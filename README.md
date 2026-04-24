@@ -65,7 +65,11 @@ These are the bugs that appear in CVE databases. These are the bugs that cost co
 ## Quick start
 
 ```bash
+# Zero-dependency install (plain text output)
 pip install ansede-static
+
+# With colored terminal output (recommended for local use)
+pip install "ansede-static[rich]"
 
 # Scan a directory (recursive)
 ansede-static src/
@@ -378,7 +382,7 @@ steps:
 ```yaml
 repos:
   - repo: https://github.com/mattybellx/Ansede
-    rev: v1.1.0
+    rev: v1.2.0
     hooks:
       - id: ansede-static
         args: [--fail-on, high]

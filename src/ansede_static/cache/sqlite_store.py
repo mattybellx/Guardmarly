@@ -104,6 +104,20 @@ class SQLiteStore:
         ).fetchall()
         return [str(row[0]) for row in rows]
 
+    def evict_older_than(self, bucket: str, days: int) -> int:
+        """Delete entries in *bucket* not updated within the last *days* days.
+
+        Returns the number of rows deleted.  Keeps the cache bounded on
+        long-running incremental installations.
+        """
+        conn = self.connect()
+        cursor = conn.execute(
+            "DELETE FROM cache_entries WHERE bucket = ? AND updated_at < datetime('now', ? || ' days')",
+            (bucket, f"-{days}"),
+        )
+        conn.commit()
+        return cursor.rowcount
+
     def __enter__(self) -> SQLiteStore:
         self.connect()
         return self

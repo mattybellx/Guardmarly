@@ -71,3 +71,37 @@ def test_stable_hash_is_deterministic():
     assert stable_hash("hello") == stable_hash("hello")
     assert stable_hash("hello") != stable_hash("world")
     assert len(stable_hash("any string")) == 64  # SHA-256 hex
+
+
+def test_sqlite_store_evict_older_than(tmp_path):
+    """evict_older_than(bucket, 0) removes all entries (updated_at < now)."""
+    store = SQLiteStore(tmp_path / "cache.db")
+    store.set_json("scan", "a.py", {"v": 1})
+    store.set_json("scan", "b.py", {"v": 2})
+    store.set_json("other", "c.py", {"v": 3})
+
+    # Evicting with 0 days removes everything older than right now.
+    # SQLite CURRENT_TIMESTAMP has 1-second granularity; we back-date the
+    # entries by directly updating updated_at to force them to look old.
+    store.connect().execute(
+        "UPDATE cache_entries SET updated_at = datetime('now', '-2 days')"
+    )
+    store.connect().commit()
+
+    deleted = store.evict_older_than("scan", 1)
+    assert deleted == 2
+    assert store.get_json("scan", "a.py") is None
+    assert store.get_json("scan", "b.py") is None
+    # Different bucket untouched
+    assert store.get_json("other", "c.py") == {"v": 3}
+    store.close()
+
+
+def test_sqlite_store_evict_returns_zero_when_nothing_old(tmp_path):
+    store = SQLiteStore(tmp_path / "cache.db")
+    store.set_json("scan", "fresh.py", {"v": 1})
+    # Entries are brand-new — evict with 30-day window should remove nothing.
+    deleted = store.evict_older_than("scan", 30)
+    assert deleted == 0
+    assert store.get_json("scan", "fresh.py") == {"v": 1}
+    store.close()
