@@ -8,8 +8,11 @@ and load custom internal taint sources and sinks.
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
+
+_log = logging.getLogger(__name__)
 
 
 @dataclass
@@ -38,10 +41,14 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
                 custom_sinks[sink_name] = (sink_data[0], sink_data[1])
                 
         return AnsedeConfig(
-            exclude_paths=data.get("exclude", []),
+            exclude_paths=data.get("exclude_paths", []),
             disable_rules=data.get("disable_rules", []),
             custom_sources=data.get("custom_sources", []),
             custom_sinks=custom_sinks,
         )
-    except Exception:
+    except json.JSONDecodeError as exc:
+        _log.warning("ansede.json is not valid JSON — ignoring config: %s", exc)
+        return AnsedeConfig()
+    except Exception as exc:
+        _log.warning("Failed to load ansede.json — ignoring config: %s", exc)
         return AnsedeConfig()

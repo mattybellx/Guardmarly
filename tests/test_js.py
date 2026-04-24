@@ -531,3 +531,97 @@ class TestJsSuppression:
     def test_suppress_wrong_cwe_still_flags(self):
         code = "document.getElementById('out').innerHTML = req.query.name; // ansede: ignore[CWE-89]"
         assert _has_cwe(code, "CWE-79")
+
+
+# ── CWE-307: Missing rate limiting on auth routes ────────────────────────────
+
+class TestMissingRateLimit:
+    def test_login_route_no_rate_limiter(self):
+        code = """
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    const user = authenticate(username, password);
+    if (user) {
+        res.json({ token: generateToken(user) });
+    } else {
+        res.status(401).json({ error: 'Invalid credentials' });
+    }
+});
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_password_reset_route_no_rate_limiter(self):
+        code = """
+app.post('/auth/reset-password', (req, res) => {
+    const { email } = req.body;
+    sendResetEmail(email);
+    res.json({ message: 'Reset link sent' });
+});
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_login_route_with_rate_limiter_ok(self):
+        code = """
+const rateLimit = require('express-rate-limit');
+const loginLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+
+app.post('/login', loginLimiter, (req, res) => {
+    const { username, password } = req.body;
+    const user = authenticate(username, password);
+    res.json({ token: generateToken(user) });
+});
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_non_auth_route_not_flagged(self):
+        code = """
+app.get('/products', (req, res) => {
+    res.json(getProducts());
+});
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+
+# ── CWE-352: Missing CSRF protection ─────────────────────────────────────────
+
+class TestMissingCSRF:
+    def test_post_route_no_csrf(self):
+        code = """
+app.post('/transfer', (req, res) => {
+    const { to, amount } = req.body;
+    transfer(req.user.id, to, amount);
+    res.json({ ok: true });
+});
+"""
+        assert _has_cwe(code, "CWE-352")
+
+    def test_delete_route_no_csrf(self):
+        code = """
+app.delete('/account', (req, res) => {
+    deleteAccount(req.user.id);
+    res.json({ deleted: true });
+});
+"""
+        assert _has_cwe(code, "CWE-352")
+
+    def test_post_route_with_csurf_ok(self):
+        code = """
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+
+app.post('/transfer', csrfProtection, (req, res) => {
+    const { to, amount } = req.body;
+    transfer(req.user.id, to, amount);
+    res.json({ ok: true });
+});
+"""
+        assert not _has_cwe(code, "CWE-352")
+
+    def test_get_route_not_flagged(self):
+        """GET routes are not state-mutating — CSRF check does not apply."""
+        code = """
+app.get('/profile', (req, res) => {
+    res.json(getProfile(req.user.id));
+});
+"""
+        assert not _has_cwe(code, "CWE-352")

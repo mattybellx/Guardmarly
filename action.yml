@@ -62,45 +62,81 @@ runs:
         INPUT_FORMAT: ${{ inputs.format }}
         INPUT_OUTPUT: ${{ inputs.output }}
         INPUT_EXCLUDE: ${{ inputs.exclude }}
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
       run: |
-        ARGS=("$INPUT_PATH" --format "$INPUT_FORMAT" --fail-on never)
-        COUNT_ARGS=("$INPUT_PATH" --format json --fail-on never)
-        if [ -n "$INPUT_OUTPUT" ]; then
-          ARGS+=(--output "$INPUT_OUTPUT")
-        fi
+        # Build shared exclude flags once
+        EXCLUDE_FLAGS=()
         if [ -n "$INPUT_EXCLUDE" ]; then
           for pat in $(echo "$INPUT_EXCLUDE" | tr ',' ' '); do
-            ARGS+=(--exclude "$pat")
-            COUNT_ARGS+=(--exclude "$pat")
+            EXCLUDE_FLAGS+=(--exclude "$pat")
           done
         fi
 
+        # Primary scan: requested format, written to output file (or stdout)
+        ARGS=("$INPUT_PATH" --format "$INPUT_FORMAT" --fail-on never "${EXCLUDE_FLAGS[@]}")
+        if [ -n "$INPUT_OUTPUT" ]; then
+          ARGS+=(--output "$INPUT_OUTPUT")
+        fi
         ansede-static "${ARGS[@]}"
 
-        TMP_JSON="$(mktemp)"
-        ansede-static "${COUNT_ARGS[@]}" > "$TMP_JSON" 2>/dev/null || true
-        FINDINGS_COUNT="$(python3 - "$TMP_JSON" <<'PY'
-import json
-import sys
+        # Derive findings count from the already-generated output rather than re-scanning.
+        # Fall back to a fresh JSON scan only when the primary format is not json/sarif.
+        if [ "$INPUT_FORMAT" = "json" ] && [ -n "$INPUT_OUTPUT" ]; then
+          COUNT_FILE="$INPUT_OUTPUT"
+          REMOVE_COUNT_FILE=false
+        elif [ "$INPUT_FORMAT" = "sarif" ] && [ -n "$INPUT_OUTPUT" ]; then
+          # Extract count from SARIF results array length
+          COUNT_FILE=""
+        else
+          COUNT_FILE="$(mktemp)"
+          ansede-static "$INPUT_PATH" --format json --fail-on never "${EXCLUDE_FLAGS[@]}" > "$COUNT_FILE" 2>/dev/null || true
+          REMOVE_COUNT_FILE=true
+        fi
 
-with open(sys.argv[1], encoding="utf-8") as handle:
-    data = json.load(handle)
+        FINDINGS_COUNT="$(python3 - "$INPUT_FORMAT" "${INPUT_OUTPUT:-}" "${COUNT_FILE:-}" <<'PY'
+import json, sys
 
-if isinstance(data, dict):
-    summary = data.get("summary")
-    if isinstance(summary, dict) and isinstance(summary.get("total_findings"), int):
-        print(summary["total_findings"])
+fmt, out_file, count_file = sys.argv[1], sys.argv[2], sys.argv[3]
+
+def count_from_json(path):
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+    if isinstance(data, dict):
+        s = data.get("summary")
+        if isinstance(s, dict) and isinstance(s.get("total_findings"), int):
+            return s["total_findings"]
+        return sum(len(e.get("findings", [])) for e in data.get("results", []) if isinstance(e, dict))
+    if isinstance(data, list):
+        return sum(len(e.get("findings", [])) for e in data if isinstance(e, dict))
+    return 0
+
+def count_from_sarif(path):
+    with open(path, encoding="utf-8") as fh:
+        data = json.load(fh)
+    total = 0
+    for run in data.get("runs", []):
+        total += len(run.get("results", []))
+    return total
+
+try:
+    if fmt == "sarif" and out_file:
+        print(count_from_sarif(out_file))
+    elif count_file:
+        print(count_from_json(count_file))
     else:
-        results = data.get("results", [])
-        print(sum(len(entry.get("findings", [])) for entry in results if isinstance(entry, dict)))
-elif isinstance(data, list):
-    print(sum(len(entry.get("findings", [])) for entry in data if isinstance(entry, dict)))
-else:
+        print(0)
+except Exception:
     print(0)
 PY
         )"
-        rm -f "$TMP_JSON"
+
+        [ "${REMOVE_COUNT_FILE:-false}" = "true" ] && rm -f "$COUNT_FILE"
         echo "findings_count=$FINDINGS_COUNT" >> "$GITHUB_OUTPUT"
+
+        # Enforce fail-on threshold using exit code — no third scan needed
+        if [ "$INPUT_FAIL_ON" != "never" ]; then
+          ansede-static "$INPUT_PATH" --format text --no-colour --fail-on "$INPUT_FAIL_ON" "${EXCLUDE_FLAGS[@]}" 2>&1 || exit 1
+        fi
 
     - name: Upload SARIF to Code Scanning
       if: ${{ inputs.upload-sarif == 'true' && inputs.format == 'sarif' && inputs.output != '' }}
@@ -108,16 +144,6 @@ PY
       with:
         sarif_file: ${{ inputs.output }}
         category: ansede-static
-
-    - name: Enforce fail-on threshold
-      shell: bash
-      env:
-        INPUT_FAIL_ON: ${{ inputs.fail-on }}
-        INPUT_PATH: ${{ inputs.path }}
-      run: |
-        if [ "$INPUT_FAIL_ON" != "never" ]; then
-          ansede-static "$INPUT_PATH" --fail-on "$INPUT_FAIL_ON" --format text --no-colour 2>&1 || exit 1
-        fi
 
 branding:
   icon: 'shield'
