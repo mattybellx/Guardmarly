@@ -16,13 +16,21 @@ import argparse
 import json
 import sys
 import textwrap
-import time
 from pathlib import Path
 
 from ansede_static._types import AnalysisResult, Finding, Severity
+from ansede_static.config import apply_config_to_results, load_config, temporary_analyzer_config
 from ansede_static.python_analyzer import analyze_python
 from ansede_static.js_analyzer import analyze_js
-from ansede_static.reporters import format_text_multi, format_json, format_sarif, format_ciso_report
+from ansede_static.js_engine.backends import (
+    backend_choices,
+    backend_execution_record,
+    list_js_backends,
+    run_js_analysis,
+)
+from ansede_static.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
+from ansede_static.rules import describe_rule, list_rule_contracts
+from ansede_static.schema import FINGERPRINT_VERSION
 from ansede_static import _PYTHON_EXTS, _JS_EXTS
 
 from ansede_static.ir.global_graph import GlobalGraph
@@ -68,7 +76,12 @@ def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]
     return files
 
 
-def _analyze_file(path: Path) -> AnalysisResult:
+def _analyze_file(
+    path: Path,
+    *,
+    requested_js_backend: str = "auto",
+    experimental_js_ast: bool = False,
+) -> AnalysisResult:
     lang = _detect_language(path)
     try:
         code = path.read_text(encoding="utf-8", errors="replace")
@@ -80,9 +93,69 @@ def _analyze_file(path: Path) -> AnalysisResult:
     if lang == "python":
         return analyze_python(code, filename=str(path))
     elif lang == "javascript":
-        return analyze_js(code, filename=str(path))
+        result, _ = run_js_analysis(
+            code,
+            filename=str(path),
+            requested_backend=requested_js_backend,
+            experimental_js_ast=experimental_js_ast,
+        )
+        return result
     else:
         return AnalysisResult(file_path=str(path), language="unknown")
+
+
+def _render_rule_catalog(as_json: bool) -> str:
+    rules = [contract.as_dict() for contract in list_rule_contracts()]
+    if as_json:
+        return json.dumps({"rules": rules}, indent=2)
+
+    lines = ["ansede-static rule catalog", "-" * 72]
+    for rule in rules:
+        cwe = f" [{rule['cwe']}]" if rule["cwe"] else ""
+        lines.append(
+            f"{rule['rule_id']:<8} {rule['default_severity']:<8} {rule['maturity']:<8} {rule['title']}{cwe}"
+        )
+    return "\n".join(lines)
+
+
+def _render_rule_description(token: str, as_json: bool) -> str | None:
+    contract = describe_rule(token)
+    if not contract:
+        return None
+    payload = contract.as_dict()
+    if as_json:
+        return json.dumps(payload, indent=2)
+
+    lines = [
+        f"{payload['rule_id'] or payload['cwe']}: {payload['title']}",
+        "-" * 72,
+        f"Category          : {payload['category']}",
+        f"Default severity  : {payload['default_severity']}",
+        f"Maturity          : {payload['maturity']}",
+        f"Precision         : {payload['precision']}",
+        f"Languages         : {', '.join(payload['languages']) or 'n/a'}",
+        f"Docs              : {payload['docs_url']}",
+        f"Summary           : {payload['summary']}",
+        f"Remediation       : {payload['remediation']}",
+    ]
+    if payload["known_limitations"]:
+        lines.append(f"Known limitations : {'; '.join(payload['known_limitations'])}")
+    return "\n".join(lines)
+
+
+def _render_js_backend_catalog(as_json: bool) -> str:
+    payload = [backend.as_dict() for backend in list_js_backends()]
+    if as_json:
+        return json.dumps({"js_backends": payload}, indent=2)
+
+    lines = ["ansede-static JS backend catalog", "-" * 72]
+    for backend in payload:
+        availability = "available" if backend["available"] else "planned"
+        lines.append(
+            f"{backend['key']:<18} {backend['maturity']:<8} {availability:<9} {backend['label']}"
+        )
+        lines.append(f"    {backend['description']}")
+    return "\n".join(lines)
 
 
 def _should_fail(results: list[AnalysisResult], fail_on: str) -> bool:
@@ -137,6 +210,60 @@ def _load_baseline(path: Path) -> set[str]:
     return fingerprints
 
 
+def _parse_auto_fix_block(auto_fix: str) -> tuple[str, str] | None:
+    if "BEFORE:" not in auto_fix or "AFTER:" not in auto_fix:
+        return None
+    before_part, after_part = auto_fix.split("AFTER:", 1)
+    before = before_part.replace("BEFORE:", "", 1).strip()
+    after = after_part.strip("\n ")
+    if not before or not after:
+        return None
+    return before, after
+
+
+def _is_safe_inline_auto_fix(before: str, after: str) -> bool:
+    return "\n" not in before and "\n" not in after
+
+
+def _apply_auto_fixes(results: list[AnalysisResult]) -> tuple[int, int]:
+    applied_count = 0
+    skipped_count = 0
+    for result in results:
+        if not result.findings:
+            continue
+        try:
+            with open(result.file_path, "r", encoding="utf-8") as handle:
+                content = handle.read()
+            lines = content.splitlines()
+            modified = False
+            for finding in sorted(result.findings, key=lambda x: x.line or 0, reverse=True):
+                if not finding.auto_fix or not finding.line:
+                    continue
+                parsed_fix = _parse_auto_fix_block(finding.auto_fix)
+                if not parsed_fix:
+                    skipped_count += 1
+                    continue
+                before, after = parsed_fix
+                if not _is_safe_inline_auto_fix(before, after):
+                    skipped_count += 1
+                    continue
+
+                idx = finding.line - 1
+                if 0 <= idx < len(lines) and before in lines[idx]:
+                    lines[idx] = lines[idx].replace(before, after)
+                    modified = True
+                    applied_count += 1
+                else:
+                    skipped_count += 1
+
+            if modified:
+                with open(result.file_path, "w", encoding="utf-8") as handle:
+                    handle.write("\n".join(lines) + "\n")
+        except OSError:
+            skipped_count += 1
+    return applied_count, skipped_count
+
+
 def _apply_baseline(results: list[AnalysisResult], baseline: set[str]) -> list[AnalysisResult]:
     """Remove findings already present in the baseline."""
     for r in results:
@@ -178,6 +305,18 @@ def build_parser() -> argparse.ArgumentParser:
         help="Read source code from stdin (requires --lang).",
     )
     parser.add_argument(
+        "--list-rules", action="store_true",
+        help="Print the detector catalog and exit.",
+    )
+    parser.add_argument(
+        "--describe-rule", metavar="TOKEN",
+        help="Show the contract for a stable rule ID like PY-020 or a CWE like CWE-862.",
+    )
+    parser.add_argument(
+        "--list-js-backends", action="store_true",
+        help="Print the available JS/TS analysis backends and exit.",
+    )
+    parser.add_argument(
         "--init", action="store_true",
         help="Initialize a new ansede.json configuration file in the current directory.",
     )
@@ -186,16 +325,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="Force language detection (useful with --stdin).",
     )
     parser.add_argument(
-        "--format", "-f", choices=["text", "json", "sarif", "ciso"], default="text",
-        help="Output format (default: text). Use 'ciso' for executive summary.",
+        "--format", "-f", choices=["text", "json", "sarif", "ciso", "html"], default="text",
+        help="Output format (default: text). Use 'ciso' for executive summary, 'html' for browser dashboard.",
     )
     parser.add_argument(
         "--ai-triage", action="store_true",
-        help="Enable Zero-False-Positive LLM Verification (requires active Ollama container).",
+        help="Enable the offline heuristic triage pass that suppresses common false positives in tests/mocks and safe parameterized patterns.",
     )
     parser.add_argument(
         "--experimental-js-ast", action="store_true",
-        help="Phase 1: Route JS/TS scanning to the new structurally-aware AST hybrid engine (Beta).",
+        help="Compatibility alias for `--js-backend structural` when auto-selection is in use.",
+    )
+    parser.add_argument(
+        "--js-backend", choices=list(backend_choices()), default="auto",
+        help="Select the JS/TS analysis backend: auto (default), classic, or structural.",
     )
     parser.add_argument(
         "--output", "-o", type=Path, default=None, metavar="FILE",
@@ -226,7 +369,44 @@ def build_parser() -> argparse.ArgumentParser:
         "--version", action="version",
         version=_get_version_str(),
     )
+    parser.add_argument(
+        "--apply-fixes", action="store_true",
+        help="Apply auto-fixes directly to the source files when possible (Warning: overwrites code)",
+    )
+    parser.add_argument(
+        "--incremental", action="store_true",
+        help="Scan only files changed in git diff (massive monorepo optimization)",
+    )
+    parser.add_argument(
+        "--min-confidence", type=float, default=0.0, metavar="FLOAT",
+        help="Suppress findings with confidence below this value (0.0–1.0, default: 0.0).",
+    )
+    parser.add_argument(
+        "--timeout-per-file", type=float, default=30.0, metavar="SECONDS",
+        help="Abort analysis of a single file after this many seconds (default: 30).",
+    )
+    parser.add_argument(
+        "--sbom", choices=["cyclonedx", "spdx"], default=None, metavar="FORMAT",
+        help="Generate a Software Bill of Materials in CycloneDX or SPDX JSON format.",
+    )
+    parser.add_argument(
+        "--sbom-output", type=Path, default=None, metavar="FILE",
+        help="Write SBOM output to FILE (default: sbom.json in current directory).",
+    )
     return parser
+
+
+def _build_feedback_parser() -> argparse.ArgumentParser:
+    """Standalone parser for the 'feedback' subcommand."""
+    p = argparse.ArgumentParser(
+        prog="ansede-static feedback",
+        description="Record a false-positive for a rule.",
+    )
+    p.add_argument("--fp", dest="rule_id", required=True, metavar="RULE_ID",
+                   help="Rule ID to mark as a false positive (e.g. PY-020).")
+    p.add_argument("--note", default="", metavar="TEXT",
+                   help="Optional free-text note.")
+    return p
 
 
 def _get_version_str() -> str:
@@ -242,20 +422,106 @@ def _get_version_str() -> str:
     return f"ansede-static {v}"
 
 
+def _print_config_warnings(warnings: list[str]) -> None:
+    for warning in warnings:
+        msg = f"ansede-static: config warning: {warning}"
+        if console:
+            console.print(f"[bold yellow]{msg}[/bold yellow]")
+        else:
+            print(msg, file=sys.stderr)
+
+
+def _handle_feedback(args: argparse.Namespace) -> None:
+    """Record a false-positive entry to ~/.ansede/feedback.jsonl."""
+    import datetime
+    feedback_dir = Path.home() / ".ansede"
+    feedback_dir.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "rule_id": args.rule_id,
+        "type": "fp",
+        "note": getattr(args, "note", ""),
+    }
+    feedback_file = feedback_dir / "feedback.jsonl"
+    with open(feedback_file, "a", encoding="utf-8") as fh:
+        fh.write(json.dumps(entry) + "\n")
+    print(f"Feedback recorded: {feedback_file}")
+
+
+def _analyze_file_with_timeout(
+    path: Path,
+    *,
+    requested_js_backend: str = "auto",
+    experimental_js_ast: bool = False,
+    timeout_seconds: float = 30.0,
+) -> AnalysisResult:
+    """Run _analyze_file with a hard per-file timeout.
+
+    Uses a *daemon* threading.Thread so Python's atexit machinery never blocks
+    waiting for a stuck C-level regex inside the re/JS-structural engine.
+    ThreadPoolExecutor registers an atexit handler that calls shutdown(wait=True),
+    which blocks forever when a worker is stuck — daemon threads have no such hook.
+    """
+    import threading
+    import queue as _queue
+
+    result_holder: _queue.Queue[AnalysisResult] = _queue.Queue(maxsize=1)
+
+    def _worker() -> None:
+        try:
+            r = _analyze_file(
+                path,
+                requested_js_backend=requested_js_backend,
+                experimental_js_ast=experimental_js_ast,
+            )
+        except Exception as exc:  # noqa: BLE001
+            r = AnalysisResult(file_path=str(path), language=_detect_language(path) or "unknown")
+            r.parse_error = str(exc)
+        # put_nowait: if somehow the queue already has a value (shouldn't happen)
+        # just drop it — we're abandoning this thread anyway.
+        try:
+            result_holder.put_nowait(r)
+        except _queue.Full:
+            pass
+
+    t = threading.Thread(target=_worker, daemon=True, name=f"ansede-{path.name}")
+    t.start()
+    try:
+        return result_holder.get(timeout=timeout_seconds)
+    except _queue.Empty:
+        # Thread is still stuck (daemon — will be killed on process exit).
+        timed_out = AnalysisResult(file_path=str(path), language=_detect_language(path) or "unknown")
+        timed_out.parse_error = f"Timed out after {timeout_seconds:.0f}s"
+        return timed_out
+
+
 def main() -> None:
     parser = build_parser()
-    parser.add_argument(
-        "--apply-fixes", action="store_true",
-        help="Apply auto-fixes directly to the source files when possible (Warning: overwrites code)",
-    )
-    
-    parser.add_argument(
-        "--incremental", action="store_true",
-        help="Scan only files changed in git diff (massive monorepo optimization)",
-    )
-    
+
+    # ── feedback subcommand (pre-parsed to avoid positional conflict) ───────
+    if len(sys.argv) >= 2 and sys.argv[1] == "feedback":
+        fb_args = _build_feedback_parser().parse_args(sys.argv[2:])
+        _handle_feedback(fb_args)
+        sys.exit(0)
+
     args = parser.parse_args()
     from pathlib import Path
+
+    if getattr(args, "list_rules", False):
+        print(_render_rule_catalog(args.format == "json"))
+        sys.exit(0)
+
+    if getattr(args, "describe_rule", None):
+        rendered = _render_rule_description(str(args.describe_rule), args.format == "json")
+        if rendered is None:
+            print(f"ansede-static: unknown rule token: {args.describe_rule}", file=sys.stderr)
+            sys.exit(2)
+        print(rendered)
+        sys.exit(0)
+
+    if getattr(args, "list_js_backends", False):
+        print(_render_js_backend_catalog(args.format == "json"))
+        sys.exit(0)
 
     # ── Handle Init ────────────────────────────────────────────────────────
     if getattr(args, "init", False):
@@ -272,14 +538,19 @@ def main() -> None:
     ".git"
   ],
   "disable_rules": [
-    "PY-WEAK-CRYPTO"
+        "PY-013",
+        "CWE-862"
   ],
   "custom_sources": [
     "get_untrusted_user_input",
     "request.headers.get"
   ],
   "custom_sinks": {
-    "my_vulnerable_db_execute": ["Custom SQLi", "Unsanitized input to db_execute", "high"]
+        "my_vulnerable_db_execute": {
+            "cwe": "CWE-89",
+            "title": "Custom SQL Injection sink",
+            "severity": "critical"
+        }
   }
 }
 ''')
@@ -288,6 +559,9 @@ def main() -> None:
 
     # Disable colour if not a tty or explicitly disabled
     colour = args.colour and sys.stdout.isatty()
+    execution = {
+        "js_backend": backend_execution_record(args.js_backend, experimental_js_ast=args.experimental_js_ast),
+    }
 
     results: list[AnalysisResult] = []
 
@@ -296,7 +570,6 @@ def main() -> None:
         args.paths = [Path(".")]
 
     # ── Load Enterprise Configuration ───────────────────────────────────────
-    from ansede_static.config import load_config
     import subprocess
     from pathlib import Path
     workspace_root = Path.cwd()
@@ -305,151 +578,179 @@ def main() -> None:
         if workspace_root.is_file():
             workspace_root = workspace_root.parent
     config = load_config(workspace_root)
+    if config.warnings:
+        _print_config_warnings(config.warnings)
 
     # ── Inject Configured Sinks and Sources ─────────────────────────────────
-    try:
-        from ansede_static.python_analyzer import TAINT_SOURCES, TAINT_SINKS
-        for src in config.custom_sources:
-            TAINT_SOURCES[src] = "Custom internal taint source"
-        for sink, data in config.custom_sinks.items():
-             TAINT_SINKS[sink] = data
-    except ImportError:
-        pass
+    with temporary_analyzer_config(config):
+        # ── stdin mode ─────────────────────────────────────────────────────────
+        if args.stdin:
+            if not args.lang:
+                parser.error("--stdin requires --lang")
+            code = sys.stdin.read()
+            if args.lang == "python":
+                results.append(analyze_python(code, filename="<stdin>"))
+            else:
+                result, _ = run_js_analysis(
+                    code,
+                    filename="<stdin>",
+                    requested_backend=args.js_backend,
+                    experimental_js_ast=args.experimental_js_ast,
+                )
+                results.append(result)
 
-    # ── stdin mode ─────────────────────────────────────────────────────────
-    if args.stdin:
-        if not args.lang:
-            parser.error("--stdin requires --lang")
-        code = sys.stdin.read()
-        if args.lang == "python":
-            results.append(analyze_python(code, filename="<stdin>"))
-        else:
-            results.append(analyze_js(code, filename="<stdin>"))
-
-    # ── file/directory mode ────────────────────────────────────────────────
-    files: list[Path] = []
-    
-    if args.incremental:
-        if console:
-            console.print("[bold yellow]⚡ Running in Incremental Git-Diff Mode (ignoring unmodified files)...[/bold yellow]")
+        # ── file/directory mode ────────────────────────────────────────────────
+        files: list[Path] = []
         
-        try:
-            diff_out = subprocess.check_output(
-                ["git", "diff", "--name-status", "HEAD"], 
-                cwd=str(workspace_root), 
-                text=True
-            )
-            # also get untracked files
-            untracked_out = subprocess.check_output(
-                ["git", "ls-files", "--others", "--exclude-standard"],
-                cwd=str(workspace_root),
-                text=True
-            )
+        if args.incremental:
+            if console:
+                console.print("[bold yellow]⚡ Running in Incremental Git-Diff Mode (ignoring unmodified files)...[/bold yellow]")
             
-            changed_files = []
-            for line in diff_out.splitlines():
-                if line.startswith("D"):
-                    continue
-                parts = line.split("\t", 1)
-                if len(parts) == 2:
-                    changed_files.append(parts[1].strip())
-                    
-            changed_files.extend(untracked_out.splitlines())
-            
-            files = []
-            for f in set(changed_files):
-                p = (workspace_root / f).resolve()
-                if p.exists() and p.suffix in (".py", ".js", ".jsx", ".ts", ".tsx"):
-                    # Check exclusions
-                    if any(ex in str(p) for ex in config.exclude_paths):
+            try:
+                diff_out = subprocess.check_output(
+                    ["git", "diff", "--name-status", "HEAD"], 
+                    cwd=str(workspace_root), 
+                    text=True
+                )
+                # also get untracked files
+                untracked_out = subprocess.check_output(
+                    ["git", "ls-files", "--others", "--exclude-standard"],
+                    cwd=str(workspace_root),
+                    text=True
+                )
+                
+                changed_files = []
+                for line in diff_out.splitlines():
+                    if line.startswith("D"):
                         continue
-                    files.append(p)
-            
+                    parts = line.split("\t", 1)
+                    if len(parts) == 2:
+                        changed_files.append(parts[1].strip())
+                        
+                changed_files.extend(untracked_out.splitlines())
+                
+                files = []
+                for f in set(changed_files):
+                    p = (workspace_root / f).resolve()
+                    if p.exists() and p.suffix in (".py", ".js", ".jsx", ".ts", ".tsx"):
+                        # Check exclusions
+                        if any(ex in str(p) for ex in config.exclude_paths):
+                            continue
+                        files.append(p)
+                
+                if not files:
+                    if console:
+                        console.print("[dim]No valid source files found in git diff.[/dim]")
+                    sys.exit(0)
+                    
+            except Exception as e:
+                if console:
+                    console.print(f"[bold red]Failed to run git diff: {e}[/bold red]")
+                sys.exit(1)
+
+        elif args.paths:
+            exclude_extra = [".venv", "node_modules", "__pycache__", ".git",
+                             "site-packages", "dist", "build", ".tox",
+                             "public", "vendor", "static", "assets", "bower_components"] + args.exclude + config.exclude_paths
+            files = _collect_files(args.paths, exclude_extra)
             if not files:
                 if console:
-                    console.print("[dim]No valid source files found in git diff.[/dim]")
-                sys.exit(0)
-                
-        except Exception as e:
-            if console:
-                console.print(f"[bold red]Failed to run git diff: {e}[/bold red]")
-            sys.exit(1)
+                    console.print(f"[bold red]ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}[/bold red]")
+                else:
+                    print(f"ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}", file=sys.stderr)
+                sys.exit(2)
 
-    elif args.paths:
-        exclude_extra = [".venv", "node_modules", "__pycache__", ".git",
-                         "site-packages", "dist", "build", ".tox"] + args.exclude + config.exclude_paths
-        files = _collect_files(args.paths, exclude_extra)
-        if not files:
-            if console:
-                console.print(f"[bold red]ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}[/bold red]")
-            else:
-                print(f"ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}", file=sys.stderr)
-            sys.exit(2)
-
-        global_graph = GlobalGraph()
-        
-        # Two-Pass Orchestration with Rich UI
-        if Progress and args.format == "text":
-            with Progress(
-                SpinnerColumn(), # type: ignore
-                TextColumn("[progress.description]{task.description}"), # type: ignore
-                BarColumn(), # type: ignore
-                TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), # type: ignore
-                TimeElapsedColumn(), # type: ignore
-                console=console
-            ) as progress:
-                
-                # Pass 1: Discovery & Graph Building (Stubbed in engine for now, preparing for next phase)
-                discovery_task = progress.add_task("[cyan]Pass 1: Building Global Symbol Graph...", total=len(files))
-                for fpath in files:
-                    # index global references into global_graph here
-                    lang = _detect_language(fpath)
-                    try:
-                        code = fpath.read_text(encoding="utf-8", errors="replace")
-                        if lang == "python":
-                            from ansede_static.python_analyzer import index_python_file
-                            index_python_file(code, str(fpath), global_graph)
-                        elif lang == "javascript":
-                            # Future extension: index JS AST using oxc/tree-sitter
+            global_graph = GlobalGraph()
+            
+            # Two-Pass Orchestration with Rich UI
+            if Progress and args.format == "text":
+                with Progress(
+                    SpinnerColumn(), # type: ignore
+                    TextColumn("[progress.description]{task.description}"), # type: ignore
+                    BarColumn(), # type: ignore
+                    TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), # type: ignore
+                    TimeElapsedColumn(), # type: ignore
+                    console=console
+                ) as progress:
+                    
+                    # Pass 1: Discovery & Graph Building (Stubbed in engine for now, preparing for next phase)
+                    discovery_task = progress.add_task("[cyan]Pass 1: Building Global Symbol Graph...", total=len(files))
+                    for fpath in files:
+                        # index global references into global_graph here
+                        lang = _detect_language(fpath)
+                        try:
+                            code = fpath.read_text(encoding="utf-8", errors="replace")
+                            if lang == "python":
+                                from ansede_static.python_analyzer import index_python_file
+                                index_python_file(code, str(fpath), global_graph)
+                            elif lang == "javascript":
+                                # Future extension: index JS AST using oxc/tree-sitter
+                                pass
+                        except OSError:
                             pass
-                    except OSError:
-                        pass
-                    progress.advance(discovery_task)
-                
-                # Pass 2: Taint Engine Evaluation
-                eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(files))
-                for fpath in files:
-                    # Pass the global_graph into analysis for inter-procedural queries
-                    lang = _detect_language(fpath)
-                    try:
-                        code = fpath.read_text(encoding="utf-8", errors="replace")
-                    except OSError as exc:
-                        result = AnalysisResult(file_path=str(fpath), language=lang or "unknown")
-                        result.parse_error = str(exc)
-                        results.append(result)
+                        progress.advance(discovery_task)
+                    
+                    # Pass 2: Taint Engine Evaluation — uses timeout to prevent any single
+                    # file from hanging the entire scan.
+                    eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(files))
+                    for fpath in files:
+                        progress.update(eval_task, description=f"[yellow]Scanning {fpath.name}...")
+                        results.append(
+                            _analyze_file_with_timeout(
+                                fpath,
+                                requested_js_backend=args.js_backend,
+                                experimental_js_ast=args.experimental_js_ast,
+                                timeout_seconds=args.timeout_per_file,
+                            )
+                        )
                         progress.advance(eval_task)
-                        continue
+            else:
+                # Fallback for CI / non-text formats — print simple progress to stderr
+                total = len(files)
+                for idx, fpath in enumerate(files, 1):
+                    print(f"ansede-static: scanning [{idx}/{total}] {fpath.name}", file=sys.stderr)
+                    results.append(
+                        _analyze_file_with_timeout(
+                            fpath,
+                            requested_js_backend=args.js_backend,
+                            experimental_js_ast=args.experimental_js_ast,
+                            timeout_seconds=args.timeout_per_file,
+                        )
+                    )
 
-                    if lang == "python":
-                        results.append(analyze_python(code, filename=str(fpath), global_graph=global_graph))
-                    elif lang == "javascript":
-                        if getattr(args, "experimental_js_ast", False):
-                            from ansede_static.js_ast_analyzer import analyze_js_ast
-                            results.append(analyze_js_ast(code, filename=str(fpath)))
-                        else:
-                            results.append(analyze_js(code, filename=str(fpath)))
-                    else:
-                        results.append(AnalysisResult(file_path=str(fpath), language="unknown"))
-                        
-                    progress.advance(eval_task)
         else:
-            # Fallback for CI / non-text formats
-            for fpath in files:
-                results.append(_analyze_file(fpath))
+            parser.print_help()
+            sys.exit(0)
 
-    else:
-        parser.print_help()
-        sys.exit(0)
+    results = apply_config_to_results(results, config)
+
+    # ── Apply custom YAML rules (if configured) ───────────────────────────
+    if config.custom_rules_file:
+        try:
+            from ansede_static import yaml_rules as _yaml_rules
+            custom_rules = _yaml_rules.load_custom_rules(
+                Path(config.custom_rules_file) if not Path(config.custom_rules_file).is_absolute()
+                else Path(config.custom_rules_file)
+            )
+            if custom_rules:
+                for r in results:
+                    if r.file_path and r.language:
+                        try:
+                            code_text = Path(r.file_path).read_text(encoding="utf-8", errors="replace")
+                        except OSError:
+                            continue
+                        extra = _yaml_rules.apply_custom_rules(
+                            code_text, r.file_path, r.language, custom_rules
+                        )
+                        r.findings.extend(extra)
+        except Exception as exc:
+            print(f"ansede-static: warning: custom rules error: {exc}", file=sys.stderr)
+
+    # ── Confidence filter ───────────────────────────────────────────────
+    min_conf: float = getattr(args, "min_confidence", 0.0)
+    if min_conf > 0.0:
+        for r in results:
+            r.findings = [f for f in r.findings if f.confidence >= min_conf]
 
     # ── Apply baseline filter ───────────────────────────────────────────────
     if args.baseline:
@@ -472,23 +773,38 @@ def main() -> None:
                 pass
         results = run_ai_triage(results, code_map)
 
-    # ── Offline Heuristic Auto-Remediation Engine (Explanations) ───────────
+    # ── Offline Heuristic Auto-Remediation Engine (Explanations + snippets) ──
     from ansede_static.engine.explain import get_explanation
+    # Collect source lines per file for triggering-code snippets
+    _source_lines: dict[str, list[str]] = {}
     for r in results:
+        if r.file_path and r.file_path not in _source_lines:
+            try:
+                _source_lines[r.file_path] = Path(r.file_path).read_text(
+                    encoding="utf-8", errors="replace"
+                ).splitlines()
+            except OSError:
+                _source_lines[r.file_path] = []
+    for r in results:
+        src_lines = _source_lines.get(r.file_path or "", [])
         for f in r.findings:
             if f.cwe:
                 f.explanation = get_explanation(f.cwe)
+            # Attach triggering code line
+            if f.line and src_lines and 1 <= f.line <= len(src_lines):
+                f.triggering_code = src_lines[f.line - 1].strip()
 
     # ── Format output ───────────────────────────────────────────────────────
-    
     if args.format == "text":
         output = format_text_multi(results, colour=colour, verbose=args.verbose)
     elif args.format == "json":
-        output = format_json(results)
+        output = format_json(results, execution=execution)
     elif args.format == "sarif":
-        output = format_sarif(results)
+        output = format_sarif(results, execution=execution)
     elif args.format == "ciso":
         output = format_ciso_report(results)
+    elif args.format == "html":
+        output = format_html(results)
     else:
         output = format_text_multi(results, colour=colour, verbose=args.verbose)
 
@@ -520,7 +836,20 @@ def main() -> None:
                 sys.stdout.buffer.flush()
             except AttributeError:
                 print(output)
-
+    # ── SBOM generation ───────────────────────────────────────────────
+    if getattr(args, "sbom", None):
+        try:
+            from ansede_static import sbom as _sbom
+            sbom_text = _sbom.generate_sbom(workspace_root, fmt=args.sbom)
+            sbom_out: Path = getattr(args, "sbom_output", None) or Path("sbom.json")
+            sbom_out.write_text(sbom_text, encoding="utf-8")
+            msg = f"SBOM ({args.sbom}) written to {sbom_out}"
+            if console:
+                console.print(f"[bold green]OK[/bold green] {msg}")
+            else:
+                print(msg)
+        except Exception as exc:
+            print(f"ansede-static: SBOM generation failed: {exc}", file=sys.stderr)
     # ── Interactive Auto-Fix Prompter ─────────────────────────────────────────
     fixable_count = sum(1 for r in results for f in r.findings if f.auto_fix)
     
@@ -540,36 +869,13 @@ def main() -> None:
     if getattr(args, "apply_fixes", False):
         if console:
             console.print("\n[bold yellow]🛠️  Applying Code Auto-Fixes...[/bold yellow]")
-        for r in results:
-            if not r.findings:
-                continue
-            try:
-                with open(r.file_path, "r", encoding="utf-8") as f:
-                    content = f.read()
-                lines = content.splitlines()
-                modified = False
-                # Sort descending by line number to avoid messing up offsets
-                for finding in sorted(r.findings, key=lambda x: x.line or 0, reverse=True):
-                    if finding.auto_fix and finding.line:
-                        # Simple BEFORE/AFTER block parsing
-                        if "BEFORE:" in finding.auto_fix and "AFTER:" in finding.auto_fix:
-                            parts = finding.auto_fix.split("AFTER:", 1)
-                            before = parts[0].replace("BEFORE:", "").strip()
-                            after = parts[1].strip("\n ")
-                            
-                            idx = finding.line - 1
-                            if 0 <= idx < len(lines) and before in lines[idx]:
-                                lines[idx] = lines[idx].replace(before, after.replace("\n        ", "\n"))
-                                modified = True
-                                if console:
-                                    console.print(f"  [green]✔ Fixed[/green] [bold]{finding.title}[/bold] in {r.file_path}:{finding.line}")
-                
-                if modified:
-                    with open(r.file_path, "w", encoding="utf-8") as f:
-                        f.write("\n".join(lines) + "\n")
-            except Exception as e:
-                if console:
-                    console.print(f"  [red]✖ Failed to apply fixes[/red] to {r.file_path}: {e}")
+        applied_count, skipped_count = _apply_auto_fixes(results)
+        if console:
+            console.print(f"  [green]✔ Applied[/green] {applied_count} safe inline fix(es)")
+            if skipped_count:
+                console.print(
+                    f"  [yellow]↷ Skipped[/yellow] {skipped_count} fix(es) that were multi-line, malformed, or could not be matched safely"
+                )
 
     # ── Exit code ───────────────────────────────────────────────────────────
     if args.fail_on != "never" and _should_fail(results, args.fail_on):

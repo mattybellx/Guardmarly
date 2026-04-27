@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import { existsSync } from 'fs';
+import { join } from 'path';
 
 import { AnsedeFileResult, AnsedeFinding, countFindings } from './protocol';
 import { runAnsedeScan } from './runner';
@@ -51,6 +53,43 @@ function diagnosticRange(document: vscode.TextDocument, finding: AnsedeFinding):
         safeLine,
         line.range.end.character,
     );
+}
+
+
+function resolveExecutable(document: vscode.TextDocument, configuredExecutable: string): string {
+    const trimmedExecutable = configuredExecutable.trim();
+    if (trimmedExecutable && trimmedExecutable !== 'ansede-static') {
+        return trimmedExecutable;
+    }
+
+    const folder = vscode.workspace.getWorkspaceFolder(document.uri);
+    if (!folder) {
+        return trimmedExecutable || 'ansede-static';
+    }
+
+    const candidates = process.platform === 'win32'
+        ? [
+            join(folder.uri.fsPath, '.venv', 'Scripts', 'ansede-static.exe'),
+            join(folder.uri.fsPath, '.venv', 'Scripts', 'ansede-static.cmd'),
+            join(folder.uri.fsPath, '.venv', 'Scripts', 'ansede-static'),
+            join(folder.uri.fsPath, 'venv', 'Scripts', 'ansede-static.exe'),
+            join(folder.uri.fsPath, 'venv', 'Scripts', 'ansede-static.cmd'),
+        ]
+        : [
+            join(folder.uri.fsPath, '.venv', 'bin', 'ansede-static'),
+            join(folder.uri.fsPath, 'venv', 'bin', 'ansede-static'),
+        ];
+
+    const discovered = candidates.find(candidate => existsSync(candidate));
+    return discovered ?? (trimmedExecutable || 'ansede-static');
+}
+
+
+function isMissingExecutableError(error: unknown): boolean {
+    if (!(error instanceof Error)) {
+        return false;
+    }
+    return /executable not found|ENOENT|spawn .* ansede-static/i.test(error.message);
 }
 
 
@@ -132,22 +171,27 @@ async function scanDocument(
     document: vscode.TextDocument,
     collection: vscode.DiagnosticCollection,
     statusItem: vscode.StatusBarItem,
-): Promise<void> {
+    options?: {
+        expectedVersion?: number;
+        onMissingExecutable?: () => void;
+    },
+): Promise<boolean> {
     const config = vscode.workspace.getConfiguration('ansede');
     if (!config.get<boolean>('enable', true)) {
         collection.delete(document.uri);
         statusItem.hide();
-        return;
+        return false;
     }
 
     const language = getLanguage(document);
     if (!language) {
-        return;
+        return false;
     }
 
     const minSeverity = config.get<string>('minSeverity', 'medium');
     const minOrder = SEVERITY_ORDER[minSeverity] ?? SEVERITY_ORDER.medium;
-    const executable = config.get<string>('executable', 'ansede-static');
+    const executable = resolveExecutable(document, config.get<string>('executable', 'ansede-static'));
+    const timeoutMs = Math.max(config.get<number>('scanTimeoutMs', 15_000) ?? 15_000, 1_000);
 
     statusItem.text = '$(shield~spin) Ansede scanning...';
     statusItem.tooltip = 'Ansede Static Security Scanner';
@@ -158,8 +202,13 @@ async function scanDocument(
             executable,
             language,
             code: document.getText(),
-            timeoutMs: 15_000,
+            timeoutMs,
         });
+
+        const openDocument = vscode.workspace.textDocuments.find(candidate => candidate.uri.toString() === document.uri.toString());
+        if (typeof options?.expectedVersion === 'number' && openDocument && openDocument.version !== options.expectedVersion) {
+            return false;
+        }
 
         const diagnostics: vscode.Diagnostic[] = [];
         for (const result of report.results) {
@@ -178,11 +227,19 @@ async function scanDocument(
         }
         statusItem.tooltip = `Ansede Static Security Scanner — ${totalFindings} finding(s) in latest scan`;
         statusItem.show();
+        return true;
     } catch (error) {
         collection.delete(document.uri);
-        statusItem.text = '$(shield) Ansede: scan failed';
-        statusItem.tooltip = error instanceof Error ? error.message : 'Ansede scan failed';
+        if (isMissingExecutableError(error)) {
+            options?.onMissingExecutable?.();
+            statusItem.text = '$(shield) Ansede: executable not found';
+            statusItem.tooltip = 'Install ansede-static in your workspace environment or set ansede.executable.';
+        } else {
+            statusItem.text = '$(shield) Ansede: scan failed';
+            statusItem.tooltip = error instanceof Error ? error.message : 'Ansede scan failed';
+        }
         statusItem.show();
+        return false;
     }
 }
 
@@ -243,37 +300,96 @@ export function activate(context: vscode.ExtensionContext): void {
     statusItem.tooltip = 'Ansede Static Security Scanner';
     statusItem.command = 'ansede.scanCurrentFile';
 
-    const scan = (document: vscode.TextDocument): Promise<void> => scanDocument(document, collection, statusItem);
+    const pendingScans = new Map<string, ReturnType<typeof setTimeout>>();
+    let missingExecutableWarningShown = false;
+
+    const notifyMissingExecutable = (): void => {
+        if (missingExecutableWarningShown) {
+            return;
+        }
+        missingExecutableWarningShown = true;
+        void vscode.window.showWarningMessage(
+            'Ansede could not find the ansede-static executable. Install it in your workspace virtualenv or set ansede.executable.',
+            'Open Settings'
+        ).then(selection => {
+            if (selection === 'Open Settings') {
+                void vscode.commands.executeCommand('workbench.action.openSettings', 'ansede.executable');
+            }
+        });
+    };
+
+    const scan = (document: vscode.TextDocument, expectedVersion = document.version): Promise<void> => scanDocument(
+        document,
+        collection,
+        statusItem,
+        {
+            expectedVersion,
+            onMissingExecutable: notifyMissingExecutable,
+        },
+    ).then(succeeded => {
+        if (succeeded) {
+            missingExecutableWarningShown = false;
+        }
+    }).catch(() => {
+        // scanDocument handles status updates; the catch keeps the promise chain quiet for event handlers.
+    });
+
+    const scheduleTypeScan = (document: vscode.TextDocument): void => {
+        if (!vscode.workspace.getConfiguration('ansede').get<boolean>('scanOnType', true)) {
+            return;
+        }
+        if (!getLanguage(document)) {
+            return;
+        }
+        const key = document.uri.toString();
+        const existing = pendingScans.get(key);
+        if (existing) {
+            clearTimeout(existing);
+        }
+        pendingScans.set(key, setTimeout(() => {
+            pendingScans.delete(key);
+            void scan(document, document.version);
+        }, 500));
+    };
 
     if (vscode.window.activeTextEditor) {
-        void scan(vscode.window.activeTextEditor.document);
+        void scan(vscode.window.activeTextEditor.document, vscode.window.activeTextEditor.document.version);
     }
 
     context.subscriptions.push(
         collection,
         statusItem,
         vscode.languages.registerCodeActionsProvider(
-            [{ scheme: 'file', language: 'python' }, { scheme: 'file', language: 'javascript' }],
+            [
+                { scheme: 'file', language: 'python' },
+                { scheme: 'file', language: 'javascript' },
+                { scheme: 'file', language: 'javascriptreact' },
+                { scheme: 'file', language: 'typescript' },
+                { scheme: 'file', language: 'typescriptreact' },
+            ],
             new AnsedeCodeActionProvider(),
             { providedCodeActionKinds: [vscode.CodeActionKind.QuickFix] }
         ),
         vscode.workspace.onDidOpenTextDocument(document => {
-            void scan(document);
+            void scan(document, document.version);
+        }),
+        vscode.workspace.onDidChangeTextDocument(event => {
+            scheduleTypeScan(event.document);
         }),
         vscode.workspace.onDidSaveTextDocument(document => {
             if (vscode.workspace.getConfiguration('ansede').get<boolean>('scanOnSave', true)) {
-                void scan(document);
+                void scan(document, document.version);
             }
         }),
         vscode.window.onDidChangeActiveTextEditor(editor => {
             if (editor && vscode.workspace.getConfiguration('ansede').get<boolean>('scanOnOpen', true)) {
-                void scan(editor.document);
+                void scan(editor.document, editor.document.version);
             }
         }),
         vscode.commands.registerCommand('ansede.scanCurrentFile', () => {
             const editor = vscode.window.activeTextEditor;
             if (editor) {
-                void scan(editor.document);
+                void scan(editor.document, editor.document.version);
             }
         }),
         vscode.commands.registerCommand('ansede.scanWorkspace', async () => {
@@ -282,16 +398,27 @@ export function activate(context: vscode.ExtensionContext): void {
                 return;
             }
             for (const folder of folders) {
-                const files = await vscode.workspace.findFiles(
-                    new vscode.RelativePattern(folder, '**/*.[pj]s'),
-                    '**/node_modules/**',
-                );
-                for (const uri of files) {
+                const discoveredUris: vscode.Uri[] = [];
+                for (const pattern of ['**/*.py', '**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx']) {
+                    const files = await vscode.workspace.findFiles(
+                        new vscode.RelativePattern(folder, pattern),
+                        '**/{node_modules,.venv,dist,build,__pycache__}/**',
+                    );
+                    discoveredUris.push(...files);
+                }
+                const uniqueUris = [...new Map(discoveredUris.map(uri => [uri.toString(), uri])).values()];
+                for (const uri of uniqueUris) {
                     const document = await vscode.workspace.openTextDocument(uri);
-                    await scan(document);
+                    await scan(document, document.version);
                 }
             }
             void vscode.window.showInformationMessage('Ansede: workspace scan complete. Check Problems panel.');
+        }),
+        new vscode.Disposable(() => {
+            for (const timer of pendingScans.values()) {
+                clearTimeout(timer);
+            }
+            pendingScans.clear();
         }),
     );
 }

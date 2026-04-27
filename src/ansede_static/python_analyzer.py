@@ -92,7 +92,10 @@ TAINT_SOURCES: dict[str, str] = {
 # Taint sink catalogue — maps callee name → (CWE, vuln description)
 # ──────────────────────────────────────────────────────────────────────────────
 
-TAINT_SINKS: dict[str, tuple[str, str]] = {
+_SinkInfo = tuple[str, str] | tuple[str, str, str]
+
+
+TAINT_SINKS: dict[str, _SinkInfo] = {
     # SQL Injection — CWE-89
     "cursor.execute":             ("CWE-89", "SQL Injection"),
     "execute":                    ("CWE-89", "SQL Injection"),
@@ -481,6 +484,21 @@ def _get_sink_name(node: ast.Call) -> str | None:
         if attr in TAINT_SINKS:
             return attr
     return None
+
+
+def _unpack_sink_info(info: _SinkInfo) -> tuple[str, str, str | None]:
+    if len(info) == 3:
+        return info[0], info[1], info[2]
+    return info[0], info[1], None
+
+
+def _severity_from_name(name: str | None, default: Severity) -> Severity:
+    if not name:
+        return default
+    try:
+        return Severity(name.lower())
+    except ValueError:
+        return default
 
 
 def _find_tainted_arg(
@@ -1194,8 +1212,9 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
 
                 sink = _get_sink_name(node)
                 if sink and sink in TAINT_SINKS:
-                    cwe, vuln_type = TAINT_SINKS[sink]
-                    sev = Severity.CRITICAL if "Injection" in vuln_type else Severity.HIGH
+                    cwe, vuln_type, configured_severity = _unpack_sink_info(TAINT_SINKS[sink])
+                    default_severity = Severity.CRITICAL if "Injection" in vuln_type else Severity.HIGH
+                    sev = _severity_from_name(configured_severity, default_severity)
 
                     # Deterministic Algorithmic Triage: Parameterised SQL is safe 
                     # If tainted argument is not the 1st positional arg or the string query kwarg, it's parameterised.
@@ -3417,29 +3436,37 @@ def index_python_file(code: str, filename: str, global_graph):
     except SyntaxError:
         return
         
-    local_imports = {}
+    def _resolve_import_target(module_name: str, current_file: str, level: int) -> str:
+        module_path = Path(*module_name.split('.')) if module_name else Path()
+        current_dir = Path(current_file).resolve(strict=False).parent
+
+        if level > 0:
+            anchor = current_dir
+            for _ in range(max(level - 1, 0)):
+                anchor = anchor.parent
+            candidate = (anchor / module_path).with_suffix('.py')
+            return str(candidate.resolve(strict=False))
+
+        candidates = [current_dir / module_path]
+        candidates.extend(parent / module_path for parent in current_dir.parents)
+        for candidate in candidates:
+            py_candidate = candidate.with_suffix('.py')
+            if py_candidate.exists():
+                return str(py_candidate.resolve(strict=False))
+        return str((current_dir / module_path).with_suffix('.py').resolve(strict=False))
 
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom):
             module_name = node.module or ""
-            # Simple resolution assuming standard module.py pattern inside the workspace
-            source_file = module_name.replace('.', '/') + '.py'
-            from pathlib import Path
-            base_dir = Path(filename).parent
-            # Try to resolve relative to current file, or fallback to name matching in Pass 2
-            
+            target_file = _resolve_import_target(module_name, filename, node.level)
+
             for alias in node.names:
                 local_name = alias.asname if alias.asname else alias.name
                 if alias.name != "*":
-                    local_imports[local_name] = (module_name, alias.name)
                     # Register an IMPORTS edge
                     source_node = NodeID(file_path=filename, symbol_name=local_name)
-                    target_node = NodeID(file_path=str(base_dir / source_file) if base_dir else source_file, symbol_name=alias.name)
-                    # Use relative path if the file exists there, else use just the basename approximation
-                    # We can use the module_name to roughly map it
-                    # To make it robust: just use `module_name + '.py'` as an approximation
-                    approx_target_node = NodeID(file_path=module_name + ".py", symbol_name=alias.name)
-                    global_graph.add_edge(Edge(source=source_node, target=approx_target_node, edge_type="IMPORTS"))
+                    target_node = NodeID(file_path=target_file, symbol_name=alias.name)
+                    global_graph.add_edge(Edge(source=source_node, target=target_node, edge_type="IMPORTS"))
 
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
@@ -3474,7 +3501,7 @@ def index_python_file(code: str, filename: str, global_graph):
                             ast_type="Global",
                             line_start=node.lineno,
                             taint_source=src,
-                            taint_trace=(src,)
+                            taint_trace=(_make_trace_frame("source", src, line=node.lineno),)
                         )
                         global_graph.add_node(taint_node)
 

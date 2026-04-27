@@ -9,7 +9,8 @@ import json
 
 import pytest
 
-from ansede_static.config import AnsedeConfig, load_config
+from ansede_static import scan_code
+from ansede_static.config import AnsedeConfig, CustomSinkSpec, apply_config_to_results, load_config
 
 
 def _write_config(tmp_path, data: dict) -> None:
@@ -53,12 +54,34 @@ def test_load_config_custom_sources(tmp_path):
 def test_load_config_custom_sinks(tmp_path):
     _write_config(tmp_path, {
         "custom_sinks": {
-            "my_db_execute": ["Custom SQLi sink", "high"],
+            "my_db_execute": {
+                "cwe": "CWE-89",
+                "title": "Custom SQL Injection sink",
+                "severity": "critical",
+            },
         }
     })
     cfg = load_config(tmp_path)
     assert "my_db_execute" in cfg.custom_sinks
-    assert cfg.custom_sinks["my_db_execute"] == ("Custom SQLi sink", "high")
+    assert cfg.custom_sinks["my_db_execute"] == CustomSinkSpec(
+        cwe="CWE-89",
+        title="Custom SQL Injection sink",
+        severity="critical",
+    )
+
+
+def test_load_config_custom_sinks_legacy_cwe_list(tmp_path):
+    _write_config(tmp_path, {
+        "custom_sinks": {
+            "my_db_execute": ["CWE-89", "Custom SQL Injection sink", "critical"],
+        }
+    })
+    cfg = load_config(tmp_path)
+    assert cfg.custom_sinks["my_db_execute"] == CustomSinkSpec(
+        cwe="CWE-89",
+        title="Custom SQL Injection sink",
+        severity="critical",
+    )
 
 
 def test_load_config_full(tmp_path):
@@ -67,14 +90,22 @@ def test_load_config_full(tmp_path):
         "disable_rules": ["PY-017"],
         "custom_sources": ["get_user_payload"],
         "custom_sinks": {
-            "unsafe_render": ["Template injection sink", "critical"],
+            "unsafe_render": {
+                "cwe": "CWE-79",
+                "title": "Template injection sink",
+                "severity": "critical",
+            },
         },
     })
     cfg = load_config(tmp_path)
     assert cfg.exclude_paths == ["node_modules", ".venv"]
     assert cfg.disable_rules == ["PY-017"]
     assert cfg.custom_sources == ["get_user_payload"]
-    assert cfg.custom_sinks["unsafe_render"] == ("Template injection sink", "critical")
+    assert cfg.custom_sinks["unsafe_render"] == CustomSinkSpec(
+        cwe="CWE-79",
+        title="Template injection sink",
+        severity="critical",
+    )
 
 
 # ── Error handling ────────────────────────────────────────────────────────────
@@ -98,13 +129,70 @@ def test_load_config_none_workspace_uses_cwd():
 
 
 def test_load_config_custom_sinks_malformed_entry_skipped(tmp_path):
-    """Sink entries with fewer than 2 elements are silently skipped."""
+    """Malformed sink entries are skipped with warnings."""
     _write_config(tmp_path, {
         "custom_sinks": {
             "bad_sink": ["only_one_element"],
-            "good_sink": ["description", "high"],
+            "legacy_wrong_shape": ["description", "high"],
+            "good_sink": {"cwe": "CWE-89", "title": "Custom SQL Injection sink"},
         }
     })
     cfg = load_config(tmp_path)
     assert "bad_sink" not in cfg.custom_sinks
+    assert "legacy_wrong_shape" not in cfg.custom_sinks
     assert "good_sink" in cfg.custom_sinks
+    assert len(cfg.warnings) >= 2
+
+
+def test_apply_config_to_results_disables_by_rule_id():
+    config = AnsedeConfig(disable_rules=["PY-020"])
+    results = [scan_code(
+        """
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/admin/users')
+def admin_users():
+    return []
+""",
+        language="python",
+    )]
+
+    filtered = apply_config_to_results(results, config)
+    assert not filtered[0].findings
+
+
+def test_apply_config_to_results_disables_by_cwe():
+    config = AnsedeConfig(disable_rules=["CWE-862"])
+    results = [scan_code(
+        """
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/admin/users')
+def admin_users():
+    return []
+""",
+        language="python",
+    )]
+
+    filtered = apply_config_to_results(results, config)
+    assert not filtered[0].findings
+
+
+def test_scan_code_respects_custom_sink_config():
+    config = AnsedeConfig(custom_sinks={
+        "my_db_execute": CustomSinkSpec(cwe="CWE-89", title="Custom SQL Injection sink", severity="critical")
+    })
+    result = scan_code(
+        """
+from flask import request
+def run_query():
+    payload = request.args.get('q')
+    my_db_execute(payload)
+""",
+        language="python",
+        config=config,
+    )
+
+    assert any(f.rule_id == "PY-004" and f.cwe == "CWE-89" for f in result.findings)

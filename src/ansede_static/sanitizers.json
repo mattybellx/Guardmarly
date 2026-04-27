@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "description": "Versioned catalog of known-safe (sanitizer) functions per framework and CWE. Community-maintainable.",
+  "python": {
+    "CWE-78": {
+      "generic":   ["shlex.quote", "shlex.split", "pipes.quote"],
+      "stdlib":    ["subprocess.run", "subprocess.check_output"],
+      "notes":     "Use shell=False with argument lists instead of shell=True with strings."
+    },
+    "CWE-79": {
+      "generic":   ["html.escape", "escape", "markupsafe.escape", "bleach.clean"],
+      "django":    ["django.utils.html.escape", "django.utils.html.format_html", "mark_safe"],
+      "flask":     ["markupsafe.escape", "flask.escape", "Markup"],
+      "jinja2":    ["jinja2.Markup", "jinja2.escape"],
+      "notes":     "Auto-escaping in Jinja2/Django templates also neutralises XSS."
+    },
+    "CWE-89": {
+      "generic":   ["int", "float", "bool", "uuid.UUID"],
+      "sqlalchemy": ["text", "bindparams", "literal", "literal_column"],
+      "django":    ["django.db.models.Q", "django.db.connection.cursor"],
+      "psycopg2":  ["psycopg2.sql.Identifier", "psycopg2.sql.Literal"],
+      "pymysql":   ["pymysql.escape_string"],
+      "notes":     "Parameterized queries (?, %s, :name) are the primary defense."
+    },
+    "CWE-22": {
+      "generic":   ["os.path.basename", "os.path.realpath", "Path.resolve"],
+      "werkzeug":  ["werkzeug.utils.secure_filename", "secure_filename"],
+      "notes":     "After resolving, assert the path starts with the safe base directory."
+    },
+    "CWE-95": {
+      "generic":   ["ast.literal_eval", "json.loads", "json.load"],
+      "notes":     "Never pass user input to eval/exec. Use safe parsing alternatives."
+    },
+    "CWE-502": {
+      "generic":   ["json.loads", "json.load"],
+      "notes":     "JSON is safe; pickle, yaml.load, marshal are not safe with untrusted data."
+    },
+    "CWE-918": {
+      "generic":   ["urllib.parse.urlparse", "validators.url", "ipaddress.ip_address"],
+      "notes":     "Allowlist validated hostnames; block private/internal IP ranges."
+    },
+    "CWE-601": {
+      "flask":     ["flask.url_for"],
+      "django":    ["django.urls.reverse"],
+      "notes":     "Internal redirects via url_for/reverse are safe; external must be allowlisted."
+    }
+  },
+  "javascript": {
+    "CWE-79": {
+      "generic":   ["DOMPurify.sanitize", "he.encode", "he.escape", "xss", "sanitizeHtml"],
+      "react":     ["React.createElement", "textContent"],
+      "notes":     "React JSX auto-escapes text; avoid dangerouslySetInnerHTML with user data."
+    },
+    "CWE-89": {
+      "sequelize": ["sequelize.escape", "Sequelize.literal", "sequelize.query with replacements"],
+      "knex":      ["knex.raw with bindings", "knex.where"],
+      "mysql":     ["mysql.escape", "mysql.format", "mysql2.escape"],
+      "pg":        ["pg.Client.query with parameterized values"],
+      "mongoose":  ["mongoose.Types.ObjectId"],
+      "notes":     "Always use parameterized queries or ORM query builders."
+    },
+    "CWE-78": {
+      "generic":   ["execa", "execFileSync", "spawnSync"],
+      "notes":     "Use execFile/spawn with argument arrays instead of exec with shell strings."
+    },
+    "CWE-22": {
+      "generic":   ["path.basename", "path.resolve combined with startsWith check"],
+      "notes":     "After path.resolve, verify the result starts with the expected base directory."
+    },
+    "CWE-918": {
+      "generic":   ["URL constructor with hostname check", "validator.isURL"],
+      "notes":     "Parse URLs and allowlist the hostname before making outbound requests."
+    },
+    "CWE-601": {
+      "generic":   ["relative paths only", "allowlisted absolute origins"],
+      "notes":     "Accept only relative paths or origins from a strict allowlist."
+    }
+  }
+}

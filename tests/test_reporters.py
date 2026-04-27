@@ -4,6 +4,7 @@ import json
 
 from ansede_static.cache import stable_hash
 from ansede_static.engine_version import ENGINE_NAME, SCHEMA_VERSION
+from ansede_static.schema import FINGERPRINT_VERSION
 from ansede_static.ir import build_issue_records
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.python_analyzer import analyze_python
@@ -63,6 +64,7 @@ def test_json_report_has_versioned_envelope():
     payload = json.loads(format_json(_sample_results()))
 
     assert payload["schema_version"] == SCHEMA_VERSION
+    assert payload["fingerprint_version"] == FINGERPRINT_VERSION
     assert payload["tool"] == ENGINE_NAME
     assert payload["summary"]["total_findings"] == 1
     assert payload["summary"]["security_findings"] == 1
@@ -74,6 +76,8 @@ def test_json_report_has_versioned_envelope():
     assert payload["results"][0]["lines_scanned"] > 0
     assert payload["results"][0]["findings"][0]["finding_class"] == "security"
     assert payload["results"][0]["findings"][0]["rule_id"] == "PY-004"
+    assert payload["results"][0]["findings"][0]["rule"]["rule_id"] == "PY-004"
+    assert payload["results"][0]["findings"][0]["rule"]["precision"] == "high"
 
 
 def test_ir_builder_emits_records():
@@ -105,6 +109,7 @@ def test_sarif_has_partial_fingerprints():
     assert len(result["partialFingerprints"]["primaryLocationLineHash"]) == 64
     assert "codeFlows" in result
     assert len(result["codeFlows"][0]["threadFlows"][0]["locations"]) >= 2
+    assert result["properties"]["rule"]["rule_id"] == "PY-004"
 
 
 def test_mixed_report_separates_security_and_quality_findings():
@@ -136,6 +141,16 @@ def test_text_and_sarif_expose_finding_class_breakdown():
     assert precisions == {"high", "low"}
     rule_ids = {rule["id"] for rule in sarif["runs"][0]["tool"]["driver"]["rules"]}
     assert rule_ids == {"PY-004", "PY-028"}
+    maturities = {rule["properties"]["maturity"] for rule in sarif["runs"][0]["tool"]["driver"]["rules"]}
+    assert "stable" in maturities
+
+
+def test_json_and_sarif_can_include_execution_metadata():
+    json_payload = json.loads(format_json(_sample_results(), execution={"js_backend": {"requested": "auto", "selected": "structural"}}))
+    sarif_payload = json.loads(format_sarif(_sample_results(), execution={"js_backend": {"requested": "auto", "selected": "structural"}}))
+
+    assert json_payload["execution"]["js_backend"]["selected"] == "structural"
+    assert sarif_payload["runs"][0]["properties"]["execution"]["js_backend"]["requested"] == "auto"
 
 
 def test_stable_hash_is_deterministic():

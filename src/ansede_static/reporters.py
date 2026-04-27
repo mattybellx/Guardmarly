@@ -22,6 +22,7 @@ from typing import Any
 
 from ansede_static._types import AnalysisResult, Finding, Severity
 from ansede_static.engine_version import get_engine_version
+from ansede_static.rules import get_rule_contract
 from ansede_static.schema import build_report
 
 try:
@@ -242,9 +243,9 @@ def format_text_multi(
 # JSON formatter
 # ──────────────────────────────────────────────────────────────────────────────
 
-def format_json(results: list[AnalysisResult], indent: int = 2) -> str:
+def format_json(results: list[AnalysisResult], indent: int = 2, *, execution: dict[str, Any] | None = None) -> str:
     """Return a JSON string with all results."""
-    payload: dict[str, Any] = build_report(results)
+    payload: dict[str, Any] = build_report(results, execution=execution)
     return _json.dumps(payload, indent=indent, default=str)
 
 
@@ -319,7 +320,7 @@ _SARIF_PRECISION_ORDER: dict[str, int] = {
 }
 
 
-def format_sarif(results: list[AnalysisResult]) -> str:
+def format_sarif(results: list[AnalysisResult], *, execution: dict[str, Any] | None = None) -> str:
     """
     Return a SARIF 2.1.0 JSON string.
     Upload to GitHub: `gh upload-scan-result results.sarif`
@@ -329,27 +330,41 @@ def format_sarif(results: list[AnalysisResult]) -> str:
     for result in results:
         for f in result.findings:
             rule_id = f.effective_rule_id
-            precision = _sarif_precision(f.confidence)
+            contract = get_rule_contract(
+                f.rule_id,
+                cwe=f.cwe,
+                title=f.title,
+                category=f.category,
+                severity=f.severity.value,
+                language=result.language,
+            )
+            precision = _more_conservative_precision(
+                _contract_precision_to_sarif(contract.precision),
+                _sarif_precision(f.confidence),
+            )
             if rule_id not in rules_by_id:
                 tags = [f.finding_class, f.category]
+                tags.extend(contract.tags)
                 properties: dict[str, Any] = {
                     "tags": tags,
                     "precision": precision,
                     "confidence": f.confidence,
                     "cwe": f.cwe,
+                    "maturity": contract.maturity,
+                    "ruleSummary": contract.summary,
                 }
                 if f.finding_class == "security":
                     properties["security-severity"] = _cwe_to_cvss(f.cwe)
                 rules_by_id[rule_id] = {
                     "id": rule_id,
-                    "name": f.title[:80],
-                    "shortDescription": {"text": f.description[:200]},
-                    "fullDescription": {"text": f.description},
-                    "helpUri": _cwe_help_uri(f.cwe),
+                    "name": contract.title[:80] or f.title[:80],
+                    "shortDescription": {"text": contract.summary or f.description[:200]},
+                    "fullDescription": {"text": contract.summary or f.description},
+                    "helpUri": contract.docs_url or _cwe_help_uri(f.cwe),
                     "defaultConfiguration": {
                         "level": _SARIF_LEVEL.get(f.severity.value, "warning")
                     },
-                    "help": {"text": f.suggestion or "Review and fix this finding."},
+                    "help": {"text": contract.remediation or f.suggestion or "Review and fix this finding."},
                     "properties": properties,
                 }
             else:
@@ -394,6 +409,14 @@ def format_sarif(results: list[AnalysisResult]) -> str:
                     "analysisKind": f.analysis_kind,
                     "suggestion": f.suggestion,
                     "autoFix": f.auto_fix,
+                    "rule": get_rule_contract(
+                        f.rule_id,
+                        cwe=f.cwe,
+                        title=f.title,
+                        category=f.category,
+                        severity=f.severity.value,
+                        language=result.language,
+                    ).as_dict(),
                 },
             })
 
@@ -413,6 +436,7 @@ def format_sarif(results: list[AnalysisResult]) -> str:
             "automationDetails": {
                 "id": "ansede-static/",
             },
+            **({"properties": {"execution": execution}} if execution else {}),
         }],
     }
     return _json.dumps(sarif, indent=2, default=str)
@@ -459,6 +483,15 @@ def _sarif_precision(confidence: float) -> str:
     return "low"
 
 
+def _contract_precision_to_sarif(precision: str) -> str:
+    normalized = precision.strip().lower()
+    if normalized == "high":
+        return "high"
+    if normalized == "low":
+        return "low"
+    return "medium"
+
+
 def _more_conservative_precision(existing: str, new: str) -> str:
     existing_order = _SARIF_PRECISION_ORDER.get(existing, _SARIF_PRECISION_ORDER["medium"])
     new_order = _SARIF_PRECISION_ORDER.get(new, _SARIF_PRECISION_ORDER["medium"])
@@ -479,3 +512,213 @@ def _cwe_to_cvss(cwe: str) -> str:
     if cwe in high:
         return "8.1"
     return "5.5"
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# HTML dashboard formatter (self-contained, zero external resources)
+# ──────────────────────────────────────────────────────────────────────────────
+
+_HTML_SEV_COLOUR: dict[str, str] = {
+    "critical": "#c0392b",
+    "high":     "#e67e22",
+    "medium":   "#2980b9",
+    "low":      "#27ae60",
+    "info":     "#7f8c8d",
+}
+
+_HTML_TEMPLATE = """\
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ansede-static Security Report</title>
+<style>
+  :root {{
+    --bg: #1a1a2e; --surface: #16213e; --surface2: #0f3460;
+    --text: #e0e0e0; --muted: #9e9e9e; --accent: #e94560;
+  }}
+  * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{ background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; padding: 24px; }}
+  h1 {{ font-size: 1.6rem; color: var(--accent); margin-bottom: 8px; }}
+  .subtitle {{ color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }}
+  .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }}
+  .stat-card {{ background: var(--surface); border-radius: 8px; padding: 14px; text-align: center; border-top: 3px solid var(--accent); }}
+  .stat-card .num {{ font-size: 2rem; font-weight: 700; }}
+  .stat-card .label {{ font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }}
+  .file-section {{ background: var(--surface); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }}
+  .file-header {{ background: var(--surface2); padding: 12px 16px; font-family: monospace; font-size: 0.85rem; cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; }}
+  .file-header:hover {{ background: #0d2d52; }}
+  .file-body {{ padding: 12px; }}
+  .finding {{ border-left: 4px solid; padding: 10px 14px; margin-bottom: 8px; border-radius: 0 6px 6px 0; background: rgba(255,255,255,0.03); }}
+  .finding-header {{ display: flex; gap: 10px; align-items: baseline; margin-bottom: 4px; }}
+  .badge {{ font-size: 0.7rem; font-weight: 700; padding: 2px 7px; border-radius: 3px; text-transform: uppercase; color: #fff; }}
+  .finding-title {{ font-weight: 600; font-size: 0.9rem; }}
+  .finding-location {{ font-size: 0.75rem; color: var(--muted); font-family: monospace; }}
+  .finding-desc {{ font-size: 0.82rem; color: #c0c0c0; margin-top: 4px; }}
+  .finding-meta {{ display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }}
+  .tag {{ font-size: 0.7rem; padding: 1px 6px; border-radius: 12px; background: rgba(255,255,255,0.1); color: var(--muted); }}
+  .finding-code {{ font-family: monospace; font-size: 0.78rem; background: #0a0a1a; border-radius: 4px; padding: 8px 12px; margin-top: 6px; overflow-x: auto; white-space: pre; color: #a8d8a8; }}
+  .finding-suggestion {{ font-size: 0.8rem; color: #7fbfff; margin-top: 5px; font-style: italic; }}
+  .clean {{ color: var(--muted); font-size: 0.85rem; padding: 10px 16px; }}
+  .confidence-bar-wrap {{ display: inline-block; width: 60px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; vertical-align: middle; margin-left: 4px; }}
+  .confidence-bar {{ height: 6px; border-radius: 3px; background: #27ae60; }}
+  details summary {{ list-style: none; }}
+  details summary::-webkit-details-marker {{ display: none; }}
+  .toggle {{ font-size: 0.75rem; color: var(--muted); }}
+  footer {{ color: var(--muted); font-size: 0.75rem; text-align: center; margin-top: 32px; }}
+</style>
+</head>
+<body>
+<h1>&#x1F6E1; ansede-static — Security Report</h1>
+<p class="subtitle">Generated: {timestamp} &nbsp;|&nbsp; Engine v{version} &nbsp;|&nbsp; {file_count} file(s) scanned</p>
+<div class="summary-grid">
+  <div class="stat-card" style="border-top-color:#c0392b"><div class="num" style="color:#c0392b">{critical}</div><div class="label">Critical</div></div>
+  <div class="stat-card" style="border-top-color:#e67e22"><div class="num" style="color:#e67e22">{high}</div><div class="label">High</div></div>
+  <div class="stat-card" style="border-top-color:#2980b9"><div class="num" style="color:#2980b9">{medium}</div><div class="label">Medium</div></div>
+  <div class="stat-card" style="border-top-color:#27ae60"><div class="num" style="color:#27ae60">{low}</div><div class="label">Low</div></div>
+  <div class="stat-card"><div class="num">{total}</div><div class="label">Total</div></div>
+  <div class="stat-card"><div class="num">{security}</div><div class="label">Security</div></div>
+  <div class="stat-card"><div class="num">{quality}</div><div class="label">Quality</div></div>
+</div>
+{file_sections}
+<footer>ansede-static &mdash; SAST engine &mdash; <a href="https://github.com/mattybellx/Ansede" style="color:#7fbfff">github.com/mattybellx/Ansede</a></footer>
+<script>
+  document.querySelectorAll('.file-header').forEach(h => {{
+    h.addEventListener('click', () => {{
+      const body = h.nextElementSibling;
+      if (body) body.style.display = body.style.display === 'none' ? '' : 'none';
+      const tog = h.querySelector('.toggle');
+      if (tog) tog.textContent = body.style.display === 'none' ? '▶' : '▼';
+    }});
+  }});
+</script>
+</body>
+</html>"""
+
+
+def _html_escape(text: str) -> str:
+    return (
+        text.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace('"', "&quot;")
+            .replace("'", "&#x27;")
+    )
+
+
+def format_html(results: list[AnalysisResult]) -> str:
+    """Return a self-contained HTML security dashboard string."""
+    import datetime
+    from ansede_static.engine_version import get_engine_version as _gev
+
+    total = sum(len(r.findings) for r in results)
+    critical = sum(r.critical_count for r in results)
+    high = sum(r.high_count for r in results)
+    medium = sum(1 for r in results for f in r.findings if f.severity.value == "medium")
+    low = sum(1 for r in results for f in r.findings if f.severity.value == "low")
+    security = sum(r.security_count for r in results)
+    quality = sum(r.quality_count for r in results)
+
+    file_sections_html: list[str] = []
+    for result in results:
+        fp = _html_escape(result.file_path or "<stdin>")
+        lang = _html_escape(result.language or "")
+        finding_count = len(result.findings)
+        badge_text = f"{finding_count} finding{'s' if finding_count != 1 else ''}" if finding_count else "clean"
+        badge_colour = "#c0392b" if finding_count else "#27ae60"
+
+        finding_cards: list[str] = []
+        if result.parse_error:
+            finding_cards.append(
+                f'<div class="finding" style="border-color:#c0392b">'
+                f'<div class="finding-header"><span class="badge" style="background:#c0392b">ERROR</span>'
+                f'<span class="finding-title">{_html_escape(result.parse_error)}</span></div></div>'
+            )
+        elif not result.findings:
+            finding_cards.append(
+                f'<p class="clean">&#x2705; No issues found &mdash; {result.lines_scanned} lines scanned</p>'
+            )
+        else:
+            for f in result.sorted_findings():
+                sev = f.severity.value
+                colour = _HTML_SEV_COLOUR.get(sev, "#7f8c8d")
+                loc = f"L{f.line}" if f.line else "?"
+                cwe_text = f" &mdash; {_html_escape(f.cwe)}" if f.cwe else ""
+                rule_id = _html_escape(f.effective_rule_id)
+                conf_pct = int(f.confidence * 100)
+                conf_bar = (
+                    f'<span class="confidence-bar-wrap">'
+                    f'<span class="confidence-bar" style="width:{conf_pct}%"></span></span>'
+                    f' {conf_pct}%'
+                )
+
+                # Tags (compliance + category)
+                tags_html = ""
+                all_tags = [f.category, f.analysis_kind] + list(getattr(f, "tags", []))
+                tags_html = "".join(
+                    f'<span class="tag">{_html_escape(t)}</span>'
+                    for t in all_tags if t
+                )
+
+                # Triggering code snippet
+                snippet_html = ""
+                if getattr(f, "triggering_code", None):
+                    snippet_html = (
+                        f'<div class="finding-code">{_html_escape(f.triggering_code)}</div>'
+                    )
+
+                suggestion_html = ""
+                if f.suggestion:
+                    suggestion_html = (
+                        f'<p class="finding-suggestion">&#x1F4A1; {_html_escape(f.suggestion[:200])}</p>'
+                    )
+
+                finding_cards.append(
+                    f'<div class="finding" style="border-color:{colour}">'
+                    f'  <div class="finding-header">'
+                    f'    <span class="badge" style="background:{colour}">{sev.upper()}</span>'
+                    f'    <span class="finding-location">{loc}</span>'
+                    f'    <span class="finding-title">{_html_escape(f.title)}{cwe_text}</span>'
+                    f'  </div>'
+                    f'  <div class="finding-desc">{_html_escape(f.description[:300])}</div>'
+                    f'  {snippet_html}'
+                    f'  {suggestion_html}'
+                    f'  <div class="finding-meta">'
+                    f'    <span class="tag">{rule_id}</span>'
+                    f'    <span class="tag">confidence {conf_bar}</span>'
+                    f'    {tags_html}'
+                    f'  </div>'
+                    f'</div>'
+                )
+
+        body_html = "\n".join(finding_cards)
+        file_sections_html.append(
+            f'<div class="file-section">'
+            f'<div class="file-header">'
+            f'  <span>{fp} &nbsp;<span style="color:{_HTML_SEV_COLOUR.get("info","#7f8c8d")};font-size:0.75rem">[{lang}]</span></span>'
+            f'  <span><span style="color:{badge_colour};font-weight:700">{badge_text}</span>&nbsp;<span class="toggle">&#x25BC;</span></span>'
+            f'</div>'
+            f'<div class="file-body">{body_html}</div>'
+            f'</div>'
+        )
+
+    try:
+        version = _gev()
+    except Exception:
+        version = "?"
+
+    html = _HTML_TEMPLATE.format(
+        timestamp=datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+        version=version,
+        file_count=len(results),
+        critical=critical,
+        high=high,
+        medium=medium,
+        low=low,
+        total=total,
+        security=security,
+        quality=quality,
+        file_sections="\n".join(file_sections_html),
+    )
+    return html

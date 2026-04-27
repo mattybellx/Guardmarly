@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "case_id": "pinned-real-world-example",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/owner/repo.git",
+        "ref": "0123456789abcdef0123456789abcdef01234567",
+        "subdir": "src"
+      },
+      "language": "python",
+      "targets": ["app"],
+      "expected_cwes": ["CWE-862"],
+      "expected_rule_ids": ["PY-020"],
+      "notes": "Example only: pin to a commit SHA for reproducible external corpus runs."
+    }
+  ]
+}

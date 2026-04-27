@@ -12,6 +12,9 @@ from ansede_static._types import AnalysisResult
 from ansede_static.engine_version import ENGINE_NAME, SCHEMA_VERSION, get_engine_record, get_engine_version
 
 
+FINGERPRINT_VERSION = "2"
+
+
 def build_summary(results: list[AnalysisResult]) -> dict[str, Any]:
     """Build aggregate counts across the full scan result set."""
     category_counts: dict[str, int] = {}
@@ -35,12 +38,13 @@ def build_summary(results: list[AnalysisResult]) -> dict[str, Any]:
     }
 
 
-def build_report(results: list[AnalysisResult]) -> dict[str, Any]:
+def build_report(results: list[AnalysisResult], *, execution: dict[str, Any] | None = None) -> dict[str, Any]:
     """Build the canonical JSON envelope for a scan."""
     summary = build_summary(results)
     version = get_engine_version()
-    return {
+    report = {
         "schema_version": SCHEMA_VERSION,
+        "fingerprint_version": FINGERPRINT_VERSION,
         "tool": ENGINE_NAME,
         "version": version,
         "engine_version": version,
@@ -51,3 +55,6 @@ def build_report(results: list[AnalysisResult]) -> dict[str, Any]:
         "summary": summary,
         "results": [r.as_dict() for r in results],
     }
+    if execution:
+        report["execution"] = execution
+    return report

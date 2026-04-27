@@ -5,6 +5,44 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- `AnsedeConfig` is now usable directly from the Python API via `scan_file(..., config=...)` and `scan_code(..., config=...)`.
+- JSON report envelopes now include a top-level `fingerprint_version` marker to document the baseline fingerprint format.
+- VS Code extension now supports debounced `scanOnType` scanning and a configurable `ansede.scanTimeoutMs` setting.
+- Rule contracts are now exposed through a new `src/ansede_static/rules.py` catalog and surfaced in JSON/SARIF finding payloads.
+- New CLI catalog commands: `--list-rules`, `--describe-rule`, and `--list-js-backends`.
+- A new trust-oriented quality harness is available via `python -m benchmarks.quality_benchmark`.
+- A new manifest-driven external corpus runner is available via `python -m benchmarks.external_corpus --manifest benchmarks/external_manifest.json`.
+- The external corpus runner now supports pinned git-backed manifest entries with local caching plus `--cache-dir`, `--refresh`, and `--offline` controls for larger real-world corpus workflows.
+- A curated opt-in real-world manifest is now shipped in `benchmarks/real_world_manifest.json`, initially covering pinned NodeGoat route files for open redirect, brute-force, cookie-flag, and eval-style code execution checks.
+- A new performance smoke benchmark is available via `python -m benchmarks.perf_benchmark`.
+- A roadmap document now tracks concrete v1.3 / v1.4 / v2.0 milestone tickets in `ROADMAP.md`.
+- The experimental JS/TS AST path now includes a zero-dependency structural call/property parser and shared `js_engine` helpers for syntax-aware detections before fallback merging.
+- The structural JS/TS engine now detects React / JSX `dangerouslySetInnerHTML` flows and object-literal route/auth patterns such as Fastify-style `route({...})` definitions and options-object hooks.
+- The JS engine now resolves relative-import helper functions and local helper call chains for redirect, SSRF, path traversal, and route access-control findings.
+- Route/auth heuristics now understand nested route option semantics such as Hapi-style `options.auth` / `scope` and helper-based auth / privilege checks.
+- Helper summaries now propagate return-value taint across local and imported JS/TS call chains, allowing sink checks to catch values returned through nested helper layers before later redirect / SSRF / path operations.
+- Route/auth heuristics now understand broader framework semantics including Koa-style `router.use(...)` auth prefixes, NestJS decorator routes/guards, and Next.js file-based route handlers with dynamic `params` segments.
+- JS project indexing now uses a workspace-wide module graph cache so repeated route and taint analysis can reuse parsed file indexes across larger repositories.
+
+### Changed
+- `disable_rules` from `ansede.json` are now enforced using either stable detector IDs (for example `PY-020`) or whole-CWE tokens (for example `CWE-862`).
+- `custom_sinks` now use an explicit object schema (`cwe`, `title`, `severity`) instead of the ambiguous legacy list format.
+- `--ai-triage` help text now describes the implemented offline heuristic triage behavior rather than implying an external LLM requirement.
+- JS/TS scans now use an explicit backend-selection contract (`auto`, `classic`, `structural`) in the CLI and Python API.
+- Report envelopes now record requested and selected JS backend execution metadata.
+- CI is now intended to cover cross-platform smoke runs plus quality/performance benchmark visibility alongside unit tests.
+- `--experimental-js-ast` now routes scans through a syntax-aware structural engine before merging fallback coverage from the standard JS analyzer.
+- `--apply-fixes` now only auto-applies safe inline edits; multi-line or ambiguous fixes remain suggestions for manual review.
+- VS Code extension workspace scans now cover Python, JavaScript, JSX, TypeScript, and TSX files.
+- VS Code quick fixes now register for the full supported JS/TS editor surface instead of plain JavaScript only.
+- `js_analyzer.py` is now a thin orchestrator over shared `js_engine` modules instead of a single monolithic implementation file.
+
+### Fixed
+- VS Code extension now auto-detects `ansede-static` in common workspace virtualenv locations before falling back to `PATH`.
+- Missing `ansede-static` executable errors in the VS Code extension are now surfaced with a targeted setup message.
+- CLI starter config written by `--init` now matches the implemented `custom_sinks` schema.
+
 ## [1.2.0] — 2026-04-24
 
 ### Added

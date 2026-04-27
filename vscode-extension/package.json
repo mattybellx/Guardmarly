@@ -65,10 +65,21 @@
           "default": true,
           "description": "Re-scan when the file is saved."
         },
+        "ansede.scanOnType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Debounce and re-scan while you type for inline feedback without saving."
+        },
         "ansede.scanOnOpen": {
           "type": "boolean",
           "default": true,
           "description": "Scan when a file is opened."
+        },
+        "ansede.scanTimeoutMs": {
+          "type": "number",
+          "default": 15000,
+          "minimum": 1000,
+          "description": "Timeout in milliseconds for each ansede-static scan process."
         },
         "ansede.minSeverity": {
           "type": "string",

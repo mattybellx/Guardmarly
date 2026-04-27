@@ -207,6 +207,34 @@ app.get('/logout', (req, res) => {
                 assert any(frame_kind == "helper" for frame_kind in kinds)
                 assert labels[-1] == "sink `res.redirect()`"
 
+    def test_imported_redirect_helper_detected(self, tmp_path):
+        helper_file = tmp_path / "redirect_helper.js"
+        app_file = tmp_path / "app.js"
+        helper_file.write_text(
+            """
+export function redirectTo(res, target) {
+    return res.redirect(target);
+}
+""",
+            encoding="utf-8",
+        )
+        app_code = """
+import { redirectTo } from './redirect_helper';
+
+app.get('/logout', (req, res) => {
+    const next = req.query.next;
+    redirectTo(res, next);
+});
+"""
+        app_file.write_text(app_code, encoding="utf-8")
+
+        result = analyze_js(app_code, filename=str(app_file))
+        finding = next(f for f in result.findings if f.cwe == "CWE-601")
+        labels = [frame.label for frame in finding.trace]
+
+        assert any(label == "through `redirectTo()`" for label in labels)
+        assert labels[-1] == "sink `res.redirect()`"
+
 
 # ── CWE-918: SSRF ────────────────────────────────────────────────────────────
 
@@ -410,6 +438,154 @@ app.get('/admin/audit', (req, res) => {
 });
 """
                 assert not _has_cwe(code, "CWE-287")
+
+        def test_fastify_route_object_missing_auth_detected(self):
+                code = """
+fastify.route({
+    method: 'GET',
+    url: '/admin/users',
+    handler: async (request, reply) => {
+        const users = await User.findAll();
+        reply.send(users);
+    }
+});
+"""
+                assert _has_cwe(code, "CWE-862")
+
+        def test_fastify_route_object_idor_detected(self):
+                code = """
+fastify.route({
+    method: 'GET',
+    url: '/accounts/:accountId',
+    preHandler: [requireAuth],
+    handler: async (request, reply) => {
+        const accountId = request.params.accountId;
+        const account = await Account.findByPk(accountId);
+        reply.send(account);
+    }
+});
+"""
+                assert _has_cwe(code, "CWE-639")
+
+        def test_fastify_options_object_auth_without_role_guard_detected(self):
+                code = """
+fastify.get('/admin/users', { preHandler: [requireAuth] }, async (request, reply) => {
+    const users = await User.findAll();
+    reply.send(users);
+});
+"""
+                result = analyze_js(code)
+                finding = next(f for f in result.findings if f.rule_id == "JS-035")
+
+                assert finding.cwe == "CWE-285"
+                assert any(frame.label == "auth middleware `requireAuth`" for frame in finding.trace)
+
+        def test_object_route_auth_role_option_prevents_broken_access_control(self):
+                code = """
+fastify.route({
+    method: 'GET',
+    url: '/admin/users',
+    auth: { strategy: 'jwt', scope: ['admin'] },
+    handler: async (request, reply) => {
+        const users = await User.findAll();
+        reply.send(users);
+    }
+});
+"""
+                assert not _has_cwe(code, "CWE-285")
+
+        def test_imported_lookup_helper_idor_detected(self, tmp_path):
+                helper_file = tmp_path / "data_helpers.js"
+                app_file = tmp_path / "app.js"
+                helper_file.write_text(
+                    """
+export async function loadAccount(accountId) {
+    return Account.findByPk(accountId);
+}
+""",
+                    encoding="utf-8",
+                )
+                app_code = """
+import { loadAccount } from './data_helpers';
+
+app.get('/accounts/:accountId', requireAuth, async (req, res) => {
+    const account = await loadAccount(req.params.accountId);
+    res.json(account);
+});
+"""
+                app_file.write_text(app_code, encoding="utf-8")
+
+                result = analyze_js(app_code, filename=str(app_file))
+                finding = next(f for f in result.findings if f.cwe == "CWE-639")
+                labels = [frame.label for frame in finding.trace]
+
+                assert any(label == "through `loadAccount()`" for label in labels)
+                assert labels[-1].startswith("resource lookup `")
+
+        def test_helper_verification_prevents_auth_bypass(self, tmp_path):
+                helper_file = tmp_path / "auth_helper.js"
+                app_file = tmp_path / "app.js"
+                helper_file.write_text(
+                    """
+export function requireSession(token) {
+    return jwt.verify(token, JWT_SECRET);
+}
+""",
+                    encoding="utf-8",
+                )
+                app_code = """
+import { requireSession } from './auth_helper';
+
+app.get('/admin/audit', (req, res) => {
+    const token = req.headers.authorization;
+    const user = requireSession(token);
+    if (!user) {
+        return res.status(401).end();
+    }
+    res.json({ ok: true });
+});
+"""
+                app_file.write_text(app_code, encoding="utf-8")
+
+                result = analyze_js(app_code, filename=str(app_file))
+                assert not any(f.cwe == "CWE-287" for f in result.findings)
+
+        def test_hapi_options_auth_without_role_guard_detected(self):
+                code = """
+server.route({
+    method: 'GET',
+    path: '/admin/users',
+    options: { auth: 'jwt' },
+    handler: async (request, h) => {
+        const users = await User.findAll();
+        return users;
+    }
+});
+"""
+                result = analyze_js(code)
+                finding = next(f for f in result.findings if f.rule_id == "JS-035")
+
+                assert finding.cwe == "CWE-285"
+                assert any("auth option `auth`" in frame.label for frame in finding.trace)
+
+        def test_hapi_scope_option_prevents_broken_access_control(self):
+                code = """
+server.route({
+    method: 'GET',
+    path: '/admin/users',
+    options: {
+        auth: {
+            strategy: 'jwt',
+            scope: ['admin']
+        }
+    },
+    handler: async (request, h) => {
+        const users = await User.findAll();
+        return users;
+    }
+});
+"""
+                assert not _has_cwe(code, "CWE-285")
 
 
 # ── CWE-1321: Prototype pollution ────────────────────────────────────────────
@@ -625,3 +801,230 @@ app.get('/profile', (req, res) => {
 });
 """
         assert not _has_cwe(code, "CWE-352")
+
+
+class TestAdvancedHelperFlow:
+    def test_imported_helper_return_chain_redirect_detected(self, tmp_path):
+        selectors_file = tmp_path / "selectors.js"
+        builders_file = tmp_path / "builders.js"
+        app_file = tmp_path / "app.js"
+
+        selectors_file.write_text(
+            """
+export function readNext(req) {
+    return req.query.next;
+}
+""",
+            encoding="utf-8",
+        )
+        builders_file.write_text(
+            """
+import { readNext } from './selectors';
+
+export function computeRedirect(req) {
+    return readNext(req);
+}
+""",
+            encoding="utf-8",
+        )
+        app_code = """
+import { computeRedirect } from './builders';
+
+app.get('/logout', (req, res) => {
+    const target = computeRedirect(req);
+    res.redirect(target);
+});
+"""
+        app_file.write_text(app_code, encoding="utf-8")
+
+        result = analyze_js(app_code, filename=str(app_file))
+        finding = next(f for f in result.findings if f.rule_id == "JS-039")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-601"
+        assert any(label == "through `computeRedirect()`" for label in labels)
+        assert any(label == "through `readNext()`" for label in labels)
+        assert labels[-1] == "sink `res.redirect()`"
+
+
+class TestBroaderRouteSemantics:
+    def test_koa_router_use_auth_triggers_broken_access_control(self):
+        code = """
+const router = new Router();
+
+router.use('/admin', requireAuth);
+router.get('/admin/users', async (ctx) => {
+    return User.findAll();
+});
+"""
+        result = analyze_js(code)
+
+        assert not any(f.rule_id == "JS-034" for f in result.findings)
+        finding = next(f for f in result.findings if f.rule_id == "JS-035")
+        assert finding.cwe == "CWE-285"
+        assert any(frame.label == "auth middleware `requireAuth`" for frame in finding.trace)
+
+    def test_nest_admin_controller_auth_without_role_guard_detected(self):
+        code = """
+@Controller('admin')
+@UseGuards(AuthGuard('jwt'))
+export class AdminController {
+    @Get('users')
+    async listUsers() {
+        return this.userService.findAll();
+    }
+}
+"""
+        result = analyze_js(code)
+        finding = next(f for f in result.findings if f.rule_id == "JS-035")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-285"
+        assert labels[0] == "route `/admin/users` method `GET`"
+        assert any("UseGuards" in label or "AuthGuard" in label for label in labels)
+        assert labels[-1] == "admin route reachable after auth only"
+
+    def test_next_app_route_idor_detected(self, tmp_path):
+        route_file = tmp_path / "app" / "api" / "accounts" / "[accountId]" / "route.ts"
+        route_file.parent.mkdir(parents=True)
+        route_code = """
+export async function GET(request, { params }) {
+    const account = await Account.findByPk(params.accountId);
+    return Response.json(account);
+}
+"""
+        route_file.write_text(route_code, encoding="utf-8")
+
+        result = analyze_js(route_code, filename=str(route_file))
+        finding = next(f for f in result.findings if f.rule_id == "JS-033")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-639"
+        assert labels[0] == "route `/api/accounts/:accountId` method `GET`"
+        assert "resource parameter `accountId`" in labels
+
+    def test_next_admin_route_auth_without_role_guard_detected(self, tmp_path):
+        route_file = tmp_path / "app" / "api" / "admin" / "users" / "route.ts"
+        route_file.parent.mkdir(parents=True)
+        route_code = """
+export async function GET(request) {
+    const session = await getServerSession(authOptions);
+    return Response.json(await listUsers(session));
+}
+"""
+        route_file.write_text(route_code, encoding="utf-8")
+
+        result = analyze_js(route_code, filename=str(route_file))
+        finding = next(f for f in result.findings if f.rule_id == "JS-035")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-285"
+        assert labels[0] == "route `/api/admin/users` method `GET`"
+        assert any("getServerSession" in label for label in labels)
+        assert labels[-1] == "admin route reachable after auth only"
+
+
+class TestDeeperJsResolution:
+    def test_reexported_redirect_alias_detected(self, tmp_path):
+        redirect_file = tmp_path / "redirect.js"
+        barrel_file = tmp_path / "index.ts"
+        app_file = tmp_path / "app.js"
+
+        redirect_file.write_text(
+            """
+export function redirectTo(res, target) {
+    return res.redirect(target);
+}
+""",
+            encoding="utf-8",
+        )
+        barrel_file.write_text(
+            """
+export { redirectTo as go } from './redirect';
+""",
+            encoding="utf-8",
+        )
+        app_code = """
+import { go } from './index';
+
+app.get('/logout', (req, res) => {
+    go(res, req.query.next);
+});
+"""
+        app_file.write_text(app_code, encoding="utf-8")
+
+        result = analyze_js(app_code, filename=str(app_file))
+        finding = next(f for f in result.findings if f.rule_id == "JS-039")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-601"
+        assert any(label == "through `go()`" for label in labels)
+        assert labels[-1] == "sink `res.redirect()`"
+
+    def test_sanitized_helper_return_prevents_path_traversal(self, tmp_path):
+        helper_file = tmp_path / "paths.js"
+        app_file = tmp_path / "app.js"
+
+        helper_file.write_text(
+            """
+export function safePath(filePath) {
+    return path.basename(filePath);
+}
+""",
+            encoding="utf-8",
+        )
+        app_code = """
+import { safePath } from './paths';
+
+const filePath = req.params.file;
+const safe = safePath(filePath);
+fs.readFileSync(safe, 'utf8');
+"""
+        app_file.write_text(app_code, encoding="utf-8")
+
+        result = analyze_js(app_code, filename=str(app_file))
+        assert not any(f.cwe == "CWE-22" for f in result.findings)
+
+    def test_nest_controller_service_call_chain_idor_detected(self, tmp_path):
+        service_file = tmp_path / "accounts.service.ts"
+        controller_file = tmp_path / "accounts.controller.ts"
+
+        service_file.write_text(
+            """
+export class AccountsService {
+    async loadAccount(accountId) {
+        return Account.findByPk(accountId);
+    }
+}
+""",
+            encoding="utf-8",
+        )
+        controller_code = """
+import { AccountsService } from './accounts.service';
+
+@Controller('accounts')
+@UseGuards(AuthGuard('jwt'))
+export class AccountsController {
+    constructor(private readonly accountsService: AccountsService) {}
+
+    @Get(':accountId')
+    async show(params) {
+        return this.load(params.accountId);
+    }
+
+    async load(accountId) {
+        return this.accountsService.loadAccount(accountId);
+    }
+}
+"""
+        controller_file.write_text(controller_code, encoding="utf-8")
+
+        result = analyze_js(controller_code, filename=str(controller_file))
+        finding = next(f for f in result.findings if f.rule_id == "JS-033")
+        labels = [frame.label for frame in finding.trace]
+
+        assert finding.cwe == "CWE-639"
+        assert labels[0] == "route `/accounts/:accountId` method `GET`"
+        assert any(label == "through `this.load()`" for label in labels)
+        assert any(label == "through `this.accountsService.loadAccount()`" for label in labels)
+

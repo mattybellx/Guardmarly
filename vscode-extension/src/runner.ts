@@ -50,6 +50,11 @@ export function runAnsedeScan(options: RunScanOptions): Promise<AnsedeReportEnve
         });
 
         child.on('error', (error: Error) => {
+            const errorWithCode = error as NodeJS.ErrnoException;
+            if (errorWithCode.code === 'ENOENT') {
+                finish(() => reject(new Error(`ansede-static executable not found: ${options.executable}`)));
+                return;
+            }
             finish(() => reject(error));
         });
 

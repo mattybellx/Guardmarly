@@ -31,6 +31,10 @@ inputs:
     description: 'Upload SARIF results to GitHub Code Scanning (requires contents:write and security-events:write permissions)'
     required: false
     default: 'true'
+  post-pr-comments:
+    description: 'Post inline review comments on the PR for each finding (requires pull-requests:write permission). Only active on pull_request events.'
+    required: false
+    default: 'false'
 
 outputs:
   findings-count:
@@ -144,6 +148,69 @@ PY
       with:
         sarif_file: ${{ inputs.output }}
         category: ansede-static
+
+    - name: Post PR inline comments
+      if: ${{ inputs.post-pr-comments == 'true' && github.event_name == 'pull_request' && inputs.format == 'sarif' && inputs.output != '' }}
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        SARIF_FILE: ${{ inputs.output }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        REPO: ${{ github.repository }}
+      run: |
+        python3 - <<'PY'
+import json, os, urllib.request, urllib.error
+
+sarif_file = os.environ["SARIF_FILE"]
+token = os.environ["GITHUB_TOKEN"]
+repo = os.environ["REPO"]
+pr_number = os.environ["PR_NUMBER"]
+
+try:
+    with open(sarif_file, encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception as exc:
+    print(f"[ansede] Cannot read SARIF: {exc}")
+    raise SystemExit(0)
+
+comments = []
+for run in data.get("runs", []):
+    for result in run.get("results", []):
+        msg = result.get("message", {}).get("text", "Security finding")
+        level = result.get("level", "warning")
+        for loc in result.get("locations", []):
+            phys = loc.get("physicalLocation", {})
+            path = phys.get("artifactLocation", {}).get("uri", "")
+            line = phys.get("region", {}).get("startLine", 1)
+            rule_id = result.get("ruleId", "")
+            body = f"**[ansede-static]** `{rule_id}` — {msg}"
+            comments.append({"path": path, "line": line, "side": "RIGHT", "body": body})
+
+if not comments:
+    print("[ansede] No findings to post as PR comments.")
+    raise SystemExit(0)
+
+url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews"
+headers = {
+    "Authorization": f"Bearer {token}",
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "Content-Type": "application/json",
+}
+payload = json.dumps({
+    "body": f"ansede-static found {len(comments)} security finding(s). See inline comments.",
+    "event": "COMMENT",
+    "comments": comments[:50],  # GitHub caps inline comments per review
+}).encode("utf-8")
+
+req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+try:
+    with urllib.request.urlopen(req) as resp:
+        print(f"[ansede] Posted {len(comments)} inline comment(s). HTTP {resp.status}")
+except urllib.error.HTTPError as exc:
+    print(f"[ansede] Failed to post PR comments: HTTP {exc.code} {exc.reason}")
+    raise SystemExit(1)
+PY
 
 branding:
   icon: 'shield'

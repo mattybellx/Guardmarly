@@ -62,6 +62,7 @@ class Finding:
     explanation: str = "" # educational markdown tutorial
     trace: tuple[TraceFrame, ...] = ()
     analysis_kind: str = "pattern"
+    triggering_code: str = ""  # source line that triggered the finding
 
     @property
     def finding_class(self) -> str:
@@ -75,7 +76,9 @@ class Finding:
         """Return the best available stable rule identifier for downstream tooling."""
         return self.rule_id or self.cwe or self.title
 
-    def as_dict(self) -> dict[str, Any]:
+    def as_dict(self, *, language: str | None = None) -> dict[str, Any]:
+        from ansede_static.rules import rule_record_for_finding
+
         return {
             "severity": self.severity.value,
             "title": self.title,
@@ -92,6 +95,14 @@ class Finding:
             "explanation": self.explanation,
             "analysis_kind": self.analysis_kind,
             "trace": [frame.as_dict() for frame in self.trace],
+            "rule": rule_record_for_finding(
+                self.rule_id,
+                cwe=self.cwe,
+                title=self.title,
+                category=self.category,
+                severity=self.severity.value,
+                language=language,
+            ),
         }
 
 
@@ -162,6 +173,6 @@ class AnalysisResult:
             "lines": self.lines_scanned,
             "lines_scanned": self.lines_scanned,
             "parse_error": self.parse_error,
-            "findings": [f.as_dict() for f in self.sorted_findings()],
+            "findings": [f.as_dict(language=self.language) for f in self.sorted_findings()],
             "summary": self.summary_dict(),
         }

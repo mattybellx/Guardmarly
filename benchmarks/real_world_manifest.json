@@ -1,0 +1,49 @@
+{
+  "entries": [
+    {
+      "case_id": "nodegoat-open-redirect-and-bruteforce",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "app/routes"
+      },
+      "language": "javascript",
+      "targets": ["index.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-601", "CWE-307"],
+      "expected_rule_ids": ["JS-039", "JS-014", "JS-029"],
+      "notes": "NodeGoat login route currently triggers open-redirect and missing-rate-limit detections on a pinned commit."
+    },
+    {
+      "case_id": "nodegoat-redos-validation",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "app/routes"
+      },
+      "language": "javascript",
+      "targets": ["profile.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-1333"],
+      "expected_rule_ids": ["JS-024"],
+      "notes": "Pinned NodeGoat profile route contains an active catastrophic-backtracking regex example."
+    },
+    {
+      "case_id": "nodegoat-eval-code-injection",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "app/routes"
+      },
+      "language": "javascript",
+      "targets": ["contributions.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-95"],
+      "expected_rule_ids": ["JS-004"],
+      "notes": "Pinned NodeGoat contribution route contains multiple direct `eval()` code-execution hits."
+    }
+  ]
+}
