@@ -920,8 +920,9 @@ def _generate_auto_fix(finding: Finding, lines: list[str]) -> str:
                 f"        {indent}raise")
 
     if "cwe-1188" in t or "debug=true" in t:
+        debug_override = 'os.environ.get("DEBUG","false").lower()=="true"'
         return (f"BEFORE: {stripped}\n"
-                f"AFTER:  {indent}{stripped.replace('True', 'os.environ.get(\"DEBUG\",\"false\").lower()==\"true\"')}")
+            f"AFTER:  {indent}{stripped.replace('True', debug_override)}")
 
     if "cwe-601" in t or "open redirect" in t:
         return (f"BEFORE: {stripped}\n"
