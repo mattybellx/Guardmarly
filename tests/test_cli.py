@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from ansede_static._types import AnalysisResult, Finding, Severity
 from ansede_static.cli import (
     _apply_auto_fixes,
+    _collect_files,
     _is_safe_inline_auto_fix,
     _load_baseline,
+    _matches_exclude_pattern,
     _parse_auto_fix_block,
     _render_js_backend_catalog,
     _render_rule_catalog,
@@ -117,3 +120,33 @@ def test_render_js_backend_catalog_lists_structural_backend():
 
     assert "structural" in text
     assert "classic" in text
+
+
+def test_matches_exclude_pattern_uses_real_path_segments():
+    path = Path("src/ansede_static/cli.py")
+
+    assert not _matches_exclude_pattern(path, "static")
+    assert _matches_exclude_pattern(path, "src")
+    assert _matches_exclude_pattern(path, "ansede_static")
+
+
+def test_collect_files_does_not_exclude_ansede_static_package(tmp_path):
+    package_dir = tmp_path / "src" / "ansede_static"
+    package_dir.mkdir(parents=True)
+    module = package_dir / "cli.py"
+    module.write_text("print('ok')\n", encoding="utf-8")
+
+    collected = _collect_files([tmp_path / "src"], ["static"])
+
+    assert module in collected
+
+
+def test_collect_files_excludes_real_static_directory(tmp_path):
+    static_dir = tmp_path / "src" / "static"
+    static_dir.mkdir(parents=True)
+    asset = static_dir / "app.js"
+    asset.write_text("console.log('ok')\n", encoding="utf-8")
+
+    collected = _collect_files([tmp_path / "src"], ["static"])
+
+    assert asset not in collected

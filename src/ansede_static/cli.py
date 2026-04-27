@@ -55,12 +55,29 @@ def _detect_language(path: Path) -> str | None:
     return None
 
 
+def _matches_exclude_pattern(path: Path, pattern: str) -> bool:
+    """Return True when *pattern* matches a real path segment or explicit subpath.
+
+    This avoids false positives such as excluding ``ansede_static`` when the
+    caller only meant to skip a directory literally named ``static``.
+    """
+    normalized_pattern = pattern.strip().replace("\\", "/").strip("/").lower()
+    if not normalized_pattern:
+        return False
+
+    normalized_path = path.as_posix().lower()
+    if "/" in normalized_pattern:
+        return normalized_pattern in normalized_path
+
+    return normalized_pattern in {part.lower() for part in path.parts}
+
+
 def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]:
     """Recursively expand directories into individual source files."""
     files: list[Path] = []
     for p in paths:
         if p.is_file():
-            if _detect_language(p):
+            if _detect_language(p) and not any(_matches_exclude_pattern(p, pat) for pat in exclude_patterns):
                 files.append(p)
         elif p.is_dir():
             for child in sorted(p.rglob("*")):
@@ -69,8 +86,7 @@ def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]
                 if _detect_language(child) is None:
                     continue
                 # Skip excluded paths
-                rel = str(child)
-                if any(pat in rel for pat in exclude_patterns):
+                if any(_matches_exclude_pattern(child, pat) for pat in exclude_patterns):
                     continue
                 files.append(child)
     return files
@@ -351,7 +367,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--exclude", action="append", default=[], metavar="STRING",
-        help="Skip files whose path contains STRING. Can be repeated.",
+        help="Skip files whose path matches STRING as a segment or subpath. Can be repeated.",
     )
     parser.add_argument(
         "--baseline", type=Path, default=None, metavar="FILE",
