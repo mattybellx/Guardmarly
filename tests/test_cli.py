@@ -7,6 +7,7 @@ from ansede_static._types import AnalysisResult, Finding, Severity
 from ansede_static.cli import (
     _apply_auto_fixes,
     _collect_files,
+    _collect_entropy_files,
     _is_safe_inline_auto_fix,
     _load_baseline,
     _matches_exclude_pattern,
@@ -150,3 +151,20 @@ def test_collect_files_excludes_real_static_directory(tmp_path):
     collected = _collect_files([tmp_path / "src"], ["static"])
 
     assert asset not in collected
+
+
+def test_collect_entropy_files_includes_markdown_and_env(tmp_path):
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    readme = docs / "README.md"
+    env_file = tmp_path / ".env"
+    script = tmp_path / "app.py"
+    readme.write_text("API_KEY=sk-live-demo-secret\n", encoding="utf-8")
+    env_file.write_text("STRIPE_SECRET=sk-live-demo-secret\n", encoding="utf-8")
+    script.write_text("print('hello')\n", encoding="utf-8")
+
+    collected = _collect_entropy_files([tmp_path], [])
+
+    assert readme in collected
+    assert env_file in collected
+    assert script not in collected

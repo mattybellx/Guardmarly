@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from ansede_static.cache import SQLiteStore, stable_hash
+from ansede_static.python_analyzer import analyze_python
 
 
 def test_sqlite_store_round_trip(tmp_path):
@@ -104,4 +105,29 @@ def test_sqlite_store_evict_returns_zero_when_nothing_old(tmp_path):
     deleted = store.evict_older_than("scan", 30)
     assert deleted == 0
     assert store.get_json("scan", "fresh.py") == {"v": 1}
+    store.close()
+
+
+def test_python_analyzer_persists_function_summaries(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    code = """
+from flask import request
+
+def helper(user_id):
+    return user_id
+
+def handler():
+    value = request.args.get('id')
+    return helper(value)
+"""
+
+    result = analyze_python(code, filename="app.py")
+    assert result.findings is not None
+
+    store = SQLiteStore(tmp_path / ".ansede" / "cache.db")
+    keys = store.keys("function_summaries_v1")
+    assert len(keys) == 1
+    payload = store.get_json("function_summaries_v1", keys[0])
+    assert "helper" in payload
+    assert "handler" in payload
     store.close()

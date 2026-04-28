@@ -46,6 +46,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Union
 
+from ansede_static.cache.sqlite_store import SQLiteStore, stable_hash
+
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Re-export types for convenience
@@ -552,6 +554,73 @@ class _FunctionTaintSummary:
     source: str = ""
     source_line: int | None = None
     return_line: int | None = None
+
+
+_FUNCTION_SUMMARY_BUCKET = "function_summaries_v1"
+
+
+def _summary_cache_key(code: str, filename: str) -> str:
+    """Return a stable cache key for persisted function summaries."""
+    return stable_hash(f"{filename}\0{code}")
+
+
+def _serialise_function_summaries(
+    summaries: dict[str, _FunctionTaintSummary],
+) -> dict[str, dict[str, Any]]:
+    return {
+        name: {
+            "parameters": list(summary.parameters),
+            "tainted_params": list(summary.tainted_params),
+            "source": summary.source,
+            "source_line": summary.source_line,
+            "return_line": summary.return_line,
+        }
+        for name, summary in summaries.items()
+    }
+
+
+def _deserialise_function_summaries(payload: Any) -> dict[str, _FunctionTaintSummary]:
+    if not isinstance(payload, dict):
+        return {}
+    summaries: dict[str, _FunctionTaintSummary] = {}
+    for name, data in payload.items():
+        if not isinstance(name, str) or not isinstance(data, dict):
+            continue
+        summaries[name] = _FunctionTaintSummary(
+            parameters=tuple(data.get("parameters", ())),
+            tainted_params=tuple(data.get("tainted_params", ())),
+            source=str(data.get("source", "")),
+            source_line=data.get("source_line"),
+            return_line=data.get("return_line"),
+        )
+    return summaries
+
+
+def _load_cached_function_summaries(code: str, filename: str) -> dict[str, _FunctionTaintSummary] | None:
+    """Load persisted function summaries for the exact file contents, if present."""
+    cache_key = _summary_cache_key(code, filename)
+    try:
+        with SQLiteStore(Path(".ansede") / "cache.db") as store:
+            payload = store.get_json(_FUNCTION_SUMMARY_BUCKET, cache_key)
+    except Exception:
+        return None
+    if payload is None:
+        return None
+    return _deserialise_function_summaries(payload)
+
+
+def _store_cached_function_summaries(
+    code: str,
+    filename: str,
+    summaries: dict[str, _FunctionTaintSummary],
+) -> None:
+    """Persist function summaries for the exact file contents."""
+    cache_key = _summary_cache_key(code, filename)
+    try:
+        with SQLiteStore(Path(".ansede") / "cache.db") as store:
+            store.set_json(_FUNCTION_SUMMARY_BUCKET, cache_key, _serialise_function_summaries(summaries))
+    except Exception:
+        return
 
 
 def _get_local_callee_name(node: ast.Call) -> str:
@@ -3627,7 +3696,10 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
     for node in ast.walk(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             func_defs[node.name] = node
-    func_summaries = _build_function_taint_summaries(tree, func_defs)
+    func_summaries = _load_cached_function_summaries(code, filename or "<stdin>")
+    if func_summaries is None:
+        func_summaries = _build_function_taint_summaries(tree, func_defs)
+        _store_cached_function_summaries(code, filename or "<stdin>", func_summaries)
 
     ctx = _Ctx(lines=lines, sans=sans, func_defs=func_defs, func_summaries=func_summaries, _tree=tree, filename=filename, global_graph=global_graph)
     findings: list[Finding] = []

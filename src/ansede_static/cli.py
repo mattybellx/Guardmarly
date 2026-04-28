@@ -13,6 +13,7 @@ Zero external dependencies — pure stdlib only.
 from __future__ import annotations
 
 import argparse
+import gc
 import json
 import sys
 import textwrap
@@ -90,6 +91,68 @@ def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]
                     continue
                 files.append(child)
     return files
+
+
+_ENTROPY_TEXT_EXTS: frozenset[str] = frozenset({
+    ".md", ".markdown", ".txt", ".rst", ".env", ".ini", ".cfg",
+    ".conf", ".yaml", ".yml", ".toml",
+})
+
+_ENTROPY_TEXT_NAMES: frozenset[str] = frozenset({
+    ".env", ".env.example", ".env.local", ".env.development", ".env.production",
+    "readme", "roadmap", "focus", "changelog", "security", "contributing",
+})
+
+
+def _is_entropy_text_candidate(path: Path) -> bool:
+    """Return True when *path* should be scanned as plaintext for entropy secrets."""
+    if _detect_language(path) is not None:
+        return False
+    suffixes = {suffix.lower() for suffix in path.suffixes}
+    if suffixes & _ENTROPY_TEXT_EXTS:
+        return True
+    name = path.name.lower()
+    stem = path.stem.lower()
+    if name in _ENTROPY_TEXT_NAMES or stem in _ENTROPY_TEXT_NAMES:
+        return True
+    return name.startswith(".env")
+
+
+def _collect_entropy_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]:
+    """Collect plaintext/docs/env files suitable for entropy-only scanning."""
+    files: list[Path] = []
+    for p in paths:
+        if p.is_file():
+            if _is_entropy_text_candidate(p) and not any(_matches_exclude_pattern(p, pat) for pat in exclude_patterns):
+                files.append(p)
+        elif p.is_dir():
+            for child in sorted(p.rglob("*")):
+                if not child.is_file():
+                    continue
+                if not _is_entropy_text_candidate(child):
+                    continue
+                if any(_matches_exclude_pattern(child, pat) for pat in exclude_patterns):
+                    continue
+                files.append(child)
+    return files
+
+
+def _analyze_entropy_file(path: Path) -> AnalysisResult:
+    """Scan a plaintext/docs/env file for high-entropy secrets."""
+    result = AnalysisResult(file_path=str(path), language="text")
+    try:
+        content = path.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        result.parse_error = str(exc)
+        return result
+
+    result.lines_scanned = len(content.splitlines())
+    try:
+        from ansede_static.entropy import scan_for_secrets
+        result.findings = scan_for_secrets(content, str(path))
+    except Exception as exc:  # noqa: BLE001
+        result.parse_error = f"Entropy scan error: {exc}"
+    return result
 
 
 def _analyze_file(
@@ -522,14 +585,19 @@ def _analyze_file_with_timeout(
 
     def _worker() -> None:
         try:
-            r = _analyze_file(
-                path,
-                requested_js_backend=requested_js_backend,
-                experimental_js_ast=experimental_js_ast,
-            )
+            if _detect_language(path) is None and _is_entropy_text_candidate(path):
+                r = _analyze_entropy_file(path)
+            else:
+                r = _analyze_file(
+                    path,
+                    requested_js_backend=requested_js_backend,
+                    experimental_js_ast=experimental_js_ast,
+                )
         except Exception as exc:  # noqa: BLE001
             r = AnalysisResult(file_path=str(path), language=_detect_language(path) or "unknown")
             r.parse_error = str(exc)
+        finally:
+            gc.collect()
         # put_nowait: if somehow the queue already has a value (shouldn't happen)
         # just drop it — we're abandoning this thread anyway.
         try:
@@ -660,6 +728,7 @@ def main() -> None:
 
         # ── file/directory mode ────────────────────────────────────────────────
         files: list[Path] = []
+        entropy_files: list[Path] = []
         
         if args.incremental:
             if console:
@@ -705,13 +774,19 @@ def main() -> None:
                 files = []
                 for f in set(changed_files):
                     p = (workspace_root / f).resolve()
-                    if p.exists() and p.suffix in (".py", ".js", ".jsx", ".ts", ".tsx"):
+                    if p.exists() and (
+                        p.suffix in (".py", ".js", ".jsx", ".ts", ".tsx")
+                        or (getattr(args, "entropy", False) and _is_entropy_text_candidate(p))
+                    ):
                         # Check exclusions
                         if any(ex in str(p) for ex in config.exclude_paths):
                             continue
-                        files.append(p)
+                        if _detect_language(p) is None:
+                            entropy_files.append(p)
+                        else:
+                            files.append(p)
                 
-                if not files:
+                if not files and not entropy_files:
                     if console:
                         console.print("[dim]No valid source files found in git diff.[/dim]")
                     sys.exit(0)
@@ -726,7 +801,9 @@ def main() -> None:
                              "site-packages", "dist", "build", ".tox",
                              "public", "vendor", "static", "assets", "bower_components"] + args.exclude + config.exclude_paths
             files = _collect_files(args.paths, exclude_extra)
-            if not files:
+            if getattr(args, "entropy", False):
+                entropy_files = _collect_entropy_files(args.paths, exclude_extra)
+            if not files and not entropy_files:
                 if console:
                     console.print(f"[bold red]ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}[/bold red]")
                 else:
@@ -741,13 +818,27 @@ def main() -> None:
                     _inc_cache = IncrementalCache()
                     cached_unchanged: list[Path] = []
                     changed_files: list[Path] = []
-                    for fp in files:
+                    candidate_scan_files = files + entropy_files
+                    direct_changed: set[str] = set()
+                    for fp in candidate_scan_files:
+                        if _inc_cache.file_changed(fp):
+                            direct_changed.add(str(fp.resolve()))
+                    affected_paths = _inc_cache.affected_files(
+                        direct_changed,
+                        candidate_paths=(str(fp.resolve()) for fp in candidate_scan_files),
+                    )
+                    for fp in candidate_scan_files:
+                        normalized_fp = str(fp.resolve())
+                        must_scan = normalized_fp in affected_paths
+                        if must_scan:
+                            changed_files.append(fp)
+                            continue
                         if not _inc_cache.file_changed(fp):
                             cached_findings = _inc_cache.get_cached_findings(fp)
                             if cached_findings is not None:
                                 r = AnalysisResult(
                                     file_path=str(fp),
-                                    language=_detect_language(fp) or "unknown",
+                                    language=_detect_language(fp) or ("text" if _is_entropy_text_candidate(fp) else "unknown"),
                                     lines_scanned=0,
                                 )
                                 # Re-hydrate findings from dicts
@@ -778,8 +869,9 @@ def main() -> None:
                             f"file(s) served from cache, {len(changed_files)} to scan.",
                             file=sys.stderr,
                         )
-                    files = changed_files
-                    if not files:
+                    files = [fp for fp in changed_files if _detect_language(fp) is not None]
+                    entropy_files = [fp for fp in changed_files if _detect_language(fp) is None]
+                    if not files and not entropy_files:
                         # All files served from cache — skip scanning
                         pass
                 except Exception as _exc:
@@ -809,21 +901,23 @@ def main() -> None:
                         if lang == "python":
                             from ansede_static.python_analyzer import index_python_file
                             index_python_file(code, str(fpath), global_graph)
+                            gc.collect()
                     except OSError:
                         pass
 
             # ── Pass 2: Taint Engine Evaluation ──────────────────────────────
-            if files:
+            scan_targets = files + entropy_files
+            if scan_targets:
                 if use_parallel:
                     import concurrent.futures as _cf
                     import os as _os
                     n_workers = worker_count or _os.cpu_count() or 4
                     print(
-                        f"ansede-static: parallel scan with {n_workers} workers over {len(files)} files",
+                        f"ansede-static: parallel scan with {n_workers} workers over {len(scan_targets)} files",
                         file=sys.stderr,
                     )
                     with _cf.ProcessPoolExecutor(max_workers=n_workers) as _pool:
-                        for _res in _pool.map(_scan_one, files):
+                        for _res in _pool.map(_scan_one, scan_targets):
                             results.append(_res)
                 elif Progress and args.format == "text":
                     with Progress(
@@ -834,30 +928,16 @@ def main() -> None:
                         TimeElapsedColumn(), # type: ignore
                         console=console
                     ) as progress:
-                        eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(files))
-                        for fpath in files:
+                        eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(scan_targets))
+                        for fpath in scan_targets:
                             progress.update(eval_task, description=f"[yellow]Scanning {fpath.name}...")
                             results.append(_scan_one(fpath))
                             progress.advance(eval_task)
                 else:
-                    total = len(files)
-                    for idx, fpath in enumerate(files, 1):
+                    total = len(scan_targets)
+                    for idx, fpath in enumerate(scan_targets, 1):
                         print(f"ansede-static: scanning [{idx}/{total}] {fpath.name}", file=sys.stderr)
                         results.append(_scan_one(fpath))
-
-            # ── Entropy scan (--entropy flag) ─────────────────────────────────
-            if getattr(args, "entropy", False):
-                try:
-                    from ansede_static.entropy import scan_for_secrets
-                    for r in results:
-                        if r.language == "python" and r.file_path:
-                            try:
-                                _src = Path(r.file_path).read_text(encoding="utf-8", errors="replace")
-                                r.findings.extend(scan_for_secrets(_src, r.file_path))
-                            except OSError:
-                                pass
-                except Exception as _exc:
-                    print(f"ansede-static: entropy scan warning: {_exc}", file=sys.stderr)
 
             # ── Update SHA-256 cache for newly scanned files ──────────────────
             if _inc_cache is not None:

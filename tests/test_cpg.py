@@ -272,3 +272,24 @@ def test_incremental_cache_context_manager(tmp_path):
         cache.update_hash(str(f))
         assert not cache.file_changed(str(f))
     # No exception — context manager works
+
+
+def test_incremental_cache_marks_importers_of_changed_files(tmp_path):
+    from ansede_static.cache.incremental import IncrementalCache
+
+    db = tmp_path / "cache.db"
+    dep = tmp_path / "dep.py"
+    app = tmp_path / "app.py"
+    dep.write_text("VALUE = 1\n", encoding="utf-8")
+    app.write_text("from dep import VALUE\nprint(VALUE)\n", encoding="utf-8")
+
+    cache = IncrementalCache(str(db))
+    cache.update_hash(str(dep))
+    cache.update_hash(str(app))
+
+    dep.write_text("VALUE = 2\n", encoding="utf-8")
+    affected = cache.affected_files([str(dep)], candidate_paths=[str(dep), str(app)])
+
+    assert str(dep.resolve()) in affected
+    assert str(app.resolve()) in affected
+    cache.close()

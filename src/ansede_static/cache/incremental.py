@@ -30,15 +30,75 @@ Zero external dependencies.  Python 3.9+.
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 from pathlib import Path
-from typing import Any, List, Optional
+from typing import Any, Iterable, List, Optional
 
 from ansede_static.cache.sqlite_store import SQLiteStore
 
 _BUCKET_HASH = "file_hashes"
 _BUCKET_FINDINGS = "file_findings"
+_BUCKET_IMPORTS = "file_imports"
+
+
+def _resolve_import_target(module_name: str, current_file: Path, level: int) -> str:
+    """Best-effort Python import resolution for local incremental invalidation."""
+    module_path = Path(*module_name.split(".")) if module_name else Path()
+    current_dir = current_file.resolve(strict=False).parent
+
+    if level > 0:
+        anchor = current_dir
+        for _ in range(max(level - 1, 0)):
+            anchor = anchor.parent
+        py_candidate = (anchor / module_path).with_suffix(".py")
+        if py_candidate.exists():
+            return str(py_candidate.resolve())
+        init_candidate = anchor / module_path / "__init__.py"
+        if init_candidate.exists():
+            return str(init_candidate.resolve())
+        return str(py_candidate.resolve(strict=False))
+
+    candidates = [current_dir / module_path]
+    candidates.extend(parent / module_path for parent in current_dir.parents)
+    for candidate in candidates:
+        py_candidate = candidate.with_suffix(".py")
+        if py_candidate.exists():
+            return str(py_candidate.resolve())
+        init_candidate = candidate / "__init__.py"
+        if init_candidate.exists():
+            return str(init_candidate.resolve())
+    return str((current_dir / module_path).with_suffix(".py").resolve(strict=False))
+
+
+def _extract_python_imports(path: Path) -> list[str]:
+    """Return a normalised list of local Python import targets for *path*."""
+    if path.suffix.lower() != ".py":
+        return []
+    try:
+        source = path.read_text(encoding="utf-8", errors="replace")
+        tree = ast.parse(source, filename=str(path))
+    except (OSError, SyntaxError, ValueError):
+        return []
+
+    imports: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom):
+            module_name = node.module or ""
+            for alias in node.names:
+                if alias.name == "*":
+                    target = _resolve_import_target(module_name, path, node.level)
+                    imports.add(str(Path(target).resolve(strict=False)))
+                else:
+                    resolved_module = module_name or alias.name
+                    target = _resolve_import_target(resolved_module, path, node.level)
+                    imports.add(str(Path(target).resolve(strict=False)))
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                target = _resolve_import_target(alias.name, path, 0)
+                imports.add(str(Path(target).resolve(strict=False)))
+    return sorted(imports)
 
 
 def _hash_file(path: Path) -> str:
@@ -97,6 +157,44 @@ class IncrementalCache:
         current_hash = _hash_file(Path(path))
         if current_hash:
             self._store.set_json(_BUCKET_HASH, key, current_hash)
+        self._store.set_json(_BUCKET_IMPORTS, key, _extract_python_imports(Path(path)))
+
+    def get_imports(self, path: str | Path) -> list[str]:
+        """Return the cached import dependencies for *path*."""
+        key = self._normalise(path)
+        imports = self._store.get_json(_BUCKET_IMPORTS, key)
+        return list(imports or [])
+
+    def affected_files(
+        self,
+        changed_paths: Iterable[str | Path],
+        *,
+        candidate_paths: Optional[Iterable[str | Path]] = None,
+    ) -> set[str]:
+        """
+        Return all files that should be rescanned because they directly changed
+        or import a changed file (transitively).
+        """
+        frontier = {self._normalise(path) for path in changed_paths}
+        affected = set(frontier)
+        candidates = (
+            {self._normalise(path) for path in candidate_paths}
+            if candidate_paths is not None
+            else set(self._store.keys(_BUCKET_IMPORTS))
+        )
+
+        changed = True
+        while changed:
+            changed = False
+            for candidate in list(candidates):
+                if candidate in affected:
+                    continue
+                imports = set(self.get_imports(candidate))
+                if imports & frontier:
+                    affected.add(candidate)
+                    frontier.add(candidate)
+                    changed = True
+        return affected
 
     # ------------------------------------------------------------------
     # Findings management
@@ -136,6 +234,7 @@ class IncrementalCache:
         # SQLiteStore doesn't expose delete; we overwrite with sentinel
         self._store.set_json(_BUCKET_HASH, key, None)
         self._store.set_json(_BUCKET_FINDINGS, key, None)
+        self._store.set_json(_BUCKET_IMPORTS, key, None)
 
     def close(self) -> None:
         """Close the backing SQLite connection."""
