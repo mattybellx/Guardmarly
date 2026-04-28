@@ -614,7 +614,7 @@ _KNOWN_RULE_IDS: tuple[str, ...] = (
     "PY-001", "PY-002", "PY-003", "PY-004", "PY-005", "PY-006", "PY-007", "PY-008", "PY-009", "PY-010",
     "PY-011", "PY-012", "PY-013", "PY-014", "PY-015", "PY-016", "PY-017", "PY-018", "PY-019", "PY-020",
     "PY-021", "PY-022", "PY-023", "PY-024", "PY-025", "PY-026", "PY-027", "PY-028", "PY-029", "PY-030",
-    "PY-031", "PY-032", "PY-033", "PY-034", "PY-035",
+    "PY-031", "PY-032", "PY-033", "PY-034", "PY-035", "PY-036", "PY-037",
 )
 
 
@@ -1024,6 +1024,30 @@ _PY_RULE_CONTRACTS: dict[str, RuleContract] = {
         summary="Flags request-body iteration that applies arbitrary fields to model or object state.",
         remediation="Use an explicit allowlist of permitted fields instead of iterating over raw request JSON.",
         tags=("python", "mass-assignment", "json"),
+    ),
+    "PY-036": _apply_cwe_base(
+        "PY-036",
+        cwe="CWE-470",
+        title="Externally-controlled method/module dispatch",
+        category="security",
+        default_severity="high",
+        languages=("python",),
+        precision="high",
+        summary="Detects getattr(), __import__(), and importlib.import_module() called with tainted attribute or module names.",
+        remediation="Validate attribute/module names against an explicit allowlist before dynamic dispatch.",
+        tags=("python", "dynamic-dispatch", "reflection"),
+    ),
+    "PY-037": _apply_cwe_base(
+        "PY-037",
+        cwe="CWE-89",
+        title="CPG inter-procedural taint path",
+        category="security",
+        default_severity="high",
+        languages=("python",),
+        precision="medium",
+        summary="CPG-based inter-procedural taint analysis found a path from a source to a sink.",
+        remediation="Sanitize or validate the tainted value before it reaches the sink.",
+        tags=("python", "cpg", "inter-procedural", "taint"),
     ),
 }
 

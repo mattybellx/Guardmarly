@@ -409,6 +409,43 @@ def build_parser() -> argparse.ArgumentParser:
         "--sbom-output", type=Path, default=None, metavar="FILE",
         help="Write SBOM output to FILE (default: sbom.json in current directory).",
     )
+    parser.add_argument(
+        "--lsp", action="store_true",
+        help="Start ansede-static as an LSP server on stdio for IDE integration.",
+    )
+    parser.add_argument(
+        "--parallel", action="store_true",
+        help=(
+            "Analyse files in parallel using multiple worker processes "
+            "(defaults to os.cpu_count()). Speeds up large monorepo scans."
+        ),
+    )
+    parser.add_argument(
+        "--workers", type=int, default=None, metavar="N",
+        help="Number of parallel worker processes (default: cpu count). Implies --parallel.",
+    )
+    parser.add_argument(
+        "--entropy", action="store_true",
+        help=(
+            "Enable entropy-based secret detection.  Scans all string literals "
+            "for high-entropy values that may be hardcoded credentials or API keys."
+        ),
+    )
+    parser.add_argument(
+        "--incremental-sha256", dest="incremental_sha256", action="store_true",
+        help=(
+            "Use SHA-256 file-content hashing to skip unchanged files "
+            "(does not require a git repository).  Cache stored in .ansede/cache.db."
+        ),
+    )
+    parser.add_argument(
+        "--ai-remediate", action="store_true",
+        help=(
+            "Attempt to generate AI-powered remediations via a local Ollama instance "
+            "(http://localhost:11434). Falls back to built-in heuristics when Ollama is "
+            "unavailable. Results are embedded in JSON/SARIF output."
+        ),
+    )
     return parser
 
 
@@ -539,6 +576,12 @@ def main() -> None:
         print(_render_js_backend_catalog(args.format == "json"))
         sys.exit(0)
 
+    # ── LSP server mode ────────────────────────────────────────────────────
+    if getattr(args, "lsp", False):
+        from ansede_static.lsp_server import run_lsp_server
+        run_lsp_server()
+        sys.exit(0)
+
     # ── Handle Init ────────────────────────────────────────────────────────
     if getattr(args, "init", False):
         init_file = Path.cwd() / "ansede.json"
@@ -641,10 +684,24 @@ def main() -> None:
                         continue
                     parts = line.split("\t", 1)
                     if len(parts) == 2:
-                        changed_files.append(parts[1].strip())
+                        changed_files.append(Path(parts[1].strip()))
                         
-                changed_files.extend(untracked_out.splitlines())
-                
+                changed_files.extend(Path(f) for f in untracked_out.splitlines())
+
+                # ── Monorepo awareness: scope scan to affected packages ────────
+                try:
+                    from ansede_static.monorepo import detect_monorepo
+                    mono_info = detect_monorepo(workspace_root)
+                    if mono_info.is_monorepo:
+                        affected_pkgs = mono_info.affected_packages(
+                            [(workspace_root / f).resolve() for f in changed_files]
+                        )
+                        if affected_pkgs and console:
+                            pkg_names = ", ".join(p.name for p in affected_pkgs)
+                            console.print(f"[cyan]Monorepo ({mono_info.kind}): scanning {len(affected_pkgs)} affected package(s): {pkg_names}[/cyan]")
+                except Exception:
+                    pass
+
                 files = []
                 for f in set(changed_files):
                     p = (workspace_root / f).resolve()
@@ -676,63 +733,142 @@ def main() -> None:
                     print(f"ansede-static: no Python or JavaScript files found in: {', '.join(str(p) for p in args.paths)}", file=sys.stderr)
                 sys.exit(2)
 
+            # ── SHA-256 incremental cache: skip unchanged files ────────────────
+            _inc_cache = None
+            if getattr(args, "incremental_sha256", False):
+                try:
+                    from ansede_static.cache.incremental import IncrementalCache
+                    _inc_cache = IncrementalCache()
+                    cached_unchanged: list[Path] = []
+                    changed_files: list[Path] = []
+                    for fp in files:
+                        if not _inc_cache.file_changed(fp):
+                            cached_findings = _inc_cache.get_cached_findings(fp)
+                            if cached_findings is not None:
+                                r = AnalysisResult(
+                                    file_path=str(fp),
+                                    language=_detect_language(fp) or "unknown",
+                                    lines_scanned=0,
+                                )
+                                # Re-hydrate findings from dicts
+                                for fd in cached_findings:
+                                    if isinstance(fd, Finding):
+                                        r.findings.append(fd)
+                                    elif isinstance(fd, dict):
+                                        try:
+                                            sev = Severity[fd.get("severity", "INFO").upper()]
+                                        except KeyError:
+                                            sev = Severity.INFO
+                                        r.findings.append(Finding(
+                                            category="security",
+                                            title=fd.get("title", ""),
+                                            description=fd.get("description", ""),
+                                            severity=sev,
+                                            cwe=fd.get("cwe", ""),
+                                            line=fd.get("line"),
+                                            rule_id=fd.get("rule_id", ""),
+                                        ))
+                                results.append(r)
+                                cached_unchanged.append(fp)
+                                continue
+                        changed_files.append(fp)
+                    if cached_unchanged:
+                        print(
+                            f"ansede-static: SHA-256 cache: {len(cached_unchanged)} unchanged "
+                            f"file(s) served from cache, {len(changed_files)} to scan.",
+                            file=sys.stderr,
+                        )
+                    files = changed_files
+                    if not files:
+                        # All files served from cache — skip scanning
+                        pass
+                except Exception as _exc:
+                    print(f"ansede-static: incremental cache warning: {_exc}", file=sys.stderr)
+                    _inc_cache = None
+
             global_graph = GlobalGraph()
-            
-            # Two-Pass Orchestration with Rich UI
-            if Progress and args.format == "text":
-                with Progress(
-                    SpinnerColumn(), # type: ignore
-                    TextColumn("[progress.description]{task.description}"), # type: ignore
-                    BarColumn(), # type: ignore
-                    TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), # type: ignore
-                    TimeElapsedColumn(), # type: ignore
-                    console=console
-                ) as progress:
-                    
-                    # Pass 1: Discovery & Graph Building (Stubbed in engine for now, preparing for next phase)
-                    discovery_task = progress.add_task("[cyan]Pass 1: Building Global Symbol Graph...", total=len(files))
-                    for fpath in files:
-                        # index global references into global_graph here
-                        lang = _detect_language(fpath)
-                        try:
-                            code = fpath.read_text(encoding="utf-8", errors="replace")
-                            if lang == "python":
-                                from ansede_static.python_analyzer import index_python_file
-                                index_python_file(code, str(fpath), global_graph)
-                            elif lang == "javascript":
-                                # Future extension: index JS AST using oxc/tree-sitter
-                                pass
-                        except OSError:
-                            pass
-                        progress.advance(discovery_task)
-                    
-                    # Pass 2: Taint Engine Evaluation — uses timeout to prevent any single
-                    # file from hanging the entire scan.
-                    eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(files))
-                    for fpath in files:
-                        progress.update(eval_task, description=f"[yellow]Scanning {fpath.name}...")
-                        results.append(
-                            _analyze_file_with_timeout(
-                                fpath,
-                                requested_js_backend=args.js_backend,
-                                experimental_js_ast=args.experimental_js_ast,
-                                timeout_seconds=args.timeout_per_file,
-                            )
-                        )
-                        progress.advance(eval_task)
-            else:
-                # Fallback for CI / non-text formats — print simple progress to stderr
-                total = len(files)
-                for idx, fpath in enumerate(files, 1):
-                    print(f"ansede-static: scanning [{idx}/{total}] {fpath.name}", file=sys.stderr)
-                    results.append(
-                        _analyze_file_with_timeout(
-                            fpath,
-                            requested_js_backend=args.js_backend,
-                            experimental_js_ast=args.experimental_js_ast,
-                            timeout_seconds=args.timeout_per_file,
-                        )
+
+            # ── Helper for scanning one file (used in both serial and parallel) ──
+            def _scan_one(fpath: Path) -> AnalysisResult:
+                return _analyze_file_with_timeout(
+                    fpath,
+                    requested_js_backend=args.js_backend,
+                    experimental_js_ast=args.experimental_js_ast,
+                    timeout_seconds=args.timeout_per_file,
+                )
+
+            use_parallel = getattr(args, "parallel", False) or getattr(args, "workers", None)
+            worker_count: int | None = getattr(args, "workers", None)
+
+            # ── Pass 1: Discovery & Graph Building ────────────────────────────
+            if files:
+                for fpath in files:
+                    lang = _detect_language(fpath)
+                    try:
+                        code = fpath.read_text(encoding="utf-8", errors="replace")
+                        if lang == "python":
+                            from ansede_static.python_analyzer import index_python_file
+                            index_python_file(code, str(fpath), global_graph)
+                    except OSError:
+                        pass
+
+            # ── Pass 2: Taint Engine Evaluation ──────────────────────────────
+            if files:
+                if use_parallel:
+                    import concurrent.futures as _cf
+                    import os as _os
+                    n_workers = worker_count or _os.cpu_count() or 4
+                    print(
+                        f"ansede-static: parallel scan with {n_workers} workers over {len(files)} files",
+                        file=sys.stderr,
                     )
+                    with _cf.ProcessPoolExecutor(max_workers=n_workers) as _pool:
+                        for _res in _pool.map(_scan_one, files):
+                            results.append(_res)
+                elif Progress and args.format == "text":
+                    with Progress(
+                        SpinnerColumn(), # type: ignore
+                        TextColumn("[progress.description]{task.description}"), # type: ignore
+                        BarColumn(), # type: ignore
+                        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), # type: ignore
+                        TimeElapsedColumn(), # type: ignore
+                        console=console
+                    ) as progress:
+                        eval_task = progress.add_task("[yellow]Pass 2: Evaluating Taint Reachability...", total=len(files))
+                        for fpath in files:
+                            progress.update(eval_task, description=f"[yellow]Scanning {fpath.name}...")
+                            results.append(_scan_one(fpath))
+                            progress.advance(eval_task)
+                else:
+                    total = len(files)
+                    for idx, fpath in enumerate(files, 1):
+                        print(f"ansede-static: scanning [{idx}/{total}] {fpath.name}", file=sys.stderr)
+                        results.append(_scan_one(fpath))
+
+            # ── Entropy scan (--entropy flag) ─────────────────────────────────
+            if getattr(args, "entropy", False):
+                try:
+                    from ansede_static.entropy import scan_for_secrets
+                    for r in results:
+                        if r.language == "python" and r.file_path:
+                            try:
+                                _src = Path(r.file_path).read_text(encoding="utf-8", errors="replace")
+                                r.findings.extend(scan_for_secrets(_src, r.file_path))
+                            except OSError:
+                                pass
+                except Exception as _exc:
+                    print(f"ansede-static: entropy scan warning: {_exc}", file=sys.stderr)
+
+            # ── Update SHA-256 cache for newly scanned files ──────────────────
+            if _inc_cache is not None:
+                for r in results:
+                    if r.file_path and not r.parse_error:
+                        try:
+                            _inc_cache.update_hash(r.file_path)
+                            _inc_cache.store_findings(r.file_path, r.findings)
+                        except Exception:
+                            pass
+                _inc_cache.close()
 
         else:
             parser.print_help()
@@ -809,6 +945,27 @@ def main() -> None:
             # Attach triggering code line
             if f.line and src_lines and 1 <= f.line <= len(src_lines):
                 f.triggering_code = src_lines[f.line - 1].strip()
+
+    # ── AI-powered Remediation (Ollama) ────────────────────────────────────
+    if getattr(args, "ai_remediate", False):
+        from ansede_static.engine.remediation import generate_remediation
+        _source_cache: dict[str, str] = {}
+        for r in results:
+            if not r.file_path:
+                continue
+            if r.file_path not in _source_cache:
+                try:
+                    _source_cache[r.file_path] = Path(r.file_path).read_text(
+                        encoding="utf-8", errors="replace"
+                    )
+                except OSError:
+                    _source_cache[r.file_path] = ""
+            src = _source_cache[r.file_path]
+            for f in r.findings:
+                if not f.auto_fix:
+                    suggestion = generate_remediation(f, src, r.file_path, use_ai=True)
+                    if suggestion:
+                        f.auto_fix = suggestion
 
     # ── Format output ───────────────────────────────────────────────────────
     if args.format == "text":

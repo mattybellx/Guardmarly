@@ -1,0 +1,134 @@
+{
+  "_comment": "Ansede unified taint specification v2. Community-maintainable. Format mirrors sanitizers.json.",
+  "_version": "2.0.0",
+  "sources": {
+    "python": [
+      {"name": "request.args",          "cwe": "CWE-20", "label": "HTTP query string"},
+      {"name": "request.form",          "cwe": "CWE-20", "label": "HTTP POST body"},
+      {"name": "request.json",          "cwe": "CWE-20", "label": "HTTP JSON body"},
+      {"name": "request.data",          "cwe": "CWE-20", "label": "HTTP raw body"},
+      {"name": "request.cookies",       "cwe": "CWE-20", "label": "HTTP cookie"},
+      {"name": "request.headers",       "cwe": "CWE-20", "label": "HTTP header"},
+      {"name": "request.files",         "cwe": "CWE-20", "label": "HTTP file upload"},
+      {"name": "request.values",        "cwe": "CWE-20", "label": "HTTP combined values"},
+      {"name": "request.get_data",      "cwe": "CWE-20", "label": "HTTP raw body"},
+      {"name": "get_json",              "cwe": "CWE-20", "label": "Flask JSON body"},
+      {"name": "form.get",              "cwe": "CWE-20", "label": "Flask form get"},
+      {"name": "args.get",              "cwe": "CWE-20", "label": "Flask args get"},
+      {"name": "input",                 "cwe": "CWE-20", "label": "stdin user input"},
+      {"name": "sys.stdin.read",        "cwe": "CWE-20", "label": "stdin read"},
+      {"name": "sys.argv",              "cwe": "CWE-20", "label": "CLI argument"},
+      {"name": "os.environ",            "cwe": "CWE-20", "label": "environment variable"},
+      {"name": "os.getenv",             "cwe": "CWE-20", "label": "environment variable"},
+      {"name": "os.environ.get",        "cwe": "CWE-20", "label": "environment variable"},
+      {"name": "cursor.fetchone",       "cwe": "CWE-20", "label": "database row"},
+      {"name": "cursor.fetchall",       "cwe": "CWE-20", "label": "database rows"},
+      {"name": "cursor.fetchmany",      "cwe": "CWE-20", "label": "database rows"}
+    ],
+    "python_datascience": [
+      {"name": "pd.read_csv",           "cwe": "CWE-20", "label": "pandas CSV"},
+      {"name": "pd.read_json",          "cwe": "CWE-20", "label": "pandas JSON"},
+      {"name": "pd.read_sql",           "cwe": "CWE-20", "label": "pandas SQL result"},
+      {"name": "pd.read_excel",         "cwe": "CWE-20", "label": "pandas Excel"},
+      {"name": "pd.read_parquet",       "cwe": "CWE-20", "label": "pandas Parquet"},
+      {"name": "df.query",              "cwe": "CWE-89", "label": "pandas query"},
+      {"name": "spark.sql",             "cwe": "CWE-89", "label": "Spark SQL"},
+      {"name": "sc.textFile",           "cwe": "CWE-20", "label": "Spark text file"}
+    ],
+    "javascript": [
+      {"name": "req.query",             "cwe": "CWE-20", "label": "Express query string"},
+      {"name": "req.body",              "cwe": "CWE-20", "label": "Express POST body"},
+      {"name": "req.params",            "cwe": "CWE-20", "label": "Express URL param"},
+      {"name": "req.headers",           "cwe": "CWE-20", "label": "Express header"},
+      {"name": "req.cookies",           "cwe": "CWE-20", "label": "Express cookie"},
+      {"name": "process.env",           "cwe": "CWE-20", "label": "Node environment"},
+      {"name": "process.argv",          "cwe": "CWE-20", "label": "Node CLI argument"}
+    ]
+  },
+  "sinks": {
+    "python": [
+      {"name": "cursor.execute",         "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "db.execute",             "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "conn.execute",           "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "session.execute",        "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "engine.execute",         "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "os.system",              "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "os.popen",               "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "subprocess.call",        "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "subprocess.run",         "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "subprocess.Popen",       "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "eval",                   "cwe": "CWE-95",  "label": "Code injection"},
+      {"name": "exec",                   "cwe": "CWE-95",  "label": "Code injection"},
+      {"name": "compile",                "cwe": "CWE-95",  "label": "Code injection"},
+      {"name": "requests.get",           "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "requests.post",          "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "requests.put",           "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "requests.request",       "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "urllib.request.urlopen", "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "urllib.urlopen",         "cwe": "CWE-918", "label": "SSRF"},
+      {"name": "open",                   "cwe": "CWE-22",  "label": "Path traversal"},
+      {"name": "os.path.join",           "cwe": "CWE-22",  "label": "Path traversal"},
+      {"name": "pathlib.Path",           "cwe": "CWE-22",  "label": "Path traversal"},
+      {"name": "pickle.loads",           "cwe": "CWE-502", "label": "Insecure deserialization"},
+      {"name": "yaml.load",              "cwe": "CWE-502", "label": "Insecure deserialization"},
+      {"name": "marshal.loads",          "cwe": "CWE-502", "label": "Insecure deserialization"},
+      {"name": "render_template_string", "cwe": "CWE-79",  "label": "XSS / SSTI"},
+      {"name": "Markup",                 "cwe": "CWE-79",  "label": "XSS"},
+      {"name": "jinja2.Template",        "cwe": "CWE-79",  "label": "SSTI"}
+    ],
+    "python_datascience": [
+      {"name": "df.query",               "cwe": "CWE-89",  "label": "Pandas code injection"},
+      {"name": "spark.sql",              "cwe": "CWE-89",  "label": "Spark SQL injection"},
+      {"name": "pickle.loads",           "cwe": "CWE-502", "label": "Pickle deserialization"},
+      {"name": "yaml.load",              "cwe": "CWE-502", "label": "YAML unsafe load"}
+    ],
+    "javascript": [
+      {"name": "res.send",               "cwe": "CWE-79",  "label": "XSS"},
+      {"name": "res.json",               "cwe": "CWE-79",  "label": "XSS"},
+      {"name": "innerHTML",              "cwe": "CWE-79",  "label": "DOM XSS"},
+      {"name": "document.write",         "cwe": "CWE-79",  "label": "DOM XSS"},
+      {"name": "eval",                   "cwe": "CWE-95",  "label": "Code injection"},
+      {"name": "child_process.exec",     "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "child_process.execSync", "cwe": "CWE-78",  "label": "Command injection"},
+      {"name": "db.query",               "cwe": "CWE-89",  "label": "SQL injection"},
+      {"name": "connection.query",       "cwe": "CWE-89",  "label": "SQL injection"}
+    ]
+  },
+  "sanitizers": {
+    "python": [
+      {"name": "html.escape",            "cwe": ["CWE-79"],         "label": "HTML escape"},
+      {"name": "markupsafe.escape",      "cwe": ["CWE-79"],         "label": "Markup safe escape"},
+      {"name": "bleach.clean",           "cwe": ["CWE-79"],         "label": "HTML sanitizer"},
+      {"name": "escape",                 "cwe": ["CWE-79"],         "label": "Generic escape"},
+      {"name": "urllib.parse.quote",     "cwe": ["CWE-89", "CWE-918"], "label": "URL encoding"},
+      {"name": "quote",                  "cwe": ["CWE-918"],        "label": "URL quote"},
+      {"name": "quote_plus",             "cwe": ["CWE-918"],        "label": "URL quote_plus"},
+      {"name": "int",                    "cwe": ["CWE-89", "CWE-78"], "label": "Type cast to int"},
+      {"name": "float",                  "cwe": ["CWE-89"],         "label": "Type cast to float"},
+      {"name": "bool",                   "cwe": ["CWE-89"],         "label": "Type cast to bool"},
+      {"name": "uuid.UUID",              "cwe": ["CWE-89"],         "label": "UUID validation"},
+      {"name": "re.match",               "cwe": ["CWE-89", "CWE-78"], "label": "Regex validation (anchored only)"},
+      {"name": "re.fullmatch",           "cwe": ["CWE-89", "CWE-78"], "label": "Regex fullmatch"},
+      {"name": "re.search",              "cwe": ["CWE-89"],         "label": "Regex search (anchored only)"},
+      {"name": "sqlalchemy.text",        "cwe": ["CWE-89"],         "label": "SQLAlchemy parameterized"},
+      {"name": "parameterized",          "cwe": ["CWE-89"],         "label": "Parameterized query"},
+      {"name": "flask_wtf.csrf",         "cwe": ["CWE-352"],        "label": "CSRF protection"}
+    ],
+    "javascript": [
+      {"name": "DOMPurify.sanitize",     "cwe": ["CWE-79"],         "label": "DOM sanitizer"},
+      {"name": "escape",                 "cwe": ["CWE-79"],         "label": "Generic escape"},
+      {"name": "encodeURIComponent",     "cwe": ["CWE-79", "CWE-918"], "label": "URI encoding"},
+      {"name": "parseInt",               "cwe": ["CWE-89"],         "label": "Type cast to int"},
+      {"name": "parseFloat",             "cwe": ["CWE-89"],         "label": "Type cast to float"}
+    ]
+  },
+  "implicit_type_casts": {
+    "_comment": "These Python built-in type conversions are treated as sanitizers for numeric-injection sinks.",
+    "python": ["int", "float", "bool", "complex", "bytes"]
+  },
+  "regex_sanitizer_rules": {
+    "_comment": "A re.match/re.fullmatch/re.search call is treated as a sanitizer IFF the pattern literal is fully anchored (starts with ^ and ends with $).",
+    "require_full_anchoring": true,
+    "treat_as_sanitizer_cwes": ["CWE-89", "CWE-78", "CWE-22"]
+  }
+}

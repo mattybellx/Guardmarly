@@ -159,6 +159,10 @@ SANITIZERS: dict[str, set[str]] = {
     "urllib.parse.urlparse":          {"CWE-918"},
     "validators.url":                 {"CWE-918"},
     "ipaddress.ip_address":           {"CWE-918"},
+    # Regex validation (anchored patterns only — checked at use site)
+    "re.match":                       {"CWE-89", "CWE-78", "CWE-22"},
+    "re.fullmatch":                   {"CWE-89", "CWE-78", "CWE-22"},
+    "re.search":                      {"CWE-89"},
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -761,6 +765,19 @@ def _find_tainted_expr_info(
         src, line, san, trace = tainted[node.id]
         return (node.id, src, line, san, trace)
 
+    # Collection element taint: x = tainted_list[i] → x is tainted
+    if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name):
+        if node.value.id in tainted:
+            src, line, san, trace = tainted[node.value.id]
+            return (node.value.id, src, line, san, trace)
+
+    # List/tuple literal: [tainted, clean] → result is tainted
+    if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
+        for elt in node.elts:
+            info = _find_tainted_expr_info(elt, tainted, func_summaries, visited)
+            if info:
+                return info
+
     if isinstance(node, ast.expr):
         src = _get_taint_source(node)
         if src:
@@ -1133,6 +1150,45 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                             taint_trace + (_make_trace_frame("import", f"imported `{node.id}`", line=node.lineno),),
                         )
 
+        # ── Pre-pass: collect isinstance type-guards for numeric narrowing ─────
+        # Detects:  if isinstance(var, (int, float, bool)):  →  strip injection taint in that branch
+        _SAFE_NUMERIC = frozenset({"int", "float", "bool", "complex"})
+        isinstance_safe_vars: set[str] = set()
+        for if_node in ast.walk(fnode):
+            if not isinstance(if_node, ast.If):
+                continue
+            test = if_node.test
+            if not (isinstance(test, ast.Call)
+                    and isinstance(test.func, ast.Name)
+                    and test.func.id == "isinstance"
+                    and len(test.args) == 2):
+                continue
+            guarded = test.args[0]
+            types_arg = test.args[1]
+            if not isinstance(guarded, ast.Name):
+                continue
+            type_names: set[str] = set()
+            if isinstance(types_arg, ast.Name):
+                type_names.add(types_arg.id)
+            elif isinstance(types_arg, ast.Tuple):
+                for elt in types_arg.elts:
+                    if isinstance(elt, ast.Name):
+                        type_names.add(elt.id)
+            if type_names and type_names.issubset(_SAFE_NUMERIC):
+                isinstance_safe_vars.add(guarded.id)
+
+        # ── Pre-pass: collect lambda variable assignments ──────────────────────
+        # Detects:  handler = lambda x: sink(x)  →  handler(tainted) propagates
+        lambda_vars: dict[str, ast.Lambda] = {}
+        for lnode in ast.walk(fnode):
+            if not isinstance(lnode, ast.Assign):
+                continue
+            if not isinstance(lnode.value, ast.Lambda):
+                continue
+            for ltarget in lnode.targets:
+                if isinstance(ltarget, ast.Name):
+                    lambda_vars[ltarget.id] = lnode.value
+
         for node in ast.walk(fnode):
             # Track taint propagation through assignments
             if isinstance(node, ast.Assign):
@@ -1151,6 +1207,31 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                                 _make_trace_frame("propagator", f"assign to `{target.id}`", line=node.lineno),
                             ),
                         )
+                        continue
+
+                    # Lambda-call propagation: result = transform(tainted) where transform is a lambda
+                    if (isinstance(node.value, ast.Call)
+                            and isinstance(node.value.func, ast.Name)
+                            and node.value.func.id in lambda_vars):
+                        lam = lambda_vars[node.value.func.id]
+                        # Build a tainted-vars snapshot scoped to the lambda's parameters
+                        lam_tainted = dict(tainted_vars)
+                        for lam_idx, lam_arg in enumerate(lam.args.args):
+                            if lam_idx < len(node.value.args):
+                                lam_call_arg = node.value.args[lam_idx]
+                                lam_info = _find_tainted_expr_info(lam_call_arg, tainted_vars, func_summaries)
+                                if lam_info:
+                                    _, lsrc, lline, lsan, ltrace = lam_info
+                                    lam_tainted[lam_arg.arg] = (lsrc, lline, lsan, ltrace)
+                        lam_result = _find_tainted_expr_info(lam.body, lam_tainted, func_summaries)
+                        if lam_result:
+                            lbl, lsrc2, lline2, lsan2, ltrace2 = lam_result
+                            tainted_vars[target.id] = (
+                                f"lambda result from `{lbl}` ({lsrc2})",
+                                lline2,
+                                lsan2,
+                                _append_trace(ltrace2, "propagator", f"lambda assign to `{target.id}`", line=node.lineno),
+                            )
                         continue
 
                     taint_info = _find_tainted_expr_info(node.value, tainted_vars, func_summaries)
@@ -1239,6 +1320,9 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         vname, vsrc, vline, san_cwes, trace = hit
                         # Skip if this CWE has been neutralised by a sanitizer
                         if cwe in san_cwes or cwe in inline_sanitized:
+                            continue
+                        # isinstance type-guard: numeric-narrowed variables are safe for injection CWEs
+                        if vname in isinstance_safe_vars and cwe in {"CWE-89", "CWE-78", "CWE-95"}:
                             continue
                         finding_trace = _append_trace(trace, "sink", f"sink `{sink}()`", node)
                         findings.append(Finding(
@@ -3362,6 +3446,174 @@ def _rule_27(ctx: _Ctx) -> list[Finding]:
     return _assign_rule_ids(findings, "PY-035")
 
 
+def _rule_28(ctx: _Ctx) -> list[Finding]:
+    """CWE-470: Use of externally-controlled input to select classes or methods (getattr dispatch)."""
+    findings: list[Finding] = []
+    func_defs = ctx.func_defs
+    func_summaries = ctx.func_summaries
+
+    for fname, fnode in func_defs.items():
+        tainted_vars: dict[str, _TaintInfo] = {}
+        # Seed tainted vars from function parameters and direct sources
+        for arg in fnode.args.args:
+            if arg.arg in ("request", "req", "event", "body", "payload", "data"):
+                tainted_vars[arg.arg] = (
+                    "function parameter (likely untrusted)",
+                    fnode.lineno,
+                    set(),
+                    (_make_trace_frame("source", f"parameter `{arg.arg}`", line=fnode.lineno),),
+                )
+        for node in ast.walk(fnode):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if not isinstance(t, ast.Name):
+                        continue
+                    src = _get_taint_source(node.value)
+                    if src:
+                        tainted_vars[t.id] = (
+                            src, node.lineno, set(),
+                            (_make_trace_frame("source", src, node.value, line=node.lineno),),
+                        )
+                    elif _find_tainted_expr_info(node.value, tainted_vars, func_summaries):
+                        info = _find_tainted_expr_info(node.value, tainted_vars, func_summaries)
+                        assert info is not None
+                        tainted_vars[t.id] = (info[1], info[2], info[3],
+                            _append_trace(info[4], "propagator", f"assign to `{t.id}`", line=node.lineno))
+
+        for node in ast.walk(fnode):
+            if not isinstance(node, ast.Call):
+                continue
+            call_name = _get_call_name(node)
+
+            # Pattern: getattr(obj, method_or_attr) where method_or_attr is tainted
+            if (call_name in ("getattr", "builtins.getattr")
+                    and len(node.args) >= 2):
+                attr_arg = node.args[1]
+                attr_info = _find_tainted_expr_info(attr_arg, tainted_vars, func_summaries)
+                if attr_info:
+                    vname, vsrc, vline, san_cwes, trace = attr_info
+                    findings.append(Finding(
+                        category="security", severity=Severity.HIGH,
+                        title=f"CWE-470: Externally-controlled method dispatch in {fname}() at line {node.lineno}",
+                        description=(
+                            f"`getattr()` is called with a tainted attribute name from `{vname}` "
+                            f"({vsrc}, L{vline}). An attacker can invoke arbitrary methods on the target "
+                            f"object, potentially accessing `__class__`, `__subclasses__`, or other "
+                            f"introspection gadgets."
+                        ),
+                        line=node.lineno,
+                        suggestion=(
+                            "Validate attribute names against an explicit allowlist before calling getattr(): "
+                            "`ALLOWED = {'view', 'edit'}; assert attr in ALLOWED; getattr(obj, attr)()`"
+                        ),
+                        cwe="CWE-470", rule_id="PY-036", agent="python-analyzer",
+                        trace=_append_trace(trace, "sink", "sink `getattr()`", node),
+                    ))
+
+            # Pattern: __import__(tainted_module)
+            if (call_name == "__import__" and len(node.args) >= 1):
+                arg_info = _find_tainted_expr_info(node.args[0], tainted_vars, func_summaries)
+                if arg_info:
+                    vname, vsrc, vline, san_cwes, trace = arg_info
+                    findings.append(Finding(
+                        category="security", severity=Severity.CRITICAL,
+                        title=f"CWE-470: Dynamic module import from user input in {fname}() at line {node.lineno}",
+                        description=(
+                            f"`__import__()` receives a tainted module name from `{vname}` "
+                            f"({vsrc}, L{vline}). An attacker can import arbitrary system modules "
+                            f"to escalate privileges or execute arbitrary code."
+                        ),
+                        line=node.lineno,
+                        suggestion="Use a hardcoded allowlist of permitted modules. Never pass user-controlled strings to __import__().",
+                        cwe="CWE-470", rule_id="PY-036", agent="python-analyzer",
+                        trace=_append_trace(trace, "sink", "sink `__import__()`", node),
+                    ))
+
+            # Pattern: importlib.import_module(tainted_module)
+            if (call_name in ("importlib.import_module", "import_module") and len(node.args) >= 1):
+                arg_info = _find_tainted_expr_info(node.args[0], tainted_vars, func_summaries)
+                if arg_info:
+                    vname, vsrc, vline, san_cwes, trace = arg_info
+                    findings.append(Finding(
+                        category="security", severity=Severity.CRITICAL,
+                        title=f"CWE-470: Dynamic importlib.import_module from user input in {fname}() at line {node.lineno}",
+                        description=(
+                            f"`importlib.import_module()` receives a tainted module name from `{vname}` "
+                            f"({vsrc}, L{vline})."
+                        ),
+                        line=node.lineno,
+                        suggestion="Validate module names against an explicit allowlist before importing.",
+                        cwe="CWE-470", rule_id="PY-036", agent="python-analyzer",
+                        trace=_append_trace(trace, "sink", "sink `importlib.import_module()`", node),
+                    ))
+
+    return _assign_rule_ids(findings, "PY-036")
+
+
+def _rule_29(ctx: _Ctx) -> list[Finding]:
+    """CPG-assisted flow — run the CPG taint engine when available and merge unique findings."""
+    try:
+        from ansede_static.cpg import build_cpg, CPGTaintEngine  # noqa: PLC0415
+    except ImportError:
+        return []
+
+    findings: list[Finding] = []
+    code = "\n".join(ctx.lines)
+    if not code.strip():
+        return []
+
+    try:
+        cpg = build_cpg(code, ctx.filename)
+    except Exception:
+        return []
+
+    try:
+        engine = CPGTaintEngine(cpg)
+        paths = engine.find_taint_paths()
+    except Exception:
+        return []
+
+    # Keyword-based CWE mapping derived from sink label
+    _SINK_CWES: dict[str, str] = {
+        "execute": "CWE-89", "sql": "CWE-89",
+        "system": "CWE-78", "popen": "CWE-78", "subprocess": "CWE-78",
+        "eval": "CWE-95", "exec": "CWE-95",
+        "urlopen": "CWE-918", "requests.get": "CWE-918", "requests.post": "CWE-918",
+        "open": "CWE-22", "path.join": "CWE-22",
+        "pickle": "CWE-502", "yaml.load": "CWE-502", "marshal": "CWE-502",
+        "render_template_string": "CWE-79", "markup": "CWE-79",
+    }
+
+    for tp in paths:
+        try:
+            sink_label_lower = tp.sink_label.lower()
+            cwe = next(
+                (v for k, v in _SINK_CWES.items() if k in sink_label_lower),
+                "CWE-89",
+            )
+            sev = Severity.HIGH
+            if cwe in ("CWE-78", "CWE-95", "CWE-502"):
+                sev = Severity.CRITICAL
+            line = (tp.sink_lineno or 0) if tp.sink_lineno else (tp.source_lineno or 0)
+            findings.append(Finding(
+                category="security",
+                severity=sev,
+                title=f"{cwe}: CPG taint path — {tp.source_label} \u2192 {tp.sink_label}",
+                description=(
+                    f"CPG inter-procedural analysis found a taint path from `{tp.source_label}` "
+                    f"(L{tp.source_lineno}) to `{tp.sink_label}` (L{tp.sink_lineno}). "
+                    f"Tags: {', '.join(sorted(tp.tags))}."
+                ),
+                line=line,
+                suggestion=_cwe_fix(cwe, tp.sink_label),
+                rule_id="PY-037",
+                cwe=cwe, agent="cpg-engine",
+            ))
+        except Exception:
+            continue
+    return findings
+
+
 def _detect(code: str, filename: str = "", global_graph: object = None) -> list[Finding]:
     """Run all deterministic detection rules. Returns findings sorted by severity."""
     try:
@@ -3385,11 +3637,37 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         _rule_11, _rule_12, _rule_13, _rule_14, _rule_15,
         _rule_16, _rule_17, _rule_18, _rule_19, _rule_20,
         _rule_21, _rule_22, _rule_23, _rule_24, _rule_25,
-        _rule_26, _rule_27,
+        _rule_26, _rule_27, _rule_28, _rule_29,
     ):
         findings.extend(rule_fn(ctx))
 
+    # ── Data science ruleset ───────────────────────────────────────────────
+    try:
+        from ansede_static.rulesets.datascience import analyze_datascience
+        findings.extend(analyze_datascience(code, filename))
+    except Exception:  # pragma: no cover
+        pass
+
+    # ── Entropy-based secret detection ────────────────────────────────────
+    try:
+        from ansede_static.entropy import scan_for_secrets
+        # Only run if the file is not too large (avoid false positives in data files)
+        if len(code) < 500_000:
+            findings.extend(scan_for_secrets(code, filename))
+    except Exception:  # pragma: no cover
+        pass
+
     # ── Deduplicate by (title.lower(), line) ──────────────────────────────
+    # First: prefer AST-based findings over CPG findings for the same (cwe, line)
+    ast_covered: set[tuple[str, int]] = set()
+    for f in findings:
+        if f.rule_id != "PY-037" and f.cwe:
+            ast_covered.add((f.cwe, f.line or 0))
+    findings = [
+        f for f in findings
+        if f.rule_id != "PY-037" or (f.cwe, f.line or 0) not in ast_covered
+    ]
+    # Second: title/line dedup
     seen: set[tuple[str, int | None]] = set()
     deduped: list[Finding] = []
     for f in findings:
