@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import re
+import warnings as _warnings
 from pathlib import Path
 
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
@@ -17,6 +18,15 @@ from ansede_static.js_engine import (
     filter_inline_suppressions,
     trace_for_expr,
     trace_has_sanitizer,
+)
+
+_warnings.warn(
+    "ansede_static.js_ast_analyzer is deprecated and will be removed in a future release. "
+    "Use ansede_static.v2.engine with the v2 JS rule pack instead. "
+    "The v2 engine provides tree-sitter-backed normalization, structured taint tracking, "
+    "and the full rule protocol. See docs/writing-rules.md for migration guidance.",
+    DeprecationWarning,
+    stacklevel=2,
 )
 from ansede_static.js_engine.project import build_js_project_index, propagate_helper_return_traces
 from ansede_static.js_engine.react import run_react_checks

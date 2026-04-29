@@ -2,6 +2,10 @@
 ansede_static.cache.sqlite_store
 ────────────────────────────────
 Tiny SQLite-backed JSON key-value store for incremental scan state.
+
+Phase 4 upgrades (spec §4.3):
+  - WAL journal mode + NORMAL synchronous mode for safe concurrent reads.
+  - BLAKE2b-20 replaces SHA-256 in stable_hash() for faster fingerprinting.
 """
 from __future__ import annotations
 
@@ -13,9 +17,14 @@ from typing import Any
 
 
 def stable_hash(value: str | bytes) -> str:
-    """Return a stable SHA-256 hex digest for content-addressing."""
+    """Return a stable BLAKE2b-20 hex digest for content-addressing.
+
+    BLAKE2b is ~3× faster than SHA-256 on modern hardware while retaining
+    sufficient collision resistance for a cache key.  The digest_size=20
+    (160-bit) matches the space requirements of typical file path hashing.
+    """
     payload = value.encode("utf-8") if isinstance(value, str) else value
-    return hashlib.sha256(payload).hexdigest()
+    return hashlib.blake2b(payload, digest_size=20).hexdigest()
 
 
 class SQLiteStore:
@@ -31,6 +40,9 @@ class SQLiteStore:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self._connection = sqlite3.connect(self.path)
             self._connection.row_factory = sqlite3.Row
+            # Phase 4: WAL mode for concurrent-safe reads during parallel scans
+            self._connection.execute("PRAGMA journal_mode=WAL")
+            self._connection.execute("PRAGMA synchronous=NORMAL")
             self._initialise()
         return self._connection
 

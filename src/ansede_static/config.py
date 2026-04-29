@@ -4,6 +4,12 @@ ansede_static.config
 Fast, zero-dependency configuration loader for enterprise workspaces.
 Reads an `ansede.json` file to tune scanner rules, set ignore paths, 
 and load custom internal taint sources and sinks.
+
+Phase 4 additions (spec §4.1-4.2):
+  - jsonschema validation when jsonschema is installed (optional dep).
+  - Upgraded sink format with tainted_args / safe_args / sources fields.
+  - Schema bundled at src/ansede_static/schema/ansede.schema.json.
+  - AnsedeConfig.v2_sinks / v2_sources lists for v2 engine integration.
 """
 from __future__ import annotations
 
@@ -12,11 +18,74 @@ import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterator
+from typing import Iterator, Optional
 
 from ansede_static._types import AnalysisResult, Finding
 
 _log = logging.getLogger(__name__)
+
+# ── Optional jsonschema integration ───────────────────────────────────────────
+try:
+    import jsonschema as _jsonschema  # type: ignore[import-untyped]
+    _HAS_JSONSCHEMA = True
+except ImportError:
+    _jsonschema = None  # type: ignore[assignment]
+    _HAS_JSONSCHEMA = False
+
+# Path to bundled JSON Schema
+_SCHEMA_PATH = Path(__file__).parent / "schemas" / "ansede.schema.json"
+_CACHED_SCHEMA: Optional[dict] = None
+
+
+def _load_schema() -> Optional[dict]:
+    """Load the bundled JSON Schema; return None if not found or parse fails."""
+    global _CACHED_SCHEMA
+    if _CACHED_SCHEMA is not None:
+        return _CACHED_SCHEMA
+    if not _SCHEMA_PATH.is_file():
+        return None
+    try:
+        _CACHED_SCHEMA = json.loads(_SCHEMA_PATH.read_text(encoding="utf-8"))
+        return _CACHED_SCHEMA
+    except Exception as exc:
+        _log.debug("Could not load ansede.schema.json: %s", exc)
+        return None
+
+
+def validate_config_json(data: dict, warnings: list[str]) -> None:
+    """
+    Validate *data* against the Ansede JSON Schema.
+
+    When jsonschema is not installed a single advisory warning is emitted
+    instead of hard-failing — the scanner stays zero-runtime-dep by default.
+    Validation errors are appended to *warnings* so callers can surface them
+    without aborting the scan.
+    """
+    if not _HAS_JSONSCHEMA:
+        warnings.append(
+            "jsonschema is not installed; ansede.json schema validation is skipped. "
+            "Install with: pip install ansede-static[schema]"
+        )
+        return
+
+    schema = _load_schema()
+    if schema is None:
+        _log.debug("ansede.schema.json not found; schema validation skipped")
+        return
+
+    try:
+        validator = _jsonschema.Draft7Validator(schema)
+        errors = sorted(validator.iter_errors(data), key=lambda e: list(e.path))
+        for error in errors:
+            path_str = " > ".join(str(p) for p in error.absolute_path) or "(root)"
+            warnings.append(
+                "ansede.json schema error at "
+                + path_str
+                + ": "
+                + error.message
+            )
+    except Exception as exc:
+        _log.debug("jsonschema validation raised: %s", exc)
 
 
 _VALID_SEVERITIES = frozenset({"critical", "high", "medium", "low", "info"})
@@ -32,12 +101,36 @@ class CustomSinkSpec:
         return (self.cwe, self.title, self.severity)
 
 
+@dataclass(frozen=True)
+class V2SinkSpec:
+    """v2 sink format (spec §4.1) — richer than the legacy CustomSinkSpec."""
+    rule_id: str
+    cwe: str
+    title: str
+    function: str
+    severity: str = "high"
+    tainted_args: tuple[int, ...] = field(default_factory=tuple)
+    safe_args: tuple[int, ...] = field(default_factory=tuple)
+    language: str = ""  # "" means all languages
+
+
+@dataclass(frozen=True)
+class V2SourceSpec:
+    """v2 source format (spec §4.1)."""
+    function: str
+    category: str   # user_input | env | file | network | database
+    language: str = ""
+
+
 @dataclass
 class AnsedeConfig:
     exclude_paths: list[str] = field(default_factory=list)
     disable_rules: list[str] = field(default_factory=list)
     custom_sources: list[str] = field(default_factory=list)
     custom_sinks: dict[str, CustomSinkSpec] = field(default_factory=dict)
+    # v2 structured sink / source specs
+    v2_sinks: list[V2SinkSpec] = field(default_factory=list)
+    v2_sources: list[V2SourceSpec] = field(default_factory=list)
     # Path to a custom YAML/JSON rule definitions file (see docs/CUSTOM_RULES.md)
     custom_rules_file: str = ""
     # Extra sanitizer catalog JSON files to merge with the built-in library
@@ -207,11 +300,29 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
             data = json.load(f)
             
         warnings: list[str] = []
+
+        # Phase 4: JSON Schema validation
+        validate_config_json(data, warnings)
+
         custom_sinks: dict[str, CustomSinkSpec] = {}
         for sink_name, sink_data in data.get("custom_sinks", {}).items():
             sink_spec = _parse_custom_sink(sink_name, sink_data, warnings)
             if sink_spec is not None:
                 custom_sinks[sink_name] = sink_spec
+
+        # v2 structured sinks
+        v2_sinks: list[V2SinkSpec] = []
+        for raw_sink in data.get("sinks", []):
+            parsed = _parse_v2_sink(raw_sink, warnings)
+            if parsed is not None:
+                v2_sinks.append(parsed)
+
+        # v2 structured sources
+        v2_sources: list[V2SourceSpec] = []
+        for raw_src in data.get("sources", []):
+            parsed_src = _parse_v2_source(raw_src, warnings)
+            if parsed_src is not None:
+                v2_sources.append(parsed_src)
 
         disable_rules = [rule for rule in data.get("disable_rules", []) if isinstance(rule, str) and rule.strip()]
         custom_sources = [src for src in data.get("custom_sources", []) if isinstance(src, str) and src.strip()]
@@ -225,6 +336,8 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
             disable_rules=disable_rules,
             custom_sources=custom_sources,
             custom_sinks=custom_sinks,
+            v2_sinks=v2_sinks,
+            v2_sources=v2_sources,
             custom_rules_file=custom_rules_file,
             extra_sanitizer_files=extra_sanitizer_files,
             warnings=warnings,
@@ -235,3 +348,57 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
     except Exception as exc:
         _log.warning("Failed to load ansede.json — ignoring config: %s", exc)
         return AnsedeConfig()
+
+
+def _parse_v2_sink(raw: object, warnings: list[str]) -> Optional[V2SinkSpec]:
+    if not isinstance(raw, dict):
+        warnings.append("ansede.json sinks[]: each entry must be an object — skipping.")
+        return None
+    rule_id = str(raw.get("rule_id", "")).strip()
+    cwe = str(raw.get("cwe", "")).strip().upper()
+    title = str(raw.get("title", "")).strip()
+    function = str(raw.get("function", "")).strip()
+    severity = str(raw.get("severity", "high")).strip().lower() or "high"
+    if not rule_id or not cwe or not title or not function:
+        warnings.append(
+            "ansede.json sinks[]: entry missing required field (rule_id/cwe/title/function) — skipping."
+        )
+        return None
+    if severity not in _VALID_SEVERITIES:
+        severity = "high"
+    tainted_args = tuple(int(x) for x in raw.get("tainted_args", []) if isinstance(x, int))
+    safe_args = tuple(int(x) for x in raw.get("safe_args", []) if isinstance(x, int))
+    language = str(raw.get("language", "")).strip()
+    return V2SinkSpec(
+        rule_id=rule_id, cwe=cwe, title=title, function=function,
+        severity=severity, tainted_args=tainted_args, safe_args=safe_args,
+        language=language,
+    )
+
+
+def _parse_v2_source(raw: object, warnings: list[str]) -> Optional[V2SourceSpec]:
+    _VALID_CATEGORIES = frozenset({"user_input", "env", "file", "network", "database"})
+    if not isinstance(raw, dict):
+        warnings.append("ansede.json sources[]: each entry must be an object — skipping.")
+        return None
+    function = str(raw.get("function", "")).strip()
+    category = str(raw.get("category", "")).strip().lower()
+    if not function or not category:
+        warnings.append(
+            "ansede.json sources[]: entry missing required field (function/category) — skipping."
+        )
+        return None
+    if category not in _VALID_CATEGORIES:
+        warnings.append(
+            "ansede.json sources[]: entry has invalid category "
+            + repr(category)
+            + "; valid: "
+            + ", ".join(sorted(_VALID_CATEGORIES))
+            + " — skipping."
+        )
+        return None
+    return V2SourceSpec(
+        function=function,
+        category=category,
+        language=str(raw.get("language", "")).strip(),
+    )

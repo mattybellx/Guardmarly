@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/mattybellx/Ansede/blob/main/src/ansede_static/schema/ansede.schema.json",
+  "title": "Ansede Configuration",
+  "description": "Configuration schema for ansede.json (Ansede v2.0+). A security tool that silently ignores malformed configuration is not a security tool.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sinks": {
+      "type": "array",
+      "description": "Custom taint sink definitions. Extends the built-in sink catalogue.",
+      "items": {
+        "$ref": "#/definitions/SinkSpec"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "Custom taint source definitions. Extends the built-in source catalogue.",
+      "items": {
+        "$ref": "#/definitions/SourceSpec"
+      }
+    },
+    "custom_sinks": {
+      "type": "object",
+      "description": "Legacy v1 custom sink format. Prefer the 'sinks' array for new configs.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/LegacySinkObject"
+          },
+          {
+            "type": "array",
+            "description": "Legacy list format: [cwe, title, severity?]",
+            "minItems": 2,
+            "maxItems": 3,
+            "items": { "type": "string" }
+          }
+        ]
+      }
+    },
+    "custom_sources": {
+      "type": "array",
+      "description": "Legacy v1 custom source list.",
+      "items": { "type": "string" }
+    },
+    "exclude_paths": {
+      "type": "array",
+      "description": "Path segments or subpaths to exclude from scanning. Cannot remove built-in exclusions (node_modules, .venv, etc.).",
+      "items": { "type": "string" },
+      "examples": [["tests/fixtures", "migrations", "legacy_code"]]
+    },
+    "disable_rules": {
+      "type": "array",
+      "description": "Rule IDs to disable globally (e.g. PY-004, CWE-89).",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9\\-]+$"
+      }
+    },
+    "max_callees_per_node": {
+      "type": "integer",
+      "description": "Maximum outgoing call-graph edges per node. Guards against dynamic-dispatch explosion. Default: 50.",
+      "minimum": 1,
+      "maximum": 500,
+      "default": 50
+    },
+    "max_workers": {
+      "type": "integer",
+      "description": "Maximum parallel worker processes for file parsing. Default: min(4, cpu_count).",
+      "minimum": 1,
+      "maximum": 64
+    },
+    "custom_rules_file": {
+      "type": "string",
+      "description": "Path to a YAML or JSON custom rules file."
+    },
+    "extra_sanitizer_files": {
+      "type": "array",
+      "description": "Additional sanitizer catalog JSON files to merge with the built-in library.",
+      "items": { "type": "string" }
+    },
+    "baseline_file": {
+      "type": "string",
+      "description": "Path to a baseline.json file produced by `ansede baseline generate`."
+    },
+    "output_format": {
+      "type": "string",
+      "description": "Default output format when --format is not specified on the CLI.",
+      "enum": ["text", "json", "sarif", "html", "ciso"],
+      "default": "text"
+    },
+    "fail_on": {
+      "type": "string",
+      "description": "Exit code 1 when findings of this severity or higher are found.",
+      "enum": ["critical", "high", "medium", "low", "info", "never"]
+    },
+    "log_level": {
+      "type": "string",
+      "description": "Structured log verbosity for the engine. DEBUG emits per-file parse, finding, and suppression events.",
+      "enum": ["DEBUG", "INFO", "WARNING", "ERROR"],
+      "default": "WARNING"
+    }
+  },
+  "definitions": {
+    "SinkSpec": {
+      "type": "object",
+      "required": ["rule_id", "cwe", "title", "function"],
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "description": "Stable rule identifier, e.g. CUSTOM-001.",
+          "pattern": "^[A-Z][A-Z0-9\\-]+$"
+        },
+        "cwe": {
+          "type": "string",
+          "description": "CWE identifier, e.g. CWE-89.",
+          "pattern": "^CWE-[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable title for this sink.",
+          "minLength": 3
+        },
+        "function": {
+          "type": "string",
+          "description": "Fully-qualified function or method name to treat as a sink.",
+          "minLength": 1
+        },
+        "tainted_args": {
+          "type": "array",
+          "description": "0-indexed argument positions that must not receive tainted data.",
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "safe_args": {
+          "type": "array",
+          "description": "0-indexed argument positions that are always safe (e.g. parameterized slots).",
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"],
+          "default": "high"
+        },
+        "language": {
+          "type": "string",
+          "description": "Language this sink applies to. Omit to apply to all languages.",
+          "enum": ["python", "javascript", "typescript"]
+        }
+      }
+    },
+    "SourceSpec": {
+      "type": "object",
+      "required": ["function", "category"],
+      "additionalProperties": false,
+      "properties": {
+        "function": {
+          "type": "string",
+          "description": "Fully-qualified function or attribute access that introduces taint.",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "description": "Taint category for this source.",
+          "enum": ["user_input", "env", "file", "network", "database"]
+        },
+        "language": {
+          "type": "string",
+          "enum": ["python", "javascript", "typescript"]
+        }
+      }
+    },
+    "LegacySinkObject": {
+      "type": "object",
+      "required": ["cwe", "title"],
+      "additionalProperties": false,
+      "properties": {
+        "cwe": {
+          "type": "string",
+          "pattern": "^CWE-[0-9]+$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["critical", "high", "medium", "low", "info"]
+        }
+      }
+    }
+  }
+}

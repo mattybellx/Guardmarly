@@ -71,7 +71,7 @@ def test_sqlite_store_context_manager(tmp_path):
 def test_stable_hash_is_deterministic():
     assert stable_hash("hello") == stable_hash("hello")
     assert stable_hash("hello") != stable_hash("world")
-    assert len(stable_hash("any string")) == 64  # SHA-256 hex
+    assert len(stable_hash("any string")) == 40  # BLAKE2b-20 hex (Phase 4 §4.3 upgrade from SHA-256)
 
 
 def test_sqlite_store_evict_older_than(tmp_path):
