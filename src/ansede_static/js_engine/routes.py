@@ -43,6 +43,7 @@ _RESOURCE_PARAM_RE = re.compile(r'(?:^|_)(?:id|uid|pk|slug)$|(?:Id|Uid|Pk|Slug)$
 _AUTH_MIDDLEWARE_RE = re.compile(
     r'requireAuth|authMiddleware|isAuthenticated|isLoggedIn|passport\.authenticate|'
     r'verifyToken|checkAuth|ensureAuth|jwtAuth|requireLogin|'
+    r'request\.jwtVerify|jwtVerify|fastify\.authenticate|koaJwt|koa-jwt|ctx\.isAuthenticated|'
     r'requireAdmin|adminOnly|adminRequired|ensureAdmin|staffOnly|staffRequired|'
     r'requireRole|hasRole|checkRole|requirePermission|checkPermission|hasPermission|'
     r'AuthGuard|JwtAuthGuard|SessionGuard|UseGuards|withAuth|requireSession|requireUser|getServerSession',
@@ -96,6 +97,7 @@ _CREDENTIAL_SOURCE_RE = re.compile(
 _VERIFICATION_CALL_RE = re.compile(
     r'jwt\.verify|verifyToken|checkAuth|validateToken|decodeToken|passport\.authenticate|'
     r'loadUser|findByToken|authenticate|authorize|requireRole|checkPermission|hasPermission|hasRole|'
+    r'request\.jwtVerify|ctx\.isAuthenticated|ctx\.state\.user|'
     r'getServerSession|verifyIdToken|validateSession|lucia\.validateSession|supabase\.auth\.getUser|'
     r'auth\s*\(|requireSession|requireUser',
     re.IGNORECASE,
@@ -135,6 +137,10 @@ _NEXT_FUNCTION_ROUTE_RE = re.compile(
 )
 _NEXT_ARROW_ROUTE_RE = re.compile(
     rf'export\s+const\s+(?P<method>{_NEXT_ROUTE_METHOD_RE})\s*=\s*(?:async\s*)?(?P<params>\([^)]*\)|[A-Za-z_$][\w$]*)\s*=>\s*\{{',
+    re.MULTILINE,
+)
+_FASTIFY_REGISTER_RE = re.compile(
+    r'(?P<instance>[A-Za-z_$][\w$]*)\.register\s*\(\s*(?:async\s*)?(?:function\s*\([^)]*\)|\((?P<params>[^)]*)\)\s*=>)\s*\{',
     re.MULTILINE,
 )
 
@@ -264,19 +270,28 @@ def _join_route_path(prefix: str | None, suffix: str | None) -> str:
     return '/' + '/'.join(segments) if segments else '/'
 
 
-def _ambient_route_parts(code: str) -> tuple[tuple[str | None, tuple[str, ...]], ...]:
+def _ambient_route_parts(
+    code: str,
+    *,
+    router_prefixes: dict[str, tuple[str, ...]] | None = None,
+) -> tuple[tuple[str | None, tuple[str, ...]], ...]:
     entries: list[tuple[str | None, tuple[str, ...]]] = []
+    router_prefixes = router_prefixes or {}
     for call in collect_calls(code):
         if call.callee.split('.')[-1].lower() != 'use' or not call.arguments:
             continue
         prefix = _string_literal_value(call.arguments[0])
         if prefix and prefix.startswith('/'):
             invocation_parts = tuple(argument for argument in call.arguments[1:] if argument.strip())
+            receiver = call.callee.rsplit('.', 1)[0].strip() if '.' in call.callee else ''
+            base_prefixes = router_prefixes.get(receiver, ('',)) if receiver else ('',)
+            for base_prefix in base_prefixes:
+                entries.append((_join_route_path(base_prefix, prefix), invocation_parts))
         else:
             prefix = None
             invocation_parts = tuple(argument for argument in call.arguments if argument.strip())
-        if invocation_parts:
-            entries.append((prefix, invocation_parts))
+            if invocation_parts:
+                entries.append((prefix, invocation_parts))
     return tuple(entries)
 
 
@@ -432,6 +447,61 @@ def _build_nest_route_blocks(code: str) -> list[RouteBlock]:
     return blocks
 
 
+def _build_fastify_prefixed_route_blocks(code: str) -> list[RouteBlock]:
+    blocks: list[RouteBlock] = []
+    for match in _FASTIFY_REGISTER_RE.finditer(code):
+        body_open = code.find('{', match.end() - 1)
+        if body_open < 0:
+            continue
+        body_close = _consume_balanced_segment(code, body_open, '{', '}')
+        if body_close is None:
+            continue
+
+        after_body = code[body_close + 1:]
+        options_match = re.match(r'\s*,\s*\{(?P<opts>[^}]*)\}', after_body)
+        prefix = ''
+        if options_match:
+            opts = options_match.group('opts')
+            prefix_match = re.search(r'\bprefix\s*:\s*(?P<val>["\'][^"\']+["\'])', opts)
+            if prefix_match:
+                literal = _string_literal_value(prefix_match.group('val'))
+                if literal:
+                    prefix = literal
+
+        register_body = code[body_open + 1:body_close]
+        instance = match.group('instance')
+        params = (match.group('params') or '').strip()
+        instance_alias = params.split(',')[0].strip() if params else ''
+        if not instance_alias:
+            instance_alias = instance
+
+        for call in collect_calls(register_body):
+            callee = call.callee
+            if not callee.startswith(instance_alias + '.'):
+                continue
+            method = _normalize_direct_method(callee.split('.')[-1])
+            if not method or not call.arguments:
+                continue
+            local_path = _string_literal_value(call.arguments[0])
+            if not local_path:
+                continue
+            route_path = _join_route_path(prefix, local_path)
+            start_line = code.count('\n', 0, body_open + 1) + call.line
+            invocation_parts = tuple(arg for arg in call.arguments[1:-1] if arg.strip())
+            blocks.append(RouteBlock(
+                method=method,
+                path=route_path,
+                start_line=start_line,
+                end_line=start_line + call.raw.count('\n'),
+                invocation='\n'.join(invocation_parts),
+                invocation_parts=invocation_parts,
+                body=_handler_text_from_args(call.arguments[1:]) or call.raw,
+                source_kind='fastify-register-route',
+                class_name='',
+            ))
+    return blocks
+
+
 
 def _handler_text_from_args(args: tuple[str, ...]) -> str:
     if not args:
@@ -470,6 +540,60 @@ def _simple_helper_name(expr: str) -> str | None:
     if calls and calls[0].raw.strip() == candidate:
         return calls[0].callee
     return None
+
+
+def _callee_receiver(callee: str) -> str | None:
+    if '.' not in callee:
+        return None
+    return callee.rsplit('.', 1)[0].strip() or None
+
+
+def _mount_target_identifiers(args: tuple[str, ...]) -> tuple[str, ...]:
+    names: list[str] = []
+    if len(args) < 2:
+        return ()
+    for arg in args[1:]:
+        helper_name = _simple_helper_name(arg)
+        if helper_name:
+            names.append(helper_name)
+            continue
+        text = arg.strip()
+        if text.startswith('[') and text.endswith(']'):
+            for item in split_top_level_args(text[1:-1]):
+                item_name = _simple_helper_name(item)
+                if item_name:
+                    names.append(item_name)
+    return tuple(dict.fromkeys(names))
+
+
+def _router_mount_prefixes(code: str) -> dict[str, tuple[str, ...]]:
+    """Infer mount prefixes for router variables from `.use('/prefix', router)` calls."""
+    prefixes: dict[str, tuple[str, ...]] = {}
+    changed = True
+    while changed:
+        changed = False
+        for call in collect_calls(code):
+            if call.callee.split('.')[-1].lower() != 'use' or not call.arguments:
+                continue
+            mount_prefix = _string_literal_value(call.arguments[0])
+            if not mount_prefix or not mount_prefix.startswith('/'):
+                continue
+
+            receiver = _callee_receiver(call.callee)
+            receiver_prefixes = prefixes.get(receiver, ('',)) if receiver else ('',)
+            targets = _mount_target_identifiers(call.arguments)
+            if not targets:
+                continue
+
+            for target in targets:
+                combined: set[str] = set(prefixes.get(target, ()))
+                for base_prefix in receiver_prefixes:
+                    combined.add(_join_route_path(base_prefix, mount_prefix))
+                normalized = tuple(sorted(prefix for prefix in combined if prefix))
+                if normalized != prefixes.get(target, ()): 
+                    prefixes[target] = normalized
+                    changed = True
+    return prefixes
 
 
 
@@ -624,7 +748,8 @@ def _helper_route_effect_traces(
 
 def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
     blocks: list[RouteBlock] = []
-    ambient_parts = _ambient_route_parts(code)
+    router_prefixes = _router_mount_prefixes(code)
+    ambient_parts = _ambient_route_parts(code, router_prefixes=router_prefixes)
     for call in collect_calls(code):
         short = call.callee.split('.')[-1].lower()
         direct_method = _normalize_direct_method(short)
@@ -633,17 +758,24 @@ def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
             if not path:
                 continue
             invocation_args = call.arguments[:-1] if len(call.arguments) > 1 else call.arguments
-            blocks.append(RouteBlock(
-                method=direct_method,
-                path=path,
-                start_line=call.line,
-                end_line=call.line + call.raw.count('\n'),
-                invocation='\n'.join(invocation_args),
-                invocation_parts=_ambient_invocation_parts(path, ambient_parts) + tuple(call.arguments[1:-1]),
-                body=_handler_text_from_args(call.arguments[1:]) or call.raw,
-                source_kind='call-route',
-                class_name='',
-            ))
+            receiver = _callee_receiver(call.callee)
+            effective_paths = (
+                tuple(_join_route_path(prefix, path) for prefix in router_prefixes.get(receiver, ()))
+                if receiver and receiver in router_prefixes
+                else (path,)
+            )
+            for effective_path in effective_paths:
+                blocks.append(RouteBlock(
+                    method=direct_method,
+                    path=effective_path,
+                    start_line=call.line,
+                    end_line=call.line + call.raw.count('\n'),
+                    invocation='\n'.join(invocation_args),
+                    invocation_parts=_ambient_invocation_parts(effective_path, ambient_parts) + tuple(call.arguments[1:-1]),
+                    body=_handler_text_from_args(call.arguments[1:]) or call.raw,
+                    source_kind='call-route',
+                    class_name='',
+                ))
             continue
 
         if short != 'route' or not call.arguments:
@@ -671,6 +803,7 @@ def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
             class_name='',
         ))
     blocks.extend(_build_nest_route_blocks(code))
+    blocks.extend(_build_fastify_prefixed_route_blocks(code))
     if filename:
         blocks.extend(_build_next_route_blocks(code, filename=filename))
     return blocks

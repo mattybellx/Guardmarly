@@ -20,7 +20,7 @@ import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from ansede_static._types import AnalysisResult, Finding
@@ -32,6 +32,76 @@ except ImportError:
     console = None
 
 _log = logging.getLogger(__name__)
+
+
+def _match_contains_any(path: str, patterns: list[str]) -> bool:
+    if not patterns:
+        return True
+    path_norm = path.replace("\\", "/").lower()
+    if "*" in patterns:
+        return True
+    return any(token.lower() in path_norm for token in patterns)
+
+
+def _finding_matches_auto_rule(finding: Finding, file_path: str, rule: dict[str, Any]) -> bool:
+    match = rule.get("match", {}) if isinstance(rule, dict) else {}
+    if not isinstance(match, dict):
+        return False
+
+    expected_rule = str(match.get("rule_id") or "")
+    expected_cwe = str(match.get("cwe") or "")
+    path_contains = [str(v) for v in match.get("path_contains_any", []) if isinstance(v, str)]
+
+    if expected_rule and (finding.rule_id or "") != expected_rule:
+        return False
+    if expected_cwe and (finding.cwe or "") != expected_cwe:
+        return False
+    return _match_contains_any(file_path, path_contains)
+
+
+def _load_active_suppression_rules(config_path: str | Path | None) -> list[dict[str, Any]]:
+    if config_path is None:
+        return []
+    path = Path(config_path)
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    generated = payload.get("generated_rules", []) if isinstance(payload, dict) else []
+    active = []
+    for rule in generated:
+        if isinstance(rule, dict) and bool(rule.get("enabled", False)):
+            active.append(rule)
+    return active
+
+
+def load_active_suppression_rules(config_path: str | Path | None) -> list[dict[str, Any]]:
+    """Public wrapper for loading enabled suppression rules."""
+    return _load_active_suppression_rules(config_path)
+
+
+def finding_matches_auto_rule(finding: Finding, file_path: str, rule: dict[str, Any]) -> bool:
+    """Public wrapper for suppression rule matching."""
+    return _finding_matches_auto_rule(finding, file_path, rule)
+
+
+def apply_active_suppressions(
+    findings: list[Finding],
+    *,
+    file_path: str,
+    suppression_config_path: str | Path | None,
+) -> list[Finding]:
+    """Filter findings using enabled auto-suppression rules from a config file."""
+    rules = _load_active_suppression_rules(suppression_config_path)
+    if not rules:
+        return findings
+    return [
+        finding
+        for finding in findings
+        if not any(_finding_matches_auto_rule(finding, file_path, rule) for rule in rules)
+    ]
 
 
 @dataclass
@@ -477,9 +547,258 @@ class AlgorithmicTriageEngine:
         """Return triage statistics."""
         return self.stats.copy()
 
-def run_ai_triage(results: list[AnalysisResult], code_map: dict[str, str]) -> list[AnalysisResult]:
+
+def _safe_slug(value: str) -> str:
+    return re.sub(r"[^a-z0-9_]+", "_", value.lower()).strip("_")
+
+
+def _noise_signature(file_path: str, finding: dict[str, Any]) -> tuple[str, str, str, str]:
+    rule_id = str(finding.get("rule_id") or "")
+    cwe = str(finding.get("cwe") or "")
+    title = str(finding.get("title") or "")
+    path_norm = file_path.replace("\\", "/").lower()
+
+    bucket = "generic_noise"
+    if any(token in path_norm for token in ("/test", "tests/", "/fixtures", "fixture", "mock", "demo", "example")):
+        bucket = "test_fixture_noise"
+    elif "entropy" in rule_id.lower() or cwe == "CWE-798":
+        bucket = "entropy_credential_noise"
+    elif any(token in path_norm for token in ("/dist/", ".min.", "bundle", "vendor", "node_modules")):
+        bucket = "generated_bundle_noise"
+
+    return bucket, rule_id, cwe, title
+
+
+def mine_web_wild_noise(
+    report_path: str | Path,
+    *,
+    min_occurrences: int = 3,
+) -> dict[str, Any]:
+    """Mine recurring false-positive signatures from a web-wild harness report."""
+    payload = json.loads(Path(report_path).read_text(encoding="utf-8", errors="replace"))
+    samples = payload.get("samples", []) if isinstance(payload, dict) else []
+
+    signature_counts: dict[tuple[str, str, str, str], int] = {}
+    signature_examples: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
+
+    for sample in samples:
+        if not isinstance(sample, dict):
+            continue
+        expected = {str(v) for v in sample.get("expected_labels", []) if isinstance(v, str)}
+        findings = sample.get("findings", [])
+        file_path = str(sample.get("file", ""))
+
+        for finding in findings:
+            if not isinstance(finding, dict):
+                continue
+            cwe = str(finding.get("cwe") or "")
+            if cwe and cwe in expected:
+                continue
+
+            signature = _noise_signature(file_path, finding)
+            signature_counts[signature] = signature_counts.get(signature, 0) + 1
+            signature_examples.setdefault(signature, [])
+            if len(signature_examples[signature]) < 3:
+                signature_examples[signature].append(
+                    {
+                        "repo": sample.get("repo", ""),
+                        "file": file_path,
+                        "line": finding.get("line"),
+                        "title": finding.get("title", ""),
+                    }
+                )
+
+    candidates: list[dict[str, Any]] = []
+    for signature, count in sorted(signature_counts.items(), key=lambda kv: kv[1], reverse=True):
+        if count < min_occurrences:
+            continue
+        bucket, rule_id, cwe, title = signature
+        rationale = {
+            "test_fixture_noise": "Rule repeatedly fires in test/demo/fixture contexts without matching weak labels.",
+            "entropy_credential_noise": "Entropy/credential findings repeatedly appear as collateral noise in non-secret contexts.",
+            "generated_bundle_noise": "Rule repeatedly fires in generated/minified/vendor code where direct ownership is low.",
+            "generic_noise": "Rule shows recurring unmatched predictions in sampled web-wild corpus.",
+        }.get(bucket, "Recurring unmatched finding pattern in web-wild corpus.")
+
+        candidates.append(
+            {
+                "bucket": bucket,
+                "rule_id": rule_id,
+                "cwe": cwe,
+                "title": title,
+                "occurrences": count,
+                "explanation": rationale,
+                "examples": signature_examples.get(signature, []),
+            }
+        )
+
+    return {
+        "report_path": str(report_path),
+        "sample_count": len(samples) if isinstance(samples, list) else 0,
+        "min_occurrences": min_occurrences,
+        "candidates": candidates,
+    }
+
+
+def generate_candidate_suppressions(
+    report_path: str | Path,
+    *,
+    output_path: str | Path | None = None,
+    min_occurrences: int = 3,
+) -> dict[str, Any]:
+    """Generate explainable suppression candidates from web-wild noise buckets."""
+    mined = mine_web_wild_noise(report_path, min_occurrences=min_occurrences)
+    suppression_rules: list[dict[str, Any]] = []
+
+    for candidate in mined.get("candidates", []):
+        rule_id = str(candidate.get("rule_id") or "")
+        cwe = str(candidate.get("cwe") or "")
+        bucket = str(candidate.get("bucket") or "generic_noise")
+        slug = _safe_slug(rule_id or cwe or bucket or "noise")
+        scope_patterns = {
+            "test_fixture_noise": ["tests/", "fixtures/", "mock", "demo", "example"],
+            "entropy_credential_noise": ["demo", "example", "sample", "test"],
+            "generated_bundle_noise": ["dist/", "vendor/", "node_modules/", ".min."],
+            "generic_noise": ["*"],
+        }.get(bucket, ["*"])
+
+        suppression_rules.append(
+            {
+                "id": f"SUPPRESS-AUTO-{slug.upper()}",
+                "match": {
+                    "rule_id": rule_id,
+                    "cwe": cwe,
+                    "path_contains_any": scope_patterns,
+                },
+                "confidence": 0.7,
+                "enabled": False,
+                "source": "web_wild_harness",
+                "explanation": candidate.get("explanation", ""),
+                "evidence": {
+                    "occurrences": candidate.get("occurrences", 0),
+                    "examples": candidate.get("examples", []),
+                },
+            }
+        )
+
+    payload = {
+        "kind": "ansede-suppression-candidates",
+        "version": 1,
+        "report_path": str(report_path),
+        "generated_rules": suppression_rules,
+    }
+
+    if output_path is not None:
+        out = Path(output_path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+    return payload
+
+
+def deploy_candidate_suppressions_with_cve_guard(
+    report_path: str | Path,
+    *,
+    output_path: str | Path,
+    min_occurrences: int = 3,
+    max_enable: int = 8,
+    cve_regression_budget: int = 0,
+) -> dict[str, Any]:
+    """Closed-loop suppression deployment.
+
+    Flow:
+      1) Mine web-wild recurring noise and produce candidate suppressions.
+      2) Enable top-N candidates in descending evidence order.
+      3) Run CVE regression gate; if core findings regress beyond budget, roll back.
+      4) Persist output config with activation decision and validation metadata.
+    """
+    payload = generate_candidate_suppressions(
+        report_path,
+        output_path=None,
+        min_occurrences=min_occurrences,
+    )
+
+    candidates = payload.get("generated_rules", []) if isinstance(payload, dict) else []
+    scored: list[tuple[int, dict[str, Any]]] = []
+    for rule in candidates:
+        if not isinstance(rule, dict):
+            continue
+        occurrences = int(rule.get("evidence", {}).get("occurrences", 0)) if isinstance(rule.get("evidence"), dict) else 0
+        scored.append((occurrences, rule))
+    scored.sort(key=lambda item: item[0], reverse=True)
+
+    enabled_ids: set[str] = set()
+    for _, rule in scored[: max(0, max_enable)]:
+        rid = str(rule.get("id") or "")
+        if rid:
+            enabled_ids.add(rid)
+
+    for rule in candidates:
+        if isinstance(rule, dict):
+            rule["enabled"] = str(rule.get("id") or "") in enabled_ids
+
+    out = Path(output_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    # Persist provisional enabled configuration so CVE guard validates the
+    # exact suppression set we intend to deploy.
+    out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+    validation: dict[str, Any] = {
+        "cve_guard": "skipped",
+        "passed": True,
+        "details": {},
+    }
+    try:
+        from benchmarks.cve_recall_runner import run_cve_recall
+
+        baseline_report = run_cve_recall(quiet=True)
+        baseline_cases = baseline_report.get("cases", []) if isinstance(baseline_report, dict) else []
+        baseline_failed = sum(1 for case in baseline_cases if isinstance(case, dict) and not bool(case.get("passed", False)))
+
+        cve_report = run_cve_recall(quiet=True, suppression_config=out)
+        summary = cve_report.get("summary", {}) if isinstance(cve_report, dict) else {}
+        cases = cve_report.get("cases", []) if isinstance(cve_report, dict) else []
+        failed_cases = sum(1 for case in cases if isinstance(case, dict) and not bool(case.get("passed", False)))
+        regression_delta = max(0, failed_cases - baseline_failed)
+        passed = regression_delta <= int(cve_regression_budget)
+        validation = {
+            "cve_guard": "executed",
+            "passed": passed,
+            "details": {
+                "baseline_failed_cases": baseline_failed,
+                "failed_cases": failed_cases,
+                "regression_delta": regression_delta,
+                "regression_budget": int(cve_regression_budget),
+                "summary": summary,
+            },
+        }
+        if not passed:
+            for rule in candidates:
+                if isinstance(rule, dict):
+                    rule["enabled"] = False
+    except Exception as exc:  # noqa: BLE001
+        validation = {
+            "cve_guard": "error",
+            "passed": False,
+            "details": {"error": str(exc)},
+        }
+        for rule in candidates:
+            if isinstance(rule, dict):
+                rule["enabled"] = False
+
+    payload["validation"] = validation
+    out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return payload
+
+def run_ai_triage(
+    results: list[AnalysisResult],
+    code_map: dict[str, str],
+    *,
+    suppression_config_path: str | Path | None = None,
+) -> list[AnalysisResult]:
     """Orchestrates the offline deterministic triage across all findings."""
     verifier = AlgorithmicTriageEngine()
+    active_suppressions = _load_active_suppression_rules(suppression_config_path)
     if console:
         console.print("[bold purple]🧠 Initiating Zero-Dependency Algorithmic Advanced Triage Layer...[/bold purple]")
         
@@ -492,6 +811,9 @@ def run_ai_triage(results: list[AnalysisResult], code_map: dict[str, str]) -> li
         
         verified_findings = []
         for f in r.findings:
+            if any(_finding_matches_auto_rule(f, r.file_path, rule) for rule in active_suppressions):
+                continue
+
             start_line = max(0, f.line - 5 if f.line else 0)
             end_line = min(len(code_lines), (f.line + 5) if f.line else len(code_lines))
             snippet = "\n".join(code_lines[start_line:end_line])

@@ -11,23 +11,48 @@ def _check_no_rate_limit(code: str, *, agent: str) -> list[Finding]:
     findings: list[Finding] = []
     lines = code.splitlines()
     auth_route_re = re.compile(
-        r'(?:app|router|fastify|server|api)\.post\s*\(["\'](?:[^"\']*(?:login|signin|sign-in|authenticate|auth)[^"\']*)["\']',
+        r'(?:app|router|fastify|server|api)\.(?:post|get|put|patch)\s*\('
+        r'["\'](?:[^"\']*(?:'
+        r'login|signin|sign-in|sign_in|'
+        r'authenticate|auth[^"\']*|'
+        r'forgot.?password|reset.?password|password.?reset|'
+        r'mfa|2fa|totp|otp|verify.?otp|otp.?verify|'
+        r'token|refresh.?token|token.?refresh|'
+        r'register|signup|sign-up|sign_up'
+        r')[^"\']*)["\']',
         re.IGNORECASE,
     )
-    rate_limit_re = re.compile(r'rateLimit|rate.?limiter|throttle|slowDown', re.IGNORECASE)
+    rate_limit_re = re.compile(
+        r'rateLimit|rate.?limiter|throttle|slowDown|express-rate-limit|'
+        r'bottleneck|p-throttle|limiter\.consume|redis.*limiter',
+        re.IGNORECASE,
+    )
     has_rate_limit = bool(rate_limit_re.search(code))
 
     for lineno, line in enumerate(lines, 1):
         if COMMENT_LINE_RE.match(line.strip()):
             continue
-        if auth_route_re.search(line) and not has_rate_limit:
+        m = auth_route_re.search(line)
+        if m and not has_rate_limit:
+            # determine the endpoint category for a more useful message
+            path_text = m.group(0).lower()
+            if any(k in path_text for k in ('mfa', '2fa', 'totp', 'otp')):
+                endpoint_kind = "multi-factor authentication"
+            elif any(k in path_text for k in ('forgot', 'reset')):
+                endpoint_kind = "password reset"
+            elif any(k in path_text for k in ('token', 'refresh')):
+                endpoint_kind = "token/refresh"
+            elif any(k in path_text for k in ('register', 'signup', 'sign-up', 'sign_up')):
+                endpoint_kind = "registration"
+            else:
+                endpoint_kind = "authentication"
             findings.append(Finding(
                 category="security",
                 severity=Severity.MEDIUM,
-                title=f"CWE-307: No rate limiting on auth route at line {lineno}",
+                title=f"CWE-307: No rate limiting on {endpoint_kind} route at line {lineno}",
                 description=(
-                    f"Authentication route at L{lineno} (`{line.strip()[:80]}`) has no rate-limiting middleware in scope. "
-                    f"An attacker can brute-force credentials."
+                    f"{endpoint_kind.capitalize()} route at L{lineno} (`{line.strip()[:80]}`) has no rate-limiting middleware in scope. "
+                    f"An attacker can brute-force credentials, OTPs, or tokens."
                 ),
                 line=lineno,
                 suggestion=(
@@ -98,11 +123,48 @@ def _check_sensitive_console_log(code: str, *, agent: str) -> list[Finding]:
 
 def _check_dangerous_object_merge(code: str, *, agent: str) -> list[Finding]:
     findings: list[Finding] = []
-    pattern = re.compile(r'Object\.assign\s*\([^)]*req\.body|{\s*\.\.\.\s*req\.body', re.IGNORECASE)
+    # Direct spread/assign with req.body
+    spread_pattern = re.compile(r'Object\.assign\s*\([^)]*req\.body|{\s*\.\.\.\s*req\.body', re.IGNORECASE)
+    # Deep-merge library calls with req.body / req.query / req.params
+    deep_merge_pattern = re.compile(
+        r'(?:_\.merge|_\.mergeWith|_\.defaultsDeep|deepmerge|merge\.recursive|'
+        r'lodash\.merge|extend\s*\(|jQuery\.extend\s*\(|angular\.merge\s*\(|'
+        r'Object\.assign\s*\(\s*\w+\s*,\s*\w*req\b)'
+        r'[^;]*req\.',
+        re.IGNORECASE,
+    )
+    # Proto / constructor injection patterns
+    proto_pattern = re.compile(
+        r'(?:req\.\w+)\s*\[(?:["\']__proto__["\']|["\']constructor["\'])\]|'
+        r'(?:req\.\w+)(?:\.constructor|\.prototype)',
+        re.IGNORECASE,
+    )
+    # 2nd-order: variable assigned from req.body/query/params, later spread into object
+    # e.g.  const data = req.body;  ...  Object.assign(target, data)  or { ...data }
+    _taint_assign_re = re.compile(
+        r'\b(?:const|let|var)\s+(\w+)\s*=\s*req\.(?:body|query|params|headers)',
+        re.IGNORECASE,
+    )
+    _second_order_spread_re_tmpl = r'Object\.assign\s*\([^)]*\b{var}\b|{{\s*\.\.\.\s*{var}\s*}}'
+    _deep_merge_tmpl = (
+        r'(?:_\.merge|_\.mergeWith|_\.defaultsDeep|deepmerge|lodash\.merge)'
+        r'\s*\([^)]*\b{var}\b'
+    )
+
+    # Collect taint-variable names defined in this snippet (within a short scope window)
+    tainted_vars: list[tuple[int, str]] = []
+    lines = code.splitlines()
+    for lineno_0, line in enumerate(lines):
+        m = _taint_assign_re.search(line)
+        if m:
+            tainted_vars.append((lineno_0, m.group(1)))
+
+    reported_vars: set[str] = set()
+
     for lineno, line in enumerate(code.splitlines(), 1):
         if COMMENT_LINE_RE.match(line.strip()):
             continue
-        if pattern.search(line):
+        if spread_pattern.search(line):
             findings.append(Finding(
                 category="security",
                 severity=Severity.HIGH,
@@ -117,6 +179,77 @@ def _check_dangerous_object_merge(code: str, *, agent: str) -> list[Finding]:
                 cwe="CWE-1321",
                 agent=agent,
             ))
+        elif deep_merge_pattern.search(line):
+            findings.append(Finding(
+                category="security",
+                severity=Severity.HIGH,
+                title=f"CWE-1321: Prototype pollution via deep-merge with request data at line {lineno}",
+                description=(
+                    f"Deep-merge function (`_.merge`, `deepmerge`, etc.) called with user-controlled input at L{lineno}: "
+                    f"`{line.strip()[:80]}`. Lodash <4.17.21 and similar libraries have known prototype-pollution CVEs."
+                ),
+                line=lineno,
+                suggestion=(
+                    "Update to lodash ≥4.17.21. Filter request keys with a schema validator before merging. "
+                    "Never pass raw `req.body` to deep-merge functions."
+                ),
+                rule_id="JS-032",
+                cwe="CWE-1321",
+                agent=agent,
+            ))
+        elif proto_pattern.search(line):
+            findings.append(Finding(
+                category="security",
+                severity=Severity.CRITICAL,
+                title=f"CWE-1321: Direct __proto__/constructor access on request data at line {lineno}",
+                description=(
+                    f"Request data accessed via `__proto__` or `constructor` property at L{lineno}: "
+                    f"`{line.strip()[:80]}`. This enables direct prototype-chain modification."
+                ),
+                line=lineno,
+                suggestion="Never allow request keys to reach prototype properties. Validate and allowlist input keys.",
+                rule_id="JS-032",
+                cwe="CWE-1321",
+                agent=agent,
+            ))
+        else:
+            # 2nd-order: check if a taint-assigned variable is later spread/merged
+            for def_lineno_0, var_name in tainted_vars:
+                if lineno_0 := (lineno - 1):  # same as lineno but 0-based
+                    pass
+                # Only look forward from where the var was defined
+                if (lineno - 1) <= def_lineno_0:
+                    continue
+                if var_name in reported_vars:
+                    continue
+                spread_re = re.compile(
+                    _second_order_spread_re_tmpl.format(var=re.escape(var_name)),
+                    re.IGNORECASE,
+                )
+                merge_re = re.compile(
+                    _deep_merge_tmpl.format(var=re.escape(var_name)),
+                    re.IGNORECASE,
+                )
+                if spread_re.search(line) or merge_re.search(line):
+                    reported_vars.add(var_name)
+                    findings.append(Finding(
+                        category="security",
+                        severity=Severity.HIGH,
+                        title=f"CWE-1321: Prototype pollution — 2nd-order spread of tainted variable `{var_name}` at line {lineno}",
+                        description=(
+                            f"Variable `{var_name}` was assigned from `req.*` at L{def_lineno_0 + 1} and "
+                            f"is later spread into an object or passed to a deep-merge at L{lineno}: "
+                            f"`{line.strip()[:80]}`. A `__proto__` key in the source can pollute the prototype chain."
+                        ),
+                        line=lineno,
+                        suggestion=(
+                            "Strip `__proto__` / `constructor` keys from request data before using it. "
+                            "Use a schema validator (Joi, Zod, ajv) to allowlist expected properties."
+                        ),
+                        rule_id="JS-032",
+                        cwe="CWE-1321",
+                        agent=agent,
+                    ))
     return findings
 
 

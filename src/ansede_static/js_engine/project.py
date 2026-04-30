@@ -1203,6 +1203,7 @@ def summarize_js_function(
 	file_path: str,
 	function_name: str,
 	*,
+	global_graph: object | None = None,
 	visited: set[tuple[str, str]] | None = None,
 ) -> FunctionSummary:
 	if not project:
@@ -1229,6 +1230,7 @@ def summarize_js_function(
 
 	effects: list[HelperEffect] = []
 	return_effects: list[ReturnEffect] = []
+	depends_on: set[str] = set()
 	verifies_auth = bool(_VERIFICATION_CALL_RE.search(function_def.body))
 	privilege_guard = _body_has_privilege_guard(function_def.body)
 	ownership_guard = _body_has_ownership_guard(function_def.body)
@@ -1284,10 +1286,12 @@ def summarize_js_function(
 				if not resolved_return:
 					continue
 				resolved_return_file, resolved_return_function = resolved_return
+				depends_on.add(f"{_normalize_path(resolved_return_file)}::{resolved_return_function.lookup_key or resolved_return_function.name}")
 				nested_return_summary = summarize_js_function(
 					project,
 					resolved_return_file,
 					resolved_return_function.lookup_key or resolved_return_function.name,
+					global_graph=global_graph,
 					visited=visited,
 				)
 				for nested_return in nested_return_summary.return_effects:
@@ -1320,10 +1324,12 @@ def summarize_js_function(
 			if not resolved:
 				continue
 			nested_file, nested_function = resolved
+			depends_on.add(f"{_normalize_path(nested_file)}::{nested_function.lookup_key or nested_function.name}")
 			nested_summary = summarize_js_function(
 				project,
 				nested_file,
 				nested_function.lookup_key or nested_function.name,
+				global_graph=global_graph,
 				visited=visited,
 			)
 			if nested_summary.verifies_auth:
@@ -1356,6 +1362,23 @@ def summarize_js_function(
 		ownership_guard=ownership_guard,
 	)
 	project.summaries[cache_key] = summary
+	if global_graph is not None and hasattr(global_graph, "record_function_summary"):
+		try:
+			from ansede_static.ir.global_graph import FunctionSummary as GraphFunctionSummary
+
+			arg_sink_indexes = tuple(sorted({effect.param_index for effect in summary.effects}))
+			arg_return_indexes = tuple(sorted({effect.param_index for effect in summary.return_effects}))
+			global_graph.record_function_summary(GraphFunctionSummary(
+				file_path=normalized_file,
+				function_name=function_name,
+				args_to_sink=arg_sink_indexes,
+				args_to_return=arg_return_indexes,
+				return_from_source=any(bool(effect.source_suffix) for effect in summary.return_effects),
+				side_effect_symbols=(),
+				depends_on=tuple(sorted(depends_on)),
+			))
+		except Exception:
+			pass
 	return summary
 
 
@@ -1400,6 +1423,7 @@ def _trace_helper_return_expression(
 	taint_traces: dict[str, tuple[TraceFrame, ...]],
 	*,
 	line: int,
+	global_graph: object | None = None,
 ) -> tuple[TraceFrame, ...]:
 	if not project:
 		return ()
@@ -1409,7 +1433,34 @@ def _trace_helper_return_expression(
 		if not resolved:
 			continue
 		resolved_file, function_def = resolved
-		summary = summarize_js_function(project, resolved_file, function_def.lookup_key or function_def.name)
+		summary = summarize_js_function(
+			project,
+			resolved_file,
+			function_def.lookup_key or function_def.name,
+			global_graph=global_graph,
+		)
+		if global_graph is not None and hasattr(global_graph, "propagate_call_facts"):
+			tainted_arg_indexes: set[int] = set()
+			for idx, argument in enumerate(call.arguments):
+				argument_trace = trace_for_expr(argument, taint_traces, line=line) or request_object_trace(argument, line=line)
+				if argument_trace:
+					tainted_arg_indexes.add(idx)
+			try:
+				_, _, ret_hit, return_trace = global_graph.propagate_call_facts(
+					caller_file=file_path,
+					caller_name="<js-scope>",
+					callee_file=resolved_file,
+					callee_name=function_def.lookup_key or function_def.name,
+					tainted_arg_indexes=tainted_arg_indexes,
+					call_line=line,
+					call_string=(),
+					call_string_k=2,
+				)
+				if ret_hit and return_trace:
+					trace = append_trace(return_trace, "helper", f"through `{call.callee}()`", line=line)
+					traces.append(trace)
+			except Exception:
+				pass
 		for return_effect in summary.return_effects:
 			if return_effect.param_index >= len(call.arguments):
 				continue
@@ -1448,6 +1499,7 @@ def propagate_helper_return_traces(
 	taint_traces: dict[str, tuple[TraceFrame, ...]],
 	*,
 	line_offset: int = 0,
+	global_graph: object | None = None,
 ) -> dict[str, tuple[TraceFrame, ...]]:
 	if not project or not file_path:
 		return taint_traces
@@ -1465,7 +1517,14 @@ def propagate_helper_return_traces(
 			target, expr = match.groups()
 			if target in propagated:
 				continue
-			trace = _trace_helper_return_expression(project, file_path, expr, propagated, line=lineno)
+			trace = _trace_helper_return_expression(
+				project,
+				file_path,
+				expr,
+				propagated,
+				line=lineno,
+				global_graph=global_graph,
+			)
 			if not trace:
 				continue
 			trace = append_trace(trace, "propagator", f"assign to `{target}`", line=lineno)

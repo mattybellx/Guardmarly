@@ -1,5 +1,9 @@
 ﻿# ansede-static
-https://github.com/mattybellx/Ansede/blob/master/unnamed.png
+
+<p align="center">
+  <img src="https://github.com/mattybellx/Ansede/blob/master/unnamed.png" alt="Ansede banner" width="900" />
+</p>
+
 **Static security analysis that finds what Bandit misses.**
 
 Detects **IDOR, unauthorized access, and auth bypass** at the AST level — plus SQL injection,
@@ -17,6 +21,22 @@ ansede-static src/
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/mattybellx/Ansede?style=social)](https://github.com/mattybellx/Ansede/stargazers)
 [![Discussions](https://img.shields.io/github/discussions/mattybellx/Ansede?label=Discussions)](https://github.com/mattybellx/Ansede/discussions)
+
+## Quick navigation
+
+- [Quick start](#quick-start)
+- [Detection coverage](#detection-coverage)
+- [Pattern recall benchmark](#pattern-recall-benchmark)
+- [Quality and performance harnesses](#quality-and-performance-harnesses)
+- [CI integration](#ci-integration)
+- [Contributing](#contributing)
+
+## Latest validation snapshot
+
+- Full test suite: **472 passed**
+- CVE benchmark recall: **35/35 (100%)**
+- Quality benchmark: **41/41 checks (100%)**
+- Internet spot-check sample (10 real-world snippets): **10/10 hits (100%)**
 
 > **Install note:** PyPI publishing is configured for the project, but the package is not currently live there, so the install commands below use the GitHub source directly.
 
@@ -549,7 +569,7 @@ steps:
     ansede-static src/ --format sarif --output ansede.sarif --fail-on high
 - name: Upload SARIF
   if: always()
-  uses: github/codeql-action/upload-sarif@v3
+  uses: github/codeql-action/upload-sarif@v4
   with:
     sarif_file: ansede.sarif
 ```

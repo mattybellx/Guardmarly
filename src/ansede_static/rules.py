@@ -611,10 +611,11 @@ _KNOWN_RULE_IDS: tuple[str, ...] = (
     "JS-011", "JS-012", "JS-013", "JS-014", "JS-015", "JS-016", "JS-017", "JS-018", "JS-019", "JS-020",
     "JS-021", "JS-022", "JS-023", "JS-024", "JS-026", "JS-027", "JS-028", "JS-029", "JS-030", "JS-031",
     "JS-032", "JS-033", "JS-034", "JS-035", "JS-036", "JS-037", "JS-038", "JS-039", "JS-040",
+    "JS-043", "JS-044", "JS-045", "JS-046", "JS-047", "JS-048", "JS-049",
     "PY-001", "PY-002", "PY-003", "PY-004", "PY-005", "PY-006", "PY-007", "PY-008", "PY-009", "PY-010",
     "PY-011", "PY-012", "PY-013", "PY-014", "PY-015", "PY-016", "PY-017", "PY-018", "PY-019", "PY-020",
     "PY-021", "PY-022", "PY-023", "PY-024", "PY-025", "PY-026", "PY-027", "PY-028", "PY-029", "PY-030",
-    "PY-031", "PY-032", "PY-033", "PY-034", "PY-035", "PY-036", "PY-037",
+    "PY-031", "PY-032", "PY-033", "PY-034", "PY-035", "PY-036", "PY-037", "PY-038",
 )
 
 
@@ -1048,6 +1049,25 @@ _PY_RULE_CONTRACTS: dict[str, RuleContract] = {
         summary="CPG-based inter-procedural taint analysis found a path from a source to a sink.",
         remediation="Sanitize or validate the tainted value before it reaches the sink.",
         tags=("python", "cpg", "inter-procedural", "taint"),
+    ),
+    "PY-038": _apply_cwe_base(
+        "PY-038",
+        cwe="CWE-307",
+        title="Python auth/sensitive route missing rate limiting",
+        category="security",
+        default_severity="medium",
+        languages=("python",),
+        precision="medium",
+        summary=(
+            "Flags Flask/FastAPI/Django authentication or sensitive routes (login, MFA, "
+            "password-reset, token-refresh) where no rate-limiting library is detected "
+            "in file scope, enabling brute-force attacks."
+        ),
+        remediation=(
+            "Use `flask-limiter` (`@limiter.limit('5/minute')`), `slowapi` for FastAPI, "
+            "`django-ratelimit`, or a reverse-proxy rate limiter in front of sensitive endpoints."
+        ),
+        tags=("python", "auth", "rate-limiting", "brute-force"),
     ),
 }
 

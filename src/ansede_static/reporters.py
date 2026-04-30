@@ -559,6 +559,8 @@ _HTML_TEMPLATE = """\
   .tag {{ font-size: 0.7rem; padding: 1px 6px; border-radius: 12px; background: rgba(255,255,255,0.1); color: var(--muted); }}
   .finding-code {{ font-family: monospace; font-size: 0.78rem; background: #0a0a1a; border-radius: 4px; padding: 8px 12px; margin-top: 6px; overflow-x: auto; white-space: pre; color: #a8d8a8; }}
   .finding-suggestion {{ font-size: 0.8rem; color: #7fbfff; margin-top: 5px; font-style: italic; }}
+    .trace-block {{ margin-top: 8px; border-left: 3px solid rgba(127,191,255,0.4); padding-left: 10px; }}
+    .trace-step {{ font-family: monospace; font-size: 0.76rem; color: #b8c7e0; margin: 2px 0; }}
   .clean {{ color: var(--muted); font-size: 0.85rem; padding: 10px 16px; }}
   .confidence-bar-wrap {{ display: inline-block; width: 60px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; vertical-align: middle; margin-left: 4px; }}
   .confidence-bar {{ height: 6px; border-radius: 3px; background: #27ae60; }}
@@ -673,6 +675,21 @@ def format_html(results: list[AnalysisResult]) -> str:
                         f'<p class="finding-suggestion">&#x1F4A1; {_html_escape(f.suggestion[:200])}</p>'
                     )
 
+                trace_html = ""
+                if f.trace:
+                    steps = []
+                    for frame in f.trace:
+                        loc = f"L{frame.line}" if frame.line else "?"
+                        steps.append(
+                            f'<div class="trace-step">{_html_escape(frame.kind.upper())} → {_html_escape(frame.label)} ({loc})</div>'
+                        )
+                    trace_html = (
+                        '<details class="trace-block">'
+                        '<summary class="tag" style="cursor:pointer">trace-backed code flow</summary>'
+                        + "".join(steps)
+                        + '</details>'
+                    )
+
                 finding_cards.append(
                     f'<div class="finding" style="border-color:{colour}">'
                     f'  <div class="finding-header">'
@@ -683,6 +700,7 @@ def format_html(results: list[AnalysisResult]) -> str:
                     f'  <div class="finding-desc">{_html_escape(f.description[:300])}</div>'
                     f'  {snippet_html}'
                     f'  {suggestion_html}'
+                    f'  {trace_html}'
                     f'  <div class="finding-meta">'
                     f'    <span class="tag">{rule_id}</span>'
                     f'    <span class="tag">confidence {conf_bar}</span>'

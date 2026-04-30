@@ -137,7 +137,7 @@ def _check_taint_ssrf(
         return []
     var_pattern = "|".join(re.escape(name) for name in taint_traces)
     pattern = re.compile(
-        rf'(?:fetch|axios\.(?:get|post)|request|got|needle|http\.get|https\.get)\s*\([^)]*(?:{var_pattern})',
+        rf'(?:fetch|axios\.(?:get|post|put|delete|request)|request|got(?:\.(?:get|post|stream))?|needle(?:\.(?:get|post|put|delete|request))?|superagent(?:\.(?:get|post))?|http\.get|https\.get)\s*\([^)]*(?:{var_pattern})',
         re.IGNORECASE,
     )
     findings: list[Finding] = []
@@ -174,6 +174,7 @@ def _helper_taint_findings(
     *,
     filename: str,
     project,
+    global_graph: object | None,
     agent: str,
     analysis_kind: str,
 ) -> list[Finding]:
@@ -186,7 +187,32 @@ def _helper_taint_findings(
         if not resolved:
             continue
         resolved_file, function_def = resolved
-        summary = summarize_js_function(project, resolved_file, function_def.lookup_key or function_def.name)
+        summary = summarize_js_function(
+            project,
+            resolved_file,
+            function_def.lookup_key or function_def.name,
+            global_graph=global_graph,
+        )
+        if global_graph is not None and hasattr(global_graph, "propagate_call_facts"):
+            tainted_arg_indexes: set[int] = set()
+            for idx, argument in enumerate(call.arguments):
+                if trace_for_expr(argument, taint_traces, line=call.line) or request_object_trace(argument, line=call.line):
+                    tainted_arg_indexes.add(idx)
+            try:
+                sink_hit, _, _, _ = global_graph.propagate_call_facts(
+                    caller_file=filename or "<memory>",
+                    caller_name="<js-scope>",
+                    callee_file=resolved_file,
+                    callee_name=function_def.lookup_key or function_def.name,
+                    tainted_arg_indexes=tainted_arg_indexes,
+                    call_line=call.line,
+                    call_string=(),
+                    call_string_k=2,
+                )
+                if not sink_hit:
+                    continue
+            except Exception:
+                pass
         for effect in summary.effects:
             if effect.kind not in {"path", "redirect", "ssrf"}:
                 continue
@@ -259,6 +285,7 @@ def run_taint_flow_checks(
     analysis_kind: str = "taint-flow",
     filename: str = "",
     project=None,
+    global_graph: object | None = None,
 ) -> list[Finding]:
     active_project = project or (build_js_project_index(filename, code) if filename else None)
     taint_traces = extract_taint_traces(code)
@@ -268,6 +295,7 @@ def run_taint_flow_checks(
             filename,
             code,
             taint_traces,
+            global_graph=global_graph,
         )
     findings: list[Finding] = []
     for checker in (
@@ -282,6 +310,7 @@ def run_taint_flow_checks(
             taint_traces,
             filename=filename,
             project=active_project,
+            global_graph=global_graph,
             agent=agent,
             analysis_kind=analysis_kind,
         )

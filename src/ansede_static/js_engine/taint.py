@@ -12,8 +12,8 @@ _ASSIGNMENT_RE = re.compile(
 )
 DIRECT_TAINT_SOURCE_RE = re.compile(
     r'\b(?:'
-    r'req\.(?:params|query|body|headers|cookies)(?:\.[A-Za-z_$][\w$]*)?'
-    r'|request\.(?:params|query|body|headers|cookies)(?:\.[A-Za-z_$][\w$]*)?'
+    r'req\.(?:params|query|body|headers|cookies|ip|hostname|protocol|originalUrl|url|path|method)(?:\.[A-Za-z_$][\w$]*)?'
+    r'|request\.(?:params|query|body|headers|cookies|ip|hostname|protocol|originalUrl|url)(?:\.[A-Za-z_$][\w$]*)?'
     r'|params\.[A-Za-z_$][\w$]*'
     r'|ctx\.(?:params|query|body)(?:\.[A-Za-z_$][\w$]*)?'
     r'|ctx\.request\.(?:body|headers)(?:\.[A-Za-z_$][\w$]*)?'

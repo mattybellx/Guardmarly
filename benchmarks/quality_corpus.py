@@ -191,4 +191,162 @@ function go(req, res) {
         expected_rule_ids=("JS-039",),
         notes="Open redirect through unvalidated target.",
     ),
+    # ── New rule coverage entries ─────────────────────────────────────────────
+    QualityCase(
+        case_id="js-xxe-unsafe",
+        language="javascript",
+        filename="xxe_unsafe.js",
+        js_backend="auto",
+        snippet="""
+const { DOMParser } = require('xmldom');
+const parser = new DOMParser();
+const doc = parser.parseFromString(req.body.xml, 'text/xml');
+""",
+        expected_cwes=("CWE-611",),
+        expected_rule_ids=("JS-043",),
+        notes="DOMParser without entity restriction should trigger XXE rule.",
+    ),
+    QualityCase(
+        case_id="js-xxe-safe",
+        language="javascript",
+        filename="xxe_safe.js",
+        js_backend="auto",
+        snippet="""
+const { DOMParser } = require('xmldom');
+const parser = new DOMParser({ resolveExternalEntities: false });
+const doc = parser.parseFromString(req.body.xml, 'text/xml');
+""",
+        forbidden_cwes=("CWE-611",),
+        forbidden_rule_ids=("JS-043",),
+        notes="resolveExternalEntities: false should suppress XXE finding.",
+    ),
+    QualityCase(
+        case_id="js-cookie-no-secure",
+        language="javascript",
+        filename="cookie_unsafe.js",
+        js_backend="auto",
+        snippet="""
+app.post('/login', (req, res) => {
+  res.cookie('session', token, { httpOnly: true });
+  res.json({ ok: true });
+});
+""",
+        expected_cwes=("CWE-614",),
+        expected_rule_ids=("JS-045",),
+        notes="Cookie without secure flag is a CWE-614 finding.",
+    ),
+    QualityCase(
+        case_id="js-cookie-with-secure",
+        language="javascript",
+        filename="cookie_safe.js",
+        js_backend="auto",
+        snippet="""
+app.post('/login', (req, res) => {
+  res.cookie('session', token, { httpOnly: true, secure: true });
+  res.json({ ok: true });
+});
+""",
+        forbidden_cwes=("CWE-614",),
+        forbidden_rule_ids=("JS-045",),
+        notes="Cookie with secure: true should not trigger CWE-614.",
+    ),
+    QualityCase(
+        case_id="js-node-serialize-unsafe",
+        language="javascript",
+        filename="node_serialize.js",
+        js_backend="auto",
+        snippet="""
+const serialize = require('node-serialize');
+const obj = serialize.unserialize(req.body.data);
+""",
+        expected_cwes=("CWE-502",),
+        expected_rule_ids=("JS-046",),
+        notes="node-serialize unserialize() is a known RCE vector (CWE-502).",
+    ),
+    QualityCase(
+        case_id="js-header-injection-unsafe",
+        language="javascript",
+        filename="header_injection.js",
+        js_backend="auto",
+        snippet="""
+app.get('/redirect', (req, res) => {
+  res.setHeader('Location', req.query.url);
+  res.status(302).end();
+});
+""",
+        expected_cwes=("CWE-113",),
+        expected_rule_ids=("JS-044",),
+        notes="Setting a response header with unsanitized query input enables HTTP header injection.",
+    ),
+    QualityCase(
+        case_id="py-rate-limit-missing",
+        language="python",
+        filename="no_rate_limit.py",
+        snippet="""
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    return jsonify({'ok': True})
+""",
+        expected_cwes=("CWE-307",),
+        expected_rule_ids=("PY-038",),
+        notes="Flask login route with no rate limiter should fire CWE-307.",
+    ),
+    QualityCase(
+        case_id="py-rate-limit-present",
+        language="python",
+        filename="with_rate_limit.py",
+        snippet="""
+from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+
+app = Flask(__name__)
+limiter = Limiter(app)
+
+@app.route('/login', methods=['POST'])
+@limiter.limit('5/minute')
+def login():
+    username = request.form.get('username')
+    return jsonify({'ok': True})
+""",
+        forbidden_cwes=("CWE-307",),
+        forbidden_rule_ids=("PY-038",),
+        notes="flask_limiter with @limiter.limit should suppress the CWE-307 finding.",
+    ),
+    QualityCase(
+        case_id="py-fastapi-no-auth",
+        language="python",
+        filename="fastapi_no_auth.py",
+        snippet="""
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get('/admin/users')
+async def list_users():
+    return {'users': []}
+""",
+        expected_cwes=("CWE-862",),
+        notes="FastAPI admin route with no Depends() guard should trigger missing-auth.",
+    ),
+    QualityCase(
+        case_id="py-fastapi-with-auth",
+        language="python",
+        filename="fastapi_with_auth.py",
+        snippet="""
+from fastapi import FastAPI, Depends
+from app.auth import get_current_user
+
+app = FastAPI()
+
+@app.get('/admin/users')
+async def list_users(user=Depends(get_current_user)):
+    return {'users': []}
+""",
+        forbidden_cwes=("CWE-862",),
+        notes="FastAPI route with Depends() auth should not trigger missing-auth.",
+    ),
 )

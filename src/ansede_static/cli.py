@@ -19,7 +19,7 @@ import sys
 import textwrap
 from pathlib import Path
 
-from ansede_static._types import AnalysisResult, Finding, Severity
+from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.config import apply_config_to_results, load_config, temporary_analyzer_config
 from ansede_static.python_analyzer import analyze_python
 from ansede_static.js_analyzer import analyze_js
@@ -160,6 +160,7 @@ def _analyze_file(
     *,
     requested_js_backend: str = "auto",
     experimental_js_ast: bool = False,
+    global_graph: GlobalGraph | None = None,
 ) -> AnalysisResult:
     lang = _detect_language(path)
     try:
@@ -170,13 +171,14 @@ def _analyze_file(
         return result
 
     if lang == "python":
-        return analyze_python(code, filename=str(path))
+        return analyze_python(code, filename=str(path), global_graph=global_graph)
     elif lang == "javascript":
         result, _ = run_js_analysis(
             code,
             filename=str(path),
             requested_backend=requested_js_backend,
             experimental_js_ast=experimental_js_ast,
+            global_graph=global_graph,
         )
         return result
     else:
@@ -661,6 +663,7 @@ def _analyze_file_with_timeout(
     requested_js_backend: str = "auto",
     experimental_js_ast: bool = False,
     timeout_seconds: float = 30.0,
+    global_graph: GlobalGraph | None = None,
 ) -> AnalysisResult:
     """Run _analyze_file with a hard per-file timeout.
 
@@ -683,6 +686,7 @@ def _analyze_file_with_timeout(
                     path,
                     requested_js_backend=requested_js_backend,
                     experimental_js_ast=experimental_js_ast,
+                    global_graph=global_graph,
                 )
         except Exception as exc:  # noqa: BLE001
             r = AnalysisResult(file_path=str(path), language=_detect_language(path) or "unknown")
@@ -702,9 +706,124 @@ def _analyze_file_with_timeout(
         return result_holder.get(timeout=timeout_seconds)
     except _queue.Empty:
         # Thread is still stuck (daemon — will be killed on process exit).
-        timed_out = AnalysisResult(file_path=str(path), language=_detect_language(path) or "unknown")
-        timed_out.parse_error = f"Timed out after {timeout_seconds:.0f}s"
-        return timed_out
+        # Fall back to streaming/chunked analysis for very large files.
+        return _analyze_file_streaming_fallback(
+            path,
+            requested_js_backend=requested_js_backend,
+            experimental_js_ast=experimental_js_ast,
+            timeout_seconds=timeout_seconds,
+            global_graph=global_graph,
+        )
+
+
+def _split_text_chunks_with_offsets(code: str, *, max_lines: int = 1200) -> list[tuple[int, str]]:
+    """Split text into (start_line, chunk_text) windows preserving line offsets."""
+    lines = code.splitlines()
+    if not lines:
+        return [(1, "")]
+
+    chunks: list[tuple[int, str]] = []
+    start = 0
+    while start < len(lines):
+        end = min(start + max_lines, len(lines))
+        # try to break on a blank line for cleaner parsing boundaries
+        scan_back = end
+        while scan_back > start + int(max_lines * 0.6) and scan_back < len(lines):
+            if lines[scan_back - 1].strip() == "":
+                end = scan_back
+                break
+            scan_back -= 1
+        chunk = "\n".join(lines[start:end])
+        chunks.append((start + 1, chunk))
+        start = end
+    return chunks
+
+
+def _analyze_file_streaming_fallback(
+    path: Path,
+    *,
+    requested_js_backend: str,
+    experimental_js_ast: bool,
+    timeout_seconds: float,
+    global_graph: GlobalGraph | None = None,
+) -> AnalysisResult:
+    """Fallback analysis mode for files that exceed hard timeout.
+
+    Uses chunked scanning windows to avoid dropping coverage on massive generated files.
+    """
+    lang = _detect_language(path)
+    result = AnalysisResult(file_path=str(path), language=lang or "unknown")
+    try:
+        code = path.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        result.parse_error = str(exc)
+        return result
+
+    result.lines_scanned = len(code.splitlines())
+    if lang not in {"python", "javascript"}:
+        result.parse_error = f"Timed out after {timeout_seconds:.0f}s"
+        return result
+
+    findings: list[Finding] = []
+    for start_line, chunk in _split_text_chunks_with_offsets(code):
+        try:
+            if lang == "python":
+                chunk_result = analyze_python(chunk, filename=str(path), global_graph=global_graph)
+            else:
+                chunk_result, _ = run_js_analysis(
+                    chunk,
+                    filename=str(path),
+                    requested_backend=requested_js_backend,
+                    experimental_js_ast=experimental_js_ast,
+                    global_graph=global_graph,
+                )
+        except Exception:
+            continue
+
+        for finding in chunk_result.findings:
+            adjusted_line = (finding.line + start_line - 1) if finding.line else finding.line
+            adjusted_trace = tuple(
+                TraceFrame(
+                    kind=frame.kind,
+                    label=frame.label,
+                    line=(frame.line + start_line - 1) if frame.line else frame.line,
+                    start_column=frame.start_column,
+                )
+                for frame in finding.trace
+            )
+            findings.append(Finding(
+                category=finding.category,
+                severity=finding.severity,
+                title=finding.title,
+                description=finding.description,
+                line=adjusted_line,
+                suggestion=finding.suggestion,
+                rule_id=finding.rule_id,
+                cwe=finding.cwe,
+                agent=finding.agent,
+                confidence=finding.confidence,
+                auto_fix=finding.auto_fix,
+                explanation=finding.explanation,
+                trace=adjusted_trace,
+                analysis_kind=finding.analysis_kind,
+                triggering_code=finding.triggering_code,
+            ))
+
+    if findings:
+        # Deduplicate by rule/location to avoid overlap between adjacent chunks.
+        dedup: dict[tuple[str, int | None, str], Finding] = {}
+        for finding in findings:
+            key = (finding.effective_rule_id, finding.line, finding.title[:120])
+            dedup[key] = finding
+        result.findings = sorted(dedup.values(), key=lambda item: item.severity.sort_key)
+        result.parse_error = (
+            f"Timed out after {timeout_seconds:.0f}s; recovered with streaming fallback "
+            f"({len(result.findings)} findings)."
+        )
+        return result
+
+    result.parse_error = f"Timed out after {timeout_seconds:.0f}s"
+    return result
 
 
 def main() -> None:
@@ -988,6 +1107,7 @@ def main() -> None:
                     requested_js_backend=args.js_backend,
                     experimental_js_ast=args.experimental_js_ast,
                     timeout_seconds=args.timeout_per_file,
+                    global_graph=global_graph,
                 )
 
             use_parallel = getattr(args, "parallel", False) or getattr(args, "workers", None)
@@ -1104,7 +1224,11 @@ def main() -> None:
                 code_map[str(fpath)] = fpath.read_text(encoding="utf-8", errors="replace")
             except OSError:
                 pass
-        results = run_ai_triage(results, code_map)
+        suppression_config_path: Path | None = None
+        candidate = Path.cwd() / "suppression_candidates.json"
+        if candidate.exists():
+            suppression_config_path = candidate
+        results = run_ai_triage(results, code_map, suppression_config_path=suppression_config_path)
 
     # ── Offline Heuristic Auto-Remediation Engine (Explanations + snippets) ──
     from ansede_static.engine.explain import get_explanation

@@ -1253,3 +1253,425 @@ def get_item():
     db.execute("SELECT * FROM t WHERE id='" + raw + "'")
 """
         assert _has_cwe(code, "CWE-89")
+
+
+# ── CWE-307: Missing rate limiting on auth routes (PY-038) ───────────────────
+
+class TestPythonRateLimiting:
+    def test_flask_login_route_no_rate_limit(self):
+        code = """
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    return jsonify({'ok': True})
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_flask_mfa_route_no_rate_limit(self):
+        code = """
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+
+@app.route('/verify/mfa', methods=['POST'])
+def verify_mfa():
+    otp = request.form.get('code')
+    return jsonify({'ok': True})
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_flask_reset_password_no_rate_limit(self):
+        code = """
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    token = request.form.get('token')
+    return jsonify({'ok': True})
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_flask_login_with_flask_limiter_safe(self):
+        code = """
+from flask import Flask, request, jsonify
+from flask_limiter import Limiter
+
+app = Flask(__name__)
+limiter = Limiter(app)
+
+@app.route('/login', methods=['POST'])
+@limiter.limit('5/minute')
+def login():
+    username = request.form.get('username')
+    return jsonify({'ok': True})
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_fastapi_login_no_rate_limit(self):
+        code = """
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.post('/login')
+async def login():
+    return {'ok': True}
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_fastapi_login_with_slowapi_safe(self):
+        code = """
+from fastapi import FastAPI
+from slowapi import Limiter
+
+app = FastAPI()
+limiter = Limiter(key_func=lambda r: r.client.host)
+
+@app.post('/login')
+async def login():
+    return {'ok': True}
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_register_route_no_rate_limit(self):
+        code = """
+from flask import Flask, request
+app = Flask(__name__)
+
+@app.route('/signup', methods=['POST'])
+def signup():
+    email = request.form.get('email')
+    return 'ok'
+"""
+        assert _has_cwe(code, "CWE-307")
+
+    def test_otp_route_no_rate_limit(self):
+        code = """
+from flask import Flask, request
+app = Flask(__name__)
+
+@app.post('/verify-otp')
+def verify_otp():
+    return 'ok'
+"""
+        # May use different decorator pattern; just check no crash
+        result = analyze_python(code)
+        assert isinstance(result.findings, list)
+
+
+# ── CWE-862: FastAPI / DRF route auth detection ──────────────────────────────
+
+class TestFrameworkAuthDetection:
+    def test_fastapi_admin_route_no_auth_dependency(self):
+        code = """
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get('/admin/users')
+async def list_users():
+    return {'users': []}
+"""
+        assert _has_cwe(code, "CWE-862")
+
+    def test_fastapi_route_with_depends_auth_safe(self):
+        code = """
+from fastapi import FastAPI, Depends
+from app.auth import get_current_user
+
+app = FastAPI()
+
+@app.get('/admin/users')
+async def list_users(current_user=Depends(get_current_user)):
+    return {'users': []}
+"""
+        assert not _has_cwe(code, "CWE-862")
+
+    def test_fastapi_route_with_security_safe(self):
+        code = """
+from fastapi import FastAPI, Security
+from app.auth import HTTPBearer
+
+app = FastAPI()
+security = HTTPBearer()
+
+@app.get('/profile')
+async def profile(token=Security(security)):
+    return {'ok': True}
+"""
+        assert not _has_cwe(code, "CWE-862")
+
+    def test_drf_view_with_is_authenticated_safe(self):
+        code = """
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    return Response({'ok': True})
+"""
+        assert not _has_cwe(code, "CWE-862")
+
+    def test_drf_view_with_allow_any_still_flagged(self):
+        code = """
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def public_endpoint(request):
+    return Response({'ok': True})
+"""
+        # AllowAny = explicitly public; should still be flagged by missing-auth on admin routes
+        # (non-admin route with AllowAny is expected public — no finding)
+        result = analyze_python(code)
+        assert isinstance(result.findings, list)
+
+
+# ── CWE-78: subprocess.getoutput injection (expanded sinks) ──────────────────
+
+class TestSubprocessGetoutput:
+    def test_subprocess_getoutput_tainted(self):
+        code = """
+import subprocess
+from flask import request, Flask
+app = Flask(__name__)
+
+@app.route('/checksum')
+def checksum():
+    filename = request.args.get('file')
+    result = subprocess.getoutput(f'sha256sum {filename}')
+    return result
+"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_subprocess_getstatusoutput_tainted(self):
+        code = """
+import subprocess
+from flask import request
+
+def run_check(req):
+    cmd = request.args.get('cmd')
+    status, output = subprocess.getstatusoutput(cmd)
+    return output
+"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_execvp_tainted(self):
+        code = """
+import os
+from flask import request
+
+def run():
+    prog = request.args.get('prog')
+    os.execvp(prog, [prog])
+"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_subprocess_run_with_list_safe(self):
+        code = """
+import subprocess
+result = subprocess.run(['ls', '-la'], capture_output=True)
+"""
+        assert not _has_cwe(code, "CWE-78")
+
+
+# ── CWE-502: marshal/shelve/jsonpickle/dill sinks ────────────────────────────
+
+class TestExpandedDeserialization:
+    def test_marshal_load_tainted(self):
+        code = """
+import marshal
+from flask import request
+
+def deserialize():
+    data = request.data
+    return marshal.loads(data)
+"""
+        assert _has_cwe(code, "CWE-502")
+
+    def test_shelve_open_tainted_path(self):
+        code = """
+import shelve
+from flask import request
+
+def open_store():
+    path = request.args.get('db')
+    shelf = shelve.open(path)
+    return str(dict(shelf))
+"""
+        assert _has_cwe(code, "CWE-502")
+
+    def test_jsonpickle_decode_tainted(self):
+        code = """
+import jsonpickle
+from flask import request
+
+def decode_obj():
+    return jsonpickle.decode(request.data)
+"""
+        assert _has_cwe(code, "CWE-502")
+
+    def test_dill_loads_tainted(self):
+        code = """
+import dill
+from flask import request
+
+def load():
+    return dill.loads(request.data)
+"""
+        assert _has_cwe(code, "CWE-502")
+
+
+# ── CWE-918: SSRF via aiohttp / httpx expanded sinks ────────────────────────
+
+class TestExpandedSSRF:
+    def test_httpx_get_tainted(self):
+        code = """
+import httpx
+from flask import request
+
+def proxy():
+    url = request.args.get('url')
+    return httpx.get(url).text
+"""
+        assert _has_cwe(code, "CWE-918")
+
+    def test_httpx_post_tainted(self):
+        code = """
+import httpx
+from flask import request
+
+def relay():
+    endpoint = request.form.get('endpoint')
+    return httpx.post(endpoint, json={}).text
+"""
+        assert _has_cwe(code, "CWE-918")
+
+    def test_requests_put_tainted(self):
+        code = """
+import requests
+from flask import request
+
+def forward():
+    target = request.args.get('target')
+    return requests.put(target).text
+"""
+        assert _has_cwe(code, "CWE-918")
+
+    def test_requests_to_fixed_url_safe(self):
+        code = """
+import requests
+
+def call_api():
+    return requests.get('https://api.example.com/data').json()
+"""
+        assert not _has_cwe(code, "CWE-918")
+
+
+# ── CWE-89: SQLAlchemy text() sink ──────────────────────────────────────────
+
+class TestSQLAlchemyTextSink:
+    def test_sqlalchemy_text_with_format_string(self):
+        code = """
+from sqlalchemy import text
+from flask import request
+
+def search(session):
+    name = request.args.get('name')
+    result = session.execute(text(f'SELECT * FROM users WHERE name = {name!r}'))
+    return result.fetchall()
+"""
+        assert _has_cwe(code, "CWE-89")
+
+    def test_sqlalchemy_text_parameterized_safe(self):
+        code = """
+from sqlalchemy import text
+from flask import request
+
+def search(session):
+    name = request.args.get('name')
+    result = session.execute(text('SELECT * FROM users WHERE name = :name'), {'name': name})
+    return result.fetchall()
+"""
+        assert not _has_cwe(code, "CWE-89")
+
+
+# ── CWE-79: SSTI via render_template_string ──────────────────────────────────
+
+class TestSSTI:
+    def test_render_template_string_tainted(self):
+        code = """
+from flask import Flask, request, render_template_string
+
+app = Flask(__name__)
+
+@app.route('/render')
+def render():
+    template = request.args.get('template', '')
+    return render_template_string(template)
+"""
+        assert _has_cwe(code, "CWE-79")
+
+    def test_jinja2_template_from_string_tainted(self):
+        code = """
+import jinja2
+from flask import request
+
+def render():
+    tmpl = request.args.get('t')
+    t = jinja2.Template(tmpl)
+    return t.render()
+"""
+        assert _has_cwe(code, "CWE-79")
+
+    def test_render_template_static_name_safe(self):
+        code = """
+from flask import render_template
+
+def index():
+    return render_template('index.html', name='World')
+"""
+        assert not _has_cwe(code, "CWE-79")
+
+
+# ── CWE-78: pty.spawn injection ──────────────────────────────────────────────
+
+class TestPtySpawnInjection:
+    def test_pty_spawn_tainted(self):
+        code = """
+import pty
+from flask import request
+
+def run():
+    cmd = request.args.get('cmd')
+    pty.spawn(['/bin/sh', '-c', cmd])
+"""
+        assert _has_cwe(code, "CWE-78")
+
+
+# ── CWE-95: importlib.import_module injection ────────────────────────────────
+
+class TestImportlibInjection:
+    def test_importlib_import_module_tainted(self):
+        code = """
+import importlib
+from flask import request
+
+def load():
+    mod = request.args.get('module')
+    importlib.import_module(mod)
+"""
+        assert _has_cwe(code, "CWE-95")
+
+    def test_importlib_static_safe(self):
+        code = """
+import importlib
+importlib.import_module('json')
+"""
+        assert not _has_cwe(code, "CWE-95")

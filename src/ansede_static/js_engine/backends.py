@@ -90,16 +90,23 @@ def resolve_js_backend(requested: str | None = None, *, experimental_js_ast: boo
     raise ValueError(f"Unsupported JS backend: {requested!r}")
 
 
-def run_js_analysis(code: str, *, filename: str = "", requested_backend: str | None = None, experimental_js_ast: bool = False) -> tuple[AnalysisResult, JsBackend]:
+def run_js_analysis(
+    code: str,
+    *,
+    filename: str = "",
+    requested_backend: str | None = None,
+    experimental_js_ast: bool = False,
+    global_graph: object | None = None,
+) -> tuple[AnalysisResult, JsBackend]:
     backend = resolve_js_backend(requested_backend, experimental_js_ast=experimental_js_ast)
     if backend.key == "classic":
         from ansede_static.js_analyzer import analyze_js
 
-        return analyze_js(code, filename=filename), backend
+        return analyze_js(code, filename=filename, global_graph=global_graph), backend
 
     from ansede_static.js_ast_analyzer import analyze_js_ast
 
-    return analyze_js_ast(code, filename=filename), backend
+    return analyze_js_ast(code, filename=filename, global_graph=global_graph), backend
 
 
 def backend_execution_record(requested: str | None = None, *, experimental_js_ast: bool = False) -> dict[str, Any]:

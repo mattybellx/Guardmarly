@@ -47,6 +47,8 @@ from pathlib import Path
 from typing import Any, Union
 
 from ansede_static.cache.sqlite_store import SQLiteStore, stable_hash
+from ansede_static.hardening import TemplateEngineDetector
+from ansede_static.template_transpiler import template_taint_nodes
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -64,30 +66,46 @@ _TaintInfo = tuple[str, int, set[str], tuple[TraceFrame, ...]]
 # ──────────────────────────────────────────────────────────────────────────────
 
 TAINT_SOURCES: dict[str, str] = {
-    # Flask / FastAPI / Django
-    "request.args":         "HTTP query parameter",
-    "request.form":         "HTTP form data",
-    "request.data":         "raw HTTP body",
-    "request.json":         "parsed HTTP JSON body",
-    "request.files":        "uploaded file",
-    "request.headers":      "HTTP header",
-    "request.cookies":      "HTTP cookie",
-    "request.GET":          "HTTP query parameter (Django)",
-    "request.POST":         "HTTP form data (Django)",
-    "request.body":         "raw HTTP body (Django)",
-    "request.query_params": "query parameter (FastAPI)",
-    "request.get_json":     "parsed HTTP JSON body (Flask get_json())",
+    # Flask / FastAPI / Django / Starlette / Litestar / aiohttp
+    "request.args":           "HTTP query parameter",
+    "request.form":           "HTTP form data",
+    "request.data":           "raw HTTP body",
+    "request.json":           "parsed HTTP JSON body",
+    "request.files":          "uploaded file",
+    "request.headers":        "HTTP header",
+    "request.cookies":        "HTTP cookie",
+    "request.GET":            "HTTP query parameter (Django)",
+    "request.POST":           "HTTP form data (Django)",
+    "request.body":           "raw HTTP body (Django/FastAPI/aiohttp)",
+    "request.query_params":   "query parameter (FastAPI/Starlette)",
+    "request.get_json":       "parsed HTTP JSON body (Flask get_json())",
+    "request.values":         "merged GET+POST values (Flask)",
+    "request.stream":         "raw HTTP body stream (Flask/FastAPI)",
+    "request.url":            "request URL",
+    "request.path":           "request path",
+    "request.host":           "request Host header",
+    "request.referrer":       "HTTP Referer header",
+    "request.user_agent":     "HTTP User-Agent header",
+    # Path/route parameters
+    "kwargs":                 "route parameter (dict from URL path)",
     # Standard input
-    "input":                "user console input",
-    "sys.argv":             "command-line argument",
-    "sys.stdin":            "stdin",
+    "input":                  "user console input",
+    "sys.argv":               "command-line argument",
+    "sys.stdin":              "stdin",
     # Environment
-    "os.environ":           "environment variable",
-    "os.getenv":            "environment variable",
+    "os.environ":             "environment variable",
+    "os.getenv":              "environment variable",
+    # File reads that may load attacker-controlled content
+    "open":                   "file contents (may be attacker-controlled)",
+    "pathlib.Path.read_text": "file contents (may be attacker-controlled)",
+    "pathlib.Path.read_bytes":"file contents (may be attacker-controlled)",
     # Unsafe deserialization (result already tainted)
-    "json.loads":           "parsed JSON (may be from untrusted source)",
-    "yaml.load":            "parsed YAML (unsafe loader)",
-    "yaml.unsafe_load":     "parsed YAML (unsafe)",
+    "json.loads":             "parsed JSON (may be from untrusted source)",
+    "yaml.load":              "parsed YAML (unsafe loader)",
+    "yaml.unsafe_load":       "parsed YAML (unsafe)",
+    # Database query results used to construct further queries
+    "fetchone":               "database row (may propagate taint to nested queries)",
+    "fetchall":               "database rows (may propagate taint to nested queries)",
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -104,34 +122,76 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
     "executemany":                ("CWE-89", "SQL Injection"),
     "raw":                        ("CWE-89", "SQL Injection (Django ORM raw)"),
     "extra":                      ("CWE-89", "SQL Injection (Django ORM extra)"),
+    "text":                       ("CWE-89", "SQL Injection (SQLAlchemy text())"),
     # Command Injection — CWE-78
     "os.system":                  ("CWE-78", "OS Command Injection"),
     "os.popen":                   ("CWE-78", "OS Command Injection"),
+    "os.execve":                  ("CWE-78", "OS Command Injection via execve()"),
+    "os.execvp":                  ("CWE-78", "OS Command Injection via execvp()"),
+    "os.execl":                   ("CWE-78", "OS Command Injection via execl()"),
     "subprocess.call":            ("CWE-78", "OS Command Injection"),
     "subprocess.run":             ("CWE-78", "OS Command Injection"),
     "subprocess.Popen":           ("CWE-78", "OS Command Injection"),
     "subprocess.check_output":    ("CWE-78", "OS Command Injection"),
     "subprocess.check_call":      ("CWE-78", "OS Command Injection"),
+    "subprocess.getoutput":       ("CWE-78", "OS Command Injection (shell=True implicit)"),
+    "subprocess.getstatusoutput": ("CWE-78", "OS Command Injection (shell=True implicit)"),
+    "pty.spawn":                  ("CWE-78", "OS Command Injection via pty.spawn()"),
     # Code Injection — CWE-95
     "eval":                       ("CWE-95", "Code Injection via eval()"),
     "exec":                       ("CWE-95", "Code Injection via exec()"),
     "compile":                    ("CWE-95", "Code Injection via compile()"),
     "__import__":                 ("CWE-95", "Dynamic import injection"),
+    "importlib.import_module":    ("CWE-95", "Dynamic module import injection"),
     # Deserialization — CWE-502
     "pickle.loads":               ("CWE-502", "Unsafe Deserialization"),
     "pickle.load":                ("CWE-502", "Unsafe Deserialization"),
     "marshal.loads":              ("CWE-502", "Unsafe Deserialization"),
+    "marshal.load":               ("CWE-502", "Unsafe Deserialization"),
     "yaml.load":                  ("CWE-502", "Unsafe Deserialization (yaml.load)"),
+    "shelve.open":                ("CWE-502", "Unsafe Deserialization (shelve uses pickle)"),
+    "dill.loads":                 ("CWE-502", "Unsafe Deserialization (dill)"),
+    "jsonpickle.decode":          ("CWE-502", "Unsafe Deserialization (jsonpickle)"),
     # SSRF — CWE-918
     "requests.get":               ("CWE-918", "Server-Side Request Forgery"),
     "requests.post":              ("CWE-918", "Server-Side Request Forgery"),
+    "requests.put":               ("CWE-918", "Server-Side Request Forgery"),
+    "requests.patch":             ("CWE-918", "Server-Side Request Forgery"),
+    "requests.delete":            ("CWE-918", "Server-Side Request Forgery"),
+    "requests.request":           ("CWE-918", "Server-Side Request Forgery"),
     "urllib.request.urlopen":     ("CWE-918", "Server-Side Request Forgery"),
+    "urllib.request.urlretrieve": ("CWE-918", "Server-Side Request Forgery"),
     "urlopen":                    ("CWE-918", "Server-Side Request Forgery"),
     "httpx.get":                  ("CWE-918", "Server-Side Request Forgery"),
     "httpx.post":                 ("CWE-918", "Server-Side Request Forgery"),
+    "httpx.put":                  ("CWE-918", "Server-Side Request Forgery"),
+    "httpx.patch":                ("CWE-918", "Server-Side Request Forgery"),
+    "httpx.delete":               ("CWE-918", "Server-Side Request Forgery"),
+    "httpx.request":              ("CWE-918", "Server-Side Request Forgery"),
+    "aiohttp.ClientSession.get":  ("CWE-918", "Server-Side Request Forgery (aiohttp)"),
+    "aiohttp.ClientSession.post": ("CWE-918", "Server-Side Request Forgery (aiohttp)"),
+    "session.get":                ("CWE-918", "Server-Side Request Forgery (aiohttp session)"),
+    "session.post":               ("CWE-918", "Server-Side Request Forgery (aiohttp session)"),
+    # Path Traversal — CWE-22
+    "open":                       ("CWE-22", "Path Traversal via open()"),
+    "os.open":                    ("CWE-22", "Path Traversal via os.open()"),
+    "os.path.join":               ("CWE-22", "Path Traversal via os.path.join()"),
+    "pathlib.Path":               ("CWE-22", "Path Traversal via pathlib.Path"),
     # XSS — CWE-79
     "render_template_string":     ("CWE-79", "Cross-Site Scripting (template injection)"),
     "Markup":                     ("CWE-79", "Cross-Site Scripting (unescaped HTML)"),
+    "jinja2.Template":            ("CWE-79", "Server-Side Template Injection (SSTI)"),
+    "Environment.from_string":    ("CWE-79", "Server-Side Template Injection (SSTI)"),
+    # Log injection — CWE-117
+    "logging.info":               ("CWE-117", "Log Injection"),
+    "logging.warning":            ("CWE-117", "Log Injection"),
+    "logging.error":              ("CWE-117", "Log Injection"),
+    "logging.debug":              ("CWE-117", "Log Injection"),
+    "logging.critical":           ("CWE-117", "Log Injection"),
+    "logger.info":                ("CWE-117", "Log Injection"),
+    "logger.warning":             ("CWE-117", "Log Injection"),
+    "logger.error":               ("CWE-117", "Log Injection"),
+    "logger.debug":               ("CWE-117", "Log Injection"),
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -139,32 +199,53 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
 # ──────────────────────────────────────────────────────────────────────────────
 
 SANITIZERS: dict[str, set[str]] = {
+    # Command injection sanitizers
     "shlex.quote":                    {"CWE-78"},
     "shlex.split":                    {"CWE-78"},
     "pipes.quote":                    {"CWE-78"},
+    # XSS sanitizers
     "bleach.clean":                   {"CWE-79"},
     "markupsafe.escape":              {"CWE-79"},
     "html.escape":                    {"CWE-79"},
     "escape":                         {"CWE-79"},
     "django.utils.html.escape":       {"CWE-79"},
+    "nh3.clean":                      {"CWE-79"},
+    # Path traversal sanitizers
     "os.path.basename":               {"CWE-22"},
     "secure_filename":                {"CWE-22"},
     "werkzeug.utils.secure_filename": {"CWE-22"},
     "Path.resolve":                   {"CWE-22"},
+    "os.path.realpath":               {"CWE-22"},
+    "os.path.abspath":                {"CWE-22"},
+    # Deserialization sanitizers
     "json.loads":                     {"CWE-502"},
     "json.load":                      {"CWE-502"},
     "ast.literal_eval":               {"CWE-95"},
-    "int":                            {"CWE-89", "CWE-78", "CWE-95"},
+    "yaml.safe_load":                 {"CWE-502"},
+    "yaml.full_load":                 {"CWE-502"},
+    # Type-casting sanitizers (narrow the type, removing injection vectors)
+    "int":                            {"CWE-89", "CWE-78", "CWE-95", "CWE-22"},
     "float":                          {"CWE-89", "CWE-78", "CWE-95"},
     "bool":                           {"CWE-89", "CWE-78", "CWE-95"},
+    "str.isdigit":                    {"CWE-89", "CWE-78"},
+    "str.isalpha":                    {"CWE-89", "CWE-78"},
+    "str.isalnum":                    {"CWE-89", "CWE-78"},
     "uuid.UUID":                      {"CWE-89", "CWE-78"},
-    "urllib.parse.urlparse":          {"CWE-918"},
+    # URL validation sanitizers
+    "urllib.parse.urlparse":          {"CWE-918", "CWE-601"},
+    "urllib.parse.quote":             {"CWE-79", "CWE-601"},
+    "urllib.parse.urlencode":         {"CWE-79"},
     "validators.url":                 {"CWE-918"},
     "ipaddress.ip_address":           {"CWE-918"},
     # Regex validation (anchored patterns only — checked at use site)
     "re.match":                       {"CWE-89", "CWE-78", "CWE-22"},
     "re.fullmatch":                   {"CWE-89", "CWE-78", "CWE-22"},
     "re.search":                      {"CWE-89"},
+    # Schema validation libraries
+    "pydantic.BaseModel":             {"CWE-89", "CWE-78", "CWE-22", "CWE-918"},
+    "marshmallow.Schema":             {"CWE-89", "CWE-78", "CWE-22"},
+    "cerberus.Validator":             {"CWE-89", "CWE-78"},
+    "voluptuous.Schema":              {"CWE-89", "CWE-78"},
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -233,19 +314,93 @@ BROKEN_AUTH_PATTERNS: list[tuple[str, str, str, str]] = [
 # ──────────────────────────────────────────────────────────────────────────────
 
 _AUTH_DECORATORS: frozenset[str] = frozenset({
+    # Flask / generic
     "login_required", "require_auth", "auth_required", "jwt_required",
     "token_required", "authenticated", "permission_required",
     "requires_auth", "verify_token", "api_key_required", "requires_login",
     "admin_required", "staff_required", "superuser_required",
     "role_required", "requires_role", "requires_admin",
     "requires_permission",
+    # Django
+    "login_required", "permission_required", "user_passes_test",
+    # Django REST Framework
+    "api_view", "permission_classes",
+    # FastAPI / Starlette
+    "Depends", "Security",
+    # Popular libraries
+    "flask_login", "HTTPBasicAuth", "HTTPTokenAuth",
+    "require_http_methods",
 })
 
 _PRIVILEGE_DECORATORS: frozenset[str] = frozenset({
     "admin_required", "staff_required", "superuser_required",
     "role_required", "requires_role", "requires_admin",
     "permission_required", "requires_permission",
+    "user_passes_test",
 })
+
+# FastAPI auth dependency names — these in function params signal auth is present
+_FASTAPI_AUTH_DEPENDS_RE: re.Pattern[str] = re.compile(
+    r'get_current_user|current_user|require_auth|oauth2|jwt|token|bearer|'  # noqa: ISC001
+    r'verify_token|check_auth|ensure_auth|authenticate|authorized|security|'  # noqa: ISC001
+    r'api_key|get_user|check_token|validate_token|login_required|'  # noqa: ISC001
+    r'auth_scheme|http_bearer|http_basic|http_digest|HTTPBearer|HTTPBasic',
+    re.IGNORECASE,
+)
+
+_DJANGO_PERMISSION_CLASS_RE: re.Pattern[str] = re.compile(
+    r'IsAuthenticated|IsAdminUser|IsAuthenticatedOrReadOnly|'  # noqa: ISC001
+    r'DjangoModelPermissions|TokenHasScope|AllowAny',
+    re.IGNORECASE,
+)
+
+
+def _fastapi_route_has_auth_dependency(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+    """Return True when any function parameter uses a FastAPI Depends/Security call
+    that looks like an authentication dependency."""
+    for arg in (*fnode.args.args, *fnode.args.kwonlyargs,
+                *([] if fnode.args.vararg is None else [fnode.args.vararg]),
+                *([] if fnode.args.kwarg is None else [fnode.args.kwarg])):
+        # Check annotation — FastAPI auth typically appears as default value
+        pass
+    # Check default values (positional and keyword-only)
+    all_defaults = [*fnode.args.defaults, *fnode.args.kw_defaults]
+    for default in all_defaults:
+        if default is None:
+            continue
+        if not isinstance(default, ast.Call):
+            continue
+        callee_text = _safe_unparse(default.func)
+        # Depends(...) or Security(...) with an auth-looking callback
+        if callee_text in {"Depends", "Security"}:
+            for darg in default.args:
+                dep_text = _safe_unparse(darg)
+                if _FASTAPI_AUTH_DEPENDS_RE.search(dep_text):
+                    return True
+            for kw in default.keywords:
+                dep_text = _safe_unparse(kw.value)
+                if _FASTAPI_AUTH_DEPENDS_RE.search(dep_text):
+                    return True
+    return False
+
+
+def _drf_viewfunc_has_auth(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+    """Return True when a Django REST framework view has permission_classes with
+    a non-trivial permission (anything other than AllowAny)."""
+    for deco in fnode.decorator_list:
+        if not isinstance(deco, ast.Call):
+            continue
+        callee = _safe_unparse(deco.func)
+        if callee not in {"permission_classes", "api_view"}:
+            continue
+        for darg in deco.args:
+            text = _safe_unparse(darg)
+            # AllowAny is explicitly no-auth
+            if "AllowAny" in text and "IsAuthenticated" not in text:
+                return False
+            if _DJANGO_PERMISSION_CLASS_RE.search(text):
+                return True
+    return False
 
 _FLASK_ROUTE_ATTRS: frozenset[str] = frozenset({
     "route", "get", "post", "put", "patch", "delete", "options",
@@ -789,10 +944,68 @@ def _call_taint_from_summary(
     tainted: dict[str, _TaintInfo],
     func_summaries: dict[str, _FunctionTaintSummary],
     visited: set[int] | None = None,
+    *,
+    global_graph: object | None = None,
+    caller_file: str = "",
+    caller_name: str = "",
 ) -> tuple[str, str, int, set[str], tuple[TraceFrame, ...]] | None:
     """Resolve taint flowing out of a helper call using its function summary."""
     callee = _get_local_callee_name(node)
     summary = func_summaries.get(callee)
+
+    # Prefer the unified GlobalGraph IFDS transfer when available.
+    if global_graph is not None and hasattr(global_graph, "propagate_call_facts"):
+        tainted_arg_indexes: set[int] = set()
+        if summary is not None and summary.parameters:
+            arg_map = _map_call_arguments(node, summary.parameters)
+            for idx, param in enumerate(summary.parameters):
+                arg_node = arg_map.get(param)
+                if arg_node is None:
+                    continue
+                info = _find_tainted_expr_info(
+                    arg_node,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                )
+                if info:
+                    tainted_arg_indexes.add(idx)
+        else:
+            for idx, arg_node in enumerate(node.args):
+                info = _find_tainted_expr_info(
+                    arg_node,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                )
+                if info:
+                    tainted_arg_indexes.add(idx)
+
+        try:
+            sink_hit, sink_trace, ret_hit, return_trace = global_graph.propagate_call_facts(
+                caller_file=caller_file or "<stdin>",
+                caller_name=caller_name or "<module>",
+                callee_file=caller_file or "<stdin>",
+                callee_name=callee,
+                tainted_arg_indexes=tainted_arg_indexes,
+                call_line=getattr(node, "lineno", None),
+                call_string=(),
+                call_string_k=2,
+            )
+            if ret_hit:
+                src = "interprocedural return taint (global IFDS)"
+                trace = return_trace or sink_trace
+                trace = _append_trace(trace, "helper", f"through `{callee}()`", node)
+                return (f"{callee}()", src, getattr(node, "lineno", 0), set(), trace)
+        except Exception:
+            pass
+
     if not summary:
         return None
     if summary.source:
@@ -807,7 +1020,15 @@ def _call_taint_from_summary(
         arg_node = arg_map.get(param_name)
         if arg_node is None:
             continue
-        info = _find_tainted_expr_info(arg_node, tainted, func_summaries, visited)
+        info = _find_tainted_expr_info(
+            arg_node,
+            tainted,
+            func_summaries,
+            visited,
+            global_graph=global_graph,
+            caller_file=caller_file,
+            caller_name=caller_name,
+        )
         if info:
             label, src, line, san, trace = info
             trace = _append_trace(trace, "helper", f"through `{callee}()`", node)
@@ -820,6 +1041,10 @@ def _find_tainted_expr_info(
     tainted: dict[str, _TaintInfo],
     func_summaries: dict[str, _FunctionTaintSummary],
     visited: set[int] | None = None,
+    *,
+    global_graph: object | None = None,
+    caller_file: str = "",
+    caller_name: str = "",
 ) -> tuple[str, str, int, set[str], tuple[TraceFrame, ...]] | None:
     """Return the first tainted origin found inside an expression, including helper calls."""
     if visited is None:
@@ -843,7 +1068,15 @@ def _find_tainted_expr_info(
     # List/tuple literal: [tainted, clean] → result is tainted
     if isinstance(node, (ast.List, ast.Tuple, ast.Set)):
         for elt in node.elts:
-            info = _find_tainted_expr_info(elt, tainted, func_summaries, visited)
+            info = _find_tainted_expr_info(
+                elt,
+                tainted,
+                func_summaries,
+                visited,
+                global_graph=global_graph,
+                caller_file=caller_file,
+                caller_name=caller_name,
+            )
             if info:
                 return info
 
@@ -855,7 +1088,15 @@ def _find_tainted_expr_info(
             return (label, src, getattr(node, "lineno", 0), set(), trace)
 
     if isinstance(node, ast.Call):
-        summary_info = _call_taint_from_summary(node, tainted, func_summaries, visited)
+        summary_info = _call_taint_from_summary(
+            node,
+            tainted,
+            func_summaries,
+            visited,
+            global_graph=global_graph,
+            caller_file=caller_file,
+            caller_name=caller_name,
+        )
         sanitized_cwes = _get_sanitized_cwes(node)
         if summary_info:
             label, src, line, san, trace = summary_info
@@ -869,7 +1110,15 @@ def _find_tainted_expr_info(
             return (label, src, line, san | sanitized_cwes, trace)
         if sanitized_cwes:
             for arg in node.args:
-                info = _find_tainted_expr_info(arg, tainted, func_summaries, visited)
+                info = _find_tainted_expr_info(
+                    arg,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                )
                 if info:
                     trace = _append_trace(
                         info[4],
@@ -879,7 +1128,15 @@ def _find_tainted_expr_info(
                     )
                     return (info[0], info[1], info[2], info[3] | sanitized_cwes, trace)
             for kw in node.keywords:
-                info = _find_tainted_expr_info(kw.value, tainted, func_summaries, visited)
+                info = _find_tainted_expr_info(
+                    kw.value,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                )
                 if info:
                     trace = _append_trace(
                         info[4],
@@ -890,7 +1147,15 @@ def _find_tainted_expr_info(
                     return (info[0], info[1], info[2], info[3] | sanitized_cwes, trace)
 
     for child in ast.iter_child_nodes(node):
-        info = _find_tainted_expr_info(child, tainted, func_summaries, visited)
+        info = _find_tainted_expr_info(
+            child,
+            tainted,
+            func_summaries,
+            visited,
+            global_graph=global_graph,
+            caller_file=caller_file,
+            caller_name=caller_name,
+        )
         if info:
             return info
     return None
@@ -1288,11 +1553,25 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         for lam_idx, lam_arg in enumerate(lam.args.args):
                             if lam_idx < len(node.value.args):
                                 lam_call_arg = node.value.args[lam_idx]
-                                lam_info = _find_tainted_expr_info(lam_call_arg, tainted_vars, func_summaries)
+                                lam_info = _find_tainted_expr_info(
+                                    lam_call_arg,
+                                    tainted_vars,
+                                    func_summaries,
+                                    global_graph=ctx.global_graph,
+                                    caller_file=ctx.filename,
+                                    caller_name=fname,
+                                )
                                 if lam_info:
                                     _, lsrc, lline, lsan, ltrace = lam_info
                                     lam_tainted[lam_arg.arg] = (lsrc, lline, lsan, ltrace)
-                        lam_result = _find_tainted_expr_info(lam.body, lam_tainted, func_summaries)
+                        lam_result = _find_tainted_expr_info(
+                            lam.body,
+                            lam_tainted,
+                            func_summaries,
+                            global_graph=ctx.global_graph,
+                            caller_file=ctx.filename,
+                            caller_name=fname,
+                        )
                         if lam_result:
                             lbl, lsrc2, lline2, lsan2, ltrace2 = lam_result
                             tainted_vars[target.id] = (
@@ -1303,7 +1582,14 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                             )
                         continue
 
-                    taint_info = _find_tainted_expr_info(node.value, tainted_vars, func_summaries)
+                    taint_info = _find_tainted_expr_info(
+                        node.value,
+                        tainted_vars,
+                        func_summaries,
+                        global_graph=ctx.global_graph,
+                        caller_file=ctx.filename,
+                        caller_name=fname,
+                    )
                     if not taint_info:
                         continue
                     label, source_desc, source_line, inherited_san, inherited_trace = taint_info
@@ -1342,7 +1628,14 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         )
 
             if isinstance(node, ast.AugAssign) and isinstance(node.target, ast.Name):
-                taint_info = _find_tainted_expr_info(node.value, tainted_vars, func_summaries)
+                taint_info = _find_tainted_expr_info(
+                    node.value,
+                    tainted_vars,
+                    func_summaries,
+                    global_graph=ctx.global_graph,
+                    caller_file=ctx.filename,
+                    caller_name=fname,
+                )
                 if taint_info:
                     label, source_desc, source_line, inherited_san, inherited_trace = taint_info
                     tainted_vars[node.target.id] = (
@@ -1380,7 +1673,14 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
 
                     all_args = node.args + [kw.value for kw in node.keywords]
                     for arg_node in all_args:
-                        hit = _find_tainted_expr_info(arg_node, tainted_vars, func_summaries)
+                        hit = _find_tainted_expr_info(
+                            arg_node,
+                            tainted_vars,
+                            func_summaries,
+                            global_graph=ctx.global_graph,
+                            caller_file=ctx.filename,
+                            caller_name=fname,
+                        )
                         if not hit:
                             continue
                         if arg_node in safe_params:
@@ -2159,6 +2459,14 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
                     dname = deco.func.attr
             if dname and dname in _AUTH_DECORATORS:
                 has_auth = True
+
+        # FastAPI Depends() / Security() dependency injection as auth signal
+        if not has_auth and _fastapi_route_has_auth_dependency(fnode):
+            has_auth = True
+
+        # Django REST Framework permission_classes decorator
+        if not has_auth and _drf_viewfunc_has_auth(fnode):
+            has_auth = True
 
         if not has_route or has_auth or is_public:
             continue
@@ -3683,6 +3991,70 @@ def _rule_29(ctx: _Ctx) -> list[Finding]:
     return findings
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# Rate-limiting patterns for Python frameworks
+# ──────────────────────────────────────────────────────────────────────────────
+
+_PY_RATE_LIMIT_RE: re.Pattern[str] = re.compile(
+    r'flask_limiter|slowapi|fastapi_limiter|limits|'
+    r'@limiter\.|@app\.limiter|Limiter\s*\(|RateLimiter\s*\(|'
+    r'rate_limit|ratelimit|throttle|SlowAPI|redis.*limit',
+    re.IGNORECASE,
+)
+
+_PY_AUTH_ROUTE_PAT: re.Pattern[str] = re.compile(
+    r'@(?:app|router|api|blueprint)\.\s*(?:post|get|route)\s*\(\s*["\']'
+    r'[^"\']*(?:login|signin|sign.?in|authenticate|auth[^"\']*|'
+    r'forgot.?password|reset.?password|password.?reset|'
+    r'mfa|2fa|totp|otp|verify.?otp|token|refresh.?token|'
+    r'register|signup|sign.?up)[^"\']*["\']',
+    re.IGNORECASE,
+)
+
+
+def _rule_30(ctx: _Ctx) -> list[Finding]:
+    """CWE-307: Missing rate limiting on Python authentication/sensitive endpoints."""
+    findings: list[Finding] = []
+    code_text = "\n".join(ctx.lines)
+    if _PY_RATE_LIMIT_RE.search(code_text):
+        return findings  # rate limiting present globally
+
+    for lineno, line in enumerate(ctx.lines, 1):
+        if not _PY_AUTH_ROUTE_PAT.search(line):
+            continue
+        # Determine endpoint kind for the message
+        line_lower = line.lower()
+        if any(k in line_lower for k in ("mfa", "2fa", "totp", "otp")):
+            kind = "multi-factor authentication"
+        elif any(k in line_lower for k in ("forgot", "reset")):
+            kind = "password reset"
+        elif any(k in line_lower for k in ("token", "refresh")):
+            kind = "token/refresh"
+        elif any(k in line_lower for k in ("register", "signup", "sign-up", "sign_up")):
+            kind = "registration"
+        else:
+            kind = "authentication"
+        findings.append(Finding(
+            category="security",
+            severity=Severity.MEDIUM,
+            title=f"CWE-307: No rate limiting on {kind} route at line {lineno}",
+            description=(
+                f"{kind.capitalize()} route at L{lineno} has no rate-limiting decorator or "
+                f"middleware in scope: `{line.strip()[:80]}`. "
+                f"An attacker can brute-force credentials, OTPs, or tokens."
+            ),
+            line=lineno,
+            suggestion=(
+                "Add rate limiting: `flask-limiter` for Flask (`@limiter.limit('5/minute')`), "
+                "`slowapi` for FastAPI, or a middleware-level rate limiter."
+            ),
+            rule_id="PY-038",
+            cwe="CWE-307",
+            agent="python-analyzer",
+        ))
+    return findings
+
+
 def _detect(code: str, filename: str = "", global_graph: object = None) -> list[Finding]:
     """Run all deterministic detection rules. Returns findings sorted by severity."""
     try:
@@ -3701,6 +4073,30 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         func_summaries = _build_function_taint_summaries(tree, func_defs)
         _store_cached_function_summaries(code, filename or "<stdin>", func_summaries)
 
+    if global_graph is not None:
+        try:
+            from ansede_static.ir.global_graph import FunctionSummary
+
+            for function_name, summary in func_summaries.items():
+                parameters = list(summary.parameters)
+                tainted_params = set(summary.tainted_params)
+                arg_indexes = tuple(
+                    idx for idx, param in enumerate(parameters)
+                    if param in tainted_params
+                )
+                global_graph.record_function_summary(FunctionSummary(
+                    file_path=filename or "<stdin>",
+                    function_name=function_name,
+                    args_to_sink=arg_indexes,
+                    args_to_return=arg_indexes,
+                    return_from_source=bool(summary.source),
+                    side_effect_symbols=(),
+                    depends_on=(),
+                ))
+            global_graph.save_summaries()
+        except Exception:
+            pass
+
     ctx = _Ctx(lines=lines, sans=sans, func_defs=func_defs, func_summaries=func_summaries, _tree=tree, filename=filename, global_graph=global_graph)
     findings: list[Finding] = []
     for rule_fn in (
@@ -3709,7 +4105,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         _rule_11, _rule_12, _rule_13, _rule_14, _rule_15,
         _rule_16, _rule_17, _rule_18, _rule_19, _rule_20,
         _rule_21, _rule_22, _rule_23, _rule_24, _rule_25,
-        _rule_26, _rule_27, _rule_28, _rule_29,
+        _rule_26, _rule_27, _rule_28, _rule_29, _rule_30,
     ):
         findings.extend(rule_fn(ctx))
 
@@ -3877,6 +4273,58 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
     except (SyntaxError, ValueError, RecursionError, TypeError) as exc:
         result.parse_error = f"Internal analyzer error: {exc}"
         return result
+
+    # Universal template engine pass (Jinja2 / Handlebars SSTI)
+    try:
+        for tpl in TemplateEngineDetector.detect_all_ssti(code, filename):
+            findings.append(Finding(
+                category="security",
+                severity=Severity.CRITICAL if tpl.severity.upper() == "CRITICAL" else Severity.HIGH,
+                title=f"{tpl.cwe}: Potential server-side template injection in {tpl.context}",
+                description=(
+                    f"Template sink `{tpl.sink_function}` receives potentially tainted template expression at "
+                    f"line {tpl.line}. Dynamic template rendering can allow template-expression execution."
+                ),
+                line=tpl.line,
+                suggestion="Avoid rendering user-controlled template fragments directly; pass data as context variables and keep template source static.",
+                rule_id="PY-038",
+                cwe=tpl.cwe,
+                agent="python-analyzer",
+                confidence=0.9,
+                analysis_kind="template-ast",
+                trace=(
+                    TraceFrame(kind="source", label=f"template expression `{tpl.tainted_expr[:80]}`", line=tpl.line),
+                    TraceFrame(kind="sink", label=f"sink `{tpl.sink_function}`", line=tpl.line),
+                ),
+            ))
+    except Exception:
+        pass
+
+    # Template AST transpilation pass: find tainted template expressions.
+    try:
+        for node in template_taint_nodes(code, filename=filename):
+            findings.append(Finding(
+                category="security",
+                severity=Severity.HIGH,
+                title=f"CWE-1336: Tainted template expression in {node.engine} template at line {node.line}",
+                description=(
+                    f"Template AST node `{node.expression[:90]}` in {node.engine} {node.kind} contains request/user-controlled markers. "
+                    "Treat this as executable template context unless values are strictly escaped or sandboxed."
+                ),
+                line=node.line,
+                suggestion="Avoid concatenating user-controlled template expressions; keep templates static and pass data as context values.",
+                rule_id="PY-038",
+                cwe="CWE-1336",
+                agent="python-analyzer",
+                confidence=0.9,
+                analysis_kind="template-ast",
+                trace=(
+                    TraceFrame(kind="source", label=f"template expression `{node.expression[:80]}`", line=node.line, start_column=node.column),
+                    TraceFrame(kind="sink", label=f"template AST {node.kind}", line=node.line, start_column=node.column),
+                ),
+            ))
+    except Exception:
+        pass
 
     result.findings = findings
     return result

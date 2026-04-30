@@ -627,4 +627,193 @@ app.get('/admin/audit', (req, res) => {
 """,
                 expected_hit=r"CWE-287|[Aa]uth bypass|presence-only",
         ),
+
+    # ─── New entries validating newly-added detection rules ───────────────
+
+    CVEEntry(
+        cve_id="CVE-2021-LODASH-PROTO-POLL",
+        language="javascript",
+        cwe="CWE-1321",
+        description=(
+            "lodash <4.17.21 — prototype pollution via _.merge() with attacker-controlled "
+            "objects. Here via a deep-merge helper used directly on req.body."
+        ),
+        snippet="""
+const _ = require('lodash');
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+app.post('/settings', (req, res) => {
+  const userSettings = {};
+  _.merge(userSettings, req.body);   // CVE-2020-8203 pattern
+  res.json({ ok: true });
+});
+""",
+        expected_hit=r"CWE-1321|[Pp]rototype [Pp]ollution|deep.?merge",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2022-NODE-SERIALIZE-RCE",
+        language="javascript",
+        cwe="CWE-502",
+        description=(
+            "node-serialize 0.0.4 — remote code execution via IIFE payload in "
+            "serialized objects passed to `unserialize()`."
+        ),
+        snippet="""
+const serialize = require('node-serialize');
+const express = require('express');
+const app = express();
+
+app.post('/restore', (req, res) => {
+  const obj = serialize.unserialize(req.body.data);  // CVE-2017-5941 / node-serialize RCE
+  res.json({ result: obj });
+});
+""",
+        expected_hit=r"CWE-502|[Uu]nserialize|[Dd]eserialization",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2022-XXE-EXPRESS",
+        language="javascript",
+        cwe="CWE-611",
+        description="Express route parses user-supplied XML without disabling external entities.",
+        snippet="""
+const express = require('express');
+const { DOMParser } = require('xmldom');
+const app = express();
+
+app.post('/parse', (req, res) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(req.body.xml, 'text/xml');
+  res.json({ root: doc.documentElement.nodeName });
+});
+""",
+        expected_hit=r"CWE-611|XXE|[Ee]xternal [Ee]ntity",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2022-UPLOAD-RCE",
+        language="javascript",
+        cwe="CWE-434",
+        description=(
+            "Unrestricted file upload — multer handler accepts any file type without "
+            "MIME or extension validation, allowing upload of server-side scripts."
+        ),
+        snippet="""
+const express = require('express');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const app = express();
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.json({ filename: req.file.originalname });
+});
+""",
+        expected_hit=r"CWE-434|[Uu]nrestricted.*upload|[Ff]ile.*upload",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2022-PATH-TRAVERSAL-STATIC",
+        language="javascript",
+        cwe="CWE-22",
+        description="Express route passes user-supplied filename to res.sendFile without path validation.",
+        snippet="""
+const express = require('express');
+const path = require('path');
+const app = express();
+
+app.get('/download', (req, res) => {
+  const filename = req.query.file;
+  res.sendFile(filename, { root: '/var/uploads' });
+});
+""",
+        expected_hit=r"CWE-22|[Pp]ath [Tt]raversal|sendFile",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2023-PY-RATE-LIMIT",
+        language="python",
+        cwe="CWE-307",
+        description="Flask login route has no rate-limiting, enabling brute-force attacks.",
+        snippet="""
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    if username == 'admin' and password == 'secret':
+        return jsonify({'token': 'abc123'})
+    return jsonify({'error': 'invalid'}), 401
+""",
+        expected_hit=r"CWE-307|rate.?limit|brute.?force",
+        severity_min="medium",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2023-PY-SSTI",
+        language="python",
+        cwe="CWE-79",
+        description=(
+            "Server-Side Template Injection via render_template_string with "
+            "user-controlled template content."
+        ),
+        snippet="""
+from flask import Flask, request, render_template_string
+
+app = Flask(__name__)
+
+@app.route('/render')
+def render_page():
+    template = request.args.get('template', '')
+    return render_template_string(template)
+""",
+        expected_hit=r"CWE-79|[Tt]emplate [Ii]njection|SSTI|render_template_string",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2023-PY-SUBPROCESS-GETOUTPUT",
+        language="python",
+        cwe="CWE-78",
+        description=(
+            "subprocess.getoutput() implicitly uses shell=True, enabling command injection "
+            "via user-supplied filenames."
+        ),
+        snippet="""
+import subprocess
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/checksum')
+def checksum():
+    filename = request.args.get('file')
+    result = subprocess.getoutput(f'sha256sum {filename}')
+    return result
+""",
+        expected_hit=r"CWE-78|[Cc]ommand [Ii]njection|getoutput",
+    ),
+
+    CVEEntry(
+        cve_id="CVE-2023-PY-FASTAPI-MISSING-AUTH",
+        language="python",
+        cwe="CWE-862",
+        description=(
+            "FastAPI admin route exposes all users without any authentication dependency."
+        ),
+        snippet="""
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get('/admin/users')
+async def list_all_users():
+    return {'users': []}
+""",
+        expected_hit=r"CWE-862|[Mm]issing auth|admin",
+    ),
 ]

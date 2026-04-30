@@ -316,6 +316,91 @@ RULES: list[Rule] = [
         context_lines=20,
         negate_context=True,
     ),
+    # ─── XML / XXE ────────────────────────────────────────────────────────────
+    Rule(
+        "JS-043", "CWE-611",
+        "CWE-611: XML External Entity (XXE) via unsafe XML parser at line {line}",
+        "XML parsed without disabling external-entity resolution at L{line}: `{snippet}`. "
+        "An attacker can read local files or cause SSRF via crafted DOCTYPE declarations.",
+        "Disable external entities: set `resolveExternalEntities: false` or use a safe DOM parser. "
+        "Avoid parsing attacker-controlled XML.",
+        Severity.HIGH,
+        r'(?:new\s+DOMParser|libxmljs\.parseXml|sax\.createParser|xml2js\.parseString|'
+        r'xmldom\.DOMParser|fast-xml-parser|xmlParser\.parse|parseXml|new\s+XMLParser)\s*\(',
+        exclude_pattern=r'resolveExternalEntities\s*:\s*false|noent\s*:\s*false|'
+                        r'ignoreAttributes\s*:\s*true',
+    ),
+    # ─── HTTP Header Injection ────────────────────────────────────────────────
+    Rule(
+        "JS-044", "CWE-113",
+        "CWE-113: HTTP header injection via user-controlled value at line {line}",
+        "`res.setHeader()` / `res.header()` called with a value from `req.*` at L{line}: `{snippet}`. "
+        "Unvalidated newlines (\\r\\n) in header values split the HTTP response (response splitting).",
+        "Sanitize header values — strip CR/LF characters before setting headers. "
+        "Use a framework-level header-encoding layer.",
+        Severity.HIGH,
+        r'res\.(?:setHeader|header)\s*\([^)]*req\.\w+',
+    ),
+    # ─── Cookie without Secure flag ──────────────────────────────────────────
+    Rule(
+        "JS-045", "CWE-614",
+        "CWE-614: Cookie set without Secure flag at line {line}",
+        "`res.cookie()` called without `secure: true` at L{line}: `{snippet}`. "
+        "The cookie is transmitted over plain HTTP, allowing interception.",
+        "Always set `secure: true` on cookies that carry session or auth tokens.",
+        Severity.MEDIUM,
+        r'res\.cookie\s*\(',
+        exclude_pattern=r'secure\s*:\s*true',
+    ),
+    # ─── Node.js deserialization ─────────────────────────────────────────────
+    Rule(
+        "JS-046", "CWE-502",
+        "CWE-502: Unsafe deserialization via node-serialize / serialize-javascript at line {line}",
+        "`unserialize()` or `eval`-based deserialization of untrusted data at L{line}: `{snippet}`. "
+        "node-serialize and similar libraries execute embedded IIFE payloads — arbitrary RCE.",
+        "Never deserialize untrusted data with node-serialize. Use JSON.parse() with strict schema validation instead.",
+        Severity.CRITICAL,
+        r'\bunserialize\s*\(|serialize-javascript|node-serialize',
+    ),
+    # ─── RegExp constructor with user input ──────────────────────────────────
+    Rule(
+        "JS-047", "CWE-1333",
+        "CWE-1333: RegExp constructed from user-controlled input (ReDoS risk) at line {line}",
+        "`new RegExp(...)` called with a value from `req.*` at L{line}: `{snippet}`. "
+        "Attacker-supplied regex patterns can cause catastrophic backtracking (ReDoS).",
+        "Never construct regex patterns from user input. Use a fixed allowlist of accepted pattern shapes, "
+        "or a non-backtracking engine.",
+        Severity.HIGH,
+        r'new\s+RegExp\s*\([^)]*req\.\w+',
+    ),
+    # ─── Unvalidated file upload ──────────────────────────────────────────────
+    Rule(
+        "JS-048", "CWE-434",
+        "CWE-434: Unrestricted file upload — no MIME/extension check at line {line}",
+        "File upload handler at L{line} (`{snippet}`) appears to accept files without MIME type or extension validation. "
+        "An attacker can upload executable files (`.php`, `.js`, scripts).",
+        "Validate file MIME type server-side and restrict allowed extensions to an explicit allowlist. "
+        "Store uploads outside the web root and never execute uploaded content.",
+        Severity.HIGH,
+        r'(?:multer|formidable|busboy|multiparty)(?:\.single|\.array|\.fields|\.any)?\s*\(',
+        context_confirm=r'mimetype|\.ext|fileFilter|allowedTypes|whitelist|allowlist',
+        context_lines=15,
+        negate_context=True,
+    ),
+    # ─── Path traversal in static file serving ───────────────────────────────
+    Rule(
+        "JS-049", "CWE-22",
+        "CWE-22: Path traversal in dynamic static-file serving at line {line}",
+        "`sendFile`, `createReadStream`, or `res.download` called with a user-controlled path at L{line}: `{snippet}`. "
+        "An attacker can traverse the directory with `../` sequences.",
+        "Resolve the path inside a safe base directory and reject requests that escape it: "
+        "`path.resolve(BASE, file).startsWith(BASE)`.",
+        Severity.HIGH,
+        # Match sendFile/download/readFile where the first arg is NOT a plain string/path literal
+        r'(?:res\.sendFile|res\.download|fs\.createReadStream|fs\.readFile)\s*\(\s*(?!["\'/`])',
+        context_confirm=r'req\.(?:query|params|body|headers)',
+        context_lines=6,
+    ),
 ]
 
 

@@ -1,9 +1,81 @@
 from __future__ import annotations
 
+import json
+
 from ansede_static.js_ast_analyzer import analyze_js_ast
 
 
 class TestJsAstAnalyzer:
+  def test_sourcemap_source_root_remaps_findings(self, tmp_path):
+    bundle_file = tmp_path / "bundle.js"
+    map_file = tmp_path / "bundle.js.map"
+
+    bundle_file.write_text(
+      "document.write(req.query.html);\n//# sourceMappingURL=bundle.js.map\n",
+      encoding="utf-8",
+    )
+    map_file.write_text(
+      json.dumps({
+        "version": 3,
+        "file": "bundle.js",
+        "sourceRoot": "src",
+        "sources": ["app.ts"],
+        "names": [],
+        "mappings": "AAAA",
+      }),
+      encoding="utf-8",
+    )
+
+    result = analyze_js_ast(bundle_file.read_text(encoding="utf-8"), filename=str(bundle_file))
+    finding = next(f for f in result.findings if f.rule_id == "JS-002")
+
+    assert "[source-mapped]" in finding.title
+    assert "src/app.ts:1" in finding.description
+
+  def test_indexed_sourcemap_sections_remap_multiple_lines(self, tmp_path):
+    bundle_file = tmp_path / "bundle.js"
+    map_file = tmp_path / "bundle.js.map"
+
+    bundle_file.write_text(
+      "document.write(req.query.first);\ndocument.write(req.query.second);\n//# sourceMappingURL=bundle.js.map\n",
+      encoding="utf-8",
+    )
+    map_file.write_text(
+      json.dumps({
+        "version": 3,
+        "file": "bundle.js",
+        "sections": [
+          {
+            "offset": {"line": 0, "column": 0},
+            "map": {
+              "version": 3,
+              "sources": ["first.ts"],
+              "names": [],
+              "mappings": "AAAA",
+            },
+          },
+          {
+            "offset": {"line": 1, "column": 0},
+            "map": {
+              "version": 3,
+              "sources": ["second.ts"],
+              "names": [],
+              "mappings": "AAAA",
+            },
+          },
+        ],
+      }),
+      encoding="utf-8",
+    )
+
+    result = analyze_js_ast(bundle_file.read_text(encoding="utf-8"), filename=str(bundle_file))
+    js002_findings = [f for f in result.findings if f.rule_id == "JS-002"]
+
+    assert len(js002_findings) >= 2
+    descriptions = "\n".join(f.description for f in js002_findings)
+    assert "first.ts:1" in descriptions
+    assert "second.ts:1" in descriptions
+
     def test_react_create_element_dangerous_html_detected_structurally(self):
         code = """
 function UserBio(props) {

@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
 
 a = Analysis(
@@ -32,7 +33,8 @@ exe = EXE(
     console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
-    target_arch=None,
+    # Set ANSEDE_TARGET_ARCH to "x86_64" or "arm64" in CI release jobs.
+    target_arch=os.environ.get('ANSEDE_TARGET_ARCH') or None,
     codesign_identity=None,
     entitlements_file=None,
 )
