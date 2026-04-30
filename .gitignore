@@ -18,6 +18,7 @@ venv/
 .ci*/
 .py*embed/
 .ansede/
+.tmp/
 
 # IDE
 .idea/

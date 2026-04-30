@@ -3989,11 +3989,14 @@ def _rule_28(ctx: _Ctx) -> list[Finding]:
                             src, node.lineno, set(),
                             (_make_trace_frame("source", src, node.value, line=node.lineno),),
                         )
-                    elif _find_tainted_expr_info(node.value, tainted_vars, func_summaries):
-                        info = _find_tainted_expr_info(node.value, tainted_vars, func_summaries)
-                        assert info is not None
-                        tainted_vars[t.id] = (info[1], info[2], info[3],
-                            _append_trace(info[4], "propagator", f"assign to `{t.id}`", line=node.lineno))
+                    else:
+                        info = _find_tainted_expr_info(
+                            node.value, tainted_vars, func_summaries,
+                            global_graph=ctx.global_graph, caller_file=ctx.filename, caller_name=fname,
+                        )
+                        if info:
+                            tainted_vars[t.id] = (info[1], info[2], info[3],
+                                _append_trace(info[4], "propagator", f"assign to `{t.id}`", line=node.lineno))
 
         for node in ast.walk(fnode):
             if not isinstance(node, ast.Call):
@@ -4004,7 +4007,10 @@ def _rule_28(ctx: _Ctx) -> list[Finding]:
             if (call_name in ("getattr", "builtins.getattr")
                     and len(node.args) >= 2):
                 attr_arg = node.args[1]
-                attr_info = _find_tainted_expr_info(attr_arg, tainted_vars, func_summaries)
+                attr_info = _find_tainted_expr_info(
+                    attr_arg, tainted_vars, func_summaries,
+                    global_graph=ctx.global_graph, caller_file=ctx.filename, caller_name=fname,
+                )
                 if attr_info:
                     vname, vsrc, vline, san_cwes, trace, _ = attr_info
                     findings.append(Finding(
@@ -4027,7 +4033,10 @@ def _rule_28(ctx: _Ctx) -> list[Finding]:
 
             # Pattern: __import__(tainted_module)
             if (call_name == "__import__" and len(node.args) >= 1):
-                arg_info = _find_tainted_expr_info(node.args[0], tainted_vars, func_summaries)
+                arg_info = _find_tainted_expr_info(
+                    node.args[0], tainted_vars, func_summaries,
+                    global_graph=ctx.global_graph, caller_file=ctx.filename, caller_name=fname,
+                )
                 if arg_info:
                     vname, vsrc, vline, san_cwes, trace, _ = arg_info
                     findings.append(Finding(
@@ -4046,7 +4055,10 @@ def _rule_28(ctx: _Ctx) -> list[Finding]:
 
             # Pattern: importlib.import_module(tainted_module)
             if (call_name in ("importlib.import_module", "import_module") and len(node.args) >= 1):
-                arg_info = _find_tainted_expr_info(node.args[0], tainted_vars, func_summaries)
+                arg_info = _find_tainted_expr_info(
+                    node.args[0], tainted_vars, func_summaries,
+                    global_graph=ctx.global_graph, caller_file=ctx.filename, caller_name=fname,
+                )
                 if arg_info:
                     vname, vsrc, vline, san_cwes, trace, _ = arg_info
                     findings.append(Finding(

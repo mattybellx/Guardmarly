@@ -8,7 +8,7 @@ Complete summary of IFDS/IDE interprocedural taint analysis implementation (Phas
 
 **Completed:** 2026-04-29  
 **Status:** ✅ COMPLETE — Production-ready IFDS framework, with hybrid production Python integration  
-**Tests:** 410 passing (59 new IFDS-specific tests)
+**Tests:** 473 passing (full suite, including 59 IFDS-specific tests)
 
 ---
 
