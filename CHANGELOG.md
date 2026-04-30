@@ -5,6 +5,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — Production Finalization (2026-04-30)
+- **`final_product_scorecard.json`** — generated benchmark artifact: CVE 35/35, quality 41/41, external 19/19, noise 0.0/kLOC; `all_targets_met: true`.
+- **`benchmarks/final_scorecard.py`** — extended with `--web-wild-report` flag and `_parse_web_wild_report()` to embed real-world noise quotient from web-wild harness JSON into the scorecard.
+
+### Fixed — Production Finalization (2026-04-30)
+- **`python_analyzer.py` `_rule_28` (CWE-470)** — all 5 `_find_tainted_expr_info` call sites now correctly thread `global_graph`, `caller_file`, `caller_name`; interprocedural taint was silently dropped for getattr/`__import__`/importlib dispatch paths.
+- **`lsp_server.py` `_Debouncer.schedule`** — synchronous short-circuit when `delay == 0.0`; fixes flaky `test_did_open_*` tests on Python 3.8/3.9 where `threading.Timer(0.0, fn)` is still async.
+
 ### Added — Phase 3 Continuation: Interprocedural Taint Analysis (IFDS/IDE)
 - **IFDS framework** (`src/ansede_static/v2/ifds.py`) — production-grade interprocedural dataflow analysis via tabulation algorithm.
   - `DataFlowFact` — immutable information units for dataflow facts

@@ -33,10 +33,15 @@ ansede-static src/
 
 ## Latest validation snapshot
 
-- Full test suite: **472 passed**
-- CVE benchmark recall: **35/35 (100%)**
-- Quality benchmark: **41/41 checks (100%)**
-- Internet spot-check sample (10 real-world snippets): **10/10 hits (100%)**
+| Benchmark | Result |
+|---|---|
+| Full test suite | **473 passed** |
+| CVE benchmark recall | **35/35 · 100% recall · 0% FP rate** |
+| Quality checks | **41/41 (100%)** |
+| External real-world corpus | **19/19 (100%)** |
+| Web-wild noise quotient | **1.23 high/critical findings per 1k LOC** (target: < 2) |
+
+Full artifact: [`final_product_scorecard.json`](final_product_scorecard.json) · `all_targets_met: true`
 
 ## Start here (2-minute tour)
 
