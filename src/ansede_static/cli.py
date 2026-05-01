@@ -73,6 +73,26 @@ def _matches_exclude_pattern(path: Path, pattern: str) -> bool:
     return normalized_pattern in {part.lower() for part in path.parts}
 
 
+def _load_ansedeignore(workspace_root: Path) -> list[str]:
+    """Load .ansedeignore patterns from the workspace root (gitignore-compatible syntax).
+
+    Blank lines and #-comments are skipped; negations (!pattern) are not yet supported.
+    """
+    ignore_file = workspace_root / ".ansedeignore"
+    if not ignore_file.is_file():
+        return []
+    patterns: list[str] = []
+    try:
+        for line in ignore_file.read_text(encoding="utf-8", errors="replace").splitlines():
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            patterns.append(stripped)
+    except OSError:
+        pass
+    return patterns
+
+
 def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]:
     """Recursively expand directories into individual source files."""
     files: list[Path] = []
@@ -161,6 +181,7 @@ def _analyze_file(
     requested_js_backend: str = "auto",
     experimental_js_ast: bool = False,
     global_graph: GlobalGraph | None = None,
+    cache_store: object | None = None,
 ) -> AnalysisResult:
     lang = _detect_language(path)
     try:
@@ -170,8 +191,17 @@ def _analyze_file(
         result.parse_error = str(exc)
         return result
 
+    # ── File-level result cache (skip re-analysis if file unchanged) ──────
+    if cache_store is not None and hasattr(cache_store, "get_cached_result"):
+        try:
+            cached = cache_store.get_cached_result(str(path), code)
+            if cached is not None:
+                return cached
+        except Exception:
+            pass
+
     if lang == "python":
-        return analyze_python(code, filename=str(path), global_graph=global_graph)
+        result = analyze_python(code, filename=str(path), global_graph=global_graph)
     elif lang == "javascript":
         result, _ = run_js_analysis(
             code,
@@ -180,9 +210,17 @@ def _analyze_file(
             experimental_js_ast=experimental_js_ast,
             global_graph=global_graph,
         )
-        return result
     else:
-        return AnalysisResult(file_path=str(path), language="unknown")
+        result = AnalysisResult(file_path=str(path), language="unknown")
+
+    # ── Store result in cache ─────────────────────────────────────────────
+    if cache_store is not None and hasattr(cache_store, "put_cached_result"):
+        try:
+            cache_store.put_cached_result(str(path), code, result)
+        except Exception:
+            pass
+
+    return result
 
 
 def _render_rule_catalog(as_json: bool) -> str:
@@ -1017,9 +1055,12 @@ def main() -> None:
                 sys.exit(1)
 
         elif args.paths:
+            # ── Load .ansedeignore patterns ─────────────────────────────────
+            _ansedeignore_patterns = _load_ansedeignore(workspace_root)
+
             exclude_extra = [".venv", "node_modules", "__pycache__", ".git",
                              "site-packages", "dist", "build", ".tox",
-                             "public", "vendor", "static", "assets", "bower_components"] + args.exclude + config.exclude_paths
+                             "public", "vendor", "static", "assets", "bower_components"] + args.exclude + config.exclude_paths + _ansedeignore_patterns
             files = _collect_files(args.paths, exclude_extra)
             if getattr(args, "entropy", False):
                 entropy_files = _collect_entropy_files(args.paths, exclude_extra)
@@ -1181,6 +1222,40 @@ def main() -> None:
             sys.exit(0)
 
     results = apply_config_to_results(results, config)
+
+    # ── Context-aware triage: downgrade confidence for test/mock/generated files ─
+    try:
+        from ansede_static.engine.triage import ContextAnalyzer
+        _downgraded = 0
+        for _r in results:
+            _new_findings = []
+            for _f in _r.findings:
+                _is_test, _ = ContextAnalyzer.is_test_context(_r.file_path, "")
+                _is_mock, _ = ContextAnalyzer.is_mock_context(_r.file_path, "")
+                _is_gen, _ = ContextAnalyzer.is_generated(_r.file_path)
+                if _is_test or _is_mock or _is_gen:
+                    _downgraded += 1
+                    _f = Finding(
+                        category=_f.category,
+                        severity=_f.severity,
+                        title=_f.title,
+                        description=_f.description,
+                        line=_f.line,
+                        suggestion=_f.suggestion,
+                        rule_id=_f.rule_id,
+                        cwe=_f.cwe,
+                        agent=_f.agent,
+                        confidence=max(0.0, _f.confidence - 0.35),
+                        auto_fix=_f.auto_fix,
+                        explanation=_f.explanation,
+                        trace=_f.trace,
+                        analysis_kind=_f.analysis_kind,
+                        triggering_code=_f.triggering_code,
+                    )
+                _new_findings.append(_f)
+            _r.findings = _new_findings
+    except Exception:
+        pass
 
     # ── Apply custom YAML rules (if configured) ───────────────────────────
     if config.custom_rules_file:

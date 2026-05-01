@@ -5,7 +5,28 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from ansede_static._types import Finding, Severity, TraceFrame
-from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments
+from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments, consume_balanced
+from ansede_static.js_engine.constants import (
+    AUTH_MIDDLEWARE_RE,
+    PRIVILEGE_MIDDLEWARE_RE,
+    OWNERSHIP_KEY_RE,
+    PRINCIPAL_REF_RE,
+    LOOKUP_SINK_RE,
+    DIRECT_MUTATION_SINK_RE,
+    INSTANCE_MUTATION_RE,
+    CREDENTIAL_NAME_RE,
+    CREDENTIAL_SOURCE_RE,
+    VERIFICATION_CALL_RE,
+    PRIVILEGE_KEY_RE,
+    REQUEST_OBJECT_ARG_RE,
+    callee_matches,
+    DOCUMENT_WRITE_CALLEES,
+    SQL_CALLEES,
+    LOOKUP_CALLEE_PARTS,
+    MUTATION_CALLEE_PARTS,
+    PATH_CALLEE_PARTS,
+    SSRF_CALLEES,
+)
 from ansede_static.js_engine.project import (
     build_js_project_index,
     propagate_helper_return_traces,
@@ -40,44 +61,11 @@ _NEST_ROUTE_DECORATORS = {
 _NEXT_ROUTE_METHOD_RE = r"GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS"
 _ROUTE_PARAM_RE = re.compile(r':([A-Za-z_$][\w$]*)')
 _RESOURCE_PARAM_RE = re.compile(r'(?:^|_)(?:id|uid|pk|slug)$|(?:Id|Uid|Pk|Slug)$', re.IGNORECASE)
-_AUTH_MIDDLEWARE_RE = re.compile(
-    r'requireAuth|authMiddleware|isAuthenticated|isLoggedIn|passport\.authenticate|'
-    r'verifyToken|checkAuth|ensureAuth|jwtAuth|requireLogin|'
-    r'request\.jwtVerify|jwtVerify|fastify\.authenticate|koaJwt|koa-jwt|ctx\.isAuthenticated|'
-    r'requireAdmin|adminOnly|adminRequired|ensureAdmin|staffOnly|staffRequired|'
-    r'requireRole|hasRole|checkRole|requirePermission|checkPermission|hasPermission|'
-    r'AuthGuard|JwtAuthGuard|SessionGuard|UseGuards|withAuth|requireSession|requireUser|getServerSession',
-    re.IGNORECASE,
-)
-_PRIVILEGE_MIDDLEWARE_RE = re.compile(
-    r'requireAdmin|adminOnly|adminRequired|ensureAdmin|staffOnly|staffRequired|'
-    r'superuserOnly|rootOnly|requireRole|hasRole|checkRole|requirePermission|'
-    r'checkPermission|hasPermission|authorizeRole|permissionMiddleware|'
-    r'RolesGuard|PermissionsGuard|ScopesGuard|RoleGuard|PermissionGuard|Roles\s*\(|Permissions\s*\(',
-    re.IGNORECASE,
-)
-_OWNERSHIP_KEY_RE = re.compile(
-    r'ownerId|userId|accountId|tenantId|authorId|createdBy|organizationId|orgId',
-    re.IGNORECASE,
-)
-_PRINCIPAL_REF_RE = re.compile(
-    r'(?:req|request)\.(?:user|auth)|res\.locals\.user|reply\.locals\.user|currentUser|session\.user|'
-    r'(?:req|request)\.session\.(?:user|auth)|(?:req|request)\.session\[\s*["\']user(?:Id)?["\']\s*\]|'
-    r'ctx\.state\.user|context\.state\.user|event\.locals\.user|locals\.user|c\.get\(\s*["\']user["\']\s*\)',
-    re.IGNORECASE,
-)
-_LOOKUP_SINK_RE = re.compile(
-    r'findByPk\s*\(|findById\s*\(|findOne\s*\(|findUnique\s*\(|findFirst\s*\(|'
-    r'select\s+.+\bwhere\b',
-    re.IGNORECASE,
-)
-_DIRECT_MUTATION_SINK_RE = re.compile(
-    r'destroy\s*\(|update\s*\(|deleteOne\s*\(|remove\s*\(|'
-    r'findByIdAndUpdate\s*\(|findByIdAndDelete\s*\(|findOneAndUpdate\s*\(|'
-    r'findOneAndDelete\s*\(|\bUPDATE\s+\w+\s+SET\b|\bDELETE\s+FROM\b',
-    re.IGNORECASE,
-)
-_INSTANCE_MUTATION_RE = re.compile(r'\b([A-Za-z_$][\w$]*)\s*\.\s*(destroy|save|remove|update)\s*\(', re.IGNORECASE)
+# AUTH_MIDDLEWARE_RE, PRIVILEGE_MIDDLEWARE_RE, OWNERSHIP_KEY_RE, PRINCIPAL_REF_RE,
+# LOOKUP_SINK_RE, DIRECT_MUTATION_SINK_RE, INSTANCE_MUTATION_RE,
+# CREDENTIAL_NAME_RE, CREDENTIAL_SOURCE_RE, VERIFICATION_CALL_RE, PRIVILEGE_KEY_RE
+# are all imported from js_engine.constants
+
 _PUBLIC_ROUTE_RE = re.compile(
     r'/(?:login|signin|sign-in|signup|sign-up|register|authenticate|forgot|reset|callback|'
     r'logout|health|ping|status|healthz|ready|readiness|liveness|docs|swagger|openapi|'
@@ -85,23 +73,6 @@ _PUBLIC_ROUTE_RE = re.compile(
     re.IGNORECASE,
 )
 _ADMIN_ROUTE_RE = re.compile(r'/(?:admin|internal|staff|superuser|root)(?:/|$)', re.IGNORECASE)
-_PRIVILEGE_KEY_RE = re.compile(r'admin|staff|superuser|root|role|permission|scope|acl|rbac', re.IGNORECASE)
-_CREDENTIAL_NAME_RE = re.compile(
-    r'authoriz|auth|token|jwt|session|cookie|bearer|api[_-]?key|apikey|credential',
-    re.IGNORECASE,
-)
-_CREDENTIAL_SOURCE_RE = re.compile(
-    r'\b(?:req|request)\.(?:headers|cookies|query|body)\b|request\.headers\.get\s*\([^)]*\)|ctx\.request\.(?:headers|body)',
-    re.IGNORECASE,
-)
-_VERIFICATION_CALL_RE = re.compile(
-    r'jwt\.verify|verifyToken|checkAuth|validateToken|decodeToken|passport\.authenticate|'
-    r'loadUser|findByToken|authenticate|authorize|requireRole|checkPermission|hasPermission|hasRole|'
-    r'request\.jwtVerify|ctx\.isAuthenticated|ctx\.state\.user|'
-    r'getServerSession|verifyIdToken|validateSession|lucia\.validateSession|supabase\.auth\.getUser|'
-    r'auth\s*\(|requireSession|requireUser',
-    re.IGNORECASE,
-)
 _DISABLED_AUTH_RE = re.compile(r'^\s*(?:false|null|undefined|0)\s*$', re.IGNORECASE)
 _ROLEISH_OPTION_RE = re.compile(r'role|permission|scope|admin|staff|root|superuser', re.IGNORECASE)
 _ROUTE_OPTION_FIELDS = (
@@ -159,69 +130,8 @@ class RouteBlock:
 
 
 def _consume_balanced_segment(text: str, start_index: int, opener: str, closer: str) -> int | None:
-    depth = 0
-    state = "default"
-    index = start_index
-    while index < len(text):
-        ch = text[index]
-        nxt = text[index + 1] if index + 1 < len(text) else ""
-
-        if state == "line_comment":
-            if ch == "\n":
-                state = "default"
-            index += 1
-            continue
-
-        if state == "block_comment":
-            if ch == "*" and nxt == "/":
-                index += 2
-                state = "default"
-                continue
-            index += 1
-            continue
-
-        if state in {"single", "double", "template"}:
-            if ch == "\\" and index + 1 < len(text):
-                index += 2
-                continue
-            if state == "single" and ch == "'":
-                state = "default"
-            elif state == "double" and ch == '"':
-                state = "default"
-            elif state == "template" and ch == "`":
-                state = "default"
-            index += 1
-            continue
-
-        if ch == "/" and nxt == "/":
-            state = "line_comment"
-            index += 2
-            continue
-        if ch == "/" and nxt == "*":
-            state = "block_comment"
-            index += 2
-            continue
-        if ch == "'":
-            state = "single"
-            index += 1
-            continue
-        if ch == '"':
-            state = "double"
-            index += 1
-            continue
-        if ch == "`":
-            state = "template"
-            index += 1
-            continue
-
-        if ch == opener:
-            depth += 1
-        elif ch == closer:
-            depth -= 1
-            if depth == 0:
-                return index
-        index += 1
-    return None
+    """Thin wrapper — delegates to the canonical implementation in common.py."""
+    return consume_balanced(text, start_index, opener, closer)
 
 
 
@@ -835,7 +745,7 @@ def _option_labels(text: str, pattern: re.Pattern[str]) -> tuple[str, ...]:
 
 def _body_verification_labels(block: RouteBlock) -> tuple[str, ...]:
     labels: list[str] = []
-    for match in _VERIFICATION_CALL_RE.finditer(block.body):
+    for match in VERIFICATION_CALL_RE.finditer(block.body):
         label = f"handler verification `{match.group(0)}`"
         if label not in labels:
             labels.append(label)
@@ -852,7 +762,7 @@ def _route_invocation_text(block: RouteBlock) -> str:
 
 def _route_auth_labels(block: RouteBlock, *, filename: str = '', project=None) -> tuple[str, ...]:
     invocation_text = _route_invocation_text(block)
-    labels = list(_option_labels(invocation_text, _AUTH_MIDDLEWARE_RE))
+    labels = list(_option_labels(invocation_text, AUTH_MIDDLEWARE_RE))
     if _auth_option_enabled(invocation_text) and 'auth option `auth`' not in labels:
         labels.append('auth option `auth`')
     labels.extend(_body_verification_labels(block))
@@ -863,7 +773,7 @@ def _route_auth_labels(block: RouteBlock, *, filename: str = '', project=None) -
 
 def _route_privilege_labels(block: RouteBlock, *, filename: str = '', project=None) -> tuple[str, ...]:
     invocation_text = _route_invocation_text(block)
-    labels = list(_option_labels(invocation_text, _PRIVILEGE_MIDDLEWARE_RE))
+    labels = list(_option_labels(invocation_text, PRIVILEGE_MIDDLEWARE_RE))
     if _ROLEISH_OPTION_RE.search(invocation_text) and _auth_option_enabled(invocation_text):
         labels.append('auth option `role`')
     labels.extend(_route_helper_labels(block, filename=filename, project=project, attr='privilege_guard', prefix='privilege helper'))
@@ -901,7 +811,7 @@ def _extract_principal_aliases(code: str) -> set[str]:
         if not match:
             continue
         target, expr = match.groups()
-        if _PRINCIPAL_REF_RE.search(expr):
+        if PRINCIPAL_REF_RE.search(expr):
             aliases.add(target)
     return aliases
 
@@ -909,9 +819,9 @@ def _extract_principal_aliases(code: str) -> set[str]:
 
 def _line_has_owner_guard(line: str, principal_aliases: set[str]) -> bool:
     stripped = strip_comments(line).strip()
-    if not stripped or not _OWNERSHIP_KEY_RE.search(stripped):
+    if not stripped or not OWNERSHIP_KEY_RE.search(stripped):
         return False
-    has_principal = bool(_PRINCIPAL_REF_RE.search(stripped))
+    has_principal = bool(PRINCIPAL_REF_RE.search(stripped))
     if not has_principal:
         has_principal = any(re.search(rf'\b{re.escape(alias)}\b', stripped) for alias in principal_aliases)
     if not has_principal:
@@ -932,11 +842,11 @@ def _block_has_ownership_guard(block: RouteBlock, *, filename: str = '', project
 
 def _line_has_privilege_guard(line: str, principal_aliases: set[str]) -> bool:
     stripped = strip_comments(line).strip()
-    if not stripped or not _PRIVILEGE_KEY_RE.search(stripped):
+    if not stripped or not PRIVILEGE_KEY_RE.search(stripped):
         return False
-    if _PRIVILEGE_MIDDLEWARE_RE.search(stripped):
+    if PRIVILEGE_MIDDLEWARE_RE.search(stripped):
         return True
-    has_principal = bool(_PRINCIPAL_REF_RE.search(stripped))
+    has_principal = bool(PRINCIPAL_REF_RE.search(stripped))
     if not has_principal:
         has_principal = any(re.search(rf'\b{re.escape(alias)}\b', stripped) for alias in principal_aliases)
     if not has_principal:
@@ -962,7 +872,7 @@ def _route_looks_sensitive(block: RouteBlock, resource_params: set[str]) -> bool
         stripped = strip_comments(line).strip()
         if not stripped:
             continue
-        if _LOOKUP_SINK_RE.search(stripped) or _DIRECT_MUTATION_SINK_RE.search(stripped):
+        if LOOKUP_SINK_RE.search(stripped) or DIRECT_MUTATION_SINK_RE.search(stripped):
             return True
     return False
 
@@ -984,14 +894,14 @@ def _extract_credential_traces(block: RouteBlock) -> dict[str, tuple[TraceFrame,
             target, expr = match.groups()
             if target in traces:
                 continue
-            if _CREDENTIAL_SOURCE_RE.search(expr) and _CREDENTIAL_NAME_RE.search(expr + ' ' + target):
+            if CREDENTIAL_SOURCE_RE.search(expr) and CREDENTIAL_NAME_RE.search(expr + ' ' + target):
                 traces[target] = (
                     TraceFrame(kind='source', label=f"credential source `{expr[:80]}`", line=lineno),
                     TraceFrame(kind='propagator', label=f"assign to `{target}`", line=lineno),
                 )
                 changed = True
                 continue
-            if not _CREDENTIAL_NAME_RE.search(target):
+            if not CREDENTIAL_NAME_RE.search(target):
                 continue
             referenced = [name for name in traces if re.search(rf'\b{re.escape(name)}\b', expr)]
             if not referenced:
@@ -1029,7 +939,7 @@ def _presence_only_gate(
         stripped,
         re.IGNORECASE,
     )
-    if direct_match and _CREDENTIAL_NAME_RE.search(direct_match.group(2)):
+    if direct_match and CREDENTIAL_NAME_RE.search(direct_match.group(2)):
         trace = (TraceFrame(kind='source', label=f"credential source `{direct_match.group(2)[:80]}`", line=line_no),)
         return (f"if ({direct_match.group(1).strip()})", trace)
     return None
@@ -1047,7 +957,7 @@ def _first_presence_only_gate(block: RouteBlock) -> tuple[int, str, tuple[TraceF
 
 
 def _block_has_verification(block: RouteBlock, *, filename: str = '', project=None) -> bool:
-    if _VERIFICATION_CALL_RE.search(block.body):
+    if VERIFICATION_CALL_RE.search(block.body):
         return True
     return any(summary.verifies_auth for _, summary, _ in _block_helper_entries(block, filename=filename, project=project))
 
@@ -1153,7 +1063,7 @@ def _check_route_idor(code: str, *, agent: str, analysis_kind: str, filename: st
             stripped = strip_comments(line).strip()
             if not stripped or COMMENT_LINE_RE.match(stripped):
                 continue
-            if not _LOOKUP_SINK_RE.search(stripped):
+            if not LOOKUP_SINK_RE.search(stripped):
                 continue
             ref = _find_route_resource_reference(
                 stripped,
@@ -1243,11 +1153,28 @@ def _check_route_idor(code: str, *, agent: str, analysis_kind: str, filename: st
 
 def _check_route_missing_auth(code: str, *, agent: str, analysis_kind: str, filename: str = '', project=None) -> list[Finding]:
     findings: list[Finding] = []
+
+    # ── Pre-pass: collect app.use(middleware) line numbers for ordering check ─
+    _auth_mw_lines: list[int] = []
+    _use_call_re = re.compile(
+        r'(?:app|router|server|api|fastify|express)\s*\.\s*use\s*\(',
+        re.IGNORECASE,
+    )
+    for _lineno, _raw in enumerate(code.splitlines(), 1):
+        if _use_call_re.search(_raw) and AUTH_MIDDLEWARE_RE.search(_raw):
+            _auth_mw_lines.append(_lineno)
+
     for block in _build_route_blocks(code, filename=filename):
         resource_params = _route_resource_params(block.path)
         if _is_public_route(block.path):
             continue
+        # If auth middleware appears AFTER this route, it doesn't protect it
+        _auth_before_route = any(ml < block.start_line for ml in _auth_mw_lines)
         if _route_auth_labels(block, filename=filename, project=project):
+            continue
+        if _auth_before_route and not _is_admin_route(block.path):
+            # There IS auth middleware earlier in the file, just not inline on this route.
+            # Don't flag — the `app.use(auth)` pattern protects subsequent routes.
             continue
         if _block_has_verification(block, filename=filename, project=project) or _first_presence_only_gate(block):
             continue
@@ -1407,7 +1334,7 @@ def _check_route_missing_ownership_mutation(code: str, *, agent: str, analysis_k
             if not match:
                 continue
             target, expr = match.groups()
-            if not _LOOKUP_SINK_RE.search(expr):
+            if not LOOKUP_SINK_RE.search(expr):
                 continue
             ref = _find_route_resource_reference(
                 expr,
@@ -1426,11 +1353,11 @@ def _check_route_missing_ownership_mutation(code: str, *, agent: str, analysis_k
             stripped = strip_comments(line).strip()
             if not stripped or COMMENT_LINE_RE.match(stripped):
                 continue
-            if not _DIRECT_MUTATION_SINK_RE.search(stripped):
+            if not DIRECT_MUTATION_SINK_RE.search(stripped):
                 continue
             ref_trace: tuple[TraceFrame, ...] = ()
             mutation_label = stripped[:80]
-            inst_match = _INSTANCE_MUTATION_RE.search(stripped)
+            inst_match = INSTANCE_MUTATION_RE.search(stripped)
             if inst_match:
                 resource_var = inst_match.group(1)
                 if resource_var not in resource_vars:

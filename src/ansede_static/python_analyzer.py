@@ -213,6 +213,38 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
     "logger.warning":             ("CWE-117", "Log Injection"),
     "logger.error":               ("CWE-117", "Log Injection"),
     "logger.debug":               ("CWE-117", "Log Injection"),
+    # GraphQL Injection — CWE-943
+    "graphql.execute":            ("CWE-89", "GraphQL Injection"),
+    "graphql.execute_sync":       ("CWE-89", "GraphQL Injection"),
+    "gql":                        ("CWE-89", "GraphQL Injection (gql())"),
+    # NoSQL Injection — CWE-943
+    "collection.find":            ("CWE-943", "NoSQL Injection (MongoDB find)"),
+    "collection.aggregate":       ("CWE-943", "NoSQL Injection (MongoDB aggregate)"),
+    "collection.update_one":      ("CWE-943", "NoSQL Injection (MongoDB update)"),
+    "collection.delete_one":      ("CWE-943", "NoSQL Injection (MongoDB delete)"),
+    # LDAP Injection — CWE-90
+    "ldap.search":                ("CWE-90", "LDAP Injection"),
+    "ldap.search_s":              ("CWE-90", "LDAP Injection"),
+    "ldap.search_ext":            ("CWE-90", "LDAP Injection"),
+    # XPath Injection — CWE-643
+    "tree.xpath":                 ("CWE-643", "XPath Injection (lxml)"),
+    "etree.XPath":                ("CWE-643", "XPath Injection (lxml)"),
+    "findall":                    ("CWE-643", "XPath Injection (ElementTree)"),
+    "findtext":                   ("CWE-643", "XPath Injection (ElementTree)"),
+    # Email Header Injection — CWE-93
+    "smtplib.SMTP.sendmail":      ("CWE-93", "Email Header Injection"),
+    "sendmail":                   ("CWE-93", "Email Header Injection"),
+    # XXE — CWE-611
+    "lxml.etree.parse":           ("CWE-611", "XML External Entity (XXE) via lxml"),
+    "etree.parse":                ("CWE-611", "XML External Entity (XXE) via ElementTree"),
+    "etree.fromstring":           ("CWE-611", "XML External Entity (XXE) via ElementTree"),
+    "xml.etree.ElementTree.parse":("CWE-611", "XML External Entity (XXE) via ElementTree"),
+    "etree.iterparse":            ("CWE-611", "XML External Entity (XXE) via iterparse"),
+    "etree.XMLParser":            ("CWE-611", "XML External Entity (XXE) via custom parser"),
+    # HTTP Response Splitting — CWE-113
+    "make_response":              ("CWE-113", "HTTP Response Splitting"),
+    "Response":                   ("CWE-113", "HTTP Response Splitting"),
+    "redirect":                   ("CWE-601", "Open Redirect"),
 }
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -375,15 +407,174 @@ _DJANGO_PERMISSION_CLASS_RE: re.Pattern[str] = re.compile(
     re.IGNORECASE,
 )
 
+# Django class-based view mixins that enforce authentication on all methods.
+_DJANGO_AUTH_MIXINS: frozenset[str] = frozenset({
+    "LoginRequiredMixin",
+    "PermissionRequiredMixin",
+    "UserPassesTestMixin",
+    "AccessMixin",
+    "StaffRequiredMixin",
+    "SuperuserRequiredMixin",
+    # popular third-party equivalents
+    "OwnerRequiredMixin",
+    "GroupRequiredMixin",
+    "RoleRequiredMixin",
+})
+
+# FastAPI / Starlette security dependency class names — when assigned to a
+# module-level variable and used inside Depends(), the route is authenticated.
+_FASTAPI_SECURITY_CLASS_RE: re.Pattern[str] = re.compile(
+    r'OAuth2|HTTPBearer|HTTPBasic|HTTPDigest|APIKey|OpenIdConnect|'
+    r'OAuth2PasswordBearer|OAuth2AuthorizationCode',
+    re.IGNORECASE,
+)
+
+
+def _class_has_auth_mixin(
+    cls: ast.ClassDef,
+    class_defs: dict[str, ast.ClassDef] | None,
+    visited: set[str] | None = None,
+) -> bool:
+    """Return True if a class inherits from a Django auth mixin (directly or transitively)."""
+    if visited is None:
+        visited = set()
+    if cls.name in visited:
+        return False
+    visited.add(cls.name)
+
+    for base in cls.bases:
+        name = (
+            base.id if isinstance(base, ast.Name)
+            else base.attr if isinstance(base, ast.Attribute)
+            else None
+        )
+        if not name:
+            continue
+        if name in _DJANGO_AUTH_MIXINS:
+            return True
+        if class_defs and name in class_defs:
+            if _class_has_auth_mixin(class_defs[name], class_defs, visited):
+                return True
+    return False
+
+
+def _fastapi_dep_call_has_auth_signal(node: ast.AST, auth_aliases: set[str]) -> bool:
+    """Return True when a Depends/Security call references an auth-like dependency."""
+    if not isinstance(node, ast.Call):
+        return False
+    callee = _decorator_name(node.func)
+    if callee not in {"Depends", "Security"}:
+        return False
+    for arg in node.args:
+        if isinstance(arg, ast.Name) and arg.id in auth_aliases:
+            return True
+        if _FASTAPI_AUTH_DEPENDS_RE.search(_safe_unparse(arg)):
+            return True
+    for kw in node.keywords:
+        if isinstance(kw.value, ast.Name) and kw.value.id in auth_aliases:
+            return True
+        if _FASTAPI_AUTH_DEPENDS_RE.search(_safe_unparse(kw.value)):
+            return True
+    return False
+
+
+def _collect_fastapi_auth_aliases(tree: ast.Module) -> set[str]:
+    """Collect symbol names that represent auth/security dependencies in a module."""
+    aliases: set[str] = set()
+
+    # Pass 1: scheme/security object aliases (oauth2_scheme = OAuth2PasswordBearer(...)).
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign) or not isinstance(node.value, ast.Call):
+            continue
+        callee_text = _safe_unparse(node.value.func)
+        if not _FASTAPI_SECURITY_CLASS_RE.search(callee_text):
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                aliases.add(target.id)
+
+    # Pass 2: dependency provider function aliases (get_current_user, auth_*, etc.).
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        fname = node.name
+        if _FASTAPI_AUTH_DEPENDS_RE.search(fname):
+            aliases.add(fname)
+            continue
+
+        # If the function consumes an auth alias via Depends/Security, it is itself an auth alias.
+        for default in [*node.args.defaults, *node.args.kw_defaults]:
+            if default is None:
+                continue
+            if _fastapi_dep_call_has_auth_signal(default, aliases):
+                aliases.add(fname)
+                break
+
+    return aliases
+
+
+def _collect_fastapi_guarded_receivers(tree: ast.Module, auth_aliases: set[str]) -> set[str]:
+    """Collect FastAPI/APIRouter receiver names configured with auth dependencies."""
+    guarded: set[str] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Assign) or not isinstance(node.value, ast.Call):
+            continue
+        ctor = _decorator_name(node.value.func)
+        if ctor not in {"FastAPI", "APIRouter"}:
+            continue
+        has_auth_dependency = False
+        for kw in node.value.keywords:
+            if kw.arg != "dependencies" or not isinstance(kw.value, (ast.List, ast.Tuple, ast.Set)):
+                continue
+            if any(_fastapi_dep_call_has_auth_signal(dep, auth_aliases) for dep in kw.value.elts):
+                has_auth_dependency = True
+                break
+        if not has_auth_dependency:
+            continue
+        for target in node.targets:
+            if isinstance(target, ast.Name):
+                guarded.add(target.id)
+
+    # ── Also detect app.include_router(router, dependencies=[Depends(auth)]) ──
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        callee = _safe_unparse(node.func)
+        if not callee.endswith(".include_router") or not node.args:
+            continue
+        router_arg = node.args[0]
+        router_name = None
+        if isinstance(router_arg, ast.Name):
+            router_name = router_arg.id
+        elif isinstance(router_arg, ast.Attribute):
+            router_name = _safe_unparse(router_arg)
+        if not router_name:
+            continue
+        has_auth_dep = False
+        for kw in node.keywords:
+            if kw.arg != "dependencies" or not isinstance(kw.value, (ast.List, ast.Tuple, ast.Set)):
+                continue
+            if any(_fastapi_dep_call_has_auth_signal(dep, auth_aliases) for dep in kw.value.elts):
+                has_auth_dep = True
+                break
+        if has_auth_dep:
+            guarded.add(router_name)
+
+    return guarded
+
 
 def _fastapi_route_has_auth_dependency(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
     """Return True when any function parameter uses a FastAPI Depends/Security call
     that looks like an authentication dependency."""
-    for arg in (*fnode.args.args, *fnode.args.kwonlyargs,
-                *([] if fnode.args.vararg is None else [fnode.args.vararg]),
-                *([] if fnode.args.kwarg is None else [fnode.args.kwarg])):
-        # Check annotation — FastAPI auth typically appears as default value
-        pass
+    for arg in (
+        *fnode.args.args,
+        *fnode.args.kwonlyargs,
+        *([] if fnode.args.vararg is None else [fnode.args.vararg]),
+        *([] if fnode.args.kwarg is None else [fnode.args.kwarg]),
+    ):
+        annotation_text = _safe_unparse(arg.annotation)
+        if _FASTAPI_AUTH_DEPENDS_RE.search(annotation_text):
+            return True
     # Check default values (positional and keyword-only)
     all_defaults = [*fnode.args.defaults, *fnode.args.kw_defaults]
     for default in all_defaults:
@@ -477,7 +668,8 @@ _PUBLIC_ROUTE_PAT: re.Pattern[str] = re.compile(
     r'auth|oauth|callback|verify.?email|confirm|public|health|ping|status|'
     r'well.?known|favicon|robots|index|home|about|contact|terms|privacy|'
     r'sitemap|feed|rss|atom|api/docs|openapi|swagger|redoc|schema|'
-    r'manifest|version|ready|live|liveness|readiness|healthz)',
+    r'manifest|version|ready|live|liveness|readiness|healthz|'
+    r'token|refresh.?token|access.?token|revoke.?token)',
     re.IGNORECASE,
 )
 _ADMIN_PATH_PAT: re.Pattern[str] = re.compile(r'/admin', re.IGNORECASE)
@@ -503,6 +695,12 @@ _MUTATING_METHODS: frozenset[str] = frozenset({
 # Patterns in route paths that suggest resource-specific CRUD endpoints
 _RESOURCE_ID_PAT: re.Pattern[str] = re.compile(
     r'<\s*(?:int|string|uuid)?\s*:?\s*\w*(?:id|slug|pk)\s*>', re.IGNORECASE,
+)
+
+_PATH_LIKE_NAME_RE: re.Pattern[str] = re.compile(
+    r'(?:^|_)(?:path|paths|file|filename|filepath|dirname|basename|storage|repo|'
+    r'package|instance|session_file|output_file|temp_dir|tempfile)(?:$|_)',
+    re.IGNORECASE,
 )
 
 
@@ -635,6 +833,50 @@ def _is_tainted_expr(node: ast.expr, tainted: dict[str, Any]) -> bool:
         if isinstance(child, ast.Name) and child.id in tainted:
             return True
     return False
+
+
+def _expr_looks_path_like(node: ast.AST | None) -> bool:
+    """Return True if the expression name/shape suggests it carries a filesystem path.
+
+    This is intentionally narrow and used only by framework-style CWE-22 heuristics
+    to catch path builder helpers that don't flow from an obvious request source.
+    """
+    if node is None:
+        return False
+    if isinstance(node, ast.Name):
+        return bool(_PATH_LIKE_NAME_RE.search(node.id))
+    if isinstance(node, ast.Attribute):
+        return bool(_PATH_LIKE_NAME_RE.search(node.attr)) or _expr_looks_path_like(node.value)
+    if isinstance(node, ast.Subscript):
+        return _expr_looks_path_like(node.value)
+    if isinstance(node, ast.Starred):
+        return _expr_looks_path_like(node.value)
+    if isinstance(node, ast.Call):
+        call_name = _get_call_name(node)
+        short = call_name.rsplit('.', 1)[-1] if call_name else ''
+        if _PATH_LIKE_NAME_RE.search(short):
+            return True
+        if short in {'join', 'abspath', 'realpath', 'resolve', 'mkstemp', 'gettempdir'}:
+            return True
+        return any(_expr_looks_path_like(arg) for arg in node.args)
+    if isinstance(node, ast.BinOp):
+        return _expr_looks_path_like(node.left) or _expr_looks_path_like(node.right)
+    if isinstance(node, ast.JoinedStr):
+        return any(
+            isinstance(v, ast.FormattedValue) and _expr_looks_path_like(v.value)
+            for v in node.values
+        )
+    return False
+
+
+def _function_has_explicit_path_guard(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
+    """Return True if the function contains clear path-boundary validation."""
+    src = ast.dump(fnode, include_attributes=False)
+    return bool(re.search(
+        r'realpath|abspath|resolve|normpath|SuspiciousFileOperation|InvalidSessionKey|startswith',
+        src,
+        re.IGNORECASE,
+    ))
 
 
 def _get_tainted_parent(node: ast.expr, tainted: dict[str, Any]) -> str | None:
@@ -1485,6 +1727,13 @@ class _Ctx:
     _tree: ast.Module = None  # type: ignore[assignment]
     filename: str = ""
     global_graph: object = None
+    class_defs: dict[str, ast.ClassDef] = None  # type: ignore[assignment]
+    # Maps method name → enclosing ClassDef (last definition wins for same name)
+    func_to_class: dict[str, ast.ClassDef] = None  # type: ignore[assignment]
+    # FastAPI/APIRouter receiver names configured with auth dependencies.
+    fastapi_guarded_receivers: set[str] = None  # type: ignore[assignment]
+    # FastAPI auth alias names (oauth2_scheme, get_current_user, etc.).
+    fastapi_auth_aliases: set[str] = None  # type: ignore[assignment]
 
 
 _PY_TAINT_RULE_IDS: dict[str, str] = {
@@ -1587,11 +1836,12 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
     func_defs = ctx.func_defs
     func_summaries = ctx.func_summaries
     # ── Rule 3: Intra-function taint analysis ────────────────────────────
-    # tainted_vars maps variable name → (source_description, line, sanitized_cwes)
-    # sanitized_cwes tracks which CWEs have been neutralised by passing through
-    # a known sanitizer (e.g. shlex.quote neutralises CWE-78).
+    # Scoped symbol table: tainted_vars now tracks per-scope entries so that
+    # same-name rebinding in nested scopes (comprehensions, inner functions,
+    # with-blocks) does not conflate taint across scopes.
     for fname, fnode in func_defs.items():
         tainted_vars: dict[str, _TaintInfo] = {}
+        _scope_stack: list[dict[str, _TaintInfo]] = []  # pushed on scope entry, popped on exit
         route_resource_names = _route_resource_names(fnode)
         for arg in fnode.args.args:
             if arg.arg in ("request", "req", "event", "body", "payload", "data"):
@@ -1621,6 +1871,21 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                             set(),
                             taint_trace + (_make_trace_frame("import", f"imported `{node.id}`", line=node.lineno),),
                         )
+
+        # ── Pre-pass: collect comprehension-scoped variable names ──────────
+        # In Python 3, comprehension iteration variables (the `x` in `[x for x in ...]`)
+        # are scoped to the comprehension and don't leak to the outer scope.
+        # We collect these so the taint tracker skips them (they're fresh bindings).
+        _comprehension_scoped: set[str] = set()
+        for _node in ast.walk(fnode):
+            for _comp in ast.iter_child_nodes(_node):
+                if isinstance(_comp, ast.comprehension):
+                    if isinstance(_comp.target, ast.Name):
+                        _comprehension_scoped.add(_comp.target.id)
+                    elif isinstance(_comp.target, (ast.Tuple, ast.List)):
+                        for _elt in _comp.target.elts:
+                            if isinstance(_elt, ast.Name):
+                                _comprehension_scoped.add(_elt.id)
 
         # ── Pre-pass: collect isinstance type-guards for numeric narrowing ─────
         # Detects:  if isinstance(var, (int, float, bool)):  →  strip injection taint in that branch
@@ -1667,6 +1932,12 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                 for target in node.targets:
                     if not isinstance(target, ast.Name):
                         continue
+                    # Skip comprehension-scoped variables — they're fresh bindings
+                    if target.id in _comprehension_scoped and not any(
+                        isinstance(p, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                        for p in ast.walk(fnode) if hasattr(p, 'name') and getattr(p, 'name', None) == fname
+                    ):
+                        continue
                     src = _get_taint_source(node.value)
                     if src:
                         source_label = _safe_unparse(node.value)[:80] or src
@@ -1700,7 +1971,7 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                                     caller_name=fname,
                                 )
                                 if lam_info:
-                                    _, lsrc, lline, lsan, ltrace, _ = info
+                                    _, lsrc, lline, lsan, ltrace, _ = lam_info
                                     lam_tainted[lam_arg.arg] = (lsrc, lline, lsan, ltrace)
                         lam_result = _find_tainted_expr_info(
                             lam.body,
@@ -1729,6 +2000,45 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         caller_name=fname,
                     )
                     if not taint_info:
+                        # Explicit clean-return / clean-assignment propagation:
+                        # if a function return is provably not tainted, overwrite any prior taint
+                        # on the target variable instead of leaving stale taint behind.
+                        if isinstance(node.value, ast.Call):
+                            callee = _get_local_callee_name(node.value)
+                            summary = func_summaries.get(callee) if callee else None
+                            if summary is not None:
+                                arg_map = _map_call_arguments(node.value, summary.parameters)
+                                tainted_arg_indexes: set[int] = set()
+                                for idx, param in enumerate(summary.parameters):
+                                    arg_node = arg_map.get(param)
+                                    if arg_node is None:
+                                        continue
+                                    arg_hit = _find_tainted_expr_info(
+                                        arg_node,
+                                        tainted_vars,
+                                        func_summaries,
+                                        global_graph=ctx.global_graph,
+                                        caller_file=ctx.filename,
+                                        caller_name=fname,
+                                    )
+                                    if arg_hit:
+                                        tainted_arg_indexes.add(idx)
+
+                                return_is_tainted = bool(summary.source)
+                                if not return_is_tainted and tainted_arg_indexes:
+                                    return_taint_params = {
+                                        idx
+                                        for idx, param_name in enumerate(summary.parameters)
+                                        if param_name in set(summary.tainted_params)
+                                    }
+                                    return_is_tainted = bool(return_taint_params & tainted_arg_indexes)
+
+                                if not return_is_tainted:
+                                    tainted_vars.pop(target.id, None)
+                                    continue
+
+                        # Non-tainted assignment should clear previously tainted variable state.
+                        tainted_vars.pop(target.id, None)
                         continue
                     label, source_desc, source_line, inherited_san, inherited_trace, _ = taint_info
                     if isinstance(node.value, ast.Call):
@@ -2115,9 +2425,9 @@ def _rule_11(ctx: _Ctx) -> list[Finding]:
 # Helpers for CWE-862 heuristic
 # ──────────────────────────────────────────────────────────────────────────────
 
-_MUTATION_CALLS: frozenset[str] = frozenset({
-    # ORM / DB mutation
-    "commit", "add", "save", "delete", "update", "insert", "execute",
+# Unambiguous ORM / IO mutation method names — always a mutation regardless of receiver.
+_MUTATION_CALLS_UNAMBIGUOUS: frozenset[str] = frozenset({
+    "commit", "add", "save", "delete", "insert", "execute",
     "bulk_create", "bulk_update", "create",
     # File / IO
     "write", "send", "send_message", "publish",
@@ -2125,20 +2435,59 @@ _MUTATION_CALLS: frozenset[str] = frozenset({
     "set_cookie", "delete_cookie",
 })
 
+# Ambiguous method names that are only ORM mutations when called on ORM-like receivers
+# (e.g. session.update(...) is a mutation; results.update({}) is a plain dict op).
+_MUTATION_CALLS_AMBIGUOUS: frozenset[str] = frozenset({"update"})
+
+# Deprecated alias kept for backwards-compat with external callers (union of both sets).
+_MUTATION_CALLS: frozenset[str] = _MUTATION_CALLS_UNAMBIGUOUS | _MUTATION_CALLS_AMBIGUOUS
+
+# Receiver names that indicate an ORM / DB / session object (for ambiguous mutation check).
+_ORM_RECEIVER_RE: re.Pattern[str] = re.compile(
+    r'^(?:session|db|database|orm|queryset|objects|cursor|conn|connection|engine|'
+    r'manager|repo|repository|store|storage|tx|transaction|client)$',
+    re.IGNORECASE,
+)
+
 _MUTATION_ATTR_PAT: re.Pattern[str] = re.compile(
     r'session\[|redirect\(|abort\(|flash\(', re.IGNORECASE,
 )
 
 
 def _body_has_mutation(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> bool:
-    """Return True if the function body contains state-mutating calls."""
-    for node in ast.walk(fnode):
-        if isinstance(node, ast.Call):
+    """Return True if the function body contains state-mutating calls.
+
+    Walks only the function *body* statements (not default-value expressions) to
+    avoid false positives from FastAPI Path()/Query() parameter defaults that are
+    unrelated to actual state mutation in the handler.
+    """
+    for stmt in fnode.body:
+        for node in ast.walk(stmt):
+            if not isinstance(node, ast.Call):
+                continue
             if isinstance(node.func, ast.Attribute):
-                if node.func.attr in _MUTATION_CALLS:
+                attr = node.func.attr
+                if attr in _MUTATION_CALLS_UNAMBIGUOUS:
                     return True
-            if isinstance(node.func, ast.Name):
-                if node.func.id in _MUTATION_CALLS:
+                if attr in _MUTATION_CALLS_AMBIGUOUS:
+                    # Only treat as mutation when called on an ORM-like receiver.
+                    recv = node.func.value
+                    recv_name = (
+                        recv.id if isinstance(recv, ast.Name)
+                        else recv.attr if isinstance(recv, ast.Attribute)
+                        else ""
+                    )
+                    if recv_name and _ORM_RECEIVER_RE.search(recv_name):
+                        return True
+            elif isinstance(node.func, ast.Name):
+                if node.func.id in _MUTATION_CALLS_UNAMBIGUOUS:
+                    return True
+    # Also check the legacy pattern-based signals (redirect, session[...], etc.)
+    for stmt in fnode.body:
+        for node in ast.walk(stmt):
+            if isinstance(node, ast.Expr) and isinstance(node.value, ast.Call):
+                call_src = _safe_unparse(node.value)
+                if _MUTATION_ATTR_PAT.search(call_src):
                     return True
     return False
 
@@ -2567,6 +2916,14 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
                 attr = deco.func.attr
                 if attr in _FLASK_ROUTE_ATTRS:
                     has_route = True
+                    receiver_name = deco.func.value.id if isinstance(deco.func.value, ast.Name) else ""
+                    if (
+                        not has_auth
+                        and receiver_name
+                        and ctx.fastapi_guarded_receivers is not None
+                        and receiver_name in ctx.fastapi_guarded_receivers
+                    ):
+                        has_auth = True
                     # Track explicit HTTP method from decorator name
                     if attr != "route":
                         route_methods.add(attr.lower())
@@ -2585,6 +2942,15 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
                             for elt in kw.value.elts:
                                 if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
                                     route_methods.add(elt.value.lower())
+                        if (
+                            kw.arg == "dependencies"
+                            and isinstance(kw.value, (ast.List, ast.Tuple, ast.Set))
+                            and any(
+                                _fastapi_dep_call_has_auth_signal(dep, ctx.fastapi_auth_aliases or set())
+                                for dep in kw.value.elts
+                            )
+                        ):
+                            has_auth = True
             dname = None
             if isinstance(deco, ast.Name):
                 dname = deco.id
@@ -2605,6 +2971,17 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
         # Django REST Framework permission_classes decorator
         if not has_auth and _drf_viewfunc_has_auth(fnode):
             has_auth = True
+
+        # Django class-based view: auth mixin on enclosing class
+        if not has_auth and ctx.func_to_class is not None:
+            enclosing = ctx.func_to_class.get(fname)
+            if enclosing is not None and _class_has_auth_mixin(enclosing, ctx.class_defs):
+                has_auth = True
+
+        # FastAPI-style resource ID: {item_id} or {id} in path string
+        if not has_resource_id and route_path:
+            if re.search(r'\{[^}]*(?:id|uid|pk|slug)[^}]*\}', route_path, re.IGNORECASE):
+                has_resource_id = True
 
         if not has_route or has_auth or is_public:
             continue
@@ -2829,6 +3206,8 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
     func_defs = ctx.func_defs
     # ── Rule 15: Path traversal — os.path.join with unsanitized variable ──
     for fname, fnode in func_defs.items():
+        if fname.lower() == "safe_join" or _function_has_explicit_path_guard(fnode):
+            continue
         sanitized_paths: set[str] = set()
         for node in ast.walk(fnode):
             if isinstance(node, ast.Assign):
@@ -2870,18 +3249,35 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
             )
             if not is_path_join:
                 continue
-            for arg in node.args[1:]:
+            for arg in node.args:
                 var_name = None
+                if isinstance(arg, ast.Constant):
+                    continue
                 if isinstance(arg, ast.Name):
                     var_name = arg.id
+                elif isinstance(arg, ast.Attribute):
+                    var_name = arg.attr
                 elif isinstance(arg, ast.Subscript):
                     var_name = "subscript"
+                elif isinstance(arg, ast.Call):
+                    var_name = _get_call_name(arg).rsplit('.', 1)[-1] or "call result"
+                elif isinstance(arg, ast.BinOp):
+                    var_name = "composed path"
+                elif isinstance(arg, ast.Starred):
+                    inner = arg.value
+                    if isinstance(inner, ast.Name):
+                        var_name = inner.id
+                    else:
+                        var_name = "starred path parts"
+                is_risky = False
                 if var_name and var_name not in sanitized_paths:
+                    is_risky = var_name in tainted_paths or _expr_looks_path_like(arg)
+                if is_risky:
                     findings.append(Finding(
                         category="security", severity=Severity.HIGH,
                         title=f"CWE-22: Path traversal in {fname}() via os.path.join()",
                         description=(
-                            f"`{fname}()` passes `{var_name}` (possibly user-controlled or DB-sourced) "
+                            f"`{fname}()` passes `{var_name}` (dynamic/path-like input) "
                             f"to `os.path.join()` at L{node.lineno} without sanitization. "
                             f"`../` sequences can escape the intended directory."
                         ),
@@ -3378,6 +3774,16 @@ def _rule_21(ctx: _Ctx) -> list[Finding]:
                     # String concatenation: "/data/" + filename
                     is_tainted = _is_tainted_expr(arg, {v: None for v in tainted_vars - sanitized_paths})
                     var_name = "concatenated path"
+                elif isinstance(arg, ast.Call):
+                    callee = _get_call_name(arg)
+                    short = callee.rsplit('.', 1)[-1] if callee else 'helper result'
+                    if _expr_looks_path_like(arg):
+                        is_tainted = True
+                        var_name = short or "path helper"
+                elif isinstance(arg, ast.Attribute):
+                    if _expr_looks_path_like(arg):
+                        is_tainted = True
+                        var_name = arg.attr
 
                 if not is_tainted:
                     continue
@@ -4235,7 +4641,24 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         except Exception:
             pass
 
-    ctx = _Ctx(lines=lines, sans=sans, func_defs=func_defs, func_summaries=func_summaries, _tree=tree, filename=filename, global_graph=global_graph)
+    # Build class-level context for Django CBV mixin detection.
+    class_defs: dict[str, ast.ClassDef] = {}
+    func_to_class: dict[str, ast.ClassDef] = {}
+    fastapi_auth_aliases = _collect_fastapi_auth_aliases(tree)
+    fastapi_guarded_receivers = _collect_fastapi_guarded_receivers(tree, fastapi_auth_aliases)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ClassDef):
+            class_defs[node.name] = node
+            for item in node.body:
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    func_to_class[item.name] = node
+    ctx = _Ctx(
+        lines=lines, sans=sans, func_defs=func_defs, func_summaries=func_summaries,
+        _tree=tree, filename=filename, global_graph=global_graph,
+        class_defs=class_defs, func_to_class=func_to_class,
+        fastapi_guarded_receivers=fastapi_guarded_receivers,
+        fastapi_auth_aliases=fastapi_auth_aliases,
+    )
     findings: list[Finding] = []
     for rule_fn in (
         _rule_01, _rule_02, _rule_03, _rule_04, _rule_05,

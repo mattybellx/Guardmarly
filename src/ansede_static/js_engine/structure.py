@@ -3,6 +3,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from ansede_static.js_engine.common import consume_balanced, split_top_level, find_top_level_colon
+
 _CALL_RE = re.compile(r'((?:new\s+)?[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*\(')
 _PROPERTY_WRITE_RE = re.compile(r'\.(innerHTML|outerHTML)\s*(\+?=)')
 _KEYWORD_CALLEES = {
@@ -39,164 +41,13 @@ class JsPropertyWrite:
 
 
 def _split_top_level_segments(text: str, separator: str = ",") -> tuple[str, ...]:
-    parts: list[str] = []
-    state = "default"
-    paren_depth = 0
-    bracket_depth = 0
-    brace_depth = 0
-    start = 0
-    i = 0
-    while i < len(text):
-        ch = text[i]
-        nxt = text[i + 1] if i + 1 < len(text) else ""
-
-        if state == "line_comment":
-            if ch == "\n":
-                state = "default"
-            i += 1
-            continue
-
-        if state == "block_comment":
-            if ch == "*" and nxt == "/":
-                i += 2
-                state = "default"
-                continue
-            i += 1
-            continue
-
-        if state in {"single", "double", "template"}:
-            if ch == "\\" and i + 1 < len(text):
-                i += 2
-                continue
-            if state == "single" and ch == "'":
-                state = "default"
-            elif state == "double" and ch == '"':
-                state = "default"
-            elif state == "template" and ch == "`":
-                state = "default"
-            i += 1
-            continue
-
-        if ch == "/" and nxt == "/":
-            state = "line_comment"
-            i += 2
-            continue
-        if ch == "/" and nxt == "*":
-            state = "block_comment"
-            i += 2
-            continue
-        if ch == "'":
-            state = "single"
-            i += 1
-            continue
-        if ch == '"':
-            state = "double"
-            i += 1
-            continue
-        if ch == "`":
-            state = "template"
-            i += 1
-            continue
-
-        if ch == "(":
-            paren_depth += 1
-        elif ch == ")":
-            paren_depth = max(paren_depth - 1, 0)
-        elif ch == "[":
-            bracket_depth += 1
-        elif ch == "]":
-            bracket_depth = max(bracket_depth - 1, 0)
-        elif ch == "{":
-            brace_depth += 1
-        elif ch == "}":
-            brace_depth = max(brace_depth - 1, 0)
-        elif ch == separator and not (paren_depth or bracket_depth or brace_depth):
-            part = text[start:i].strip()
-            if part:
-                parts.append(part)
-            start = i + 1
-        i += 1
-
-    tail = text[start:].strip()
-    if tail:
-        parts.append(tail)
-    return tuple(parts)
+    """Thin wrapper — delegates to the canonical implementation in common.py."""
+    return split_top_level(text, separator)
 
 
 def _find_top_level_colon(text: str) -> int | None:
-    state = "default"
-    paren_depth = 0
-    bracket_depth = 0
-    brace_depth = 0
-    i = 0
-    while i < len(text):
-        ch = text[i]
-        nxt = text[i + 1] if i + 1 < len(text) else ""
-
-        if state == "line_comment":
-            if ch == "\n":
-                state = "default"
-            i += 1
-            continue
-
-        if state == "block_comment":
-            if ch == "*" and nxt == "/":
-                i += 2
-                state = "default"
-                continue
-            i += 1
-            continue
-
-        if state in {"single", "double", "template"}:
-            if ch == "\\" and i + 1 < len(text):
-                i += 2
-                continue
-            if state == "single" and ch == "'":
-                state = "default"
-            elif state == "double" and ch == '"':
-                state = "default"
-            elif state == "template" and ch == "`":
-                state = "default"
-            i += 1
-            continue
-
-        if ch == "/" and nxt == "/":
-            state = "line_comment"
-            i += 2
-            continue
-        if ch == "/" and nxt == "*":
-            state = "block_comment"
-            i += 2
-            continue
-        if ch == "'":
-            state = "single"
-            i += 1
-            continue
-        if ch == '"':
-            state = "double"
-            i += 1
-            continue
-        if ch == "`":
-            state = "template"
-            i += 1
-            continue
-
-        if ch == "(":
-            paren_depth += 1
-        elif ch == ")":
-            paren_depth = max(paren_depth - 1, 0)
-        elif ch == "[":
-            bracket_depth += 1
-        elif ch == "]":
-            bracket_depth = max(bracket_depth - 1, 0)
-        elif ch == "{":
-            brace_depth += 1
-        elif ch == "}":
-            brace_depth = max(brace_depth - 1, 0)
-        elif ch == ":" and not (paren_depth or bracket_depth or brace_depth):
-            return i
-        i += 1
-    return None
+    """Thin wrapper — delegates to the canonical implementation in common.py."""
+    return find_top_level_colon(text)
 
 
 
@@ -275,70 +126,8 @@ def mask_js_text(text: str) -> str:
 
 
 def _consume_balanced_segment(text: str, start_index: int, opener: str, closer: str) -> int | None:
-    depth = 0
-    state = "default"
-    i = start_index
-    while i < len(text):
-        ch = text[i]
-        nxt = text[i + 1] if i + 1 < len(text) else ""
-
-        if state == "line_comment":
-            if ch == "\n":
-                state = "default"
-            i += 1
-            continue
-
-        if state == "block_comment":
-            if ch == "*" and nxt == "/":
-                i += 2
-                state = "default"
-                continue
-            i += 1
-            continue
-
-        if state in {"single", "double", "template"}:
-            if ch == "\\" and i + 1 < len(text):
-                i += 2
-                continue
-            if state == "single" and ch == "'":
-                state = "default"
-            elif state == "double" and ch == '"':
-                state = "default"
-            elif state == "template" and ch == "`":
-                state = "default"
-            i += 1
-            continue
-
-        if ch == "/" and nxt == "/":
-            state = "line_comment"
-            i += 2
-            continue
-        if ch == "/" and nxt == "*":
-            state = "block_comment"
-            i += 2
-            continue
-        if ch == "'":
-            state = "single"
-            i += 1
-            continue
-        if ch == '"':
-            state = "double"
-            i += 1
-            continue
-        if ch == "`":
-            state = "template"
-            i += 1
-            continue
-
-        if ch == opener:
-            depth += 1
-        elif ch == closer:
-            depth -= 1
-            if depth == 0:
-                return i
-        i += 1
-
-    return None
+    """Thin wrapper — delegates to the canonical implementation in common.py."""
+    return consume_balanced(text, start_index, opener, closer)
 
 
 

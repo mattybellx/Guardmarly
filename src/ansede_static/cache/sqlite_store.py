@@ -130,6 +130,91 @@ class SQLiteStore:
         conn.commit()
         return cursor.rowcount
 
+    # ── File-level result caching ────────────────────────────────────────────
+
+    _RESULT_BUCKET = "file_results_v1"
+
+    def get_cached_result(self, file_path: str, code: str) -> object | None:
+        """Return a cached AnalysisResult if file content hasn't changed, else None."""
+        from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
+
+        content_hash = stable_hash(code)
+        cached = self.get_json(self._RESULT_BUCKET, f"{file_path}:{content_hash}")
+        if cached is None:
+            return None
+        try:
+            findings = []
+            for fd in cached.get("findings", []):
+                trace = tuple(
+                    TraceFrame(
+                        kind=t.get("kind", ""),
+                        label=t.get("label", ""),
+                        line=t.get("line"),
+                        start_column=t.get("start_column", 1),
+                    )
+                    for t in fd.get("trace", [])
+                )
+                findings.append(Finding(
+                    category=fd.get("category", "security"),
+                    severity=Severity(fd.get("severity", "medium")),
+                    title=fd.get("title", ""),
+                    description=fd.get("description", ""),
+                    line=fd.get("line"),
+                    suggestion=fd.get("suggestion", ""),
+                    rule_id=fd.get("rule_id", ""),
+                    cwe=fd.get("cwe", ""),
+                    agent=fd.get("agent", ""),
+                    confidence=fd.get("confidence", 1.0),
+                    auto_fix=fd.get("auto_fix", ""),
+                    explanation=fd.get("explanation", ""),
+                    trace=trace,
+                    analysis_kind=fd.get("analysis_kind", "pattern"),
+                    triggering_code=fd.get("triggering_code", ""),
+                ))
+            return AnalysisResult(
+                file_path=cached.get("file_path", file_path),
+                language=cached.get("language", ""),
+                lines_scanned=cached.get("lines_scanned", 0),
+                findings=findings,
+                parse_error=cached.get("parse_error", ""),
+            )
+        except Exception:
+            return None
+
+    def put_cached_result(self, file_path: str, code: str, result: object) -> None:
+        """Store an AnalysisResult keyed by file path + content hash."""
+        content_hash = stable_hash(code)
+        payload = {
+            "file_path": getattr(result, "file_path", file_path),
+            "language": getattr(result, "language", ""),
+            "lines_scanned": getattr(result, "lines_scanned", 0),
+            "parse_error": getattr(result, "parse_error", ""),
+            "findings": [
+                {
+                    "category": f.category,
+                    "severity": f.severity.value,
+                    "title": f.title,
+                    "description": f.description,
+                    "line": f.line,
+                    "suggestion": f.suggestion,
+                    "rule_id": f.rule_id,
+                    "cwe": f.cwe,
+                    "agent": f.agent,
+                    "confidence": f.confidence,
+                    "auto_fix": f.auto_fix,
+                    "explanation": f.explanation,
+                    "analysis_kind": f.analysis_kind,
+                    "triggering_code": f.triggering_code,
+                    "trace": [
+                        {"kind": t.kind, "label": t.label, "line": t.line, "start_column": t.start_column}
+                        for t in (getattr(f, "trace", None) or ())
+                    ],
+                }
+                for f in getattr(result, "findings", [])
+            ],
+        }
+        self.set_json(self._RESULT_BUCKET, f"{file_path}:{content_hash}", payload)
+
     def __enter__(self) -> SQLiteStore:
         self.connect()
         return self

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+from typing import Callable
 
 from ansede_static._types import Finding
 
@@ -9,6 +10,203 @@ SUPPRESSION_RE: re.Pattern[str] = re.compile(
     re.IGNORECASE,
 )
 COMMENT_LINE_RE = re.compile(r"^\s*(?://|/\*|\*)")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Shared JS Lexer — comment- and string-aware character scanner
+# ═══════════════════════════════════════════════════════════════════════════════
+# Used by structure.py, routes.py, react.py, project.py to avoid the same
+# state-machine being reimplemented (and drifting) in 5+ places.
+
+
+class JsLexerState:
+    """Mutable lexer state that tracks string/comment context while scanning."""
+
+    __slots__ = ("mode",)
+
+    def __init__(self) -> None:
+        self.mode: str = "default"
+
+    def feed(self, ch: str, nxt: str) -> str | None:
+        """Advance the scanner one character.  Returns the new mode or None."""
+        if self.mode == "line_comment":
+            if ch == "\n":
+                self.mode = "default"
+            return self.mode
+
+        if self.mode == "block_comment":
+            if ch == "*" and nxt == "/":
+                self.mode = "default"
+            return self.mode
+
+        if self.mode in {"single", "double", "template"}:
+            if ch == "\\":
+                return self.mode  # skip next char, handled by caller
+            if self.mode == "single" and ch == "'":
+                self.mode = "default"
+            elif self.mode == "double" and ch == '"':
+                self.mode = "default"
+            elif self.mode == "template" and ch == "`":
+                self.mode = "default"
+            return self.mode
+
+        # default mode
+        if ch == "/" and nxt == "/":
+            self.mode = "line_comment"
+            return self.mode
+        if ch == "/" and nxt == "*":
+            self.mode = "block_comment"
+            return self.mode
+        if ch == "'":
+            self.mode = "single"
+            return self.mode
+        if ch == '"':
+            self.mode = "double"
+            return self.mode
+        if ch == "`":
+            self.mode = "template"
+            return self.mode
+
+        return None
+
+
+def consume_balanced(
+    text: str,
+    start_index: int,
+    opener: str,
+    closer: str,
+) -> int | None:
+    """Scan from *start_index* for matching *opener*/*closer* respecting JS strings & comments.
+
+    Returns the index of the matching closer, or None if not found.
+    """
+    depth = 0
+    state = JsLexerState()
+    i = start_index
+    while i < len(text):
+        ch = text[i]
+        nxt = text[i + 1] if i + 1 < len(text) else ""
+
+        prev_mode = state.mode
+        new_mode = state.feed(ch, nxt)
+
+        # Skip second char of two-char sequences
+        if prev_mode == "default" and new_mode in {"line_comment", "block_comment"}:
+            i += 2
+            continue
+        if prev_mode == "block_comment" and new_mode == "default":
+            i += 2
+            continue
+        if prev_mode in {"single", "double", "template"} and ch == "\\":
+            i += 2
+            continue
+
+        if state.mode == "default":
+            if ch == opener:
+                depth += 1
+            elif ch == closer:
+                depth -= 1
+                if depth == 0:
+                    return i
+        i += 1
+    return None
+
+
+def split_top_level(
+    text: str,
+    separator: str = ",",
+) -> tuple[str, ...]:
+    """Split *text* on *separator* only at depth 0 (outside parens/brackets/braces/strings/comments)."""
+    parts: list[str] = []
+    state = JsLexerState()
+    paren_depth = 0
+    bracket_depth = 0
+    brace_depth = 0
+    start = 0
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        nxt = text[i + 1] if i + 1 < len(text) else ""
+
+        prev_mode = state.mode
+        new_mode = state.feed(ch, nxt)
+
+        if prev_mode == "default" and new_mode in {"line_comment", "block_comment"}:
+            i += 2
+            continue
+        if prev_mode == "block_comment" and new_mode == "default":
+            i += 2
+            continue
+        if prev_mode in {"single", "double", "template"} and ch == "\\":
+            i += 2
+            continue
+
+        if state.mode == "default":
+            if ch == "(":
+                paren_depth += 1
+            elif ch == ")":
+                paren_depth = max(paren_depth - 1, 0)
+            elif ch == "[":
+                bracket_depth += 1
+            elif ch == "]":
+                bracket_depth = max(bracket_depth - 1, 0)
+            elif ch == "{":
+                brace_depth += 1
+            elif ch == "}":
+                brace_depth = max(brace_depth - 1, 0)
+            elif ch == separator and not (paren_depth or bracket_depth or brace_depth):
+                part = text[start:i].strip()
+                if part:
+                    parts.append(part)
+                start = i + 1
+        i += 1
+
+    tail = text[start:].strip()
+    if tail:
+        parts.append(tail)
+    return tuple(parts)
+
+
+def find_top_level_colon(text: str) -> int | None:
+    """Return index of first ':' at depth 0, respecting strings & comments, or None."""
+    state = JsLexerState()
+    paren_depth = 0
+    bracket_depth = 0
+    brace_depth = 0
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        nxt = text[i + 1] if i + 1 < len(text) else ""
+
+        prev_mode = state.mode
+        new_mode = state.feed(ch, nxt)
+
+        if prev_mode == "default" and new_mode in {"line_comment", "block_comment"}:
+            i += 2
+            continue
+        if prev_mode == "block_comment" and new_mode == "default":
+            i += 2
+            continue
+        if prev_mode in {"single", "double", "template"} and ch == "\\":
+            i += 2
+            continue
+
+        if state.mode == "default":
+            if ch == "(":
+                paren_depth += 1
+            elif ch == ")":
+                paren_depth = max(paren_depth - 1, 0)
+            elif ch == "[":
+                bracket_depth += 1
+            elif ch == "]":
+                bracket_depth = max(bracket_depth - 1, 0)
+            elif ch == "{":
+                brace_depth += 1
+            elif ch == "}":
+                brace_depth = max(brace_depth - 1, 0)
+            elif ch == ":" and not (paren_depth or bracket_depth or brace_depth):
+                return i
+        i += 1
+    return None
 
 
 def strip_js_comments_preserve_layout(text: str) -> str:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 
 from ansede_static._types import Finding, Severity, TraceFrame
+from ansede_static.js_engine.common import consume_balanced
 from ansede_static.js_engine.structure import JsCall, parse_object_literal
 from ansede_static.js_engine.taint import append_trace, merge_traces, trace_for_expr, trace_has_sanitizer
 
@@ -34,64 +35,8 @@ _OBJECT_ASSIGN_RE = re.compile(r'(?:const|let|var)\s+([A-Za-z_$]\w*)\s*=\s*', re
 
 
 def _balanced_object_end(text: str, start_index: int) -> int | None:
-    depth = 0
-    state = 'default'
-    i = start_index
-    while i < len(text):
-        ch = text[i]
-        nxt = text[i + 1] if i + 1 < len(text) else ''
-        if state == 'line_comment':
-            if ch == '\n':
-                state = 'default'
-            i += 1
-            continue
-        if state == 'block_comment':
-            if ch == '*' and nxt == '/':
-                i += 2
-                state = 'default'
-                continue
-            i += 1
-            continue
-        if state in {'single', 'double', 'template'}:
-            if ch == '\\' and i + 1 < len(text):
-                i += 2
-                continue
-            if state == 'single' and ch == "'":
-                state = 'default'
-            elif state == 'double' and ch == '"':
-                state = 'default'
-            elif state == 'template' and ch == '`':
-                state = 'default'
-            i += 1
-            continue
-        if ch == '/' and nxt == '/':
-            state = 'line_comment'
-            i += 2
-            continue
-        if ch == '/' and nxt == '*':
-            state = 'block_comment'
-            i += 2
-            continue
-        if ch == "'":
-            state = 'single'
-            i += 1
-            continue
-        if ch == '"':
-            state = 'double'
-            i += 1
-            continue
-        if ch == '`':
-            state = 'template'
-            i += 1
-            continue
-        if ch == '{':
-            depth += 1
-        elif ch == '}':
-            depth -= 1
-            if depth == 0:
-                return i
-        i += 1
-    return None
+    """Return index of matching '}' for '{' at *start_index*, respecting JS strings & comments."""
+    return consume_balanced(text, start_index, "{", "}")
 
 
 

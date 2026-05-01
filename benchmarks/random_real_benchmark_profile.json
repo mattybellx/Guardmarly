@@ -1,0 +1,87 @@
+{
+  "seed": 665007,
+  "sample_size": 120,
+  "elapsed_sec": 13.31,
+  "top_slowest_files": [
+    {
+      "seconds": 1.598,
+      "file": ".ansede\\web-wild-cache\\expressjs__express\\examples\\downloads\\index.js"
+    },
+    {
+      "seconds": 1.428,
+      "file": ".ansede\\web-wild-cache\\django__django\\django\\contrib\\admin\\options.py"
+    },
+    {
+      "seconds": 1.291,
+      "file": ".ansede\\web-wild-cache\\expressjs__express\\test\\res.render.js"
+    },
+    {
+      "seconds": 0.919,
+      "file": ".ansede\\web-wild-cache\\django__django\\tests\\sessions_tests\\tests.py"
+    },
+    {
+      "seconds": 0.752,
+      "file": ".ansede\\web-wild-cache\\pallets__flask\\tests\\test_blueprints.py"
+    },
+    {
+      "seconds": 0.596,
+      "file": ".ansede\\web-wild-cache\\django__django\\tests\\httpwrappers\\tests.py"
+    },
+    {
+      "seconds": 0.57,
+      "file": ".ansede\\web-wild-cache\\django__django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\select2\\i18n\\zh-TW.js"
+    },
+    {
+      "seconds": 0.392,
+      "file": ".ansede\\web-wild-cache\\OWASP__NodeGoat\\test\\e2e\\integration\\profile_spec.js"
+    },
+    {
+      "seconds": 0.374,
+      "file": ".ansede\\web-wild-cache\\django__django\\tests\\gis_tests\\geoapp\\tests.py"
+    },
+    {
+      "seconds": 0.349,
+      "file": ".ansede\\web-wild-cache\\django__django\\django\\http\\request.py"
+    },
+    {
+      "seconds": 0.281,
+      "file": ".ansede\\web-wild-cache\\django__django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\select2\\i18n\\ko.js"
+    },
+    {
+      "seconds": 0.274,
+      "file": ".ansede\\web-wild-cache\\django__django\\django\\contrib\\admin\\static\\admin\\js\\vendor\\select2\\i18n\\ja.js"
+    }
+  ],
+  "repo_avg_seconds": [
+    {
+      "repo": "expressjs__express",
+      "total_sec": 3.02,
+      "files": 3,
+      "avg_sec": 1.008
+    },
+    {
+      "repo": "pallets__flask",
+      "total_sec": 0.81,
+      "files": 2,
+      "avg_sec": 0.403
+    },
+    {
+      "repo": "OWASP__NodeGoat",
+      "total_sec": 0.39,
+      "files": 1,
+      "avg_sec": 0.392
+    },
+    {
+      "repo": "django__django",
+      "total_sec": 8.19,
+      "files": 88,
+      "avg_sec": 0.093
+    },
+    {
+      "repo": "tiangolo__fastapi",
+      "total_sec": 0.9,
+      "files": 26,
+      "avg_sec": 0.034
+    }
+  ]
+}

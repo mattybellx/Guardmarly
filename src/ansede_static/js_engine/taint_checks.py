@@ -3,7 +3,12 @@ from __future__ import annotations
 import re
 
 from ansede_static._types import Finding, Severity, TraceFrame
-from ansede_static.js_engine.common import COMMENT_LINE_RE
+from ansede_static.js_engine.common import COMMENT_LINE_RE, consume_balanced
+from ansede_static.js_engine.constants import (
+    PATH_CALLEE_PARTS,
+    SSRF_CALLEES,
+    callee_matches,
+)
 from ansede_static.js_engine.project import (
     build_js_project_index,
     propagate_helper_return_traces,
@@ -274,6 +279,40 @@ def _helper_taint_findings(
                     analysis_kind=analysis_kind,
                     trace=trace,
                 ))
+
+    # ── Apply IDE lattice confidence adjustment where available ──────────
+    if global_graph is not None and hasattr(global_graph, "adjust_confidence_from_ide"):
+        for i, finding in enumerate(findings):
+            try:
+                adjusted = global_graph.adjust_confidence_from_ide(
+                    file_path=filename or "<memory>",
+                    function_name="<js-scope>",
+                    value_label="$ret",
+                    base_confidence=finding.confidence,
+                    call_string=(),
+                    call_string_k=2,
+                )
+                if adjusted != finding.confidence:
+                    findings[i] = Finding(
+                        category=finding.category,
+                        severity=finding.severity,
+                        title=finding.title,
+                        description=finding.description,
+                        line=finding.line,
+                        suggestion=finding.suggestion,
+                        rule_id=finding.rule_id,
+                        cwe=finding.cwe,
+                        agent=finding.agent,
+                        confidence=adjusted,
+                        auto_fix=finding.auto_fix,
+                        explanation=finding.explanation,
+                        trace=finding.trace,
+                        analysis_kind=finding.analysis_kind,
+                        triggering_code=finding.triggering_code,
+                    )
+            except Exception:
+                pass
+
     return findings
 
 

@@ -19,6 +19,16 @@ from ansede_static.js_engine import (
     trace_for_expr,
     trace_has_sanitizer,
 )
+from ansede_static.js_engine.constants import (
+    DOCUMENT_WRITE_CALLEES,
+    TIMER_CALLEES,
+    COMMAND_EXEC_CALLEES,
+    SHELL_TRUE_CALLEES,
+    SQL_CALLEES,
+    SSRF_CALLEES,
+    PATH_CALLEE_PARTS,
+    callee_matches,
+)
 from ansede_static.js_engine.source_map_resolver import (
     load_sourcemap_path,
     remap_findings_to_source_map,
@@ -38,67 +48,14 @@ _SANITIZE_HTML_RE = re.compile(r'DOMPurify\.sanitize|sanitizeHtml|escapeHtml', r
 _DYNAMIC_CONCAT_RE = re.compile(r'(?:\+\s*[A-Za-z_$`"\'])|(?:[A-Za-z_$)\]`"\']\s*\+)', re.IGNORECASE)
 _SHELL_TRUE_RE = re.compile(r'\bshell\s*:\s*true\b', re.IGNORECASE)
 _SIMPLE_IDENTIFIER_RE = re.compile(r'^\s*[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\s*$')
+# DOCUMENT_WRITE_CALLEES, TIMER_CALLEES, COMMAND_EXEC_CALLEES, SHELL_TRUE_CALLEES,
+# SQL_CALLEES, SSRF_CALLEES, PATH_CALLEE_PARTS, callee_matches
+# are all imported from js_engine.constants
 
-_DOCUMENT_WRITE_CALLEES = {"document.write", "document.writeln"}
-_TIMER_CALLEES = {"setTimeout", "setInterval"}
-_COMMAND_EXEC_CALLEES = {"exec", "execSync", "child_process.exec", "child_process.execSync"}
-_SHELL_TRUE_CALLEES = {"spawn", "execFile", "child_process.spawn", "child_process.execFile"}
-_SQL_CALLEES = {
-    "query",
-    "execute",
-    "raw",
-    "db.query",
-    "db.execute",
-    "sequelize.query",
-    "knex.raw",
-}
-_SSRF_CALLEES = {
-    "fetch",
-    "axios.get",
-    "axios.post",
-    "axios.put",
-    "axios.delete",
-    "axios.request",
-    "request",
-    "got",
-    "got.get",
-    "got.post",
-    "got.stream",
-    "needle",
-    "needle.get",
-    "needle.post",
-    "needle.put",
-    "needle.delete",
-    "needle.request",
-    "superagent.get",
-    "superagent.post",
-    "http.get",
-    "https.get",
-}
-_PATH_CALLEE_PARTS = {
-    "readFile",
-    "readFileSync",
-    "writeFile",
-    "writeFileSync",
-    "open",
-    "openSync",
-    "unlink",
-    "unlinkSync",
-    "stat",
-    "statSync",
-    "access",
-    "accessSync",
-    "createReadStream",
-    "createWriteStream",
-    "resolve",
-    "join",
-}
-
-def _callee_matches(call: JsCall, targets: set[str]) -> bool:
-    if call.callee in targets:
-        return True
-    short = call.callee.split(".")[-1]
-    return short in targets
+# Backward-compatible wrapper — extracts .callee from JsCall and delegates to
+# the canonical callee_matches from js_engine.constants.
+def _callee_matches(call: JsCall, targets: frozenset[str]) -> bool:
+    return callee_matches(call.callee, targets)
 
 
 def _downgrade_findings_for_missing_sourcemap(
@@ -282,7 +239,7 @@ def _check_document_write(
 ) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _DOCUMENT_WRITE_CALLEES) or not call.arguments:
+        if not _callee_matches(call, DOCUMENT_WRITE_CALLEES) or not call.arguments:
             continue
         expr = call.arguments[0]
         if _expr_is_static_string(expr):
@@ -371,7 +328,7 @@ def _check_timer_string_eval(
 ) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _TIMER_CALLEES) or not call.arguments:
+        if not _callee_matches(call, TIMER_CALLEES) or not call.arguments:
             continue
         expr = call.arguments[0]
         if _expr_looks_like_function_reference(expr):
@@ -403,7 +360,7 @@ def _check_command_exec(
 ) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _COMMAND_EXEC_CALLEES) or not call.arguments:
+        if not _callee_matches(call, COMMAND_EXEC_CALLEES) or not call.arguments:
             continue
         expr = call.arguments[0]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)
@@ -432,7 +389,7 @@ def _check_command_exec(
 def _check_shell_true(calls: list[JsCall]) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _SHELL_TRUE_CALLEES):
+        if not _callee_matches(call, SHELL_TRUE_CALLEES):
             continue
         if not any(_SHELL_TRUE_RE.search(argument) for argument in call.arguments[1:]):
             continue
@@ -460,7 +417,7 @@ def _check_sql_injection(
 ) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _SQL_CALLEES) or not call.arguments:
+        if not _callee_matches(call, SQL_CALLEES) or not call.arguments:
             continue
         expr = call.arguments[0]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)
@@ -535,7 +492,7 @@ def _check_path_traversal(
     findings: list[Finding] = []
     for call in calls:
         short = call.callee.split(".")[-1]
-        if short not in _PATH_CALLEE_PARTS or not call.arguments:
+        if short not in PATH_CALLEE_PARTS or not call.arguments:
             continue
         expr = call.arguments[0]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)
@@ -595,7 +552,7 @@ def _check_ssrf(
 ) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if not _callee_matches(call, _SSRF_CALLEES) or not call.arguments:
+        if not _callee_matches(call, SSRF_CALLEES) or not call.arguments:
             continue
         expr = call.arguments[0]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)

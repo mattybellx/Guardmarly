@@ -401,6 +401,79 @@ RULES: list[Rule] = [
         context_confirm=r'req\.(?:query|params|body|headers)',
         context_lines=6,
     ),
+    # ─── GraphQL Injection — CWE-943 ────────────────────────────────────────
+    Rule(
+        "JS-050", "CWE-89",
+        "CWE-89: GraphQL injection via template literal query at line {line}",
+        "`graphql()` / `execute()` called with a template-literal query at L{line}: `{snippet}`. "
+        "Injecting user input directly into GraphQL queries enables data exfiltration or mutation bypass.",
+        "Use parameterized (variable) queries: `graphql(schema, query, rootValue, {}, variables)` — "
+        "never embed user input directly in query strings.",
+        Severity.CRITICAL,
+        r'(?:graphql|execute|gql|graphqlHTTP)\s*\([^)]*(?:`[^`]*\$\{|["\'][^"\']*["\']\s*\+)',
+    ),
+    # ─── NoSQL Injection (MongoDB $where, $regex) — CWE-943 ─────────────────
+    Rule(
+        "JS-051", "CWE-943",
+        "CWE-943: NoSQL injection via $where/$regex operator at line {line}",
+        "MongoDB query uses `$where` or dynamic `$regex` with user-controlled input at L{line}: `{snippet}`. "
+        "`$where` executes arbitrary JavaScript on the server; `$regex` can cause denial of service.",
+        "Never pass user input to `$where`. Sanitize regex input or use fixed text-search patterns.",
+        Severity.CRITICAL,
+        r'["\']?\$(?:where|regex)["\']?\s*:\s*[^,}]*req\.\w+',
+    ),
+    # ─── LDAP Injection — CWE-90 ─────────────────────────────────────────────
+    Rule(
+        "JS-052", "CWE-90",
+        "CWE-90: LDAP injection via user-controlled filter at line {line}",
+        "LDAP search filter uses `req.*` input at L{line}: `{snippet}`. "
+        "Special LDAP characters `*()|&!` can manipulate or broaden the search scope.",
+        "Escape LDAP filter characters: replace `*` → `\\2a`, `(` → `\\28`, `)` → `\\29`.",
+        Severity.HIGH,
+        r'(?:ldap|ldapjs|activedirectory)\.(?:search|authenticate|bind|compare)\w*\s*\([^)]*req\.\w+',
+    ),
+    # ─── Email Header Injection — CWE-93 ────────────────────────────────────
+    Rule(
+        "JS-053", "CWE-93",
+        "CWE-93: Email header injection via user-controlled subject/recipient at line {line}",
+        "Email send function uses `req.*` input in headers/fields at L{line}: `{snippet}`. "
+        "Newline characters (\\r\\n) allow attackers to inject additional email headers.",
+        "Strip CR/LF characters from all email fields before sending.",
+        Severity.MEDIUM,
+        r'(?:nodemailer|sendgrid|mailgun|smtpTransport|sendMail|transporter\.sendMail|sgMail\.send)\s*\([^)]*req\.\w+',
+    ),
+    # ─── Vue.js v-html XSS — CWE-79 ─────────────────────────────────────────
+    Rule(
+        "JS-054", "CWE-79",
+        "CWE-79: XSS via Vue.js v-html directive at line {line}",
+        "Vue template uses `v-html` with dynamic content at L{line}: `{snippet}`. "
+        "`v-html` renders raw HTML — any user-controlled data here executes scripts.",
+        "Use `{{ expression }}` (text interpolation) instead of `v-html`. "
+        "If HTML is required, sanitize with DOMPurify before binding.",
+        Severity.HIGH,
+        r'v-html\s*=\s*["\'`]\s*(?!.*DOMPurify|.*sanitize|.*escape)',
+    ),
+    # ─── Svelte @html XSS — CWE-79 ──────────────────────────────────────────
+    Rule(
+        "JS-055", "CWE-79",
+        "CWE-79: XSS via Svelte @html directive at line {line}",
+        "Svelte template uses `{{@html expression}}` at L{line}: `{snippet}`. "
+        "`{{@html}}` renders unescaped HTML — any user data here executes scripts.",
+        "Use `{{expression}}` (auto-escaped) instead. If HTML is required, sanitize with DOMPurify first.",
+        Severity.HIGH,
+        r'\{@html\s+[^}]+\}',
+    ),
+    # ─── Angular [innerHTML] XSS — CWE-79 ────────────────────────────────────
+    Rule(
+        "JS-056", "CWE-79",
+        "CWE-79: XSS via Angular [innerHTML] binding at line {line}",
+        "Angular template uses `[innerHTML]` binding at L{line}: `{snippet}`. "
+        "Angular's `[innerHTML]` bypasses built-in sanitization for that element.",
+        "Use Angular's `DomSanitizer.bypassSecurityTrustHtml()` only with pre-sanitized content. "
+        "Sanitize with DOMPurify before binding, or use text interpolation `{{ }}`.",
+        Severity.HIGH,
+        r'\[innerHTML\]\s*=\s*["\'`]',
+    ),
 ]
 
 

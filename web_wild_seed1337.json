@@ -1,0 +1,2672 @@
+﻿{
+  "seed": 1337,
+  "n_files": 40,
+  "cache_dir": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache",
+  "suppression_config": null,
+  "repos": [
+    {
+      "repo": "OWASP/NodeGoat",
+      "cache_hit": false,
+      "resolved_ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+      "cache_path": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache\\OWASP__NodeGoat"
+    },
+    {
+      "repo": "pallets/flask",
+      "cache_hit": false,
+      "resolved_ref": "2ac89889f4cc330eabd50f295dcef02828522c69",
+      "cache_path": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache\\pallets__flask"
+    },
+    {
+      "repo": "expressjs/express",
+      "cache_hit": false,
+      "resolved_ref": "6340c1eaaedc0ddcae8be8df2cdb1d2e961cbf2f",
+      "cache_path": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache\\expressjs__express"
+    },
+    {
+      "repo": "django/django",
+      "cache_hit": false,
+      "resolved_ref": "8c8b833d32c02d3ae6f43b04bb1e45968796b402",
+      "cache_path": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache\\django__django"
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "cache_hit": false,
+      "resolved_ref": "a3ceb9ca7415d8874233edac857e85e47d2a6680",
+      "cache_path": "C:\\Users\\matth\\AppData\\Local\\Temp\\ansede-web-wild-cache\\tiangolo__fastapi"
+    }
+  ],
+  "samples": [
+    {
+      "repo": "django/django",
+      "file": "django\\db\\models\\query_utils.py",
+      "language": "python",
+      "lines_scanned": 561,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-918"
+      ],
+      "label_reasons": [
+        "CWE-918: pattern requests\\.(?:get|post)\\s*\\(\\s*\\w+|fetch\\..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\backends\\sqlite3\\base.py",
+      "language": "python",
+      "lines_scanned": 378,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-89"
+      ],
+      "label_reasons": [
+        "CWE-89: pattern SELECT\\s+.+\\+|SELECT\\s+.+\\$\\{|execute\\s*..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.58 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 158,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.57 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 190,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\deprecation.py",
+      "language": "python",
+      "lines_scanned": 410,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.53 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 180,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\cache\\backends\\filebased.py",
+      "language": "python",
+      "lines_scanned": 169,
+      "finding_count": 5,
+      "finding_count_scored": 4,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [
+        "CWE-22",
+        "CWE-502"
+      ],
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-502: Unsafe deserialization at line 38",
+          "description": "Unsafe pickle deserialization at L38: `return pickle.loads(zlib.decompress(f.read()))`. If the data comes from an untrusted source, an attacker can achieve RCE.",
+          "line": 38,
+          "suggestion": "Use JSON. If pickle is required, verify data integrity with HMAC before loading.",
+          "rule_id": "PY-012",
+          "cwe": "CWE-502",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: return pickle.loads(zlib.decompress(f.read()))\nAFTER:                      return json.loads(zlib.decompress(f.read()))",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-012",
+            "title": "Python unsafe deserialization pattern",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-502",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags direct use of unsafe deserializers such as `pickle.loads`, `marshal.loads`, or unsafe `yaml.load`.",
+            "remediation": "Use JSON or verify integrity and safety before deserializing.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/502.html",
+            "known_limitations": [],
+            "tags": [
+              "deserialization",
+              "pickle",
+              "yaml",
+              "python",
+              "patterns",
+              "OWASP:A08:2021"
+            ]
+          }
+        },
+        {
+          "severity": "critical",
+          "title": "CWE-502: Unsafe deserialization at line 71",
+          "description": "Unsafe pickle deserialization at L71: `previous_value = pickle.loads(zlib.decompress(f.read()))`. If the data comes from an untrusted source, an attacker can achieve RCE.",
+          "line": 71,
+          "suggestion": "Use JSON. If pickle is required, verify data integrity with HMAC before loading.",
+          "rule_id": "PY-012",
+          "cwe": "CWE-502",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: previous_value = pickle.loads(zlib.decompress(f.read()))\nAFTER:                          previous_value = json.loads(zlib.decompress(f.read()))",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-012",
+            "title": "Python unsafe deserialization pattern",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-502",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags direct use of unsafe deserializers such as `pickle.loads`, `marshal.loads`, or unsafe `yaml.load`.",
+            "remediation": "Use JSON or verify integrity and safety before deserializing.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/502.html",
+            "known_limitations": [],
+            "tags": [
+              "deserialization",
+              "pickle",
+              "yaml",
+              "python",
+              "patterns",
+              "OWASP:A08:2021"
+            ]
+          }
+        },
+        {
+          "severity": "critical",
+          "title": "CWE-502: Unsafe deserialization at line 152",
+          "description": "Unsafe pickle deserialization at L152: `exp = pickle.load(f)`. If the data comes from an untrusted source, an attacker can achieve RCE.",
+          "line": 152,
+          "suggestion": "Use JSON. If pickle is required, verify data integrity with HMAC before loading.",
+          "rule_id": "PY-012",
+          "cwe": "CWE-502",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: exp = pickle.load(f)\nAFTER:              exp = json.load(f)",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-012",
+            "title": "Python unsafe deserialization pattern",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-502",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags direct use of unsafe deserializers such as `pickle.loads`, `marshal.loads`, or unsafe `yaml.load`.",
+            "remediation": "Use JSON or verify integrity and safety before deserializing.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/502.html",
+            "known_limitations": [],
+            "tags": [
+              "deserialization",
+              "pickle",
+              "yaml",
+              "python",
+              "patterns",
+              "OWASP:A08:2021"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "CWE-22: Path traversal in _list_cache_files() via os.path.join()",
+          "description": "`_list_cache_files()` passes `fname` (possibly user-controlled or DB-sourced) to `os.path.join()` at L167 without sanitization. `../` sequences can escape the intended directory.",
+          "line": 167,
+          "suggestion": "Sanitize: `from werkzeug.utils import secure_filename; safe = secure_filename(filename)`. Verify resolved path: `assert os.path.realpath(p).startswith(BASE_DIR)`.",
+          "rule_id": "PY-023",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-023",
+            "title": "Python path join with unsanitized user input",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-22",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags `os.path.join` or similar path composition with tainted user input.",
+            "remediation": "Normalize against a safe root and reject any resolved path that escapes it.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/22.html",
+            "known_limitations": [],
+            "tags": [
+              "path",
+              "filesystem",
+              "taint",
+              "python",
+              "join",
+              "OWASP:A01:2021"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Implicit None return in _cull() \u2014 can fall off end",
+          "description": "`_cull()` has 1 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 110,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\models\\fetch_modes.py",
+      "language": "python",
+      "lines_scanned": 61,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-918"
+      ],
+      "label_reasons": [
+        "CWE-918: pattern requests\\.(?:get|post)\\s*\\(\\s*\\w+|fetch\\..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\middleware\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "pallets/flask",
+      "file": "src\\flask\\blueprints.py",
+      "language": "python",
+      "lines_scanned": 128,
+      "finding_count": 1,
+      "finding_count_scored": 1,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [
+        "CWE-22"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "CWE-22: Path traversal in open_resource() via os.path.join()",
+          "description": "`open_resource()` passes `resource` (possibly user-controlled or DB-sourced) to `os.path.join()` at L123 without sanitization. `../` sequences can escape the intended directory.",
+          "line": 123,
+          "suggestion": "Sanitize: `from werkzeug.utils import secure_filename; safe = secure_filename(filename)`. Verify resolved path: `assert os.path.realpath(p).startswith(BASE_DIR)`.",
+          "rule_id": "PY-023",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-023",
+            "title": "Python path join with unsanitized user input",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-22",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags `os.path.join` or similar path composition with tainted user input.",
+            "remediation": "Normalize against a safe root and reject any resolved path that escapes it.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/22.html",
+            "known_limitations": [],
+            "tags": [
+              "path",
+              "filesystem",
+              "taint",
+              "python",
+              "join",
+              "OWASP:A01:2021"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\db\\backends\\oracle\\base.py",
+      "language": "python",
+      "lines_scanned": 14,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "file": "fastapi\\middleware\\wsgi.py",
+      "language": "python",
+      "lines_scanned": 3,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\sessions\\management\\commands\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\checks\\compatibility\\django_4_0.py",
+      "language": "python",
+      "lines_scanned": 19,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.73 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 12,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\templatetags\\static.py",
+      "language": "python",
+      "lines_scanned": 179,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "file": "fastapi\\security\\oauth2.py",
+      "language": "python",
+      "lines_scanned": 693,
+      "finding_count": 5,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "CWE-307: No rate limiting on authentication route at line 39",
+          "description": "Authentication route at L39 has no rate-limiting decorator or middleware in scope: `@app.post(\"/login\")`. An attacker can brute-force credentials, OTPs, or tokens.",
+          "line": 39,
+          "suggestion": "Add rate limiting: `flask-limiter` for Flask (`@limiter.limit('5/minute')`), `slowapi` for FastAPI, or a middleware-level rate limiter.",
+          "rule_id": "PY-038",
+          "cwe": "CWE-307",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-038",
+            "title": "Python auth/sensitive route missing rate limiting",
+            "category": "security",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-307",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags Flask/FastAPI/Django authentication or sensitive routes (login, MFA, password-reset, token-refresh) where no rate-limiting library is detected in file scope, enabling brute-force attacks.",
+            "remediation": "Use `flask-limiter` (`@limiter.limit('5/minute')`), `slowapi` for FastAPI, `django-ratelimit`, or a reverse-proxy rate limiter in front of sensitive endpoints.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/307.html",
+            "known_limitations": [],
+            "tags": [
+              "rate-limiting",
+              "auth",
+              "bruteforce",
+              "python",
+              "brute-force",
+              "OWASP:A07:2021"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "CWE-307: No rate limiting on authentication route at line 193",
+          "description": "Authentication route at L193 has no rate-limiting decorator or middleware in scope: `@app.post(\"/login\")`. An attacker can brute-force credentials, OTPs, or tokens.",
+          "line": 193,
+          "suggestion": "Add rate limiting: `flask-limiter` for Flask (`@limiter.limit('5/minute')`), `slowapi` for FastAPI, or a middleware-level rate limiter.",
+          "rule_id": "PY-038",
+          "cwe": "CWE-307",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-038",
+            "title": "Python auth/sensitive route missing rate limiting",
+            "category": "security",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-307",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags Flask/FastAPI/Django authentication or sensitive routes (login, MFA, password-reset, token-refresh) where no rate-limiting library is detected in file scope, enabling brute-force attacks.",
+            "remediation": "Use `flask-limiter` (`@limiter.limit('5/minute')`), `slowapi` for FastAPI, `django-ratelimit`, or a reverse-proxy rate limiter in front of sensitive endpoints.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/307.html",
+            "known_limitations": [],
+            "tags": [
+              "rate-limiting",
+              "auth",
+              "bruteforce",
+              "python",
+              "brute-force",
+              "OWASP:A07:2021"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.53 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 15,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.58 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 163,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.50 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 434,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\staticfiles\\storage.py",
+      "language": "python",
+      "lines_scanned": 598,
+      "finding_count": 9,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in _post_process() (CC=17)",
+          "description": "`_post_process()` at L380 has cyclomatic complexity 17. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 380,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.76 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 62,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.76 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 70,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.74 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 76,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.58 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 80,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.72 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 89,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.71 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 92,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 5.10 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 97,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.99 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 108,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\postgres\\indexes.py",
+      "language": "python",
+      "lines_scanned": 244,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\checks\\security\\csrf.py",
+      "language": "python",
+      "lines_scanned": 65,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.61 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 6,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.86 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 15,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\views\\decorators\\csrf.py",
+      "language": "python",
+      "lines_scanned": 68,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\gdal\\datasource.py",
+      "language": "python",
+      "lines_scanned": 128,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "file": "fastapi\\datastructures.py",
+      "language": "python",
+      "lines_scanned": 186,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.62 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 22,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\dateparse.py",
+      "language": "python",
+      "lines_scanned": 155,
+      "finding_count": 6,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.71 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 16,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.95 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 21,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.67 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 28,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.52 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 41,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.62 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 57,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.55 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 134,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\syndication\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\auth\\hashers.py",
+      "language": "python",
+      "lines_scanned": 699,
+      "finding_count": 6,
+      "finding_count_scored": 1,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [
+        "CWE-327"
+      ],
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "CWE-327: Weak password hashing (MD5) at line 669",
+          "description": "`MD5` is cryptographically broken for password storage at L669. No salt is used; rainbow tables and GPU brute-force make this trivial to crack.",
+          "line": 669,
+          "suggestion": "Use bcrypt, argon2, or scrypt: `bcrypt.hashpw(password.encode(), bcrypt.gensalt())`",
+          "rule_id": "PY-013",
+          "cwe": "CWE-327",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: hash = hashlib.md5((salt + password).encode()).hexdigest()\nAFTER:          import bcrypt\n                hashed = bcrypt.hashpw((salt + password, bcrypt.gensalt())",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-013",
+            "title": "Python weak password hashing",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-327",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags MD5/SHA1/SHA224 used for password hashing or similar credential protection.",
+            "remediation": "Use bcrypt, argon2, or scrypt for passwords instead of fast general-purpose hashes.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/327.html",
+            "known_limitations": [],
+            "tags": [
+              "crypto",
+              "hashing",
+              "passwords",
+              "python",
+              "OWASP:A02:2021",
+              "NIST:SC-13",
+              "PCI-DSS:4.2.1"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.52 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 101,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.60 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 318,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.76 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 376,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.50 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 388,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.75 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 167,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\mail\\utils.py",
+      "language": "python",
+      "lines_scanned": 22,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\files\\images.py",
+      "language": "python",
+      "lines_scanned": 89,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admin\\static\\admin\\js\\core.js",
+      "language": "javascript",
+      "lines_scanned": 194,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\backends\\oracle\\validation.py",
+      "language": "python",
+      "lines_scanned": 22,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\views\\decorators\\gzip.py",
+      "language": "python",
+      "lines_scanned": 5,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\inspect.py",
+      "language": "python",
+      "lines_scanned": 134,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\sites\\requests.py",
+      "language": "python",
+      "lines_scanned": 20,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\files\\storage\\filesystem.py",
+      "language": "python",
+      "lines_scanned": 224,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "pallets/flask",
+      "file": "src\\flask\\helpers.py",
+      "language": "python",
+      "lines_scanned": 682,
+      "finding_count": 4,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.57 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 29,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.53 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 37,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.53 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 282,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.53 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 548,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\postgres\\search.py",
+      "language": "python",
+      "lines_scanned": 526,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\formats.py",
+      "language": "python",
+      "lines_scanned": 305,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.62 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 245,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "file": "app\\routes\\contributions.js",
+      "language": "javascript",
+      "lines_scanned": 80,
+      "finding_count": 3,
+      "finding_count_scored": 3,
+      "expected_labels": [
+        "CWE-95"
+      ],
+      "label_reasons": [
+        "CWE-95: pattern \\beval\\s*\\(|\\bnew\\s+Function\\s*\\(..."
+      ],
+      "predicted_labels": [
+        "CWE-95"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-95: Code injection via eval() at line 32",
+          "description": "`eval()` is called with dynamic content at L32: `eval(req.body.preTax)`. If the argument is attacker-influenced, arbitrary JavaScript can execute.",
+          "line": 32,
+          "suggestion": "Remove `eval()`. Parse data with `JSON.parse()` or use a safe expression interpreter.",
+          "rule_id": "JS-004",
+          "cwe": "CWE-95",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-ast-analyzer",
+          "confidence": 0.96,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "syntax-ast",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "source `req.body.preTax`",
+              "line": 32,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `eval()`",
+              "line": 32,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "JS-004",
+            "title": "Code injection via eval()",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-95",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "`eval()` called.",
+            "remediation": "Eliminate eval(). Use JSON.parse() for data, or a safe expression library.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/95.html",
+            "known_limitations": [],
+            "tags": [
+              "eval",
+              "code-exec",
+              "rce",
+              "javascript",
+              "OWASP:A03:2021"
+            ]
+          }
+        },
+        {
+          "severity": "critical",
+          "title": "CWE-95: Code injection via eval() at line 33",
+          "description": "`eval()` is called with dynamic content at L33: `eval(req.body.afterTax)`. If the argument is attacker-influenced, arbitrary JavaScript can execute.",
+          "line": 33,
+          "suggestion": "Remove `eval()`. Parse data with `JSON.parse()` or use a safe expression interpreter.",
+          "rule_id": "JS-004",
+          "cwe": "CWE-95",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-ast-analyzer",
+          "confidence": 0.96,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "syntax-ast",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "source `req.body.afterTax`",
+              "line": 33,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `eval()`",
+              "line": 33,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "JS-004",
+            "title": "Code injection via eval()",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-95",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "`eval()` called.",
+            "remediation": "Eliminate eval(). Use JSON.parse() for data, or a safe expression library.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/95.html",
+            "known_limitations": [],
+            "tags": [
+              "eval",
+              "code-exec",
+              "rce",
+              "javascript",
+              "OWASP:A03:2021"
+            ]
+          }
+        },
+        {
+          "severity": "critical",
+          "title": "CWE-95: Code injection via eval() at line 34",
+          "description": "`eval()` is called with dynamic content at L34: `eval(req.body.roth)`. If the argument is attacker-influenced, arbitrary JavaScript can execute.",
+          "line": 34,
+          "suggestion": "Remove `eval()`. Parse data with `JSON.parse()` or use a safe expression interpreter.",
+          "rule_id": "JS-004",
+          "cwe": "CWE-95",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-ast-analyzer",
+          "confidence": 0.96,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "syntax-ast",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "source `req.body.roth`",
+              "line": 34,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `eval()`",
+              "line": 34,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "JS-004",
+            "title": "Code injection via eval()",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-95",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "`eval()` called.",
+            "remediation": "Eliminate eval(). Use JSON.parse() for data, or a safe expression library.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/95.html",
+            "known_limitations": [],
+            "tags": [
+              "eval",
+              "code-exec",
+              "rce",
+              "javascript",
+              "OWASP:A03:2021"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\staticfiles\\finders.py",
+      "language": "python",
+      "lines_scanned": 315,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\middleware\\security.py",
+      "language": "python",
+      "lines_scanned": 66,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\auth\\templatetags\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\serializers\\json.py",
+      "language": "python",
+      "lines_scanned": 113,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\geos\\prototypes\\io.py",
+      "language": "python",
+      "lines_scanned": 371,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\db\\backends\\postgis\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    }
+  ],
+  "summary": {
+    "sampled_files": 40,
+    "labeled_files": 9,
+    "labeled_candidate_pool": 56,
+    "tp": 3,
+    "fp": 2,
+    "fn": 6,
+    "recall": 33.33,
+    "precision": 60.0,
+    "f1": 42.86,
+    "fp_rate": 40.0
+  }
+}

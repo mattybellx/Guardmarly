@@ -1,0 +1,145 @@
+{
+  "seed": 664947,
+  "sample_size": 250,
+  "corpus_size": 4411,
+  "elapsed_sec": 47.33,
+  "scan_errors": 0,
+  "error_types": {},
+  "error_examples": [],
+  "findings_total": 391,
+  "severity": {
+    "severity.critical": 114,
+    "severity.high": 107,
+    "severity.low": 154,
+    "severity.medium": 16
+  },
+  "unique_rules": 18,
+  "top_rules": [
+    [
+      "PY-ENTROPY-002",
+      154
+    ],
+    [
+      "PY-010",
+      106
+    ],
+    [
+      "PY-022",
+      51
+    ],
+    [
+      "PY-020",
+      17
+    ],
+    [
+      "PY-011",
+      9
+    ],
+    [
+      "PY-023",
+      8
+    ],
+    [
+      "PY-028",
+      8
+    ],
+    [
+      "PY-002",
+      8
+    ],
+    [
+      "PY-036",
+      7
+    ],
+    [
+      "PY-006",
+      7
+    ],
+    [
+      "PY-001",
+      4
+    ],
+    [
+      "PY-008",
+      3
+    ],
+    [
+      "PY-038",
+      3
+    ],
+    [
+      "PY-029",
+      2
+    ],
+    [
+      "PY-003",
+      1
+    ],
+    [
+      "PY-037",
+      1
+    ],
+    [
+      "JS-011",
+      1
+    ],
+    [
+      "JS-024",
+      1
+    ]
+  ],
+  "unique_cwes": 12,
+  "top_cwes": [
+    [
+      "CWE-798",
+      261
+    ],
+    [
+      "CWE-918",
+      54
+    ],
+    [
+      "CWE-862",
+      17
+    ],
+    [
+      "CWE-617",
+      12
+    ],
+    [
+      "CWE-22",
+      10
+    ],
+    [
+      "CWE-1188",
+      9
+    ],
+    [
+      "none",
+      9
+    ],
+    [
+      "CWE-470",
+      7
+    ],
+    [
+      "CWE-95",
+      7
+    ],
+    [
+      "CWE-1336",
+      3
+    ],
+    [
+      "CWE-89",
+      1
+    ],
+    [
+      "CWE-1333",
+      1
+    ]
+  ],
+  "confidence": {
+    "numeric": 391
+  }
+}

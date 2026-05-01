@@ -431,14 +431,73 @@ class CWETriageRules:
     @staticmethod
     def triage_cwe_862(finding: Finding, snippet: str, file_path: str) -> TriageResult | None:
         """CWE-862: Missing Authorization."""
-        # Check for common authorization patterns
-        auth_patterns = ['@login_required', '@require_auth', 'if not user', 'if current_user', 'check_permission', 'assert_auth']
-        if any(pattern in snippet.lower() for pattern in auth_patterns):
+        path_lower = file_path.lower().replace("\\", "/")
+        snippet_lower = snippet.lower()
+
+        # Suppress in test/mock contexts — auth stubs are expected there.
+        if any(p in path_lower for p in ContextAnalyzer.TEST_PATTERNS):
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.97,
+                reason="Auth finding in test/mock file (auth stubs expected)",
+                remediation_level="suppress",
+            )
+
+        # Suppress if the class name contains 'mock' (e.g. class MockAuthView)
+        if re.search(r'\bclass\s+\w*mock\w*', snippet_lower):
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.93,
+                reason="Auth finding inside a mock class",
+                remediation_level="suppress",
+            )
+
+        # Django: class inherits from a known auth mixin → route is protected.
+        _DJANGO_AUTH_MIXIN_RE = re.compile(
+            r'\b(?:LoginRequiredMixin|PermissionRequiredMixin|UserPassesTestMixin|'
+            r'AccessMixin|StaffRequiredMixin|SuperuserRequiredMixin|'
+            r'OwnerRequiredMixin|GroupRequiredMixin|RoleRequiredMixin)\b',
+        )
+        if _DJANGO_AUTH_MIXIN_RE.search(snippet):
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.95,
+                reason="Django auth mixin detected on enclosing class",
+                remediation_level="suppress",
+            )
+
+        # Django middleware entry alone is not sufficient evidence of endpoint-level authz.
+        # Do not suppress solely on AuthenticationMiddleware presence.
+
+        # FastAPI: OAuth2/HTTPBearer security scheme or get_current_user dependency.
+        _FASTAPI_AUTH_SIGNAL_RE = re.compile(
+            r'\b(?:OAuth2PasswordBearer|HTTPBearer|HTTPBasic|HTTPDigest|APIKeyHeader|'
+            r'APIKeyCookie|APIKeyQuery|OpenIdConnect|get_current_user|'
+            r'oauth2_scheme|security_scheme)\b',
+        )
+        if _FASTAPI_AUTH_SIGNAL_RE.search(snippet):
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.92,
+                reason="FastAPI security scheme or dependency detected",
+                remediation_level="suppress",
+            )
+
+        # Explicit guard evidence only (no broad "current_user" proximity shortcuts).
+        explicit_guard_patterns = [
+            '@login_required', '@require_auth', '@permission_required',
+            'permission_required(', 'user_passes_test(',
+            'is_authenticated',
+            'depends(get_current_user', 'security(get_current_user',
+            'oauth2passwordbearer(', 'httpbearer(', 'apikeyheader(',
+            'dependencies=[depends(',
+        ]
+        if any(pattern in snippet_lower for pattern in explicit_guard_patterns):
             return TriageResult(
                 is_true_positive=False,
                 confidence=0.88,
-                reason="Authorization check detected in proximity",
-                remediation_level="suppress"
+                reason="Explicit authentication/authorization guard detected",
+                remediation_level="suppress",
             )
 
         return None
@@ -446,23 +505,21 @@ class CWETriageRules:
     @staticmethod
     def triage_cwe_639(finding: Finding, snippet: str, file_path: str) -> TriageResult | None:
         """CWE-639: IDOR (Insecure Direct Object Reference)."""
-        # Check for scope validation patterns
-        scope_patterns = [
-            'current_user',
-            'user_id',
-            'owner_id',
-            'belongs_to',
-            'WHERE.*=.*user',
-            'WHERE.*=.*owner',
-            'filter.*user',
-        ]
-
-        if any(re.search(pattern, snippet, re.IGNORECASE) for pattern in scope_patterns):
+        # ORM ownership-scoped queries are safe IDOR mitigations.
+        _ORM_OWNERSHIP_RE = re.compile(
+            r'get_object_or_404\s*\([^)]*\buser\s*=|'          # Django get_object_or_404(Model, user=req.user)
+            r'filter\s*\([^)]*(?:owner_id|user_id|user)\s*=|'   # .filter(owner_id=user.id)
+            r'filter_by\s*\([^)]*(?:owner_id|user_id|user)\s*=|'
+            r'\.objects\.filter\s*\([^)]*request\.user|'
+            r'WHERE\s+[^\n]*=\s*[^\n]*(?:user_id|owner_id)',
+            re.IGNORECASE,
+        )
+        if _ORM_OWNERSHIP_RE.search(snippet):
             return TriageResult(
                 is_true_positive=False,
-                confidence=0.83,
-                reason="User scope validation detected",
-                remediation_level="suppress"
+                confidence=0.88,
+                reason="ORM ownership-scoped query detected (e.g. filter(owner_id=user.id))",
+                remediation_level="suppress",
             )
 
         return None
@@ -538,7 +595,7 @@ class AlgorithmicTriageEngine:
         self.stats["verified"] += 1
         return TriageResult(
             is_true_positive=True,
-            confidence=0.85,
+            confidence=0.95,
             reason="No overriding safe patterns detected; treating as true positive",
             remediation_level="standard"
         )
@@ -561,6 +618,8 @@ def _noise_signature(file_path: str, finding: dict[str, Any]) -> tuple[str, str,
     bucket = "generic_noise"
     if any(token in path_norm for token in ("/test", "tests/", "/fixtures", "fixture", "mock", "demo", "example")):
         bucket = "test_fixture_noise"
+    elif any(token in path_norm for token in ("django/", "fastapi/", "src/flask/", "flask/", "lib/")):
+        bucket = "framework_internal_noise"
     elif "entropy" in rule_id.lower() or cwe == "CWE-798":
         bucket = "entropy_credential_noise"
     elif any(token in path_norm for token in ("/dist/", ".min.", "bundle", "vendor", "node_modules")):
@@ -615,6 +674,7 @@ def mine_web_wild_noise(
         bucket, rule_id, cwe, title = signature
         rationale = {
             "test_fixture_noise": "Rule repeatedly fires in test/demo/fixture contexts without matching weak labels.",
+            "framework_internal_noise": "Rule repeatedly fires in framework-internal implementation code where weak labels are not representative of app-level risk.",
             "entropy_credential_noise": "Entropy/credential findings repeatedly appear as collateral noise in non-secret contexts.",
             "generated_bundle_noise": "Rule repeatedly fires in generated/minified/vendor code where direct ownership is low.",
             "generic_noise": "Rule shows recurring unmatched predictions in sampled web-wild corpus.",
@@ -657,6 +717,7 @@ def generate_candidate_suppressions(
         slug = _safe_slug(rule_id or cwe or bucket or "noise")
         scope_patterns = {
             "test_fixture_noise": ["tests/", "fixtures/", "mock", "demo", "example"],
+            "framework_internal_noise": ["django/", "fastapi/", "src/flask/", "flask/", "lib/"],
             "entropy_credential_noise": ["demo", "example", "sample", "test"],
             "generated_bundle_noise": ["dist/", "vendor/", "node_modules/", ".min."],
             "generic_noise": ["*"],

@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator, Optional
 
-from ansede_static._types import AnalysisResult, Finding
+from ansede_static._types import AnalysisResult, Finding, Severity
 
 _log = logging.getLogger(__name__)
 
@@ -135,6 +135,9 @@ class AnsedeConfig:
     custom_rules_file: str = ""
     # Extra sanitizer catalog JSON files to merge with the built-in library
     extra_sanitizer_files: list[str] = field(default_factory=list)
+    # Rule severity overrides — map CWE or rule_id to new severity
+    # e.g. {"CWE-862": "critical", "PY-020": "low"}
+    rule_overrides: dict[str, str] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list, compare=False)
 
 
@@ -201,15 +204,51 @@ def finding_is_disabled(finding: Finding, disabled_rules: set[str]) -> bool:
 
 
 def apply_config_to_results(results: list[AnalysisResult], config: AnsedeConfig | None) -> list[AnalysisResult]:
-    if not config or not config.disable_rules:
+    if not config:
         return results
 
     disabled_rules = {_normalized_rule_token(rule) for rule in config.disable_rules if rule.strip()}
+    overrides = config.rule_overrides if hasattr(config, "rule_overrides") else {}
+
     for result in results:
-        result.findings = [
-            finding for finding in result.findings
-            if not finding_is_disabled(finding, disabled_rules)
-        ]
+        filtered: list[Finding] = []
+        for finding in result.findings:
+            if disabled_rules:
+                if finding_is_disabled(finding, disabled_rules):
+                    continue
+
+            # Apply severity overrides
+            if overrides:
+                for token in (
+                    _normalized_rule_token(finding.rule_id),
+                    _normalized_rule_token(finding.cwe),
+                ):
+                    if token and token in overrides:
+                        new_sev = overrides[token]
+                        try:
+                            finding = Finding(
+                                category=finding.category,
+                                severity=Severity(new_sev),
+                                title=finding.title,
+                                description=finding.description,
+                                line=finding.line,
+                                suggestion=finding.suggestion,
+                                rule_id=finding.rule_id,
+                                cwe=finding.cwe,
+                                agent=finding.agent,
+                                confidence=finding.confidence,
+                                auto_fix=finding.auto_fix,
+                                explanation=finding.explanation,
+                                trace=finding.trace,
+                                analysis_kind=finding.analysis_kind,
+                                triggering_code=finding.triggering_code,
+                            )
+                        except (ValueError, KeyError):
+                            pass
+                        break
+
+            filtered.append(finding)
+        result.findings = filtered
     return results
 
 
@@ -331,6 +370,16 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
             str(p).strip() for p in data.get("extra_sanitizer_files", []) if str(p).strip()
         ]
 
+        # Rule severity overrides — map CWE or rule_id to a new severity level
+        rule_overrides: dict[str, str] = {}
+        raw_overrides = data.get("rule_overrides", {})
+        if isinstance(raw_overrides, dict):
+            for rule_token, sev in raw_overrides.items():
+                token = str(rule_token).strip()
+                sev_str = str(sev).strip().lower()
+                if token and sev_str in _VALID_SEVERITIES:
+                    rule_overrides[_normalized_rule_token(token)] = sev_str
+
         return AnsedeConfig(
             exclude_paths=data.get("exclude_paths", []),
             disable_rules=disable_rules,
@@ -340,6 +389,7 @@ def load_config(workspace_root: Path | None = None) -> AnsedeConfig:
             v2_sources=v2_sources,
             custom_rules_file=custom_rules_file,
             extra_sanitizer_files=extra_sanitizer_files,
+            rule_overrides=rule_overrides,
             warnings=warnings,
         )
     except json.JSONDecodeError as exc:

@@ -821,6 +821,37 @@ def read_config():
 """
         assert not _has_cwe(code, "CWE-22")
 
+    def test_framework_style_join_return_is_flagged(self):
+        code = """
+import os
+def auto_find_instance_path(package_path):
+    return os.path.join(package_path, 'instance')
+"""
+        assert _has_cwe(code, "CWE-22")
+
+    def test_path_helper_returned_to_open_is_flagged(self):
+        code = """
+import os
+def key_to_file(storage_path, session_key):
+    return os.path.join(storage_path, 'prefix_' + session_key)
+def load_session(storage_path, session_key):
+    with open(key_to_file(storage_path, session_key)) as f:
+        return f.read()
+"""
+        assert _has_cwe(code, "CWE-22")
+
+    def test_safe_join_with_explicit_boundary_check_not_flagged(self):
+        code = """
+import os
+def safe_join(base, name):
+    final_path = os.path.abspath(os.path.join(base, name))
+    base_path = os.path.abspath(base)
+    if not final_path.startswith(base_path):
+        raise ValueError('outside base')
+    return final_path
+"""
+        assert not _has_cwe(code, "CWE-22")
+
 
 # ── CWE-601: Open Redirect (Rule 22) ─────────────────────────────────────────
 

@@ -1,0 +1,3198 @@
+{
+  "seed": 42,
+  "n_files": 50,
+  "cache_dir": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache",
+  "suppression_config": null,
+  "repos": [
+    {
+      "repo": "OWASP/NodeGoat",
+      "cache_hit": true,
+      "resolved_ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+      "cache_path": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache\\OWASP__NodeGoat"
+    },
+    {
+      "repo": "pallets/flask",
+      "cache_hit": true,
+      "resolved_ref": "2ac89889f4cc330eabd50f295dcef02828522c69",
+      "cache_path": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache\\pallets__flask"
+    },
+    {
+      "repo": "expressjs/express",
+      "cache_hit": true,
+      "resolved_ref": "6340c1eaaedc0ddcae8be8df2cdb1d2e961cbf2f",
+      "cache_path": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache\\expressjs__express"
+    },
+    {
+      "repo": "django/django",
+      "cache_hit": true,
+      "resolved_ref": "3f912ee4189602b4df121c0dc0428673fda5c253",
+      "cache_path": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache\\django__django"
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "cache_hit": true,
+      "resolved_ref": "4f64b8f65191b497255004e896a2bbfd7cfd1886",
+      "cache_path": "C:\\Users\\matth\\OneDrive\\Desktop\\ansede-static-focus\\.ansede\\web-wild-cache\\tiangolo__fastapi"
+    }
+  ],
+  "samples": [
+    {
+      "repo": "django/django",
+      "file": "django\\forms\\fields.py",
+      "language": "python",
+      "lines_scanned": 1399,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in clean() (CC=17)",
+          "description": "`clean()` at L1099 has cyclomatic complexity 17. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1099,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in set_choices() (CC=23)",
+          "description": "`set_choices()` at L1202 has cyclomatic complexity 23. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1202,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admin\\sites.py",
+      "language": "python",
+      "lines_scanned": 621,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-601"
+      ],
+      "label_reasons": [
+        "CWE-601: pattern redirect\\s*\\(\\s*(?:req\\.|request\\.)..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "file": "app\\assets\\vendor\\html5shiv.js",
+      "language": "javascript",
+      "lines_scanned": 8,
+      "finding_count": 1,
+      "finding_count_scored": 1,
+      "expected_labels": [
+        "CWE-79"
+      ],
+      "label_reasons": [
+        "CWE-79: pattern innerHTML\\s*=|document\\.write\\s*\\(..."
+      ],
+      "predicted_labels": [
+        "CWE-79"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-79: XSS via innerHTML assignment at line 6",
+          "description": "Unsanitized data assigned to `innerHTML` or `outerHTML` at L6: `c=d.insertBefore(c.lastChild,d.firstChild);b.hasCSS=!!c}g||t(a,b);return a}var k=l.html5||`. An attacker can inject a `<script>` tag or event handler that executes in the victim's browser. (minified bundle without source map; confidence downgraded to low)",
+          "line": 6,
+          "suggestion": "Use `textContent` instead of `innerHTML`, or sanitize with DOMPurify.sanitize(). Never concatenate user data into HTML.",
+          "rule_id": "JS-001",
+          "cwe": "CWE-79",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-analyzer",
+          "confidence": 0.35,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "JS-001",
+            "title": "XSS via innerHTML assignment",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-79",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Unsanitized data assigned to `innerHTML` or `outerHTML`.",
+            "remediation": "Use `textContent` instead of `innerHTML`, or sanitize with DOMPurify.sanitize(). Never concatenate user data into HTML.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/79.html",
+            "known_limitations": [
+              "DOM and template heuristics are strongest when flows remain inside a file or helper chain."
+            ],
+            "tags": [
+              "xss",
+              "html",
+              "frontend",
+              "javascript",
+              "OWASP:A03:2021",
+              "NIST:SI-10"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\version.py",
+      "language": "python",
+      "lines_scanned": 123,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-78"
+      ],
+      "label_reasons": [
+        "CWE-78: pattern shell\\s*=\\s*True|child_process\\.exec\\s*\\..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.58 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 25,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.59 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 49,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\gdal\\raster\\source.py",
+      "language": "python",
+      "lines_scanned": 543,
+      "finding_count": 2,
+      "finding_count_scored": 1,
+      "expected_labels": [
+        "CWE-22"
+      ],
+      "label_reasons": [
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [
+        "CWE-22"
+      ],
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "CWE-22: Path traversal in clone() via os.path.join()",
+          "description": "`clone()` passes `VSI_MEM_FILESYSTEM_BASE_PATH` (dynamic/path-like input) to `os.path.join()` at L470 without sanitization. `../` sequences can escape the intended directory.",
+          "line": 470,
+          "suggestion": "Sanitize: `from werkzeug.utils import secure_filename; safe = secure_filename(filename)`. Verify resolved path: `assert os.path.realpath(p).startswith(BASE_DIR)`.",
+          "rule_id": "PY-023",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-023",
+            "title": "Python path join with unsanitized user input",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-22",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags `os.path.join` or similar path composition with tainted user input.",
+            "remediation": "Normalize against a safe root and reject any resolved path that escapes it.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/22.html",
+            "known_limitations": [],
+            "tags": [
+              "path",
+              "filesystem",
+              "taint",
+              "python",
+              "join",
+              "OWASP:A01:2021"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "Excessive complexity in __init__() (CC=26)",
+          "description": "`__init__()` at L77 has cyclomatic complexity 26. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 77,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\contenttypes\\prefetch.py",
+      "language": "python",
+      "lines_scanned": 36,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-918"
+      ],
+      "label_reasons": [
+        "CWE-918: pattern requests\\.(?:get|post)\\s*\\(\\s*\\w+|fetch\\..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\contenttypes\\fields.py",
+      "language": "python",
+      "lines_scanned": 871,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-918"
+      ],
+      "label_reasons": [
+        "CWE-918: pattern requests\\.(?:get|post)\\s*\\(\\s*\\w+|fetch\\..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Implicit None return in create_generic_related_manager() \u2014 can fall off end",
+          "description": "`create_generic_related_manager()` has 17 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 767,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in create_generic_related_manager() (CC=24)",
+          "description": "`create_generic_related_manager()` at L610 has cyclomatic complexity 24. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 610,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admin\\static\\admin\\js\\SelectBox.js",
+      "language": "javascript",
+      "lines_scanned": 177,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-79"
+      ],
+      "label_reasons": [
+        "CWE-79: pattern innerHTML\\s*=|document\\.write\\s*\\(..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": []
+    },
+    {
+      "repo": "pallets/flask",
+      "file": "src\\flask\\cli.py",
+      "language": "python",
+      "lines_scanned": 1127,
+      "finding_count": 9,
+      "finding_count_scored": 5,
+      "expected_labels": [
+        "CWE-22",
+        "CWE-95"
+      ],
+      "label_reasons": [
+        "CWE-95: pattern \\beval\\s*\\(|\\bnew\\s+Function\\s*\\(...",
+        "CWE-22: pattern os\\.path\\.join\\s*\\(|send_file\\s*\\(.*join..."
+      ],
+      "predicted_labels": [
+        "CWE-22",
+        "CWE-95"
+      ],
+      "tp": 2,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-95: Code Injection via eval() in shell_command()",
+          "description": "Untrusted data flows from `startup` (environment variable, L1020) to `eval()` at L1023 without sanitization. An attacker can exploit this to execute arbitrary Python code in the application context.",
+          "line": 1023,
+          "suggestion": "Avoid eval/exec. Use ast.literal_eval() for data, or a safe expression evaluator.",
+          "rule_id": "PY-006",
+          "cwe": "CWE-95",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "os.environ.get('PYTHONSTARTUP')",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "propagator",
+              "label": "assign to `startup`",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `eval()`",
+              "line": 1023,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "PY-006",
+            "title": "Python code injection via tainted dynamic execution",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-95",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Tracks user input into `eval`, `exec`, or similar dynamic code execution sinks.",
+            "remediation": "Replace eval-like execution with safe parsing or explicit dispatch.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/95.html",
+            "known_limitations": [],
+            "tags": [
+              "eval",
+              "code-exec",
+              "rce",
+              "python",
+              "taint",
+              "OWASP:A03:2021"
+            ]
+          }
+        },
+        {
+          "severity": "critical",
+          "title": "CWE-95: Code Injection via compile() in shell_command()",
+          "description": "Untrusted data flows from `startup` (environment variable, L1020) to `compile()` at L1023 without sanitization. An attacker can exploit this to execute arbitrary Python code in the application context.",
+          "line": 1023,
+          "suggestion": "Avoid eval/exec. Use ast.literal_eval() for data, or a safe expression evaluator.",
+          "rule_id": "PY-006",
+          "cwe": "CWE-95",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "os.environ.get('PYTHONSTARTUP')",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "propagator",
+              "label": "assign to `startup`",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `compile()`",
+              "line": 1023,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "PY-006",
+            "title": "Python code injection via tainted dynamic execution",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-95",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Tracks user input into `eval`, `exec`, or similar dynamic code execution sinks.",
+            "remediation": "Replace eval-like execution with safe parsing or explicit dispatch.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/95.html",
+            "known_limitations": [],
+            "tags": [
+              "eval",
+              "code-exec",
+              "rce",
+              "python",
+              "taint",
+              "OWASP:A03:2021"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "CWE-22: Path Traversal via open() in shell_command()",
+          "description": "Untrusted data flows from `startup` (environment variable, L1020) to `open()` at L1022 without sanitization. An attacker can exploit this to read/write arbitrary files on the server.",
+          "line": 1022,
+          "suggestion": "Sanitize paths: `secure_filename(f)` then `assert resolved.startswith(BASE_DIR)`",
+          "rule_id": "PY-004",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: with open(startup) as f:\nAFTER:          safe_path = Path(BASE_DIR, startup).resolve()\n                assert str(safe_path).startswith(str(BASE_DIR))\n                with open(safe_path) as f:",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [
+            {
+              "kind": "source",
+              "label": "os.environ.get('PYTHONSTARTUP')",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "propagator",
+              "label": "assign to `startup`",
+              "line": 1020,
+              "start_column": 1
+            },
+            {
+              "kind": "sink",
+              "label": "sink `open()`",
+              "line": 1022,
+              "start_column": 1
+            }
+          ],
+          "rule": {
+            "rule_id": "PY-004",
+            "title": "Python SQL injection via tainted query text",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-89",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Tracks user input into SQL text formatting and execution calls.",
+            "remediation": "Switch to parameterized SQL or ORM bind parameters.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/89.html",
+            "known_limitations": [],
+            "tags": [
+              "sqli",
+              "database",
+              "taint",
+              "python",
+              "OWASP:A03:2021",
+              "NIST:SI-10",
+              "PCI-DSS:6.2.4"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "CWE-22: Path traversal in _path_is_ancestor() via os.path.join()",
+          "description": "`_path_is_ancestor()` passes `path` (dynamic/path-like input) to `os.path.join()` at L695 without sanitization. `../` sequences can escape the intended directory.",
+          "line": 695,
+          "suggestion": "Sanitize: `from werkzeug.utils import secure_filename; safe = secure_filename(filename)`. Verify resolved path: `assert os.path.realpath(p).startswith(BASE_DIR)`.",
+          "rule_id": "PY-023",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-023",
+            "title": "Python path join with unsanitized user input",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-22",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags `os.path.join` or similar path composition with tainted user input.",
+            "remediation": "Normalize against a safe root and reject any resolved path that escapes it.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/22.html",
+            "known_limitations": [],
+            "tags": [
+              "path",
+              "filesystem",
+              "taint",
+              "python",
+              "join",
+              "OWASP:A01:2021"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "CWE-22: Path traversal in shell_command() via open()",
+          "description": "`shell_command()` passes `startup` (user-controlled) to file open at L1022 without path sanitization. `../` sequences can escape the intended directory and read/write arbitrary files.",
+          "line": 1022,
+          "suggestion": "Sanitize: `from werkzeug.utils import secure_filename; safe = secure_filename(filename)`. Verify resolved path: `assert os.path.realpath(p).startswith(BASE_DIR)`.",
+          "rule_id": "PY-029",
+          "cwe": "CWE-22",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: with open(startup) as f:\nAFTER:          safe_path = Path(BASE_DIR, startup).resolve()\n                assert str(safe_path).startswith(str(BASE_DIR))\n                with open(safe_path) as f:",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-029",
+            "title": "Python file open with tainted path",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-22",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags `open()` or `Path.*` file operations that use user-controlled paths without confinement.",
+            "remediation": "Secure filenames and verify the resolved path remains under the expected base directory.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/22.html",
+            "known_limitations": [],
+            "tags": [
+              "path",
+              "filesystem",
+              "taint",
+              "python",
+              "open",
+              "OWASP:A01:2021"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Broad exception catch without re-raise in run_command()",
+          "description": "`run_command()` catches all exceptions at L956 without re-raising. Errors may be silently hidden in production.",
+          "line": 956,
+          "suggestion": "Catch specific exception types, or log and re-raise broad catches.",
+          "rule_id": "PY-002",
+          "cwe": "CWE-617",
+          "category": "error-handling",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-002",
+            "title": "Broad exception catch without re-raise",
+            "category": "error-handling",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-617",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags broad exception handlers that suppress unexpected failures instead of surfacing them.",
+            "remediation": "Catch narrower exception types or log and re-raise unexpected errors.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/617.html",
+            "known_limitations": [],
+            "tags": [
+              "exceptions",
+              "error-handling",
+              "reliability",
+              "python"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Broad exception catch without re-raise in list_commands()",
+          "description": "`list_commands()` catches all exceptions at L650 without re-raising. Errors may be silently hidden in production.",
+          "line": 650,
+          "suggestion": "Catch specific exception types, or log and re-raise broad catches.",
+          "rule_id": "PY-002",
+          "cwe": "CWE-617",
+          "category": "error-handling",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-002",
+            "title": "Broad exception catch without re-raise",
+            "category": "error-handling",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-617",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags broad exception handlers that suppress unexpected failures instead of surfacing them.",
+            "remediation": "Catch narrower exception types or log and re-raise unexpected errors.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/617.html",
+            "known_limitations": [],
+            "tags": [
+              "exceptions",
+              "error-handling",
+              "reliability",
+              "python"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.57 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 1112,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "BEFORE: help=\"\"\"\\\nAFTER:      help = os.environ[\"help\"]",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.57 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 360,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admin\\options.py",
+      "language": "python",
+      "lines_scanned": 2639,
+      "finding_count": 7,
+      "finding_count_scored": 0,
+      "expected_labels": [
+        "CWE-601"
+      ],
+      "label_reasons": [
+        "CWE-601: pattern redirect\\s*\\(\\s*(?:req\\.|request\\.)..."
+      ],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "Excessive complexity in _changeform_view() (CC=28)",
+          "description": "`_changeform_view()` at L1859 has cyclomatic complexity 28. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1859,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "Excessive complexity in changelist_view() (CC=29)",
+          "description": "`changelist_view()` at L2074 has cyclomatic complexity 29. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 2074,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Implicit None return in get_formset() \u2014 can fall off end",
+          "description": "`get_formset()` has 5 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 2528,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in lookup_allowed() (CC=20)",
+          "description": "`lookup_allowed()` at L454 has cyclomatic complexity 20. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 454,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in get_search_results() (CC=24)",
+          "description": "`get_search_results()` at L1138 has cyclomatic complexity 24. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1138,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in response_add() (CC=20)",
+          "description": "`response_add()` at L1391 has cyclomatic complexity 20. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1391,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in get_formset() (CC=17)",
+          "description": "`get_formset()` at L2482 has cyclomatic complexity 17. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 2482,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\timesince.py",
+      "language": "python",
+      "lines_scanned": 143,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in timesince() (CC=23)",
+          "description": "`timesince()` at L28 has cyclomatic complexity 23. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 28,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.65 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 29,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "pallets/flask",
+      "file": "src\\flask\\sessions.py",
+      "language": "python",
+      "lines_scanned": 385,
+      "finding_count": 3,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.74 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 172,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.51 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 188,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.57 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 216,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\models\\functions\\math.py",
+      "language": "python",
+      "lines_scanned": 214,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admin\\widgets.py",
+      "language": "python",
+      "lines_scanned": 633,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\middleware\\security.py",
+      "language": "python",
+      "lines_scanned": 66,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\management\\color.py",
+      "language": "python",
+      "lines_scanned": 120,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.59 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 75,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "Gruntfile.js",
+      "language": "javascript",
+      "lines_scanned": 15,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "file": "config\\env\\test.js",
+      "language": "javascript",
+      "lines_scanned": 8,
+      "finding_count": 1,
+      "finding_count_scored": 1,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [
+        "CWE-798"
+      ],
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-798: Hardcoded credential at line 6",
+          "description": "A credential, key, or password appears to be hardcoded at L6: `zapApiKey: \"v9dn0balpqas1pcc281tn5ood1\",`. Commit history will permanently expose this credential even after removal.",
+          "line": 6,
+          "suggestion": "Move secrets to environment variables: `process.env.API_KEY`. Use a secrets manager for production.",
+          "rule_id": "JS-011",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "JS-011",
+            "title": "Hardcoded credential",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "A credential, key, or password appears to be hardcoded.",
+            "remediation": "Move secrets to environment variables: `process.env.API_KEY`. Use a secrets manager for production.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "javascript",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admindocs\\views.py",
+      "language": "python",
+      "lines_scanned": 523,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.64 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 512,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\gdal\\raster\\const.py",
+      "language": "python",
+      "lines_scanned": 105,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\geos\\point.py",
+      "language": "python",
+      "lines_scanned": 163,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\backends\\postgresql\\features.py",
+      "language": "python",
+      "lines_scanned": 191,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\template\\autoreload.py",
+      "language": "python",
+      "lines_scanned": 61,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Implicit None return in template_changed() \u2014 can fall off end",
+          "description": "`template_changed()` has 1 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 57,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "file": "config\\env\\all.js",
+      "language": "javascript",
+      "lines_scanned": 14,
+      "finding_count": 1,
+      "finding_count_scored": 1,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [
+        "CWE-798"
+      ],
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "critical",
+          "title": "CWE-798: Hardcoded credential at line 8",
+          "description": "A credential, key, or password appears to be hardcoded at L8: `cookieSecret: \"session_cookie_secret_key_here\",`. Commit history will permanently expose this credential even after removal.",
+          "line": 8,
+          "suggestion": "Move secrets to environment variables: `process.env.API_KEY`. Use a secrets manager for production.",
+          "rule_id": "JS-011",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "JS-011",
+            "title": "Hardcoded credential",
+            "category": "security",
+            "default_severity": "critical",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "A credential, key, or password appears to be hardcoded.",
+            "remediation": "Move secrets to environment variables: `process.env.API_KEY`. Use a secrets manager for production.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "javascript",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\db\\models\\sql\\query.py",
+      "language": "python",
+      "lines_scanned": 2892,
+      "finding_count": 6,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "Excessive complexity in get_aggregation() (CC=34)",
+          "description": "`get_aggregation()` at L457 has cyclomatic complexity 34. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 457,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "Excessive complexity in build_filter() (CC=33)",
+          "description": "`build_filter()` at L1487 has cyclomatic complexity 33. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1487,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "Excessive complexity in names_to_path() (CC=26)",
+          "description": "`names_to_path()` at L1774 has cyclomatic complexity 26. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 1774,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Implicit None return in build_lookup() \u2014 can fall off end",
+          "description": "`build_lookup()` has 3 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 1437,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in combine() (CC=18)",
+          "description": "`combine()` at L700 has cyclomatic complexity 18. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 700,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in set_values() (CC=16)",
+          "description": "`set_values()` at L2582 has cyclomatic complexity 16. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 2582,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\gdal\\datasource.py",
+      "language": "python",
+      "lines_scanned": 128,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "js_tests\\admin\\navigation.test.js",
+      "language": "javascript",
+      "lines_scanned": 24,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\utils\\csp.py",
+      "language": "python",
+      "lines_scanned": 115,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.67 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 8,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\views\\generic\\detail.py",
+      "language": "python",
+      "lines_scanned": 191,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\mail\\utils.py",
+      "language": "python",
+      "lines_scanned": 22,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\geoip2.py",
+      "language": "python",
+      "lines_scanned": 230,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.91 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 1,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.51 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 71,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\management\\sql.py",
+      "language": "python",
+      "lines_scanned": 59,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\middleware\\locale.py",
+      "language": "python",
+      "lines_scanned": 80,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\messages\\storage\\session.py",
+      "language": "python",
+      "lines_scanned": 52,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "OWASP/NodeGoat",
+      "file": "app\\assets\\vendor\\chart\\raphael-min.js",
+      "language": "javascript",
+      "lines_scanned": 10,
+      "finding_count": 1,
+      "finding_count_scored": 1,
+      "expected_labels": [
+        "CWE-79"
+      ],
+      "label_reasons": [
+        "CWE-79: pattern innerHTML\\s*=|document\\.write\\s*\\(..."
+      ],
+      "predicted_labels": [
+        "CWE-1333"
+      ],
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "CWE-1333: Potential ReDoS \u2014 catastrophic backtracking regex at line 10",
+          "description": "Regex with nested quantifiers or ambiguous alternation at L10: `(function(a){var b=\"0.3.4\",c=\"hasOwnProperty\",d=/[\\.\\/]/,e=\"*\",f=function(){},g=function(a`. (minified bundle without source map; confidence downgraded to low)",
+          "line": 10,
+          "suggestion": "Use safe regex patterns or a non-backtracking engine.",
+          "rule_id": "JS-024",
+          "cwe": "CWE-1333",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "js-analyzer",
+          "confidence": 0.35,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "JS-024",
+            "title": "Potential ReDoS \u2014 catastrophic backtracking regex",
+            "category": "security",
+            "default_severity": "high",
+            "languages": [
+              "javascript",
+              "typescript"
+            ],
+            "cwe": "CWE-1333",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Regex with nested quantifiers or ambiguous alternation.",
+            "remediation": "Use safe regex patterns or a non-backtracking engine.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/1333.html",
+            "known_limitations": [],
+            "tags": [
+              "regex",
+              "redos",
+              "performance",
+              "javascript",
+              "OWASP:A06:2021"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "file": "fastapi\\dependencies\\utils.py",
+      "language": "python",
+      "lines_scanned": 1057,
+      "finding_count": 5,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "high",
+          "title": "Excessive complexity in analyze_param() (CC=43)",
+          "description": "`analyze_param()` at L393 has cyclomatic complexity 43. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 393,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "high",
+          "title": "Excessive complexity in solve_dependencies() (CC=27)",
+          "description": "`solve_dependencies()` at L598 has cyclomatic complexity 27. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 598,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Implicit None return in _get_multidict_value() \u2014 can fall off end",
+          "description": "`_get_multidict_value()` has 2 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 778,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in get_dependant() (CC=17)",
+          "description": "`get_dependant()` at L286 has cyclomatic complexity 17. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 286,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Excessive complexity in request_params_to_args() (CC=20)",
+          "description": "`request_params_to_args()` at L784 has cyclomatic complexity 20. Functions above 15 are hard to test, debug, and maintain.",
+          "line": 784,
+          "suggestion": "Extract sub-functions for distinct logic branches or use lookup tables.",
+          "rule_id": "PY-028",
+          "cwe": "",
+          "category": "architecture",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-028",
+            "title": "Cyclomatic complexity hotspot",
+            "category": "architecture",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags overly branchy functions that are statistically harder to review, test, and secure.",
+            "remediation": "Split complex control flow into smaller helpers with single responsibilities.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "quality",
+              "complexity",
+              "maintainability"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\db\\backends\\oracle\\base.py",
+      "language": "python",
+      "lines_scanned": 14,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\views\\defaults.py",
+      "language": "python",
+      "lines_scanned": 150,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\sites\\models.py",
+      "language": "python",
+      "lines_scanned": 120,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\db\\backends\\mysql\\operations.py",
+      "language": "python",
+      "lines_scanned": 152,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\gis\\gdal\\raster\\__init__.py",
+      "language": "python",
+      "lines_scanned": 0,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "tiangolo/fastapi",
+      "file": "fastapi\\logger.py",
+      "language": "python",
+      "lines_scanned": 3,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\sites\\checks.py",
+      "language": "python",
+      "lines_scanned": 30,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\auth\\forms.py",
+      "language": "python",
+      "lines_scanned": 599,
+      "finding_count": 1,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Broad exception catch without re-raise in send_mail()",
+          "description": "`send_mail()` catches all exceptions at L418 without re-raising. Errors may be silently hidden in production.",
+          "line": 418,
+          "suggestion": "Catch specific exception types, or log and re-raise broad catches.",
+          "rule_id": "PY-002",
+          "cwe": "CWE-617",
+          "category": "error-handling",
+          "finding_class": "security",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-002",
+            "title": "Broad exception catch without re-raise",
+            "category": "error-handling",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-617",
+            "maturity": "beta",
+            "precision": "medium",
+            "summary": "Flags broad exception handlers that suppress unexpected failures instead of surfacing them.",
+            "remediation": "Catch narrower exception types or log and re-raise unexpected errors.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/617.html",
+            "known_limitations": [],
+            "tags": [
+              "exceptions",
+              "error-handling",
+              "reliability",
+              "python"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\admindocs\\utils.py",
+      "language": "python",
+      "lines_scanned": 268,
+      "finding_count": 4,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.62 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 110,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.71 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 219,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.81 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 236,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        },
+        {
+          "severity": "low",
+          "title": "Hardcoded high-entropy string (potential secret/credential)",
+          "description": "A string literal with Shannon entropy 4.73 bits was detected. High-entropy strings embedded in source code are often credentials, API keys, or tokens.",
+          "line": 253,
+          "suggestion": "Move secrets to environment variables or a secrets manager (e.g., os.environ['API_KEY'], HashiCorp Vault, AWS Secrets Manager).",
+          "rule_id": "PY-ENTROPY-002",
+          "cwe": "CWE-798",
+          "category": "security",
+          "finding_class": "security",
+          "agent": "entropy-scanner",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "entropy",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-ENTROPY-002",
+            "title": "Hardcoded high-entropy string (potential secret/credential)",
+            "category": "security",
+            "default_severity": "low",
+            "languages": [
+              "python"
+            ],
+            "cwe": "CWE-798",
+            "maturity": "stable",
+            "precision": "high",
+            "summary": "Flags secrets, credentials, and signing keys embedded directly in source code.",
+            "remediation": "Load secrets from environment variables or a secrets manager and rotate compromised values.",
+            "docs_url": "https://cwe.mitre.org/data/definitions/798.html",
+            "known_limitations": [],
+            "tags": [
+              "secrets",
+              "credentials",
+              "keys",
+              "OWASP:A07:2021",
+              "NIST:IA-5",
+              "PCI-DSS:8.2.2"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\core\\checks\\messages.py",
+      "language": "python",
+      "lines_scanned": 82,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\auth\\backends.py",
+      "language": "python",
+      "lines_scanned": 347,
+      "finding_count": 2,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": [
+        {
+          "severity": "medium",
+          "title": "Implicit None return in authenticate() \u2014 can fall off end",
+          "description": "`authenticate()` has 1 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 280,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        },
+        {
+          "severity": "medium",
+          "title": "Implicit None return in aauthenticate() \u2014 can fall off end",
+          "description": "`aauthenticate()` has 1 branches that return a value and 1 that return None implicitly. Callers that do not check for None will encounter AttributeError or incorrect logic.",
+          "line": 303,
+          "suggestion": "Ensure all code paths return an explicit value, or annotate the return type.",
+          "rule_id": "PY-003",
+          "cwe": "",
+          "category": "bug",
+          "finding_class": "quality",
+          "agent": "python-analyzer",
+          "confidence": 1.0,
+          "auto_fix": "",
+          "explanation": "",
+          "analysis_kind": "pattern",
+          "trace": [],
+          "rule": {
+            "rule_id": "PY-003",
+            "title": "Inconsistent return paths causing implicit None",
+            "category": "bug",
+            "default_severity": "medium",
+            "languages": [
+              "python"
+            ],
+            "cwe": "",
+            "maturity": "beta",
+            "precision": "high",
+            "summary": "Flags functions whose branches mix explicit return values with implicit `None` fall-through.",
+            "remediation": "Ensure all paths return an explicit value or annotate the optional return contract clearly.",
+            "docs_url": "https://github.com/mattybellx/Ansede/blob/main/docs/QUALITY.md",
+            "known_limitations": [],
+            "tags": [
+              "python",
+              "returns",
+              "bug-risk"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\syndication\\apps.py",
+      "language": "python",
+      "lines_scanned": 7,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\contrib\\staticfiles\\apps.py",
+      "language": "python",
+      "lines_scanned": 14,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    },
+    {
+      "repo": "django/django",
+      "file": "django\\template\\backends\\base.py",
+      "language": "python",
+      "lines_scanned": 83,
+      "finding_count": 0,
+      "finding_count_scored": 0,
+      "expected_labels": [],
+      "label_reasons": [],
+      "predicted_labels": [],
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "findings": []
+    }
+  ],
+  "summary": {
+    "sampled_files": 50,
+    "labeled_files": 11,
+    "labeled_candidate_pool": 56,
+    "tp": 4,
+    "fp": 3,
+    "fn": 8,
+    "recall": 33.33,
+    "precision": 57.14,
+    "f1": 42.11,
+    "fp_rate": 42.86
+  }
+}

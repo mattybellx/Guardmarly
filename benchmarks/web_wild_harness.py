@@ -51,8 +51,10 @@ _DEFAULT_REPOS: tuple[str, ...] = (
 )
 
 _SKIP_PATH_SEGMENTS: frozenset[str] = frozenset({
-    "tests", "test", "docs", "doc", "examples", "example", "tutorial",
+    "tests", "test", "docs", "doc", "docs_src", "examples", "example", "tutorial",
     "migrations", "locale", "i18n", "fixtures", "__pycache__", "node_modules",
+    # Git hooks and project-management scripts are not web-app code.
+    "scripts",
 })
 
 _SEVERITY_ORDER: dict[str, int] = {
@@ -444,6 +446,27 @@ def _parse_repo_specs(values: list[str]) -> list[RepoSpec]:
     return specs
 
 
+def _run_cve_quality_gate(*, suppression_config: Path | None, min_recall: float) -> tuple[bool, dict[str, Any]]:
+    """Run the CVE corpus quality gate and return (passed, payload)."""
+    if suppression_config is None:
+        return True, {"skipped": True, "reason": "no suppression config"}
+
+    try:
+        from benchmarks.cve_recall_runner import run_cve_recall
+        report = run_cve_recall(quiet=True, suppression_config=suppression_config)
+        summary = report.get("summary", {}) if isinstance(report, dict) else {}
+        recall = float(summary.get("recall", 0.0)) if isinstance(summary, dict) else 0.0
+        passed = recall >= float(min_recall)
+        return passed, {
+            "skipped": False,
+            "recall": recall,
+            "min_recall": float(min_recall),
+            "summary": summary,
+        }
+    except Exception as exc:  # noqa: BLE001
+        return False, {"skipped": False, "error": str(exc)}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="ansede-static web wild online corpus harness",
@@ -492,6 +515,10 @@ def main() -> None:
                         help="Suppress human-readable summary")
     parser.add_argument("--json", action="store_true",
                         help="Emit JSON report")
+    parser.add_argument("--quality-gate-cve", action="store_true",
+                        help="Run CVE recall gate when --suppression-config is provided")
+    parser.add_argument("--quality-gate-min-recall", type=float, default=100.0, metavar="PCT",
+                        help="Minimum CVE recall percentage required by --quality-gate-cve (default: 100)")
     args = parser.parse_args()
 
     if args.refresh and args.offline:
@@ -515,6 +542,15 @@ def main() -> None:
         quiet=args.quiet,
     )
 
+    quality_gate_failed = False
+    if args.quality_gate_cve:
+        passed, payload = _run_cve_quality_gate(
+            suppression_config=args.suppression_config,
+            min_recall=args.quality_gate_min_recall,
+        )
+        quality_gate_failed = not passed
+        report["quality_gate_cve"] = payload
+
     if args.json or args.quiet:
         print(json.dumps(report, indent=2))
 
@@ -524,7 +560,7 @@ def main() -> None:
         fail_under_precision=args.fail_under_precision,
         fail_under_f1=args.fail_under_f1,
         max_fp_rate=args.max_fp_rate,
-    ):
+    ) or quality_gate_failed:
         sys.exit(1)
 
 

@@ -536,6 +536,9 @@ class GlobalGraph:
             fact_sources = ("intrinsic-source",)
         elif tainted_arg_indexes:
             fact_sources = tuple(sorted(f"arg[{idx}]" for idx in tainted_arg_indexes))
+        elif fact_level == IDETaintLevel.CLEAN:
+            # Explicitly encode clean return transfer so callers can overwrite stale taint.
+            fact_sources = ("clean-return",)
         propagated_fact = IDETaintFact(
             level=fact_level,
             sources=fact_sources,
@@ -600,3 +603,34 @@ class GlobalGraph:
 
         dfs(source_id, [source_id], {source_id})
         return paths
+
+    def adjust_confidence_from_ide(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        base_confidence: float,
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> float:
+        """Use IDE lattice facts to refine a finding's confidence.
+
+        - TAINTED facts boost confidence toward 1.0
+        - CLEAN facts suppress confidence toward 0.0
+        - BOTTOM/TOP facts leave confidence unchanged
+        """
+        fact = self.get_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=call_string,
+            call_string_k=call_string_k,
+        )
+        if fact.level == IDETaintLevel.BOTTOM or fact.level == IDETaintLevel.TOP:
+            return base_confidence
+        if fact.level == IDETaintLevel.TAINTED:
+            return min(1.0, base_confidence + 0.15)
+        if fact.level == IDETaintLevel.CLEAN:
+            return max(0.0, base_confidence - 0.40)
+        return base_confidence

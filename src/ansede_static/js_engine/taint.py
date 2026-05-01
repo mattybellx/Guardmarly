@@ -172,7 +172,8 @@ def extract_taint_traces(
     lines = code.splitlines()
     active_direct_source_re = direct_source_re or DIRECT_TAINT_SOURCE_RE
 
-    for _ in range(4):
+    MAX_PASSES = 24  # Run to fixpoint, not a fixed small count
+    for _ in range(MAX_PASSES):
         changed = False
         for lineno, line in enumerate(lines, 1 + line_offset):
             stripped = strip_comments(line).strip()

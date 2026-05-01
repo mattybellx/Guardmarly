@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ansede-studio — Security Scanner</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ansede-studio Design System — Apple/Google/Nvidia quality
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: #181825;
+  --bg-elevated: #1e1e2e;
+  --bg-input: #111118;
+  --border: #2a2a3a;
+  --border-focus: #6366f1;
+  --text-primary: #f1f1f7;
+  --text-secondary: #9898b0;
+  --text-muted: #606078;
+  --accent: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.15);
+  --red: #ef4444;
+  --red-bg: rgba(239, 68, 68, 0.12);
+  --red-border: rgba(239, 68, 68, 0.25);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245, 158, 11, 0.12);
+  --amber-border: rgba(245, 158, 11, 0.25);
+  --cyan: #06b6d4;
+  --cyan-bg: rgba(6, 182, 212, 0.12);
+  --cyan-border: rgba(6, 182, 212, 0.25);
+  --green: #10b981;
+  --green-bg: rgba(16, 185, 129, 0.12);
+  --green-border: rgba(16, 185, 129, 0.25);
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="light"] {
+  --bg-primary: #f8f8fc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-elevated: #f0f0f5;
+  --bg-input: #f4f4f8;
+  --border: #e0e0e8;
+  --border-focus: #6366f1;
+  --text-primary: #1a1a2e;
+  --text-secondary: #606078;
+  --text-muted: #9898b0;
+  --accent: #4f46e5;
+  --accent-glow: rgba(79, 70, 229, 0.08);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Layout ── */
+.app-header {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+.app-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+}
+.app-header .logo .icon {
+  width: 28px; height: 28px;
+  background: linear-gradient(135deg, var(--accent), #a855f7);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.app-header .actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.app-header .theme-toggle {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.app-header .theme-toggle:hover { border-color: var(--border-focus); color: var(--text-primary); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+/* ── Hero / Upload Zone ── */
+.upload-zone {
+  background: var(--bg-card);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.upload-zone:hover, .upload-zone.drag-over {
+  border-color: var(--accent);
+  background: var(--bg-elevated);
+  box-shadow: 0 0 40px var(--accent-glow);
+}
+.upload-zone .icon-big {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+.upload-zone h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+.upload-zone p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.upload-zone input[type="file"] { display: none; }
+
+/* ── Code Input ── */
+.code-section { margin-top: 24px; }
+.code-section .tabs {
+  display: flex; gap: 4px; margin-bottom: 12px;
+}
+.code-section .tab {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition);
+}
+.code-section .tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+.code-section textarea {
+  width: 100%;
+  min-height: 200px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: var(--text-primary);
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  font-size: 14px;
+  line-height: 1.7;
+  resize: vertical;
+  transition: var(--transition);
+}
+.code-section textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.code-section textarea::placeholder { color: var(--text-muted); }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  letter-spacing: -0.2px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px var(--accent-glow);
+}
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.btn-secondary:hover { border-color: var(--accent); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.btn-ghost:hover { color: var(--text-primary); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-row { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; align-items: center; }
+
+/* ── Results ── */
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 20px;
+  flex-wrap: wrap; gap: 12px;
+}
+.results-header h2 {
+  font-size: 20px; font-weight: 600; letter-spacing: -0.3px;
+}
+.results-header .stats {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.stat-badge {
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.stat-badge.critical { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.stat-badge.high { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.stat-badge.medium { background: var(--cyan-bg); color: var(--cyan); border: 1px solid var(--cyan-border); }
+.stat-badge.low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+
+.finding-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.finding-card:hover {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow);
+}
+.finding-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 3px 0 0 3px;
+}
+.finding-card.critical::before { background: var(--red); }
+.finding-card.high::before { background: var(--amber); }
+.finding-card.medium::before { background: var(--cyan); }
+.finding-card.low::before { background: var(--green); }
+.finding-card .card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.finding-card .severity-tag {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.severity-tag.critical { background: var(--red-bg); color: var(--red); }
+.severity-tag.high { background: var(--amber-bg); color: var(--amber); }
+.severity-tag.medium { background: var(--cyan-bg); color: var(--cyan); }
+.severity-tag.low { background: var(--green-bg); color: var(--green); }
+.finding-card .card-title {
+  font-size: 15px; font-weight: 600; flex: 1; letter-spacing: -0.2px;
+}
+.finding-card .card-meta {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.finding-card .meta-item {
+  font-size: 12px; color: var(--text-muted);
+  background: var(--bg-elevated);
+  padding: 3px 8px; border-radius: 5px;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+.finding-card .card-desc {
+  font-size: 13px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.6;
+}
+.finding-card .card-suggestion {
+  font-size: 13px; color: var(--green);
+  background: var(--green-bg);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--green);
+  margin-bottom: 12px;
+}
+.finding-card .code-block {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", "Consolas", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.finding-card .code-line {
+  display: flex;
+  padding: 2px 12px;
+}
+.finding-card .code-line.target {
+  background: var(--accent-glow);
+  border-left: 3px solid var(--accent);
+}
+.finding-card .code-line .line-num {
+  color: var(--text-muted);
+  width: 36px;
+  text-align: right;
+  margin-right: 12px;
+  user-select: none;
+  flex-shrink: 0;
+}
+.finding-card .trace-flow {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+.finding-card .trace-step {
+  display: flex; align-items: center; gap: 8px; padding: 3px 0;
+  color: var(--text-secondary);
+}
+.finding-card .trace-step .dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.trace-step .dot.source { background: var(--green); }
+.trace-step .dot.propagator { background: var(--amber); }
+.trace-step .dot.helper { background: var(--cyan); }
+.trace-step .dot.sink { background: var(--red); }
+.trace-step .dot.check { background: var(--accent); }
+.trace-step .dot.gap { background: var(--red); animation: pulse-dot 1.5s infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── Empty State ── */
+.empty-state {
+  text-align: center; padding: 48px 24px;
+  color: var(--text-muted);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.empty-state h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; color: var(--text-secondary); }
+
+/* ── Footer ── */
+.app-footer {
+  text-align: center;
+  padding: 32px 24px 48px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+/* ── Loading Spinner ── */
+.spinner {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .container { padding: 20px 16px; }
+  .upload-zone { padding: 32px 16px; }
+  .finding-card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═════════════════════ HEADER ═════════════════════ -->
+<header class="app-header">
+  <div class="logo">
+    <div class="icon">&#9760;</div>
+    <span>ansede-studio</span>
+  </div>
+  <div class="actions">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <span id="theme-icon">&#9789;</span>
+    </button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ═══════════════════ UPLOAD ZONE ══════════════════ -->
+  <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+    <div class="icon-big">&#128230;</div>
+    <h2>Drop your source code here</h2>
+    <p>.py &middot; .js &middot; .ts &middot; .jsx &middot; or paste below</p>
+    <input type="file" id="fileInput" multiple accept=".py,.js,.ts,.jsx,.tsx,.mjs" onchange="handleFiles(this.files)">
+    <div class="btn-row" style="justify-content:center">
+      <span class="btn btn-secondary" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">Choose Files</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ CODE INPUT ═══════════════════ -->
+  <div class="code-section">
+    <div class="tabs">
+      <button class="tab active" onclick="setLanguage('auto', this)">Auto-detect</button>
+      <button class="tab" onclick="setLanguage('python', this)">Python</button>
+      <button class="tab" onclick="setLanguage('javascript', this)">JavaScript</button>
+    </div>
+    <textarea id="codeInput" placeholder="Paste your source code here...&#10;&#10;Example:&#10;from flask import request&#10;@app.route('/user/&lt;id&gt;')&#10;def get_user(id):&#10;    return db.execute(f&quot;SELECT * FROM users WHERE id = '{id}'&quot;)"></textarea>
+  </div>
+
+  <!-- ═══════════════════ ACTIONS ══════════════════════ -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="scanBtn" onclick="runScan()">
+      &#128269; Scan for Vulnerabilities
+    </button>
+    <span style="color:var(--text-muted);font-size:13px" id="fileCount">No files selected</span>
+  </div>
+
+  <!-- ═══════════════════ RESULTS ══════════════════════ -->
+  <div id="resultsSection" style="display:none">
+    <div class="results-header">
+      <h2 id="resultsTitle">Scan Results</h2>
+      <div class="stats" id="statsRow"></div>
+    </div>
+    <div class="btn-row" style="margin-top:0;margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="exportResults('sarif')">&#128196; Export SARIF</button>
+      <button class="btn btn-secondary" onclick="exportResults('json')">&#128196; Export JSON</button>
+      <button class="btn btn-ghost" onclick="clearResults()">Clear Results</button>
+    </div>
+    <div id="findingsList"></div>
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="icon">&#9989;</div>
+      <h3>No vulnerabilities found</h3>
+      <p>Your code looks clean! &#127881;</p>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    ansede-studio &middot; Powered by ansede-static v2.0 &middot; Zero dependencies &middot; 100% offline
+  </footer>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   ansede-studio — App Logic
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+let selectedLanguage = 'auto';
+let uploadedFiles = [];
+let scanResults = [];
+
+// ── Theme ─────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const icon = document.getElementById('theme-icon');
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  icon.innerHTML = next === 'dark' ? '&#9789;' : '&#9728;';
+  localStorage.setItem('ansede-theme', next);
+}
+(function() {
+  const saved = localStorage.getItem('ansede-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('theme-icon').innerHTML = saved === 'dark' ? '&#9789;' : '&#9728;';
+})();
+
+// ── Drag & Drop ──────────────────────────────────────────────────────
+const zone = document.getElementById('uploadZone');
+['dragenter','dragover'].forEach(e => {
+  zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('drag-over'); });
+});
+['dragleave','drop'].forEach(e => {
+  zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('drag-over'); });
+});
+zone.addEventListener('drop', ev => {
+  handleFiles(ev.dataTransfer.files);
+});
+
+// ── Language Tabs ────────────────────────────────────────────────────
+function setLanguage(lang, btn) {
+  selectedLanguage = lang;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── File Handling ────────────────────────────────────────────────────
+function handleFiles(files) {
+  uploadedFiles = Array.from(files);
+  document.getElementById('fileCount').textContent =
+    uploadedFiles.length ? `${uploadedFiles.length} file(s) selected` : 'No files selected';
+}
+
+// ── Scan ─────────────────────────────────────────────────────────────
+async function runScan() {
+  const code = document.getElementById('codeInput').value.trim();
+  if (!code && !uploadedFiles.length) {
+    alert('Drop a file or paste some code first!');
+    return;
+  }
+
+  const btn = document.getElementById('scanBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Scanning...';
+
+  const formData = new FormData();
+  uploadedFiles.forEach(f => formData.append('files', f));
+  if (code) {
+    formData.append('code', code);
+    formData.append('language', selectedLanguage);
+  }
+
+  try {
+    const resp = await fetch('/api/scan', { method: 'POST', body: formData });
+    const data = await resp.json();
+    if (data.success) {
+      displayResults(data);
+    } else {
+      alert('Scan failed: ' + (data.error || 'Unknown error'));
+    }
+  } catch (err) {
+    alert('Connection error — is the server running? ' + err.message);
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '&#128269; Scan for Vulnerabilities';
+}
+
+// ── Display Results ──────────────────────────────────────────────────
+function displayResults(data) {
+  scanResults = data.results || [];
+  const total = data.total_findings || 0;
+  const section = document.getElementById('resultsSection');
+  const empty = document.getElementById('emptyState');
+  const list = document.getElementById('findingsList');
+  const title = document.getElementById('resultsTitle');
+  const statsRow = document.getElementById('statsRow');
+
+  section.style.display = 'block';
+  list.innerHTML = '';
+
+  if (total === 0) {
+    empty.style.display = 'block';
+    title.textContent = 'Scan Results — Clean!';
+    statsRow.innerHTML = '';
+    return;
+  }
+
+  empty.style.display = 'none';
+  title.textContent = `Scan Results — ${total} Finding${total !== 1 ? 's' : ''}`;
+
+  // Stats
+  let critical = 0, high = 0, medium = 0, low = 0;
+  scanResults.forEach(r => {
+    r.findings.forEach(f => {
+      if (f.severity === 'critical') critical++;
+      else if (f.severity === 'high') high++;
+      else if (f.severity === 'medium') medium++;
+      else low++;
+    });
+  });
+  statsRow.innerHTML = [
+    critical ? `<span class="stat-badge critical">${critical} CRITICAL</span>` : '',
+    high ? `<span class="stat-badge high">${high} HIGH</span>` : '',
+    medium ? `<span class="stat-badge medium">${medium} MEDIUM</span>` : '',
+    low ? `<span class="stat-badge low">${low} LOW</span>` : '',
+  ].join('');
+
+  // Findings
+  scanResults.forEach(result => {
+    result.findings.forEach(finding => {
+      const card = document.createElement('div');
+      card.className = `finding-card ${finding.severity}`;
+
+      const traceHtml = (finding.trace && finding.trace.length) ? `
+        <div class="trace-flow">
+          <div style="font-weight:600;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted)">Data Flow Trace</div>
+          ${finding.trace.map(t => `
+            <div class="trace-step">
+              <span class="dot ${t.kind}"></span>
+              <span style="font-weight:500">${t.kind.toUpperCase()}</span>
+              <span>${escapeHtml(t.label)}</span>
+              ${t.line ? `<span style="color:var(--text-muted);margin-left:auto">L${t.line}</span>` : ''}
+            </div>
+          `).join('')}
+        </div>
+      ` : '';
+
+      const codeHtml = (finding.code_context && finding.code_context.length) ? `
+        <div class="code-block">
+          ${finding.code_context.map(l => `
+            <div class="code-line${l.is_target ? ' target' : ''}">
+              <span class="line-num">${l.line_num}</span>
+              <span>${escapeHtml(l.code)}</span>
+            </div>
+          `).join('')}
+        </div>
+      ` : '';
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="severity-tag ${finding.severity}">${finding.severity}</span>
+          <span class="card-title">${escapeHtml(finding.title)}</span>
+        </div>
+        <div class="card-meta">
+          ${finding.cwe ? `<span class="meta-item">${escapeHtml(finding.cwe)}</span>` : ''}
+          ${finding.rule_id ? `<span class="meta-item">${escapeHtml(finding.rule_id)}</span>` : ''}
+          <span class="meta-item">L${finding.line || '?'}</span>
+          <span class="meta-item">confidence ${Math.round(finding.confidence * 100)}%</span>
+        </div>
+        <div class="card-desc">${escapeHtml(finding.description)}</div>
+        ${finding.suggestion ? `<div class="card-suggestion">&#128161; ${escapeHtml(finding.suggestion)}</div>` : ''}
+        ${codeHtml}
+        ${traceHtml}
+      `;
+      list.appendChild(card);
+    });
+  });
+
+  // Scroll to results
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Export ────────────────────────────────────────────────────────────
+async function exportResults(format) {
+  try {
+    const resp = await fetch('/api/export', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ format, findings: scanResults }),
+    });
+    const data = await resp.json();
+    if (data.success) {
+      const blob = new Blob([JSON.stringify(data.content, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ansede-results.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  } catch (err) {
+    alert('Export failed: ' + err.message);
+  }
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────
+function clearResults() {
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('findingsList').innerHTML = '';
+  document.getElementById('codeInput').value = '';
+  uploadedFiles = [];
+  scanResults = [];
+  document.getElementById('fileCount').textContent = 'No files selected';
+}
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>

@@ -7,7 +7,21 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ansede_static._types import TraceFrame
-from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments
+from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments, consume_balanced
+from ansede_static.js_engine.constants import (
+    AUTH_MIDDLEWARE_RE,
+    PRIVILEGE_MIDDLEWARE_RE,
+    OWNERSHIP_KEY_RE,
+    PRINCIPAL_REF_RE,
+    VERIFICATION_CALL_RE,
+    PRIVILEGE_KEY_RE,
+    REQUEST_OBJECT_ARG_RE,
+    LOOKUP_CALLEE_PARTS,
+    MUTATION_CALLEE_PARTS,
+    PATH_CALLEE_PARTS,
+    SSRF_CALLEES,
+    callee_matches,
+)
 from ansede_static.js_engine.structure import collect_calls, mask_js_text, parse_object_literal, split_top_level_args
 from ansede_static.js_engine.taint import (
 	append_trace,
@@ -20,67 +34,10 @@ from ansede_static.js_engine.taint import (
 
 _JS_EXTENSIONS = (".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs")
 _SIMPLE_NAME_RE = re.compile(r"^[A-Za-z_$][\w$]*$")
-_LOOKUP_CALLEE_PARTS = {"findByPk", "findById", "findOne", "findUnique", "findFirst"}
-_MUTATION_CALLEE_PARTS = {
-	"destroy",
-	"update",
-	"deleteOne",
-	"remove",
-	"findByIdAndUpdate",
-	"findByIdAndDelete",
-	"findOneAndUpdate",
-	"findOneAndDelete",
-}
-_PATH_CALLEE_PARTS = {
-	"readFile",
-	"readFileSync",
-	"writeFile",
-	"writeFileSync",
-	"open",
-	"openSync",
-	"unlink",
-	"unlinkSync",
-	"stat",
-	"statSync",
-	"access",
-	"accessSync",
-	"createReadStream",
-	"createWriteStream",
-	"resolve",
-	"join",
-}
-_SSRF_CALLEES = {
-	"fetch",
-	"axios.get",
-	"axios.post",
-	"request",
-	"got",
-	"needle",
-	"http.get",
-	"https.get",
-}
-_REQUEST_OBJECT_ARG_RE = re.compile(
-	r"^\s*(?:req|request|ctx|context|event|c)(?:\b|\s*$)",
-	re.IGNORECASE,
-)
-_VERIFICATION_CALL_RE = re.compile(
-	r"jwt\.verify|verifyToken|checkAuth|validateToken|decodeToken|passport\.authenticate|"
-	r"loadUser|findByToken|authenticate|authorize|requireRole|checkPermission|hasPermission|hasRole|"
-	r"getServerSession|verifyIdToken|validateSession|lucia\.validateSession|supabase\.auth\.getUser|"
-	r"auth\s*\(|requireSession|requireUser",
-	re.IGNORECASE,
-)
-_PRIVILEGE_KEY_RE = re.compile(r"admin|staff|superuser|root|role|permission|scope|acl|rbac", re.IGNORECASE)
-_OWNERSHIP_KEY_RE = re.compile(
-	r"ownerId|userId|accountId|tenantId|authorId|createdBy|organizationId|orgId",
-	re.IGNORECASE,
-)
-_PRINCIPAL_REF_RE = re.compile(
-	r"(?:req|request)\.(?:user|auth)|res\.locals\.user|reply\.locals\.user|ctx\.state\.user|"
-	r"context\.state\.user|event\.locals\.user|locals\.user|currentUser|session\.user|"
-	r"(?:req|request)\.session\.(?:user|auth)|c\.get\(\s*[\"']user[\"']\s*\)",
-	re.IGNORECASE,
-)
+# LOOKUP_CALLEE_PARTS, MUTATION_CALLEE_PARTS, PATH_CALLEE_PARTS, SSRF_CALLEES,
+# AUTH_MIDDLEWARE_RE, PRIVILEGE_MIDDLEWARE_RE, OWNERSHIP_KEY_RE, PRINCIPAL_REF_RE,
+# VERIFICATION_CALL_RE, PRIVILEGE_KEY_RE, REQUEST_OBJECT_ARG_RE
+# are all imported from js_engine.constants
 _FUNCTION_DECL_RE = re.compile(
 	r"(?P<prefix>export\s+default\s+|export\s+)?function\s+(?P<name>[A-Za-z_$][\w$]*)?\s*\((?P<params>[^)]*)\)\s*\{",
 	re.S,
@@ -1231,7 +1188,7 @@ def summarize_js_function(
 	effects: list[HelperEffect] = []
 	return_effects: list[ReturnEffect] = []
 	depends_on: set[str] = set()
-	verifies_auth = bool(_VERIFICATION_CALL_RE.search(function_def.body))
+	verifies_auth = bool(VERIFICATION_CALL_RE.search(function_def.body))
 	privilege_guard = _body_has_privilege_guard(function_def.body)
 	ownership_guard = _body_has_ownership_guard(function_def.body)
 	call_aliases = _extract_call_aliases(function_def.body)
@@ -1554,20 +1511,20 @@ def _direct_effects_for_param(
 			sink_label = "sink `reply.redirect()`" if call.callee == "reply.redirect" else "sink `res.redirect()`"
 			effects.append(HelperEffect("redirect", param_index, sink_label))
 
-		if short_name in _PATH_CALLEE_PARTS and arg0_trace and not trace_has_sanitizer(arg0_trace, "path"):
+		if short_name in PATH_CALLEE_PARTS and arg0_trace and not trace_has_sanitizer(arg0_trace, "path"):
 			effects.append(HelperEffect("path", param_index, "sink `fs/path operation`"))
 
-		if call.callee in _SSRF_CALLEES or short_name in {item.split(".")[-1] for item in _SSRF_CALLEES}:
+		if call.callee in SSRF_CALLEES or short_name in {item.split(".")[-1] for item in SSRF_CALLEES}:
 			if arg0_trace and not trace_has_sanitizer(arg0_trace, "ssrf"):
 				effects.append(HelperEffect("ssrf", param_index, "sink `HTTP client call`"))
 
-		if short_name in _LOOKUP_CALLEE_PARTS and arg0_trace:
+		if short_name in LOOKUP_CALLEE_PARTS and arg0_trace:
 			effects.append(HelperEffect("lookup", param_index, f"resource lookup `{call.raw[:80]}`"))
 			lhs_match = re.match(r"\s*(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=", call.raw)
 			if lhs_match:
 				resource_aliases.add(lhs_match.group(1))
 
-		if short_name in _MUTATION_CALLEE_PARTS:
+		if short_name in MUTATION_CALLEE_PARTS:
 			if any(trace_for_expr(argument, taint_traces, line=call_line) for argument in call.arguments):
 				effects.append(HelperEffect("mutation", param_index, f"mutation `{call.raw[:80]}`"))
 			instance_name = call.callee.split(".", 1)[0]
@@ -1595,16 +1552,16 @@ def _extract_principal_aliases(code: str) -> set[str]:
 		if not match:
 			continue
 		target, expr = match.groups()
-		if _PRINCIPAL_REF_RE.search(expr):
+		if PRINCIPAL_REF_RE.search(expr):
 			aliases.add(target)
 	return aliases
 
 
 def _line_has_privilege_guard(line: str, principal_aliases: set[str]) -> bool:
 	stripped = line.strip()
-	if not stripped or not _PRIVILEGE_KEY_RE.search(stripped):
+	if not stripped or not PRIVILEGE_KEY_RE.search(stripped):
 		return False
-	has_principal = bool(_PRINCIPAL_REF_RE.search(stripped))
+	has_principal = bool(PRINCIPAL_REF_RE.search(stripped))
 	if not has_principal:
 		has_principal = any(re.search(rf"\b{re.escape(alias)}\b", stripped) for alias in principal_aliases)
 	if not has_principal:
@@ -1614,9 +1571,9 @@ def _line_has_privilege_guard(line: str, principal_aliases: set[str]) -> bool:
 
 def _line_has_owner_guard(line: str, principal_aliases: set[str]) -> bool:
 	stripped = line.strip()
-	if not stripped or not _OWNERSHIP_KEY_RE.search(stripped):
+	if not stripped or not OWNERSHIP_KEY_RE.search(stripped):
 		return False
-	has_principal = bool(_PRINCIPAL_REF_RE.search(stripped))
+	has_principal = bool(PRINCIPAL_REF_RE.search(stripped))
 	if not has_principal:
 		has_principal = any(re.search(rf"\b{re.escape(alias)}\b", stripped) for alias in principal_aliases)
 	if not has_principal:
@@ -1650,6 +1607,6 @@ def _dedup_return_effects(effects: list[ReturnEffect]) -> tuple[ReturnEffect, ..
 
 def request_object_trace(argument: str, *, line: int) -> tuple[TraceFrame, ...]:
 	candidate = argument.strip()
-	if not _REQUEST_OBJECT_ARG_RE.match(candidate):
+	if not REQUEST_OBJECT_ARG_RE.match(candidate):
 		return ()
 	return (TraceFrame(kind="source", label=f"request object `{candidate}`", line=line),)
