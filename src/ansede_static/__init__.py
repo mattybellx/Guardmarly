@@ -37,6 +37,7 @@ __version__ = get_engine_version()
 
 _PYTHON_EXTS = frozenset({".py", ".pyi", ".pyw"})
 _JS_EXTS     = frozenset({".js", ".mjs", ".cjs", ".ts", ".tsx", ".jsx"})
+_GO_EXTS     = frozenset({".go"})
 
 
 def scan_file(path: str | Path, config: AnsedeConfig | None = None, *, js_backend: str = "auto") -> AnalysisResult:
@@ -65,8 +66,12 @@ def scan_file(path: str | Path, config: AnsedeConfig | None = None, *, js_backen
         elif ext in _JS_EXTS:
             code = p.read_text(encoding="utf-8", errors="replace")
             result, _ = run_js_analysis(code, filename=str(p), requested_backend=js_backend, global_graph=shared_graph)
+        elif ext in _GO_EXTS:
+            from ansede_static.go_engine.go_analyzer import run_go_analysis
+            code = p.read_text(encoding="utf-8", errors="replace")
+            result = run_go_analysis(code, filename=str(p))
         else:
-            raise ValueError(f"Unsupported file extension: {ext!r}. Supported: .py, .js, .ts (and variants).")
+            raise ValueError(f"Unsupported file extension: {ext!r}. Supported: .py, .js, .ts, .go (and variants).")
     apply_config_to_results([result], config)
     return result
 
@@ -95,7 +100,10 @@ def scan_code(
             result = analyze_python(code, filename=filename)
         elif language in ("javascript", "typescript", "js", "ts"):
             result, _ = run_js_analysis(code, filename=filename, requested_backend=js_backend)
+        elif language == "go":
+            from ansede_static.go_engine.go_analyzer import run_go_analysis
+            result = run_go_analysis(code, filename=filename)
         else:
-            raise ValueError(f"Unsupported language: {language!r}. Must be 'python' or 'javascript'.")
+            raise ValueError(f"Unsupported language: {language!r}. Must be 'python', 'javascript', or 'go'.")
     apply_config_to_results([result], config)
     return result
