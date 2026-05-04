@@ -86,16 +86,21 @@ class FunctionSummary:
 
 @dataclass(frozen=True)
 class IFDSTaintFact:
-    """Context-sensitive IFDS taint fact.
+    """Context-sensitive IFDS taint fact with field-sensitive access paths.
 
     `call_string` stores the bounded call context (k-limited) and is used to
     keep return-flow propagation sound for nested helper chains.
+
+    `access_path` tracks the sequence of field/property accesses from the
+    tainted base object — e.g., (\"user\", \"email\") means obj.user.email is
+    tainted.  Empty tuple means the base reference itself is tainted.
     """
 
     function_file: str
     function_name: str
     value_label: str
     call_string: Tuple[str, ...] = ()
+    access_path: Tuple[str, ...] = ()
 
     def trim(self, k: int) -> "IFDSTaintFact":
         if k <= 0:
@@ -104,6 +109,7 @@ class IFDSTaintFact:
                 function_name=self.function_name,
                 value_label=self.value_label,
                 call_string=(),
+                access_path=self.access_path,
             )
         if len(self.call_string) <= k:
             return self
@@ -112,6 +118,7 @@ class IFDSTaintFact:
             function_name=self.function_name,
             value_label=self.value_label,
             call_string=self.call_string[-k:],
+            access_path=self.access_path,
         )
 
 
@@ -126,12 +133,17 @@ class IDETaintLevel(IntEnum):
 
 @dataclass(frozen=True)
 class IDETaintFact:
-    """IDE lattice fact tracked per (file, function, value, call-string)."""
+    """IDE lattice fact tracked per (file, function, value, call-string).
+
+    `access_path` provides field-sensitive precision: (\"user\", \"email\")
+    means obj.user.email is tainted rather than the whole obj reference.
+    """
 
     level: IDETaintLevel = IDETaintLevel.BOTTOM
     sources: Tuple[str, ...] = ()
     sanitizers: Tuple[str, ...] = ()
     call_string: Tuple[str, ...] = ()
+    access_path: Tuple[str, ...] = ()
 
     def trim(self, k: int) -> "IDETaintFact":
         if k <= 0:
@@ -140,6 +152,7 @@ class IDETaintFact:
                 sources=self.sources,
                 sanitizers=self.sanitizers,
                 call_string=(),
+                access_path=self.access_path,
             )
         if len(self.call_string) <= k:
             return self
@@ -148,6 +161,7 @@ class IDETaintFact:
             sources=self.sources,
             sanitizers=self.sanitizers,
             call_string=self.call_string[-k:],
+            access_path=self.access_path,
         )
 
     def join(self, other: "IDETaintFact") -> "IDETaintFact":
@@ -159,7 +173,12 @@ class IDETaintFact:
         sources = tuple(sorted(set(self.sources) | set(other.sources)))
         sanitizers = tuple(sorted(set(self.sanitizers) | set(other.sanitizers)))
         call_string = self.call_string if len(self.call_string) >= len(other.call_string) else other.call_string
-        return IDETaintFact(level=level, sources=sources, sanitizers=sanitizers, call_string=call_string)
+        # Join access paths: if both paths exist and differ, widen to empty (top)
+        if self.access_path and other.access_path and self.access_path != other.access_path:
+            access_path: Tuple[str, ...] = ()
+        else:
+            access_path = self.access_path or other.access_path
+        return IDETaintFact(level=level, sources=sources, sanitizers=sanitizers, call_string=call_string, access_path=access_path)
 
     def meet(self, other: "IDETaintFact") -> "IDETaintFact":
         if self.level == IDETaintLevel.TOP:
@@ -171,11 +190,17 @@ class IDETaintFact:
         sanitizer_intersection = set(self.sanitizers) & set(other.sanitizers)
         if not source_intersection and level > IDETaintLevel.CLEAN:
             level = IDETaintLevel.CLEAN
+        # Meet access paths: if they match, keep them; otherwise widen
+        if self.access_path == other.access_path:
+            access_path = self.access_path
+        else:
+            access_path = ()
         return IDETaintFact(
             level=level,
             sources=tuple(sorted(source_intersection)),
             sanitizers=tuple(sorted(sanitizer_intersection)),
             call_string=self.call_string if self.call_string == other.call_string else (),
+            access_path=access_path,
         )
 
 
@@ -580,6 +605,181 @@ class GlobalGraph:
                     if imported_taint:
                         return imported_taint
         return None
+
+    # ── Demand-driven call-chain verification ─────────────────────────────
+
+    def verify_call_chain_soundness(
+        self,
+        *,
+        sink_file: str,
+        sink_function: str,
+        source_file: str,
+        source_function: str,
+        max_depth: int = 12,
+    ) -> Tuple[bool, List[str]]:
+        """Demand-driven backward verification of the taint path through callers.
+
+        Starting from the sink function, walks *up* the call dependency graph
+        (reverse edges) to verify that the source function genuinely reaches
+        the sink through a chain of verified summarized calls.  Returns
+        (is_reachable, chain_text).
+
+        Unlike the bounded k=2 forward call-string, this can traverse
+        arbitrarily deep middleware → view → service → ORM chains.
+        """
+        sink_key = self._summary_tuple_key(sink_file, sink_function)
+        source_key = self._summary_tuple_key(source_file, source_function)
+
+        # BFS upward from sink through reverse call dependencies
+        visited: Set[Tuple[str, str]] = {sink_key}
+        parent: Dict[Tuple[str, str], Optional[Tuple[str, str]]] = {sink_key: None}
+        queue: List[Tuple[str, str]] = [sink_key]
+        found = False
+
+        for _depth in range(max_depth):
+            next_queue: List[Tuple[str, str]] = []
+            for current in queue:
+                # Check all callers of the current function
+                callers = self.reverse_summary_dependencies.get(current, set())
+                for caller_key in callers:
+                    if caller_key in visited:
+                        continue
+                    visited.add(caller_key)
+                    parent[caller_key] = current
+                    if caller_key == source_key:
+                        found = True
+                        break
+                    # Also check partial matches by file or function name
+                    caller_file, caller_fn = caller_key
+                    if self._paths_match(caller_file, source_key[0]) and caller_fn == source_key[1]:
+                        found = True
+                        break
+                    next_queue.append(caller_key)
+                if found:
+                    break
+            if found or not next_queue:
+                break
+            queue = next_queue
+
+        if found:
+            # Reconstruct the chain from source → sink
+            chain: List[str] = []
+            cur: Optional[Tuple[str, str]] = source_key
+            while cur is not None:
+                chain.append(f"{cur[1]}({cur[0]})")
+                cur = parent.get(cur)
+            return True, chain
+        return False, []
+
+    def resolve_taint_with_access_path(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        access_path: Tuple[str, ...] = (),
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> Tuple[IDETaintLevel, Tuple[str, ...], Tuple[str, ...]]:
+        """Resolve taint state for a value with optional field-sensitive access path.
+
+        When `access_path` is non-empty (e.g., (\"user\", \"email\")), only facts
+        whose access path is a prefix of or equal to the query path will match.
+        An empty query access_path matches any fact (conservative read).
+        """
+        if not access_path:
+            # Conservative: match any access path
+            fact = self.get_ide_fact(
+                file_path=file_path,
+                function_name=function_name,
+                value_label=value_label,
+                call_string=call_string,
+                call_string_k=call_string_k,
+            )
+            return fact.level, fact.sources, fact.sanitizers
+
+        # Field-sensitive lookup: try exact access path first, then each prefix
+        for prefix_len in range(len(access_path), 0, -1):
+            prefix = access_path[:prefix_len]
+            # Look up facts with each call-string variant
+            for cs_variant in self._call_string_variants(call_string, call_string_k):
+                key = self._ide_fact_key(
+                    file_path=file_path,
+                    function_name=function_name,
+                    value_label=value_label,
+                    call_string=cs_variant,
+                )
+                if key in self.ide_facts:
+                    fact = self.ide_facts[key]
+                    if not fact.access_path or fact.access_path == prefix:
+                        return fact.level, fact.sources, fact.sanitizers
+            # Also try without access path restriction (conservative fallback)
+            for cs_variant in self._call_string_variants(call_string, call_string_k):
+                key = self._ide_fact_key(
+                    file_path=file_path,
+                    function_name=function_name,
+                    value_label=value_label,
+                    call_string=cs_variant,
+                )
+                if key in self.ide_facts and not self.ide_facts[key].access_path:
+                    fact = self.ide_facts[key]
+                    if fact.level >= IDETaintLevel.TAINTED:
+                        return fact.level, fact.sources, fact.sanitizers
+
+        # Fall back to conservative lookup
+        fact = self.get_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=call_string,
+            call_string_k=call_string_k,
+        )
+        return fact.level, fact.sources, fact.sanitizers
+
+    def _call_string_variants(
+        self,
+        call_string: Tuple[str, ...],
+        k: int,
+    ) -> List[Tuple[str, ...]]:
+        """Generate call-string variants for fuzzy matching."""
+        if not call_string:
+            return [()]
+        bounded = call_string[-k:] if k > 0 else call_string
+        variants = [bounded]
+        # Also try dropping the last call-site for imprecise matching
+        if len(bounded) > 1:
+            variants.append(bounded[:-1])
+        if len(bounded) > 0:
+            variants.append(())
+        return variants
+
+    def set_taint_with_access_path(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        level: IDETaintLevel,
+        sources: Tuple[str, ...] = (),
+        access_path: Tuple[str, ...] = (),
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> IDETaintFact:
+        """Record a field-sensitive taint fact for a value."""
+        fact = IDETaintFact(
+            level=level,
+            sources=sources,
+            call_string=call_string,
+            access_path=access_path,
+        )
+        return self.set_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            fact=fact,
+            join=True,
+            call_string_k=call_string_k,
+        )
 
     def find_all_paths(self, source_id: NodeID, sink_id: NodeID, max_depth: int = 5) -> List[List[NodeID]]:
         """Bounded DFS path discovery across the ICFG projection."""
