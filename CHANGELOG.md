@@ -5,6 +5,26 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — CWE Coverage Expansion (2026-05-04)
+- **5 new CWE categories** with Python detector rules: CWE-200 (PY-039, information exposure), CWE-295 (PY-040, TLS verification disabled), CWE-319 (PY-041, cleartext HTTP), CWE-400 (PY-042, unbounded resource consumption), CWE-614 (PY-043, cookie without secure flag).
+- **Rule catalog expanded** from 91 to 96 rules (43 Python + 53 JS), 46 distinct CWEs.
+- **OWASP Top 10 2021** now 100% covered across all 10 categories.
+- **Curated manifest** expanded from 3 to 8 cases, including first Django (non-NodeGoat) case.
+- **JS rate-limiting detection** (`JS-029`) improved with route-aware limiter guard tracking and elevated to HIGH severity.
+
+### Improved — Framework Noise & Benchmark Honesty (2026-05-04)
+- **Python framework noise policy** comprehensively expanded: 11 rule categories covered with global downgrades for framework internals plus path-specific rules for edge cases (CLI, auto-reload, DB backends, middleware).
+- **JS vendor/minified noise policy** with separate confidence thresholds for vendor assets (0.15) vs framework internal code (0.25).
+- **Weak-label benchmark policy** with framework-specific file and CWE suppressions, plus curated-vs-weak hybrid sampling preference.
+- **Entropy scanner** refined to eliminate false positives on format strings, HTML templates, and non-secret-context tokens.
+- **Web-wild harness** upgraded with balanced sampling, vendor-mode toggles, hybrid labeling with curated manifest, and output file support.
+
+### Changed — Architecture (2026-05-04)
+- **GlobalGraph** now created at `scan_file()` entry point for both Python and JS analysis, enabling IDE-lattice-powered cross-file taint tracking across all language backends.
+- **Python analyzer** now uses `id()`-based `func_to_class` mapping for Django CBV mixin detection.
+- **`analyze_file()`** signature updated to accept optional `global_graph` parameter.
+- **Triage engine** enhanced with broader ownership/tenant scoping patterns, Nest.js guard detection, and improved FastAPI dependency signal matching.
+
 ### Added — Public Launch Readiness (2026-04-30)
 - **`BENCHMARKS.md`** — dedicated public proof page with reproducible benchmark commands and current scorecards (CVE/quality/external/web-wild), plus cross-scanner NodeGoat evidence for ansede-static vs Bandit vs Semgrep OSS.
 
