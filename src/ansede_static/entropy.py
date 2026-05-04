@@ -53,6 +53,8 @@ from ansede_static._types import Finding, Severity
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 DEFAULT_MIN_ENTROPY: float = 4.5
+# No-secret-context findings use a higher bar to limit noise on framework code.
+_NON_SECRET_MIN_ENTROPY: float = 5.0
 DEFAULT_MIN_LENGTH: int = 20
 
 _SECRET_KEYWORDS: frozenset = frozenset({
@@ -65,14 +67,23 @@ _SECRET_KEYWORDS: frozenset = frozenset({
     "refresh_token", "bearer", "session_key", "secret_key",
 })
 
-# Strings matching these patterns are almost certainly not secrets
+# Strings matching these patterns are almost certainly not secrets.
 _EXCLUDE_PATTERNS: tuple = (
     re.compile(r"^[0-9a-f]{40}$", re.I),   # SHA-1 hex digest
     re.compile(r"^[0-9a-f]{64}$", re.I),   # SHA-256 hex digest
     re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", re.I),  # UUID
-    re.compile(r"^[\./~]"),                  # paths
+    re.compile(r"^[\./~]"),                  # file paths
     re.compile(r"^https?://"),               # URLs
-    re.compile(r"^[A-Za-z0-9+/]+=*$"),      # pure base64 (common for test data)
+    # Real secrets don't contain spaces; format strings, error messages, and i18n
+    # strings all do.  This single check eliminates the vast majority of framework
+    # source FPs without touching any real credential pattern.
+    re.compile(r" "),
+    # Format-string markers  (%s, %(x)s, {0}, {name})
+    re.compile(r"%[\(\w]|\{\w*\}"),
+    # HTML tags / CSS fragments / SVG — common in template/widget code
+    re.compile(r"<[a-z]+[ />]|style=|class=", re.I),
+    # Regex-flavoured strings (anchors, character classes, quantifiers)
+    re.compile(r"\^\S|\\[dDwWsSnrtu]|\[\^?[\w-]{2,}\]"),
 )
 
 _PLACEHOLDER_VALUES: frozenset = frozenset({
@@ -232,6 +243,11 @@ def scan_for_secrets(
         lineno = getattr(node, "lineno", 0)
         kw = _context_keyword(node, parent_map)
         is_secret_context = _keyword_matches_secret(kw) if kw else False
+
+        # Non-secret-context strings need a higher entropy bar to reduce noise
+        # from framework internals (i18n keys, SQL templates, etc.).
+        if not is_secret_context and ent < _NON_SECRET_MIN_ENTROPY:
+            continue
 
         severity = Severity.HIGH if is_secret_context else Severity.LOW
         rule_id = "PY-ENTROPY-001" if is_secret_context else "PY-ENTROPY-002"

@@ -725,6 +725,9 @@ app.post('/login', (req, res) => {
 });
 """
         assert _has_cwe(code, "CWE-307")
+        result = analyze_js(code)
+        finding = next(f for f in result.findings if f.cwe == "CWE-307")
+        assert finding.severity == Severity.HIGH
 
     def test_password_reset_route_no_rate_limiter(self):
         code = """
@@ -756,6 +759,52 @@ app.get('/products', (req, res) => {
 });
 """
         assert not _has_cwe(code, "CWE-307")
+
+    def test_get_login_page_not_flagged_for_rate_limit(self):
+        code = """
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_global_app_use_rate_limiter_suppresses_auth_route(self):
+        code = """
+const rateLimit = require('express-rate-limit');
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 5 }));
+
+app.post('/login', (req, res) => {
+    res.json({ ok: true });
+});
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_prefix_rate_limiter_suppresses_matching_auth_route(self):
+        code = """
+const rateLimit = require('express-rate-limit');
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+app.use('/auth', authLimiter);
+
+app.post('/auth/reset-password', (req, res) => {
+    res.json({ ok: true });
+});
+"""
+        assert not _has_cwe(code, "CWE-307")
+
+    def test_unrelated_limiter_does_not_suppress_login_route(self):
+        code = """
+const rateLimit = require('express-rate-limit');
+const profileLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 5 });
+
+app.get('/profile', profileLimiter, (req, res) => {
+    res.json({ ok: true });
+});
+
+app.post('/login', (req, res) => {
+    res.json({ ok: true });
+});
+"""
+        assert _has_cwe(code, "CWE-307")
 
 
 # ── CWE-352: Missing CSRF protection ─────────────────────────────────────────

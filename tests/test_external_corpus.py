@@ -80,14 +80,23 @@ def test_load_real_world_manifest_has_curated_git_entries():
     manifest = load_manifest(Path("benchmarks/real_world_manifest.json"))
 
     assert {entry.case_id for entry in manifest.entries} == {
-        "nodegoat-open-redirect-and-bruteforce",
+        "nodegoat-login-bruteforce",
+        "nodegoat-signup-bruteforce",
+        "nodegoat-open-redirect-learn-link",
         "nodegoat-redos-validation",
         "nodegoat-eval-code-injection",
+        "nodegoat-hardcoded-zap-api-key",
+        "nodegoat-hardcoded-cookie-and-crypto-secrets",
+        "django-gdal-raster-clone-path-traversal",
     }
     assert all(entry.source.kind == "git" for entry in manifest.entries)
-    assert all(entry.source.repo == "https://github.com/OWASP/NodeGoat.git" for entry in manifest.entries)
+    assert {entry.source.repo for entry in manifest.entries} == {
+        "https://github.com/OWASP/NodeGoat.git",
+        "https://github.com/django/django.git",
+    }
     assert all(len(entry.source.ref) == 40 for entry in manifest.entries)
-    assert all(entry.js_backend == "structural" for entry in manifest.entries)
+    assert all(entry.js_backend == "structural" for entry in manifest.entries if entry.language == "javascript")
+    assert any(entry.language == "python" and entry.expected_rule_ids == ("PY-023",) for entry in manifest.entries)
 
 
 @pytest.mark.skipif(shutil.which("git") is None, reason="git is required for git-backed corpus tests")

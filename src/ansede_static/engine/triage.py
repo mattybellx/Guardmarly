@@ -453,12 +453,12 @@ class CWETriageRules:
             )
 
         # Django: class inherits from a known auth mixin → route is protected.
-        _DJANGO_AUTH_MIXIN_RE = re.compile(
-            r'\b(?:LoginRequiredMixin|PermissionRequiredMixin|UserPassesTestMixin|'
-            r'AccessMixin|StaffRequiredMixin|SuperuserRequiredMixin|'
-            r'OwnerRequiredMixin|GroupRequiredMixin|RoleRequiredMixin)\b',
-        )
-        if _DJANGO_AUTH_MIXIN_RE.search(snippet):
+        if re.search(
+            r'\bclass\s+\w+\s*\([^)]*(?:LoginRequiredMixin|PermissionRequiredMixin|'
+            r'UserPassesTestMixin|AccessMixin|StaffRequiredMixin|SuperuserRequiredMixin|'
+            r'OwnerRequiredMixin|GroupRequiredMixin|RoleRequiredMixin)[^)]*\)',
+            snippet, re.IGNORECASE,
+        ):
             return TriageResult(
                 is_true_positive=False,
                 confidence=0.95,
@@ -470,12 +470,16 @@ class CWETriageRules:
         # Do not suppress solely on AuthenticationMiddleware presence.
 
         # FastAPI: OAuth2/HTTPBearer security scheme or get_current_user dependency.
-        _FASTAPI_AUTH_SIGNAL_RE = re.compile(
-            r'\b(?:OAuth2PasswordBearer|HTTPBearer|HTTPBasic|HTTPDigest|APIKeyHeader|'
-            r'APIKeyCookie|APIKeyQuery|OpenIdConnect|get_current_user|'
-            r'oauth2_scheme|security_scheme)\b',
-        )
-        if _FASTAPI_AUTH_SIGNAL_RE.search(snippet):
+        if re.search(
+            r'\b(?:Depends|Security)\s*\(\s*'
+            r'(?:get_current_user|current_user|require_auth|verify_token|authenticate|'
+            r'oauth2_scheme|http_bearer|http_basic|security_scheme|'
+            r'HTTPBearer|HTTPBasic|OAuth2PasswordBearer|APIKey\w*)\b',
+            snippet, re.IGNORECASE,
+        ) or re.search(
+            r'\b(?:dependencies\s*=\s*\[[^\]]*(?:Depends|Security)\s*\([^\]]*\])',
+            snippet, re.IGNORECASE | re.DOTALL,
+        ):
             return TriageResult(
                 is_true_positive=False,
                 confidence=0.92,
@@ -491,6 +495,8 @@ class CWETriageRules:
             'depends(get_current_user', 'security(get_current_user',
             'oauth2passwordbearer(', 'httpbearer(', 'apikeyheader(',
             'dependencies=[depends(',
+            # Nest.js guard decorators (TypeScript endpoints)
+            '@useguards(',
         ]
         if any(pattern in snippet_lower for pattern in explicit_guard_patterns):
             return TriageResult(
@@ -505,20 +511,24 @@ class CWETriageRules:
     @staticmethod
     def triage_cwe_639(finding: Finding, snippet: str, file_path: str) -> TriageResult | None:
         """CWE-639: IDOR (Insecure Direct Object Reference)."""
-        # ORM ownership-scoped queries are safe IDOR mitigations.
-        _ORM_OWNERSHIP_RE = re.compile(
-            r'get_object_or_404\s*\([^)]*\buser\s*=|'          # Django get_object_or_404(Model, user=req.user)
-            r'filter\s*\([^)]*(?:owner_id|user_id|user)\s*=|'   # .filter(owner_id=user.id)
-            r'filter_by\s*\([^)]*(?:owner_id|user_id|user)\s*=|'
-            r'\.objects\.filter\s*\([^)]*request\.user|'
-            r'WHERE\s+[^\n]*=\s*[^\n]*(?:user_id|owner_id)',
-            re.IGNORECASE,
-        )
-        if _ORM_OWNERSHIP_RE.search(snippet):
+        # ORM/SQL ownership-scoped queries are safe IDOR mitigations.
+        if re.search(
+            r'\b(?:filter|filter_by|get_object_or_404|where|objects\.filter)\s*\([^)]*'
+            r'(?:owner_id|user_id|owner|user|tenant_id|account_id|organization_id|org_id|workspace_id)\s*=\s*'
+            r'[^)]*(?:current_user|request\.user|g\.user|g\.user_id|principal|identity|actor|viewer|claims)\b',
+            snippet, re.IGNORECASE | re.DOTALL,
+        ) or re.search(
+            r'\bWHERE\b[^\n;]*(?:owner_id|user_id|tenant_id|account_id|organization_id|org_id|workspace_id)\b',
+            snippet, re.IGNORECASE,
+        ) or re.search(
+            r'\bif\s+[^\n:]*\.(?:owner_id|user_id|tenant_id|account_id|organization_id|org_id|workspace_id)\s*'
+            r'(?:==|!=|is\s+not|is)\s*[^\n:]*\b(?:current_user|request\.user|g\.user|g\.user_id|principal|identity|actor|viewer)\b',
+            snippet, re.IGNORECASE,
+        ):
             return TriageResult(
                 is_true_positive=False,
-                confidence=0.88,
-                reason="ORM ownership-scoped query detected (e.g. filter(owner_id=user.id))",
+                confidence=0.9,
+                reason="Ownership/tenant scoping detected in query or guard",
                 remediation_level="suppress",
             )
 

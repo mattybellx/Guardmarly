@@ -48,9 +48,31 @@ _SANITIZE_HTML_RE = re.compile(r'DOMPurify\.sanitize|sanitizeHtml|escapeHtml', r
 _DYNAMIC_CONCAT_RE = re.compile(r'(?:\+\s*[A-Za-z_$`"\'])|(?:[A-Za-z_$)\]`"\']\s*\+)', re.IGNORECASE)
 _SHELL_TRUE_RE = re.compile(r'\bshell\s*:\s*true\b', re.IGNORECASE)
 _SIMPLE_IDENTIFIER_RE = re.compile(r'^\s*[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\s*$')
+_VENDOR_JS_PATH_RE = re.compile(r'(?:^|[/\\])(?:vendor|vendors|node_modules|third_party|third-party|bower_components)(?:[/\\]|$)', re.IGNORECASE)
+_MINIFIED_JS_PATH_RE = re.compile(r'(?:\.min\.(?:js|css)$|(?:bundle|chunk)\.js$)', re.IGNORECASE)
 # DOCUMENT_WRITE_CALLEES, TIMER_CALLEES, COMMAND_EXEC_CALLEES, SHELL_TRUE_CALLEES,
 # SQL_CALLEES, SSRF_CALLEES, PATH_CALLEE_PARTS, callee_matches
 # are all imported from js_engine.constants
+
+_FRAMEWORK_INTERNAL_JS_MARKERS: tuple[str, ...] = (
+    "/expressjs__express/lib/",
+    "/pallets__flask/src/flask/",
+    "/django__django/django/",
+    "/tiangolo__fastapi/fastapi/",
+    "/site-packages/express/",
+    "/site-packages/flask/",
+    "/site-packages/django/",
+    "/site-packages/fastapi/",
+    "/site-packages/starlette/",
+)
+
+_VENDOR_NOISE_CWES: frozenset[str] = frozenset({
+    "CWE-22", "CWE-98", "CWE-1321", "CWE-1333", "CWE-601", "CWE-862", "CWE-918",
+})
+
+_FRAMEWORK_INTERNAL_NOISE_CWES: frozenset[str] = frozenset({
+    "CWE-22", "CWE-98", "CWE-1333", "CWE-601", "CWE-918",
+})
 
 # Backward-compatible wrapper — extracts .callee from JsCall and delegates to
 # the canonical callee_matches from js_engine.constants.
@@ -86,6 +108,71 @@ def _downgrade_findings_for_missing_sourcemap(
             triggering_code=finding.triggering_code,
         ))
     return downgraded
+
+
+def _normalized_path(filename: str) -> str:
+    return filename.replace("\\", "/").lower()
+
+
+def _is_vendor_or_minified_js_path(filename: str) -> bool:
+    path_norm = _normalized_path(filename)
+    return bool(_VENDOR_JS_PATH_RE.search(path_norm) or _MINIFIED_JS_PATH_RE.search(path_norm))
+
+
+def _is_framework_internal_js_path(filename: str) -> bool:
+    path_norm = _normalized_path(filename)
+    return any(marker in path_norm for marker in _FRAMEWORK_INTERNAL_JS_MARKERS)
+
+
+def _downgrade_noise_findings(
+    findings: list[Finding],
+    *,
+    reason: str,
+    cwes: frozenset[str],
+    confidence: float = 0.2,
+    severity: Severity = Severity.LOW,
+) -> list[Finding]:
+    for finding in findings:
+        if finding.cwe not in cwes:
+            continue
+        if finding.severity.sort_key < severity.sort_key:
+            finding.severity = severity
+        finding.confidence = min(finding.confidence, confidence)
+        if reason not in finding.description:
+            finding.description = f"{finding.description} ({reason})"
+    return findings
+
+
+def _apply_js_noise_policy(
+    findings: list[Finding],
+    *,
+    filename: str,
+    minified: object,
+    source_map_path: str | Path | None,
+) -> list[Finding]:
+    if not filename:
+        return findings
+
+    vendor_like = _is_vendor_or_minified_js_path(filename) or bool(getattr(minified, "is_minified", False) and source_map_path is None)
+    framework_internal = _is_framework_internal_js_path(filename)
+
+    if vendor_like:
+        findings = _downgrade_noise_findings(
+            findings,
+            reason="vendor/minified asset heuristic downgraded",
+            cwes=_VENDOR_NOISE_CWES,
+            confidence=0.15,
+            severity=Severity.LOW,
+        )
+    if framework_internal:
+        findings = _downgrade_noise_findings(
+            findings,
+            reason="framework-internal implementation heuristic downgraded",
+            cwes=_FRAMEWORK_INTERNAL_NOISE_CWES,
+            confidence=0.25,
+            severity=Severity.LOW,
+        )
+    return findings
 
 
 
@@ -461,7 +548,12 @@ def _check_sql_injection(
 def _check_dynamic_require(calls: list[JsCall]) -> list[Finding]:
     findings: list[Finding] = []
     for call in calls:
-        if call.callee.split(".")[-1] != "require" or not call.arguments:
+        # Only match the Node.js global `require()` — not custom object methods like
+        # `handlers.require(name)` or `loader.require(mod)`.  A dot-qualified callee
+        # such as `foo.require` is an object method, not module loading.
+        if "." in call.callee or call.callee.split(".")[-1] != "require":
+            continue
+        if not call.arguments:
             continue
         expr = call.arguments[0]
         if _expr_is_static_string(expr):
@@ -503,7 +595,7 @@ def _check_path_traversal(
             line=call.line,
             title=f"CWE-22: Path traversal via tainted variable at line {call.line}",
             description=(
-                f"A file-system or path operation at L{call.line} uses a user-influenthank u yes{call.raw[:90]}`. "
+                f"A file-system or path operation at L{call.line} uses a user-influenced value: `{call.raw[:90]}`. "
                 f"Attackers can use `../` sequences to escape the intended directory."
             ),
             suggestion="Normalize with `path.basename()` or a strict allowlist and verify the resolved path stays under the expected base directory.",
@@ -646,6 +738,12 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
     merged = remap_findings_to_source_map(merged, filename)
     if minified.is_minified and source_map_path is None:
         merged = _downgrade_findings_for_missing_sourcemap(merged)
+    merged = _apply_js_noise_policy(
+        merged,
+        filename=filename,
+        minified=minified,
+        source_map_path=source_map_path,
+    )
     result.findings = filter_inline_suppressions(merged, code)
     return result
 

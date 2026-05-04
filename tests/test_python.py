@@ -175,6 +175,16 @@ def load(data):
 """
         assert not _has_cwe(code, "CWE-502")
 
+    def test_yaml_load_with_imported_safe_loader_alias_ok(self):
+        code = """
+import yaml
+from yaml import SafeLoader
+
+def load(data):
+    return yaml.load(data, Loader=SafeLoader)
+"""
+        assert not _has_cwe(code, "CWE-502")
+
 
 # ── CWE-22: Path Traversal ────────────────────────────────────────────────────
 
@@ -675,6 +685,18 @@ def fetch():
 """
         assert _has_cwe(code, "CWE-918")
 
+    def test_ssrf_reassignment_to_constant_url_not_flagged(self):
+        code = """
+import requests
+from flask import request
+
+def route():
+    url = request.args.get('url')
+    url = 'https://example.com/status'
+    return requests.get(url)
+"""
+        assert not _has_cwe(code, "CWE-918")
+
     def test_ssrf_helper_chain_trace_keeps_bounded_ifds_context(self):
         code = """
 import requests
@@ -851,6 +873,27 @@ def safe_join(base, name):
     return final_path
 """
         assert not _has_cwe(code, "CWE-22")
+
+    def test_open_path_constructor_with_request_input_is_flagged(self):
+        code = """
+from pathlib import Path
+from flask import Flask, request
+app = Flask(__name__)
+@app.route('/read')
+def read_file():
+    return Path(request.args.get('file')).read_text()
+"""
+        assert _has_cwe(code, "CWE-22")
+
+    def test_join_direct_request_get_is_flagged(self):
+        code = """
+import os
+from flask import request
+def download():
+    path = os.path.join('/uploads', request.args.get('file'))
+    return path
+"""
+        assert _has_cwe(code, "CWE-22")
 
 
 # ── CWE-601: Open Redirect (Rule 22) ─────────────────────────────────────────
@@ -1488,6 +1531,36 @@ def public_endpoint(request):
         result = analyze_python(code)
         assert isinstance(result.findings, list)
 
+    def test_class_based_view_with_login_required_mixin_safe(self):
+        code = """
+from flask import Flask
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+app = Flask(__name__)
+
+class AdminUsersView(LoginRequiredMixin):
+    @app.get('/admin/users')
+    def get(self):
+        return {'users': []}
+"""
+        assert not _has_cwe(code, "CWE-862")
+
+    def test_class_based_view_with_permission_classes_safe(self):
+        code = """
+from flask import Flask
+from rest_framework.permissions import IsAuthenticated
+
+app = Flask(__name__)
+
+class AdminUsersAPIView:
+    permission_classes = [IsAuthenticated]
+
+    @app.get('/admin/users')
+    def get(self):
+        return {'users': []}
+"""
+        assert not _has_cwe(code, "CWE-862")
+
 
 # ── CWE-78: subprocess.getoutput injection (expanded sinks) ──────────────────
 
@@ -1731,3 +1804,134 @@ import importlib
 importlib.import_module('json')
 """
         assert not _has_cwe(code, "CWE-95")
+
+
+# ── CWE-200: Information exposure via traceback (PY-039) ─────────────────────
+
+class TestInformationExposure:
+    def test_traceback_print_exc_exposes_internals(self):
+        code = """
+import traceback
+def handler():
+    try:
+        do_work()
+    except Exception:
+        traceback.print_exc()
+        return 'error'
+"""
+        assert _has_cwe(code, "CWE-200")
+
+    def test_logger_exception_server_side_is_ok(self):
+        code = """
+import logging
+logger = logging.getLogger(__name__)
+def handler():
+    try:
+        do_work()
+    except Exception:
+        logger.exception("Server error")
+        return 'Internal error'
+"""
+        assert not _has_cwe(code, "CWE-200")
+
+
+# ── CWE-295: TLS certificate verification disabled (PY-040) ──────────────────
+
+class TestTLSVerification:
+    def test_verify_false_in_requests(self):
+        code = """
+import requests
+def fetch(url):
+    return requests.get(url, verify=False)
+"""
+        assert _has_cwe(code, "CWE-295")
+
+    def test_verify_true_is_ok(self):
+        code = """
+import requests
+def fetch(url):
+    return requests.get(url, verify=True)
+"""
+        assert not _has_cwe(code, "CWE-295")
+
+    def test_ssl_unverified_context(self):
+        code = """
+import ssl
+ctx = ssl._create_unverified_context()
+"""
+        assert _has_cwe(code, "CWE-295")
+
+
+# ── CWE-319: Cleartext HTTP in auth context (PY-041) ─────────────────────────
+
+class TestCleartextTransmission:
+    def test_http_url_in_login_context(self):
+        code = """
+LOGIN_URL = "http://example.com/auth/login"
+"""
+        assert _has_cwe(code, "CWE-319")
+
+    def test_https_url_is_ok(self):
+        code = """
+LOGIN_URL = "https://example.com/auth/login"
+"""
+        assert not _has_cwe(code, "CWE-319")
+
+    def test_localhost_http_is_ok(self):
+        code = """
+LOGIN_URL = "http://localhost:8000/auth/login"
+"""
+        assert not _has_cwe(code, "CWE-319")
+
+
+# ── CWE-400: Unbounded resource consumption (PY-042) ──────────────────────────
+
+class TestResourceConsumption:
+    def test_unbounded_int_in_range(self):
+        code = """
+from flask import request
+def generate():
+    size = int(request.args.get('size', 100))
+    return [0] * size
+"""
+        assert _has_cwe(code, "CWE-400")
+
+    def test_bounded_int_is_ok(self):
+        code = """
+def generate():
+    size = min(int(input("size: ")), 10000)
+    return [0] * size
+"""
+        assert not _has_cwe(code, "CWE-400")
+
+
+# ── CWE-614: Cookie without secure flag (PY-043) ─────────────────────────────
+
+class TestCookieSecureFlag:
+    def test_set_cookie_secure_false(self):
+        code = """
+from flask import Flask, make_response
+app = Flask(__name__)
+@app.route('/login')
+def login():
+    resp = make_response('ok')
+    resp.set_cookie('session', 'abc123', secure=False, httponly=True)
+    return resp
+"""
+        assert _has_cwe(code, "CWE-614")
+
+    def test_set_cookie_secure_true_is_ok(self):
+        code = """
+from flask import Flask, make_response
+app = Flask(__name__)
+@app.route('/login')
+def login():
+    resp = make_response('ok')
+    resp.set_cookie('session', 'abc123', secure=True, httponly=True)
+    return resp
+"""
+        assert not _has_cwe(code, "CWE-614")
+
+    def test_session_cookie_secure_false_config(self):
+        code = "SESSION_COOKIE_SECURE = False\n"
+        assert _has_cwe(code, "CWE-614")

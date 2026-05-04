@@ -4,65 +4,158 @@ import re
 
 from ansede_static._types import Finding, Severity
 from ansede_static.js_engine.common import COMMENT_LINE_RE
+from ansede_static.js_engine.structure import collect_calls
+
+
+_AUTH_ROUTE_PATH_RE = re.compile(
+    r'(?:^|/)(?:'
+    r'login|signin|sign-in|sign_in|'
+    r'authenticate|auth(?:/|$)|'
+    r'forgot.?password|reset.?password|password.?reset|'
+    r'mfa|2fa|totp|otp|verify.?otp|otp.?verify|'
+    r'token|refresh.?token|token.?refresh|'
+    r'register|signup|sign-up|sign_up'
+    r')(?:/|$)',
+    re.IGNORECASE,
+)
+
+_RATE_LIMIT_RE = re.compile(
+    r'rateLimit|rate.?limiter|throttle|slowDown|express-rate-limit|'
+    r'bottleneck|p-throttle|limiter\.consume|redis.*limiter',
+    re.IGNORECASE,
+)
+
+_RATE_LIMIT_DEF_RE = re.compile(
+    r'\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*.*(?:rateLimit|rate.?limiter|throttle|slowDown|'
+    r'express-rate-limit|bottleneck|p-throttle|limiter\.consume|redis.*limiter)',
+    re.IGNORECASE,
+)
+
+
+def _string_literal_value(value: str | None) -> str | None:
+    if value is None:
+        return None
+    text = value.strip()
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in {'"', "'"}:
+        return text[1:-1]
+    return None
+
+
+def _callee_receiver(callee: str) -> str:
+    if '.' not in callee:
+        return ''
+    return callee.rsplit('.', 1)[0].strip()
+
+
+def _is_auth_route_path(path: str) -> bool:
+    return bool(_AUTH_ROUTE_PATH_RE.search(path))
+
+
+def _looks_like_rate_limit_expr(expr: str, limiter_names: set[str]) -> bool:
+    stripped = expr.strip()
+    if _RATE_LIMIT_RE.search(stripped):
+        return True
+    return any(re.search(rf'\b{re.escape(name)}\b', stripped) for name in limiter_names)
+
+
+def _collect_rate_limiter_names(code: str) -> set[str]:
+    names: set[str] = set()
+    for line in code.splitlines():
+        match = _RATE_LIMIT_DEF_RE.search(line)
+        if match:
+            names.add(match.group(1))
+    return names
+
+
+def _path_matches_prefix(path: str, prefix: str | None) -> bool:
+    if not prefix:
+        return True
+    normalized = prefix.rstrip('/') or '/'
+    return path == normalized or path.startswith(normalized + '/')
+
+
+def _collect_rate_limit_guards(code: str, limiter_names: set[str]) -> list[tuple[str, str | None, int]]:
+    guards: list[tuple[str, str | None, int]] = []
+    for call in collect_calls(code):
+        if call.callee.split('.')[-1].lower() != 'use' or not call.arguments:
+            continue
+        receiver = _callee_receiver(call.callee)
+        prefix = _string_literal_value(call.arguments[0])
+        middleware_args = call.arguments[1:] if prefix and prefix.startswith('/') else call.arguments
+        if any(_looks_like_rate_limit_expr(arg, limiter_names) for arg in middleware_args):
+            guards.append((receiver, prefix if prefix and prefix.startswith('/') else None, call.line))
+    return guards
+
+
+def _route_has_rate_limit(
+    receiver: str,
+    path: str,
+    line_no: int,
+    route_args: tuple[str, ...],
+    limiter_names: set[str],
+    guards: list[tuple[str, str | None, int]],
+) -> bool:
+    if any(_looks_like_rate_limit_expr(arg, limiter_names) for arg in route_args[1:-1]):
+        return True
+    for guard_receiver, prefix, guard_line in guards:
+        if guard_line >= line_no:
+            continue
+        if guard_receiver != receiver:
+            continue
+        if _path_matches_prefix(path, prefix):
+            return True
+    return False
+
+
+def _endpoint_kind_for_path(path: str) -> str:
+    lowered = path.lower()
+    if any(token in lowered for token in ('mfa', '2fa', 'totp', 'otp')):
+        return 'multi-factor authentication'
+    if any(token in lowered for token in ('forgot', 'reset')):
+        return 'password reset'
+    if any(token in lowered for token in ('token', 'refresh')):
+        return 'token/refresh'
+    if any(token in lowered for token in ('register', 'signup', 'sign-up', 'sign_up')):
+        return 'registration'
+    return 'authentication'
 
 
 
 def _check_no_rate_limit(code: str, *, agent: str) -> list[Finding]:
     findings: list[Finding] = []
-    lines = code.splitlines()
-    auth_route_re = re.compile(
-        r'(?:app|router|fastify|server|api)\.(?:post|get|put|patch)\s*\('
-        r'["\'](?:[^"\']*(?:'
-        r'login|signin|sign-in|sign_in|'
-        r'authenticate|auth[^"\']*|'
-        r'forgot.?password|reset.?password|password.?reset|'
-        r'mfa|2fa|totp|otp|verify.?otp|otp.?verify|'
-        r'token|refresh.?token|token.?refresh|'
-        r'register|signup|sign-up|sign_up'
-        r')[^"\']*)["\']',
-        re.IGNORECASE,
-    )
-    rate_limit_re = re.compile(
-        r'rateLimit|rate.?limiter|throttle|slowDown|express-rate-limit|'
-        r'bottleneck|p-throttle|limiter\.consume|redis.*limiter',
-        re.IGNORECASE,
-    )
-    has_rate_limit = bool(rate_limit_re.search(code))
+    limiter_names = _collect_rate_limiter_names(code)
+    guards = _collect_rate_limit_guards(code, limiter_names)
 
-    for lineno, line in enumerate(lines, 1):
-        if COMMENT_LINE_RE.match(line.strip()):
+    for call in collect_calls(code):
+        short = call.callee.split('.')[-1].lower()
+        if short not in {'post', 'put', 'patch'}:
             continue
-        m = auth_route_re.search(line)
-        if m and not has_rate_limit:
-            # determine the endpoint category for a more useful message
-            path_text = m.group(0).lower()
-            if any(k in path_text for k in ('mfa', '2fa', 'totp', 'otp')):
-                endpoint_kind = "multi-factor authentication"
-            elif any(k in path_text for k in ('forgot', 'reset')):
-                endpoint_kind = "password reset"
-            elif any(k in path_text for k in ('token', 'refresh')):
-                endpoint_kind = "token/refresh"
-            elif any(k in path_text for k in ('register', 'signup', 'sign-up', 'sign_up')):
-                endpoint_kind = "registration"
-            else:
-                endpoint_kind = "authentication"
-            findings.append(Finding(
-                category="security",
-                severity=Severity.MEDIUM,
-                title=f"CWE-307: No rate limiting on {endpoint_kind} route at line {lineno}",
-                description=(
-                    f"{endpoint_kind.capitalize()} route at L{lineno} (`{line.strip()[:80]}`) has no rate-limiting middleware in scope. "
-                    f"An attacker can brute-force credentials, OTPs, or tokens."
-                ),
-                line=lineno,
-                suggestion=(
-                    "Apply rate limiting, for example `const limiter = rateLimit({ windowMs: 15*60*1000, max: 10 })`, "
-                    "before the auth handler."
-                ),
-                rule_id="JS-029",
-                cwe="CWE-307",
-                agent=agent,
-            ))
+        if not call.arguments:
+            continue
+        path = _string_literal_value(call.arguments[0])
+        if not path or not _is_auth_route_path(path):
+            continue
+        receiver = _callee_receiver(call.callee)
+        if _route_has_rate_limit(receiver, path, call.line, call.arguments, limiter_names, guards):
+            continue
+        endpoint_kind = _endpoint_kind_for_path(path)
+        findings.append(Finding(
+            category="security",
+            severity=Severity.HIGH,
+            title=f"CWE-307: No rate limiting on {endpoint_kind} route at line {call.line}",
+            description=(
+                f"{endpoint_kind.capitalize()} route `{path}` at L{call.line} (`{call.raw[:80]}`) has no rate-limiting middleware in scope. "
+                f"An attacker can brute-force credentials, OTPs, or tokens."
+            ),
+            line=call.line,
+            suggestion=(
+                "Apply rate limiting, for example `const limiter = rateLimit({ windowMs: 15*60*1000, max: 10 })`, "
+                "or attach a route-scoped/per-prefix limiter before the auth handler."
+            ),
+            rule_id="JS-029",
+            cwe="CWE-307",
+            agent=agent,
+        ))
     return findings
 
 

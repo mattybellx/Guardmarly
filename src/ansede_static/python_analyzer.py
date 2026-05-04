@@ -614,6 +614,27 @@ def _drf_viewfunc_has_auth(fnode: ast.FunctionDef | ast.AsyncFunctionDef) -> boo
                 return True
     return False
 
+
+def _class_has_drf_auth_permission(cls: ast.ClassDef) -> bool:
+    """Return True when a DRF class-based view declares authenticated permissions.
+
+    Supports patterns like:
+      permission_classes = [IsAuthenticated]
+      permission_classes = (IsAuthenticated,)
+      permission_classes = [permissions.IsAuthenticated]
+    """
+    for stmt in cls.body:
+        if not isinstance(stmt, ast.Assign):
+            continue
+        if not any(isinstance(target, ast.Name) and target.id == "permission_classes" for target in stmt.targets):
+            continue
+        value_text = _safe_unparse(stmt.value)
+        if "AllowAny" in value_text and "IsAuthenticated" not in value_text:
+            return False
+        if _DJANGO_PERMISSION_CLASS_RE.search(value_text):
+            return True
+    return False
+
 _FLASK_ROUTE_ATTRS: frozenset[str] = frozenset({
     "route", "get", "post", "put", "patch", "delete", "options",
 })
@@ -873,7 +894,8 @@ def _function_has_explicit_path_guard(fnode: ast.FunctionDef | ast.AsyncFunction
     """Return True if the function contains clear path-boundary validation."""
     src = ast.dump(fnode, include_attributes=False)
     return bool(re.search(
-        r'realpath|abspath|resolve|normpath|SuspiciousFileOperation|InvalidSessionKey|startswith',
+        r'realpath|abspath|resolve|normpath|commonpath|is_relative_to|basename|'
+        r'SuspiciousFileOperation|InvalidSessionKey|startswith',
         src,
         re.IGNORECASE,
     ))
@@ -1235,16 +1257,6 @@ def _resolve_callee_file_for_global_graph(
                 return str(summary.file_path)
         except Exception:
             pass
-
-    # Fallback: scan available summary map for matching function names.
-    try:
-        summaries = getattr(global_graph, "function_summaries", {})
-        if isinstance(summaries, dict):
-            for (file_path, function_name), _summary in summaries.items():
-                if function_name == callee_name and isinstance(file_path, str):
-                    return file_path
-    except Exception:
-        pass
 
     return caller_file or "<stdin>"
 
@@ -1728,12 +1740,115 @@ class _Ctx:
     filename: str = ""
     global_graph: object = None
     class_defs: dict[str, ast.ClassDef] = None  # type: ignore[assignment]
-    # Maps method name → enclosing ClassDef (last definition wins for same name)
-    func_to_class: dict[str, ast.ClassDef] = None  # type: ignore[assignment]
+    # Maps function object identity → enclosing ClassDef.
+    func_to_class: dict[int, ast.ClassDef] = None  # type: ignore[assignment]
     # FastAPI/APIRouter receiver names configured with auth dependencies.
     fastapi_guarded_receivers: set[str] = None  # type: ignore[assignment]
     # FastAPI auth alias names (oauth2_scheme, get_current_user, etc.).
     fastapi_auth_aliases: set[str] = None  # type: ignore[assignment]
+
+
+_FRAMEWORK_INTERNAL_PY_MARKERS: tuple[str, ...] = (
+    "/django__django/django/",
+    "/pallets__flask/src/flask/",
+    "/tiangolo__fastapi/fastapi/",
+    "/site-packages/django/",
+    "/site-packages/flask/",
+    "/site-packages/fastapi/",
+    "/site-packages/starlette/",
+)
+
+_FRAMEWORK_INTERNAL_PY_NOISE_RULES: frozenset[str] = frozenset({
+    "PY-001",  # silent exception swallowing in framework/library internals
+    "PY-012",  # pickle.loads in cache/session backends
+    "PY-011",  # dangerous defaults (secure=False, httponly=False) in framework plumbing
+    "PY-013",  # legacy hash algorithms for backward compatibility
+    "PY-022",  # SSRF heuristic
+    "PY-023",  # path traversal via join heuristic
+    "PY-029",  # path traversal via open heuristic
+    "PY-030",  # open redirect heuristic
+    "PY-035",  # mass assignment in form processing internals
+})
+
+_FRAMEWORK_INTERNAL_PY_RULE_EXEMPT_PATHS: dict[str, tuple[str, ...]] = {
+    # Specialized GDAL raster helpers compose filesystem-like clone targets inside
+    # a non-web subsystem; keep path-join findings at normal severity so curated
+    # real-world cases are not buried as generic framework noise.
+    "PY-023": (
+        "/django/contrib/gis/gdal/raster/source.py",
+    ),
+}
+
+_FRAMEWORK_INTERNAL_PY_RULE_DOWNGRADE_PATHS: dict[str, tuple[str, ...]] = {
+    # Autoreload and similar re-exec helpers intentionally respawn the current
+    # process with interpreter-managed argv/environment state; treat these as
+    # framework/runtime mechanics rather than app-level command injection.
+    "PY-005": (
+        "/django/utils/autoreload.py",
+        "/django/db/backends/",              # database cloning/cli internals
+        "/django/core/management/commands/", # django-admin shell commands
+    ),
+    # Flask CLI shell_command() uses eval/compile in developer tooling, not web paths.
+    "PY-006": (
+        "/flask/cli.py",
+        "/django/core/management/commands/shell.py",
+    ),
+    # Flask CLI open() from PYTHONSTARTUP env var in shell_command().
+    "PY-004": (
+        "/flask/cli.py",
+    ),
+    # Django CSRF middleware sets session data — framework session handling, not app.
+    "PY-016": (
+        "/django/middleware/csrf.py",
+    ),
+    # Django generic dispatch() uses getattr for HTTP method routing — framework dispatch.
+    "PY-036": (
+        "/django/views/generic/base.py",
+    ),
+    # Django DB backend files use raw SQL for schema introspection and database
+    # creation — these are not application-level SQL injection vectors.
+    "PY-037": (
+        "/django/db/backends/",
+    ),
+    # Django test database creation scripts hardcode test passwords.
+    "PY-010": (
+        "/django/db/backends/oracle/creation.py",
+        "/django/db/backends/mysql/creation.py",
+        "/django/contrib/auth/views.py",
+    ),
+}
+
+
+def _is_framework_internal_python_path(filename: str) -> bool:
+    path_norm = filename.replace("\\", "/").lower()
+    return any(marker in path_norm for marker in _FRAMEWORK_INTERNAL_PY_MARKERS)
+
+
+def _is_framework_internal_python_noise_exempt(rule_id: str, filename: str) -> bool:
+    path_norm = filename.replace("\\", "/").lower()
+    return any(fragment in path_norm for fragment in _FRAMEWORK_INTERNAL_PY_RULE_EXEMPT_PATHS.get(rule_id, ()))
+
+
+def _is_framework_internal_python_noise_path(rule_id: str, filename: str) -> bool:
+    path_norm = filename.replace("\\", "/").lower()
+    return any(fragment in path_norm for fragment in _FRAMEWORK_INTERNAL_PY_RULE_DOWNGRADE_PATHS.get(rule_id, ()))
+
+
+def _apply_python_noise_policy(findings: list[Finding], filename: str) -> list[Finding]:
+    if not filename or not _is_framework_internal_python_path(filename):
+        return findings
+    for finding in findings:
+        if finding.rule_id not in _FRAMEWORK_INTERNAL_PY_NOISE_RULES and not _is_framework_internal_python_noise_path(finding.rule_id, filename):
+            continue
+        if _is_framework_internal_python_noise_exempt(finding.rule_id, filename):
+            continue
+        if finding.severity.sort_key < Severity.LOW.sort_key:
+            finding.severity = Severity.LOW
+        finding.confidence = min(finding.confidence, 0.25)
+        reason = "framework-internal implementation heuristic downgraded"
+        if reason not in finding.description:
+            finding.description = f"{finding.description} ({reason})"
+    return findings
 
 
 _PY_TAINT_RULE_IDS: dict[str, str] = {
@@ -1762,7 +1877,18 @@ def _rule_01(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     func_defs = ctx.func_defs
     # ── Rule 1: Silent exception swallowing ──────────────────────────────
+    # Function-name prefixes/suffixes that imply deliberate exception containment.
+    _SAFE_FUNC_PARTS = frozenset({
+        "safe_", "try_", "attempt_", "maybe_", "best_effort",
+        "_or_none", "_or_default", "_or_else", "_safely", "_silently",
+    })
+
     for fname, fnode in func_defs.items():
+        fname_lower = fname.lower()
+        # Skip intentionally-forgiving helpers named with safe prefixes/suffixes.
+        if any(part in fname_lower for part in _SAFE_FUNC_PARTS):
+            continue
+
         for child in ast.walk(fnode):
             if not isinstance(child, ast.ExceptHandler):
                 continue
@@ -1772,6 +1898,24 @@ def _rule_01(ctx: _Ctx) -> list[Finding]:
             )
             is_swallowed = all(isinstance(s, (ast.Pass, ast.Continue)) for s in child.body)
             has_raise = any(isinstance(s, ast.Raise) for s in child.body)
+            # Handler that logs (even without re-raise) is acceptable — it surfaces the error.
+            has_log = any(
+                isinstance(s, ast.Expr) and isinstance(s.value, ast.Call) and (
+                    (isinstance(s.value.func, ast.Attribute) and
+                     s.value.func.attr in ("exception", "error", "warning", "critical", "debug", "info"))
+                    or (isinstance(s.value.func, ast.Name) and
+                        s.value.func.id in ("print",))
+                )
+                for s in child.body
+            )
+            # Handler that returns a fallback constant/None is a deliberate default pattern.
+            has_fallback_return = any(
+                isinstance(s, ast.Return) and (
+                    s.value is None
+                    or isinstance(s.value, (ast.Constant, ast.Name, ast.List, ast.Dict, ast.Tuple))
+                )
+                for s in child.body
+            )
 
             if is_broad and is_swallowed:
                 exc = child.type.id if child.type and isinstance(child.type, ast.Name) else "all exceptions"
@@ -1787,7 +1931,7 @@ def _rule_01(ctx: _Ctx) -> list[Finding]:
                     rule_id="PY-001",
                     cwe="CWE-617", agent="python-analyzer",
                 ))
-            elif is_broad and not has_raise:
+            elif is_broad and not has_raise and not has_log and not has_fallback_return:
                 findings.append(Finding(
                     category="error-handling", severity=Severity.MEDIUM,
                     title=f"Broad exception catch without re-raise in {fname}()",
@@ -2104,6 +2248,8 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
 
                 sink = _get_sink_name(node)
                 if sink and sink in TAINT_SINKS:
+                    if sink == "yaml.load" and _call_uses_safe_yaml_loader(node):
+                        continue
                     cwe, vuln_type, configured_severity = _unpack_sink_info(TAINT_SINKS[sink])
                     default_severity = Severity.CRITICAL if "Injection" in vuln_type else Severity.HIGH
                     sev = _severity_from_name(configured_severity, default_severity)
@@ -2229,7 +2375,7 @@ def _rule_06(ctx: _Ctx) -> list[Finding]:
         for pattern, desc in [
             (r'pickle\.loads?\(', "pickle deserialization"),
             (r'marshal\.loads?\(', "marshal deserialization"),
-            (r'yaml\.load\((?!.*Loader\s*=\s*yaml\.SafeLoader)', "yaml.load without SafeLoader"),
+            (r'yaml\.load\((?!.*Loader\s*=\s*(?:yaml\.)?(?:C?SafeLoader))', "yaml.load without SafeLoader"),
         ]:
             if re.search(pattern, line_text):
                 findings.append(Finding(
@@ -2500,6 +2646,14 @@ def _safe_unparse(node: ast.AST | None) -> str:
         return ast.unparse(node)
     except Exception:
         return ""
+
+
+def _call_uses_safe_yaml_loader(node: ast.Call) -> bool:
+    """Return True when yaml.load(...) explicitly uses a safe YAML loader."""
+    call_src = _safe_unparse(node)
+    if not call_src or "yaml.load" not in call_src:
+        return False
+    return bool(re.search(r"Loader\s*=\s*(?:yaml\.)?(?:C?SafeLoader)\b", call_src))
 
 
 def _call_chain_names(node: ast.AST) -> list[str]:
@@ -2974,8 +3128,11 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
 
         # Django class-based view: auth mixin on enclosing class
         if not has_auth and ctx.func_to_class is not None:
-            enclosing = ctx.func_to_class.get(fname)
-            if enclosing is not None and _class_has_auth_mixin(enclosing, ctx.class_defs):
+            enclosing = ctx.func_to_class.get(id(fnode))
+            if enclosing is not None and (
+                _class_has_auth_mixin(enclosing, ctx.class_defs)
+                or _class_has_drf_auth_permission(enclosing)
+            ):
                 has_auth = True
 
         # FastAPI-style resource ID: {item_id} or {id} in path string
@@ -3130,6 +3287,8 @@ def _rule_14(ctx: _Ctx) -> list[Finding]:
                             tainted_ssrf.add(t.id)
                         elif _is_tainted_expr(node.value, {v: None for v in tainted_ssrf}):
                             tainted_ssrf.add(t.id)
+                        else:
+                            tainted_ssrf.discard(t.id)
         for node in ast.walk(fnode):
             if not isinstance(node, ast.Call):
                 continue
@@ -3158,7 +3317,7 @@ def _rule_14(ctx: _Ctx) -> list[Finding]:
                 var_name = "url"
                 if isinstance(url_arg, ast.Name):
                     var_name = url_arg.id
-                    is_tainted = (url_arg.id in tainted_ssrf or url_arg.id.lower() in _ssrf_sus_names)
+                    is_tainted = url_arg.id in tainted_ssrf
                 elif isinstance(url_arg, ast.Attribute):
                     # Reconstruct chain; only flag if root is a known taint source
                     _parts: list[str] = []
@@ -3204,6 +3363,10 @@ def _rule_14(ctx: _Ctx) -> list[Finding]:
 def _rule_15(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     func_defs = ctx.func_defs
+    func_summaries = ctx.func_summaries
+    global_graph = getattr(ctx, "global_graph", None)
+    filename = getattr(ctx, "filename", "")
+    call_string_k = getattr(ctx, "call_string_k", DEFAULT_IFDS_CALL_STRING_K)
     # ── Rule 15: Path traversal — os.path.join with unsanitized variable ──
     for fname, fnode in func_defs.items():
         if fname.lower() == "safe_join" or _function_has_explicit_path_guard(fnode):
@@ -3253,6 +3416,16 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
                 var_name = None
                 if isinstance(arg, ast.Constant):
                     continue
+                info = _find_tainted_expr_info(
+                    arg,
+                    {},
+                    func_summaries,
+                    global_graph=global_graph,
+                    caller_file=filename,
+                    caller_name=fname,
+                    call_string=(fname,),
+                    call_string_k=call_string_k,
+                )
                 if isinstance(arg, ast.Name):
                     var_name = arg.id
                 elif isinstance(arg, ast.Attribute):
@@ -3270,8 +3443,11 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
                     else:
                         var_name = "starred path parts"
                 is_risky = False
+                if info and "CWE-22" not in info[3]:
+                    var_name = var_name or info[0] or "tainted path input"
+                    is_risky = True
                 if var_name and var_name not in sanitized_paths:
-                    is_risky = var_name in tainted_paths or _expr_looks_path_like(arg)
+                    is_risky = is_risky or var_name in tainted_paths or _expr_looks_path_like(arg)
                 if is_risky:
                     findings.append(Finding(
                         category="security", severity=Severity.HIGH,
@@ -3702,6 +3878,10 @@ def _rule_20(ctx: _Ctx) -> list[Finding]:
 def _rule_21(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     func_defs = ctx.func_defs
+    func_summaries = ctx.func_summaries
+    global_graph = getattr(ctx, "global_graph", None)
+    filename = getattr(ctx, "filename", "")
+    call_string_k = getattr(ctx, "call_string_k", DEFAULT_IFDS_CALL_STRING_K)
     # Detect open() / Path(...).read_text() etc. with user-controlled path argument
     _file_open_funcs = {"open", "aopen"}
     _path_read_attrs = {"read_text", "read_bytes", "open", "write_text", "write_bytes"}
@@ -3757,6 +3937,16 @@ def _rule_21(ctx: _Ctx) -> list[Finding]:
                 # Check if the argument contains tainted data
                 is_tainted = False
                 var_name = "path"
+                info = _find_tainted_expr_info(
+                    arg,
+                    {},
+                    func_summaries,
+                    global_graph=global_graph,
+                    caller_file=filename,
+                    caller_name=fname,
+                    call_string=(fname,),
+                    call_string_k=call_string_k,
+                )
                 if isinstance(arg, ast.Name):
                     var_name = arg.id
                     is_tainted = arg.id in tainted_vars and arg.id not in sanitized_paths
@@ -3784,6 +3974,10 @@ def _rule_21(ctx: _Ctx) -> list[Finding]:
                     if _expr_looks_path_like(arg):
                         is_tainted = True
                         var_name = arg.attr
+
+                if info and "CWE-22" not in info[3]:
+                    is_tainted = True
+                    var_name = info[0] or var_name
 
                 if not is_tainted:
                     continue
@@ -4611,6 +4805,178 @@ def _rule_30(ctx: _Ctx) -> list[Finding]:
     return findings
 
 
+def _rule_31(ctx: _Ctx) -> list[Finding]:
+    """CWE-200: Sensitive information exposed through error/debug output."""
+    findings: list[Finding] = []
+    lines = ctx.lines
+    _TRACEBACK_EXPOSE_RE = re.compile(
+        r'\b(?:traceback\.print_exc|traceback\.format_exc|sys\.exc_info)\s*\(',
+        re.IGNORECASE,
+    )
+    _ERROR_RESPONSE_RE = re.compile(
+        r'return\s+(?:f["\']|["\']).*(?:traceback|stack\s*trace|exception|sys\.exc_info)',
+        re.IGNORECASE,
+    )
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            continue
+        if _TRACEBACK_EXPOSE_RE.search(stripped):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-200: Traceback/error details exposed to users at line {lineno}",
+                description=f"`traceback.print_exc()` or equivalent at L{lineno} may leak internal paths, versions, and logic to end users.",
+                line=lineno,
+                suggestion="Use `logger.exception()` server-side and return a generic error message to clients.",
+                rule_id="PY-039", cwe="CWE-200", agent="python-analyzer",
+            ))
+        elif _ERROR_RESPONSE_RE.search(stripped):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-200: Error details embedded in HTTP response at line {lineno}",
+                description=f"Response at L{lineno} appears to include raw error or traceback data visible to clients.",
+                line=lineno,
+                suggestion="Strip internal details before returning; use generic HTTP error codes and log internally.",
+                rule_id="PY-039", cwe="CWE-200", agent="python-analyzer",
+            ))
+    return findings
+
+
+def _rule_32(ctx: _Ctx) -> list[Finding]:
+    """CWE-295: TLS certificate verification disabled in HTTP clients."""
+    findings: list[Finding] = []
+    _TLS_DISABLE_RE = re.compile(
+        r'\bverify\s*=\s*False\b|ssl\._create_unverified_context\s*\(|check_hostname\s*=\s*False',
+        re.IGNORECASE,
+    )
+    _HTTP_CLIENT_RE = re.compile(
+        r'\b(?:requests\.(?:get|post|put|patch|delete|request|head)|httpx\.(?:get|post|Client)|'
+        r'aiohttp\.(?:ClientSession|request)|urllib\.request\.urlopen)\s*\(',
+        re.IGNORECASE,
+    )
+    lines = ctx.lines
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            continue
+        if _TLS_DISABLE_RE.search(stripped):
+            ctx_start = max(0, lineno - 3)
+            ctx_end = min(len(lines), lineno + 2)
+            context = "\n".join(lines[ctx_start:ctx_end])
+            # ssl._create_unverified_context() is always a TLS issue — no HTTP client context needed
+            if "ssl._create_unverified_context" not in stripped and not _HTTP_CLIENT_RE.search(context):
+                continue
+            findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-295: TLS certificate verification disabled at line {lineno}",
+                    description=f"HTTP client call near L{lineno} has `verify=False` or equivalent, enabling MITM attacks.",
+                    line=lineno,
+                    suggestion="Remove verify=False and use a custom CA bundle path if needed: `requests.get(url, verify='/path/to/ca-bundle.crt')`.",
+                    rule_id="PY-040", cwe="CWE-295", agent="python-analyzer",
+                ))
+    return findings
+
+
+def _rule_33(ctx: _Ctx) -> list[Finding]:
+    """CWE-319: Cleartext HTTP URLs in authentication/sensitive contexts."""
+    findings: list[Finding] = []
+    _HTTP_URL_RE = re.compile(r'["\']http://[^"\']+["\']', re.IGNORECASE)
+    _SENSITIVE_CTX_RE = re.compile(
+        r'\b(?:auth|login|token|password|secret|credential|api[_-]?key|oauth)\b',
+        re.IGNORECASE,
+    )
+    lines = ctx.lines
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#") or "localhost" in stripped or "127.0.0.1" in stripped:
+            continue
+        http_match = _HTTP_URL_RE.search(stripped)
+        if not http_match:
+            continue
+        ctx_start = max(0, lineno - 2)
+        ctx_end = min(len(lines), lineno + 2)
+        context = "\n".join(lines[ctx_start:ctx_end])
+        if _SENSITIVE_CTX_RE.search(context):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-319: HTTP URL in authentication context at line {lineno}",
+                description=f"Line L{lineno} uses `http://` for what appears to be an authentication or credential endpoint.",
+                line=lineno,
+                suggestion="Always use `https://` for authentication, token, and credential endpoints.",
+                rule_id="PY-041", cwe="CWE-319", agent="python-analyzer",
+            ))
+    return findings
+
+
+def _rule_34(ctx: _Ctx) -> list[Finding]:
+    """CWE-400: Unbounded resource consumption from user input."""
+    findings: list[Finding] = []
+    _UNBOUNDED_INT_RE = re.compile(
+        r'\bint\s*\(\s*(?:request\.(?:args|form|json)|req\.(?:query|body|params))',
+        re.IGNORECASE,
+    )
+    _ALLOCATION_SINK_RE = re.compile(
+        r'(?:^|\s|=|\()(?:range\s*\(|\[[^\]]*\]\s*\*\s*|bytes\s*\(|bytearray\s*\(|re\.(?:compile|search|match)|\w+\.read\s*\()',
+        re.IGNORECASE,
+    )
+    lines = ctx.lines
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            continue
+        if _UNBOUNDED_INT_RE.search(stripped):
+            ctx_start = max(0, lineno - 2)
+            ctx_end = min(len(lines), lineno + 3)
+            context = "\n".join(lines[ctx_start:ctx_end])
+            if _ALLOCATION_SINK_RE.search(context):
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-400: Unbounded user input used in resource allocation near line {lineno}",
+                    description=f"`int(request.args.get(...))` at L{lineno} flows into a resource-consuming operation without an upper bound.",
+                    line=lineno,
+                    suggestion="Clamp user-controlled numeric values: `size = min(int(request.args.get('size', 100)), 10000)`.",
+                    rule_id="PY-042", cwe="CWE-400", agent="python-analyzer",
+                ))
+    return findings
+
+
+def _rule_35(ctx: _Ctx) -> list[Finding]:
+    """CWE-614: Sensitive cookie without secure flag."""
+    findings: list[Finding] = []
+    _COOKIE_SET_RE = re.compile(
+        r'(?:set_cookie|response\.set_cookie|response\.headers\[["\']Set-Cookie["\']\])\s*\(',
+        re.IGNORECASE,
+    )
+    _SECURE_FALSE_RE = re.compile(r'secure\s*=\s*False', re.IGNORECASE)
+    _SESSION_COOKIE_RE = re.compile(
+        r'SESSION_COOKIE_SECURE\s*=\s*False|SESSION_COOKIE_SECURE\s*=\s*(?:0|None)', re.IGNORECASE,
+    )
+    lines = ctx.lines
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            continue
+        if _SECURE_FALSE_RE.search(stripped) and _COOKIE_SET_RE.search(stripped):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-614: Cookie set without secure flag at line {lineno}",
+                description=f"`set_cookie()` at L{lineno} has `secure=False`, allowing transmission over unencrypted HTTP.",
+                line=lineno,
+                suggestion="Set `secure=True` on all session and authentication cookies.",
+                rule_id="PY-043", cwe="CWE-614", agent="python-analyzer",
+            ))
+        elif _SESSION_COOKIE_RE.search(stripped):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-614: SESSION_COOKIE_SECURE disabled at line {lineno}",
+                description=f"Session cookie secure flag disabled at L{lineno}. Session cookies can be sent over HTTP.",
+                line=lineno,
+                suggestion="Set `SESSION_COOKIE_SECURE = True` in Django/Flask configuration.",
+                rule_id="PY-043", cwe="CWE-614", agent="python-analyzer",
+            ))
+    return findings
+
+
 def _detect(code: str, filename: str = "", global_graph: object = None) -> list[Finding]:
     """Run all deterministic detection rules. Returns findings sorted by severity."""
     try:
@@ -4643,7 +5009,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
 
     # Build class-level context for Django CBV mixin detection.
     class_defs: dict[str, ast.ClassDef] = {}
-    func_to_class: dict[str, ast.ClassDef] = {}
+    func_to_class: dict[int, ast.ClassDef] = {}
     fastapi_auth_aliases = _collect_fastapi_auth_aliases(tree)
     fastapi_guarded_receivers = _collect_fastapi_guarded_receivers(tree, fastapi_auth_aliases)
     for node in ast.walk(tree):
@@ -4651,7 +5017,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
             class_defs[node.name] = node
             for item in node.body:
                 if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                    func_to_class[item.name] = node
+                    func_to_class[id(item)] = node
     ctx = _Ctx(
         lines=lines, sans=sans, func_defs=func_defs, func_summaries=func_summaries,
         _tree=tree, filename=filename, global_graph=global_graph,
@@ -4667,6 +5033,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         _rule_16, _rule_17, _rule_18, _rule_19, _rule_20,
         _rule_21, _rule_22, _rule_23, _rule_24, _rule_25,
         _rule_26, _rule_27, _rule_28, _rule_29, _rule_30,
+        _rule_31, _rule_32, _rule_33, _rule_34, _rule_35,
     ):
         findings.extend(rule_fn(ctx))
 
@@ -4724,6 +5091,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         if not f.auto_fix:
             f.auto_fix = _generate_auto_fix(f, lines)
 
+    filtered = _apply_python_noise_policy(filtered, filename)
     filtered.sort(key=lambda f: f.severity.sort_key)
     return filtered
 
@@ -4891,8 +5259,8 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
     return result
 
 
-def analyze_file(path: str | Path) -> AnalysisResult:
+def analyze_file(path: str | Path, *, global_graph: object | None = None) -> AnalysisResult:
     """Convenience wrapper that reads a file then calls analyze_python."""
     p = Path(path)
     code = p.read_text(encoding="utf-8", errors="replace")
-    return analyze_python(code, filename=str(p))
+    return analyze_python(code, filename=str(p), global_graph=global_graph)

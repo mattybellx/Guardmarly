@@ -30,9 +30,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-if hasattr(sys.stdout, "reconfigure"):
+_stdout_reconfigure = getattr(sys.stdout, "reconfigure", None)
+if callable(_stdout_reconfigure):
     try:
-        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        _stdout_reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
 
@@ -57,6 +58,12 @@ _SKIP_PATH_SEGMENTS: frozenset[str] = frozenset({
     "scripts",
 })
 
+_VENDOR_PATH_SEGMENTS: frozenset[str] = frozenset({
+    "vendor", "vendors", "third_party", "third-party", "node_modules", "bower_components",
+})
+
+_MINIFIED_FILE_RE = re.compile(r"(?:\.min\.(?:js|css)$|(?:^|[._-])(bundle|chunk)(?:[._-]|\.)?.*\.js$)", re.IGNORECASE)
+
 _SEVERITY_ORDER: dict[str, int] = {
     "critical": 4,
     "high": 3,
@@ -77,6 +84,71 @@ class SampledFile:
     repo: str
     path: Path
     relative_path: str
+
+
+@dataclass(frozen=True)
+class CuratedLabel:
+    repo: str
+    relative_path: str
+    expected_cwes: tuple[str, ...] = ()
+    label_reasons: tuple[str, ...] = ()
+    notes: str = ""
+
+
+_FRAMEWORK_WEAK_LABEL_SUPPRESSIONS: dict[str, frozenset[str]] = {
+    "pallets/flask": frozenset({"CWE-22", "CWE-918"}),
+    "django/django": frozenset({"CWE-22", "CWE-918"}),
+    "tiangolo/fastapi": frozenset({"CWE-22", "CWE-918"}),
+    "expressjs/express": frozenset({"CWE-22", "CWE-918", "CWE-98"}),
+}
+
+_FRAMEWORK_WEAK_FILE_SUPPRESSIONS: tuple[tuple[str, re.Pattern[str], frozenset[str]], ...] = (
+    (
+        "django/django",
+        re.compile(r"^django/contrib/admin/static/admin/js/", re.IGNORECASE),
+        frozenset({"CWE-79"}),
+    ),
+    (
+        "django/django",
+        re.compile(r"^django/core/management/commands/shell\.py$", re.IGNORECASE),
+        frozenset({"CWE-22"}),
+    ),
+    (
+        "django/django",
+        re.compile(r"^django/core/management/utils\.py$", re.IGNORECASE),
+        frozenset({"CWE-22"}),
+    ),
+    (
+        "django/django",
+        re.compile(r"^django/db/", re.IGNORECASE),
+        frozenset({"CWE-89"}),
+    ),
+    (
+        "django/django",
+        re.compile(r"^django/contrib/auth/admin\.py$", re.IGNORECASE),
+        frozenset({"CWE-601"}),
+    ),
+    (
+        "django/django",
+        re.compile(r"^django/utils/autoreload\.py$", re.IGNORECASE),
+        frozenset({"CWE-22"}),
+    ),
+    (
+        "pallets/flask",
+        re.compile(r"^src/flask/config\.py$", re.IGNORECASE),
+        frozenset({"CWE-95"}),
+    ),
+    (
+        "pallets/flask",
+        re.compile(r"^src/flask/cli\.py$", re.IGNORECASE),
+        frozenset({"CWE-22", "CWE-95"}),
+    ),
+    (
+        "pallets/flask",
+        re.compile(r"^src/flask/helpers\.py$", re.IGNORECASE),
+        frozenset({"CWE-22"}),
+    ),
+)
 
 
 def _safe_div(n: float, d: float) -> float:
@@ -174,7 +246,134 @@ def _is_candidate_file(path: Path) -> bool:
     return suffix in _PYTHON_EXTS or suffix in _JS_EXTS
 
 
-def _collect_repo_files(root: Path, *, max_file_bytes: int) -> list[Path]:
+def _normalize_relative_path(value: str | Path) -> str:
+    return str(value).replace("\\", "/").strip("/")
+
+
+def _is_vendor_or_minified_file(path: Path, *, root: Path) -> bool:
+    try:
+        relative = path.relative_to(root)
+    except ValueError:
+        relative = path
+    rel_parts = {part.lower() for part in relative.parts}
+    if rel_parts & _VENDOR_PATH_SEGMENTS:
+        return True
+    return bool(_MINIFIED_FILE_RE.search(path.name))
+
+
+def _is_vendor_or_minified_relative_path(relative_path: str) -> bool:
+    rel = Path(_normalize_relative_path(relative_path))
+    rel_parts = {part.lower() for part in rel.parts}
+    if rel_parts & _VENDOR_PATH_SEGMENTS:
+        return True
+    return bool(_MINIFIED_FILE_RE.search(rel.name))
+
+
+def _repo_slug_from_source(repo_value: str) -> str:
+    text = repo_value.strip().rstrip("/")
+    if text.endswith(".git"):
+        text = text[:-4]
+    match = re.search(r"github\.com[/:]([^/]+)/([^/]+)$", text, re.IGNORECASE)
+    if match:
+        return f"{match.group(1)}/{match.group(2)}"
+    parts = text.replace("\\", "/").split("/")
+    if len(parts) >= 2:
+        return f"{parts[-2]}/{parts[-1]}"
+    return text
+
+
+def _load_curated_labels(manifest_path: str | Path | None) -> dict[tuple[str, str], CuratedLabel]:
+    if manifest_path is None:
+        return {}
+    path = Path(manifest_path)
+    if not path.exists():
+        raise FileNotFoundError(f"curated label manifest not found: {path}")
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    entries = data.get("entries", [])
+    labels: dict[tuple[str, str], CuratedLabel] = {}
+    for item in entries:
+        source = item.get("source", {}) if isinstance(item.get("source", {}), dict) else {}
+        targets = [str(value) for value in item.get("targets", [])]
+        if not targets and item.get("path"):
+            targets = [str(item["path"])]
+        repo = _repo_slug_from_source(str(source.get("repo", "") or item.get("repo", "")))
+        subdir = _normalize_relative_path(str(source.get("subdir", "") or ""))
+        expected = tuple(sorted({str(value) for value in item.get("expected_cwes", [])}))
+        if not repo or not targets:
+            continue
+        for target in targets:
+            relative_path = _normalize_relative_path(Path(subdir) / target if subdir else Path(target))
+            reasons = (
+                f"curated manifest: {path.name}:{item.get('case_id', relative_path)}",
+                *( [str(item.get("notes", ""))] if str(item.get("notes", "")).strip() else [] ),
+            )
+            key = (repo, relative_path)
+            existing = labels.get(key)
+            merged_expected = tuple(sorted({*expected, *(existing.expected_cwes if existing else ())}))
+            merged_reasons = tuple(dict.fromkeys((*(existing.label_reasons if existing else ()), *reasons)))
+            merged_notes = " | ".join(
+                dict.fromkeys(
+                    note for note in (
+                        existing.notes if existing else "",
+                        str(item.get("notes", "")),
+                    ) if note.strip()
+                )
+            )
+            labels[key] = CuratedLabel(
+                repo=repo,
+                relative_path=relative_path,
+                expected_cwes=merged_expected,
+                label_reasons=merged_reasons,
+                notes=merged_notes,
+            )
+    return labels
+
+
+def _has_non_request_path_signal(code: str) -> bool:
+    return bool(re.search(r"(?:os\.environ|getenv|process\.env|sys\.argv|argv\[)", code, re.IGNORECASE))
+
+
+def _apply_weak_label_policy(sample: SampledFile, code: str, labels: set[str], reasons: list[str]) -> tuple[set[str], list[str]]:
+    suppressed = _FRAMEWORK_WEAK_LABEL_SUPPRESSIONS.get(sample.repo, frozenset())
+    kept_labels = {
+        label
+        for label in labels
+        if label not in suppressed or (label == "CWE-22" and _has_non_request_path_signal(code))
+    }
+    file_suppressed: set[str] = set()
+    rel_path = _normalize_relative_path(sample.relative_path)
+    for repo, path_re, cwes in _FRAMEWORK_WEAK_FILE_SUPPRESSIONS:
+        if sample.repo == repo and path_re.search(rel_path):
+            file_suppressed.update(cwes)
+    kept_labels = {label for label in kept_labels if label not in file_suppressed}
+    if kept_labels == labels:
+        return labels, reasons
+    all_suppressed = set(suppressed) | file_suppressed
+    kept_reasons = [reason for reason in reasons if not any(label in reason for label in all_suppressed)]
+    return kept_labels, kept_reasons
+
+
+def _labels_for_sample(
+    sample: SampledFile,
+    code: str,
+    *,
+    label_mode: str,
+    curated_labels: dict[tuple[str, str], CuratedLabel] | None,
+) -> tuple[set[str], list[str], str]:
+    curated = (curated_labels or {}).get((sample.repo, _normalize_relative_path(sample.relative_path)))
+    weak_labels, weak_reasons = _infer_expected_labels(code)
+    weak_labels, weak_reasons = _apply_weak_label_policy(sample, code, weak_labels, weak_reasons)
+    if label_mode == "curated":
+        if curated is None:
+            return set(), [], "curated-unlabeled"
+        return set(curated.expected_cwes), list(curated.label_reasons), "curated"
+    if label_mode == "hybrid" and curated is not None:
+        return set(curated.expected_cwes), list(curated.label_reasons), "curated"
+    return weak_labels, weak_reasons, "weak"
+
+
+def _collect_repo_files(root: Path, *, max_file_bytes: int, vendor_mode: str = "include") -> list[Path]:
     files: list[Path] = []
     for file in sorted(root.rglob("*")):
         if not file.is_file():
@@ -183,6 +382,11 @@ def _collect_repo_files(root: Path, *, max_file_bytes: int) -> list[Path]:
             continue
         rel_parts = {part.lower() for part in file.relative_to(root).parts}
         if rel_parts & _SKIP_PATH_SEGMENTS:
+            continue
+        vendor_like = _is_vendor_or_minified_file(file, root=root)
+        if vendor_mode == "exclude" and vendor_like:
+            continue
+        if vendor_mode == "only" and not vendor_like:
             continue
         try:
             if file.stat().st_size > max_file_bytes:
@@ -194,15 +398,130 @@ def _collect_repo_files(root: Path, *, max_file_bytes: int) -> list[Path]:
 
 
 _LABEL_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
-    ("CWE-95", re.compile(r"\beval\s*\(|\bnew\s+Function\s*\(", re.IGNORECASE)),
-    ("CWE-78", re.compile(r"shell\s*=\s*True|child_process\.exec\s*\(", re.IGNORECASE)),
-    ("CWE-89", re.compile(r"SELECT\s+.+\+|SELECT\s+.+\$\{|execute\s*\(\s*f[\"']", re.IGNORECASE)),
+    ("CWE-95", re.compile(r"(?<!def\s)(?<![\w.])eval\s*\(|\bnew\s+Function\s*\(", re.IGNORECASE)),
+    ("CWE-89", re.compile(r"[\"'`]\s*(?:SELECT|INSERT|UPDATE|DELETE)\b[\s\S]{0,160}(?:[\"'`]\s*\+|\$\{)|execute\s*\(\s*f[\"']", re.IGNORECASE)),
     ("CWE-79", re.compile(r"innerHTML\s*=|document\.write\s*\(", re.IGNORECASE)),
-    ("CWE-22", re.compile(r"os\.path\.join\s*\(|send_file\s*\(.*join", re.IGNORECASE)),
-    ("CWE-918", re.compile(r"requests\.(?:get|post)\s*\(\s*\w+|fetch\s*\(\s*\w+", re.IGNORECASE)),
+    ("CWE-918", re.compile(r"(?:requests\.(?:get|post|put|delete|request)|fetch|axios\.(?:get|post|put|delete)|needle\.(?:get|post|request))\s*\(\s*(?:req(?:uest)?\.|\b(?:url|uri|endpoint|target|host|callback|webhook)\b|[A-Za-z_][\w]*(?:url|uri|endpoint|target|host|callback|webhook)[A-Za-z_\d]*)", re.IGNORECASE)),
     ("CWE-601", re.compile(r"redirect\s*\(\s*(?:req\.|request\.)", re.IGNORECASE)),
-    ("CWE-798", re.compile(r"AKIA[0-9A-Z]{16}|SECRET_KEY\s*=\s*[\"'][^\"']+[\"']", re.IGNORECASE)),
+    ("CWE-98", re.compile(r"\brequire\s*\(\s*(?![\"']).+\)|\bimport\s*\(\s*(?![\"']).+\)", re.IGNORECASE)),
 )
+
+_COMMAND_EXEC_RE = re.compile(r"\bchild_process\.exec\s*\(", re.IGNORECASE)
+_COMMAND_EXEC_ALIAS_RE = re.compile(
+    r"\b(?:const|let|var)\s+(?P<alias>[A-Za-z_][\w]*)\s*=\s*require\(\s*['\"]child_process['\"]\s*\)\.exec\b",
+    re.IGNORECASE,
+)
+_COMMAND_DYNAMIC_RE = re.compile(r"\+|process\.env|os\.environ|argv\[|\barg\b|\bcmd\b|\bcommand\b", re.IGNORECASE)
+_SUBPROCESS_SHELL_RE = re.compile(
+    r"subprocess\.(?:run|Popen|call|check_output|check_call)\s*\((?P<args>[\s\S]*?)\)",
+    re.IGNORECASE,
+)
+_SECRET_ASSIGNMENT_RE = re.compile(
+    r"(?P<key>\b(?:SECRET_KEY|API_KEY|apiKey|cookieSecret|zapApiKey|cryptoKey|clientSecret|accessKey|secret|token|dbPassword|db_pass|passwd|password)\b)\s*[:=]\s*[\"'](?P<value>[^\"']{6,})[\"']",
+    re.IGNORECASE,
+)
+_UNSAFE_YAML_LOAD_RE = re.compile(r"yaml\.load\s*\(", re.IGNORECASE)
+_SAFE_YAML_LOADER_RE = re.compile(r"Loader\s*=\s*(?:yaml\.)?(?:C?SafeLoader)", re.IGNORECASE)
+
+_PATH_USER_CONTROL_RE = re.compile(
+    r"request\.|req\.|(?:^|\W)(?:params|query|body)\.|"
+    r"\.get\s*\(\s*[\"'](?:file|path|filename|filepath|name)[\"']\s*\)|"
+    r"(?:sys\.argv|argv\[|request\.files|req\.files|os\.environ|getenv|process\.env)",
+    re.IGNORECASE,
+)
+
+_PATH_SINK_RE = re.compile(
+    r"os\.path\.join\s*\(|(?:^|\W)open\s*\(|Path\s*\(|"
+    r"send_file\s*\(|send_from_directory\s*\(|FileResponse\s*\(|"
+    r"fs\.(?:readFile|readFileSync|createReadStream)\s*\(|res\.(?:sendFile|download)\s*\(",
+    re.IGNORECASE,
+)
+
+
+def _infer_path_traversal_label(code: str) -> tuple[bool, str | None]:
+    lines = code.splitlines()
+    user_lines = [index for index, line in enumerate(lines) if _PATH_USER_CONTROL_RE.search(line)]
+    sink_lines = [index for index, line in enumerate(lines) if _PATH_SINK_RE.search(line)]
+    if not user_lines or not sink_lines:
+        return False, None
+
+    for user_line in user_lines:
+        for sink_line in sink_lines:
+            if abs(user_line - sink_line) <= 8:
+                return True, "CWE-22: nearby user-controlled path signal + file/path sink"
+    return False, None
+
+
+def _infer_command_injection_label(code: str) -> tuple[bool, str | None]:
+    if _COMMAND_EXEC_RE.search(code) and _COMMAND_DYNAMIC_RE.search(code):
+        return True, "CWE-78: dynamic exec() command construction"
+
+    for match in _COMMAND_EXEC_ALIAS_RE.finditer(code):
+        alias = re.escape(match.group("alias"))
+        if re.search(rf"\b{alias}\s*\([\s\S]{{0,160}}?(?:\+|process\.env|os\.environ|argv\[|\barg\b|\bcmd\b|\bcommand\b)", code, re.IGNORECASE):
+            return True, "CWE-78: dynamic child_process.exec alias invocation"
+
+    for match in _SUBPROCESS_SHELL_RE.finditer(code):
+        args = match.group("args")
+        if "shell=True" not in args and "shell = True" not in args:
+            continue
+        first_arg = args.split(",", 1)[0].strip()
+        if first_arg.startswith(("'", '"')) and _COMMAND_DYNAMIC_RE.search(first_arg) is None:
+            continue
+        if _COMMAND_DYNAMIC_RE.search(args):
+            return True, "CWE-78: subprocess shell=True with dynamic command input"
+    return False, None
+
+
+def _infer_code_injection_label(code: str) -> tuple[bool, str | None]:
+    if re.search(r"(?<!def\s)(?<![\w.])eval\s*\(|\bnew\s+Function\s*\(", code, re.IGNORECASE):
+        return True, "CWE-95: dynamic code execution primitive"
+    if _COMMAND_EXEC_ALIAS_RE.search(code) or _COMMAND_EXEC_RE.search(code):
+        return False, None
+    if re.search(r"\bexec\s*\(", code):
+        return True, "CWE-95: exec() dynamic code execution"
+    return False, None
+
+
+def _looks_like_secret_value(key: str, value: str) -> bool:
+    stripped = value.strip()
+    if not stripped or len(stripped) < 8:
+        return False
+    strong_secret_key = key.lower() in {"secret_key", "apikey", "api_key", "cookiesecret", "zapapikey", "cryptokey", "clientsecret"}
+    if stripped.endswith(":"):
+        return False
+    if any(ch.isspace() for ch in stripped) and not strong_secret_key:
+        return False
+    lowered = stripped.lower()
+    if any(token in lowered for token in ("enter ", "again", "username", "password: ", "aborted", "change password")):
+        return False
+    return True
+
+
+def _infer_hardcoded_secret_label(code: str) -> tuple[bool, str | None]:
+    if re.search(r"AKIA[0-9A-Z]{16}", code):
+        return True, "CWE-798: hardcoded access key pattern"
+    for match in _SECRET_ASSIGNMENT_RE.finditer(code):
+        if _looks_like_secret_value(match.group("key"), match.group("value")):
+            return True, f"CWE-798: suspicious hardcoded secret in `{match.group('key')}`"
+    return False, None
+
+
+def _infer_unsafe_deserialization_label(code: str) -> tuple[bool, str | None]:
+    if re.search(r"pickle\.loads?\s*\(|marshal\.loads?\s*\(", code):
+        return True, "CWE-502: unsafe deserializer call"
+    for line in code.splitlines():
+        if not _UNSAFE_YAML_LOAD_RE.search(line):
+            continue
+        if _SAFE_YAML_LOADER_RE.search(line) or "yaml.safe_load" in line:
+            continue
+        return True, "CWE-502: yaml.load without safe loader"
+    return False, None
+
+
+def _write_report(path: Path, report: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(report, indent=2), encoding="utf-8")
 
 
 def _infer_expected_labels(code: str) -> tuple[set[str], list[str]]:
@@ -212,7 +531,177 @@ def _infer_expected_labels(code: str) -> tuple[set[str], list[str]]:
         if rx.search(code):
             labels.add(cwe)
             reasons.append(f"{cwe}: pattern {rx.pattern[:40]}...")
+    command_hit, command_reason = _infer_command_injection_label(code)
+    if command_hit:
+        labels.add("CWE-78")
+        if command_reason:
+            reasons.append(command_reason)
+    code_exec_hit, code_exec_reason = _infer_code_injection_label(code)
+    if code_exec_hit:
+        labels.add("CWE-95")
+        if code_exec_reason:
+            reasons.append(code_exec_reason)
+    secret_hit, secret_reason = _infer_hardcoded_secret_label(code)
+    if secret_hit:
+        labels.add("CWE-798")
+        if secret_reason:
+            reasons.append(secret_reason)
+    deserialization_hit, deserialization_reason = _infer_unsafe_deserialization_label(code)
+    if deserialization_hit:
+        labels.add("CWE-502")
+        if deserialization_reason:
+            reasons.append(deserialization_reason)
+    path_hit, path_reason = _infer_path_traversal_label(code)
+    if path_hit:
+        labels.add("CWE-22")
+        if path_reason:
+            reasons.append(path_reason)
     return labels, reasons
+
+
+def _partition_candidates_by_labels(
+    candidates: list[SampledFile],
+    *,
+    label_mode: str,
+    curated_labels: dict[tuple[str, str], CuratedLabel] | None,
+) -> tuple[list[SampledFile], list[SampledFile]]:
+    curated_candidates, weak_labeled_candidates, unlabeled_candidates = _partition_candidates_by_label_source(
+        candidates,
+        label_mode=label_mode,
+        curated_labels=curated_labels,
+    )
+    return [*curated_candidates, *weak_labeled_candidates], unlabeled_candidates
+
+
+def _partition_candidates_by_label_source(
+    candidates: list[SampledFile],
+    *,
+    label_mode: str,
+    curated_labels: dict[tuple[str, str], CuratedLabel] | None,
+) -> tuple[list[SampledFile], list[SampledFile], list[SampledFile]]:
+    curated_candidates: list[SampledFile] = []
+    weak_labeled_candidates: list[SampledFile] = []
+    labeled_candidates: list[SampledFile] = []
+    unlabeled_candidates: list[SampledFile] = []
+    for candidate in candidates:
+        try:
+            code = candidate.path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            unlabeled_candidates.append(candidate)
+            continue
+        expected, _, _ = _labels_for_sample(
+            candidate,
+            code,
+            label_mode=label_mode,
+            curated_labels=curated_labels,
+        )
+        _, _, label_source = _labels_for_sample(
+            candidate,
+            code,
+            label_mode=label_mode,
+            curated_labels=curated_labels,
+        )
+        if expected:
+            labeled_candidates.append(candidate)
+            if label_source == "curated":
+                curated_candidates.append(candidate)
+            else:
+                weak_labeled_candidates.append(candidate)
+        else:
+            unlabeled_candidates.append(candidate)
+    return curated_candidates, weak_labeled_candidates, unlabeled_candidates
+
+
+def _sample_candidates(
+    candidates: list[SampledFile],
+    *,
+    total: int,
+    rng: random.Random,
+    sampling_mode: str,
+) -> list[SampledFile]:
+    if total <= 0 or not candidates:
+        return []
+    if sampling_mode == "global":
+        return rng.sample(candidates, min(total, len(candidates)))
+
+    buckets: dict[str, list[SampledFile]] = {}
+    for candidate in candidates:
+        buckets.setdefault(candidate.repo, []).append(candidate)
+    repo_order = list(buckets)
+    rng.shuffle(repo_order)
+    for repo in repo_order:
+        rng.shuffle(buckets[repo])
+
+    sampled: list[SampledFile] = []
+    while repo_order and len(sampled) < total:
+        next_order: list[str] = []
+        for repo in repo_order:
+            bucket = buckets[repo]
+            if bucket and len(sampled) < total:
+                sampled.append(bucket.pop())
+            if bucket:
+                next_order.append(repo)
+        repo_order = next_order
+    return sampled
+
+
+def _select_samples(
+    *,
+    candidates: list[SampledFile],
+    n_files: int,
+    min_labeled: int,
+    seed: int,
+    label_mode: str,
+    curated_labels: dict[tuple[str, str], CuratedLabel] | None,
+    sampling_mode: str,
+) -> tuple[list[SampledFile], int]:
+    rng = random.Random(seed)
+    sample_count = min(n_files, len(candidates))
+    curated_candidates, weak_labeled_candidates, _ = _partition_candidates_by_label_source(
+        candidates,
+        label_mode=label_mode,
+        curated_labels=curated_labels,
+    )
+    labeled_candidates = [*curated_candidates, *weak_labeled_candidates]
+
+    target_labeled = min(max(0, min_labeled), sample_count, len(labeled_candidates))
+    sampled: list[SampledFile] = []
+    curated_target = min(target_labeled, len(curated_candidates))
+    if curated_target:
+        sampled.extend(
+            _sample_candidates(
+                curated_candidates,
+                total=curated_target,
+                rng=rng,
+                sampling_mode=sampling_mode,
+            )
+        )
+    remaining_labeled = target_labeled - len(sampled)
+    if remaining_labeled > 0:
+        sampled_keys = {(item.repo, item.relative_path) for item in sampled}
+        weak_pool = [candidate for candidate in weak_labeled_candidates if (candidate.repo, candidate.relative_path) not in sampled_keys]
+        sampled.extend(
+            _sample_candidates(
+                weak_pool,
+                total=remaining_labeled,
+                rng=rng,
+                sampling_mode=sampling_mode,
+            )
+        )
+
+    remaining = sample_count - len(sampled)
+    if remaining > 0:
+        sampled_keys = {(item.repo, item.relative_path) for item in sampled}
+        pool = [candidate for candidate in candidates if (candidate.repo, candidate.relative_path) not in sampled_keys]
+        sampled.extend(
+            _sample_candidates(
+                pool,
+                total=remaining,
+                rng=rng,
+                sampling_mode=sampling_mode,
+            )
+        )
+    return sampled, len(labeled_candidates)
 
 
 def _severity_allows(finding: dict[str, Any], threshold: str) -> bool:
@@ -226,9 +715,16 @@ def _score_sample(
     severity_min: str,
     js_backend: str,
     suppression_config: Path | None,
+    label_mode: str = "weak",
+    curated_labels: dict[tuple[str, str], CuratedLabel] | None = None,
 ) -> dict[str, Any]:
     code = sample.path.read_text(encoding="utf-8", errors="replace")
-    expected_labels, label_reasons = _infer_expected_labels(code)
+    expected_labels, label_reasons, label_source = _labels_for_sample(
+        sample,
+        code,
+        label_mode=label_mode,
+        curated_labels=curated_labels,
+    )
 
     result = scan_file(sample.path, js_backend=js_backend)
     if suppression_config is not None:
@@ -262,7 +758,9 @@ def _score_sample(
         "finding_count_scored": len(scored_findings),
         "expected_labels": sorted(expected_labels),
         "label_reasons": label_reasons,
+        "label_source": label_source,
         "predicted_labels": sorted(predicted_labels),
+        "vendor_or_minified": _is_vendor_or_minified_relative_path(sample.relative_path),
         "tp": tp,
         "fp": fp,
         "fn": fn,
@@ -283,21 +781,26 @@ def run_web_wild_harness(
     severity_min: str,
     js_backend: str,
     suppression_config: Path | None,
+    sampling_mode: str = "global",
+    vendor_mode: str = "include",
+    label_mode: str = "weak",
+    label_manifest: Path | None = None,
     quiet: bool,
 ) -> dict[str, Any]:
     repo_meta: list[dict[str, Any]] = []
     candidates: list[SampledFile] = []
+    curated_labels = _load_curated_labels(label_manifest)
 
     for repo in repos:
         repo_root, meta = _ensure_repo(repo, cache_dir=cache_dir, refresh=refresh, offline=offline)
         repo_meta.append(meta)
-        files = _collect_repo_files(repo_root, max_file_bytes=max_file_bytes)
+        files = _collect_repo_files(repo_root, max_file_bytes=max_file_bytes, vendor_mode=vendor_mode)
         for file in files:
             candidates.append(
                 SampledFile(
                     repo=repo.slug,
                     path=file,
-                    relative_path=str(file.resolve().relative_to(repo_root.resolve())),
+                    relative_path=_normalize_relative_path(file.resolve().relative_to(repo_root.resolve())),
                 )
             )
 
@@ -316,34 +819,15 @@ def run_web_wild_harness(
         }
 
     candidates = sorted(candidates, key=lambda x: (x.repo, x.relative_path))
-    rng = random.Random(seed)
-    sample_count = min(n_files, len(candidates))
-
-    # Stratified random sampling: retain randomness while ensuring enough
-    # weak-labeled files for meaningful precision/recall scoring.
-    labeled_candidates: list[SampledFile] = []
-    unlabeled_candidates: list[SampledFile] = []
-    for candidate in candidates:
-        try:
-            code = candidate.path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            unlabeled_candidates.append(candidate)
-            continue
-        expected, _ = _infer_expected_labels(code)
-        if expected:
-            labeled_candidates.append(candidate)
-        else:
-            unlabeled_candidates.append(candidate)
-
-    target_labeled = min(max(0, min_labeled), sample_count, len(labeled_candidates))
-    sampled: list[SampledFile] = []
-    if target_labeled > 0:
-        sampled.extend(rng.sample(labeled_candidates, target_labeled))
-
-    remaining = sample_count - len(sampled)
-    if remaining > 0:
-        pool = [c for c in candidates if c not in sampled]
-        sampled.extend(rng.sample(pool, min(remaining, len(pool))))
+    sampled, labeled_pool = _select_samples(
+        candidates=candidates,
+        n_files=n_files,
+        min_labeled=min_labeled,
+        seed=seed,
+        label_mode=label_mode,
+        curated_labels=curated_labels,
+        sampling_mode=sampling_mode,
+    )
 
     sample_reports = [
         _score_sample(
@@ -351,6 +835,8 @@ def run_web_wild_harness(
             severity_min=severity_min,
             js_backend=js_backend,
             suppression_config=suppression_config,
+            label_mode=label_mode,
+            curated_labels=curated_labels,
         )
         for sample in sampled
     ]
@@ -363,7 +849,7 @@ def run_web_wild_harness(
     summary = {
         "sampled_files": len(sample_reports),
         "labeled_files": labeled_files,
-        "labeled_candidate_pool": len(labeled_candidates),
+        "labeled_candidate_pool": labeled_pool,
         "tp": tp,
         "fp": fp,
         "fn": fn,
@@ -375,6 +861,10 @@ def run_web_wild_harness(
         "n_files": n_files,
         "cache_dir": str(cache_dir),
         "suppression_config": str(suppression_config) if suppression_config else None,
+        "sampling_mode": sampling_mode,
+        "vendor_mode": vendor_mode,
+        "label_mode": label_mode,
+        "label_manifest": str(label_manifest) if label_manifest else None,
         "repos": repo_meta,
         "samples": sample_reports,
         "summary": summary,
@@ -476,6 +966,7 @@ def main() -> None:
             Examples:
               python -m benchmarks.web_wild_harness --n-files 40 --seed 1337
               python -m benchmarks.web_wild_harness --repos OWASP/NodeGoat pallets/flask --n-files 20
+                            python -m benchmarks.web_wild_harness --sampling-mode balanced --vendor-mode exclude --label-mode hybrid --label-manifest benchmarks/real_world_manifest.json
               python -m benchmarks.web_wild_harness --fail-under-recall 75 --fail-under-precision 45 --max-fp-rate 55 -q
               python -m benchmarks.web_wild_harness --refresh --json
             """
@@ -497,6 +988,14 @@ def main() -> None:
                         help="Skip files larger than this size")
     parser.add_argument("--min-labeled", type=int, default=5, metavar="N",
                         help="Minimum number of weak-labeled files to include when available")
+    parser.add_argument("--sampling-mode", choices=["global", "balanced"], default="global",
+                        help="Sampling strategy across repos")
+    parser.add_argument("--vendor-mode", choices=["include", "exclude", "only"], default="include",
+                        help="Whether to include vendor/minified files in the candidate pool")
+    parser.add_argument("--label-mode", choices=["weak", "curated", "hybrid"], default="weak",
+                        help="How expected labels are sourced for scoring")
+    parser.add_argument("--label-manifest", type=Path, default=None, metavar="FILE",
+                        help="Optional curated real-world manifest used by --label-mode curated/hybrid")
     parser.add_argument("--severity-min", choices=["critical", "high", "medium", "low", "info"], default="high",
                         help="Minimum finding severity used for predicted labels")
     parser.add_argument("--js-backend", choices=["auto", "classic", "structural"], default="auto",
@@ -515,6 +1014,8 @@ def main() -> None:
                         help="Suppress human-readable summary")
     parser.add_argument("--json", action="store_true",
                         help="Emit JSON report")
+    parser.add_argument("--output", type=Path, default=None, metavar="FILE",
+                        help="Optional UTF-8 file to write the JSON report to")
     parser.add_argument("--quality-gate-cve", action="store_true",
                         help="Run CVE recall gate when --suppression-config is provided")
     parser.add_argument("--quality-gate-min-recall", type=float, default=100.0, metavar="PCT",
@@ -526,6 +1027,9 @@ def main() -> None:
 
     specs = _parse_repo_specs(args.repos)
     cache_dir = (args.cache_dir or _default_cache_dir()).resolve()
+    label_manifest = args.label_manifest
+    if label_manifest is None and args.label_mode in {"curated", "hybrid"}:
+        label_manifest = Path("benchmarks/real_world_manifest.json")
 
     report = run_web_wild_harness(
         repos=specs,
@@ -539,6 +1043,10 @@ def main() -> None:
         severity_min=args.severity_min,
         js_backend=args.js_backend,
         suppression_config=args.suppression_config,
+        sampling_mode=args.sampling_mode,
+        vendor_mode=args.vendor_mode,
+        label_mode=args.label_mode,
+        label_manifest=label_manifest,
         quiet=args.quiet,
     )
 
@@ -550,6 +1058,9 @@ def main() -> None:
         )
         quality_gate_failed = not passed
         report["quality_gate_cve"] = payload
+
+    if args.output is not None:
+        _write_report(args.output, report)
 
     if args.json or args.quiet:
         print(json.dumps(report, indent=2))

@@ -1,7 +1,7 @@
 {
   "entries": [
     {
-      "case_id": "nodegoat-open-redirect-and-bruteforce",
+      "case_id": "nodegoat-login-bruteforce",
       "source": {
         "kind": "git",
         "repo": "https://github.com/OWASP/NodeGoat.git",
@@ -11,9 +11,39 @@
       "language": "javascript",
       "targets": ["index.js"],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-601", "CWE-307"],
-      "expected_rule_ids": ["JS-039", "JS-014", "JS-029"],
-      "notes": "NodeGoat login route currently triggers open-redirect and missing-rate-limit detections on a pinned commit."
+      "expected_cwes": ["CWE-307"],
+      "expected_rule_ids": ["JS-029"],
+      "notes": "Pinned NodeGoat login route has no visible brute-force or per-IP rate limiting."
+    },
+    {
+      "case_id": "nodegoat-signup-bruteforce",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "app/routes"
+      },
+      "language": "javascript",
+      "targets": ["index.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-307"],
+      "expected_rule_ids": ["JS-029"],
+      "notes": "Pinned NodeGoat signup route is also exposed without visible registration throttling."
+    },
+    {
+      "case_id": "nodegoat-open-redirect-learn-link",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "app/routes"
+      },
+      "language": "javascript",
+      "targets": ["index.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-601"],
+      "expected_rule_ids": ["JS-039", "JS-014"],
+      "notes": "Pinned NodeGoat learn-link route redirects directly from a query-string URL."
     },
     {
       "case_id": "nodegoat-redos-validation",
@@ -44,6 +74,50 @@
       "expected_cwes": ["CWE-95"],
       "expected_rule_ids": ["JS-004"],
       "notes": "Pinned NodeGoat contribution route contains multiple direct `eval()` code-execution hits."
+    },
+    {
+      "case_id": "nodegoat-hardcoded-zap-api-key",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "config/env"
+      },
+      "language": "javascript",
+      "targets": ["test.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-798"],
+      "expected_rule_ids": ["JS-011"],
+      "notes": "Pinned NodeGoat test config hardcodes a ZAP API key used by security test automation."
+    },
+    {
+      "case_id": "nodegoat-hardcoded-cookie-and-crypto-secrets",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/OWASP/NodeGoat.git",
+        "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8",
+        "subdir": "config/env"
+      },
+      "language": "javascript",
+      "targets": ["all.js"],
+      "js_backend": "structural",
+      "expected_cwes": ["CWE-798"],
+      "expected_rule_ids": ["JS-011"],
+      "notes": "Pinned NodeGoat shared config hardcodes cookie and crypto secrets instead of sourcing them from environment or a secret store."
+    },
+    {
+      "case_id": "django-gdal-raster-clone-path-traversal",
+      "source": {
+        "kind": "git",
+        "repo": "https://github.com/django/django.git",
+        "ref": "8c8b833d32c02d3ae6f43b04bb1e45968796b402",
+        "subdir": "django/contrib/gis/gdal/raster"
+      },
+      "language": "python",
+      "targets": ["source.py"],
+      "expected_cwes": ["CWE-22"],
+      "expected_rule_ids": ["PY-023"],
+      "notes": "Pinned Django GDAL raster clone helper composes a virtual filesystem clone path with os.path.join() on dynamic input inside clone()."
     }
   ]
 }

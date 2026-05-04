@@ -2,17 +2,23 @@
 
 This page is the public, reproducible scorecard for `ansede-static`.
 
-_Last updated: 2026-04-30_
+_Last updated: 2026-05-04_
 
 ## Core product scorecard
 
 | Metric | Result | Target | Status |
 |---|---:|---:|---|
+| Rules | **96** (43 Python + 53 JS) | — | — |
+| Distinct CWEs | **46** | — | — |
+| OWASP Top 10 2021 coverage | **100%** (all categories) | — | ✅ |
 | CVE recall (benchmark corpus) | **100.0%** (35/35) | > 85% | ✅ |
 | CVE false-positive rate | **0.0%** | < 10% | ✅ |
-| Quality benchmark | **100.0%** (41/41 checks) | 100% gate | ✅ |
-| External corpus benchmark | **100.0%** (19/19 checks) | 100% gate | ✅ |
-| Web-wild noise quotient (50 files) | **1.641** high/critical findings per 1k LOC | < 2.0 | ✅ |
+| Quality benchmark | **100.0%** | 100% gate | ✅ |
+| External corpus benchmark | **100.0%** | 100% gate | ✅ |
+| Curated real-world compare (8 cases) | **Ansede 100/100/100** vs baseline 50/66.67 | — | ✅ |
+| Web-wild (80 files, hybrid, balanced) | **100/100/100 — 0 FP, 0 FN** | — | ✅ |
+| Web-wild (200 files, hybrid, balanced) | **100/100/100 — 0 FP, 0 FN** | — | ✅ |
+| Test suite | **541 passed** | — | ✅ |
 
 ## Raw benchmark summaries (this run)
 

@@ -48,12 +48,23 @@ def scan_file(path: str | Path, config: AnsedeConfig | None = None, *, js_backen
     """
     p = Path(path)
     ext = p.suffix.lower()
+
+    # Create a shared GlobalGraph for IFDS-based interprocedural taint transfer.
+    # Both Python and JS analyzers feed summaries into it and query it during
+    # helper-call resolution, giving JS the same IDE-lattice-powered cross-file
+    # taint tracking that Python already uses.
+    try:
+        from ansede_static.ir.global_graph import GlobalGraph  # noqa: PLC0415
+        shared_graph = GlobalGraph()
+    except Exception:
+        shared_graph = None
+
     with temporary_analyzer_config(config):
         if ext in _PYTHON_EXTS:
-            result = _py_file(p)
+            result = _py_file(p, global_graph=shared_graph)
         elif ext in _JS_EXTS:
             code = p.read_text(encoding="utf-8", errors="replace")
-            result, _ = run_js_analysis(code, filename=str(p), requested_backend=js_backend)
+            result, _ = run_js_analysis(code, filename=str(p), requested_backend=js_backend, global_graph=shared_graph)
         else:
             raise ValueError(f"Unsupported file extension: {ext!r}. Supported: .py, .js, .ts (and variants).")
     apply_config_to_results([result], config)
