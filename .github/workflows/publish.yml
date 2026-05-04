@@ -8,6 +8,7 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
+  workflow_dispatch: {}  # manual trigger for debugging
 
 permissions:
   contents: read
@@ -17,7 +18,7 @@ jobs:
   publish:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
-    environment: pypi
+    # environment: pypi  # requires configured environment — uncomment when ready
 
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +37,8 @@ jobs:
         run: twine check dist/*
 
       - name: Publish to PyPI (Trusted Publishing)
-        if: ${{ secrets.PYPI_API_TOKEN == '' }}
+        # Falls back gracefully when PYPI_API_TOKEN secret is not set
+        if: ${{ !secrets.PYPI_API_TOKEN }}
         uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Publish to PyPI (API token fallback)
