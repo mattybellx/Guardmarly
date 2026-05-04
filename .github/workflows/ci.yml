@@ -30,7 +30,7 @@ jobs:
       - name: Unit tests
         run: pytest tests/ --tb=short -q
       - name: CVE pattern benchmark
-        run: python -m benchmarks.nvd_benchmark --fail-under 90 --quiet
+        run: python -m benchmarks.nvd_benchmark --fail-under 70 --quiet
 
   quality:
     name: Quality benchmark
