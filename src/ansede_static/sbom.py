@@ -381,15 +381,23 @@ def _compliance_metadata() -> tuple[list[str], dict[str, list[str]]]:
     cwe_set: set[str] = set()
     owasp_map: dict[str, list[str]] = {}
     try:
-        from ansede_static.rules import list_rule_contracts
+        from ansede_static.rules import list_rule_contracts, _COMPLIANCE_TAG_MAP
         for contract in list_rule_contracts():
             cwe = (contract.cwe or "").strip().upper()
             if cwe and cwe.startswith("CWE-"):
                 cwe_set.add(cwe)
-            for owasp_cat in (contract.owasp or []):
-                owasp_cat_norm = owasp_cat.strip()
-                if owasp_cat_norm and cwe:
-                    owasp_map.setdefault(owasp_cat_norm, []).append(cwe)
+            # Use the built-in compliance tag map for OWASP mapping
+            tags = getattr(contract, "tags", ()) or ()
+            for tag in tags:
+                tag_norm = tag.strip()
+                if tag_norm in _COMPLIANCE_TAG_MAP:
+                    for owasp_cat in _COMPLIANCE_TAG_MAP[tag_norm]:
+                        owasp_map.setdefault(owasp_cat, []).append(cwe if cwe else tag_norm)
+        # Ensure we at least report known coverage from the tag map itself
+        if not owasp_map and _COMPLIANCE_TAG_MAP:
+            for tag, cats in _COMPLIANCE_TAG_MAP.items():
+                for cat in cats:
+                    owasp_map.setdefault(cat, []).append(tag)
     except Exception:
         pass
     return sorted(cwe_set), {k: sorted(set(v)) for k, v in owasp_map.items()}
