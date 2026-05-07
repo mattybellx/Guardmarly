@@ -5623,7 +5623,7 @@ def _rule_41(ctx: _Ctx) -> list[Finding]:
         findings.append(Finding(
             category="security", severity=Severity.HIGH,
             title=f"CWE-611: XML parser without XXE protection at line {lineno}",
-            description=f"XML parser `{m.group(1)[:50]}` at L{lineno} may be vulnerable to XML External Entity (XXE) injection.",
+            description=f"XML parser `{m.group(0)[:50]}` at L{lineno} may be vulnerable to XML External Entity (XXE) injection.",
             line=lineno,
             suggestion=(
                 "Use defusedxml or disable external entities: "
