@@ -1233,6 +1233,7 @@ def _main_impl() -> None:
     try:
         from ansede_static import yaml_rules as _yaml_rules
         runtime_rules = _yaml_rules.load_runtime_rules(config=config, workspace_root=workspace_root)
+        runtime_rules = runtime_rules + _yaml_rules.load_registry_packs()
     except Exception as exc:
         print(f"ansede-static: warning: custom/community rules error: {exc}", file=sys.stderr)
 

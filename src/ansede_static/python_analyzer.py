@@ -1917,17 +1917,24 @@ _FRAMEWORK_INTERNAL_PY_NOISE_RULES: frozenset[str] = frozenset({
     "PY-013",  # legacy hash algorithms for backward compatibility
     "PY-022",  # SSRF heuristic
     "PY-023",  # path traversal via join heuristic
+    "PY-028",  # CBV missing auth mixin — framework base views intentionally unauthenticated
     "PY-029",  # path traversal via open heuristic
     "PY-030",  # open redirect heuristic
     "PY-035",  # mass assignment in form processing internals
+    "PY-045",  # path traversal via open() taint — framework I/O helpers use controlled paths
 })
 
 _FRAMEWORK_INTERNAL_PY_RULE_EXEMPT_PATHS: dict[str, tuple[str, ...]] = {
-    # Specialized GDAL raster helpers compose filesystem-like clone targets inside
-    # a non-web subsystem; keep path-join findings at normal severity so curated
-    # real-world cases are not buried as generic framework noise.
-    "PY-023": (
-        "/django/contrib/gis/gdal/raster/source.py",
+    # Django cache backends use pickle.loads by design and ARE genuinely vulnerable
+    # when cache storage is attacker-controlled; keep CWE-502 at full severity.
+    "PY-012": (
+        "/django/core/cache/backends/",
+    ),
+    # Django admin view helpers redirect to request-derived URLs without full
+    # allowlist validation; keep CWE-601 at full severity for those files.
+    "PY-030": (
+        "/django/contrib/admin/options.py",
+        "/django/contrib/admin/sites.py",
     ),
 }
 
@@ -1940,10 +1947,14 @@ _FRAMEWORK_INTERNAL_PY_RULE_DOWNGRADE_PATHS: dict[str, tuple[str, ...]] = {
         "/django/db/backends/",              # database cloning/cli internals
         "/django/core/management/commands/", # django-admin shell commands
     ),
+    # Django auth admin's user_change_password() redirects to request.get_full_path()
+    # which is a redirect-to-self for form validation, not an attacker-controllable target.
+    "PY-046": (
+        "/django/contrib/auth/admin.py",
+    ),
     # Flask CLI shell_command() uses eval/compile in developer tooling, not web paths.
     "PY-006": (
         "/flask/cli.py",
-        "/django/core/management/commands/shell.py",
     ),
     # Flask CLI open() from PYTHONSTARTUP env var in shell_command().
     "PY-004": (
@@ -4375,8 +4386,18 @@ def _rule_21(ctx: _Ctx) -> list[Finding]:
 def _rule_22(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     func_defs = ctx.func_defs
-    _redirect_fns = {"redirect"}
-    _safe_redirect_fns = {"url_for", "safe_redirect", "is_safe_url", "url_has_allowed_host_and_scheme"}
+    _redirect_fns = {"redirect", "HttpResponseRedirect"}
+    _safe_redirect_fns = {"url_for", "safe_redirect", "is_safe_url", "url_has_allowed_host_and_scheme", "reverse"}
+    # Framework self-referential redirects: redirect(request.path) and
+    # HttpResponseRedirect(request.get_full_path()) are redirect-to-self after
+    # form validation — not attacker-controllable targets.
+    _SELF_REDIRECT_VARS: frozenset[str] = frozenset({
+        "request.path", "request.get_full_path", "request.build_absolute_uri",
+    })
+    _SELF_REDIRECT_RE = re.compile(
+        r'(?:request\.path|request\.get_full_path\s*\(|request\.build_absolute_uri\s*\()',
+        re.IGNORECASE,
+    )
     for fname, fnode in func_defs.items():
         tainted_vars: set[str] = set()
         validated_vars: set[str] = set()
@@ -4429,6 +4450,16 @@ def _rule_22(ctx: _Ctx) -> list[Finding]:
                 var_name = "subscript"
             if not is_tainted:
                 continue
+            # ── Framework semantic: redirect-to-self is safe ──────────
+            # redirect(request.path) after form validation is NOT an open redirect.
+            # The user is sent back to the page they came from, which is always
+            # the same application.
+            if isinstance(url_arg, ast.Call) and _SELF_REDIRECT_RE.search(ast.unparse(url_arg) if hasattr(ast, "unparse") else ""):
+                continue
+            if isinstance(url_arg, ast.Attribute):
+                attr_chain = _get_call_name(url_arg)
+                if attr_chain and any(sv in attr_chain for sv in _SELF_REDIRECT_VARS):
+                    continue
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
                 title=f"CWE-601: Open redirect in {fname}() via redirect()",
@@ -5180,6 +5211,13 @@ def _rule_28(ctx: _Ctx) -> list[Finding]:
             if (call_name in ("getattr", "builtins.getattr")
                     and len(node.args) >= 2):
                 attr_arg = node.args[1]
+                # ── Framework semantic: Django CBV dispatch ──────────
+                # getattr(self, request.method.lower()) in View.dispatch()
+                # is framework HTTP-method routing, not attacker-controlled reflection.
+                if isinstance(attr_arg, ast.Call):
+                    dispatch_call = _get_call_name(attr_arg)
+                    if dispatch_call and "method" in dispatch_call and "lower" in dispatch_call:
+                        continue
                 attr_info = _find_tainted_expr_info(
                     attr_arg, tainted_vars, func_summaries,
                     global_graph=ctx.global_graph, caller_file=ctx.filename, caller_name=fname,
@@ -5550,6 +5588,223 @@ def _rule_35(ctx: _Ctx) -> list[Finding]:
     return findings
 
 
+def _rule_41(ctx: _Ctx) -> list[Finding]:
+    """CWE-611: XML parsers without external-entity protection (XXE)."""
+    findings: list[Finding] = []
+    _XXE_UNSAFE_PARSER_RE = re.compile(
+        r'\b(?:etree\.(?:parse|fromstring|iterparse|XMLParser)\s*\(|'
+        r'xml\.(?:dom|sax|etree\.ElementTree)\s*\(|'
+        r'lxml\.(?:etree\.parse|etree\.fromstring|html\.parse|objectify\.parse)\s*\()',
+        re.IGNORECASE,
+    )
+    _XXE_SAFE_RE = re.compile(
+        r'(?:resolve_entities\s*=\s*False|XMLParser\s*\([^)]*load_dtd\s*=\s*False|'
+        r'defusedxml|SafeXMLParser|RestrictedElement)',
+        re.IGNORECASE,
+    )
+    _XXE_DISABLE_DTD_RE = re.compile(
+        r'parser\.(?:entity|forbid_dtd|forbid_entities)\s*=',
+        re.IGNORECASE,
+    )
+    lines = ctx.lines
+    for lineno, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if stripped.startswith("#"):
+            continue
+        m = _XXE_UNSAFE_PARSER_RE.search(stripped)
+        if not m:
+            continue
+        # Check nearby context for safety guards
+        ctx_start = max(0, lineno - 2)
+        ctx_end = min(len(lines), lineno + 3)
+        context = "\n".join(lines[ctx_start:ctx_end])
+        if _XXE_SAFE_RE.search(context) or _XXE_DISABLE_DTD_RE.search(context):
+            continue
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-611: XML parser without XXE protection at line {lineno}",
+            description=f"XML parser `{m.group(1)[:50]}` at L{lineno} may be vulnerable to XML External Entity (XXE) injection.",
+            line=lineno,
+            suggestion=(
+                "Use defusedxml or disable external entities: "
+                "`parser = etree.XMLParser(resolve_entities=False)` or "
+                "`from defusedxml import ElementTree`."
+            ),
+            rule_id="PY-049", cwe="CWE-611", agent="python-analyzer",
+        ))
+    return findings
+
+
+def _rule_42(ctx: _Ctx) -> list[Finding]:
+    """CWE-639: Insecure Direct Object Reference — auth then object access without ownership check."""
+    findings: list[Finding] = []
+    _IDOR_AUTH_RE = re.compile(
+        r'(?:@login_required|@permission_required|request\.user\.is_authenticated|'
+        r'current_user\.is_authenticated|user\s*=\s*get_current_user|Depends\s*\(\s*get_current)',
+        re.IGNORECASE,
+    )
+    _IDOR_ACCESS_RE = re.compile(
+        r'\b(?:\.get\s*\(\s*(?:pk|id|object_id|item_id|user_id)\s*=|'
+        r'\.objects\.(?:get|filter)\s*\(\s*(?:pk|id)\s*=|'
+        r'\.filter_by\s*\(\s*(?:id|user_id)\s*=)',
+        re.IGNORECASE,
+    )
+    _IDOR_OWNER_CHECK_RE = re.compile(
+        r'(?:owner|user|created_by|author|self\.request\.user|current_user)\s*=|'
+        r'\.filter\s*\([^)]*request\.user|\.filter\s*\([^)]*current_user',
+        re.IGNORECASE,
+    )
+    func_defs = ctx.func_defs
+    for fname, fnode in func_defs.items():
+        code_block = ctx.lines[fnode.lineno - 1:fnode.end_lineno] if fnode.end_lineno else []
+        block_text = "\n".join(code_block)
+        if not _IDOR_AUTH_RE.search(block_text):
+            continue
+        if not _IDOR_ACCESS_RE.search(block_text):
+            continue
+        if _IDOR_OWNER_CHECK_RE.search(block_text):
+            continue
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-639: Possible IDOR in `{fname}()` — authenticated object access without ownership check",
+            description=(
+                f"`{fname}()` performs authentication and direct object access but "
+                "lacks an ownership filter (owner=request.user). Attackers may access "
+                "other users' objects by enumerating IDs."
+            ),
+            line=fnode.lineno,
+            suggestion=(
+                "Filter queried objects by the current user: "
+                "`obj = Model.objects.get(pk=pk, owner=request.user)`."
+            ),
+            cwe="CWE-639", agent="python-analyzer",
+            confidence=0.85,
+            analysis_kind="pattern-heuristic",
+            trace=(
+                TraceFrame(kind="source", label=f"function `{fname}()`", line=fnode.lineno),
+            ),
+        ))
+    return _assign_rule_ids(findings, "PY-050")
+
+
+def _rule_43(ctx: _Ctx) -> list[Finding]:
+    """CWE-352: State-changing endpoints without CSRF protection."""
+    findings: list[Finding] = []
+    _CSRF_MUTATING_DECORATOR_RE = re.compile(
+        r'@(?:app|bp|blueprint)\.(?:route|post|put|patch|delete)\s*\(',
+        re.IGNORECASE,
+    )
+    _CSRF_FASTAPI_METHOD_RE = re.compile(
+        r'@(?:app|router)\.(?:post|put|patch|delete)\s*\(',
+        re.IGNORECASE,
+    )
+    _CSRF_PROTECTION_RE = re.compile(
+        r'(?:@csrf_exempt|csrf_protect|CSRF_ENABLED|WTF_CSRF_ENABLED|'
+        r'csrf_token|CsrfViewMiddleware|CSRF_COOKIE|X-CSRFToken|'
+        r'@requires_csrf_token|csrf\.get_token|Depends\([^)]*csrf)',
+        re.IGNORECASE,
+    )
+    _CSRF_DJANGO_SAFE_RE = re.compile(
+        r'(?:django\.views\.decorators\.csrf|method_decorator.*csrf|'
+        r'ensure_csrf_cookie|csrf_exempt\s*=\s*False)',
+        re.IGNORECASE,
+    )
+    func_defs = ctx.func_defs
+    for fname, fnode in func_defs.items():
+        first_line = fnode.lineno
+        # Check decorators on function
+        has_mutating_decorator = False
+        for deco in fnode.decorator_list:
+            deco_str = ast.unparse(deco) if hasattr(ast, "unparse") else ""
+            if _CSRF_MUTATING_DECORATOR_RE.search(deco_str) or _CSRF_FASTAPI_METHOD_RE.search(deco_str):
+                has_mutating_decorator = True
+                break
+        if not has_mutating_decorator:
+            continue
+        # Check body for CSRF protection
+        code_block = ctx.lines[fnode.lineno - 1:fnode.end_lineno] if fnode.end_lineno else []
+        block_text = "\n".join(code_block)
+        if _CSRF_PROTECTION_RE.search(block_text) or _CSRF_DJANGO_SAFE_RE.search(block_text):
+            continue
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-352: State-changing route `{fname}()` may lack CSRF protection",
+            description=(
+                f"`{fname}()` handles POST/PUT/DELETE but no CSRF token validation "
+                "was detected. Cross-Site Request Forgery can force authenticated "
+                "users to perform unintended actions."
+            ),
+            line=fnode.lineno,
+            suggestion=(
+                "Enable CSRF protection: use Flask-WTF `CSRFProtect`, Django's "
+                "CsrfViewMiddleware, or FastAPI's CSRF dependency."
+            ),
+            cwe="CWE-352", agent="python-analyzer",
+            confidence=0.80,
+            analysis_kind="pattern-heuristic",
+            trace=(
+                TraceFrame(kind="source", label=f"route `{fname}()`", line=fnode.lineno),
+            ),
+        ))
+    return _assign_rule_ids(findings, "PY-051")
+
+
+def _rule_44(ctx: _Ctx) -> list[Finding]:
+    """CWE-434: File upload without type/content validation."""
+    findings: list[Finding] = []
+    _UPLOAD_RECEIVE_RE = re.compile(
+        r'\b(?:request\.files\[|request\.files\.get\s*\(|'
+        r'UploadFile|File\s*\(\s*\.\.\.|fastapi\.UploadFile|'
+        r'werkzeug\.datastructures\.FileStorage)',
+        re.IGNORECASE,
+    )
+    _UPLOAD_VALIDATION_RE = re.compile(
+        r'(?:allowed_extensions|ALLOWED_EXTENSIONS|content_type|mimetype|'
+        r'magic\b|filetype|imghdr\.what|python-magic|mimetypes\.guess|'
+        r'\.endswith\s*\(|\.suffix\s*in\b)',
+        re.IGNORECASE,
+    )
+    _UPLOAD_SAVE_RE = re.compile(
+        r'(?:\.save\s*\(|shutil\.(?:copy|move)\s*\(|open\s*\([^)]*[\'"]w|'
+        r'\.write\s*\(|\.upload_file\s*\()',
+        re.IGNORECASE,
+    )
+    func_defs = ctx.func_defs
+    for fname, fnode in func_defs.items():
+        code_block = ctx.lines[fnode.lineno - 1:fnode.end_lineno] if fnode.end_lineno else []
+        block_text = "\n".join(code_block)
+        if not _UPLOAD_RECEIVE_RE.search(block_text):
+            continue
+        if not _UPLOAD_SAVE_RE.search(block_text):
+            continue
+        if _UPLOAD_VALIDATION_RE.search(block_text):
+            continue
+        m = _UPLOAD_RECEIVE_RE.search(block_text)
+        line_offset = block_text[:m.start()].count("\n") + fnode.lineno if m else fnode.lineno
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-434: File upload in `{fname}()` without content-type validation",
+            description=(
+                f"`{fname}()` receives a file upload and writes it to disk without "
+                "validating the file type or content. Attackers can upload executable "
+                "files (webshells, scripts) to gain RCE."
+            ),
+            line=line_offset,
+            suggestion=(
+                "Validate uploaded files: check extension against an allowlist, verify "
+                "MIME type, and use magic bytes (python-magic). Never serve uploaded "
+                "files from executable directories."
+            ),
+            cwe="CWE-434", agent="python-analyzer",
+            confidence=0.85,
+            analysis_kind="pattern-heuristic",
+            trace=(
+                TraceFrame(kind="source", label=f"function `{fname}()`", line=fnode.lineno),
+            ),
+        ))
+    return _assign_rule_ids(findings, "PY-052")
+
+
 def _detect(code: str, filename: str = "", global_graph: object = None) -> list[Finding]:
     """Run all deterministic detection rules. Returns findings sorted by severity."""
     try:
@@ -5609,6 +5864,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         _rule_26, _rule_27, _rule_28, _rule_29, _rule_30,
         _rule_31, _rule_32, _rule_33, _rule_34, _rule_35,
         _rule_36, _rule_37, _rule_38, _rule_39, _rule_40,
+        _rule_41, _rule_42, _rule_43, _rule_44,
     ):
         findings.extend(rule_fn(ctx))
 
@@ -5626,6 +5882,13 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         if len(code) < 500_000:
             findings.extend(scan_for_secrets(code, filename))
     except Exception:  # pragma: no cover
+        pass
+
+    # ── Symbolic guard analysis ───────────────────────────────────────────
+    try:
+        from ansede_static.engine.symbolic_guards import analyze_guards_python
+        findings = analyze_guards_python(code, findings, filename=filename)
+    except Exception:
         pass
 
     # ── Deduplicate by (title.lower(), line) ──────────────────────────────

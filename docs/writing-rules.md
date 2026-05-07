@@ -272,7 +272,7 @@ rules:
     languages: ["python", "javascript", "java", "csharp", "go"]
     pattern: "legacy_exec\\s*\\("
     suggestion: "Replace legacy_exec() with a parameterized subprocess wrapper."
-    maturity: "beta"
+    maturity: "stable"
     tags: ["custom", "org-policy"]
 ```
 

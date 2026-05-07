@@ -216,13 +216,11 @@ class GlobalGraph:
     _SUMMARY_BUCKET = "ifds_function_summaries_v1"
     _DEPENDENCY_BUCKET = "ifds_function_dependencies_v1"
     # 5thMay.md Task B1 audit note (2026-05-07): keep the default bounded
-    # call-string depth at k=2 until a larger-repo perf harness demonstrates
-    # that deeper contexts stay comfortably within the stated safety margin.
-    # The current smoke benchmark (`python -m benchmarks.perf_benchmark
-    # --iterations 10`) averages ~24.6s over 20 corpus cases at k=2, so the
-    # first useful B1 step is documenting and centralizing this shared bound
-    # rather than raising it blindly.
-    DEFAULT_CALL_STRING_K = 2
+    # call-string depth at a single shared default so Python and JS helper-flow
+    # analyses do not silently diverge. v3.0 raises the default to k=3 to keep
+    # the last three verified call-sites in context and reduce cross-route taint
+    # bleed for wrapper/helper chains.
+    DEFAULT_CALL_STRING_K = 3
 
     def __init__(self, cache_path: str | Path | None = None):
         self.nodes: Dict[NodeID, TaintNode] = {}
@@ -841,3 +839,48 @@ class GlobalGraph:
         if fact.level == IDETaintLevel.CLEAN:
             return max(0.0, base_confidence - 0.40)
         return base_confidence
+
+    # ── Serialization ──────────────────────────────────────────────────────────
+
+    def to_dict(self) -> dict:
+        """Serialize the graph to a JSON-compatible dict for caching."""
+        def _ser_trace(trace: tuple) -> list:
+            return [
+                {"kind": t.kind, "label": t.label, "line": t.line, "start_column": t.start_column}
+                for t in trace
+            ]
+
+        summaries = {
+            f"{fp}|{fn}": s.as_dict()
+            for (fp, fn), s in self.function_summaries.items()
+        }
+        module_taint = {
+            f"{fp}|{sym}": {"source": src, "trace": _ser_trace(trace)}
+            for (fp, sym), (src, trace) in self.module_taint.items()
+        }
+        return {"summaries": summaries, "module_taint": module_taint}
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "GlobalGraph":
+        """Restore a GlobalGraph from a serialized dict."""
+        from ansede_static._types import TraceFrame as _TF
+
+        graph = cls()
+        for key, s in data.get("summaries", {}).items():
+            fp, fn = key.split("|", 1)
+            summary = FunctionSummary.from_dict(s)
+            graph.function_summaries[(fp, fn)] = summary
+        for key, mt in data.get("module_taint", {}).items():
+            fp, sym = key.split("|", 1)
+            trace = tuple(
+                _TF(
+                    kind=t.get("kind", ""),
+                    label=t.get("label", ""),
+                    line=t.get("line"),
+                    start_column=t.get("start_column", 1),
+                )
+                for t in mt.get("trace", [])
+            )
+            graph.module_taint[(fp, sym)] = (mt.get("source", ""), trace)
+        return graph
+

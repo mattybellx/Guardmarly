@@ -10,6 +10,13 @@ from ansede_static.ir.global_graph import (
 )
 
 
+DEFAULT_K = GlobalGraph.DEFAULT_CALL_STRING_K
+
+
+def test_global_graph_default_call_string_depth_is_three():
+    assert DEFAULT_K == 3
+
+
 def test_ide_taint_fact_join_and_meet():
     left = IDETaintFact(level=IDETaintLevel.CLEAN, sources=("arg[0]",), sanitizers=("xss",), call_string=("a",))
     right = IDETaintFact(level=IDETaintLevel.TAINTED, sources=("arg[1]",), sanitizers=("sql",), call_string=("a", "b"))
@@ -32,17 +39,17 @@ def test_global_graph_set_ide_fact_joins_existing():
         file_path="a.py",
         function_name="f",
         value_label="$ret",
-        fact=IDETaintFact(level=IDETaintLevel.CLEAN, sources=("arg[0]",), call_string=("x", "y", "z")),
+        fact=IDETaintFact(level=IDETaintLevel.CLEAN, sources=("arg[0]",), call_string=("w", "x", "y", "z")),
         join=True,
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
     merged = graph.set_ide_fact(
         file_path="a.py",
         function_name="f",
         value_label="$ret",
-        fact=IDETaintFact(level=IDETaintLevel.TAINTED, sources=("arg[1]",), call_string=("y", "z")),
+        fact=IDETaintFact(level=IDETaintLevel.TAINTED, sources=("arg[1]",), call_string=("a", "x", "y", "z")),
         join=True,
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     assert merged.level == IDETaintLevel.TAINTED
@@ -51,8 +58,8 @@ def test_global_graph_set_ide_fact_joins_existing():
         file_path="a.py",
         function_name="f",
         value_label="$ret",
-        call_string=("ignore", "y", "z"),
-        call_string_k=2,
+        call_string=("ignore", "x", "y", "z"),
+        call_string_k=DEFAULT_K,
     )
     assert fact.level == IDETaintLevel.TAINTED
 
@@ -75,7 +82,7 @@ def test_propagate_call_facts_records_return_lattice_fact():
         tainted_arg_indexes={0},
         call_line=9,
         call_string=("ctx0",),
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     assert sink_hit is False
@@ -103,7 +110,7 @@ def test_resolve_taint_with_access_path_prefers_field_specific_fact():
         sources=("arg[0]",),
         access_path=("user", "email"),
         call_string=("ctx",),
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     level, sources, sanitizers = graph.resolve_taint_with_access_path(
@@ -112,7 +119,7 @@ def test_resolve_taint_with_access_path_prefers_field_specific_fact():
         value_label="payload",
         access_path=("user", "email", "domain"),
         call_string=("ctx",),
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     assert level == IDETaintLevel.TAINTED
@@ -128,7 +135,7 @@ def test_adjust_confidence_from_ide_boosts_and_suppresses():
         value_label="$ret",
         fact=IDETaintFact(level=IDETaintLevel.TAINTED, sources=("arg[0]",), call_string=("ctx",)),
         join=True,
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
     boosted = graph.adjust_confidence_from_ide(
         file_path="flow.py",
@@ -136,7 +143,7 @@ def test_adjust_confidence_from_ide_boosts_and_suppresses():
         value_label="$ret",
         base_confidence=0.6,
         call_string=("ctx",),
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     graph.set_ide_fact(
@@ -145,7 +152,7 @@ def test_adjust_confidence_from_ide_boosts_and_suppresses():
         value_label="$ret",
         fact=IDETaintFact(level=IDETaintLevel.CLEAN, sources=("clean-return",), call_string=("ctx",)),
         join=False,
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
     suppressed = graph.adjust_confidence_from_ide(
         file_path="flow.py",
@@ -153,7 +160,7 @@ def test_adjust_confidence_from_ide_boosts_and_suppresses():
         value_label="$ret",
         base_confidence=0.6,
         call_string=("ctx",),
-        call_string_k=2,
+        call_string_k=DEFAULT_K,
     )
 
     assert boosted == pytest.approx(0.75)

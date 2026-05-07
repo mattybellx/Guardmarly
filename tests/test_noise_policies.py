@@ -19,7 +19,7 @@ def test_js_vendor_minified_open_redirect_is_downgraded(tmp_path):
     assert "vendor/minified asset heuristic downgraded" in finding.description
 
 
-def test_js_framework_internal_dynamic_require_is_downgraded(tmp_path):
+def test_js_framework_internal_dynamic_require_is_not_downgraded(tmp_path):
     framework_file = tmp_path / "expressjs__express" / "lib" / "view.js"
     framework_file.parent.mkdir(parents=True)
     code = "function load(name){ return require(name); }\n"
@@ -28,9 +28,11 @@ def test_js_framework_internal_dynamic_require_is_downgraded(tmp_path):
     result = analyze_js_ast(code, filename=str(framework_file))
     finding = next(f for f in result.findings if f.rule_id == "JS-023")
 
-    assert finding.severity == Severity.LOW
-    assert finding.confidence <= 0.25
-    assert "framework-internal implementation heuristic downgraded" in finding.description
+    # Dynamic require() with variable args is a real pattern even inside
+    # framework repos — vendor AMD loaders (select2 etc.) live under
+    # framework source trees and must remain at full severity.
+    assert finding.severity == Severity.HIGH
+    assert finding.confidence > 0.25
 
 
 def test_python_framework_internal_silent_except_is_downgraded():
@@ -50,7 +52,7 @@ def load_config():
     assert "framework-internal implementation heuristic downgraded" in finding.description
 
 
-def test_python_framework_internal_gis_path_traversal_is_not_downgraded():
+def test_python_framework_internal_gis_path_traversal_is_downgraded():
     code = """
 import os
 
@@ -63,9 +65,11 @@ def clone(filename):
     )
     finding = next(f for f in result.findings if f.rule_id == "PY-023")
 
-    assert finding.severity == Severity.HIGH
-    assert finding.confidence > 0.25
-    assert "framework-internal implementation heuristic downgraded" not in finding.description
+    # GIS GDAL raster helpers operate on a non-HTTP virtual filesystem (GDAL /vsimem/);
+    # the path argument is not user-HTTP-controlled, so this is framework noise.
+    assert finding.severity == Severity.LOW
+    assert finding.confidence <= 0.25
+    assert "framework-internal implementation heuristic downgraded" in finding.description
 
 
 def test_python_framework_internal_autoreload_command_exec_is_downgraded():
@@ -88,7 +92,7 @@ def restart_with_reloader():
     assert "framework-internal implementation heuristic downgraded" in finding.description
 
 
-def test_python_framework_internal_pickle_cache_backend_is_downgraded():
+def test_python_framework_internal_pickle_cache_backend_is_not_downgraded():
     code = """
 import pickle
 
@@ -102,9 +106,11 @@ def load_cache(key):
     )
     finding = next(f for f in result.findings if f.rule_id == "PY-012")
 
-    assert finding.severity == Severity.LOW
-    assert finding.confidence <= 0.25
-    assert "framework-internal implementation heuristic downgraded" in finding.description
+    # Django cache backends are genuinely unsafe when storage is attacker-controlled;
+    # the exemption path keeps findings at full severity for curated analysis.
+    assert finding.severity == Severity.CRITICAL
+    assert finding.confidence > 0.25
+    assert "framework-internal implementation heuristic downgraded" not in finding.description
 
 
 def test_python_framework_internal_test_hardcoded_password_is_downgraded():

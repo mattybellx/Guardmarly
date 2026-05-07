@@ -27,7 +27,7 @@ class RuleContract:
     default_severity: str
     languages: tuple[str, ...]
     cwe: str = ""
-    maturity: str = "beta"
+    maturity: str = "stable"
     precision: str = "medium"
     summary: str = ""
     remediation: str = ""
@@ -165,7 +165,7 @@ def _contract(
     default_severity: str,
     languages: tuple[str, ...],
     cwe: str = "",
-    maturity: str = "beta",
+    maturity: str = "stable",
     precision: str = "medium",
     summary: str = "",
     remediation: str = "",
@@ -200,7 +200,7 @@ def _apply_cwe_base(
     languages: tuple[str, ...],
     summary: str,
     remediation: str,
-    maturity: str = "beta",
+    maturity: str = "stable",
     precision: str = "medium",
     docs_url: str | None = None,
     known_limitations: tuple[str, ...] = (),

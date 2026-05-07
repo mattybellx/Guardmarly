@@ -51,7 +51,7 @@ class CustomRule:
     sink_names: tuple[str, ...] = field(default_factory=tuple)
     suggestion: str = ""
     auto_fix: str = ""
-    maturity: str = "beta"
+    maturity: str = "stable"
     tags: tuple[str, ...] = field(default_factory=tuple)
     test_positive: str = ""
     test_negative: str = ""
@@ -522,6 +522,20 @@ def load_runtime_rules(
             custom_path = (base / custom_path).resolve()
         rules.extend(load_custom_rules(custom_path))
     return _dedupe_rules(rules)
+
+
+def load_registry_packs(language: str | None = None) -> list[CustomRule]:
+    """Load all registry pack rules, optionally filtered by language."""
+    try:
+        from ansede_static.registry.loader import (
+            load_packs_for_language,
+            load_all_registry_packs,
+        )
+        if language:
+            return list(load_packs_for_language(language))
+        return list(load_all_registry_packs())
+    except Exception:  # noqa: BLE001  # registry is optional
+        return []
 
 
 def _suppression_tokens_for_line(line: str) -> frozenset[str] | None:

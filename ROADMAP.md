@@ -1,53 +1,21 @@
 # ansede-static release roadmap
 
-This roadmap turns the repo-quality review into concrete milestone tickets.
-The focus is deliberate: improve **trust**, **release hardening**, and **engine clarity**
-before chasing more detector count.
+## Current: v2.1 — Security-as-Code Platform (shipped 2026-05-07)
 
-## v1.3 — quality contracts and trust gates
+✅ All 11 architectural and detection systems delivered:
+- **Shared Taint IR (STIR)** — language-agnostic taint representation
+- **Symbolic Guard Analysis** — path-sensitive security check detection
+- **Async Parallel Engine** — multi-core scan execution
+- **Source Map Rescanner** — original source recovery from `.map` files
+- **Minified JS Pre-Scanner** — regex heuristics for opaque bundles
+- **Learning Triage Loop** — suppression fingerprinting from developer feedback
+- **Sharded Rule Registry** — auto-detecting, lazily-loaded framework packs
+- **CI Baseline Auto-Management** — PR diff, auto-promote, new-finding gating
+- **4 new CWE categories** (611 XXE, 639 IDOR, 352 CSRF, 434 File Upload)
+- **Framework semantic models** (redirect-to-self, CBV dispatch exemption)
+- **100 rules** (47 Python + 53 JS), **48 distinct CWEs**
 
-**Milestone goal:** give the scanner a rule contract layer and a repeatable signal-quality harness.
-
-### Tickets
-
-- [x] **V13-001 — Ship a rule contract catalog**
-  - Add stable rule metadata for flagship detectors plus placeholders for the rest
-  - Expose curated fields like maturity, precision, docs URL, remediation summary, and tags
-  - Use the catalog in machine-readable outputs so downstream tooling can reason about rule quality
-
-- [x] **V13-002 — Add rule discovery UX**
-  - Add CLI support for listing rules
-  - Add CLI support for describing a rule or CWE
-  - Keep output useful in both text and JSON modes
-
-- [x] **V13-003 — Add a trust-oriented quality benchmark**
-  - Introduce a curated corpus with both expected-hit and expected-silence cases
-  - Track pass/fail at both case and token level
-  - Support CI fail-under gating
-
-- [x] **V13-004 — Document the roadmap and quality model**
-  - Add a repo roadmap
-  - Add quality docs explaining what the benchmark measures and what it does *not* prove
-
-### Acceptance criteria
-
-- `ansede-static --list-rules`
-- `ansede-static --describe-rule PY-020`
-- `python -m benchmarks.quality_benchmark --fail-under 100`
-
----
-
-## v1.4 — release hardening and performance visibility
-
-**Milestone goal:** make the repo feel more like a release-ready security tool and less like a fast-moving analyzer prototype.
-
-### Tickets
-
-- [x] **V14-001 — Add a performance smoke benchmark**
-  - Measure repeated scans over the curated corpus
-  - Provide JSON output so CI and local runs can diff results over time
-
-- [x] **V14-002 — Harden CI around quality, platform smoke, and extension safety**
+Benchmark: recall 70%, precision 91.30%, F1 79.25%, FP rate 8.70%. 603 tests.
   - Keep the full Python-version matrix
   - Add cross-platform smoke coverage
   - Run the new quality benchmark in CI

@@ -2,23 +2,53 @@
 
 This page is the public, reproducible scorecard for `ansede-static`.
 
-_Last updated: 2026-05-04_
+_Last updated: 2026-05-07_
 
 ## Core product scorecard
 
 | Metric | Result | Target | Status |
 |---|---:|---:|---|
-| Rules | **96** (43 Python + 53 JS) | — | — |
-| Distinct CWEs | **46** | — | — |
+| Rules | **100** (47 Python + 53 JS) | — | — |
+| Distinct CWEs | **48** | — | — |
 | OWASP Top 10 2021 coverage | **100%** (all categories) | — | ✅ |
 | CVE recall (benchmark corpus) | **100.0%** (35/35) | > 85% | ✅ |
 | CVE false-positive rate | **0.0%** | < 10% | ✅ |
 | Quality benchmark | **100.0%** | 100% gate | ✅ |
 | External corpus benchmark | **100.0%** | 100% gate | ✅ |
 | Curated real-world compare (8 cases) | **Ansede 100/100/100** vs baseline 50/66.67 | — | ✅ |
-| Web-wild (80 files, hybrid, balanced) | **100/100/100 — 0 FP, 0 FN** | — | ✅ |
-| Web-wild (200 files, hybrid, balanced) | **100/100/100 — 0 FP, 0 FN** | — | ✅ |
-| Test suite | **541 passed** | — | ✅ |
+| Web-wild (250 files, hybrid) | **70.00% recall, 91.30% precision, 79.25% F1** | — | ✅ |
+| Test suite | **603 passed** | — | ✅ |
+
+## v2.1 Platform Architecture (2026-05-07)
+
+| System | Module | Purpose |
+|--------|--------|---------|
+| Shared Taint IR | `ir/stir.py` | Language-agnostic taint representation |
+| Symbolic Guards | `engine/symbolic_guards.py` | Path-sensitive security check detection |
+| Async Engine | `engine/async_scanner.py` | Multi-core parallel scan execution |
+| Source Map Rescanner | `js_engine/sourcemap_rescanner.py` | Original source recovery from .map files |
+| Minified JS Scanner | `js_engine/minified_scanner.py` | Regex heuristics for opaque bundles |
+| Learning Triage | `engine/learning_triage.py` | Suppression fingerprinting from feedback |
+| Sharded Registry | `registry/sharded_loader.py` | Auto-detecting framework packs (37 packs) |
+| CI Baseline | `engine/ci_baseline.py` | PR diff, auto-promote, new-finding gating |
+
+## New CWE Coverage (v2.1)
+
+| CWE | Python Rule | JS Rule | Description |
+|-----|------------|---------|-------------|
+| CWE-611 | PY-049 | — | XXE via unsafe XML parsers |
+| CWE-639 | PY-050 | JS-043 | IDOR: auth + object access without ownership |
+| CWE-352 | PY-051 | JS-041 | CSRF: mutating routes without token validation |
+| CWE-434 | PY-052 | JS-042 | File upload without content-type validation |
+
+## Benchmark Journey (v4 → v8)
+
+| Metric | v4 (Baseline) | v8 (All Systems) | Improvement |
+|--------|---------------|------------------|-------------|
+| Recall | 46.67% | 70.00% | +50% |
+| Precision | 66.67% | 91.30% | +37% |
+| F1 | 54.90% | 79.25% | +44% |
+| FP Rate | 33.33% | 8.70% | -74% |
 
 ## Raw benchmark summaries (this run)
 

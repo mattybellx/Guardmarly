@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from ansede_static._types import TraceFrame
+from ansede_static.ir.global_graph import GlobalGraph
 from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments, consume_balanced
 from ansede_static.js_engine.constants import (
     AUTH_MIDDLEWARE_RE,
@@ -129,6 +130,7 @@ _WORKSPACE_IGNORE_DIRS = {
 }
 _WORKSPACE_REFRESH_INTERVAL_NS = 250_000_000
 _WORKSPACE_GRAPH_CACHE: dict[str, JsWorkspaceGraph] = {}
+_DEFAULT_IFDS_CALL_STRING_K = GlobalGraph.DEFAULT_CALL_STRING_K
 
 
 @dataclass(frozen=True)
@@ -1411,7 +1413,7 @@ def _trace_helper_return_expression(
 					tainted_arg_indexes=tainted_arg_indexes,
 					call_line=line,
 					call_string=(),
-					call_string_k=2,
+					call_string_k=_DEFAULT_IFDS_CALL_STRING_K,
 				)
 				if ret_hit and return_trace:
 					trace = append_trace(return_trace, "helper", f"through `{call.callee}()`", line=line)

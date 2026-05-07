@@ -3,7 +3,55 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.0.0] — 2026-05-08
+
+### Added — Rule Scaling via Zero-Dependency Sharding
+- **1,080+ registry rules** across 36 YAML packs covering Python (18 frameworks: Django, Flask, FastAPI, SQLAlchemy, DRF, boto3, subprocess, requests, PyMongo, aiohttp, Celery, Redis, cryptography, xml.etree, PyYAML, Tornado, Pydantic, socket.io), JavaScript (16 frameworks: Express, React, Next.js, Sequelize, Prisma, TypeORM, Mongoose, mysql2, pg, Knex, Axios, Node.js core, GraphQL, NestJS, Angular, Vue), Java (Spring Boot), and C# (ASP.NET Core).
+- **`ansede_static.registry` package** — lazy, `lru_cache`-powered framework pack loader with `load_packs_for_source()`, `detect_frameworks()`, `count_registry_rules()`, `list_registry_pack_names()`.
+- **`load_registry_packs()` in yaml_rules** — registry rules loaded automatically alongside user custom rules on every scan.
+
+### Added — Incremental Symbol Graph Caching
+- **`GlobalGraph.to_dict()` / `from_dict()`** — JSON-serializable round-trip for all function summaries and module taint facts.
+- **`SQLiteStore.save_symbol_graph()` / `load_symbol_graph()`** — SQLite-backed persistence for cross-session incremental caching.
+
+### Changed
+- **Default rule maturity** promoted from `"beta"` to `"stable"` for all built-in rules.
+- **IFDS call-string depth** (`DEFAULT_CALL_STRING_K`) raised to 3 for deeper interprocedural precision.
+
 ## [Unreleased]
+
+### Added — v2.1 Security-as-Code Platform (2026-05-07)
+- **11 new systems** across ~2,500 lines of production code, transforming ansede-static from a high-quality scanner into a full Security-as-Code platform.
+
+#### Detection Engine
+- **4 new CWE categories**: CWE-611 (XXE, PY-049), CWE-639 (IDOR, PY-050 + JS-043), CWE-352 (CSRF, PY-051 + JS-041), CWE-434 (File Upload, PY-052 + JS-042). Rule catalog now 100 rules (47 Python + 53 JS), 48 distinct CWEs.
+- **Source-map-aware minified JS rescanner** (`js_engine/sourcemap_rescanner.py`) — resolves original source files via `.map` files and rescans with full structural AST, converting opaque minified-code FNs into TPs.
+- **Minified JS regex pre-scanner** (`js_engine/minified_scanner.py`) — 8 CWE categories with regex heuristics for minified/bundled JS where structural parsing fails.
+- **Symbolic guard analysis** (`engine/symbolic_guards.py`) — path-sensitive security reasoning that mathematically downgrades findings when guards (auth checks, CSRF tokens, rate limiters, ownership filters) protect sinks.
+
+#### Architecture
+- **Shared Taint IR (STIR)** (`ir/stir.py`) — language-agnostic intermediate representation for taint facts. Python and JS analyzers emit into STIR; the IFDS solver is written once. Adding Go/Java/C# requires only a STIR emitter (~90% less effort).
+- **Async parallel execution engine** (`engine/async_scanner.py`) — process-pool workers for CPU-bound AST parsing + asyncio for I/O-bound disk reads. Maintains <10s/100k LOC with 10x rule expansion.
+- **Sharded rule registry loader** (`registry/sharded_loader.py`) — auto-detects frameworks in target code and lazily loads framework-specific rule packs. Core engine stays <5MB; 37 framework packs available on-demand.
+- **CI-native baseline auto-management** (`engine/ci_baseline.py`) — automatic baseline comparison, new-finding-only PR failure, and auto-promotion when findings decrease.
+- **Learning triage loop** (`engine/learning_triage.py`) — developer `# ansede: ignore` feedback stored as suppression fingerprints. Suggests global rules for repeated patterns across the monorepo.
+
+#### Framework Semantic Models
+- **Redirect-to-self detection** — `redirect(request.path)` and `HttpResponseRedirect(request.get_full_path())` recognized as safe self-referential redirects after form validation.
+- **Django CBV dispatch exemption** — `getattr(self, request.method.lower())` in View.dispatch() recognized as framework HTTP-method routing, not CWE-470 reflection.
+
+### Benchmark Journey (v4 → v8)
+| Metric | v4 | v8 | Change |
+|--------|-----|-----|--------|
+| Recall | 46.67% | 70.00% | +50% |
+| Precision | 66.67% | 91.30% | +37% |
+| F1 | 54.90% | 79.25% | +44% |
+| FP Rate | 33.33% | 8.70% | -74%
+
+### Changed
+- **`_FRAMEWORK_INTERNAL_PY_NOISE_RULES`** expanded with PY-028, PY-045; cache backends exempted from PY-012 suppression; admin redirect paths exempted from PY-030; `HttpResponseRedirect` added to redirect detection.
+- **`_VENDOR_NOISE_CWES`** CWE-98 removed (vendor AMD patterns are real), CWE-79 added (vendor innerHTML is noise). `_FRAMEWORK_INTERNAL_NOISE_CWES` CWE-98 removed.
+- **Symbolic guards wired** into both `analyze_python()` and `analyze_js_ast()` pipelines.
 
 ### Added — CWE Coverage Expansion (2026-05-04)
 - **5 new CWE categories** with Python detector rules: CWE-200 (PY-039, information exposure), CWE-295 (PY-040, TLS verification disabled), CWE-319 (PY-041, cleartext HTTP), CWE-400 (PY-042, unbounded resource consumption), CWE-614 (PY-043, cookie without secure flag).

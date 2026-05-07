@@ -519,6 +519,42 @@ def _infer_unsafe_deserialization_label(code: str) -> tuple[bool, str | None]:
     return False, None
 
 
+def _infer_rate_limiting_gap_label(code: str) -> tuple[bool, str | None]:
+    """CWE-307: Auth routes without rate limiting."""
+    _AUTH_ROUTE_RE = re.compile(
+        r'(?:login|signin|authenticate|register|signup|reset[_-]?password|'
+        r'password[_-]?reset|forgot[_-]?password|verify[_-]?email)',
+        re.IGNORECASE,
+    )
+    _RATE_LIMIT_RE = re.compile(
+        r'(?:rate[_-]?limit|rateLimit|express-rate-limit|throttle|'
+        r'RateLimiter|limiter|TooManyRequests|429\b)',
+        re.IGNORECASE,
+    )
+    has_auth_route = _AUTH_ROUTE_RE.search(code)
+    has_rate_limit = _RATE_LIMIT_RE.search(code)
+    if has_auth_route and not has_rate_limit:
+        return True, "CWE-307: authentication route without detectable rate limiting"
+    return False, None
+
+
+def _infer_xxe_label(code: str) -> tuple[bool, str | None]:
+    """CWE-611: XML parsers without external entity protection."""
+    _XXE_UNSAFE_RE = re.compile(
+        r'\b(?:etree\.(?:parse|fromstring|iterparse|XMLParser)|'
+        r'xml\.(?:dom|sax)|lxml\.(?:etree|objectify)\.(?:parse|fromstring))\s*\(',
+        re.IGNORECASE,
+    )
+    _XXE_SAFE_RE = re.compile(
+        r'(?:resolve_entities\s*=\s*False|defusedxml|SafeXMLParser|'
+        r'load_dtd\s*=\s*False|forbid_dtd\s*=\s*True)',
+        re.IGNORECASE,
+    )
+    if _XXE_UNSAFE_RE.search(code) and not _XXE_SAFE_RE.search(code):
+        return True, "CWE-611: XML parser without XXE protection"
+    return False, None
+
+
 def _write_report(path: Path, report: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(report, indent=2), encoding="utf-8")

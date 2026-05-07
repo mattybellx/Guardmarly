@@ -215,6 +215,16 @@ class SQLiteStore:
         }
         self.set_json(self._RESULT_BUCKET, f"{file_path}:{content_hash}", payload)
 
+    _SYMBOL_GRAPH_BUCKET = "symbol_graph_v1"
+
+    def save_symbol_graph(self, scan_key: str, data: dict) -> None:
+        """Persist a serialized GlobalGraph keyed by scan_key."""
+        self.set_json(self._SYMBOL_GRAPH_BUCKET, scan_key, data)
+
+    def load_symbol_graph(self, scan_key: str) -> dict | None:
+        """Return a previously persisted GlobalGraph dict, or None if absent."""
+        return self.get_json(self._SYMBOL_GRAPH_BUCKET, scan_key)
+
     def __enter__(self) -> SQLiteStore:
         self.connect()
         return self

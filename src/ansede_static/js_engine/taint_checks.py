@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 
 from ansede_static._types import Finding, Severity, TraceFrame
+from ansede_static.ir.global_graph import GlobalGraph
 from ansede_static.js_engine.common import COMMENT_LINE_RE, consume_balanced
 from ansede_static.js_engine.constants import (
     PATH_CALLEE_PARTS,
@@ -18,6 +19,9 @@ from ansede_static.js_engine.project import (
 )
 from ansede_static.js_engine.structure import collect_calls
 from ansede_static.js_engine.taint import append_trace, extract_taint_traces, first_referenced_taint_name, trace_for_expr, trace_has_sanitizer
+
+
+_DEFAULT_IFDS_CALL_STRING_K = GlobalGraph.DEFAULT_CALL_STRING_K
 
 
 
@@ -212,7 +216,7 @@ def _helper_taint_findings(
                     tainted_arg_indexes=tainted_arg_indexes,
                     call_line=call.line,
                     call_string=(),
-                    call_string_k=2,
+                    call_string_k=_DEFAULT_IFDS_CALL_STRING_K,
                 )
                 if not sink_hit:
                     continue
@@ -290,7 +294,7 @@ def _helper_taint_findings(
                     value_label="$ret",
                     base_confidence=finding.confidence,
                     call_string=(),
-                    call_string_k=2,
+                    call_string_k=_DEFAULT_IFDS_CALL_STRING_K,
                 )
                 if adjusted != finding.confidence:
                     findings[i] = Finding(

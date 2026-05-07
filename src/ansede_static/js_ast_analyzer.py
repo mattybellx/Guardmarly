@@ -33,11 +33,13 @@ from ansede_static.js_engine.source_map_resolver import (
     load_sourcemap_path,
     remap_findings_to_source_map,
 )
+from ansede_static.js_engine.sourcemap_rescanner import rescore_via_source_map
 
 from ansede_static.js_engine.project import build_js_project_index, propagate_helper_return_traces
 from ansede_static.js_engine.react import run_react_checks
 from ansede_static.js_engine.routes import run_route_checks
 from ansede_static.js_engine.taint_checks import run_taint_flow_checks
+from ansede_static.js_engine.minified_scanner import scan_minified_js
 
 _log = logging.getLogger(__name__)
 
@@ -67,11 +69,11 @@ _FRAMEWORK_INTERNAL_JS_MARKERS: tuple[str, ...] = (
 )
 
 _VENDOR_NOISE_CWES: frozenset[str] = frozenset({
-    "CWE-22", "CWE-98", "CWE-1321", "CWE-1333", "CWE-601", "CWE-862", "CWE-918",
+    "CWE-22", "CWE-79", "CWE-1321", "CWE-1333", "CWE-601", "CWE-862", "CWE-918",
 })
 
 _FRAMEWORK_INTERNAL_NOISE_CWES: frozenset[str] = frozenset({
-    "CWE-22", "CWE-98", "CWE-1333", "CWE-601", "CWE-918",
+    "CWE-22", "CWE-1333", "CWE-601", "CWE-918",
 })
 
 # Backward-compatible wrapper — extracts .callee from JsCall and delegates to
@@ -667,6 +669,136 @@ def _check_ssrf(
     return findings
 
 
+def _check_csrf_js(code: str) -> list[Finding]:
+    """CWE-352: State-changing Express routes without CSRF token validation."""
+    findings: list[Finding] = []
+    _MUTATING_METHOD_RE = re.compile(
+        r'(?:app|router)\.(?:post|put|patch|delete|del)\s*\(\s*[\'"]',
+        re.IGNORECASE,
+    )
+    _CSRF_TOKEN_RE = re.compile(
+        r'(?:csrf|csrfToken|_csrf|xsrf|XSRF-TOKEN|csrftoken|'
+        r'csrfProtection|csurf|req\.csrfToken|lusca)',
+        re.IGNORECASE,
+    )
+    for lineno, line in enumerate(code.splitlines(), 1):
+        if not _MUTATING_METHOD_RE.search(line):
+            continue
+        # Look ahead a few lines for CSRF protection
+        lookahead = "\n".join(code.splitlines()[lineno:lineno + 5])
+        if _CSRF_TOKEN_RE.search(lookahead):
+            continue
+        findings.append(_make_finding(
+            line=lineno,
+            title=f"CWE-352: State-changing route may lack CSRF protection at line {lineno}",
+            description=(
+                f"POST/PUT/DELETE route defined at L{lineno} without detectable CSRF "
+                "token validation. Cross-site request forgery can force authenticated "
+                "users to perform unintended actions."
+            ),
+            suggestion="Use csurf middleware or implement CSRF token validation for all mutating routes.",
+            severity=Severity.HIGH,
+            rule_id="JS-041",
+            cwe="CWE-352",
+            trace=(TraceFrame(kind="source", label=f"route handler at L{lineno}", line=lineno),),
+        ))
+    # Reduce confidence for heuristic detection
+    for f in findings:
+        f.confidence = 0.80
+        f.analysis_kind = "pattern-heuristic"
+    return findings
+
+
+def _check_file_upload_js(code: str, calls: list[JsCall]) -> list[Finding]:
+    """CWE-434: File upload handling without content-type validation."""
+    findings: list[Finding] = []
+    _UPLOAD_RECEIVE_RE = re.compile(
+        r'(?:req\.files|req\.file|multer|busboy|formidable|'
+        r'express-fileupload|\.single\s*\(|\.array\s*\(|\.fields\s*\()',
+        re.IGNORECASE,
+    )
+    _UPLOAD_VALIDATION_RE = re.compile(
+        r'(?:mimetype|filetype|allowedTypes|fileFilter|'
+        r'magic|\.endsWith|\.match\s*\(\s*[\'"]\.(?:jpg|png)',
+        re.IGNORECASE,
+    )
+    _UPLOAD_SAVE_RE = re.compile(
+        r'(?:\.mv\s*\(|fs\.(?:writeFile|createWriteStream|rename)|'
+        r'\.pipe\s*\(|\.save\s*\()',
+        re.IGNORECASE,
+    )
+    lines = code.splitlines()
+    has_upload = any(_UPLOAD_RECEIVE_RE.search(l) for l in lines)
+    has_save = any(_UPLOAD_SAVE_RE.search(l) for l in lines)
+    has_validation = any(_UPLOAD_VALIDATION_RE.search(l) for l in lines)
+    if not (has_upload and has_save) or has_validation:
+        return findings
+    line = next((i + 1 for i, l in enumerate(lines) if _UPLOAD_RECEIVE_RE.search(l)), 1)
+    findings.append(_make_finding(
+        line=line,
+        title=f"CWE-434: File upload at line {line} lacks content-type validation",
+        description=(
+            f"File upload handler at L{line} receives files and writes them to disk "
+            "without validating content type. Attackers can upload executable files."
+        ),
+        suggestion="Validate file MIME type with file-type or magic-bytes, and use an extension allowlist.",
+        severity=Severity.HIGH,
+        rule_id="JS-042",
+        cwe="CWE-434",
+        trace=(TraceFrame(kind="source", label=f"upload handler near L{line}", line=line),),
+    ))
+    for f in findings:
+        f.confidence = 0.85
+        f.analysis_kind = "pattern-heuristic"
+    return findings
+
+
+def _check_idor_js(code: str) -> list[Finding]:
+    """CWE-639: Auth middleware + direct object access without ownership filter."""
+    findings: list[Finding] = []
+    _AUTH_MIDDLEWARE_RE = re.compile(
+        r'(?:req\.isAuthenticated\(\)|req\.user|passport\.authenticate|'
+        r'ensureAuthenticated|requireAuth|authMiddleware|'
+        r'\.use\s*\(\s*(?:auth|requireAuth|ensureAuth))',
+        re.IGNORECASE,
+    )
+    _DIRECT_OBJECT_ACCESS_RE = re.compile(
+        r'(?:\b(?:findById|findOne|findByPk|get)\s*\(\s*req\.(?:params|query|body)\.'
+        r'|\bModel\.(?:findById|findOne)\s*\(\s*req\.)',
+        re.IGNORECASE,
+    )
+    _OWNER_FILTER_RE = re.compile(
+        r'(?:\bowner\b|\buserId\b|\bcreatedBy\b|\bauthor\b|'
+        r'where\s*:\s*\{[^}]*req\.user\.)',
+        re.IGNORECASE,
+    )
+    lines = code.splitlines()
+    has_auth = any(_AUTH_MIDDLEWARE_RE.search(l) for l in lines)
+    has_direct_access = any(_DIRECT_OBJECT_ACCESS_RE.search(l) for l in lines)
+    has_owner_filter = any(_OWNER_FILTER_RE.search(l) for l in lines)
+    if not (has_auth and has_direct_access) or has_owner_filter:
+        return findings
+    line = next((i + 1 for i, l in enumerate(lines) if _DIRECT_OBJECT_ACCESS_RE.search(l)), 1)
+    findings.append(_make_finding(
+        line=line,
+        title=f"CWE-639: Possible IDOR — authenticated object access without ownership check at line {line}",
+        description=(
+            f"Authenticated route at L{line} performs direct object lookup by "
+            "request parameter without filtering by the current user. Attackers "
+            "can enumerate IDs to access other users' data."
+        ),
+        suggestion="Filter database queries by the authenticated user: `Model.findOne({ _id: id, owner: req.user.id })`.",
+        severity=Severity.HIGH,
+        rule_id="JS-043",
+        cwe="CWE-639",
+        trace=(TraceFrame(kind="source", label=f"object access near L{line}", line=line),),
+    ))
+    for f in findings:
+        f.confidence = 0.85
+        f.analysis_kind = "pattern-heuristic"
+    return findings
+
+
 
 def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = None) -> AnalysisResult:
     result = AnalysisResult(
@@ -706,6 +838,9 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
             lambda: _check_path_traversal(calls, taint_traces),
             lambda: _check_open_redirect(calls, taint_traces),
             lambda: _check_ssrf(calls, taint_traces),
+            lambda: _check_csrf_js(code),
+            lambda: _check_file_upload_js(code, calls),
+            lambda: _check_idor_js(code),
             lambda: run_taint_flow_checks(
                 code,
                 agent="js-ast-analyzer",
@@ -736,6 +871,45 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
     fallback = analyze_js(code, filename, global_graph=global_graph)
     merged = dedup_findings(structural_findings + fallback.findings)
     merged = remap_findings_to_source_map(merged, filename)
+
+    # ── Source-map-aware rescan ───────────────────────────────────────
+    # If the minified file has an available source map, rescan original
+    # source files with the full structural parser and remap findings back.
+    if minified.is_minified and filename:
+        try:
+            sourcemap_findings = rescore_via_source_map(
+                code, filename,
+                scan_fn=lambda c, f: analyze_js_ast(c, f).findings,
+            )
+            # Merge source map findings with existing — dedup by (cwe, line)
+            existing: set[tuple[str, int]] = set()
+            for f in merged:
+                existing.add((f.cwe or "", f.line or 0))
+            for sf in sourcemap_findings:
+                if (sf.cwe or "", sf.line or 0) not in existing:
+                    merged.append(sf)
+                    existing.add((sf.cwe or "", sf.line or 0))
+        except Exception:
+            pass
+
+    # ── Minified JS regex pre-scanner ─────────────────────────────────
+    # Only run on non-vendor minified files where the structural parser
+    # can't recover patterns. Vendor minified files already have noise
+    # policies — the minified scanner would only add FPs.
+    if minified.is_minified and not _is_vendor_or_minified_js_path(filename):
+        try:
+            minified_findings = scan_minified_js(code, filename=filename)
+            # Merge: structural findings take precedence (higher confidence),
+            # minified heuristics fill gaps.
+            structural_cwes: set[tuple[str, int]] = set()
+            for f in merged:
+                structural_cwes.add((f.cwe or "", f.line or 0))
+            for mf in minified_findings:
+                if (mf.cwe or "", mf.line or 0) not in structural_cwes:
+                    merged.append(mf)
+        except Exception:
+            pass
+
     if minified.is_minified and source_map_path is None:
         merged = _downgrade_findings_for_missing_sourcemap(merged)
     merged = _apply_js_noise_policy(
@@ -745,6 +919,14 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
         source_map_path=source_map_path,
     )
     result.findings = filter_inline_suppressions(merged, code)
+
+    # ── Symbolic guard analysis ───────────────────────────────────────
+    try:
+        from ansede_static.engine.symbolic_guards import analyze_guards_js
+        result.findings = analyze_guards_js(code, result.findings, filename=filename)
+    except Exception:
+        pass
+
     return result
 
 
