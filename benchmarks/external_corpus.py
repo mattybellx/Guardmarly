@@ -140,9 +140,13 @@ def _git_cache_key(source: ExternalCorpusSource) -> str:
     return f"{_safe_cache_name(repo_name)}-{digest}"
 
 
+def _is_windows() -> bool:
+    return os.name == "nt"
+
+
 def _run_git(args: list[str], *, cwd: Path | None = None) -> str:
     cmd = ["git"]
-    if os.name == "nt":
+    if _is_windows():
         cmd.extend(["-c", "core.longpaths=true"])
     cmd.extend(args)
     try:

@@ -15,21 +15,10 @@ jobs:
   test:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.allow_failure }}
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - python-version: '3.9'
-            allow_failure: true
-          - python-version: '3.10'
-            allow_failure: true
-          - python-version: '3.11'
-            allow_failure: true
-          - python-version: '3.12'
-            allow_failure: false
-          - python-version: '3.13'
-            allow_failure: false
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
 
     steps:
       - uses: actions/checkout@v4

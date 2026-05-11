@@ -3,6 +3,13 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.6] — 2026-05-11
+
+### Fixed — Cross-platform pytest internal error in CI
+- **Root-cause fix for Python 3.9/3.10/3.11 CI crashes** — replaced global `os.name` mutation in `tests/test_external_corpus.py` with a scoped monkeypatch of `benchmarks.external_corpus._is_windows()`.
+- **Safer git platform detection** — `benchmarks.external_corpus._run_git()` now relies on `_is_windows()` indirection, making platform behavior testable without mutating interpreter-global OS state.
+- **CI strictness restored** — Python 3.9 through 3.13 lanes are required again in `.github/workflows/ci.yml`.
+
 ## [2.1.5] — 2026-05-11
 
 ### Fixed — Workflow reliability hardening

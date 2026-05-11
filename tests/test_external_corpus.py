@@ -304,7 +304,7 @@ def test_external_corpus_run_git_enables_core_longpaths_on_windows(monkeypatch):
         captured["kwargs"] = kwargs
         return _Completed()
 
-    monkeypatch.setattr(external_corpus.os, "name", "nt", raising=False)
+    monkeypatch.setattr(external_corpus, "_is_windows", lambda: True)
     monkeypatch.setattr(external_corpus.subprocess, "run", _fake_run)
 
     result = external_corpus._run_git(["rev-parse", "HEAD"], cwd=Path("."))

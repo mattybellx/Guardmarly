@@ -282,7 +282,7 @@ These rules are pattern-only and run after the built-in analyzers. For AST-aware
 
 ```yaml
 # .github/workflows/security.yml
-- uses: mattybellx/Ansede@v2.1.5
+- uses: mattybellx/Ansede@v2.1.6
   with:
     path: src/
     fail-on: high       # optional: critical/high/medium/low/never
@@ -630,7 +630,7 @@ sarif_str = format_sarif([result])
 ```yaml
 steps:
   - uses: actions/checkout@v4
-  - uses: mattybellx/Ansede@v2.1.5
+  - uses: mattybellx/Ansede@v2.1.6
     with:
       path: src/
       fail-on: high
@@ -656,7 +656,7 @@ steps:
 ```yaml
 repos:
   - repo: https://github.com/mattybellx/Ansede
-    rev: v2.1.5
+    rev: v2.1.6
     hooks:
       - id: ansede-static
         args: [--fail-on, high]
@@ -732,7 +732,7 @@ pip install -e ".[dev]"
 pytest tests/ -q           # current validation target: full suite green
 ```
 
-Current release line: **`2.1.5`**
+Current release line: **`2.1.6`**
 
 ---
 
