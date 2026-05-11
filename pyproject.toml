@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ansede-static"
-version = "2.1.0"
+version = "2.1.1"
 description = "AST-based SAST for Python and JavaScript — detects IDOR, auth bypass, and ownership flaws that Bandit misses."
 readme = "README.md"
 license = "MIT"

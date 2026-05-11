@@ -3,6 +3,12 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.1] — 2026-05-11
+
+### Fixed — Release automation hotfix
+- **PyPI Trusted Publishing permissions** — added `id-token: write` to `.github/workflows/publish.yml` so GitHub Actions can mint the OpenID Connect token required by `pypa/gh-action-pypi-publish@release/v1`.
+- **Packaging release line** — bumped the published package version to **2.1.1** so the PyPI hotfix can ship immediately without rewriting the already-published GitHub release tag.
+
 ## [2.0.0] — 2026-05-08
 
 ### Added — Rule Scaling via Zero-Dependency Sharding
