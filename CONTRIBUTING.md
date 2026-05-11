@@ -1,15 +1,27 @@
 # Contributing to ansede-static
 
-Thanks for considering contributing! Here's how to get started.
+Thanks for considering contributing! Whether you're fixing a bug, adding a detection rule,
+or improving docs — this guide has everything you need.
+
+**First time?** Look for issues tagged [`good first issue`](https://github.com/mattybellx/Ansede/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+or try writing a [community rule](#writing-community-rules) — no core engine knowledge required.
 
 ## Quick navigation
 
+- [Where to ask for help](#where-to-ask-for-help)
 - [Development setup](#development-setup)
 - [Run validations](#run-validations)
 - [Add or update a rule](#add-or-update-a-rule)
+- [Writing community rules](#writing-community-rules)
 - [Pull request expectations](#pull-request-expectations)
 - [Code style](#code-style)
 - [Security reports](#reporting-security-issues)
+
+## Where to ask for help
+
+- **[GitHub Discussions](https://github.com/mattybellx/Ansede/discussions)** — questions, ideas, show-and-tell
+- **[Issues](https://github.com/mattybellx/Ansede/issues)** — bugs and feature requests
+- Security vulnerabilities: see [SECURITY.md](SECURITY.md) for private reporting
 
 ## Development Setup
 
@@ -52,6 +64,19 @@ All checks should pass before submitting a PR. CI targets Python **3.9–3.13**.
 6. Add a trust-oriented case to `benchmarks/quality_corpus.py` when the detector is user-facing
 
 When practical, include one realistic corpus fixture (or external corpus case) so regressions are caught early.
+
+## Writing community rules
+
+You can contribute custom detections without touching the core engine. Community rules
+are YAML files loaded from `~/.ansede/community_rules/` and run alongside built-in rules.
+
+1. Copy the template from `community_rules/flask-missing-rate-limit-CWE-307.yaml`
+2. Adjust the `id`, `title`, `severity`, and `pattern` fields
+3. Test it: `ansede-static --community-rules path/to/your.yaml src/`
+4. Submit via: `ansede-static registry --publish path/to/your.yaml`
+5. Open a PR adding the YAML to `community_rules/` and updating `community_rules/index.json`
+
+See [Writing Rules](docs/writing-rules.md) for the full YAML schema and pattern syntax.
 
 ## Pull request expectations
 

@@ -20,6 +20,8 @@ ansede-static src/
 ```
 
 [![Release](https://img.shields.io/github/v/release/mattybellx/Ansede?display_name=tag&sort=semver&label=release)](https://github.com/mattybellx/Ansede/releases)
+[![PyPI version](https://img.shields.io/pypi/v/ansede-static?label=pypi)](https://pypi.org/project/ansede-static/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/ansede-static?label=downloads)](https://pypi.org/project/ansede-static/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)](https://github.com/mattybellx/Ansede/blob/master/pyproject.toml)
 [![CI](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)

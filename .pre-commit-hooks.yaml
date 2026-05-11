@@ -1,11 +1,12 @@
 repos:
   - repo: https://github.com/mattybellx/Ansede
-    rev: v1.1.0
+    rev: v2.1.6
     hooks:
       - id: ansede-static
-        name: ansede-static security scan
+        name: Ansede Static SAST
         language: python
         entry: ansede-static
         args: [--fail-on, high]
-        types: [python]
+        types: [python, javascript, typescript]
+        pass_filenames: false
         additional_dependencies: []
