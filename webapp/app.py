@@ -192,78 +192,432 @@ def webhook():
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# Success Page (shown after Stripe redirect)
+# Microsoft Fluent Design System — Professional UI
 # ══════════════════════════════════════════════════════════════════════════
 
 _HTML = r"""<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>{{title}} · ansede-static</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>{{title}} | ansede-static</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(135deg,#0f0f1a,#1a1a2e,#16213e);color:#e2e8f0;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-.hdr{padding:24px 32px;width:100%;max-width:800px;display:flex;align-items:center;gap:12px}
-.hdr h1{font-size:1.4rem;font-weight:700;color:#f8fafc}.hdr span{color:#6366f1}
-.c{flex:1;width:100%;max-width:800px;padding:0 32px 60px}
-.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px;margin-bottom:20px}
-.card h2{font-size:1.5rem;margin-bottom:16px;color:#f1f5f9}.card p{color:#94a3b8;line-height:1.7;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
-@media(max-width:600px){.grid{grid-template-columns:1fr}}
-.pc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:28px 24px;text-align:center;transition:transform .2s,border-color .2s}
-.pc:hover{transform:translateY(-2px);border-color:#6366f1}
-.pc.pro{border-color:#6366f1;background:rgba(99,102,241,.08)}
-.pc h3{font-size:1.1rem;margin-bottom:8px}
-.pc .pr{font-size:2.2rem;font-weight:800;color:#f8fafc;margin:12px 0 4px}
-.pc .pr span{font-size:.9rem;color:#94a3b8;font-weight:400}
-.pc .per{color:#64748b;font-size:.85rem;margin-bottom:16px}
-.btn{display:inline-block;padding:12px 28px;border-radius:10px;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s;border:none;text-align:center}
-.btn-p{background:#6366f1;color:#fff;box-shadow:0 2px 12px rgba(99,102,241,.4)}.btn-p:hover{background:#4f46e5;transform:translateY(-1px)}
-.btn-s{background:rgba(255,255,255,.08);color:#e2e8f0;border:1px solid rgba(255,255,255,.12)}.btn-s:hover{background:rgba(255,255,255,.12)}
-.key{background:#0d1117;border:1px solid #6366f1;border-radius:12px;padding:20px 24px;margin:20px 0;font-family:'SF Mono','Fira Code',monospace;font-size:.85rem;word-break:break-all;color:#58a6ff;position:relative}
-.cpb{position:absolute;right:12px;top:12px;background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.3);color:#a5b4fc;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem}
-.cpb:hover{background:rgba(99,102,241,.35)}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#22c55e;color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;display:none;z-index:100}
-.step{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
-.sn{background:#6366f1;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0}
-.step p{margin:0}code{background:rgba(255,255,255,.08);padding:2px 8px;border-radius:4px;font-size:.85rem}
-.ft{text-align:center;color:#475569;font-size:.8rem;padding:20px}
-ul{list-style:none;margin-top:16px}li{padding:6px 0;color:#94a3b8;font-size:.9rem}li::before{content:'✓ ';color:#22c55e;font-weight:bold;margin-right:6px}
-</style></head><body>
-<div class="hdr"><svg width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#6366f1"/><path d="M8 16l5.5 5.5L24 11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><h1>ansede<span>-static</span></h1></div>
-<div class="c">{{body}}</div>
-<div class="ft">ansede-static · <a href="/" style="color:#6366f1;">home</a></div>
+:root {
+  --blue:       #0078D4;
+  --blue-dark:  #005A9E;
+  --blue-light: #E8F4FD;
+  --gray-50:    #FAFAFA;
+  --gray-100:   #F3F3F3;
+  --gray-200:   #E8E8E8;
+  --gray-300:   #D1D1D1;
+  --gray-400:   #A0A0A0;
+  --gray-500:   #6E6E6E;
+  --gray-600:   #505050;
+  --gray-700:   #323232;
+  --gray-800:   #1E1E1E;
+  --gray-900:   #111111;
+  --green:      #107C10;
+  --green-bg:   #DFF6DD;
+  --red:        #D13438;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--gray-800);
+  background:#fff;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Navigation ─────────────────────────────────── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--gray-200);
+  padding:0 24px;
+}
+.nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gray-900)}
+.nav-logo svg{width:28px;height:28px}
+.nav-logo span{font-size:1.15rem;font-weight:700;letter-spacing:-.02em}
+.nav-logo span em{font-style:normal;color:var(--blue)}
+.nav-cta{
+  padding:7px 18px;border-radius:6px;font-size:.85rem;font-weight:600;
+  text-decoration:none;transition:all .15s;
+  background:var(--blue);color:#fff;
+}
+.nav-cta:hover{background:var(--blue-dark)}
+
+/* ── Hero ───────────────────────────────────────── */
+.hero{
+  background:linear-gradient(170deg,#F0F6FC 0%,#E8F4FD 40%,#F5F8FB 100%);
+  border-bottom:1px solid var(--gray-200);
+  padding:72px 24px 64px;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-block;background:var(--blue-light);color:var(--blue-dark);
+  font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:20px;
+  margin-bottom:20px;letter-spacing:.02em;
+}
+.hero h1{font-size:2.8rem;font-weight:800;color:var(--gray-900);letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--blue)}
+.hero p{font-size:1.15rem;color:var(--gray-500);max-width:640px;margin:0 auto 32px}
+.hero-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat .num{font-size:2rem;font-weight:800;color:var(--gray-900);letter-spacing:-.02em}
+.hero-stat .lbl{font-size:.8rem;color:var(--gray-500);margin-top:2px}
+
+/* ── Section ────────────────────────────────────── */
+.sec{padding:64px 24px}
+.sec-inner{max-width:1100px;margin:0 auto}
+.sec-title{text-align:center;margin-bottom:48px}
+.sec-title h2{font-size:1.75rem;font-weight:700;color:var(--gray-900);letter-spacing:-.02em;margin-bottom:8px}
+.sec-title p{font-size:1rem;color:var(--gray-500);max-width:560px;margin:0 auto}
+
+/* ── Pricing Cards ──────────────────────────────── */
+.pricing-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+  align-items:stretch;
+}
+.card{
+  background:#fff;
+  border:1px solid var(--gray-200);
+  border-radius:12px;
+  padding:36px 32px;
+  display:flex;flex-direction:column;
+  transition:box-shadow .2s,border-color .2s;
+  position:relative;
+}
+.card:hover{box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.card.featured{border-color:var(--blue);box-shadow:0 4px 24px rgba(0,120,212,.12)}
+.card-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--blue);color:#fff;font-size:.75rem;font-weight:600;
+  padding:5px 16px;border-radius:12px;white-space:nowrap
+}
+.card h3{font-size:1.15rem;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.card .price{font-size:2.6rem;font-weight:800;color:var(--gray-900);letter-spacing:-.03em;margin:16px 0 0}
+.card .price span{font-size:.95rem;font-weight:500;color:var(--gray-500)}
+.card .period{font-size:.8rem;color:var(--gray-500);margin-bottom:28px}
+.card ul{list-style:none;flex:1}
+.card ul li{font-size:.88rem;color:var(--gray-600);padding:8px 0;display:flex;align-items:center;gap:10px}
+.card ul li::before{content:'';width:16px;height:16px;background:var(--green-bg);border-radius:50%;flex-shrink:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%23107C10' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position:center;background-repeat:no-repeat}
+.btn{
+  display:block;width:100%;padding:13px 20px;border-radius:8px;font-size:.9rem;font-weight:600;
+  text-align:center;text-decoration:none;cursor:pointer;transition:all .15s;border:none;
+  margin-top:24px;
+}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-dark);box-shadow:0 2px 8px rgba(0,120,212,.3)}
+.btn-outline{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn-outline:hover{background:var(--blue-light)}
+
+/* ── Trust bar ──────────────────────────────────── */
+.trust-bar{
+  background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200);
+  padding:40px 24px;text-align:center;
+}
+.trust-bar p{font-size:.85rem;color:var(--gray-500);margin-bottom:16px}
+.trust-logos{display:flex;justify-content:center;align-items:center;gap:32px;flex-wrap:wrap;color:var(--gray-400);font-size:.8rem;font-weight:600;letter-spacing:.04em}
+
+/* ── Feature table ──────────────────────────────── */
+.feat-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.feat-table th,.feat-table td{padding:14px 16px;text-align:center}
+.feat-table th{font-weight:600;color:var(--gray-700);border-bottom:2px solid var(--gray-200)}
+.feat-table th:first-child,.feat-table td:first-child{text-align:left;color:var(--gray-700);font-weight:500}
+.feat-table td{border-bottom:1px solid var(--gray-100);color:var(--gray-600)}
+.feat-table .check{color:var(--green);font-weight:600}
+.feat-table .dash{color:var(--gray-400)}
+
+/* ── Footer ─────────────────────────────────────── */
+.ft{
+  background:var(--gray-800);color:var(--gray-400);padding:48px 24px 32px;
+}
+.ft-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px}
+.ft-col h4{color:#fff;font-size:.85rem;font-weight:600;margin-bottom:12px}
+.ft-col a{display:block;color:var(--gray-400);text-decoration:none;font-size:.8rem;padding:4px 0;transition:color .15s}
+.ft-col a:hover{color:#fff}
+.ft-bottom{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);font-size:.75rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+/* ── Success page ───────────────────────────────── */
+.success-hero{text-align:center;padding:48px 24px 24px}
+.success-hero .icon{width:56px;height:56px;background:var(--green-bg);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.success-hero h2{font-size:1.6rem;font-weight:700;color:var(--gray-900)}
+.success-hero p{color:var(--gray-500);margin-top:8px}
+.key-card{
+  max-width:640px;margin:0 auto;background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:28px 32px;
+}
+.key-label{font-size:.8rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.key-value{
+  background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;
+  padding:18px 20px;font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-size:.8rem;word-break:break-all;color:var(--gray-800);position:relative;line-height:1.5
+}
+.copy-btn{
+  position:absolute;right:10px;top:10px;background:var(--blue);color:#fff;border:none;
+  padding:7px 16px;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s
+}
+.copy-btn:hover{background:var(--blue-dark)}
+.install-steps{max-width:640px;margin:32px auto}
+.install-step{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-100)}
+.install-step:last-child{border-bottom:none}
+.step-num{width:32px;height:32px;background:var(--gray-100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--gray-700);flex-shrink:0}
+.install-step p{font-size:.9rem;color:var(--gray-600);margin:0}
+.install-step code{background:var(--gray-100);padding:2px 8px;border-radius:4px;font-size:.85rem;color:var(--gray-800)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+
+/* ── Responsive ─────────────────────────────────── */
+@media(max-width:768px){
+  .hero h1{font-size:2rem}
+  .hero-stats{gap:24px}
+  .pricing-grid{grid-template-columns:1fr}
+  .feat-table{font-size:.78rem}
+  .feat-table th,.feat-table td{padding:10px 8px}
+}
+</style>
+</head>
+<body>
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="#0078D4"/><path d="M7 14l5 5L21 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Ansede<em>Static</em></span>
+    </a>
+    <a href="#pricing" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+{{body}}
+
+<!-- Footer -->
+<footer class="ft">
+  <div class="ft-inner">
+    <div class="ft-col">
+      <h4>Product</h4>
+      <a href="#pricing">Pricing</a>
+      <a href="https://github.com/mattybellx/Ansede">GitHub</a>
+      <a href="https://marketplace.visualstudio.com/items?itemName=ansede.ansede-static">VS Code Extension</a>
+    </div>
+    <div class="ft-col">
+      <h4>Resources</h4>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md">Benchmarks</a>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/docs/writing-rules.md">Writing Rules</a>
+    </div>
+    <div class="ft-col">
+      <h4>Support</h4>
+      <a href="https://github.com/mattybellx/Ansede/issues">Report an Issue</a>
+      <a href="https://github.com/mattybellx/Ansede/discussions">Discussions</a>
+      <a href="mailto:support@ansede.dev">Contact</a>
+    </div>
+  </div>
+  <div class="ft-bottom ft-inner">
+    <span>&copy; 2026 Ansede Static. All rights reserved.</span>
+    <span>Zero-dependency offline SAST</span>
+  </div>
+</footer>
+
 <script>
-function cp(){var t=document.querySelector('.key').innerText.replace('📋 Copy','').trim();navigator.clipboard.writeText(t);var o=document.getElementById('t');o.style.display='block';setTimeout(function(){o.style.display='none'},2500)}
-</script></body></html>"""
+function copyKey(){
+  var el=document.getElementById('licenseKey');
+  var txt=el.innerText.replace('Copy','').trim();
+  navigator.clipboard.writeText(txt);
+  var t=document.getElementById('toast');
+  t.style.display='block';
+  setTimeout(function(){t.style.display='none'},2500);
+}
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.querySelector(this.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>"""
 
-_INDEX_BODY = """<div class="card"><h2>🔒 World's Best Offline SAST</h2>
-<p>98.8% CVE recall. 3.6% FP rate. Scans Python, JavaScript, Java, Go, C#. Zero dependencies.</p>
-<p>Detects IDOR, auth bypass, SQLi, SSRF, hardcoded secrets, and 20+ categories — all offline.</p></div>
-<h2 style="margin:28px 0 16px;font-size:1.3rem">Choose Your Plan</h2>
-<div class="grid">
-<div class="pc"><h3>⚡ One-Time</h3><div class="pr">&pound;4.99</div><div class="per">30 days Pro · one payment</div>
-<ul><li>Unlimited scans</li><li>SARIF output</li><li>SBOM generation</li><li>All 5 languages</li></ul>
-<a href="https://buy.stripe.com/8x24gygGW6JueVJ4U61oI00" class="btn btn-p" style="margin-top:16px;display:block">Buy &pound;4.99</a></div>
-<div class="pc pro"><h3>🚀 Pro Yearly</h3><div class="pr">&pound;49<span>/yr</span></div><div class="per">everything · cancel anytime</div>
-<ul><li>Everything in One-Time</li><li>CI/CD recipes</li><li>Priority support</li><li>365 days access</li></ul>
-<a href="https://buy.stripe.com/4gM14m9eu2te00P86i1oI01" class="btn btn-p" style="margin-top:16px;display:block">Subscribe &pound;49/yr</a></div>
+_INDEX_BODY = r"""
+<div class="hero">
+  <div class="hero-badge">&#9670; World's Best Offline SAST &mdash; Verified May 2026</div>
+  <h1>Ship secure code.<br>No cloud. <em>No compromise.</em></h1>
+  <p>ansede-static detects what Bandit, Semgrep, and CodeQL miss&mdash;IDOR, auth bypass, ownership flaws&mdash;with <strong>98.8% CVE recall</strong> and a <strong>3.6% false positive rate</strong>. All offline. Zero dependencies.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">98.8%</div><div class="lbl">CVE Recall</div></div>
+    <div class="hero-stat"><div class="num">3.6%</div><div class="lbl">False Positive Rate</div></div>
+    <div class="hero-stat"><div class="num">5</div><div class="lbl">Languages</div></div>
+    <div class="hero-stat"><div class="num">&lt;0.1s</div><div class="lbl">Per 100k LOC</div></div>
+  </div>
 </div>
-<div class="card" style="margin-top:28px"><h2>💻 Already have a key?</h2><p><code>ansede-static license activate YOUR_KEY</code></p></div>"""
 
-_SUCCESS_BODY = """<div class="card" style="text-align:center"><h2 style="color:#22c55e">✅ Payment Successful!</h2>
-<p style="font-size:1.1rem">Your <strong>{tier}</strong> license is ready{email_text}!</p></div>
-<div class="card"><h2>🔑 Your License Key</h2><p>Copy this key and activate it in your terminal:</p>
-<div class="key" id="k">{key}<button class="cpb" onclick="cp()">📋 Copy</button></div><div class="toast" id="t">✅ Copied!</div>
-<div class="step"><div class="sn">1</div><p>Copy the key above</p></div>
-<div class="step"><div class="sn">2</div><p>Run: <code>ansede-static license activate YOUR_KEY</code></p></div>
-<div class="step"><div class="sn">3</div><p>Done! Pro features unlocked instantly.</p></div>{expiry_line}</div>"""
+<div class="sec" id="pricing">
+  <div class="sec-inner">
+    <div class="sec-title">
+      <h2>Simple, transparent pricing</h2>
+      <p>Start free. Upgrade when you need SARIF, SBOM, and unlimited scanning. No hidden fees. Cancel anytime.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="card">
+        <h3>Free</h3>
+        <div class="price">$0</div>
+        <div class="period">No credit card required</div>
+        <ul>
+          <li>500 scans per day</li>
+          <li>Text &amp; JSON output</li>
+          <li>Python, JavaScript, Go, Java, C#</li>
+          <li>Offline &mdash; no cloud, no telemetry</li>
+          <li>Community rule packs</li>
+        </ul>
+        <a href="https://github.com/mattybellx/Ansede" class="btn btn-outline">Download Free</a>
+      </div>
 
-_PENDING_BODY = """<meta http-equiv="refresh" content="3">
-<div class="card" style="text-align:center"><h2>⏳ Generating Your License...</h2>
-<p>This page refreshes automatically. Session: {sid}</p></div>"""
+      <div class="card">
+        <h3>One-Time</h3>
+        <div class="price">&pound;4.99</div>
+        <div class="period">30 days of Pro access</div>
+        <ul>
+          <li>Unlimited scans</li>
+          <li>SARIF output (GitHub Code Scanning)</li>
+          <li>SBOM generation (CycloneDX, SPDX)</li>
+          <li>HTML dashboards</li>
+          <li>All 5 languages</li>
+          <li>Email support</li>
+        </ul>
+        <a href="https://buy.stripe.com/8x24gygGW6JueVJ4U61oI00" class="btn btn-primary">Buy for &pound;4.99</a>
+      </div>
 
-_ERROR_BODY = """<div class="card" style="text-align:center"><h2 style="color:#ef4444">⚠️ Something went wrong</h2>
-<p>{msg}</p><p style="margin-top:16px">If you paid, check your email for the license key (including spam).</p>
-<a href="/" class="btn btn-p" style="margin-top:12px">← Home</a></div>"""
+      <div class="card featured">
+        <div class="card-badge">Most Popular</div>
+        <h3>Pro Yearly</h3>
+        <div class="price">&pound;49<span>/year</span></div>
+        <div class="period">Everything in One-Time, plus more</div>
+        <ul>
+          <li>Everything in One-Time</li>
+          <li>CI/CD integration recipes</li>
+          <li>GitHub Actions workflow generator</li>
+          <li>Priority email support</li>
+          <li>365 days of updates</li>
+          <li>Early access to new languages</li>
+        </ul>
+        <a href="https://buy.stripe.com/4gM14m9eu2te00P86i1oI01" class="btn btn-primary">Subscribe &pound;49/yr</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="trust-bar">
+  <p>Trusted by developers who care about security</p>
+  <div class="trust-logos">
+    <span>OWASP-COMPLIANT</span>
+    <span>CWE-COVERAGE 20+</span>
+    <span>919 UNIT TESTS</span>
+    <span>100% OFFLINE</span>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <div class="sec-title">
+      <h2>Compare plans</h2>
+      <p>Every feature you need to ship secure code&mdash;from solo developers to enterprise teams.</p>
+    </div>
+    <div style="overflow-x:auto">
+    <table class="feat-table">
+      <thead>
+        <tr><th></th><th>Free</th><th>One-Time</th><th>Pro</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Scans per day</td><td>500</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Languages</td><td>5</td><td>5</td><td>5</td></tr>
+        <tr><td>Text output</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>JSON output</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>SARIF output</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>SBOM generation</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>HTML dashboard</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>CI/CD recipes</td><td><span class="dash">&mdash;</span></td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Incremental scanning</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Parallel workers</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Community rules</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Email support</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Price</td><td>Free</td><td>&pound;4.99 one-time</td><td>&pound;49/year</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200)">
+  <div class="sec-inner" style="text-align:center">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:8px">Already have a license key?</h2>
+    <p style="color:var(--gray-500);margin-bottom:20px">Activate it in your terminal to unlock Pro features instantly.</p>
+    <code style="background:var(--gray-800);color:#fff;padding:12px 24px;border-radius:8px;font-size:.95rem;display:inline-block">ansede-static license activate YOUR_KEY</code>
+  </div>
+</div>
+"""
+
+_SUCCESS_BODY = r"""
+<div class="success-hero">
+  <div class="icon"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14l5 5L21 9" stroke="#107C10" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <h2>Payment Successful</h2>
+  <p>Your <strong>{tier}</strong> license is ready{email_text}. Thank you for choosing ansede-static.</p>
+</div>
+<div class="sec-inner" style="max-width:640px;margin:0 auto;padding:0 24px 48px">
+  <div class="key-card">
+    <div class="key-label">Your License Key</div>
+    <div class="key-value" id="licenseKey">{key}<button class="copy-btn" onclick="copyKey()">Copy</button></div>
+  </div>
+  <div class="install-steps">
+    <div class="install-step">
+      <div class="step-num">1</div>
+      <p>Copy the license key shown above.</p>
+    </div>
+    <div class="install-step">
+      <div class="step-num">2</div>
+      <p>Open your terminal and run:<br><code>ansede-static license activate YOUR_KEY</code></p>
+    </div>
+    <div class="install-step">
+      <div class="step-num">3</div>
+      <p>Pro features unlocked instantly. Run <code>ansede-static license</code> to verify.</p>
+    </div>
+  </div>
+  {expiry_line}
+</div>
+<div id="toast" class="toast">Copied to clipboard</div>
+"""
+
+_PENDING_BODY = r"""
+<meta http-equiv="refresh" content="3">
+<div class="sec" style="text-align:center;min-height:40vh;display:flex;align-items:center;justify-content:center">
+  <div class="sec-inner">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:8px">Generating Your License&hellip;</h2>
+    <p style="color:var(--gray-500)">This page refreshes automatically. Session: {sid}</p>
+  </div>
+</div>
+"""
+
+_ERROR_BODY = r"""
+<div class="sec" style="text-align:center;min-height:40vh;display:flex;align-items:center;justify-content:center">
+  <div class="sec-inner">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--red);margin-bottom:8px">Something went wrong</h2>
+    <p style="color:var(--gray-500);margin-bottom:20px">{msg}</p>
+    <p style="color:var(--gray-500);margin-bottom:24px">If you have already paid, your license key was sent to your email. Please check your inbox (including spam).</p>
+    <a href="/" class="btn btn-primary" style="display:inline-block;width:auto;padding:10px 32px">Back to Home</a>
+  </div>
+</div>
+"""
 
 
 @app.route("/")
