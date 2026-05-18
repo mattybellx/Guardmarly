@@ -654,6 +654,15 @@ def _handle_license_command(args: list[str]) -> None:
             print("✅ License deactivated. Free tier restored.")
         else:
             print("No license file found. Already on free tier.")
+    elif cmd == "upgrade":
+        import webbrowser
+        print()
+        print("  Opening ansede.onrender.com in your browser...")
+        print()
+        print("  💸  One-time £4.99  —  30 days Pro access")
+        print("  ⭐  Pro £49/year    —  everything included")
+        print()
+        webbrowser.open("https://ansede.onrender.com")
     elif cmd in ("--help", "-h", "help"):
         print("Usage: ansede license [command]")
         print()
@@ -661,8 +670,9 @@ def _handle_license_command(args: list[str]) -> None:
         print("  (no args)          Show current license status")
         print("  activate <key>     Activate a license key")
         print("  deactivate         Remove license and revert to free tier")
+        print("  upgrade            Open the pricing page to upgrade to Pro")
         print()
-        print("Visit https://ansede.onrender.com to purchase a license.")
+        print("  Visit https://ansede.onrender.com to purchase a license.")
     else:
         print(f"Unknown license command: {cmd}", file=sys.stderr)
         sys.exit(2)

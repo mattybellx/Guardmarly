@@ -376,10 +376,13 @@ class LicenseFeatureGate:
         tier = self.info.tier_display_name
         msg = (
             f"\n  ╔══════════════════════════════════════════════════════════╗\n"
-            f"  ║  {name} requires Pro tier or above.         ║\n"
-            f"  ║  Your tier: {tier:<10}                                  ║\n"
+            f"  ║  {name} is a Pro feature. You're on the {tier} tier.        ║\n"
             f"  ║                                                      ║\n"
-            f"  ║  Upgrade at: https://ansede.onrender.com               ║\n"
+            f"  ║  💸  One-time £4.99  —  30 days of Pro access         ║\n"
+            f"  ║  ⭐  Pro £49/year    —  unlimited everything           ║\n"
+            f"  ║                                                      ║\n"
+            f"  ║  Run: ansede-static license upgrade                   ║\n"
+            f"  ║  Or visit: https://ansede.onrender.com                 ║\n"
             f"  ╚══════════════════════════════════════════════════════════╝\n"
         )
         raise LicenseRequiredError(msg)
