@@ -138,7 +138,7 @@ internal sealed class AnsedeScannerService
             return env;
 
         // Default paths per OS
-        if (OperatingSystem.IsWindows())
+        if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             return Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "ansede", "ansede-static.exe");
@@ -195,9 +195,8 @@ internal sealed class AnsedeScannerService
                 StandardErrorEncoding = Encoding.UTF8,
             };
 
-            // Skip argv[0] (the exe itself)
-            foreach (var arg in args.Skip(1))
-                psi.ArgumentList.Add(arg);
+            // Skip argv[0] (the exe itself) — build args string for net472 compat
+            psi.Arguments = string.Join(" ", args.Skip(1).Select(a => $"\"{a}\""));
 
             using var proc = Process.Start(psi);
             if (proc == null)

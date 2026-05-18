@@ -139,5 +139,5 @@ public sealed class AnsedePackage : AsyncPackage
     }
 
     private static string Truncate(string value, int maxLength) =>
-        value.Length <= maxLength ? value : value[..(maxLength - 3)] + "...";
+        value.Length <= maxLength ? value : value.Substring(0, maxLength - 3) + "...";
 }
