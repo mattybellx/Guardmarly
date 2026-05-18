@@ -17,6 +17,7 @@ dependencies {
     intellijPlatform {
         intellijIdeaCommunity("2024.1")
         bundledPlugin("com.intellij.java")
+        instrumentationTools()
     }
     implementation("com.google.code.gson:gson:2.10.1")
 }
