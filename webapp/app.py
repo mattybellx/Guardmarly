@@ -124,6 +124,17 @@ def _lookup_by_session(sid: str) -> dict | None:
     return dict(row) if row else None
 
 
+def _lookup_by_email(email: str) -> list[dict]:
+    """Find all licenses for an email (for key recovery)."""
+    db = _get_db()
+    rows = db.execute(
+        "SELECT license_key, tier, created_at, expires_at, status FROM licenses WHERE email=? AND status='active' ORDER BY created_at DESC",
+        (email.lower().strip(),),
+    ).fetchall()
+    db.close()
+    return [dict(r) for r in rows]
+
+
 # ══════════════════════════════════════════════════════════════════════════
 # Stripe Webhook
 # ══════════════════════════════════════════════════════════════════════════
@@ -623,6 +634,35 @@ _ERROR_BODY = r"""
 @app.route("/")
 def index():
     return _HTML.replace("{{title}}", "World's Best Offline SAST").replace("{{body}}", _INDEX_BODY)
+
+
+@app.route("/lookup")
+def lookup():
+    """Key recovery page — enter your email to retrieve your license key."""
+    email = request.args.get("email", "").strip().lower()
+    if not email:
+        return _HTML.replace("{{title}}", "Key Recovery").replace("{{body}}",
+            '<div class="card" style="text-align:center"><h2>Recover Your License Key</h2>'
+            '<p style="margin-top:12px">Enter the email you used when purchasing.</p>'
+            '<form method="GET" action="/lookup" style="margin-top:16px">'
+            '<input type="email" name="email" placeholder="your@email.com" style="padding:10px 16px;border-radius:8px;border:1px solid #d1d1d1;width:280px;font-size:.95rem" required>'
+            '<button type="submit" class="btn btn-p" style="margin-left:8px;width:auto;display:inline-block">Look Up</button>'
+            '</form></div>')
+
+    keys = _lookup_by_email(email)
+    if not keys:
+        return _HTML.replace("{{title}}", "Key Recovery").replace("{{body}}",
+            f'<div class="card" style="text-align:center"><h2>No Keys Found</h2>'
+            f'<p>No active licenses found for <strong>{email}</strong>.</p>'
+            f'<p style="color:#666">If you just purchased, the key may take a moment to appear. Try again in a minute.</p>'
+            f'<a href="/lookup" class="btn btn-p" style="margin-top:16px;width:auto;display:inline-block">Try Another Email</a></div>')
+
+    rows = ''
+    for k in keys[:5]:
+        rows += f'<div class="key-box" style="margin:12px 0;position:relative;padding:16px;background:var(--gray-50);border-radius:8px;font-family:monospace;font-size:.8rem;word-break:break-all">{k["license_key"]}<br><span style="color:var(--gray-500);font-size:.75rem">Tier: {k["tier"]} | Created: {k["created_at"][:10]}</span></div>'
+    return _HTML.replace("{{title}}", "Your Keys").replace("{{body}}",
+        f'<div class="card"><h2>License Keys for {email}</h2>{rows}'
+        f'<p style="margin-top:16px;color:#666">Copy your key and run <code>ansede-static license activate YOUR_KEY</code></p></div>')
 
 
 @app.route("/success")
