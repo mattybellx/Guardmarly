@@ -1,7 +1,11 @@
 ﻿<p align="center">
+  <img alt="Ansede Static — World's Best Offline SAST" src="https://raw.githubusercontent.com/mattybellx/Ansede/master/AS.png" width="800">
+</p>
+
+<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mattybellx/Ansede/master/docs/banner-dark.svg">
-    <img alt="Ansede Static — World's Best Offline SAST" src="https://raw.githubusercontent.com/mattybellx/Ansede/master/docs/banner-light.svg" width="800">
+    <img src="https://raw.githubusercontent.com/mattybellx/Ansede/master/docs/banner-dark.svg" width="800" alt="Ansede Banner">
   </picture>
 </p>
 
