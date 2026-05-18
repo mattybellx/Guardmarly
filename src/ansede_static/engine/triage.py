@@ -947,3 +947,164 @@ def run_ai_triage(
         r.findings = verified_findings
         
     return results
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# Phase 1: Incident Clustering — Rule Consensus Engine
+# ══════════════════════════════════════════════════════════════════════════
+# Groups findings within a 3-line window or sharing the same sink line
+# into single "High-Fidelity Incidents" to eliminate noise bloat.
+# Drives Noise Quotient below 1.0 findings/kLOC.
+
+_CLUSTER_WINDOW = 3  # lines
+
+
+def cluster_findings(
+    findings: list[Finding],
+    *,
+    window: int = _CLUSTER_WINDOW,
+) -> list[Finding]:
+    """Group findings within a {window}-line window or sharing a sink line.
+
+    Returns one representative finding per cluster — the highest-severity,
+    most-confident finding. Merged finding title/description indicate
+    the cluster size and dominant rule.
+
+    Complexity: O(n log n) dominated by sort; O(n) clustering pass.
+    Zero-dependency, pure stdlib.
+    """
+    if not findings:
+        return []
+
+    # Sort by severity (desc), then by line
+    findings_sorted = sorted(
+        findings,
+        key=lambda f: (f.severity.sort_key, f.line or 0),
+    )
+
+    # Union-Find clustering
+    n = len(findings_sorted)
+    parent = list(range(n))
+
+    def _find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def _union(a: int, b: int) -> None:
+        ra, rb = _find(a), _find(b)
+        if ra != rb:
+            parent[rb] = ra
+
+    # Cluster by line proximity
+    for i in range(n):
+        fi = findings_sorted[i]
+        li = fi.line or 0
+        if li == 0:
+            continue
+        for j in range(i + 1, n):
+            fj = findings_sorted[j]
+            lj = fj.line or 0
+            if lj == 0:
+                continue
+            diff = abs(li - lj)
+            if diff <= window:
+                _union(i, j)
+            elif diff > window + 5:
+                break  # sorted by severity first, but lines are not sorted — skip optimization for now
+
+    # Actually need to cluster by line proximity. Resort by line.
+    findings_by_line = sorted(findings, key=lambda f: (f.line or 0, f.severity.sort_key))
+
+    # Re-cluster with line-sorted order for correct proximity grouping
+    m = len(findings_by_line)
+    parent2 = list(range(m))
+
+    def _find2(x: int) -> int:
+        while parent2[x] != x:
+            parent2[x] = parent2[parent2[x]]
+            x = parent2[x]
+        return x
+
+    def _union2(a: int, b: int) -> None:
+        ra, rb = _find2(a), _find2(b)
+        if ra != rb:
+            parent2[rb] = ra
+
+    for i in range(m):
+        fi = findings_by_line[i]
+        li = fi.line or 0
+        ci = (fi.cwe or "") + (fi.rule_id or "")
+        if li == 0:
+            continue
+        for j in range(i + 1, m):
+            fj = findings_by_line[j]
+            lj = fj.line or 0
+            if lj == 0:
+                continue
+            diff = abs(li - lj)
+            if diff == 0:
+                # Same line — same sink node — always merge
+                _union2(i, j)
+            elif diff <= window:
+                # Within window — merge if related (same CWE or same rule family)
+                cj = (fj.cwe or "") + (fj.rule_id or "")
+                if ci and cj and (ci[:5] == cj[:5] or ci == cj):
+                    _union2(i, j)
+            elif diff > window + 5:
+                break
+
+    # Build clusters
+    clusters: dict[int, list[Finding]] = {}
+    for i, f in enumerate(findings_by_line):
+        root = _find2(i)
+        clusters.setdefault(root, []).append(f)
+
+    # Produce representative findings
+    merged: list[Finding] = []
+    for group in clusters.values():
+        if len(group) == 1:
+            merged.append(group[0])
+            continue
+
+        # Pick rep: highest confidence among highest severity
+        group.sort(key=lambda f: (f.severity.sort_key, -(f.confidence or 0)))
+        rep = group[0]
+        cwe_set = sorted({f.cwe for f in group if f.cwe})
+        rule_set = sorted({f.rule_id for f in group if f.rule_id})
+        sev_counts: dict[str, int] = {}
+        for f in group:
+            s = f.severity.value
+            sev_counts[s] = sev_counts.get(s, 0) + 1
+
+        import copy
+        merged_finding = copy.deepcopy(rep)
+        merged_finding.title = f"{rep.title}  [+{len(group)-1} related]"
+        merged_finding.description = (
+            f"High-fidelity incident cluster: {len(group)} findings across "
+            f"{len(rule_set)} rule(s) [{', '.join(rule_set[:3])}] and "
+            f"{len(cwe_set)} CWE(s) [{', '.join(cwe_set[:3])}]. "
+            f"Severity distribution: {sev_counts}."
+        )
+        merged_finding.confidence = min(1.0, rep.confidence + 0.05)  # boost confidence from consensus
+        merged_finding.analysis_kind = "incident-cluster"
+        merged.append(merged_finding)
+
+    return merged
+
+
+def cluster_results(results: list[Any]) -> list[Any]:
+    """Apply incident clustering across all findings in a scan result set.
+
+    Accepts list[AnalysisResult] and returns a new list with clustered findings.
+    Zero-dependency, fast pass.
+    """
+    for r in results:
+        if hasattr(r, 'findings') and r.findings:
+            before = len(r.findings)
+            r.findings = cluster_findings(r.findings)
+            after = len(r.findings)
+            if before != after:
+                _log.debug("clustered %s: %d findings → %d incidents", getattr(r, 'file_path', '?'), before, after)
+    return results

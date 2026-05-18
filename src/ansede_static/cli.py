@@ -1800,6 +1800,13 @@ def _main_impl() -> None:
                     file=sys.stderr,
                 )
 
+    # ── Incident Clustering: group related findings into high-fidelity incidents ─
+    try:
+        from ansede_static.engine.triage import cluster_results
+        cluster_results(results)
+    except Exception:
+        pass
+
     # ── Format output ───────────────────────────────────────────────────────
     if args.format == "text":
         output = format_text_multi(results, colour=colour and primary_output_path is None, verbose=args.verbose)
