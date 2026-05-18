@@ -1,11 +1,8 @@
 ﻿<p align="center">
-  <img alt="Ansede Static — World's Best Offline SAST" src="https://raw.githubusercontent.com/mattybellx/Ansede/master/AS.png" width="800">
-</p>
-
-<p align="center">
   <picture>
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mattybellx/Ansede/master/AS.png">
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mattybellx/Ansede/master/docs/banner-dark.svg">
-    <img src="https://raw.githubusercontent.com/mattybellx/Ansede/master/docs/banner-dark.svg" width="800" alt="Ansede Banner">
+    <img alt="Ansede Static — World's Best Offline SAST" src="https://raw.githubusercontent.com/mattybellx/Ansede/master/AS.png" width="800">
   </picture>
 </p>
 
@@ -24,6 +21,30 @@
   <a href="https://github.com/mattybellx/Ansede/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License MIT"></a>
   <a href="https://github.com/mattybellx/Ansede/stargazers"><img src="https://img.shields.io/github/stars/mattybellx/Ansede?style=social" alt="Stars"></a>
 </p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#what-makes-it-different">Why Ansede</a> ·
+  <a href="#verified-performance">Benchmarks</a> ·
+  <a href="#detection-coverage">Coverage</a> ·
+  <a href="#comparison">vs Bandit/Semgrep/CodeQL</a> ·
+  <a href="#pricing">Pricing</a>
+</p>
+
+---
+
+## Quick Start
+
+```bash
+pip install ansede-static
+ansede-static src/
+```
+
+That's it. No config files. No cloud. No telemetry.
+
+[![PyPI version](https://img.shields.io/pypi/v/ansede-static?label=pypi&color=0078D4)](https://pypi.org/project/ansede-static/)
+[![Downloads](https://img.shields.io/pypi/dm/ansede-static?label=downloads&color=107C10)](https://pypi.org/project/ansede-static/)
+[![CI](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml)
 
 ---
 
