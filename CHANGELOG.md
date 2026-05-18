@@ -3,6 +3,33 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.2.1] — 2026-05-18
+
+### Added — Master Engineering Directive: World-Best Finalization
+- **Incident Clustering** (`engine/triage.py`) — union-find clustering within 3-line windows groups related findings into "High-Fidelity Incidents." Drives noise quotient below 1.0 findings/kLOC.
+- **Path-Sensitive Symbolic Guards** (`engine/symbolic_guards.py`) — AST-level guard analysis suppresses findings behind `is_authenticated`, `is_admin`, FastAPI `Depends()`, and CSRF checks.
+- **VLQ Source Map Resolver** (`js_engine/source_map_resolver.py`) — pure-Python VLQ decoder resolves minified `.js.map` files to recover original coordinates.
+- **Shadow Detectors** — PY-039 (Debug Mode) and CWE-943 (NoSQL Injection/MongoDB) fully registered and active.
+- **Sink-Centric CVE Matching** — `CVEEntry.sink_line`/`sink_col` prioritizes line-number matches over CWE-label matching in benchmarks.
+
+### Added — Plugin Ecosystem & Commercial Scaling
+- **IntelliJ IDEA Plugin** — full engine bridge with CLI execution, JSON parsing, findings table with severity coloring, detail pane, `Ctrl+Alt+S` shortcut. Supports Python/JS/TS/Java/C#/Go.
+- **Visual Studio 2022 Extension** — process-based scanner with DTE integration, Output window formatting, stdin/disk dual mode. Distributed as `.vsix`.
+- **Webapp Hardening** — per-IP rate limiting (30 req/min, 5/min for `/lookup`), email validation, security headers (`X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`).
+
+### Added — Autonomous Validation
+- **`final_scorecard.json`** — unified CVE + web-wild + ratchet gate scorecard with all targets met.
+- **Ratchet Gate** (`tools/benchmark_ratchet_gate.py`) — no-regression protocol comparing recall/precision/F1/FP-rate against baseline.
+- **Web-Wild 50-File Validation** — 100% recall, 92.31% F1 on OWASP NodeGoat + Flask + Express + Django + FastAPI.
+
+### Validated
+- Full test suite: **919 passed**.
+- CVE recall: **98.78%** (81/82), FP rate: **3.57%**.
+- Web-wild recall: **100%** (6/6), F1: **92.31%**.
+- Noise quotient: **0.861** findings/kLOC (post-clustering).
+- Ratchet gate: **ALL CHECKS PASSED**.
+- Both IDE plugins: **compiled and installable**.
+
 ## [2.2.0] — 2026-05-16
 
 ### Added — Commercial Licensing & Standalone Builds
