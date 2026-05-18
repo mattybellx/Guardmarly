@@ -334,7 +334,7 @@ def format_license_status(license_info: LicenseInfo | None = None) -> str:
         lines.append("    • Unlimited daily scans")
         lines.append("    • Priority email support")
         lines.append("")
-        lines.append("  Visit https://ansede.dev/pricing to upgrade.")
+        lines.append("  Visit https://ansede.onrender.com to upgrade.")
 
     return "\n".join(lines)
 
@@ -379,7 +379,7 @@ class LicenseFeatureGate:
             f"  ║  {name} requires Pro tier or above.         ║\n"
             f"  ║  Your tier: {tier:<10}                                  ║\n"
             f"  ║                                                      ║\n"
-            f"  ║  Upgrade at: https://ansede.dev/pricing               ║\n"
+            f"  ║  Upgrade at: https://ansede.onrender.com               ║\n"
             f"  ╚══════════════════════════════════════════════════════════╝\n"
         )
         raise LicenseRequiredError(msg)

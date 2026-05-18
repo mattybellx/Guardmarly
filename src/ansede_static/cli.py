@@ -662,7 +662,7 @@ def _handle_license_command(args: list[str]) -> None:
         print("  activate <key>     Activate a license key")
         print("  deactivate         Remove license and revert to free tier")
         print()
-        print("Visit https://ansede.dev/pricing to purchase a license.")
+        print("Visit https://ansede.onrender.com to purchase a license.")
     else:
         print(f"Unknown license command: {cmd}", file=sys.stderr)
         sys.exit(2)
