@@ -47,6 +47,25 @@ That's it. No config files. No cloud. No telemetry.
 [![CI](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/mattybellx/Ansede/actions/workflows/ci.yml)
 
 ---
+The Zero-Friction Security Workflow
+Traditional security scanners create friction: they slow down pipelines, break builds over years-old legacy debt, and force manual remediation. Ansede is engineered differently. Scanning at a verified 0.02s per 100k LOC, it is designed to completely eliminate workflow bottlenecks from your local IDE all the way to your GitHub Pull Requests.
+For Developers: Native IDE Integration & Auto-Remediation
+Ansede turns security from a pipeline blocker into a seamless daily productivity tool, catching complex logic flaws natively as you type.
+Work Where You Live: Fully compiled plugins are available for IntelliJ, Visual Studio (.vsix), and VS Code.
+Heuristic Auto-Remediation: Stop manually hunting for fixes. Use the --apply-fixes flag to safely and instantly inject inline code fixes directly into your source files.
+Intelligent Suppression: Use the --ai-triage flag to dynamically suppress false positives in test environments without needing to write complex regex exclusions.
+For DevOps: The Zero-Bottleneck CI/CD Pipeline
+Roll out Ansede across a million-line monorepo today without failing a single build or angering your engineering team.
+Freeze Legacy Debt: Use the free --baseline baseline.json flag to ignore every existing bug in your codebase. Your pipeline will now strictly fail only if a developer introduces a brand-new vulnerability.
+Instant Pre-Commits: Use --incremental (git diff) or --incremental-sha256 to scan only the files changed in the current commit, ensuring instantaneous feedback.
+Ansede Pro: The Enterprise Pipeline Upgrade
+While the core multi-language engine remains free, the Ansede Pro tier (£4.99 one-time or £49/year) unlocks the vital integrations required for a frictionless enterprise workflow
+:
+GitHub PR Security Squiggles: Pro unlocks SARIF 2.1.0 output. Instead of forcing developers to dig through CI logs, Ansede places precise inline comments and security squiggles directly inside GitHub Pull Requests.
+Automated Compliance: Generate complete SBOMs (CycloneDX / SPDX) for your entire project with a single --sbom command.
+Security Observability: Generate interactive HTML dashboards (--format html) for security teams to track vulnerability reduction and noise quotients over time.
+Stop wasting engineering hours on manual remediation and pipeline bottlenecks.
+Upgrade to Ansede Pro →
 
 ## What makes it different
 
