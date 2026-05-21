@@ -29,13 +29,15 @@ jobs:
       - name: Run ansede scan
         run: |
           ansede scan . \
-            --format sarif \
-            --output results.sarif \
+            --format json \
+            --output results.json \
             --fail-on high \
-            --verbose \
             --exclude node_modules \
             --exclude .venv \
             --exclude __pycache__
+
+      - name: Convert JSON to SARIF
+        run: python .github/scripts/json_to_sarif.py
 
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v4

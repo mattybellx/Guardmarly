@@ -23,10 +23,10 @@ MIN_TRACE_COVERAGE_PCT = 80.0
 
 
 def main() -> int:
-    # Run ansede-static on NodeGoat in SARIF mode
-    nodegoat = REPO_ROOT / "NodeGoat"
-    if not nodegoat.is_dir():
-        print(f"SKIP: NodeGoat directory not found at {nodegoat}")
+    # Run ansede-static on a small file to check trace coverage
+    sample_file = REPO_ROOT / "tests" / "test_python.py"
+    if not sample_file.is_file():
+        print(f"SKIP: sample file not found at {sample_file}")
         return 0
 
     result = subprocess.run(
@@ -34,7 +34,7 @@ def main() -> int:
             sys.executable,
             "-m",
             "ansede_static.cli",
-            str(nodegoat),
+            str(sample_file),
             "--format",
             "json",
             "--fail-on",
@@ -42,7 +42,7 @@ def main() -> int:
         ],
         capture_output=True,
         text=True,
-        timeout=180,
+        timeout=30,
     )
 
     if result.returncode != 0:

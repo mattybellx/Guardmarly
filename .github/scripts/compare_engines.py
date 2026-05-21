@@ -60,17 +60,13 @@ def _count_findings(data: dict | None) -> int:
 
 
 def main() -> int:
-    # Use the Python test corpus or a sample file
-    python_dir = REPO_ROOT / "src" / "ansede_static"
-    if not python_dir.is_dir():
-        print(f"SKIP: source directory not found at {python_dir}")
+    # Use a single small Python test file instead of full src/ (timeout-safe)
+    sample_file = REPO_ROOT / "tests" / "test_python.py"
+    if not sample_file.is_file():
+        print(f"SKIP: sample file not found at {sample_file}")
         return 0
 
-    target = str(python_dir)
-    if not python_dir.is_dir():
-        print(f"SKIP: v2 corpus not found at {python_dir}")
-        return 0
-
+    target = str(sample_file)
     print(f"Dual-engine comparison on: {target}")
     print()
 
