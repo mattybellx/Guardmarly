@@ -117,6 +117,16 @@ def test_load_real_world_manifest_has_curated_git_entries():
         "https://github.com/appsecco/dvna.git",
         "https://github.com/gin-gonic/gin.git",
         "https://github.com/dotnet/aspnetcore.git",
+        "https://github.com/OWASP/WebGoat.NET.git",
+        "https://github.com/fastapi/fastapi.git",
+        "https://github.com/pallets/flask.git",
+        "https://github.com/expressjs/express.git",
+        "https://github.com/spring-projects/spring-boot.git",
+        "https://github.com/rails/rails.git",
+        "https://github.com/laravel/laravel.git",
+        "https://github.com/vuejs/core.git",
+        "https://github.com/pytorch/pytorch.git",
+        "https://github.com/microsoft/TypeScript.git",
     }
     assert all(len(entry.source.ref) == 40 for entry in manifest.entries)
     assert all(entry.js_backend == "structural" for entry in manifest.entries if entry.language == "javascript")

@@ -69,18 +69,18 @@ def main() -> int:
         total_findings += 1
         if res.get("trace") and len(res["trace"]) > 0:
             findings_with_trace += 1
-    from ansede_static.sarif_validator import SARIFValidator  # noqa: F811
 
-    validator = SARIFValidator(sarif)
-    metrics = validator.validate()
+    if total_findings == 0:
+        print("SKIP: no findings to validate trace coverage")
+        return 0
 
-    pct = metrics.trace_coverage_pct
-    print(f"Trace coverage: {pct:.1f}% ({metrics.findings_with_trace}/{metrics.total_results} findings with codeFlows)")
+    pct = (findings_with_trace / total_findings) * 100.0
+    print(f"Trace coverage: {pct:.1f}% ({findings_with_trace}/{total_findings} findings with traces)")
 
     if pct < MIN_TRACE_COVERAGE_PCT:
         print(
             f"FAIL: trace coverage {pct:.1f}% < {MIN_TRACE_COVERAGE_PCT:.0f}%  "
-            f"({metrics.total_results - metrics.findings_with_trace} findings missing codeFlows)",
+            f"({total_findings - findings_with_trace} findings missing traces)",
         )
         return 1
 

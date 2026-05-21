@@ -1635,7 +1635,6 @@ def _main_impl() -> None:
         # ── file/directory mode ────────────────────────────────────────────────
         files: list[Path] = []
         entropy_files: list[Path] = []
-        
         if args.incremental:
             if console:
                 console.print("[bold yellow]⚡ Running in Incremental Git-Diff Mode (ignoring unmodified files)...[/bold yellow]")
@@ -1877,7 +1876,7 @@ def _main_impl() -> None:
                             pass
                 _inc_cache.close()
 
-        else:
+        elif not results:
             parser.print_help()
             sys.exit(0)
 
