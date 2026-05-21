@@ -8,10 +8,19 @@
         "repo": "https://github.com/WebGoat/WebGoat.git",
         "ref": "7d3343d08c360d4751e5298e1fe910463b7731a1"
       },
-      "languages": ["java"],
-      "exclude_paths": ["src/test/", "*.md", "*.xml"],
-      "expected_findings": {"min": 61, "max": 114},
-      "notes": "Classic CVE-affected Spring Boot app — primary Java real-world target."
+      "languages": [
+        "java"
+      ],
+      "exclude_paths": [
+        "src/test/",
+        "*.md",
+        "*.xml"
+      ],
+      "expected_findings": {
+        "min": 61,
+        "max": 114
+      },
+      "notes": "Classic CVE-affected Spring Boot app \u2014 primary Java real-world target."
     },
     {
       "case_id": "nodegoat-full-repo",
@@ -21,9 +30,17 @@
         "repo": "https://github.com/OWASP/NodeGoat.git",
         "ref": "c5cb68a7084e4ae7dcc60e6a98768720a81841e8"
       },
-      "languages": ["javascript"],
-      "exclude_paths": ["test/", "*.md"],
-      "expected_findings": {"min": 21, "max": 39},
+      "languages": [
+        "javascript"
+      ],
+      "exclude_paths": [
+        "test/",
+        "*.md"
+      ],
+      "expected_findings": {
+        "min": 21,
+        "max": 39
+      },
       "js_backend": "structural",
       "notes": "Extended coverage beyond current route-file subset."
     },
@@ -35,10 +52,18 @@
         "repo": "https://github.com/maxcountryman/flask-login.git",
         "ref": "c8bba84b9ba6768e878317fc46c54bd13fa1ac07"
       },
-      "languages": ["python"],
-      "exclude_paths": ["tests/", "docs/"],
-      "expected_findings": {"min": 3, "max": 7},
-      "notes": "Low-finding target — validates noise floor for Python auth patterns."
+      "languages": [
+        "python"
+      ],
+      "exclude_paths": [
+        "tests/",
+        "docs/"
+      ],
+      "expected_findings": {
+        "min": 3,
+        "max": 7
+      },
+      "notes": "Low-finding target \u2014 validates noise floor for Python auth patterns."
     },
     {
       "case_id": "dvna-full-repo",
@@ -48,11 +73,19 @@
         "repo": "https://github.com/appsecco/dvna.git",
         "ref": "9ba473add536f66ac9007966acb2a775dd31277a"
       },
-      "languages": ["javascript"],
-      "exclude_paths": ["node_modules/", "test/"],
-      "expected_findings": {"min": 22, "max": 43},
+      "languages": [
+        "javascript"
+      ],
+      "exclude_paths": [
+        "node_modules/",
+        "test/"
+      ],
+      "expected_findings": {
+        "min": 22,
+        "max": 43
+      },
       "js_backend": "structural",
-      "notes": "Intentionally vulnerable Node.js app — broad JS/TS pattern coverage."
+      "notes": "Intentionally vulnerable Node.js app \u2014 broad JS/TS pattern coverage."
     },
     {
       "case_id": "nodegoat-login-bruteforce",
@@ -63,10 +96,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["index.js"],
+      "targets": [
+        "index.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-307"],
-      "expected_rule_ids": ["JS-029"],
+      "expected_cwes": [
+        "CWE-307"
+      ],
+      "expected_rule_ids": [
+        "JS-029"
+      ],
       "notes": "Pinned NodeGoat login route has no visible brute-force or per-IP rate limiting."
     },
     {
@@ -78,10 +117,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["index.js"],
+      "targets": [
+        "index.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-307"],
-      "expected_rule_ids": ["JS-029"],
+      "expected_cwes": [
+        "CWE-307"
+      ],
+      "expected_rule_ids": [
+        "JS-029"
+      ],
       "notes": "Pinned NodeGoat signup route is also exposed without visible registration throttling."
     },
     {
@@ -93,10 +138,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["index.js"],
+      "targets": [
+        "index.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-601"],
-      "expected_rule_ids": ["JS-039"],
+      "expected_cwes": [
+        "CWE-601"
+      ],
+      "expected_rule_ids": [
+        "JS-039"
+      ],
       "notes": "Pinned NodeGoat learn-link route redirects directly from a query-string URL."
     },
     {
@@ -108,10 +159,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["profile.js"],
+      "targets": [
+        "profile.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-1333"],
-      "expected_rule_ids": ["JS-057"],
+      "expected_cwes": [
+        "CWE-1333"
+      ],
+      "expected_rule_ids": [
+        "JS-057"
+      ],
       "notes": "Pinned NodeGoat profile route contains an active catastrophic-backtracking regex example."
     },
     {
@@ -123,10 +180,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["contributions.js"],
+      "targets": [
+        "contributions.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-95"],
-      "expected_rule_ids": ["JS-004"],
+      "expected_cwes": [
+        "CWE-95"
+      ],
+      "expected_rule_ids": [
+        "JS-004"
+      ],
       "notes": "Pinned NodeGoat contribution route contains multiple direct `eval()` code-execution hits."
     },
     {
@@ -138,10 +201,16 @@
         "subdir": "config/env"
       },
       "language": "javascript",
-      "targets": ["test.js"],
+      "targets": [
+        "test.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-798"],
-      "expected_rule_ids": ["JS-011"],
+      "expected_cwes": [
+        "CWE-798"
+      ],
+      "expected_rule_ids": [
+        "JS-011"
+      ],
       "notes": "Pinned NodeGoat test config hardcodes a ZAP API key used by security test automation."
     },
     {
@@ -153,10 +222,16 @@
         "subdir": "config/env"
       },
       "language": "javascript",
-      "targets": ["all.js"],
+      "targets": [
+        "all.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-798"],
-      "expected_rule_ids": ["JS-011"],
+      "expected_cwes": [
+        "CWE-798"
+      ],
+      "expected_rule_ids": [
+        "JS-011"
+      ],
       "notes": "Pinned NodeGoat shared config hardcodes cookie and crypto secrets instead of sourcing them from environment or a secret store."
     },
     {
@@ -168,10 +243,16 @@
         "subdir": "app/routes"
       },
       "language": "javascript",
-      "targets": ["index.js"],
+      "targets": [
+        "index.js"
+      ],
       "js_backend": "structural",
-      "expected_cwes": ["CWE-352"],
-      "expected_rule_ids": ["JS-041"],
+      "expected_cwes": [
+        "CWE-352"
+      ],
+      "expected_rule_ids": [
+        "JS-041"
+      ],
       "notes": "Pinned NodeGoat route file defines multiple state-changing auth/account routes with no detectable CSRF token validation middleware."
     },
     {
@@ -183,9 +264,15 @@
         "subdir": "django/views"
       },
       "language": "python",
-      "targets": ["i18n.py"],
-      "expected_cwes": ["CWE-601"],
-      "expected_rule_ids": ["PY-046"],
+      "targets": [
+        "i18n.py"
+      ],
+      "expected_cwes": [
+        "CWE-601"
+      ],
+      "expected_rule_ids": [
+        "PY-046"
+      ],
       "notes": "Pinned Django i18n view contains user-influenced redirect flows in set_language that should be constrained to allowed hosts/schemes."
     },
     {
@@ -196,9 +283,18 @@
         "repo": "https://github.com/gin-gonic/gin.git",
         "ref": "5f4f9643258dc2a65e684b63f12c8d543c936c67"
       },
-      "languages": ["go"],
-      "exclude_paths": ["docs/", "examples/", "*_test.go"],
-      "expected_findings": {"min": 0, "max": 80},
+      "languages": [
+        "go"
+      ],
+      "exclude_paths": [
+        "docs/",
+        "examples/",
+        "*_test.go"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 80
+      },
       "notes": "Large Go framework target for non-synthetic parser fidelity tracking."
     },
     {
@@ -210,9 +306,18 @@
         "ref": "93a1b5295d92954d46e26f2bbb3abde15f332a4b",
         "subdir": "src/Security"
       },
-      "languages": ["csharp"],
-      "exclude_paths": ["**/test/", "**/samples/", "**/benchmarks/"],
-      "expected_findings": {"min": 0, "max": 200},
+      "languages": [
+        "csharp"
+      ],
+      "exclude_paths": [
+        "**/test/",
+        "**/samples/",
+        "**/benchmarks/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 200
+      },
       "notes": "Pinned ASP.NET Core security-focused subtree for C# structural coverage at realistic scale."
     },
     {
@@ -221,11 +326,20 @@
       "source": {
         "kind": "git",
         "repo": "https://github.com/OWASP/WebGoat.NET.git",
-        "ref": "main"
+        "ref": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0"
       },
-      "languages": ["csharp"],
-      "exclude_paths": ["**/packages/", "**/node_modules/", "*.md"],
-      "expected_findings": {"min": 0, "max": 50},
+      "languages": [
+        "csharp"
+      ],
+      "exclude_paths": [
+        "**/packages/",
+        "**/node_modules/",
+        "*.md"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 50
+      },
       "notes": "Deliberately vulnerable ASP.NET app for C# detection validation."
     },
     {
@@ -236,10 +350,19 @@
         "repo": "https://github.com/django/django.git",
         "ref": "4b3675cbe5ff02e84dbc7eea7b2661c27f0b0311"
       },
-      "languages": ["python"],
-      "exclude_paths": ["tests/", "docs/", "js_tests/"],
-      "expected_findings": {"min": 0, "max": 200},
-      "notes": "Django framework core — large Python corpus for scalability testing."
+      "languages": [
+        "python"
+      ],
+      "exclude_paths": [
+        "tests/",
+        "docs/",
+        "js_tests/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 200
+      },
+      "notes": "Django framework core \u2014 large Python corpus for scalability testing."
     },
     {
       "case_id": "fastapi-full",
@@ -249,10 +372,19 @@
         "repo": "https://github.com/fastapi/fastapi.git",
         "ref": "c873a07d0422be3067f4b6a0ad9bb5f818678b80"
       },
-      "languages": ["python"],
-      "exclude_paths": ["tests/", "docs/", "scripts/"],
-      "expected_findings": {"min": 0, "max": 100},
-      "notes": "FastAPI framework — modern Python async web coverage."
+      "languages": [
+        "python"
+      ],
+      "exclude_paths": [
+        "tests/",
+        "docs/",
+        "scripts/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 100
+      },
+      "notes": "FastAPI framework \u2014 modern Python async web coverage."
     },
     {
       "case_id": "flask-full",
@@ -262,10 +394,19 @@
         "repo": "https://github.com/pallets/flask.git",
         "ref": "1b5f4370e49d2f9713b62fb58eb44fafd81a0e24"
       },
-      "languages": ["python"],
-      "exclude_paths": ["tests/", "docs/", "examples/"],
-      "expected_findings": {"min": 0, "max": 50},
-      "notes": "Flask microframework — primary Python web target."
+      "languages": [
+        "python"
+      ],
+      "exclude_paths": [
+        "tests/",
+        "docs/",
+        "examples/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 50
+      },
+      "notes": "Flask microframework \u2014 primary Python web target."
     },
     {
       "case_id": "express-full",
@@ -275,10 +416,19 @@
         "repo": "https://github.com/expressjs/express.git",
         "ref": "c4738445aab23ae1b2678edb45eb75fcd82549e6"
       },
-      "languages": ["javascript"],
-      "exclude_paths": ["test/", "benchmarks/", "examples/"],
-      "expected_findings": {"min": 0, "max": 30},
-      "notes": "Express.js — primary JS web framework target."
+      "languages": [
+        "javascript"
+      ],
+      "exclude_paths": [
+        "test/",
+        "benchmarks/",
+        "examples/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 30
+      },
+      "notes": "Express.js \u2014 primary JS web framework target."
     },
     {
       "case_id": "spring-boot-full",
@@ -288,10 +438,19 @@
         "repo": "https://github.com/spring-projects/spring-boot.git",
         "ref": "d9a54c9a60b1663447bc3226d70559f4b9365f60"
       },
-      "languages": ["java"],
-      "exclude_paths": ["**/test/", "**/samples/", "**/docs/"],
-      "expected_findings": {"min": 0, "max": 300},
-      "notes": "Spring Boot — largest Java framework target for parser fidelity."
+      "languages": [
+        "java"
+      ],
+      "exclude_paths": [
+        "**/test/",
+        "**/samples/",
+        "**/docs/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 300
+      },
+      "notes": "Spring Boot \u2014 largest Java framework target for parser fidelity."
     },
     {
       "case_id": "rails-full",
@@ -301,10 +460,19 @@
         "repo": "https://github.com/rails/rails.git",
         "ref": "d1a35a4ae182bffaeeb8449c6132fad076fa7ebb"
       },
-      "languages": ["ruby"],
-      "exclude_paths": ["**/test/", "**/guides/", "**/doc/"],
-      "expected_findings": {"min": 0, "max": 200},
-      "notes": "Ruby on Rails — primary Ruby target for structural analysis."
+      "languages": [
+        "ruby"
+      ],
+      "exclude_paths": [
+        "**/test/",
+        "**/guides/",
+        "**/doc/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 200
+      },
+      "notes": "Ruby on Rails \u2014 primary Ruby target for structural analysis."
     },
     {
       "case_id": "laravel-full",
@@ -314,10 +482,19 @@
         "repo": "https://github.com/laravel/laravel.git",
         "ref": "9e4ce7fc91a8ec3472ea22a0d0e3e7c5e3c1f1b0"
       },
-      "languages": ["php"],
-      "exclude_paths": ["**/test/", "**/vendor/", "**/node_modules/"],
-      "expected_findings": {"min": 0, "max": 50},
-      "notes": "Laravel — primary PHP target for initial PHP analyzer validation."
+      "languages": [
+        "php"
+      ],
+      "exclude_paths": [
+        "**/test/",
+        "**/vendor/",
+        "**/node_modules/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 50
+      },
+      "notes": "Laravel \u2014 primary PHP target for initial PHP analyzer validation."
     },
     {
       "case_id": "vue-core",
@@ -327,10 +504,20 @@
         "repo": "https://github.com/vuejs/core.git",
         "ref": "f87fa36abfd8c2fdadc2ed2d50e674ae2e6ca174"
       },
-      "languages": ["javascript", "typescript"],
-      "exclude_paths": ["**/test/", "**/__tests__/", "packages/compiler-sfc/"],
-      "expected_findings": {"min": 0, "max": 100},
-      "notes": "Vue.js 3 core — large TypeScript corpus for JS/TS structural analysis."
+      "languages": [
+        "javascript",
+        "typescript"
+      ],
+      "exclude_paths": [
+        "**/test/",
+        "**/__tests__/",
+        "packages/compiler-sfc/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 100
+      },
+      "notes": "Vue.js 3 core \u2014 large TypeScript corpus for JS/TS structural analysis."
     },
     {
       "case_id": "pytorch-full",
@@ -340,10 +527,22 @@
         "repo": "https://github.com/pytorch/pytorch.git",
         "ref": "49e5d28f4e2ab0aa4e65013f2f3bb434bbe74c6b"
       },
-      "languages": ["python"],
-      "exclude_paths": ["test/", "docs/", "third_party/", "android/", "ios/", "scripts/"],
-      "expected_findings": {"min": 0, "max": 500},
-      "notes": "PyTorch — largest Python corpus for stress-testing scalability."
+      "languages": [
+        "python"
+      ],
+      "exclude_paths": [
+        "test/",
+        "docs/",
+        "third_party/",
+        "android/",
+        "ios/",
+        "scripts/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 500
+      },
+      "notes": "PyTorch \u2014 largest Python corpus for stress-testing scalability."
     },
     {
       "case_id": "typescript-compiler",
@@ -353,10 +552,19 @@
         "repo": "https://github.com/microsoft/TypeScript.git",
         "ref": "aedf3524f61a59cc8d77c4bf0572cc1ab17f7dac"
       },
-      "languages": ["typescript"],
-      "exclude_paths": ["tests/", "scripts/", "doc/"],
-      "expected_findings": {"min": 0, "max": 200},
-      "notes": "TypeScript compiler — largest TypeScript corpus for JS structural analysis."
+      "languages": [
+        "typescript"
+      ],
+      "exclude_paths": [
+        "tests/",
+        "scripts/",
+        "doc/"
+      ],
+      "expected_findings": {
+        "min": 0,
+        "max": 200
+      },
+      "notes": "TypeScript compiler \u2014 largest TypeScript corpus for JS structural analysis."
     }
   ]
 }
