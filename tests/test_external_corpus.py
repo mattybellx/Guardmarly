@@ -96,6 +96,17 @@ def test_load_real_world_manifest_has_curated_git_entries():
         "dvna-full-repo",
         "gin-full-repo",
         "aspnetcore-security-subtree",
+        "django-full",
+        "express-full",
+        "fastapi-full",
+        "flask-full",
+        "laravel-full",
+        "pytorch-full",
+        "rails-full",
+        "spring-boot-full",
+        "typescript-compiler",
+        "vue-core",
+        "webgoat-net",
     }
     assert all(entry.source.kind == "git" for entry in manifest.entries)
     assert {entry.source.repo for entry in manifest.entries} == {

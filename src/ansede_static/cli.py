@@ -1620,9 +1620,17 @@ def _main_impl() -> None:
             elif args.lang == "java":
                 from ansede_static.java_analyzer import analyze_java
                 results.append(analyze_java(code, filename="<stdin>"))
-            else:
+            elif args.lang == "csharp":
                 from ansede_static.csharp_analyzer import analyze_csharp
                 results.append(analyze_csharp(code, filename="<stdin>"))
+            elif args.lang == "ruby":
+                from ansede_static.ruby_analyzer import analyze_ruby
+                results.append(analyze_ruby(code, filename="<stdin>"))
+            elif args.lang == "php":
+                from ansede_static.php_analyzer import analyze_php
+                results.append(analyze_php(code, filename="<stdin>"))
+            else:
+                parser.error(f"Unsupported language for --stdin: {args.lang}")
 
         # ── file/directory mode ────────────────────────────────────────────────
         files: list[Path] = []

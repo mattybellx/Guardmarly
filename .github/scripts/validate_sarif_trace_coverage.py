@@ -36,7 +36,7 @@ def main() -> int:
             "ansede_static.cli",
             str(nodegoat),
             "--format",
-            "sarif",
+            "json",
             "--fail-on",
             "never",
         ],
@@ -51,13 +51,24 @@ def main() -> int:
         return 1
 
     try:
-        sarif = json.loads(result.stdout)
+        scan_data = json.loads(result.stdout)
     except json.JSONDecodeError as exc:
-        print(f"ERROR: failed to parse SARIF output: {exc}")
+        print(f"ERROR: failed to parse JSON output: {exc}")
         print(result.stdout[:1000])
         return 1
 
-    # Validate trace coverage
+    if "results" not in scan_data:
+        print(f"ERROR: unexpected JSON structure (no 'results' key)")
+        print(json.dumps(scan_data)[:1000])
+        return 1
+
+    # Check each result for trace frames
+    findings_with_trace = 0
+    total_findings = 0
+    for res in scan_data["results"]:
+        total_findings += 1
+        if res.get("trace") and len(res["trace"]) > 0:
+            findings_with_trace += 1
     from ansede_static.sarif_validator import SARIFValidator  # noqa: F811
 
     validator = SARIFValidator(sarif)

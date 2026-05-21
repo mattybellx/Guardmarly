@@ -67,6 +67,10 @@ def main() -> int:
         return 0
 
     target = str(python_dir)
+    if not python_dir.is_dir():
+        print(f"SKIP: v2 corpus not found at {python_dir}")
+        return 0
+
     print(f"Dual-engine comparison on: {target}")
     print()
 
