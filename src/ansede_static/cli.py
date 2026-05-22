@@ -1858,6 +1858,8 @@ def _main_impl() -> None:
 
             # ── Pass 2: Taint Engine Evaluation ──────────────────────────────
             scan_targets = files + entropy_files
+            _file_timings: list[dict] = []
+            _profiler = ScanProfiler() if getattr(args, "profile", False) else None
             if scan_targets:
                 if use_parallel:
                     import os as _os
@@ -2213,13 +2215,14 @@ def _main_impl() -> None:
         # Inject timing metadata
         try:
             parsed = json.loads(output)
-            if _file_timings:
-                total_ms = sum(t["ms"] for t in _file_timings)
+            _timings = locals().get("_file_timings") or []
+            if _timings:
+                total_ms = sum(t["ms"] for t in _timings)
                 parsed["_meta"] = {
                     "scan_time_ms": round(total_ms, 1),
-                    "files_scanned": len(_file_timings),
+                    "files_scanned": len(_timings),
                     "files_per_second": round(
-                        len(_file_timings) / (total_ms / 1000), 1
+                        len(_timings) / (total_ms / 1000), 1
                     ) if total_ms > 0 else 0,
                     "findings_total": len(results),
                 }

@@ -109,7 +109,11 @@ def main() -> int:
         return 1
 
     try:
-        data = json.loads(result.stdout)
+        # Strip any non-JSON prefix (warnings, logs) before parsing
+        out = result.stdout
+        json_start = out.index("{")
+        out = out[json_start:]
+        data = json.loads(out)
     except json.JSONDecodeError as exc:
         print(f"ERROR: failed to parse JSON for {lang}: {exc}")
         print(result.stdout[:1000])
