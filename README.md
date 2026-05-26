@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <strong>The world's most precise offline static application security testing engine.</strong><br>
-  Zero dependencies. 98.8% CVE recall. Seven languages. LLM-assisted triage. Ships as a single <code>.exe</code>.
+  <strong>Offline static application security testing engine.</strong><br>
+  Zero dependencies. Real-world validated. 5 languages. LLM-assisted triage. Ships as a single <code>.exe</code>.
 </p>
 
 <p align="center">
@@ -16,9 +16,9 @@
   <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/v/ansede-static?label=pypi&color=0078D4" alt="PyPI"></a>
   <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/dm/ansede-static?label=downloads&color=107C10" alt="Downloads"></a>
   <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg?branch=master" alt="CI"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-98.8%25-brightgreen" alt="CVE Recall 98.8%"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/FP%20Rate-3.6%25-brightgreen" alt="FP Rate 3.6%"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/LLM%20Triage-96%25%20auto-brightgreen" alt="LLM Auto 96%"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/Real%20Repos%20Scanned-35-blue" alt="35 real repos scanned"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/CWE%20Types-33%2B-yellow" alt="33+ CWE types"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md"><img src="https://img.shields.io/badge/LLM%20Triage-96%25%20auto-yellowgreen" alt="LLM Auto 96%"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="License MIT"></a>
   <a href="https://github.com/mattybellx/Ansede/stargazers"><img src="https://img.shields.io/github/stars/mattybellx/Ansede?style=social" alt="Stars"></a>
 </p>
@@ -103,7 +103,7 @@ def delete_post(post_id):
     # no if post.author_id != current_user.id: abort(403)
 ```
 
-**ansede-static models routes, decorators, auth guards, and ownership patterns at the AST level.** This is how it achieves 98.8% CVE recall while Bandit OSS sits at ~65%.
+**ansede-static models routes, decorators, auth guards, and ownership patterns at the AST level.** This is how it catches access-control vulnerabilities that regex-only tools miss.
 
 ---
 
@@ -137,58 +137,59 @@ ansede-static src/ --incremental
 
 ## Verified Performance — May 2026
 
+For the full methodology and raw data, see [`BENCHMARKS.md`](BENCHMARKS.md).
+
+### Real-World Validation — 35 Repos Scanned
+
+ansede-static has been run against **35 real open-source repos** totaling over **71 MB of supported source code** across **5 languages**. Every finding was classified by the audit engine.
+
+| Metric | 25 Small (≤2MB) | 10 Medium (2-10MB) | **Combined** |
+|---|---|---:|---:|
+| Repos scanned | 25 | 10 | **35** |
+| Zero failures | ✅ | ✅ | **✅ 35/35** |
+| Files scanned | 2,873 | 9,499 | **12,372** |
+| Lines scanned | 333,811 | 1,426,143 | **1,759,954** |
+| Source MB | 12.30 | 58.95 | **71.25 MB** |
+| Total findings | 1,037 | 3,612 | **4,649** |
+| Findings per kLOC | 3.11 | 2.53 | **2.64** |
+| CWE types detected | 25+ | 33 | **35+** |
+| True Positives | — | 11 | **11+** |
+| NEEDS_REVIEW | — | 1,224 | **1,224+** |
+
+**Top CWEs detected across all repos:** CWE-862 (missing auth), CWE-1333 (ReDoS), CWE-798 (hardcoded creds), CWE-352 (CSRF), CWE-95 (eval injection), CWE-79 (XSS), CWE-89 (SQLi).
+
+### Synthetic Benchmarks
+
 | Benchmark | Result |
 |---|---|
-| Regression suite | **919 tests passed** |
-| NVD CVE recall | **81/82 (98.78%)** |
-| NVD CVE precision | **96.43%** |
-| False positive rate | **3.57%** |
-| Web-wild recall | **100.00%** |
-| Web-wild precision | **95.00%** |
-| External real-world corpus | **15/15 cases, 30/30 checks (100%)** |
-| Noise quotient | **0.861 findings / kLOC** |
-| Raw engine speed | **~0.02s per 100k LOC** |
+| NVD CVE snippet recall | **100%** (115/115 synthetic cases) |
+| Web-wild recall | **100%** (6/6 vulnerable-by-design apps) |
+| Web-wild F1 | **92.31%** |
+| LLM auto-classification | **95.9%** across 632 findings, 7 languages |
 | Languages | Python · JavaScript · TypeScript · Go · Java · C# |
-| World-Best Audit | ✅ All quality gates passed |
 
-Full methodology and machine-readable artifacts: [`BENCHMARKS.md`](BENCHMARKS.md)
-
-### 🌍 Real-World Validation — 21 Repos Scanned
-
-To validate beyond synthetic benchmarks, ansede-static was run against **21 real production open-source repos** totaling over **2.5 GB of source code** across 8 languages. Every finding was triaged by reading source context to distinguish genuine vulnerabilities from false positives.
-
-| Metric | Result |
-|---|---|
-| **Repos scanned** | 21 (GitHub popular repos) |
-| **Total findings** | 1,032 |
-| **Confirmed real vulnerabilities** | **62** |
-| **Structural engine FP rate** | **0%** (zero false positives on taint findings) |
-| **Languages** | Python, JavaScript, TypeScript, Java, C#, Go, Ruby, PHP |
-| FP rate (YAML rules) | ~54% (context-free regex patterns — improved with confidence + path_exclude) |
-| **FP reductions applied** | −81% (59% → ~11% via confidence tuning + exclusions + path_exclude) |
-
-
-
-All confirmed findings were disclosed responsibly via GitHub Issues from `@mattybellx`.
-
-> **Verdict:** The structural taint engine is genuinely **world-class** — **zero false positives** on interprocedural taint analysis across 8 languages. The YAML registry rules (context-free regex patterns) have higher FP rates and are being progressively tuned via the new `confidence` and `path_exclude` rule schema features. See [`tools/responsible_disclosure.py`](tools/responsible_disclosure.py) for the automated disclosure pipeline.
+**Honest note:** CVE snippet benchmarks measure pattern coverage, not real-world field performance. The real-world benchmark data above is the best measure of actual field behavior.
 
 ---
 
 ## Detection Coverage
 
-| Category | CWEs detected | Example |
-|---|---|---|
-| Broken Access Control (IDOR, auth bypass) | CWE-639, CWE-862, CWE-285, CWE-287 | Route missing `@login_required`, no ownership check on DB query |
-| Injection | CWE-89, CWE-78, CWE-94, CWE-95 | SQLi via f-string, command injection via `subprocess(shell=True)`, eval injection |
-| Cryptographic Failures | CWE-327, CWE-328, CWE-798 | MD5/SHA1 for passwords, hardcoded AWS keys, API tokens in source |
-| Path Traversal & SSRF | CWE-22, CWE-918 | Unsanitized `os.path.join`, user-controlled URLs in `requests.get()` |
-| Cross-Site Issues | CWE-79, CWE-352 | `innerHTML` with user data, missing CSRF tokens |
-| Deserialization | CWE-502 | `pickle.loads()` on untrusted input |
-| Open Redirect | CWE-601 | User-controlled `next` parameter in `redirect()` |
-| Log Injection | CWE-117 | Unsanitized user input in log messages |
+| Category | CWEs detected (verified in fresh benchmark) | Example |
+|---|---|---|---|
+| Missing Authentication | CWE-862, CWE-287 | Route missing `@login_required` |
+| IDOR / Broken Access Control | CWE-639, CWE-285 | No ownership check on DB query |
+| Injection (SQL, Command, Eval) | CWE-89, CWE-78, CWE-95, CWE-94 | SQLi via f-string, `subprocess(shell=True)`, eval injection |
 | ReDoS | CWE-1333 | Catastrophic backtracking in regex patterns |
-| And more | 20+ categories | See `ansede-static --list-rules` for the full catalog |
+| Hardcoded Credentials | CWE-798 | API tokens, AWS keys, passwords in source |
+| CSRF | CWE-352 | Missing CSRF tokens on mutating routes |
+| XSS | CWE-79 | `innerHTML` with user data |
+| Path Traversal & SSRF | CWE-22, CWE-918 | Unsanitized `os.path.join`, user-controlled URLs |
+| Open Redirect | CWE-601 | User-controlled `next` in `redirect()` |
+| Deserialization | CWE-502 | `pickle.loads()` on untrusted input |
+| Prototype Pollution | CWE-1321 | Unsafe object merge |
+| Log Injection | CWE-117 | Unsanitized input in log messages |
+| Weak Cryptography | CWE-327, CWE-328 | MD5/SHA1 for passwords |
+| And more | 33+ CWE types detected in one 10-repo run | See `ansede-static --list-rules` |
 
 ---
 
@@ -246,15 +247,17 @@ All confirmed findings were disclosed responsibly via GitHub Issues from `@matty
 
 | | ansede-static | Bandit OSS | Semgrep OSS | CodeQL CLI |
 |---|---|---|---|---|
-| CVE Recall | **98.8%** | ~65% | ~72% | ~88% |
-| FP Rate | **3.6%** | ~45% | ~30% | ~12% |
+| Real repos validated | **35** | 1 (Python only) | Community | Limited |
+| CWE types detected | **33+** in one run | ~10 | ~15-25 | ~25-40 |
+| Interprocedural taint | **Full** | ❌ | ❌ (Pro only) | ✅ |
+| Route/auth analysis | **11 checkers** | ❌ | Basic patterns | Limited |
+| Auto-triage + clustering | **✅ 49% reduction** | ❌ | ❌ | ❌ |
 | Offline (no network) | ✓ | ✓ | ✗ | ✗ |
 | Zero dependencies | ✓ | ✗ | ✗ | ✗ |
 | Single binary (.exe) | ✓ | ✗ | ✗ | ✗ |
-| IDOR / Auth bypass | ✓ | ✗ | Partial | Partial |
+| IDOR / Auth bypass | **✓** | ✗ | Partial | Partial |
 | Languages | 5 | 1 | 20+ | 7 |
 | Install size | <5 MB | ~15 MB | ~200 MB | ~600 MB |
-| Speed (scan_file) | **0.02s/100k LOC** | 0.5s | 3s | 10s |
 
 ---
 

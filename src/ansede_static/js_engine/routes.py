@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -548,10 +549,11 @@ def _next_middleware_auth_labels(block: RouteBlock, *, filename: str) -> tuple[s
     return tuple(dict.fromkeys(labels))
 
 
-def _build_next_route_blocks(code: str, *, filename: str) -> list[RouteBlock]:
+@lru_cache(maxsize=256)
+def _build_next_route_blocks_cached(code: str, filename: str) -> tuple[RouteBlock, ...]:
     route_path = _next_route_path_from_filename(filename)
     if not route_path:
-        return []
+        return ()
 
     blocks: list[RouteBlock] = []
     for pattern in (_NEXT_FUNCTION_ROUTE_RE, _NEXT_ARROW_ROUTE_RE):
@@ -575,10 +577,15 @@ def _build_next_route_blocks(code: str, *, filename: str) -> list[RouteBlock]:
                 source_kind='next-file-route',
                 class_name='',
             ))
-    return blocks
+    return tuple(blocks)
 
 
-def _build_nest_route_blocks(code: str) -> list[RouteBlock]:
+def _build_next_route_blocks(code: str, *, filename: str) -> list[RouteBlock]:
+    return list(_build_next_route_blocks_cached(code, filename))
+
+
+@lru_cache(maxsize=256)
+def _build_nest_route_blocks_cached(code: str) -> tuple[RouteBlock, ...]:
     blocks: list[RouteBlock] = []
     for class_match in _NEST_CLASS_RE.finditer(code):
         class_name = class_match.group('name')
@@ -618,10 +625,15 @@ def _build_nest_route_blocks(code: str) -> list[RouteBlock]:
                 receiver='',
                 class_name=class_name,
             ))
-    return blocks
+    return tuple(blocks)
 
 
-def _build_fastify_prefixed_route_blocks(code: str) -> list[RouteBlock]:
+def _build_nest_route_blocks(code: str) -> list[RouteBlock]:
+    return list(_build_nest_route_blocks_cached(code))
+
+
+@lru_cache(maxsize=256)
+def _build_fastify_prefixed_route_blocks_cached(code: str) -> tuple[RouteBlock, ...]:
     blocks: list[RouteBlock] = []
     for match in _FASTIFY_REGISTER_RE.finditer(code):
         body_open = code.find('{', match.end() - 1)
@@ -674,7 +686,11 @@ def _build_fastify_prefixed_route_blocks(code: str) -> list[RouteBlock]:
                 receiver=instance_alias,
                 class_name='',
             ))
-    return blocks
+    return tuple(blocks)
+
+
+def _build_fastify_prefixed_route_blocks(code: str) -> list[RouteBlock]:
+    return list(_build_fastify_prefixed_route_blocks_cached(code))
 
 
 
@@ -741,7 +757,8 @@ def _mount_target_identifiers(args: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(names))
 
 
-def _router_mount_prefixes(code: str) -> dict[str, tuple[str, ...]]:
+@lru_cache(maxsize=256)
+def _router_mount_prefixes_cached(code: str) -> tuple[tuple[str, tuple[str, ...]], ...]:
     """Infer mount prefixes for router variables from `.use('/prefix', router)` calls."""
     prefixes: dict[str, tuple[str, ...]] = {}
     changed = True
@@ -768,7 +785,11 @@ def _router_mount_prefixes(code: str) -> dict[str, tuple[str, ...]]:
                 if normalized != prefixes.get(target, ()): 
                     prefixes[target] = normalized
                     changed = True
-    return prefixes
+    return tuple(sorted(prefixes.items()))
+
+
+def _router_mount_prefixes(code: str) -> dict[str, tuple[str, ...]]:
+    return dict(_router_mount_prefixes_cached(code))
 
 
 
@@ -921,7 +942,8 @@ def _helper_route_effect_traces(
             helper_hits.append((helper_line, call.callee, trace, effect.helper_chain, effect.sink_label))
     return helper_hits
 
-def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
+@lru_cache(maxsize=256)
+def _build_route_blocks_cached(code: str, filename: str = '') -> tuple[RouteBlock, ...]:
     blocks: list[RouteBlock] = []
     router_prefixes = _router_mount_prefixes(code)
     ambient_parts = _ambient_route_parts(code, router_prefixes=router_prefixes)
@@ -979,11 +1001,15 @@ def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
             receiver='',
             class_name='',
         ))
-    blocks.extend(_build_nest_route_blocks(code))
-    blocks.extend(_build_fastify_prefixed_route_blocks(code))
+    blocks.extend(_build_nest_route_blocks_cached(code))
+    blocks.extend(_build_fastify_prefixed_route_blocks_cached(code))
     if filename:
-        blocks.extend(_build_next_route_blocks(code, filename=filename))
-    return blocks
+        blocks.extend(_build_next_route_blocks_cached(code, filename))
+    return tuple(blocks)
+
+
+def _build_route_blocks(code: str, *, filename: str = '') -> list[RouteBlock]:
+    return list(_build_route_blocks_cached(code, filename))
 
 
 
@@ -1390,13 +1416,14 @@ def _check_trpc_public_mutation(code: str, *, agent: str, analysis_kind: str, fi
     return findings
 
 
-def _graphql_resolver_entries(code: str) -> list[tuple[str, str, int]]:
+@lru_cache(maxsize=256)
+def _graphql_resolver_entries(code: str) -> tuple[tuple[str, str, int], ...]:
     if not _GRAPHQL_ENV_RE.search(code):
-        return []
+        return ()
     entries: list[tuple[str, str, int]] = []
     for match in _GRAPHQL_RESOLVER_RE.finditer(code):
         entries.append((match.group('name'), match.group('body'), _line_number_for_offset(code, match.start())))
-    return entries
+    return tuple(entries)
 
 
 def _check_graphql_missing_auth(code: str, *, agent: str, analysis_kind: str, filename: str = '', project=None) -> list[Finding]:

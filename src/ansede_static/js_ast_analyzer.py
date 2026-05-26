@@ -905,7 +905,9 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
     project_ctx = ProjectContext()  # default empty context
 
     try:
-        project = build_js_project_index(filename, code) if filename else None
+        project = None
+        if filename and not minified.is_minified:
+            project = build_js_project_index(filename, code)
         calls = collect_calls(code)
         property_writes = collect_property_writes(code)
         taint_traces = extract_taint_traces(code)
@@ -967,7 +969,7 @@ def analyze_js_ast(code: str, filename: str = "", global_graph: object | None = 
     except (ValueError, TypeError, RecursionError, re.error) as exc:  # noqa: BLE001
         _log.debug("ansede-static: syntax-aware JS analysis failed on %r: %s", filename, exc, exc_info=True)
 
-    fallback = analyze_js(code, filename, global_graph=global_graph)
+    fallback = analyze_js(code, filename, global_graph=global_graph, project=project)
     merged = cluster_findings(structural_findings + fallback.findings)
     merged = rescore_findings(merged)
     merged = remap_findings_to_source_map(merged, filename)

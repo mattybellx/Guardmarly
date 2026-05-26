@@ -1,89 +1,80 @@
 {
   "kind": "ansede-final-scorecard",
   "version": 3,
-  "generated_utc": "2026-05-22T17:00:00Z",
-  "engine_version": "2.3.0",
+  "generated_utc": "2026-05-26T23:00:00Z",
+  "engine_version": "2.3.1",
   "metrics": {
-    "cve": {
-      "recall_pct": 98.78,
-      "precision_pct": 96.43,
-      "f1_pct": 97.59,
-      "fp_rate_pct": 3.57,
-      "tp": 81,
-      "fp": 3,
-      "fn": 1,
-      "passed_cases": 81,
-      "total_cases": 82,
-      "corpus": "NVD CVEs (Python/JS/Java/C#/Go)"
+    "real_world_benchmarks": {
+      "total_repos": 35,
+      "zero_failures": true,
+      "total_files": 12372,
+      "total_lines": 1759954,
+      "total_source_mb": 71.25,
+      "total_findings": 4649,
+      "findings_per_kloc": 2.64,
+      "cwe_types_detected": 33,
+      "languages": ["python", "javascript", "typescript", "go", "java", "csharp"],
+      "details": {
+        "small_repos_under_2mb": {
+          "count": 25,
+          "files": 2873,
+          "lines": 333811,
+          "findings": 1037,
+          "clustered_findings": 735,
+          "noise_quotient_raw": 3.11,
+          "noise_quotient_clustered": 2.20,
+          "cluster_reduction_pct": 29.12,
+          "wall_clock_seconds": 82.5,
+          "kloc_per_second": 4.05
+        },
+        "medium_repos_2_to_10mb": {
+          "count": 10,
+          "files": 9499,
+          "lines": 1426143,
+          "findings": 3612,
+          "clustered_findings": 1828,
+          "noise_quotient_raw": 2.53,
+          "noise_quotient_clustered": 1.28,
+          "cluster_reduction_pct": 49.39,
+          "wall_clock_seconds": 703.6,
+          "kloc_per_second": 2.03,
+          "tp": 11,
+          "needs_review": 1224,
+          "likely_fp": 2253,
+          "vendor_noise": 124
+        }
+      }
     },
-    "tests": {
-      "passed": 206,
-      "failed": 0,
-      "total": 206
+    "cve_snippet_benchmark": {
+      "total_cases": 115,
+      "passed_cases": 115,
+      "recall_pct": 100.0,
+      "precision_pct": 97.46,
+      "f1_pct": 98.75,
+      "fp_rate_pct": 2.54,
+      "note": "Synthetic CVE snippet corpus — measures pattern coverage, not field performance"
     },
     "web_wild": {
       "recall_pct": 100.0,
       "precision_pct": 85.71,
       "f1_pct": 92.31,
       "fp_rate_pct": 14.29,
-      "tp": 6,
-      "fp": 1,
-      "fn": 0,
-      "total": 7,
       "corpus": "OWASP NodeGoat + Flask + Express + Django + FastAPI (7 files)"
     },
     "llm_triage": {
-      "memory_entries": 354,
-      "cwe_agent_groups": 26,
-      "scanned_repos": 6,
-      "total_findings_audited": 632,
       "auto_classification_rate_pct": 95.9,
-      "remaining_needs_review": 26,
-      "total_files_scanned": 5575,
-      "languages": ["Python", "JavaScript", "TypeScript", "Go", "Ruby", "PHP"],
+      "total_findings_audited": 632,
       "repos": ["pocketbase", "docuseal", "monica", "gogs", "hoppscotch", "hedgedoc", "fastapi"],
-      "llm_model": "gemma3:4b (local Ollama)",
-      "min_confidence_threshold": 0.70,
-      "memory_confidence_gate": 0.75
+      "total_files_scanned": 5575,
+      "languages": ["Python", "JavaScript", "TypeScript", "Go", "Ruby", "PHP"]
     },
-    "ratchet_gate": {
-      "all_checks_passed": true,
-      "cve_recall_above_70": true,
-      "quality_100": true,
-      "external_corpus_100": true
+    "performance": {
+      "small_repos_kloc_per_second": 4.05,
+      "medium_repos_kloc_per_second": 2.03,
+      "note": "Performance varies by language and code complexity."
     }
   }
 }
-      "fn": 0,
-      "sampled_files": 50,
-      "labeled_files": 6,
-      "corpus": "OWASP NodeGoat + Flask + Express + Django + FastAPI"
-    },
-    "noise_quotient": {
-      "unit": "findings_per_1k_loc",
-      "value": 0.861,
-      "target": "< 1.0",
-      "target_met": true,
-      "note": "Post-incident-clustering (Phase 1)"
-    },
-    "engine_speed": {
-      "per_100k_loc_seconds": 0.02,
-      "target": "< 10s",
-      "target_met": true
-    },
-    "ratchet_gate": {
-      "passed": true,
-      "ratchet_recall": true,
-      "ratchet_precision": true,
-      "ratchet_f1": true,
-      "ratchet_fp_rate": true
-    },
-    "trace_coverage_pct": 80.0,
-    "languages": [
-      "python",
-      "javascript",
-      "typescript",
-      "java",
       "csharp",
       "go",
       "ruby",

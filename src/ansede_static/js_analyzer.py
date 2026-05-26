@@ -60,14 +60,21 @@ def _filter_sanitized_xss_findings(all_findings, code: str, *, filename: str, pr
 
 
 
-def analyze_js(code: str, filename: str = "", global_graph: object | None = None) -> AnalysisResult:
+def analyze_js(
+    code: str,
+    filename: str = "",
+    global_graph: object | None = None,
+    *,
+    project=None,
+) -> AnalysisResult:
     result = AnalysisResult(
         file_path=filename,
         language="javascript",
         lines_scanned=len(code.splitlines()),
     )
     all_findings = []
-    project = build_js_project_index(filename, code) if filename else None
+    if project is None and filename:
+        project = build_js_project_index(filename, code)
 
     for runner, label in (
         (lambda: run_pattern_rules(code, agent="js-analyzer"), "pattern rules"),

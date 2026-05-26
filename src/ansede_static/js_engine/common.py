@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 import re
 from typing import Callable
 
@@ -69,6 +70,7 @@ class JsLexerState:
         return None
 
 
+@lru_cache(maxsize=4096)
 def consume_balanced(
     text: str,
     start_index: int,
@@ -111,6 +113,7 @@ def consume_balanced(
     return None
 
 
+@lru_cache(maxsize=4096)
 def split_top_level(
     text: str,
     separator: str = ",",
@@ -166,6 +169,7 @@ def split_top_level(
     return tuple(parts)
 
 
+@lru_cache(maxsize=4096)
 def find_top_level_colon(text: str) -> int | None:
     """Return index of first ':' at depth 0, respecting strings & comments, or None."""
     state = JsLexerState()
@@ -209,6 +213,7 @@ def find_top_level_colon(text: str) -> int | None:
     return None
 
 
+@lru_cache(maxsize=1024)
 def strip_js_comments_preserve_layout(text: str) -> str:
     """Blank JavaScript comments while preserving line numbers and columns."""
     out: list[str] = []

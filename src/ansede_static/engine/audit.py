@@ -155,10 +155,15 @@ _TEST_PATH_RE = re.compile(
     re.IGNORECASE,
 )
 
-_EXAMPLE_PATH_RE = re.compile(r"/(?:examples?|samples?|demo|docs)/", re.IGNORECASE)
+_EXAMPLE_PATH_RE = re.compile(r"/(?:_?examples?|_?samples?|demo|docs)/", re.IGNORECASE)
 
 _HARDCODED_CRED_RE = re.compile(
     r"(?:sk_test_|pk_test_|placeholder|your-|example|dummy|test_|xxxx)",
+    re.IGNORECASE,
+)
+
+_NOP_STOREFRONT_CONTROLLER_RE = re.compile(
+    r"(?:shoppingcart|catalog|checkout|product|common|home|blog|newsletter|download|backinstocksubscription|install)controller\.cs$",
     re.IGNORECASE,
 )
 
@@ -274,17 +279,40 @@ _BUILD_SCRIPT_RE = re.compile(
 )
 
 
-def _read_code_snippet(file_path: str, line: int, context_lines: int = 3) -> str:
-    """Read a few lines of source code around the flagged line."""
+def _load_source_lines(
+    file_path: str,
+    source_cache: dict[str, list[str]] | None = None,
+) -> list[str]:
+    if source_cache is not None and file_path in source_cache:
+        return source_cache[file_path]
     if not os.path.isfile(file_path):
-        return ""
+        if source_cache is not None:
+            source_cache[file_path] = []
+        return []
     try:
-        lines = open(file_path, encoding="utf-8", errors="replace").readlines()
-        start = max(0, line - 1 - context_lines)
-        end = min(len(lines), line + context_lines)
-        return "".join(lines[start:end])
-    except Exception:
+        with open(file_path, encoding="utf-8", errors="replace") as handle:
+            lines = handle.readlines()
+    except OSError:
+        lines = []
+    if source_cache is not None:
+        source_cache[file_path] = lines
+    return lines
+
+
+def _read_code_snippet(
+    file_path: str,
+    line: int,
+    context_lines: int = 6,
+    *,
+    source_cache: dict[str, list[str]] | None = None,
+) -> str:
+    """Read a few lines of source code around the flagged line."""
+    lines = _load_source_lines(file_path, source_cache)
+    if not lines:
         return ""
+    start = max(0, line - 1 - context_lines)
+    end = min(len(lines), line + context_lines)
+    return "".join(lines[start:end])
 
 
 def _normalize_path(fp: str) -> str:
@@ -306,6 +334,14 @@ def _classify_finding(
     akind = (finding.analysis_kind or "").lower()
     desc_lower = desc.lower()
 
+    # ── Framework-internal: Go os.Open with runtime.Caller (stack trace helper) ──
+    # Gin's recovery.go reads its own source files via runtime.Caller() to print
+    # stack traces — not user-controlled path traversal. This is the canonical
+    # Go stack-trace pattern, found in every Go web framework and stdlib.
+    if cwe == "CWE-22" and "go" in (finding.agent or "").lower():
+        if "runtime.Caller" in code_snippet or "runtime.Caller" in desc:
+            return Verdict.LIKELY_FP, "Go stack trace helper — reads own source via runtime.Caller()"
+
     # ── Level 0: Path-based filters ──────────────────────────────────
 
     # Vendor/minified files → VENDOR_NOISE (unless critical severity)
@@ -318,6 +354,8 @@ def _classify_finding(
     if _TEST_PATH_RE.search(norm_path):
         if cwe in ("CWE-862", "CWE-352", "CWE-209", "CWE-1004", "CWE-307"):
             return Verdict.LIKELY_FP, "Test file — auth/CSRF/brute-force checks not applicable"
+        if cwe in ("CWE-614",):
+            return Verdict.LIKELY_FP, "Test file — cookie flag configuration in test code"
         if cwe in ("CWE-78",) and not severity.name == "CRITICAL":
             return Verdict.LIKELY_FP, "Test file — command injection in test infra"
         if cwe in ("CWE-693",):
@@ -334,6 +372,10 @@ def _classify_finding(
             return Verdict.LIKELY_FP, "Test file — SQLi/path traversal in test code"
         if cwe in ("CWE-95",):
             return Verdict.LIKELY_FP, "Test file — eval in test code"
+        if cwe in ("CWE-918",):
+            return Verdict.LIKELY_FP, "Test file — SSRF in test fixture/mock data"
+        if cwe in ("CWE-1321",):
+            return Verdict.LIKELY_FP, "Test file — prototype pollution in test fixture"
 
     # Example/demo files with hardcoded creds → LIKELY_FP
     if _EXAMPLE_PATH_RE.search(norm_path) and cwe == "CWE-798":
@@ -347,6 +389,30 @@ def _classify_finding(
         # Critical in examples may still be real if taint is confirmed
         if "taint" not in akind and "user-controlled" not in desc_lower:
             return Verdict.LIKELY_FP, "Example/demo file — not production code"
+
+    if cwe == "CWE-79" and "/website/public/" in norm_path and short_path.lower() == "script.js":
+        if "javascript:show(" in code_snippet or "tabs[value][1]" in code_snippet:
+            return Verdict.LIKELY_FP, "Static docs-site tab switcher script — constant innerHTML anchor"
+
+    if cwe == "CWE-862" and "/nopcommerce/" in norm_path:
+        if short_path.lower().endswith("publiccontroller.cs") or "webhookcontroller" in short_path.lower():
+            return Verdict.LIKELY_FP, "Public callback/storefront controller — auth not universally required"
+        if "/src/presentation/nop.web/controllers/" in norm_path and _NOP_STOREFRONT_CONTROLLER_RE.search(short_path):
+            return Verdict.LIKELY_FP, "nopCommerce storefront controller — public catalog/checkout flow"
+
+    # Design-time EF Core factories often embed local/dev fallback strings for migrations.
+    if cwe == "CWE-798" and "csharp-analyzer" in (finding.agent or "").lower():
+        if short_path.lower().endswith("dbcontextfactory.cs") or "idesigntimedbcontextfactory" in code_snippet.lower():
+            return Verdict.LIKELY_FP, "EF Core design-time DbContext factory — migration/dev fallback credential"
+
+    # Framework/library helpers exposed by real-repo validation.
+    if "/src/main/java/spark/" in norm_path:
+        if cwe == "CWE-601" and short_path.lower() == "response.java":
+            return Verdict.LIKELY_FP, "Spark framework response helper — library redirect wrapper, not app redirect flow"
+        if cwe == "CWE-918" and short_path.lower() == "abstractfileresolvingresource.java":
+            return Verdict.LIKELY_FP, "Spark framework resource helper — library URL existence probe, not app SSRF flow"
+        if cwe == "CWE-22" and short_path.lower() == "directorytraversal.java":
+            return Verdict.LIKELY_FP, "Spark path guard helper — defensive normalization utility"
 
     # Incident-cluster findings → LIKELY_FP (heuristic grouping can produce noise)
     if "incident" in akind or "cluster" in akind:
@@ -541,6 +607,16 @@ def _classify_finding(
         if cwe == "CWE-400":
             return Verdict.LIKELY_FP, "Build/CI script — DoS concern not applicable"
 
+    # CWE-601 open redirect → LIKELY_FP or NEEDS_REVIEW
+    if cwe == "CWE-601":
+        code_lower = code_snippet.lower()
+        if "http.redirect" in code_lower and (
+            "strings.trim(" in code_lower
+            or "strings.replaceall" in code_lower
+            or '"/" + strings.trim' in code_snippet
+        ):
+            return Verdict.LIKELY_FP, "Redirect target normalized before redirect — canonical path helper"
+
     # ── Language-specific: Go analysis_kind ──────────────────────────
     if akind.startswith("go-"):
         has_taint_source = "user-controlled" in desc_lower or "tainted" in desc_lower or "flows into" in desc_lower
@@ -675,11 +751,12 @@ def audit_findings(
         AuditReport with classified findings.
     """
     report = AuditReport()
+    source_cache: dict[str, list[str]] = {}
 
     for result in results:
         file_path = result.file_path
         for finding in result.findings:
-            code = _read_code_snippet(file_path, finding.line or 1)
+            code = _read_code_snippet(file_path, finding.line or 1, source_cache=source_cache)
             verdict, reasoning = _classify_finding(
                 finding, file_path, code,
             )

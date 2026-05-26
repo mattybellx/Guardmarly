@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import lru_cache
 import re
 from dataclasses import dataclass
 
@@ -51,6 +52,7 @@ def _find_top_level_colon(text: str) -> int | None:
 
 
 
+@lru_cache(maxsize=1024)
 def mask_js_text(text: str) -> str:
     out: list[str] = []
     state = "default"
@@ -221,6 +223,7 @@ def _consume_until_statement_end(text: str, start_index: int) -> int:
 
 
 
+@lru_cache(maxsize=4096)
 def split_top_level_args(arg_text: str) -> tuple[str, ...]:
     return _split_top_level_segments(arg_text)
 
@@ -251,7 +254,8 @@ def parse_object_literal(text: str) -> dict[str, str]:
 
 
 
-def collect_calls(code: str) -> list[JsCall]:
+@lru_cache(maxsize=2048)
+def _collect_calls_cached(code: str) -> tuple[JsCall, ...]:
     masked = mask_js_text(code)
     calls: list[JsCall] = []
     for match in _CALL_RE.finditer(masked):
@@ -269,11 +273,16 @@ def collect_calls(code: str) -> list[JsCall]:
             line=code.count("\n", 0, match.start()) + 1,
             raw=code[match.start():close_paren_index + 1].strip(),
         ))
-    return calls
+    return tuple(calls)
+
+
+def collect_calls(code: str) -> list[JsCall]:
+    return list(_collect_calls_cached(code))
 
 
 
-def collect_property_writes(code: str) -> list[JsPropertyWrite]:
+@lru_cache(maxsize=2048)
+def _collect_property_writes_cached(code: str) -> tuple[JsPropertyWrite, ...]:
     masked = mask_js_text(code)
     writes: list[JsPropertyWrite] = []
     for match in _PROPERTY_WRITE_RE.finditer(masked):
@@ -287,4 +296,8 @@ def collect_property_writes(code: str) -> list[JsPropertyWrite]:
             line=code.count("\n", 0, match.start()) + 1,
             raw=code[match.start():expr_end].strip(),
         ))
-    return writes
+    return tuple(writes)
+
+
+def collect_property_writes(code: str) -> list[JsPropertyWrite]:
+    return list(_collect_property_writes_cached(code))

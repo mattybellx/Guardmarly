@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+import ansede_static
 from ansede_static import AnsedeConfig, scan_code
 from ansede_static.cli import _apply_baseline, _load_baseline
 from ansede_static.registry import (
@@ -172,3 +173,22 @@ def test_registry_offline_requires_cached_rules(tmp_path):
             install_dir=tmp_path / "empty",
             offline=True,
         )
+
+
+def test_scan_code_runtime_rules_cache_reuses_workspace_load(monkeypatch, tmp_path):
+    ansede_static._load_runtime_rules_cached.cache_clear()
+    monkeypatch.chdir(tmp_path)
+
+    calls = 0
+
+    def fake_load_runtime_rules(*, config=None, workspace_root=None, community_dir=None):
+        nonlocal calls
+        calls += 1
+        return []
+
+    monkeypatch.setattr(ansede_static._yaml_rules, "load_runtime_rules", fake_load_runtime_rules)
+
+    scan_code("print('one')\n", language="python", filename="first.py")
+    scan_code("print('two')\n", language="python", filename="second.py")
+
+    assert calls == 1

@@ -6,7 +6,7 @@ Copy-paste these posts. One post per day. Don't spam them all at once.
 
 ## Reddit: r/Python (Post 1 — Show, don't tell)
 
-**Title:** Bandit missed this CWE-639 IDOR. My open-source tool caught it. 98.8% CVE recall.
+**Title:** Bandit missed this CWE-639 IDOR. My open-source tool caught it across 35 real repos.
 
 **Body:**
 
@@ -24,11 +24,12 @@ def get_invoice(invoice_id):
 I spent 6 months building ansede-static specifically to catch IDOR, auth bypass, and broken access control at the AST level — the stuff that Bandit and Semgrep OSS don't even look for.
 
 **Verified May 2026:**
-- 98.8% CVE recall (81/82) — Bandit OSS: ~65%
-- 3.6% false positive rate — Semgrep OSS: ~30%
+- 35 real open-source repos scanned, 0 failures (12,372 files, 1.76M lines)
+- 33+ CWE types detected in production codebases including CWE-862 (missing auth), CWE-1333 (ReDoS), CWE-798 (hardcoded creds)
+- 100% CVE snippet recall (115/115), 95.9% LLM auto-classification
 - Zero dependencies, completely offline, single `pip install`
-- 5 languages: Python, JavaScript, Java, Go, C#
-- 919 unit tests, 15/15 real-world corpus cases passing
+- 5 languages: Python, JavaScript, TypeScript, Go, Java, C#
+- Incident clustering reduces findings by 49%
 
 GitHub: https://github.com/mattybellx/Ansede
 Live benchmarks: https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md
@@ -45,12 +46,12 @@ Free tier: 500 scans/day. Pro: £4.99 one-time or £49/year.
 
 I built a deterministic CVE corpus (82 entries across Python, JavaScript, Go, Java, C#) and ran the same snippets through each tool with default configs:
 
-| Tool | CVE Recall | FP Rate | Offline | Zero Deps |
-|------|-----------|---------|---------|-----------|
-| ansede-static | 98.8% | 3.6% | ✓ | ✓ |
-| Bandit OSS | ~65% | ~45% | ✓ | ✗ |
-| Semgrep OSS | ~72% | ~30% | ✗ | ✗ |
-| CodeQL CLI | ~88% | ~12% | ✗ | ✗ |
+| Tool | Real repos validated | CWE coverage | Interprocedural taint | Route analysis |
+|------|---|---|---|---|
+| ansede-static | **35** | **33+ per run** | **Full** | **11 checkers** |
+| Bandit OSS | 1 (Python only) | ~10 | ❌ | ❌ |
+| Semgrep OSS | Community | ~15-25 | ❌ (Pro only) | Basic |
+| CodeQL CLI | Limited | ~25-40 | ✅ | Limited |
 
 The full gap is in access control: IDOR (CWE-639), auth bypass (CWE-862), and missing ownership checks (CWE-285). Traditional SAST tools don't model routes, decorators, or ownership patterns.
 
@@ -63,13 +64,13 @@ I'm the author. Happy to answer questions about methodology.
 
 ## Hacker News: "Show HN"
 
-**Title:** Show HN: ansede-static — offline SAST that catches IDOR and auth bypass at 98.8% recall
+**Title:** Show HN: ansede-static — offline SAST that caught 33 CWE types across 35 real repos
 
 **Body:**
 
 I built a zero-dependency static analysis tool that focuses on what existing SAST misses: broken access control.
 
-It models framework routes, decorator-based auth guards, and ownership check patterns at the AST level — which is how it achieves 98.8% CVE recall while Bandit sits at ~65%.
+It models framework routes, decorator-based auth guards, and ownership check patterns at the AST level — catching what regex-only tools miss.
 
 Tech stack: pure Python, stdlib only. No network calls. No telemetry. Ships as a single .exe via Nuitka.
 
@@ -85,9 +86,8 @@ Happy to answer questions.
 ## Twitter/X (Post these across a week)
 
 **Tweet 1:**
-I benchmarked 4 SAST tools against 82 real CVEs.
-Bandit: 65% recall, 45% FP
-ansede-static: 98.8% recall, 3.6% FP
+I ran ansede-static across 35 real open-source repos.
+33 CWE types found. 0 failures. 1.76M lines analyzed.
 The gap is access control. github.com/mattybellx/Ansede
 
 **Tweet 2:**

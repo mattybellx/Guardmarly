@@ -3,6 +3,26 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.3.1] — 2026-05-26
+
+### Changed — Honest Metrics & Documentation Overhaul
+
+- **Replaced all benchmarks with honest real-world data.** Old curated/synthetic metrics replaced with fresh 10-repo + prior 25-repo real open-source benchmarks (35 unique repos, 71.25 MB, 5 languages, 4,649 findings).
+- **Updated README.md** — badges, comparison table, verified performance, and detection coverage now reflect actual measurements.
+- **Updated BENCHMARKS.md** — complete rewrite with raw unfiltered real-world metrics, honest caveats, and reproducible methodology.
+- **Updated final_scorecard.json** — now reflects real-world scan data instead of curated metrics.
+- **Updated CHANGELOG.md** — this entry.
+- **Version bumped to 2.3.1** for PyPI release.
+
+### Performance — Second Speed Pass
+
+- **63.6% faster overall** (226.4s → 82.5s on 25-repo benchmark).
+- JS project index reuse: structural analyzer passes its `project` to the classic fallback instead of rebuilding.
+- Route-block `@lru_cache`: 6 cached functions in `routes.py` prevent 11 checkers from recomputing the same route data.
+- `GlobalGraph._normalize_path()` memoized with `@lru_cache(maxsize=32768)`.
+- `GlobalGraph.load_summary()` remembers absent keys to skip redundant SQLite queries.
+- All metrics (findings, clustering, noise quotient) unchanged — verified by before/after benchmark comparison.
+
 ## [2.3.0] — 2026-05-22
 
 ### Added — LLM-Assisted Triage Engine

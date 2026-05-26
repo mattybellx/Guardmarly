@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import lru_cache
 from enum import IntEnum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
@@ -238,10 +239,13 @@ class GlobalGraph:
         self.reverse_summary_dependencies: Dict[Tuple[str, str], Set[Tuple[str, str]]] = {}
         # (normalized file, function, value_label, call_string) -> IDETaintFact
         self.ide_facts: Dict[Tuple[str, str, str, Tuple[str, ...]], IDETaintFact] = {}
+        self._loaded_summary_keys: Set[Tuple[str, str]] = set()
+        self._missing_summary_keys: Set[Tuple[str, str]] = set()
 
         self._cache_path = Path(cache_path) if cache_path else Path(".ansede") / "cache.db"
 
     @staticmethod
+    @lru_cache(maxsize=32768)
     def _normalize_path(path: str) -> str:
         try:
             normalized = Path(path).resolve(strict=False).as_posix()
@@ -366,6 +370,8 @@ class GlobalGraph:
             depends_on=normalized_dependencies,
         )
         self.function_summaries[key] = normalized_summary
+        self._loaded_summary_keys.add(key)
+        self._missing_summary_keys.discard(key)
         self._rebuild_reverse_dependencies_for(key, normalized_summary)
 
     def absorb_stir(self, stir_model: object) -> None:
@@ -481,14 +487,22 @@ class GlobalGraph:
                 store.set_json(self._DEPENDENCY_BUCKET, dep_key, payload)
 
     def load_summary(self, file_path: str, function_name: str) -> Optional[FunctionSummary]:
+        key = self._summary_tuple_key(file_path, function_name)
+        if key in self.function_summaries:
+            return self.function_summaries[key]
+        if key in self._missing_summary_keys:
+            return None
+
         cache_key = self._summary_key(file_path, function_name)
         with SQLiteStore(self._cache_path) as store:
             payload = store.get_json(self._SUMMARY_BUCKET, cache_key)
             dep_payload = store.get_json(self._DEPENDENCY_BUCKET, cache_key)
         if not isinstance(payload, dict):
+            self._missing_summary_keys.add(key)
             return None
         summary = FunctionSummary.from_dict(payload)
         self.record_function_summary(summary)
+        self._loaded_summary_keys.add(key)
         if isinstance(dep_payload, dict):
             callers = dep_payload.get("callers", ())
             for item in callers:
@@ -530,7 +544,10 @@ class GlobalGraph:
 
         with SQLiteStore(self._cache_path) as store:
             for file_path, function_name in to_invalidate:
-                self.function_summaries.pop((file_path, function_name), None)
+                key = (file_path, function_name)
+                self.function_summaries.pop(key, None)
+                self._loaded_summary_keys.discard(key)
+                self._missing_summary_keys.discard(key)
                 cache_key = self._summary_key(file_path, function_name)
                 store.delete(self._SUMMARY_BUCKET, cache_key)
                 store.delete(self._DEPENDENCY_BUCKET, cache_key)
@@ -852,7 +869,44 @@ class GlobalGraph:
             call_string_k=call_string_k,
         )
 
-    def find_all_paths(self, source_id: NodeID, sink_id: NodeID, max_depth: int = 5) -> List[List[NodeID]]:
+    # ── Cross-language bridge convergence (DIR-3.3) ────────────────────
+
+    def publish_cross_language_bridges(
+        self,
+        bridges: list[tuple[str, str, str, str]],
+    ) -> int:
+        """Publish cross-language routeu2192HTTP bridge edges into the GlobalGraph IFDS model.
+
+        Each bridge is (source_file, source_function, target_file, target_symbol).
+        Converts each bridge into IDE taint facts and ICFG edges so
+        cross-language flows participate in the unified IFDS solution.
+        """
+        count = 0
+        for src_file, src_func, tgt_file, tgt_symbol in bridges:
+            self.set_taint_with_access_path(
+                file_path=src_file,
+                function_name=src_func,
+                value_label="return",
+                level=IDETaintLevel.TAINTED,
+                sources=(f"cross-lang:{src_func}",),
+            )
+            self.set_taint_with_access_path(
+                file_path=tgt_file,
+                function_name=tgt_symbol,
+                value_label="argument",
+                level=IDETaintLevel.TAINTED,
+                sources=(f"cross-lang:{src_func}",),
+            )
+            src_key = self._summary_tuple_key(src_file, src_func)
+            tgt_key = self._summary_tuple_key(tgt_file, tgt_symbol)
+            # Add reverse dependency so verify_call_chain_soundness can walk from sink to source
+            if tgt_key not in self.reverse_summary_dependencies:
+                self.reverse_summary_dependencies[tgt_key] = set()
+            self.reverse_summary_dependencies[tgt_key].add(src_key)
+            count += 1
+        return count
+
+    def find_all_paths(self, source_id: NodeID, sink_id: NodeID, max_depth: int = 5) -> list[list[NodeID]]:
         """Bounded DFS path discovery across the ICFG projection."""
         paths: List[List[NodeID]] = []
 

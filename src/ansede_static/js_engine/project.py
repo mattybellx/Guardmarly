@@ -3,10 +3,12 @@ from __future__ import annotations
 import os
 import re
 import time
+from functools import lru_cache
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from ansede_static._types import TraceFrame
+from ansede_static.hardening import detect_minified
 from ansede_static.ir.global_graph import GlobalGraph
 from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments, consume_balanced
 from ansede_static.js_engine.project_context import is_fs_callee
@@ -129,7 +131,7 @@ _WORKSPACE_IGNORE_DIRS = {
 	".nuxt",
 	"out",
 }
-_WORKSPACE_REFRESH_INTERVAL_NS = 250_000_000
+_WORKSPACE_REFRESH_INTERVAL_NS = 5_000_000_000
 _WORKSPACE_GRAPH_CACHE: dict[str, JsWorkspaceGraph] = {}
 _DEFAULT_IFDS_CALL_STRING_K = GlobalGraph.DEFAULT_CALL_STRING_K
 
@@ -222,6 +224,7 @@ class JsWorkspaceGraph:
 	last_refresh_ns: int = 0
 
 
+@lru_cache(maxsize=16384)
 def _normalize_path(path: str | Path) -> str:
 	try:
 		return str(Path(path).resolve(strict=False))
@@ -886,6 +889,8 @@ def _iter_related_sources(file_index: JsFileIndex) -> tuple[str, ...]:
 
 def build_js_project_index(filename: str, code: str) -> JsProjectIndex | None:
 	if not filename:
+		return None
+	if detect_minified(filename, code).is_minified:
 		return None
 	current_file = _normalize_path(filename)
 	workspace_root = _discover_workspace_root(current_file)

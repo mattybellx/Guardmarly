@@ -20,7 +20,9 @@ from ansede_static.python_analyzer import analyze_python, analyze_file as _py_fi
 from ansede_static.js_engine.backends import list_js_backends, run_js_analysis
 from ansede_static import yaml_rules as _yaml_rules
 
+from functools import lru_cache
 from pathlib import Path
+from types import SimpleNamespace
 
 
 __all__ = [
@@ -44,6 +46,65 @@ _JAVA_EXTS = frozenset({".java"})
 _CSHARP_EXTS = frozenset({".cs"})
 _RUBY_EXTS = frozenset({".rb", ".rake", ".gemspec"})
 _PHP_EXTS = frozenset({".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps"})
+
+
+def _rule_mtime(path: Path) -> int:
+    try:
+        return path.stat().st_mtime_ns
+    except OSError:
+        return -1
+
+
+def _community_rules_token() -> tuple[tuple[str, int], ...]:
+    try:
+        rule_dir = Path(_yaml_rules.default_community_rules_dir()).resolve(strict=False)
+    except (OSError, TypeError, ValueError):
+        return tuple()
+
+    if not rule_dir.is_dir():
+        return tuple()
+
+    entries: list[tuple[str, int]] = []
+    for child in sorted(rule_dir.iterdir()):
+        if child.is_file() and child.suffix.lower() in {".yaml", ".yml", ".json"}:
+            entries.append((str(child.resolve(strict=False)), _rule_mtime(child)))
+    return tuple(entries)
+
+
+@lru_cache(maxsize=64)
+def _load_runtime_rules_cached(
+    workspace_root: str,
+    custom_rules_file: str,
+    custom_rules_mtime: int,
+    community_rules_token: tuple[tuple[str, int], ...],
+) -> tuple[object, ...]:
+    config_stub = SimpleNamespace(custom_rules_file=custom_rules_file) if custom_rules_file else None
+    return tuple(_yaml_rules.load_runtime_rules(config=config_stub, workspace_root=Path(workspace_root)))
+
+
+def _get_runtime_rules(
+    config: AnsedeConfig | None,
+    *,
+    workspace_root: Path,
+) -> list[object]:
+    resolved_root = str(workspace_root.resolve(strict=False))
+    custom_rules_file = str(getattr(config, "custom_rules_file", "") or "").strip() if config else ""
+    custom_rules_path = ""
+    custom_rules_mtime = -1
+    if custom_rules_file:
+        custom_path = Path(custom_rules_file)
+        if not custom_path.is_absolute():
+            custom_path = (workspace_root / custom_path).resolve(strict=False)
+        custom_rules_path = str(custom_path)
+        custom_rules_mtime = _rule_mtime(custom_path)
+    return list(
+        _load_runtime_rules_cached(
+            resolved_root,
+            custom_rules_path,
+            custom_rules_mtime,
+            _community_rules_token(),
+        )
+    )
 
 
 def _apply_runtime_and_registry_rules(
@@ -89,13 +150,10 @@ def scan_file(
     """
     p = Path(path)
     ext = p.suffix.lower()
-    runtime_rules = _yaml_rules.load_runtime_rules(config=config, workspace_root=Path.cwd())
+    runtime_rules = _get_runtime_rules(config, workspace_root=Path.cwd())
     code = p.read_text(encoding="utf-8", errors="replace")
 
     # Create a shared GlobalGraph for IFDS-based interprocedural taint transfer.
-    # Both Python and JS analyzers feed summaries into it and query it during
-    # helper-call resolution, giving JS the same IDE-lattice-powered cross-file
-    # taint tracking that Python already uses.
     try:
         from ansede_static.ir.global_graph import GlobalGraph  # noqa: PLC0415
         shared_graph = GlobalGraph()
@@ -152,7 +210,7 @@ def scan_code(
     Raises:
         ValueError: if language is not supported.
     """
-    runtime_rules = _yaml_rules.load_runtime_rules(config=config, workspace_root=Path.cwd())
+    runtime_rules = _get_runtime_rules(config, workspace_root=Path.cwd())
     with temporary_analyzer_config(config):
         if language == "python":
             result = analyze_python(code, filename=filename)
