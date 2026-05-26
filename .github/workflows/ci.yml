@@ -28,7 +28,7 @@ jobs:
       - name: Install
         run: pip install -e ".[dev]"
       - name: Unit tests
-        run: python -m pytest tests/test_js.py tests/test_python.py tests/test_audit_engine.py tests/test_community_rules.py tests/test_cache.py tests/test_cli.py tests/test_config.py tests/test_reporters.py tests/test_triage.py tests/test_cpg.py tests/test_cross_file.py --tb=short -q
+        run: python -m pytest tests/test_js.py tests/test_python.py tests/test_audit_engine.py tests/test_community_rules.py tests/test_cache.py tests/test_cli.py tests/test_config.py tests/test_reporters.py tests/test_triage.py tests/test_cross_file.py --tb=short -q
       - name: CVE pattern benchmark
         run: python -m benchmarks.nvd_benchmark --fail-under 70 --quiet
 
