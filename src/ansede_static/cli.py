@@ -2684,7 +2684,10 @@ def _main_impl() -> None:
     upgrade_prompt = maybe_show_upgrade_prompt()
     if upgrade_prompt:
         if console:
-            console.print(f"[bold yellow]{upgrade_prompt}[/bold yellow]")
+            try:
+                console.print(f"[bold yellow]{upgrade_prompt}[/bold yellow]")
+            except Exception:
+                print(upgrade_prompt, file=sys.stderr)
         else:
             print(upgrade_prompt, file=sys.stderr)
 
