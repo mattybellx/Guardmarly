@@ -31,7 +31,7 @@ _MIN_CONFIDENCE_FOR_RULE = 0.80
 _MAX_RULES = 50
 
 
-@dataclass(slots=True)
+@dataclass
 class AutoRule:
     """Generated heuristic rule derived from past LLM classifications."""
 
