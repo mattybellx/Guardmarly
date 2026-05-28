@@ -1,8 +1,8 @@
 ﻿<p align="center">
   <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mattybellx/Ansede/master/assets/AS.png">
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mattybellx/Ansede/master/assets/AS.png">
-    <img alt="Ansede Static — Offline SAST Engine" src="https://raw.githubusercontent.com/mattybellx/Ansede/master/assets/AS.png" width="600">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png">
+    <img alt="Ansede Static — Offline SAST Engine" src="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png" width="600">
   </picture>
 </p>
 
