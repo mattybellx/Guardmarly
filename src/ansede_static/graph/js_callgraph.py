@@ -35,7 +35,7 @@ def _function_node_id(path: Path, name: str) -> str:
     return f"file://{path.resolve().as_posix()}#func:{name}"
 
 
-@dataclass(slots=True)
+@dataclass
 class _JsFunction:
     name: str
     node_id: str

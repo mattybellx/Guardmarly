@@ -8,7 +8,7 @@ from fnmatch import fnmatch
 from typing import Any
 
 
-@dataclass(slots=True)
+@dataclass
 class SourceNode:
     """A graph node describing one source artifact in the repository."""
 
@@ -21,7 +21,7 @@ class SourceNode:
     end_line: int = 0
 
 
-@dataclass(slots=True)
+@dataclass
 class SourceEdge:
     """A directed edge between two source nodes."""
 
