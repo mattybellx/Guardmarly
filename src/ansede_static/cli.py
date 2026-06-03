@@ -22,7 +22,7 @@ import textwrap
 import time
 import threading
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.config import apply_config_to_results, load_config, temporary_analyzer_config
@@ -51,6 +51,9 @@ from ansede_static.licensing import (
     format_license_status,
     maybe_show_upgrade_prompt,
     bump_scan_count,
+    bump_guarded_autofix_count,
+    maybe_show_guarded_autofix_upgrade_prompt,
+    remaining_guarded_autofix_quota,
 )
 
 try:
@@ -808,8 +811,18 @@ def _is_safe_inline_auto_fix(before: str, after: str) -> bool:
 
 
 def _apply_auto_fixes(results: list[AnalysisResult]) -> tuple[int, int]:
+    applied_count, skipped_count, _ = _apply_auto_fixes_with_backups(results)
+    return applied_count, skipped_count
+
+
+def _apply_auto_fixes_with_backups(
+    results: list[AnalysisResult],
+    *,
+    max_fixes: int | None = None,
+) -> tuple[int, int, dict[str, str]]:
     applied_count = 0
     skipped_count = 0
+    backups: dict[str, str] = {}
     for result in results:
         if not result.findings:
             continue
@@ -819,6 +832,9 @@ def _apply_auto_fixes(results: list[AnalysisResult]) -> tuple[int, int]:
             lines = content.splitlines()
             modified = False
             for finding in sorted(result.findings, key=lambda x: x.line or 0, reverse=True):
+                if max_fixes is not None and applied_count >= max_fixes:
+                    skipped_count += 1
+                    continue
                 if not finding.auto_fix or not finding.line:
                     continue
                 parsed_fix = _parse_auto_fix_block(finding.auto_fix)
@@ -832,6 +848,7 @@ def _apply_auto_fixes(results: list[AnalysisResult]) -> tuple[int, int]:
 
                 idx = finding.line - 1
                 if 0 <= idx < len(lines) and before in lines[idx]:
+                    backups.setdefault(result.file_path, content)
                     lines[idx] = lines[idx].replace(before, after)
                     modified = True
                     applied_count += 1
@@ -843,7 +860,198 @@ def _apply_auto_fixes(results: list[AnalysisResult]) -> tuple[int, int]:
                     handle.write("\n".join(lines) + "\n")
         except OSError:
             skipped_count += 1
-    return applied_count, skipped_count
+    return applied_count, skipped_count, backups
+
+
+def _finding_snapshot(results: list[AnalysisResult]) -> dict[str, dict[str, Any]]:
+    snapshot: dict[str, dict[str, Any]] = {}
+    for result in results:
+        snapshot[result.file_path] = {
+            "fingerprints": {
+                _finding_fingerprint(result.file_path, finding)
+                for finding in result.findings
+            },
+            "parse_error": bool(result.parse_error),
+        }
+    return snapshot
+
+
+def _restore_file_backups(backups: dict[str, str]) -> None:
+    for file_path, content in backups.items():
+        Path(file_path).write_text(content, encoding="utf-8")
+
+
+def _guarded_auto_fix(
+    results: list[AnalysisResult],
+    *,
+    scan_targets: list[Path],
+    rescan_fn: Callable[[Path], AnalysisResult],
+    max_fixes: int | None = None,
+) -> tuple[dict[str, Any], list[AnalysisResult] | None]:
+    scope_targets = list(dict.fromkeys(scan_targets))
+    before_snapshot = _finding_snapshot(results)
+    applied_count, skipped_count, backups = _apply_auto_fixes_with_backups(
+        results,
+        max_fixes=max_fixes,
+    )
+    if applied_count == 0:
+        return {
+            "status": "no-fixes-applied",
+            "verified": False,
+            "applied": 0,
+            "skipped": skipped_count,
+            "rescanned_files": 0,
+            "remaining_findings": sum(len(result.findings) for result in results),
+            "regressions": [],
+            "reverted": False,
+        }, None
+
+    rescanned_results = [rescan_fn(path) for path in scope_targets]
+    regressions: list[dict[str, Any]] = []
+    for result in rescanned_results:
+        previous = before_snapshot.get(result.file_path, {"fingerprints": set(), "parse_error": False})
+        previous_fingerprints = set(previous.get("fingerprints", set()))
+        current_fingerprints = {
+            _finding_fingerprint(result.file_path, finding)
+            for finding in result.findings
+        }
+        new_fingerprints = sorted(current_fingerprints - previous_fingerprints)
+        if new_fingerprints:
+            regressions.append(
+                {
+                    "file": result.file_path,
+                    "new_findings": len(new_fingerprints),
+                    "parse_error": result.parse_error,
+                }
+            )
+        elif result.parse_error and not previous.get("parse_error", False):
+            regressions.append(
+                {
+                    "file": result.file_path,
+                    "new_findings": 0,
+                    "parse_error": result.parse_error,
+                }
+            )
+
+    if regressions:
+        _restore_file_backups(backups)
+        return {
+            "status": "reverted",
+            "verified": False,
+            "applied": applied_count,
+            "skipped": skipped_count,
+            "rescanned_files": len(scope_targets),
+            "remaining_findings": sum(len(result.findings) for result in results),
+            "regressions": regressions,
+            "reverted": True,
+            "reverted_files": len(backups),
+        }, None
+
+    return {
+        "status": "verified",
+        "verified": True,
+        "applied": applied_count,
+        "skipped": skipped_count,
+        "rescanned_files": len(scope_targets),
+        "remaining_findings": sum(len(result.findings) for result in rescanned_results),
+        "regressions": [],
+        "reverted": False,
+    }, rescanned_results
+
+
+def _postprocess_guarded_rescan_results(
+    results: list[AnalysisResult],
+    *,
+    config: Any,
+    runtime_rules: list[Any],
+    yaml_rules_module: Any,
+    registry_loader: Any,
+    baseline_fps: set[str] | None,
+    min_conf: float,
+    ai_triage_enabled: bool,
+) -> list[AnalysisResult]:
+    processed = results
+
+    if yaml_rules_module is not None:
+        for result in processed:
+            if not result.language:
+                continue
+            code_text = ""
+            if result.file_path and result.file_path != "<stdin>":
+                try:
+                    code_text = Path(result.file_path).read_text(encoding="utf-8", errors="replace")
+                except OSError:
+                    code_text = ""
+            if not code_text:
+                continue
+            try:
+                applicable_rules = list(runtime_rules)
+                if registry_loader is not None and result.language in {"python", "javascript", "java", "csharp"}:
+                    applicable_rules.extend(registry_loader(code_text, result.language))
+                if applicable_rules:
+                    result.findings.extend(
+                        yaml_rules_module.apply_custom_rules(code_text, result.file_path, result.language, applicable_rules)
+                    )
+            except Exception:
+                continue
+
+    processed = apply_config_to_results(processed, config)
+
+    try:
+        from ansede_static.engine.triage import ContextAnalyzer
+
+        for result in processed:
+            new_findings = []
+            for finding in result.findings:
+                is_test, _ = ContextAnalyzer.is_test_context(result.file_path, "")
+                is_mock, _ = ContextAnalyzer.is_mock_context(result.file_path, "")
+                is_generated, _ = ContextAnalyzer.is_generated(result.file_path)
+                if is_test or is_mock or is_generated:
+                    finding = Finding(
+                        category=finding.category,
+                        severity=finding.severity,
+                        title=finding.title,
+                        description=finding.description,
+                        line=finding.line,
+                        suggestion=finding.suggestion,
+                        rule_id=finding.rule_id,
+                        cwe=finding.cwe,
+                        agent=finding.agent,
+                        confidence=max(0.0, finding.confidence - 0.35),
+                        auto_fix=finding.auto_fix,
+                        explanation=finding.explanation,
+                        trace=finding.trace,
+                        analysis_kind=finding.analysis_kind,
+                        triggering_code=finding.triggering_code,
+                    )
+                new_findings.append(finding)
+            result.findings = new_findings
+    except Exception:
+        pass
+
+    if min_conf > 0.0:
+        for result in processed:
+            result.findings = [finding for finding in result.findings if finding.confidence >= min_conf]
+
+    if baseline_fps:
+        processed = _apply_baseline(processed, baseline_fps)
+
+    if ai_triage_enabled:
+        code_map: dict[str, str] = {}
+        for result in processed:
+            if not result.file_path or result.file_path == "<stdin>":
+                continue
+            try:
+                code_map[result.file_path] = Path(result.file_path).read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+        suppression_config_path: Path | None = None
+        candidate = Path.cwd() / "suppression_candidates.json"
+        if candidate.exists():
+            suppression_config_path = candidate
+        processed = run_ai_triage(processed, code_map, suppression_config_path=suppression_config_path)
+
+    return processed
 
 
 def _handle_baseline_command(args: list[str]) -> None:
@@ -1150,6 +1358,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--apply-fixes", action="store_true",
         help="Apply auto-fixes directly to the source files when possible (Warning: overwrites code)",
+    )
+    parser.add_argument(
+        "--guarded-fix", action="store_true",
+        help=(
+            "Run Guarded Autofix: apply safe inline fixes, rescan the scanned scope, and automatically revert if "
+            "new issues or parse regressions are introduced. Free tier is capped; Pro is unlimited."
+        ),
     )
     parser.add_argument(
         "--incremental", action="store_true",
@@ -1698,6 +1913,12 @@ def _main_impl() -> None:
 
     args = parser.parse_args()
 
+    if getattr(args, "guarded_fix", False) and getattr(args, "apply_fixes", False):
+        parser.error("--guarded-fix and --apply-fixes are mutually exclusive")
+
+    if getattr(args, "guarded_fix", False) and args.stdin:
+        parser.error("--guarded-fix is not supported with --stdin")
+
     # ── License feature gating ──────────────────────────────────────────
     gate = LicenseFeatureGate()
     try:
@@ -1839,6 +2060,7 @@ def _main_impl() -> None:
         }
 
     results: list[AnalysisResult] = []
+    scan_targets: list[Path] = []
 
     # Default path to current directory if not specified and not using stdin
     if not args.paths and not args.stdin and not args.incremental:
@@ -2290,6 +2512,7 @@ def _main_impl() -> None:
             r.findings = [f for f in r.findings if f.confidence >= min_conf]
 
     # ── Apply baseline filter ───────────────────────────────────────────────
+    baseline_fps: set[str] = set()
     if args.baseline:
         if not args.baseline.is_file():
             if console:
@@ -2422,6 +2645,68 @@ def _main_impl() -> None:
         cluster_results(results)
     except Exception:
         pass
+
+    guarded_autofix_summary: dict[str, Any] | None = None
+    guarded_autofix_results: list[AnalysisResult] | None = None
+    guarded_autofix_prompt: str | None = None
+    if getattr(args, "guarded_fix", False):
+        fixable_count = sum(1 for result in results for finding in result.findings if finding.auto_fix)
+        remaining_quota = remaining_guarded_autofix_quota()
+        guarded_scope = scan_targets or [
+            Path(result.file_path)
+            for result in results
+            if result.file_path and result.file_path != "<stdin>"
+        ]
+        if remaining_quota == 0:
+            guarded_autofix_summary = {
+                "status": "limit-reached",
+                "verified": False,
+                "applied": 0,
+                "skipped": fixable_count,
+                "rescanned_files": 0,
+                "remaining_findings": sum(len(result.findings) for result in results),
+                "regressions": [],
+                "reverted": False,
+                "remaining_quota": 0,
+            }
+            guarded_autofix_prompt = maybe_show_guarded_autofix_upgrade_prompt()
+        else:
+            max_fixes = remaining_quota if remaining_quota is not None else None
+            guarded_autofix_summary, guarded_autofix_results = _guarded_auto_fix(
+                results,
+                scan_targets=guarded_scope,
+                max_fixes=max_fixes,
+                rescan_fn=lambda path: _postprocess_guarded_rescan_results(
+                    [
+                        _analyze_file_with_timeout(
+                            path,
+                            requested_js_backend=args.js_backend,
+                            experimental_js_ast=args.experimental_js_ast,
+                            timeout_seconds=args.timeout_per_file,
+                            global_graph=GlobalGraph(),
+                            engine=getattr(args, "engine", "auto"),
+                        )
+                    ],
+                    config=config,
+                    runtime_rules=runtime_rules,
+                    yaml_rules_module=_yaml_rules,
+                    registry_loader=_registry_loader,
+                    baseline_fps=baseline_fps,
+                    min_conf=min_conf,
+                    ai_triage_enabled=getattr(args, "ai_triage", False),
+                )[0],
+            )
+            guarded_autofix_summary["requested_fixable_findings"] = fixable_count
+            guarded_autofix_summary["remaining_quota"] = remaining_quota
+            if guarded_autofix_summary.get("verified") and guarded_autofix_results is not None:
+                results = guarded_autofix_results
+            if guarded_autofix_summary.get("verified") and guarded_autofix_summary.get("applied", 0) > 0:
+                bump_guarded_autofix_count(int(guarded_autofix_summary["applied"]))
+            guarded_autofix_prompt = maybe_show_guarded_autofix_upgrade_prompt(
+                int(guarded_autofix_summary.get("applied", 0))
+            )
+        if guarded_autofix_summary is not None:
+            execution["guarded_autofix"] = guarded_autofix_summary
 
     # ── Audit pipeline (--audit flag) ───────────────────────────────────────
     if getattr(args, "audit", False):
@@ -2654,7 +2939,7 @@ def _main_impl() -> None:
     fixable_count = sum(1 for r in results for f in r.findings if f.auto_fix)
     
     # Prompt the user if they didn't explicitly request fixes initially
-    if not getattr(args, "apply_fixes", False) and fixable_count > 0 and args.format == "text" and not args.output and console:
+    if not getattr(args, "apply_fixes", False) and not getattr(args, "guarded_fix", False) and fixable_count > 0 and args.format == "text" and not args.output and console:
         # Check standard input file descriptor directly if isatty is wonky in some test shells
         try:
             import os
@@ -2676,6 +2961,33 @@ def _main_impl() -> None:
                 console.print(
                     f"  [yellow]↷ Skipped[/yellow] {skipped_count} fix(es) that were multi-line, malformed, or could not be matched safely"
                 )
+    elif getattr(args, "guarded_fix", False):
+        summary = guarded_autofix_summary or {}
+        if console:
+            console.print("\n[bold cyan]🛡️  Guarded Autofix[/bold cyan]")
+            status = str(summary.get("status", "unknown"))
+            if status == "verified":
+                console.print(
+                    f"  [green]✔ Verified[/green] {summary.get('applied', 0)} fix(es) across {summary.get('rescanned_files', 0)} rescanned file(s)"
+                )
+                console.print(
+                    f"  [dim]No newly detected issues were introduced in the scanned scope. {summary.get('remaining_findings', 0)} finding(s) remain.[/dim]"
+                )
+            elif status == "reverted":
+                console.print(
+                    f"  [red]↺ Reverted[/red] {summary.get('applied', 0)} attempted fix(es) after detecting regressions in the scanned scope"
+                )
+            elif status == "limit-reached":
+                console.print("  [yellow]Free Guarded Autofix limit reached for today.[/yellow]")
+            else:
+                console.print("  [dim]No safe autofixes could be verified for this scan.[/dim]")
+            if summary.get("skipped"):
+                console.print(f"  [yellow]↷ Skipped[/yellow] {summary.get('skipped')} fix(es)")
+        if guarded_autofix_prompt:
+            if console:
+                console.print(f"[bold yellow]{guarded_autofix_prompt}[/bold yellow]")
+            else:
+                print(guarded_autofix_prompt, file=sys.stderr)
 
     # ── Exit code ───────────────────────────────────────────────────────────
 

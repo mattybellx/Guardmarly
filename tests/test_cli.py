@@ -16,6 +16,7 @@ from ansede_static.cli import (
     _load_baseline,
     _matches_exclude_pattern,
     _parse_auto_fix_block,
+    _guarded_auto_fix,
     _render_export_rule_catalog,
     _render_js_backend_catalog,
     _render_rule_catalog,
@@ -332,6 +333,12 @@ def test_build_parser_accepts_cross_language_and_auto_rule_flags():
     assert args.apply_auto_rules is True
 
 
+def test_build_parser_accepts_guarded_fix_flag():
+    args = build_parser().parse_args(["--guarded-fix", "src"])
+
+    assert args.guarded_fix is True
+
+
 def test_should_skip_file_rejects_minified_and_large_assets(tmp_path):
     minified = tmp_path / "bundle.min.js"
     minified.write_text("console.log('x')\n", encoding="utf-8")
@@ -387,6 +394,92 @@ def test_build_cross_language_execution_returns_graph_stats(tmp_path):
     assert execution["stats"]["languages"]["javascript"] >= 1
     assert execution["taint_paths_found"] >= 1
     assert execution["sample_taint_paths"]
+
+
+def test_guarded_auto_fix_keeps_verified_fix(tmp_path):
+    target = tmp_path / "demo.py"
+    target.write_text("unsafe_call(x)\n", encoding="utf-8")
+
+    results = [
+        AnalysisResult(
+            file_path=str(target),
+            language="python",
+            findings=[
+                Finding(
+                    category="security",
+                    severity=Severity.HIGH,
+                    title="Inline fix",
+                    description="",
+                    line=1,
+                    suggestion="",
+                    rule_id="PY-001",
+                    auto_fix="BEFORE: unsafe_call(x)\nAFTER:  safe_call(x)",
+                )
+            ],
+        )
+    ]
+
+    summary, rescanned = _guarded_auto_fix(
+        results,
+        scan_targets=[target],
+        max_fixes=None,
+        rescan_fn=lambda path: AnalysisResult(file_path=str(path), language="python", findings=[]),
+    )
+
+    assert summary["status"] == "verified"
+    assert summary["applied"] == 1
+    assert rescanned is not None
+    assert target.read_text(encoding="utf-8") == "safe_call(x)\n"
+
+
+def test_guarded_auto_fix_reverts_when_rescan_finds_new_issue(tmp_path):
+    target = tmp_path / "demo.py"
+    target.write_text("unsafe_call(x)\n", encoding="utf-8")
+
+    results = [
+        AnalysisResult(
+            file_path=str(target),
+            language="python",
+            findings=[
+                Finding(
+                    category="security",
+                    severity=Severity.HIGH,
+                    title="Inline fix",
+                    description="",
+                    line=1,
+                    suggestion="",
+                    rule_id="PY-001",
+                    auto_fix="BEFORE: unsafe_call(x)\nAFTER:  safe_call(x)",
+                )
+            ],
+        )
+    ]
+
+    summary, rescanned = _guarded_auto_fix(
+        results,
+        scan_targets=[target],
+        max_fixes=None,
+        rescan_fn=lambda path: AnalysisResult(
+            file_path=str(path),
+            language="python",
+            findings=[
+                Finding(
+                    category="security",
+                    severity=Severity.HIGH,
+                    title="Regression",
+                    description="",
+                    line=1,
+                    suggestion="",
+                    rule_id="PY-999",
+                )
+            ],
+        ),
+    )
+
+    assert summary["status"] == "reverted"
+    assert summary["reverted"] is True
+    assert rescanned is None
+    assert target.read_text(encoding="utf-8") == "unsafe_call(x)\n"
 
 
 def test_cross_language_results_from_paths_builds_reportable_finding():

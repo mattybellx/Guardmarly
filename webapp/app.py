@@ -15,7 +15,9 @@ import hmac
 import json
 import os
 import sqlite3
+import subprocess
 import sys
+import tempfile
 import time
 import uuid
 from datetime import datetime, timezone
@@ -24,7 +26,7 @@ from typing import Any
 
 # ── Flask (only external dependency) ───────────────────────────────────
 try:
-    from flask import Flask, request, jsonify
+  from flask import Flask, request, jsonify, render_template
 except ImportError:
     print("ERROR: Flask not installed. Run: pip install flask", file=sys.stderr)
     sys.exit(1)
@@ -75,6 +77,8 @@ def _add_security_headers(response):
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    if request.is_secure or BASE_URL.startswith("https://"):
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 
 # ── Config (set via environment variables) ────────────────────────────
@@ -92,6 +96,249 @@ _PRIVATE_KEY = bytes.fromhex(
 # ── Stripe payment links ────────────────────────────────────────────────
 _STRIPE_ONE_TIME = "https://buy.stripe.com/8x24gygGW6JueVJ4U61oI00"
 _STRIPE_PRO_YEARLY = "https://buy.stripe.com/4gM14m9eu2te00P86i1oI01"
+
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+_STUDIO_ALLOWED_EXTENSIONS = {
+  ".py": "python",
+  ".js": "javascript",
+  ".jsx": "javascript",
+  ".ts": "javascript",
+  ".tsx": "javascript",
+  ".mjs": "javascript",
+  ".go": "go",
+  ".java": "java",
+  ".cs": "csharp",
+}
+_STUDIO_LANGUAGE_EXTENSIONS = {
+  "python": ".py",
+  "javascript": ".js",
+  "go": ".go",
+  "java": ".java",
+  "csharp": ".cs",
+}
+_STUDIO_MAX_FILES = 8
+_STUDIO_MAX_FILE_BYTES = 64_000
+_STUDIO_MAX_TOTAL_BYTES = 128_000
+_STUDIO_TIMEOUT_SECONDS = 45
+
+
+def _studio_safe_name(filename: str, fallback: str) -> str:
+  raw = os.path.basename((filename or fallback).replace("\\", "/")).strip() or fallback
+  safe = _re.sub(r"[^A-Za-z0-9._-]+", "-", raw).strip(".-") or fallback
+  return safe
+
+
+def _infer_studio_extension(code: str, language: str) -> str:
+  normalized = (language or "auto").strip().lower()
+  if normalized in _STUDIO_LANGUAGE_EXTENSIONS:
+    return _STUDIO_LANGUAGE_EXTENSIONS[normalized]
+  if "def " in code or "import " in code or "@app.route" in code or "from flask" in code:
+    return ".py"
+  if "function " in code or "const " in code or "=>" in code or "require(" in code:
+    return ".js"
+  return ".py"
+
+
+def _collect_studio_sources(req: Any) -> tuple[list[dict[str, str]], str | None]:
+  sources: list[dict[str, str]] = []
+  total_bytes = 0
+
+  files = req.files.getlist("files") if getattr(req, "files", None) else []
+  if len(files) > _STUDIO_MAX_FILES:
+    return [], f"Please upload {_STUDIO_MAX_FILES} files or fewer."
+
+  for index, uploaded in enumerate(files, start=1):
+    if not uploaded or not uploaded.filename:
+      continue
+    name = _studio_safe_name(uploaded.filename, f"upload-{index}.txt")
+    ext = Path(name).suffix.lower()
+    if ext not in _STUDIO_ALLOWED_EXTENSIONS:
+      return [], f"Unsupported file type: {ext or 'unknown'}."
+    raw = uploaded.read()
+    if len(raw) > _STUDIO_MAX_FILE_BYTES:
+      return [], f"{name} exceeds the {_STUDIO_MAX_FILE_BYTES // 1024}KB studio limit."
+    total_bytes += len(raw)
+    if total_bytes > _STUDIO_MAX_TOTAL_BYTES:
+      return [], "Studio payload exceeds the 128KB limit."
+    sources.append({
+      "name": name,
+      "content": raw.decode("utf-8", errors="replace"),
+    })
+
+  code = (req.form.get("code", "") if getattr(req, "form", None) else "").strip()
+  if code:
+    encoded = code.encode("utf-8", errors="replace")
+    if len(encoded) > _STUDIO_MAX_FILE_BYTES:
+      return [], "Pasted code exceeds the 64KB studio limit."
+    total_bytes += len(encoded)
+    if total_bytes > _STUDIO_MAX_TOTAL_BYTES:
+      return [], "Studio payload exceeds the 128KB limit."
+    language = (req.form.get("language", "auto") if getattr(req, "form", None) else "auto")
+    snippet_name = f"snippet{_infer_studio_extension(code, language)}"
+    sources.append({
+      "name": snippet_name,
+      "content": code,
+    })
+
+  if not sources:
+    return [], "Paste code or upload a supported file first."
+  return sources, None
+
+
+def _run_scanner_command(target: Path, *, output_format: str, guarded_fix: bool) -> dict[str, Any]:
+  cmd = [sys.executable, "-m", "ansede_static.cli", str(target), "--format", output_format]
+  if guarded_fix:
+    cmd.append("--guarded-fix")
+
+  env = os.environ.copy()
+  src_path = str(_REPO_ROOT / "src")
+  env["PYTHONPATH"] = src_path if not env.get("PYTHONPATH") else src_path + os.pathsep + env["PYTHONPATH"]
+
+  completed = subprocess.run(
+    cmd,
+    cwd=str(_REPO_ROOT),
+    capture_output=True,
+    text=True,
+    timeout=_STUDIO_TIMEOUT_SECONDS,
+    env=env,
+  )
+  stdout = completed.stdout.strip()
+  if not stdout:
+    raise RuntimeError(completed.stderr.strip() or "Scanner returned no output.")
+  try:
+    return json.loads(stdout)
+  except json.JSONDecodeError as exc:
+    raise RuntimeError(completed.stderr.strip() or f"Could not parse scanner output: {exc}") from exc
+
+
+def _build_studio_timeline(guarded_fix: bool, execution: dict[str, Any], changed_files: int) -> list[dict[str, str]]:
+  guarded = execution.get("guarded_autofix") or {}
+  status = str(guarded.get("status", "not-run"))
+  steps = [
+    {"id": "scan", "label": "Scan", "status": "done", "detail": "Scanner ran on the submitted scope."},
+    {"id": "patch", "label": "Patch", "status": "idle", "detail": "No fixes applied yet."},
+    {"id": "verify", "label": "Verify", "status": "idle", "detail": "Verification has not run."},
+    {"id": "rollback", "label": "Rollback", "status": "idle", "detail": "Rollback not needed."},
+  ]
+  if not guarded_fix:
+    return steps
+
+  applied = int(guarded.get("applied", 0) or 0)
+  rescanned = int(guarded.get("rescanned_files", 0) or 0)
+  if status == "limit-reached":
+    steps[1].update({"status": "blocked", "detail": "Free Guarded Autofix quota reached."})
+    steps[2].update({"status": "blocked", "detail": "Verification skipped because no fixes ran."})
+    return steps
+
+  if applied > 0 or changed_files > 0:
+    steps[1].update({"status": "done", "detail": f"Applied {applied} guarded fix(es) across {changed_files} file(s)."})
+  else:
+    steps[1].update({"status": "idle", "detail": "No safe inline fixes matched the current source."})
+
+  if status == "verified":
+    steps[2].update({"status": "done", "detail": f"Rescanned {rescanned} file(s) with no newly detected issues in scope."})
+  elif status == "reverted":
+    steps[2].update({"status": "fail", "detail": f"Verification detected regressions across {rescanned} file(s)."})
+    steps[3].update({"status": "done", "detail": "Touched files were restored automatically."})
+  elif status == "no-fixes-applied":
+    steps[2].update({"status": "idle", "detail": "Nothing to verify because no safe fix was applied."})
+  else:
+    steps[2].update({"status": "idle", "detail": "Verification did not produce a keep/revert decision."})
+  return steps
+
+
+def _run_studio_mode(sources: list[dict[str, str]], *, guarded_fix: bool) -> dict[str, Any]:
+  with tempfile.TemporaryDirectory(prefix="ansede-studio-") as tmp:
+    workspace = Path(tmp) / "workspace"
+    workspace.mkdir(parents=True, exist_ok=True)
+
+    originals: dict[str, str] = {}
+    used_names: set[str] = set()
+    for index, source in enumerate(sources, start=1):
+      base_name = _studio_safe_name(source["name"], f"source-{index}.txt")
+      stem = Path(base_name).stem or f"source-{index}"
+      ext = Path(base_name).suffix.lower()
+      if ext not in _STUDIO_ALLOWED_EXTENSIONS:
+        ext = _infer_studio_extension(source["content"], _STUDIO_ALLOWED_EXTENSIONS.get(ext, "auto"))
+      candidate = f"{stem}{ext}"
+      dedupe = 2
+      while candidate in used_names:
+        candidate = f"{stem}-{dedupe}{ext}"
+        dedupe += 1
+      used_names.add(candidate)
+      target = workspace / candidate
+      target.write_text(source["content"], encoding="utf-8")
+      originals[candidate] = source["content"]
+
+    report = _run_scanner_command(workspace, output_format="json", guarded_fix=guarded_fix)
+    sarif = _run_scanner_command(workspace, output_format="sarif", guarded_fix=False)
+
+    final_files: list[dict[str, Any]] = []
+    changed_files = 0
+    for rel_name, original in originals.items():
+      final_text = (workspace / rel_name).read_text(encoding="utf-8", errors="replace")
+      changed = final_text != original
+      if changed:
+        changed_files += 1
+      final_files.append({
+        "file": rel_name,
+        "changed": changed,
+        "original": original,
+        "final": final_text,
+      })
+
+    execution = report.get("execution") or {}
+    guarded_summary = execution.get("guarded_autofix") or {}
+    verification_message = "Static scan completed for the submitted scope."
+    if guarded_fix:
+      if guarded_summary.get("status") == "verified":
+        verification_message = "Guarded Autofix verified no newly detected issues in the scanned scope."
+      elif guarded_summary.get("status") == "reverted":
+        verification_message = "Guarded Autofix rolled changes back after the verification scan found regressions."
+      elif guarded_summary.get("status") == "limit-reached":
+        verification_message = "Free-tier Guarded Autofix quota reached for today."
+      else:
+        verification_message = "Guarded Autofix found no safe inline fixes to keep."
+
+    return {
+      "success": True,
+      "mode": "guarded-fix" if guarded_fix else "scan",
+      "report": report,
+      "results": report.get("results", []),
+      "summary": report.get("summary", {}),
+      "total_findings": int(report.get("total_findings", 0) or 0),
+      "execution": execution,
+      "artifacts": {
+        "json": report,
+        "sarif": sarif,
+      },
+      "studio": {
+        "timeline": _build_studio_timeline(guarded_fix, execution, changed_files),
+        "files": final_files,
+        "changed_files": changed_files,
+        "verification_message": verification_message,
+        "scope_note": "Verification covers the scanned scope only. Untouched code outside the submitted scope is not claimed.",
+        "remaining_guarded_quota": guarded_summary.get("remaining_quota"),
+        "requested_fixable_findings": guarded_summary.get("requested_fixable_findings", 0),
+      },
+    }
+
+
+def _studio_api_response(*, guarded_fix: bool) -> tuple[Any, int]:
+  client_ip = request.remote_addr or "0.0.0.0"
+  if not _check_rate_limit(client_ip):
+    return jsonify({"success": False, "error": "Too many requests. Please wait a moment and try again."}), 429
+
+  sources, error = _collect_studio_sources(request)
+  if error:
+    return jsonify({"success": False, "error": error}), 400
+
+  try:
+    return jsonify(_run_studio_mode(sources, guarded_fix=guarded_fix)), 200
+  except subprocess.TimeoutExpired:
+    return jsonify({"success": False, "error": "Studio scan timed out. Try a smaller snippet."}), 504
+  except Exception as exc:
+    return jsonify({"success": False, "error": str(exc)}), 500
 
 # ══════════════════════════════════════════════════════════════════════════
 # Database
@@ -508,14 +755,23 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 
 _INDEX_BODY = r"""
 <div class="hero">
-  <div class="hero-badge">&#9670; World's Best Offline SAST &mdash; Verified May 2026</div>
-  <h1>Ship secure code.<br>No cloud. <em>No compromise.</em></h1>
-  <p>ansede-static detects what Bandit, Semgrep, and CodeQL miss&mdash;IDOR, auth bypass, ownership flaws&mdash;with <strong>98.8% CVE recall</strong> and a <strong>3.6% false positive rate</strong>. All offline. Zero dependencies.</p>
+  <div class="hero-badge">&#9670; World's Best Offline SAST + Guarded Autofix</div>
+  <h1>Find the bug.<br><em>Fix it under guard.</em></h1>
+  <p>ansede-static detects what Bandit, Semgrep, and CodeQL miss&mdash;IDOR, auth bypass, ownership flaws&mdash;then <strong>Guarded Autofix</strong> applies safe inline fixes, rescans the scanned scope, and automatically rolls changes back if new issues appear.</p>
   <div class="hero-stats">
     <div class="hero-stat"><div class="num">98.8%</div><div class="lbl">CVE Recall</div></div>
     <div class="hero-stat"><div class="num">3.6%</div><div class="lbl">False Positive Rate</div></div>
-    <div class="hero-stat"><div class="num">5</div><div class="lbl">Languages</div></div>
-    <div class="hero-stat"><div class="num">&lt;0.1s</div><div class="lbl">Per 100k LOC</div></div>
+    <div class="hero-stat"><div class="num">50</div><div class="lbl">Free Guarded Fixes/Day</div></div>
+    <div class="hero-stat"><div class="num">∞</div><div class="lbl">Pro Guarded Fixes</div></div>
+  </div>
+</div>
+
+<div class="sec" style="padding-top:40px;padding-bottom:24px">
+  <div class="sec-inner" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
+    <div class="card"><h3>1. Scan</h3><p style="color:var(--gray-500);margin-top:10px">Run offline SAST across your repo, CI job, or hot path. No code leaves your machine.</p></div>
+    <div class="card"><h3>2. Patch</h3><p style="color:var(--gray-500);margin-top:10px">Guarded Autofix applies only safe inline replacements that match the exact source line.</p></div>
+    <div class="card"><h3>3. Verify</h3><p style="color:var(--gray-500);margin-top:10px">The scanner rescans the scanned scope immediately after patching and checks for newly detected issues.</p></div>
+    <div class="card"><h3>4. Roll back</h3><p style="color:var(--gray-500);margin-top:10px">If the verification pass spots regressions or parse breakage, the patch is reverted automatically. Drama denied.</p></div>
   </div>
 </div>
 
@@ -523,7 +779,7 @@ _INDEX_BODY = r"""
   <div class="sec-inner">
     <div class="sec-title">
       <h2>Simple, transparent pricing</h2>
-      <p>Start free. Upgrade when you need SARIF, SBOM, and unlimited scanning. No hidden fees. Cancel anytime.</p>
+      <p>Start free. Upgrade when you want unlimited Guarded Autofix, reporting exports, and the Autofix Studio workflow.</p>
     </div>
     <div class="pricing-grid">
       <div class="card">
@@ -532,7 +788,8 @@ _INDEX_BODY = r"""
         <div class="period">No credit card required</div>
         <ul>
           <li>500 scans per day</li>
-          <li>Text &amp; JSON output</li>
+          <li>50 Guarded Autofix actions per day</li>
+          <li>Text, JSON &amp; SARIF output</li>
           <li>Python, JavaScript, Go, Java, C#</li>
           <li>Offline &mdash; no cloud, no telemetry</li>
           <li>Community rule packs</li>
@@ -541,15 +798,17 @@ _INDEX_BODY = r"""
       </div>
 
       <div class="card">
-        <h3>One-Time</h3>
+        <h3>Autofix Pass</h3>
         <div class="price">&pound;4.99</div>
         <div class="period">30 days of Pro access</div>
         <ul>
           <li>Unlimited scans</li>
+          <li>Unlimited Guarded Autofix</li>
+          <li>Verification + rollback safety pass</li>
           <li>SARIF output (GitHub Code Scanning)</li>
           <li>SBOM generation (CycloneDX, SPDX)</li>
           <li>HTML dashboards</li>
-          <li>All 5 languages</li>
+          <li>Autofix Studio preview</li>
           <li>Email support</li>
         </ul>
         <a href="https://buy.stripe.com/8x24gygGW6JueVJ4U61oI00" class="btn btn-primary">Buy for &pound;4.99</a>
@@ -562,6 +821,8 @@ _INDEX_BODY = r"""
         <div class="period">Everything in One-Time, plus more</div>
         <ul>
           <li>Everything in One-Time</li>
+          <li>Unlimited Guarded Autofix</li>
+          <li>Autofix Studio workflow view</li>
           <li>CI/CD integration recipes</li>
           <li>GitHub Actions workflow generator</li>
           <li>Priority email support</li>
@@ -575,12 +836,13 @@ _INDEX_BODY = r"""
 </div>
 
 <div class="trust-bar">
-  <p>Trusted by developers who care about security</p>
+  <p>Built for developers who want proof, not vibes</p>
   <div class="trust-logos">
     <span>OWASP-COMPLIANT</span>
     <span>CWE-COVERAGE 20+</span>
     <span>919 UNIT TESTS</span>
     <span>100% OFFLINE</span>
+    <span>ROLLBACK-ON-REGRESSION</span>
   </div>
 </div>
 
@@ -597,12 +859,15 @@ _INDEX_BODY = r"""
       </thead>
       <tbody>
         <tr><td>Scans per day</td><td>500</td><td>Unlimited</td><td>Unlimited</td></tr>
+        <tr><td>Guarded Autofix / day</td><td>50</td><td>Unlimited</td><td>Unlimited</td></tr>
         <tr><td>Languages</td><td>5</td><td>5</td><td>5</td></tr>
         <tr><td>Text output</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
         <tr><td>JSON output</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
-        <tr><td>SARIF output</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
-        <tr><td>SBOM generation</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Guarded rescan + rollback</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>SARIF output</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>SBOM generation</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
         <tr><td>HTML dashboard</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
+        <tr><td>Autofix Studio view</td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
         <tr><td>CI/CD recipes</td><td><span class="dash">&mdash;</span></td><td><span class="dash">&mdash;</span></td><td><span class="check">&check;</span></td></tr>
         <tr><td>Incremental scanning</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
         <tr><td>Parallel workers</td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td><td><span class="check">&check;</span></td></tr>
@@ -615,11 +880,73 @@ _INDEX_BODY = r"""
   </div>
 </div>
 
+<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200)">
+  <div class="sec-inner" style="text-align:center;max-width:900px">
+    <h2 style="font-size:1.45rem;font-weight:700;color:var(--gray-900);margin-bottom:10px">Meet Autofix Studio</h2>
+    <p style="color:var(--gray-500);margin:0 auto 18px;max-width:700px">A focused product surface for scan &rarr; patch &rarr; verify &rarr; rollback. Great for demos, sales conversations, and making security work feel less like archaeology.</p>
+    <a href="/autofix-studio/live" class="btn btn-primary" style="display:inline-block;width:auto;padding:12px 28px">Open Autofix Studio</a>
+    <p style="color:var(--gray-500);font-size:.82rem;margin-top:14px">Verification guarantees that no <em>newly detected</em> issues were introduced within the scanned scope. It does not claim a mathematical proof over untouched code.</p>
+  </div>
+</div>
+
 <div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200)">
   <div class="sec-inner" style="text-align:center">
     <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:8px">Already have a license key?</h2>
     <p style="color:var(--gray-500);margin-bottom:20px">Activate it in your terminal to unlock Pro features instantly.</p>
     <code style="background:var(--gray-800);color:#fff;padding:12px 24px;border-radius:8px;font-size:.95rem;display:inline-block">ansede-static license activate YOUR_KEY</code>
+  </div>
+</div>
+"""
+
+_AUTOFIX_STUDIO_BODY = r"""
+<div class="hero">
+  <div class="hero-badge">Autofix Studio</div>
+  <h1>Watch the remediation loop.<br><em>Without crossing your fingers.</em></h1>
+  <p>Autofix Studio is the sales-friendly, engineer-approved surface for Guarded Autofix. It shows the exact workflow: detect, patch, rescan, keep or roll back.</p>
+</div>
+
+<div class="sec">
+  <div class="sec-inner">
+    <div class="pricing-grid">
+      <div class="card">
+        <h3>Detect</h3>
+        <p style="color:var(--gray-500);margin-top:10px">Run ansede-static on the repo, the PR diff, or the focused scope your team actually cares about.</p>
+      </div>
+      <div class="card">
+        <h3>Patch</h3>
+        <p style="color:var(--gray-500);margin-top:10px">Apply safe inline fixes only when the suggested replacement matches the current line exactly.</p>
+      </div>
+      <div class="card featured">
+        <div class="card-badge">Guard Rail</div>
+        <h3>Verify</h3>
+        <p style="color:var(--gray-500);margin-top:10px">Immediately rescan the scanned scope. If new issues or parse regressions appear, changes are rolled back automatically.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200)">
+  <div class="sec-inner">
+    <div class="sec-title">
+      <h2>Why teams buy it</h2>
+      <p>Because “we autofix stuff” is cute. “We verify the patch and revert if it regresses” closes deals.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="card"><h3>For developers</h3><ul><li>Fast remediation loop</li><li>Safer than blind search/replace</li><li>Clear CLI upgrade path</li></ul></div>
+      <div class="card"><h3>For leads</h3><ul><li>Scope-aware verification story</li><li>Easy free vs Pro packaging</li><li>Good demo narrative for buyers</li></ul></div>
+      <div class="card"><h3>For sales</h3><ul><li>Visually understandable workflow</li><li>Honest trust language</li><li>Strong free-to-Pro conversion hook</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-inner" style="text-align:center;max-width:820px">
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:10px">Truth in advertising, on purpose</h2>
+    <p style="color:var(--gray-500);margin-bottom:20px">Autofix Studio verifies that no <strong>newly detected</strong> issues were introduced in the <strong>scanned scope</strong>. That is strong, credible, and defensible. It is not a promise about untouched files or undiscovered bug classes.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/autofix-studio/live" class="btn btn-primary" style="display:inline-block;width:auto;padding:12px 28px">Launch live studio</a>
+      <a href="/" class="btn btn-outline" style="display:inline-block;width:auto;padding:12px 28px">Back to pricing</a>
+    </div>
   </div>
 </div>
 """
@@ -679,6 +1006,47 @@ _ERROR_BODY = r"""
 @app.route("/")
 def index():
     return _HTML.replace("{{title}}", "World's Best Offline SAST").replace("{{body}}", _INDEX_BODY)
+
+
+@app.route("/autofix-studio")
+def autofix_studio():
+  return _HTML.replace("{{title}}", "Autofix Studio").replace("{{body}}", _AUTOFIX_STUDIO_BODY)
+
+
+@app.route("/autofix-studio/live")
+def autofix_studio_live():
+  return render_template("index.html")
+
+
+@app.route("/api/scan", methods=["POST"])
+def api_scan():
+  return _studio_api_response(guarded_fix=False)
+
+
+@app.route("/api/guarded-fix", methods=["POST"])
+def api_guarded_fix():
+  return _studio_api_response(guarded_fix=True)
+
+
+@app.route("/api/export", methods=["POST"])
+def api_export():
+  payload = request.get_json(silent=True) or {}
+  export_format = str(payload.get("format", "json")).lower()
+  artifacts = payload.get("artifacts") or {}
+
+  if export_format == "json":
+    content = artifacts.get("json") or payload.get("report")
+    if not content:
+      return jsonify({"success": False, "error": "No JSON report available to export."}), 400
+    return jsonify({"success": True, "content": content})
+
+  if export_format == "sarif":
+    content = artifacts.get("sarif")
+    if not content:
+      return jsonify({"success": False, "error": "No SARIF artifact available for this run."}), 400
+    return jsonify({"success": True, "content": content})
+
+  return jsonify({"success": False, "error": f"Unsupported export format: {export_format}"}), 400
 
 
 @app.route("/lookup")

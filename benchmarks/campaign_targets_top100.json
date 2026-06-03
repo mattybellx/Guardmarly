@@ -63,7 +63,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:35:44Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.8,
+      "last_mode": "hotspot",
+      "last_total_findings": 0,
+      "last_supported_file_count": 26,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:35:44Z"
     },
     {
       "id": "py-awesome-python-21289110",
@@ -80,7 +89,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:35:44Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 11,
+      "last_supported_file_count": 7,
+      "last_selected_file_count": 7,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:35:44Z"
     },
     {
       "id": "py-python-63476337",
@@ -97,7 +115,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:35:44Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.0,
+      "last_mode": "hotspot",
+      "last_total_findings": 9,
+      "last_supported_file_count": 1385,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:35:44Z"
     },
     {
       "id": "py-autogpt-614765452",
@@ -114,7 +141,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:35:45Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.4,
+      "last_mode": "hotspot",
+      "last_total_findings": 153,
+      "last_supported_file_count": 3014,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 10,
+      "scanned_at": "2026-06-03T18:35:45Z"
     },
     {
       "id": "py-stable-diffusion-webui-527591471",
@@ -131,7 +167,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:45:34Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 7.1,
+      "last_mode": "hotspot",
+      "last_total_findings": 96,
+      "last_supported_file_count": 243,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:45:34Z"
     },
     {
       "id": "py-yt-dlp-307260205",
@@ -148,7 +193,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:45:34Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 7.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 30,
+      "last_supported_file_count": 1215,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:45:34Z"
     },
     {
       "id": "py-transformers-155220641",
@@ -165,7 +219,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:59:13Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 13.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 57,
+      "last_supported_file_count": 4455,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 5,
+      "scanned_at": "2026-06-03T18:59:13Z"
     },
     {
       "id": "py-hellogithub-58028038",
@@ -182,7 +245,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:59:02Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 2.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 3,
+      "last_supported_file_count": 2,
+      "last_selected_file_count": 2,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T18:59:02Z"
     },
     {
       "id": "py-hermes-agent-1024554267",
@@ -199,7 +271,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:59:59Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 27.1,
+      "last_mode": "hotspot",
+      "last_total_findings": 113,
+      "last_supported_file_count": 2823,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 1,
+      "scanned_at": "2026-06-03T18:59:59Z",
+      "last_verification_at": "2026-06-03T19:00:11Z",
+      "last_verification_status": "campaign-budget-expired",
+      "last_verification_elapsed_seconds": 5.9,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 0,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "py-langflow-599320067",
@@ -216,7 +303,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T18:59:17Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 4.1,
+      "last_mode": "hotspot",
+      "last_total_findings": 3,
+      "last_supported_file_count": 4391,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 3,
+      "scanned_at": "2026-06-03T18:59:17Z"
     },
     {
       "id": "py-youtube-dl-1039520",
@@ -233,7 +329,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:00:05Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 24,
+      "last_supported_file_count": 902,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:00:05Z"
     },
     {
       "id": "py-open-webui-701547123",
@@ -250,7 +355,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:00:40Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 22.9,
+      "last_mode": "hotspot",
+      "last_total_findings": 661,
+      "last_supported_file_count": 310,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 238,
+      "scanned_at": "2026-06-03T19:00:40Z",
+      "last_verification_at": "2026-06-03T19:02:15Z",
+      "last_verification_status": "scan-timeout",
+      "last_verification_elapsed_seconds": 95.0,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 0,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "py-langchain-552661142",
@@ -267,7 +387,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:11:53Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 8.6,
+      "last_mode": "hotspot",
+      "last_total_findings": 23,
+      "last_supported_file_count": 2491,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 2,
+      "scanned_at": "2026-06-03T19:11:53Z",
+      "last_verification_at": "2026-06-03T19:12:10Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 16.9,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 33,
+      "last_verification_likely_real_high_critical": 2
     },
     {
       "id": "py-skills-1061953414",
@@ -284,7 +419,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:19Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.6,
+      "last_mode": "hotspot",
+      "last_total_findings": 54,
+      "last_supported_file_count": 73,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:17:19Z"
     },
     {
       "id": "py-markitdown-888092115",
@@ -301,7 +445,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:19Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 20,
+      "last_supported_file_count": 71,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:17:19Z"
     },
     {
       "id": "py-comfyui-589831718",
@@ -318,7 +471,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:29Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 10.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 114,
+      "last_supported_file_count": 654,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:17:29Z",
+      "last_verification_at": "2026-06-03T19:18:37Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 19.6,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 715,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "py-awesome-llm-apps-793375104",
@@ -335,7 +503,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:28Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 8.8,
+      "last_mode": "hotspot",
+      "last_total_findings": 109,
+      "last_supported_file_count": 861,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 26,
+      "scanned_at": "2026-06-03T19:17:28Z",
+      "last_verification_at": "2026-06-03T19:18:18Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 32.3,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 189,
+      "last_verification_likely_real_high_critical": 43
     },
     {
       "id": "py-deepseek-v3-908531752",
@@ -352,7 +535,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:31Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.6,
+      "last_mode": "hotspot",
+      "last_total_findings": 5,
+      "last_supported_file_count": 5,
+      "last_selected_file_count": 5,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:17:31Z"
     },
     {
       "id": "py-spec-kit-1042367133",
@@ -369,7 +561,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:17:45Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 16.2,
+      "last_mode": "hotspot",
+      "last_total_findings": 82,
+      "last_supported_file_count": 163,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:17:45Z"
     },
     {
       "id": "py-pytorch-65600975",
@@ -386,7 +587,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:14Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 11.8,
+      "last_mode": "hotspot",
+      "last_total_findings": 18,
+      "last_supported_file_count": 4586,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:19:14Z"
     },
     {
       "id": "py-whisper-537603333",
@@ -403,7 +613,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:09Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.6,
+      "last_mode": "hotspot",
+      "last_total_findings": 18,
+      "last_supported_file_count": 20,
+      "last_selected_file_count": 20,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:19:09Z"
     },
     {
       "id": "py-fastapi-160919119",
@@ -420,7 +639,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:14Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 28,
+      "last_supported_file_count": 1124,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 2,
+      "scanned_at": "2026-06-03T19:19:14Z",
+      "last_verification_at": "2026-06-03T19:20:10Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 13.0,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 91,
+      "last_verification_likely_real_high_critical": 13
     },
     {
       "id": "py-thefuck-33614304",
@@ -437,7 +671,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:19Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 4.8,
+      "last_mode": "hotspot",
+      "last_total_findings": 9,
+      "last_supported_file_count": 416,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:19:19Z"
     },
     {
       "id": "py-browser-use-881458615",
@@ -454,7 +697,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:29Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 14.8,
+      "last_mode": "hotspot",
+      "last_total_findings": 172,
+      "last_supported_file_count": 377,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 6,
+      "scanned_at": "2026-06-03T19:19:29Z",
+      "last_verification_at": "2026-06-03T19:19:57Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 28.3,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 391,
+      "last_verification_likely_real_high_critical": 7
     },
     {
       "id": "py-deep-live-cam-695864515",
@@ -471,7 +729,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:19:27Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 8.0,
+      "last_mode": "hotspot",
+      "last_total_findings": 45,
+      "last_supported_file_count": 34,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:19:27Z"
     },
     {
       "id": "py-django-4164482",
@@ -488,7 +755,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:22:24Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 7.4,
+      "last_mode": "hotspot",
+      "last_total_findings": 25,
+      "last_supported_file_count": 3030,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 1,
+      "scanned_at": "2026-06-03T19:22:24Z",
+      "last_verification_at": "2026-06-03T19:22:59Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 19.2,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 61,
+      "last_verification_likely_real_high_critical": 1
     },
     {
       "id": "py-core-12888993",
@@ -505,7 +787,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:22:29Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 5,
+      "last_supported_file_count": 17481,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:22:29Z"
     },
     {
       "id": "py-manim-32689863",
@@ -522,7 +813,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:22:36Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 6.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 6,
+      "last_supported_file_count": 95,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:22:36Z"
     },
     {
       "id": "py-sherlock-162998479",
@@ -539,7 +839,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:22:40Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 4.1,
+      "last_mode": "hotspot",
+      "last_total_findings": 22,
+      "last_supported_file_count": 17,
+      "last_selected_file_count": 17,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:22:40Z"
     },
     {
       "id": "py-devops-exercises-212639071",
@@ -556,7 +865,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:18Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.9,
+      "last_mode": "hotspot",
+      "last_total_findings": 21,
+      "last_supported_file_count": 22,
+      "last_selected_file_count": 22,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:18Z",
+      "last_verification_at": "2026-06-03T19:25:04Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 3.6,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 21,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "py-autoresearch-1174820787",
@@ -573,7 +897,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:18Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.0,
+      "last_mode": "hotspot",
+      "last_total_findings": 10,
+      "last_supported_file_count": 2,
+      "last_selected_file_count": 2,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:18Z",
+      "last_verification_at": "2026-06-03T19:25:07Z",
+      "last_verification_status": "scanned",
+      "last_verification_elapsed_seconds": 2.3,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 10,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "py-funnlp-145553672",
@@ -590,7 +929,15 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "queued",
+      "last_attempted_at": "2026-06-03T19:23:16Z",
+      "last_campaign_status": "no-supported-language",
+      "last_elapsed_seconds": 1.3,
+      "last_mode": "hotspot",
+      "last_total_findings": 0,
+      "last_supported_file_count": 0,
+      "last_selected_file_count": 0,
+      "last_likely_real_high_critical": 0
     },
     {
       "id": "ja-react-10270250",
@@ -607,7 +954,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:19Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.6,
+      "last_mode": "hotspot",
+      "last_total_findings": 1,
+      "last_supported_file_count": 4356,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 1,
+      "scanned_at": "2026-06-03T19:23:19Z"
     },
     {
       "id": "ja-javascript-algorithms-126577260",
@@ -624,7 +980,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:22Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 4.1,
+      "last_mode": "hotspot",
+      "last_total_findings": 0,
+      "last_supported_file_count": 359,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:22Z"
     },
     {
       "id": "ja-everything-claude-code-1136590548",
@@ -641,7 +1006,22 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:24Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 5.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 17,
+      "last_supported_file_count": 405,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 13,
+      "scanned_at": "2026-06-03T19:23:24Z",
+      "last_verification_at": "2026-06-03T19:25:01Z",
+      "last_verification_status": "scan-timeout",
+      "last_verification_elapsed_seconds": 93.0,
+      "last_verification_mode": "deep",
+      "last_verification_total_findings": 0,
+      "last_verification_likely_real_high_critical": 0
     },
     {
       "id": "ja-javaguide-132464395",
@@ -658,7 +1038,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:23Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 2,
+      "last_supported_file_count": 21,
+      "last_selected_file_count": 21,
+      "last_likely_real_high_critical": 1,
+      "scanned_at": "2026-06-03T19:23:23Z"
     },
     {
       "id": "ja-javascript-6498492",
@@ -675,7 +1064,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:26Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.9,
+      "last_mode": "hotspot",
+      "last_total_findings": 0,
+      "last_supported_file_count": 28,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:26Z"
     },
     {
       "id": "ja-next-js-70107786",
@@ -692,7 +1090,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:27Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 4.5,
+      "last_mode": "hotspot",
+      "last_total_findings": 5,
+      "last_supported_file_count": 21396,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:27Z"
     },
     {
       "id": "ja-30-seconds-of-code-112507086",
@@ -709,7 +1116,16 @@
           "CWE-639"
         ]
       },
-      "status": "queued"
+      "status": "scanned",
+      "last_attempted_at": "2026-06-03T19:23:28Z",
+      "last_campaign_status": "scanned",
+      "last_elapsed_seconds": 3.7,
+      "last_mode": "hotspot",
+      "last_total_findings": 0,
+      "last_supported_file_count": 109,
+      "last_selected_file_count": 24,
+      "last_likely_real_high_critical": 0,
+      "scanned_at": "2026-06-03T19:23:28Z"
     },
     {
       "id": "ja-node-27193779",

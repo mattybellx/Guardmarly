@@ -7,7 +7,7 @@ Zero external dependencies. Uses Ed25519-signed JWTs verified offline.
 No phone-home, no telemetry, no network calls.
 
 Tiers:
-  - free    : unlimited scans, basic formats (text/json/sarif), no SBOM/CI recipes
+    - free    : 500 scans/day, 50 guarded autofixes/day, text/json/sarif, no advanced automation
   - pro     : all features, 1 seat, $49/yr
   - team    : all features, up to 25 seats, $499/yr
   - enterprise : all features, unlimited seats, custom rules, SSO, priority support
@@ -44,6 +44,8 @@ _STRIPE_PRO_YEARLY = "https://buy.stripe.com/4gM14m9eu2te00P86i1oI01"
 _LICENSE_SERVER = os.environ.get("ANSEDE_LICENSE_SERVER", "https://ansede.dev")
 _FREE_DAILY_LIMIT = 500
 _SHOW_PAYMENT_AT = 450
+_FREE_GUARDED_AUTOFIX_LIMIT = 50
+_SHOW_AUTOFIX_PAYMENT_AT = 40
 
 # ── Embedded public key (Ed25519) ──────────────────────────────────────────
 # This is the OFFICIAL ansede-static licensing public key.
@@ -109,6 +111,13 @@ class LicenseInfo:
         if self.tier == "free":
             return 500  # generous free tier
         return 0  # unlimited
+
+    @property
+    def max_guarded_autofixes_per_day(self) -> int:
+        """Return max guarded autofixes per day. 0 = unlimited."""
+        if self.tier == "free":
+            return _FREE_GUARDED_AUTOFIX_LIMIT
+        return 0
 
     @property
     def tier_display_name(self) -> str:
@@ -326,11 +335,13 @@ def format_license_status(license_info: LicenseInfo | None = None) -> str:
 
     if license_info.tier == "free":
         lines.append(f"  Daily limit: {license_info.max_scans_per_day} scans/day")
+        lines.append(f"  Guarded fix : {license_info.max_guarded_autofixes_per_day} verified autofixes/day")
         lines.append("")
         lines.append("  Upgrade to Pro for:")
-        lines.append("    • SARIF output (GitHub Code Scanning)")
+        lines.append("    • Unlimited Guarded Autofix")
+        lines.append("    • Verified autofix re-scan + rollback safety")
         lines.append("    • SBOM generation")
-        lines.append("    • CI/CD recipes")
+        lines.append("    • HTML dashboards")
         lines.append("    • Unlimited daily scans")
         lines.append("    • Priority email support")
         lines.append("")
@@ -361,6 +372,7 @@ class LicenseFeatureGate:
             "ci-recipes": self.info.can_use_ci_recipes,
             "custom-rules": self.info.can_use_custom_rules,
             "unlimited-scans": lambda: self.info.max_scans_per_day == 0,
+            "unlimited-guarded-autofix": lambda: self.info.max_guarded_autofixes_per_day == 0,
         }
         checker = checks.get(feature)
         if checker is None:
@@ -379,7 +391,7 @@ class LicenseFeatureGate:
             f"  ║  {name} is a Pro feature. You're on the {tier} tier.        ║\n"
             f"  ║                                                      ║\n"
             f"  ║  💸  One-time £4.99  —  30 days of Pro access         ║\n"
-            f"  ║  ⭐  Pro £49/year    —  unlimited everything           ║\n"
+            f"  ║  ⭐  Pro £49/year    —  unlimited guarded autofix      ║\n"
             f"  ║                                                      ║\n"
             f"  ║  Run: ansede-static license upgrade                   ║\n"
             f"  ║  Or visit: https://ansede.onrender.com                 ║\n"
@@ -421,6 +433,14 @@ def _scan_hash_file() -> Path:
 def _scan_monotonic_file() -> Path:
     """Hidden file tracking last known UTC timestamp for clock-rollback detection."""
     return Path.home() / ".ansede" / ".scan_clock"
+
+
+def _guarded_autofix_count_file() -> Path:
+    return Path.home() / ".ansede" / "guarded_autofix_count.json"
+
+
+def _guarded_autofix_hash_file() -> Path:
+    return Path.home() / ".ansede" / ".guarded_autofix_integrity"
 
 
 def _scan_count_hash(data: str) -> str:
@@ -474,6 +494,25 @@ def _check_scans_today() -> int:
     return 0
 
 
+def _check_guarded_autofixes_today() -> int:
+    count_file = _guarded_autofix_count_file()
+    hash_file = _guarded_autofix_hash_file()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    try:
+        if count_file.exists():
+            data = json.loads(count_file.read_text())
+            if hash_file.exists():
+                stored_hash = hash_file.read_text().strip()
+                computed = _scan_count_hash(json.dumps(data, sort_keys=True))
+                if stored_hash != computed:
+                    return 0
+            return int(data.get(today, 0))
+    except Exception:
+        pass
+    return 0
+
+
 def _increment_scan_count() -> int:
     count_file = _scan_count_file()
     hash_file = _scan_hash_file()
@@ -499,6 +538,30 @@ def _increment_scan_count() -> int:
     hash_file.write_text(_scan_count_hash(serialized))
 
     return data[today]
+
+
+def _increment_guarded_autofix_count(amount: int = 1) -> int:
+    count_file = _guarded_autofix_count_file()
+    hash_file = _guarded_autofix_hash_file()
+    count_file.parent.mkdir(parents=True, exist_ok=True)
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    data: dict[str, int] = {}
+
+    try:
+        if count_file.exists():
+            data = json.loads(count_file.read_text())
+    except Exception:
+        pass
+
+    increment = max(0, int(amount))
+    data[today] = data.get(today, 0) + increment
+
+    tmp = count_file.with_suffix(".tmp")
+    serialized = json.dumps(data, sort_keys=True)
+    tmp.write_text(serialized)
+    tmp.replace(count_file)
+    hash_file.write_text(_scan_count_hash(serialized))
+    return int(data[today])
 
 
 def _verify_system_integrity() -> bool:
@@ -542,6 +605,27 @@ _UPGRADE_BANNER = """
 ).replace("{count}", "{count}").replace("{limit}", "{limit}")
 
 
+_AUTOFIX_UPGRADE_BANNER = """
+╔═══════════════════════════════════════════════════════════════════════╗
+║                                                                       ║
+║   🛠️  You've used {count} Guarded Autofix actions today.               ║
+║   Free tier includes {limit} verified autofixes/day.                  ║
+║                                                                       ║
+║   Upgrade to Pro for unlimited Guarded Autofix, verification,        ║
+║   and rollback protection across your scanned scope.                  ║
+║                                                                       ║
+║   💸  One-time £4.99:  {one_time}   ║
+║   ⭐  Pro £49/yr:      {pro_yearly}   ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+""".format(
+    one_time=_STRIPE_ONE_TIME,
+    pro_yearly=_STRIPE_PRO_YEARLY,
+    count="{count}",
+    limit="{limit}",
+).replace("{count}", "{count}").replace("{limit}", "{limit}")
+
+
 def maybe_show_upgrade_prompt() -> str | None:
     """Check if approaching free tier limit. Returns upgrade message or None."""
     try:
@@ -557,6 +641,21 @@ def maybe_show_upgrade_prompt() -> str | None:
     return None
 
 
+def maybe_show_guarded_autofix_upgrade_prompt(projected_usage: int = 0) -> str | None:
+    """Return a tailored upgrade message when Guarded Autofix usage nears the free limit."""
+    try:
+        lic = load_license()
+        if lic.tier != "free":
+            return None
+    except Exception:
+        return None
+
+    count = _check_guarded_autofixes_today() + max(0, int(projected_usage))
+    if count >= _SHOW_AUTOFIX_PAYMENT_AT:
+        return _AUTOFIX_UPGRADE_BANNER.format(count=count, limit=_FREE_GUARDED_AUTOFIX_LIMIT)
+    return None
+
+
 def bump_scan_count() -> int:
     """Increment today's scan count. Call after each scan invocation."""
     try:
@@ -566,6 +665,35 @@ def bump_scan_count() -> int:
     except Exception:
         pass
     return 0
+
+
+def remaining_guarded_autofix_quota() -> int | None:
+    """Return remaining free-tier Guarded Autofix actions for today, or None when unlimited."""
+    try:
+        lic = load_license()
+        limit = lic.max_guarded_autofixes_per_day
+    except Exception:
+        return None
+    if limit == 0:
+        return None
+    return max(0, limit - _check_guarded_autofixes_today())
+
+
+def bump_guarded_autofix_count(amount: int) -> int:
+    """Increment today's Guarded Autofix usage for free users. Pro tiers are unlimited."""
+    try:
+        lic = load_license()
+        if lic.max_guarded_autofixes_per_day == 0:
+            return 0
+        return _increment_guarded_autofix_count(amount)
+    except Exception:
+        return 0
+
+
+def is_over_free_guarded_autofix_limit() -> bool:
+    """Return True if the free tier has exhausted today's Guarded Autofix quota."""
+    remaining = remaining_guarded_autofix_quota()
+    return remaining == 0 if remaining is not None else False
 
 
 def is_over_free_limit() -> bool:
