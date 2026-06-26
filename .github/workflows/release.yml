@@ -80,7 +80,7 @@ jobs:
         run: npm run compile
       - name: Package VSIX
         working-directory: vscode-extension
-        run: npx vsce package --no-git-tag-version --no-update-readme
+        run: npx vsce package --no-git-tag-version
       - name: Upload VSIX
         uses: actions/upload-artifact@v4
         with:
