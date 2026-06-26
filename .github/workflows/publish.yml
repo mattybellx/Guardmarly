@@ -21,6 +21,7 @@ jobs:
     name: Build and publish to PyPI
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment:
       name: pypi
 
@@ -51,6 +52,8 @@ jobs:
       - name: Publish to PyPI (Trusted Publishing)
         id: publish_trusted
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
 
       - name: Publish to PyPI (API token fallback)
         id: publish_token
@@ -58,6 +61,7 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+          skip-existing: true
 
       - name: Verify PyPI publication
         if: success() || (steps.publish_token.conclusion == 'success')
