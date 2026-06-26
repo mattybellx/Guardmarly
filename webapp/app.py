@@ -24,12 +24,30 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-# ── Flask (only external dependency) ───────────────────────────────────
+# ── Flask (only external dependency — graceful fallback) ─────────────
+_FLASK_AVAILABLE: bool = False
 try:
   from flask import Flask, request, jsonify, render_template
+  _FLASK_AVAILABLE = True
 except ImportError:
-    print("ERROR: Flask not installed. Run: pip install flask", file=sys.stderr)
-    sys.exit(1)
+    # Instead of crashing, create a stub that raises clear errors when
+    # someone tries to actually USE Flask features without it installed.
+    class _FlaskStub:  # type: ignore
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            self.config: dict[str, Any] = {}
+            self.secret_key: str = "stub"
+        def route(self, *args: Any, **kwargs: Any) -> Any:
+            return lambda f: f
+        def after_request(self, f: Any) -> Any:
+            return f
+        def run(self, *args: Any, **kwargs: Any) -> None:
+            raise RuntimeError("Flask is not installed. Run: pip install flask")
+        def test_client(self) -> Any:
+            raise RuntimeError("Flask is not installed. Run: pip install flask")
+    Flask = _FlaskStub  # type: ignore
+    request = None  # type: ignore
+    jsonify = None  # type: ignore
+    render_template = None  # type: ignore
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24).hex())

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import pytest
+pytest.importorskip("flask", reason="Flask is required for webapp tests")
+
 from webapp.app import app
 
 

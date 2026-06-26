@@ -1,6 +1,11 @@
 """Test the SQLite relational graph store end-to-end."""
 import sys, json, os
-sys.path.insert(0, r'C:\Users\matth\OneDrive\Desktop\ansede-static-focus')
+from pathlib import Path
+
+import pytest
+pytest.importorskip("ansede_rust_core._core", reason="Rust core module not built")
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from ansede_static.graph.sqlite_graph import GraphStore
 from ansede_static.graph.graph_populator import populate_from_flat_table
