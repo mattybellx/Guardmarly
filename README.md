@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>The offline SAST engine that finds what others miss.</strong><br>
-  <strong>Rust-accelerated fast path</strong> · <strong>0.02s per 100k LOC</strong> · <strong>Zero external network dependencies</strong><br>
+  <strong>Rust-accelerated fast path</strong> · <strong>5,100 LOC/s per file</strong> · <strong>100% CVE recall</strong> · <strong>7 languages</strong><br>
   <code>pip install ansede-static</code> &nbsp;·&nbsp; No telemetry &nbsp;·&nbsp; Fully offline
 </p>
 
