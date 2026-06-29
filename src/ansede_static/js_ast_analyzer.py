@@ -88,7 +88,7 @@ _VENDOR_NOISE_CWES: frozenset[str] = frozenset({
 
 # CWEs that are noise in test files (test routes don't need auth, etc.)
 _TEST_NOISE_CWES: frozenset[str] = frozenset({
-    "CWE-862", "CWE-352", "CWE-209",
+    "CWE-862", "CWE-352", "CWE-209", "CWE-918", "CWE-1188",
 })
 
 _FRAMEWORK_INTERNAL_NOISE_CWES: frozenset[str] = frozenset({

@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import random
 import re
 import shutil
@@ -145,23 +146,33 @@ def _run_git(args: list[str], *, cwd: Path | None = None) -> str:
 
 
 def _github_json(url: str) -> dict[str, Any]:
+    token = os.environ.get("GITHUB_TOKEN", "").strip() or os.environ.get("GH_TOKEN", "").strip()
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "ansede-static-live-benchmark",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
     request = urllib.request.Request(
         url,
-        headers={
-            "Accept": "application/vnd.github+json",
-            "User-Agent": "ansede-static-live-benchmark",
-        },
+        headers=headers,
     )
     with urllib.request.urlopen(request, timeout=60) as response:
         return json.load(response)
 
 
 def _github_html(url: str) -> str:
+    token = os.environ.get("GITHUB_TOKEN", "").strip() or os.environ.get("GH_TOKEN", "").strip()
+    headers = {
+        "User-Agent": "ansede-static-live-benchmark",
+    }
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
     request = urllib.request.Request(
         url,
-        headers={
-            "User-Agent": "ansede-static-live-benchmark",
-        },
+        headers=headers,
     )
     with urllib.request.urlopen(request, timeout=60) as response:
         return response.read().decode("utf-8", "replace")
@@ -203,7 +214,15 @@ def _search_small_repos_html(language: str, *, max_size_kb: int, pages: int, sor
                 "s": sort,
             }
         )
-        html = _github_html(f"https://github.com/search?{params}")
+        try:
+            html = _github_html(f"https://github.com/search?{params}")
+        except urllib.error.HTTPError as exc:
+            if exc.code == 429:
+                _log.info("GitHub HTML search rate-limited on page %s for %s; sleeping 65s and retrying", page, language)
+                time.sleep(65)
+                html = _github_html(f"https://github.com/search?{params}")
+            else:
+                raise
         for full_name in pattern.findall(html):
             owner, repo = full_name.split("/", 1)
             if owner.lower() in HTML_SEARCH_EXCLUDED_OWNERS:
@@ -229,17 +248,34 @@ def _search_small_repos_html(language: str, *, max_size_kb: int, pages: int, sor
 
 
 def _search_small_repos(language: str, *, max_size_kb: int, candidate_goal: int, per_page: int, sort: str) -> list[dict[str, Any]]:
-    try:
-        pool = _search_small_repos_api(language, max_size_kb=max_size_kb, per_page=per_page, page=1, sort=sort)
-        if pool:
-            for item in pool:
-                item.setdefault("discovery_mode", "github-api-search")
-            return pool
-    except urllib.error.HTTPError as exc:
-        if exc.code != 403:
-            raise
-        _log.info("GitHub Search API rate-limited for %s; falling back to HTML search", language)
-    pages = max(2, (candidate_goal + 9) // 10)
+    for attempt in range(3):
+        try:
+            pool = _search_small_repos_api(language, max_size_kb=max_size_kb, per_page=per_page, page=1, sort=sort)
+            if pool:
+                for item in pool:
+                    item.setdefault("discovery_mode", "github-api-search")
+                return pool
+        except urllib.error.HTTPError as exc:
+            if exc.code not in {403, 429}:
+                raise
+            if attempt < 2:
+                sleep_s = 65
+                _log.info(
+                    "GitHub Search API rate-limited for %s (HTTP %s), attempt %s/3; sleeping %ss",
+                    language,
+                    exc.code,
+                    attempt + 1,
+                    sleep_s,
+                )
+                time.sleep(sleep_s)
+                continue
+            _log.info(
+                "GitHub Search API unavailable/rate-limited for %s (HTTP %s); falling back to HTML search",
+                language,
+                exc.code,
+            )
+
+    pages = max(2, min(6, (candidate_goal + 19) // 20))
     return _search_small_repos_html(language, max_size_kb=max_size_kb, pages=pages, sort=sort)
 
 

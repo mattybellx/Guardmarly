@@ -46,6 +46,19 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     "fmt.Scan": "Console input",
     "fmt.Scanf": "Console input",
     "fmt.Scanln": "Console input",
+    # Chi router
+    "chi.URLParam": "URL path parameter (chi router)",
+    # Gin framework
+    "c.Query": "Gin query parameter",
+    "c.Param": "Gin URL path parameter",
+    "c.PostForm": "Gin POST form value",
+    "c.GetHeader": "Gin request header",
+    "c.GetRawData": "Gin raw request body",
+    # Echo framework
+    "c.FormValue": "Echo form/query value",
+    # Fiber framework
+    "c.Params": "Fiber URL path parameter",
+    "c.Body": "Fiber request body",
 }
 
 _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
@@ -92,6 +105,12 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "log.Fatalf": ("CWE-532", "Sensitive Data in Logs via log.Fatalf", "low"),
     "reflect.ValueOf": ("CWE-470", "Unsafe reflection via reflect.ValueOf", "medium"),
     "unsafe.Pointer": ("CWE-822", "Unsafe pointer dereference via unsafe.Pointer", "high"),
+    # Template injection / XSS via raw HTML/JS casting
+    "template.HTML": ("CWE-79", "Unescaped template.HTML cast (potential XSS)", "high"),
+    "template.JS": ("CWE-79", "Unescaped template.JS cast (potential XSS)", "high"),
+    # Additional HTTP client sinks for SSRF
+    "http.Client.Do": ("CWE-918", "SSRF via http.Client.Do", "high"),
+    "resty.New": ("CWE-918", "SSRF via resty HTTP client", "high"),
 }
 
 _GO_AUTH_MIDDLEWARE_PATTERNS: List[str] = [
@@ -250,6 +269,7 @@ class GoSecurityWalker:
             self._walk_decl(decl)
         self._check_missing_auth()
         self._detect_hardcoded_secrets()
+        self._detect_dangerous_defaults()
         self._detect_regex_sinks()
         return self.findings
 
@@ -261,6 +281,12 @@ class GoSecurityWalker:
         (r'sk-[A-Za-z0-9]{20,}', "OpenAI/Stripe secret key"),
         (r'ghp_[A-Za-z0-9]{36}', "GitHub personal access token"),
         (r'-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----', "Private key"),
+        # AWS / cloud credentials
+        (r'(?:aws_access_key_id|aws_secret_access_key|AKIA[A-Z0-9]{16})\s*[=:]\s*["\'][A-Za-z0-9/+=]{16,}["\']', "AWS credential"),
+        # Database connection strings with embedded credentials
+        (r'(?:mongodb(?:\+srv)?|postgres(?:ql)?|mysql|sqlserver|redis)://[^:]+:[^@]+@', "Database connection string with credentials"),
+        # JWT / signing secrets
+        (r'(?:JWT_SECRET|SIGNING_KEY|HMAC_SECRET)\s*[=:]\s*["\'][^"\']{3,}["\']', "JWT or HMAC signing secret"),
     ]
 
     def _detect_hardcoded_secrets(self) -> None:
@@ -282,6 +308,51 @@ class GoSecurityWalker:
                         cwe="CWE-798",
                         agent="go-analyzer",
                         confidence=0.95,
+                        analysis_kind="pattern",
+                    ))
+                    break
+
+    _GO_DANGEROUS_DEFAULTS: List[Tuple[str, str, str, str]] = [
+        # (regex, label, description, severity)
+        (r'InsecureSkipVerify\s*:\s*true', "TLS verification disabled",
+         "TLS certificate verification is disabled — vulnerable to MITM attacks", "high"),
+        (r'InsecureSkipVerify\s*=\s*true', "TLS verification disabled",
+         "TLS certificate verification is disabled — vulnerable to MITM attacks", "high"),
+        (r'Secure\s*:\s*false', "Secure cookie flag disabled",
+         "Cookie Secure flag is false — cookies sent over unencrypted HTTP", "medium"),
+        (r'HttpOnly\s*:\s*false', "HttpOnly cookie flag disabled",
+         "Cookie HttpOnly flag is false — cookies accessible to JavaScript (XSS risk)", "medium"),
+        (r'Access-Control-Allow-Origin\s*:\s*"\*"', "CORS allow-all origin",
+         "CORS allows all origins — cross-site data access possible", "high"),
+        (r'SetEnv\s*\(\s*"[^"]*"\s*,\s*"[^"]*"\s*\)', "Hardcoded env var in code",
+         "Environment variable set directly in code — may expose secrets", "low"),
+        (r'(\*tls\.Config\{[^}]*MinVersion\s*:\s*\d+)', "TLS minimum version",
+         "Check TLS MinVersion — older versions are deprecated and vulnerable", "low"),
+        (r'MinVersion\s*:\s*tls\.VersionSSL30', "TLS SSLv3 enabled",
+         "SSLv3 is completely broken (POODLE attack)", "critical"),
+        (r'MinVersion\s*:\s*tls\.VersionTLS10', "TLS 1.0 enabled",
+         "TLS 1.0 is deprecated and vulnerable to BEAST attack", "high"),
+    ]
+
+    def _detect_dangerous_defaults(self) -> None:
+        """Detect dangerous default configurations in Go code (TLS, cookies, CORS)."""
+        for lineno, line in enumerate(self.code.splitlines(), start=1):
+            stripped = line.strip()
+            if stripped.startswith("//") or stripped.startswith("/*"):
+                continue
+            for pattern, label, desc, sev in self._GO_DANGEROUS_DEFAULTS:
+                if re.search(pattern, stripped, re.IGNORECASE):
+                    self.findings.append(Finding(
+                        category="security",
+                        severity=Severity(sev),
+                        title=f"CWE-1188: Dangerous default `{label}` at line {lineno}",
+                        description=f"{desc} Found at L{lineno}.",
+                        line=lineno,
+                        suggestion=f"Remove or gate `{label}` behind a configuration check.",
+                        rule_id="GO-1188",
+                        cwe="CWE-1188",
+                        agent="go-analyzer",
+                        confidence=0.90,
                         analysis_kind="pattern",
                     ))
                     break

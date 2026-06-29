@@ -554,6 +554,264 @@ RULES: list[Rule] = [
         r'redirect\s*:\s*\{[\s\S]*?destination\s*:\s*(?:ctx|context|req)\.query\.',
         context_confirm=r'getServerSideProps|getStaticProps',
     ),
+    # ─── CWE-614: Express cookie security (covers Semgrep cookie rules) ──
+    Rule(
+        "JS-066", "CWE-614",
+        "CWE-614: Express cookie/session missing `secure` flag at line {line}",
+        "Cookie or session set without `secure: true` at L{line}: `{snippet}`. "
+        "Cookies without the Secure flag can be transmitted over unencrypted HTTP.",
+        "Add `secure: true` to the cookie options. In production, always use HTTPS.",
+        Severity.MEDIUM,
+        r'cookie\s*:\s*\{',
+        exclude_pattern=r'secure\s*:\s*true',
+        context_confirm=r'cookie|session',
+    ),
+    Rule(
+        "JS-067", "CWE-614",
+        "CWE-614: Express cookie/session missing `httpOnly` flag at line {line}",
+        "Cookie or session set without `httpOnly: true` at L{line}: `{snippet}`. "
+        "Cookies without HttpOnly are accessible to JavaScript via `document.cookie`, enabling XSS-based session theft.",
+        "Add `httpOnly: true` to the cookie options.",
+        Severity.MEDIUM,
+        r'(?:cookie\s*:\s*\{|res\.cookie\s*\()',
+        exclude_pattern=r'httpOnly\s*:\s*true',
+        context_confirm=r'cookie|session',
+    ),
+    Rule(
+        "JS-068", "CWE-614",
+        "CWE-614: Express session with default cookie name at line {line}",
+        "Express session using default cookie name `connect.sid` or `sessionId` at L{line}. "
+        "Default/predictable session names leak framework information to attackers.",
+        "Set a custom, unguessable session name: `name: 'myapp_' + crypto.randomBytes(16).toString('hex')`",
+        Severity.LOW,
+        r'session\s*\(\s*\{',
+        exclude_pattern=r'name\s*:\s*["\'](?!connect\.sid|sessionId)',
+    ),
+    # ─── CWE-693: Express security middleware missing ──────────────────
+    Rule(
+        "JS-069", "CWE-693",
+        "CWE-693: Express session cookie missing `sameSite` flag at line {line}",
+        "Express session/cookie without `sameSite` attribute at L{line}. "
+        "Missing SameSite allows CSRF attacks via cross-origin requests.",
+        "Add `sameSite: 'strict'` or `sameSite: 'lax'` to cookie config.",
+        Severity.MEDIUM,
+        r'(?:cookie\s*:\s*\{|res\.cookie\s*\()',
+        exclude_pattern=r'sameSite\s*:',
+        context_confirm=r'cookie|session',
+    ),
+    # ─── CWE-327/328: Weak crypto in JS ──────────────────────────────
+    Rule(
+        "JS-070", "CWE-327",
+        "CWE-327: Weak cryptographic hash (MD5/SHA1) at line {line}",
+        "Weak hash algorithm detected at L{line}: `{snippet}`. MD5 and SHA1 are cryptographically broken.",
+        "Use SHA-256 or SHA-3 via `crypto.createHash('sha256')`. For passwords, use bcrypt or argon2.",
+        Severity.HIGH,
+        r'createHash\s*\(\s*["\']md5["\']|createHash\s*\(\s*["\']sha1["\']|createHash\s*\(\s*["\']sha-1["\']',
+    ),
+    Rule(
+        "JS-071", "CWE-328",
+        "CWE-328: Weak password hashing (no salt/iterations) at line {line}",
+        "Password hashing without salt or iterations at L{line}: `{snippet}`. "
+        "Unsalted hashes are vulnerable to rainbow table attacks.",
+        "Use bcrypt with salt rounds: `bcrypt.hash(password, 10)`. Never use plain SHA/MD5 for passwords.",
+        Severity.CRITICAL,
+        r'\.update\s*\(\s*password\s*\)|hash\s*\(\s*["\'](?:sha256|sha512|md5)["\']\s*,\s*password',
+        context_confirm=r'password|pwd|passwd|credential',
+    ),
+    # ─── CWE-117: Log injection in JS ────────────────────────────────
+    Rule(
+        "JS-072", "CWE-117",
+        "CWE-117: Log injection via string concatenation at line {line}",
+        "Logger call uses string concatenation at L{line}: `{snippet}`. "
+        "User-controlled data in log messages enables CRLF injection to forge log entries.",
+        "Use parameterized logging: `logger.info('User %s logged in', user)`. Never concatenate user input into log messages.",
+        Severity.MEDIUM,
+        r'(?:console\.(?:log|info|warn|error|debug)|logger\.(?:info|warn|error|debug))\s*\([^)]*\+\s*',
+        exclude_pattern=r'(?:JSON\.stringify|util\.inspect|typeof|instanceof)',
+    ),
+    # ─── CWE-943: NoSQL injection (MongoDB) ───────────────────────────
+    Rule(
+        "JS-073", "CWE-943",
+        "CWE-943: NoSQL injection via MongoDB $where at line {line}",
+        "MongoDB $where operator with user input at L{line}: `{snippet}`. Attackers can inject arbitrary JavaScript.",
+        "Use $expr with aggregation operators instead of $where. Never pass user input directly to $where.",
+        Severity.CRITICAL,
+        r'\$where\s*:\s*(?:`[^`]*\$\{|req\.|request\.|body\.|params\.|query\.)',
+    ),
+    Rule(
+        "JS-074", "CWE-943",
+        "CWE-943: NoSQL injection via unvalidated query operators at line {line}",
+        "MongoDB query with user-controlled object at L{line}: `{snippet}`. Attackers can inject $gt, $ne, $regex operators.",
+        "Sanitize user input: strip $-prefixed keys, or use mongo-sanitize. Never pass `req.body` directly to `find()`.",
+        Severity.CRITICAL,
+        r'(?:\.find|\.findOne|\.update|\.deleteOne|\.deleteMany)\s*\(\s*\{',
+        context_confirm=r'(?:req\.|request\.)(?:body|query|params)',
+    ),
+    # ─── CWE-943: NoSQL injection via user-named parameters (MongoDB) ──
+    Rule(
+        "JS-090", "CWE-943",
+        "CWE-943: NoSQL injection via MongoDB query with user-controlled parameter at line {line}",
+        "MongoDB query passes a user-controlled parameter directly at L{line}: `{snippet}`. "
+        "Attackers can inject MongoDB operators ($gt, $ne, $regex) through query parameters.",
+        "Sanitize or validate query parameters before passing to MongoDB. Use mongo-sanitize or cast values to expected types.",
+        Severity.HIGH,
+        r'(?:\.find|\.findOne|\.update|\.deleteOne|\.deleteMany)\s*\(\s*\{',
+        context_confirm=r':\s*(?:userName|userId|user_name|user_id|password|token|threshold|searchTerm|search)\b',
+    ),
+    # ─── CWE-79: DOM XSS via insertAdjacentHTML / dynamic innerHTML ────
+    Rule(
+        "JS-091", "CWE-79",
+        "CWE-79: DOM XSS via dynamic HTML insertion at line {line}",
+        "Dynamic content inserted into the DOM at L{line}: `{snippet}`. "
+        "User-controlled data in `insertAdjacentHTML`, `document.write()`, or dynamic HTML allows script injection.",
+        "Use `textContent`, `createElement` + `appendChild`, or sanitize with DOMPurify.sanitize().",
+        Severity.HIGH,
+        r'(?:insertAdjacentHTML|document\.write(?:ln)?)\s*\([^)]*(?:req\.|request\.|location\.|location\.search|location\.hash|decodeURI|atob)',
+    ),
+    # ─── CWE-1321: Prototype pollution ──────────────────────────────
+    Rule(
+        "JS-092", "CWE-1321",
+        "CWE-1321: Prototype pollution via unsafe merge at line {line}",
+        "Object merge without prototype check at L{line}: `{snippet}`. Attackers can pollute `Object.prototype` via `__proto__` or `constructor.prototype`.",
+        "Use `Object.create(null)` or check `hasOwnProperty()` before merging. Use safe-merge libraries.",
+        Severity.HIGH,
+        r'(?:Object\.assign|\.\.\.\w+|merge|extend)\s*\([^)]*(?:req\.|request\.)(?:body|query|params)',
+        context_confirm=r'(?:merge|extend|assign)',
+    ),
+    # ─── CWE-347: JWT none algorithm / weak secret ──────────────────
+    Rule(
+        "JS-093", "CWE-347",
+        "CWE-347: JWT verification with `algorithms: ['none']` or no algorithm check at line {line}",
+        "JWT verification without enforcing algorithm at L{line}: `{snippet}`. Attackers can forge tokens with `alg: none`.",
+        "Explicitly specify algorithms: `jwt.verify(token, secret, {{ algorithms: ['HS256'] }})`. Never allow 'none'.",
+        Severity.CRITICAL,
+        r'jwt\.(?:verify|decode)\s*\([^)]*\)\s*;?\s*$',
+        exclude_pattern=r'algorithms\s*:|verify\s*:',
+        context_confirm=r'(?:jwt|jsonwebtoken|token)',
+    ),
+    # ─── CWE-22: Path traversal via path.join() ─────────────────────
+    Rule(
+        "JS-094", "CWE-22",
+        "CWE-22: Path traversal via `path.join()` with user input at line {line}",
+        "`path.join()` with user-controlled argument at L{line}: `{snippet}`. User can traverse directories with `../` sequences.",
+        "Validate user input against an allowlist. Use `path.resolve()` and verify the result stays within the expected directory.",
+        Severity.HIGH,
+        r'path\.(?:join|resolve)\s*\([^)]*(?:req\.|request\.)(?:body|query|params|file)',
+        exclude_pattern=r'path\.basename|startsWith\s*\(|endsWith\s*\(',
+    ),
+    # ─── CWE-94: eval via Function constructor ──────────────────────
+    Rule(
+        "JS-078", "CWE-94",
+        "CWE-94: Code injection via `new Function()` at line {line}",
+        "`new Function()` with dynamic code at L{line}: `{snippet}`. Equivalent to `eval()` — executes arbitrary JavaScript.",
+        "Avoid `new Function()`. Use `JSON.parse()` for data or a sandboxed VM for code execution.",
+        Severity.CRITICAL,
+        r'new\s+Function\s*\([^)]*(?:req\.|request\.|body\.|query\.|params\.)',
+    ),
+    # ─── CWE-330: Insecure randomness (Math.random for crypto) ──────
+    Rule(
+        "JS-079", "CWE-330",
+        "CWE-330: Insecure randomness using `Math.random()` for security at line {line}",
+        "`Math.random()` used for crypto/security purpose at L{line}: `{snippet}`. Math.random() is not cryptographically secure.",
+        "Use `crypto.randomBytes()` or `crypto.getRandomValues()` for any security-sensitive random value.",
+        Severity.HIGH,
+        r'Math\.random\s*\(\s*\)',
+        context_confirm=r'(?:token|password|secret|key|auth|session|csrf|nonce|crypto)',
+    ),
+    # ─── CWE-942: CORS wildcard ────────────────────────────────────
+    Rule(
+        "JS-080", "CWE-942",
+        "CWE-942: CORS allows all origins (Access-Control-Allow-Origin: *) at line {line}",
+        "CORS configured with wildcard origin at L{line}: `{snippet}`. Any website can make authenticated cross-origin requests.",
+        "Restrict to specific origins. Use a dynamic allowlist based on your known domains, not `*`.",
+        Severity.HIGH,
+        r'Access-Control-Allow-Origin\s*[,:]\s*["\']?\*["\']?|cors\s*\(\s*\{\s*origin\s*:\s*(?:true|["\']?\*["\']?)',
+    ),
+    # ─── CWE-611: XXE in XML parsers ──────────────────────────────
+    Rule(
+        "JS-081", "CWE-611",
+        "CWE-611: XML External Entity (XXE) — unsafe XML parser at line {line}",
+        "XML parser without XXE protection at L{line}: `{snippet}`. Attackers can read local files or trigger SSRF.",
+        "Disable external entities: `{{ sax: true, noent: false }}` or use a safe XML parser like `fast-xml-parser`.",
+        Severity.HIGH,
+        r'(?:libxmljs|xml2js|xml2json|xml-js)\.(?:parse|parseString)\s*\(',
+        exclude_pattern=r'(?:noent|sax|secure\s*:\s*true)',
+    ),
+    # ─── CWE-116: Incomplete sanitization (CodeQL parity) ──────────
+    Rule(
+        "JS-082", "CWE-116",
+        "CWE-116: Incomplete sanitization — `.replace()` without `/g` flag at line {line}",
+        "String replacement without global flag at L{line}: `{snippet}`. Only the first occurrence is replaced, leaving the rest unsanitized.",
+        "Add the `/g` flag: `.replace(/pattern/g, '')`. Or use `.replaceAll()` for literal strings.",
+        Severity.HIGH,
+        r'\.replace\s*\(\s*/[^/]+/(?!\s*[gimyus]*g)',
+        exclude_pattern=r'/\s*[gimyus]*g',
+    ),
+    Rule(
+        "JS-083", "CWE-116",
+        "CWE-116: Incomplete sanitization — blacklist regex filter at line {line}",
+        "Regex-based blacklist sanitization at L{line}: `{snippet}`. Blacklist filters are inherently incomplete — new attack vectors bypass them.",
+        "Use allowlist validation instead of blacklist sanitization. Match against expected safe patterns, not known-bad ones.",
+        Severity.HIGH,
+        r'\.replace\s*\(\s*/\[.*\]/',
+        context_confirm=r'(?:sanitize|filter|clean|strip|escape|remove)',
+    ),
+    Rule(
+        "JS-084", "CWE-116",
+        "CWE-116: Incomplete sanitization — missing backslash escape in regex at line {line}",
+        "Regex pattern without backslash escaping at L{line}: `{snippet}`. Special regex characters in user input cause ReDoS or bypass.",
+        "Escape special regex characters: `.replace(/[.*+?^${}()|[\]\\]/g, '\\\\$&')` before using input in RegExp.",
+        Severity.HIGH,
+        r'new\s+RegExp\s*\(\s*(?:req\.|request\.|params\.|query\.|body\.|\w+)',
+        exclude_pattern=r'\.replace\s*\(\s*/\[\.\*\+',
+    ),
+    Rule(
+        "JS-085", "CWE-116",
+        "CWE-116: Incomplete URL sanitization — substring/indexOf check at line {line}",
+        "URL validated via `indexOf()` or substring check at L{line}: `{snippet}`. Attackers can prepend/append to bypass substring matching.",
+        "Use `new URL()` to parse and validate the hostname properly. Never use `indexOf()` or `includes()` for URL validation.",
+        Severity.HIGH,
+        r'(?:indexOf|includes|startsWith)\s*\([^)]*(?:url|href|redirect|location|link|target|destination)',
+        context_confirm=r'(?:redirect|url|href|location)',
+    ),
+    Rule(
+        "JS-086", "CWE-116",
+        "CWE-116: Bad HTML tag filter — regex-based HTML stripping at line {line}",
+        "HTML tags stripped via regex at L{line}: `{snippet}`. Regex-based HTML filtering is trivially bypassed with malformed or nested tags.",
+        "Use DOMPurify or a proper HTML sanitizer. Never strip HTML tags with regex.",
+        Severity.HIGH,
+        r'\.replace\s*\(\s*/<\s*\/?\s*\w+[^>]*>/',
+    ),
+    # ─── CWE-1321: Prototype pollution via spread operator ──────────
+    Rule(
+        "JS-087", "CWE-1321",
+        "CWE-1321: Prototype pollution via object spread with user data at line {line}",
+        "Object spread from user-controlled data at L{line}: `{snippet}`. User can inject `__proto__` or `constructor.prototype`.",
+        "Validate keys before spreading: filter out `__proto__`, `constructor`, and `prototype` from user input.",
+        Severity.HIGH,
+        r'\.\.\.\s*(?:req\.|request\.)(?:body|query|params)',
+    ),
+    # ─── CWE-89/943: NoSQL injection via tracked variables ──────────
+    Rule(
+        "JS-088", "CWE-943",
+        "CWE-943: NoSQL injection — user input reaches MongoDB query via variable at line {line}",
+        "User-controlled variable reaches MongoDB query at L{line}: `{snippet}`. Even through intermediate variables, user input in queries enables injection.",
+        "Validate and sanitize all query parameters. Cast values to expected types (parseInt, String). Use mongo-sanitize.",
+        Severity.HIGH,
+        r'(?:\.find|\.findOne|\.update|\.deleteOne|\.deleteMany)\s*\(\s*\{',
+        context_confirm=r'(?:req\.|request\.)(?:body|query|params)',
+        context_lines=10,
+    ),
+    # ─── CWE-200: Sensitive data in error messages ─────────────────
+    Rule(
+        "JS-089", "CWE-200",
+        "CWE-200: Sensitive data exposed in error message at line {line}",
+        "Error message includes user data or internal details at L{line}: `{snippet}`. Stack traces or raw errors expose system internals to users.",
+        "Catch errors and return generic messages to users. Log detailed errors server-side only.",
+        Severity.MEDIUM,
+        r'(?:res\.(?:send|json|end)|throw\s+new\s+Error)\s*\([^)]*(?:err\.|error\.|e\.message|e\.stack|JSON\.stringify\s*\(\s*err)',
+        context_confirm=r'(?:error|err|catch)',
+    ),
 ]
 
 

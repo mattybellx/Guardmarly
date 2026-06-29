@@ -345,6 +345,11 @@ SECRET_PATTERNS: list[tuple[str, str]] = [
     (r'sk-[A-Za-z0-9]{20,}',                                                         "OpenAI/Stripe secret key"),
     (r'(?:mongodb\+srv|postgres|mysql)://[^:]+:[^@]+@',                             "Database connection string with credentials"),
     (r'(?:JWT_SECRET|JWT_SECRET_KEY|SIGNING_KEY)\s*[=:]\s*["\'][^"\']{3,}["\']',    "JWT signing secret"),
+    # Additional secret patterns
+    (r'(?:private_key|PRIVATE_KEY)\s*[=:]\s*["\'][^"\']{20,}["\']',                 "Private key string"),
+    (r'(?:api[_-]?secret|client_secret)\s*[=:]\s*["\'][A-Za-z0-9_\-]{8,}["\']',    "API secret / client secret"),
+    (r'(?:smtp|email)_(?:password|pass|pwd)\s*[=:]\s*["\'][^"\']{3,}["\']',        "Email/SMTP password"),
+    (r'(?:redis|memcached)_(?:url|uri)\s*[=:]\s*["\']redis://[^:]+:[^@]+@',        "Redis connection string with auth"),
 ]
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -362,6 +367,27 @@ DANGEROUS_DEFAULTS: list[tuple[str, str, str]] = [
                                    "ALLOWED_HOSTS=['*']", "All hosts allowed — host header injection possible"),
     (r'\bCORS.*(?:allow_all|origins\s*=\s*\[?\s*["\']\*["\'])',
                                    "CORS allow-all",  "CORS allows all origins — cross-site data theft possible"),
+    # Additional dangerous defaults
+    (r'\bSESSION_COOKIE_SECURE\s*=\s*False\b', "SESSION_COOKIE_SECURE=False", "Session cookie sent over HTTP — hijackable via MITM"),
+    (r'\bSESSION_COOKIE_HTTPONLY\s*=\s*False\b', "SESSION_COOKIE_HTTPONLY=False", "Session cookie accessible to JavaScript — XSS can steal sessions"),
+    (r'\bCSRF_COOKIE_SECURE\s*=\s*False\b', "CSRF_COOKIE_SECURE=False", "CSRF cookie sent over HTTP — token hijackable via MITM"),
+    (r'\bCSRF_COOKIE_HTTPONLY\s*=\s*False\b', "CSRF_COOKIE_HTTPONLY=False", "CSRF cookie intentionally HTTP-only disabled"),
+    # Insecure SSL/TLS
+    (r'\bssl\._create_default_https_context\s*=\s*ssl\._create_unverified_context\b',
+                                   "SSL verification monkeypatched", "Global SSL verification disabled — ALL HTTPS requests now vulnerable to MITM"),
+    (r'\bcheck_hostname\s*=\s*False\b', "check_hostname=False", "Hostname verification disabled — MITM possible"),
+    # Insecure XML parsing (XXE)
+    (r'\betree\.(?:parse|fromstring|iterparse)\s*\(', "etree XML parse", "XML parsing without XXE protection — attackers can read local files"),
+    (r'\blxml\.etree\.(?:parse|fromstring|XMLParser)\s*\(', "lxml XML parse", "lxml parsing without XXE protection"),
+    # Insecure deserialization
+    (r'\b(?:pickle\.loads?|cPickle\.loads?|dill\.loads?)\s*\(', "pickle deserialization", "Unsafe deserialization — arbitrary code execution from untrusted data"),
+    (r'\byaml\.load\s*\((?!.*Loader\s*=\s*(?:yaml\.)?(?:SafeLoader|CSafeLoader))', "yaml.load without SafeLoader", "yaml.load can instantiate arbitrary Python objects"),
+    # Jinja2 SSTI
+    (r'\bjinja2\.Environment\s*\(|Template\s*\(|render_template_string\s*\(|flask\.render_template_string\s*\(', "Jinja2 SSTI", "Template rendering with user input — server-side template injection"),
+    # Insecure temp files
+    (r'\btempfile\.mktemp\s*\(', "insecure temp file", "tempfile.mktemp() is insecure — race condition allows attackers to hijack the filename"),
+    # Weak randomness
+    (r'\brandom\.(?:random|choice|randint|randrange|shuffle)\s*\(', "insecure random", "random module is not cryptographically secure — predictable values"),
 ]
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -2222,6 +2248,14 @@ def _rule_01(ctx: _Ctx) -> list[Finding]:
     _SAFE_FUNC_PARTS = frozenset({
         "safe_", "try_", "attempt_", "maybe_", "best_effort",
         "_or_none", "_or_default", "_or_else", "_safely", "_silently",
+        # Framework internals that legitimately catch broadly
+        "_handler", "_callback", "_worker", "_listener",
+        "dispatch", "full_dispatch", "wsgi_app", "finalize",
+        "make_response", "process_response", "handle_exception",
+        "run_wsgi", "run_app", "serve_", "__call__",
+        "_get_response", "_handle_", "on_", "event_",
+        "middleware", "interceptor", "plugin_",
+        "test_", "_test", "mock_", "fixture_",
     })
 
     for fname, fnode in func_defs.items():
@@ -2698,12 +2732,30 @@ def _rule_04(ctx: _Ctx) -> list[Finding]:
 def _rule_05(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     sans = ctx.sans_comments
+    lines = ctx.lines
     # ── Rule 5: Dangerous defaults ───────────────────────────────────────
+    # Track whether we're inside an `if __name__ == "__main__":` block
+    in_main_block = False
+    main_indent = -1
     for lineno, line_text in enumerate(sans, 1):  # use string-blanked lines
+        raw_line = lines[lineno - 1] if lineno <= len(lines) else ""
+        stripped = raw_line.strip()
+        # Track entry/exit of __main__ blocks
+        if re.match(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', stripped):
+            in_main_block = True
+            main_indent = len(raw_line) - len(raw_line.lstrip())
+            continue
+        if in_main_block and stripped and not stripped.startswith("#"):
+            current_indent = len(raw_line) - len(raw_line.lstrip())
+            if current_indent <= main_indent:
+                in_main_block = False
         if line_text.strip().startswith("#"):
             continue
         for pattern, label, desc in DANGEROUS_DEFAULTS:
             if re.search(pattern, line_text, re.IGNORECASE):
+                # Skip debug=True inside if __name__ == "__main__" — legitimate for local dev
+                if label == "debug=True" and in_main_block:
+                    continue
                 findings.append(Finding(
                     category="security", severity=Severity.HIGH,
                     title=f"CWE-1188: Dangerous default `{label}` at line {lineno}",
@@ -2752,7 +2804,7 @@ def _rule_07(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     lines = ctx.lines
     sans = ctx.sans
-    # ── Rule 7: Weak cryptographic hashing for passwords ─────────────────
+    # ── Rule 7: Weak cryptographic hashing ─────────────────────────────
     for lineno, line_text in enumerate(sans, 1):  # string-blanked
         if line_text.strip().startswith("#"):
             continue
@@ -2760,8 +2812,9 @@ def _rule_07(ctx: _Ctx) -> list[Finding]:
         if m:
             ctx_start = max(0, lineno - 5)
             context = "\n".join(lines[ctx_start:lineno])
-            if re.search(r'password|passwd|pwd|credential|secret', context, re.IGNORECASE):
-                algo = m.group(1).upper()
+            algo = m.group(1).upper()
+            # Fire CRITICAL near password/credential context
+            if re.search(r'password|passwd|pwd|credential|secret|token', context, re.IGNORECASE):
                 findings.append(Finding(
                     category="security", severity=Severity.HIGH,
                     title=f"CWE-327: Weak password hashing ({algo}) at line {lineno}",
@@ -2771,6 +2824,19 @@ def _rule_07(ctx: _Ctx) -> list[Finding]:
                     ),
                     line=lineno,
                     suggestion="Use bcrypt, argon2, or scrypt: `bcrypt.hashpw(password.encode(), bcrypt.gensalt())`",
+                    cwe="CWE-327", agent="python-analyzer",
+                ))
+            else:
+                # Fire MEDIUM for standalone weak crypto use
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-327: Weak cryptographic hash ({algo}) at line {lineno}",
+                    description=(
+                        f"`{algo}` is cryptographically broken at L{lineno}. "
+                        f"Use SHA-256 or SHA-3 instead for any security-sensitive hashing."
+                    ),
+                    line=lineno,
+                    suggestion="Replace with `hashlib.sha256()` or `hashlib.sha3_256()`. For passwords, use bcrypt/argon2.",
                     cwe="CWE-327", agent="python-analyzer",
                 ))
 
@@ -3841,6 +3907,10 @@ def _rule_14(ctx: _Ctx) -> list[Finding]:
         "next","dest","destination","host","location","callback","return_url",
     }
     for fname, fnode in func_defs.items():
+        # Skip SSRF detection in test functions — test clients (client.get(url))
+        # are not exploitable server-side
+        if fname.startswith("test_"):
+            continue
         tainted_ssrf: set[str] = set()
         for node in ast.walk(fnode):
             if isinstance(node, ast.Assign):

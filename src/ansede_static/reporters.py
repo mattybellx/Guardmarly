@@ -243,9 +243,12 @@ def format_text_multi(
 # JSON formatter
 # ──────────────────────────────────────────────────────────────────────────────
 
-def format_json(results: list[AnalysisResult], indent: int = 2, *, execution: dict[str, Any] | None = None) -> str:
-    """Return a JSON string with all results."""
-    payload: dict[str, Any] = build_report(results, execution=execution)
+def format_json(results: list[AnalysisResult], indent: int = 2, *, execution: dict[str, Any] | None = None, cluster: bool = False) -> str:
+    """Return a JSON string with all results.
+    
+    If cluster=True, incident clustering stats are included in the output.
+    """
+    payload: dict[str, Any] = build_report(results, execution=execution, cluster=cluster)
     return _json.dumps(payload, indent=indent, default=str)
 
 

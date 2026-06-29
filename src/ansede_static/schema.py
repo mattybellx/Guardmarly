@@ -15,14 +15,15 @@ from ansede_static.engine_version import ENGINE_NAME, SCHEMA_VERSION, get_engine
 FINGERPRINT_VERSION = "2"
 
 
-def build_summary(results: list[AnalysisResult]) -> dict[str, Any]:
+def build_summary(results: list[AnalysisResult], *, clustered: bool = False) -> dict[str, Any]:
     """Build aggregate counts across the full scan result set."""
     category_counts: dict[str, int] = {}
     for result in results:
         for category, count in result.category_counts().items():
             category_counts[category] = category_counts.get(category, 0) + count
 
-    return {
+    raw_total = sum(len(r.findings) for r in results)
+    summary = {
         "files_scanned": len(results),
         "clean_files": sum(1 for r in results if not r.findings and not r.parse_error),
         "parse_errors": sum(1 for r in results if r.parse_error),
@@ -34,13 +35,36 @@ def build_summary(results: list[AnalysisResult]) -> dict[str, Any]:
         "security_findings": sum(r.security_count for r in results),
         "quality_findings": sum(r.quality_count for r in results),
         "by_category": dict(sorted(category_counts.items())),
-        "total_findings": sum(len(r.findings) for r in results),
+        "total_findings": raw_total,
     }
+    if clustered:
+        summary["raw_findings"] = raw_total
+    return summary
 
 
-def build_report(results: list[AnalysisResult], *, execution: dict[str, Any] | None = None) -> dict[str, Any]:
-    """Build the canonical JSON envelope for a scan."""
-    summary = build_summary(results)
+def build_report(results: list[AnalysisResult], *, execution: dict[str, Any] | None = None, cluster: bool = False) -> dict[str, Any]:
+    """Build the canonical JSON envelope for a scan.
+    
+    If cluster=True, incident clustering is applied to reduce duplicate findings.
+    """
+    # ── Incident clustering ──────────────────────────────────────────
+    cluster_stats: dict[str, Any] | None = None
+    if cluster:
+        try:
+            from ansede_static.engine.clustering import cluster_findings
+            raw_total = sum(len(r.findings) for r in results)
+            results = cluster_findings(results)
+            clustered_total = sum(len(r.findings) for r in results)
+            reduction_pct = round((1 - clustered_total / raw_total) * 100, 1) if raw_total else 0
+            cluster_stats = {
+                "raw_findings": raw_total,
+                "clustered_findings": clustered_total,
+                "reduction_pct": reduction_pct,
+            }
+        except Exception:
+            pass
+    
+    summary = build_summary(results, clustered=cluster)
     version = get_engine_version()
     report = {
         "schema_version": SCHEMA_VERSION,
@@ -55,6 +79,8 @@ def build_report(results: list[AnalysisResult], *, execution: dict[str, Any] | N
         "summary": summary,
         "results": [r.as_dict() for r in results],
     }
+    if cluster_stats:
+        report["clustering"] = cluster_stats
     if execution:
         report["execution"] = execution
     return report

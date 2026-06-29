@@ -15,7 +15,9 @@ dependencies = [
 name = "ansede_rust_core"
 version = "0.1.0"
 dependencies = [
+ "once_cell",
  "pyo3",
+ "regex",
  "serde",
  "serde_json",
  "tree-sitter",

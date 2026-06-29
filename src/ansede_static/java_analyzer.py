@@ -59,6 +59,29 @@ _HARDCODED_SECRET_RE = re.compile(
     r"\b(?:password|passwd|pwd|apiKey|apikey|secret|secretKey)\b\s*=\s*\"[^\"]{3,}\"",
     re.IGNORECASE,
 )
+# Additional secret patterns for Java
+_HARDCODED_TOKEN_RE = re.compile(
+    r'\b(?:token|authToken|accessToken|jwtSecret|signingKey)\s*=\s*\"[A-Za-z0-9_\-\.]{8,}\"',
+    re.IGNORECASE,
+)
+_AWS_CRED_JAVA_RE = re.compile(
+    r'\b(?:awsAccessKey|awsSecretKey|AWS_ACCESS_KEY|AWS_SECRET_KEY|AKIA[A-Z0-9]{16})\s*=\s*\"[A-Za-z0-9/+=]{16,}\"',
+    re.IGNORECASE,
+)
+_DB_CONN_JAVA_RE = re.compile(
+    r'\"(?:jdbc:(?:mysql|postgresql|sqlserver|oracle|mongodb|redis)://[^:]+:[^@]+@)',
+    re.IGNORECASE,
+)
+# Dangerous Java defaults
+_DEBUG_MODE_JAVA_RE = re.compile(r'(?:debug\s*=\s*true|setDebugEnabled\s*\(\s*true\s*\))', re.IGNORECASE)
+_INSECURE_TLS_JAVA_RE = re.compile(
+    r'(?:TrustManager.*allowAll|HostnameVerifier.*allowAll|setHostnameVerifier\s*\(\s*\([^)]*\)\s*->\s*true|'
+    r'X509TrustManager.*checkClientTrusted\s*\(\s*\)\s*\{\s*\}|'
+    r'X509TrustManager.*checkServerTrusted\s*\(\s*\)\s*\{\s*\})',
+    re.IGNORECASE,
+)
+_INSECURE_COOKIE_JAVA_RE = re.compile(r'setSecure\s*\(\s*false\s*\)|setHttpOnly\s*\(\s*false\s*\)', re.IGNORECASE)
+_CORS_WILDCARD_JAVA_RE = re.compile(r'setAllowedOrigins\s*\(\s*\"?\*\"?\s*\)|allowedOrigins\s*\(\s*\"?\*\"?\s*\)', re.IGNORECASE)
 _REQUEST_TAINT_RE = re.compile(r"\b\w+\s+(?P<name>\w+)\s*=\s*\w*request\.getParameter\(", re.IGNORECASE)
 _FILE_SINK_RE = re.compile(r"new\s+File(?:InputStream)?\s*\(|Paths\.get\s*\(", re.IGNORECASE)
 _PATH_PARAM_RE = re.compile(r"\{[^}]*id[^}]*\}", re.IGNORECASE)
@@ -663,6 +686,77 @@ def analyze_java(
                 suggestion="Move credentials to environment variables or a secrets manager and rotate the exposed value.",
                 rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
                 confidence=0.96, analysis_kind="pattern",
+            ))
+        if _HARDCODED_TOKEN_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title="CWE-798: Hardcoded auth token in Java source",
+                description="An auth token or signing key is hardcoded — this is visible in version control and grants access.",
+                line=lineno,
+                suggestion="Move tokens to environment variables or a secrets manager. Rotate this token immediately.",
+                rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                confidence=0.97, analysis_kind="pattern",
+            ))
+        if _AWS_CRED_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title="CWE-798: Hardcoded AWS credential in Java source",
+                description="An AWS access key or secret is hardcoded — this grants cloud access to anyone with repository access.",
+                line=lineno,
+                suggestion="Use AWS IAM roles, instance profiles, or a secrets manager. Rotate this key immediately.",
+                rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                confidence=0.98, analysis_kind="pattern",
+            ))
+        if _DB_CONN_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title="CWE-798: Database connection string with embedded credentials in Java",
+                description="A database connection string contains embedded credentials — visible in version control.",
+                line=lineno,
+                suggestion="Use environment variables or a secrets manager for database credentials. Rotate this credential.",
+                rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                confidence=0.97, analysis_kind="pattern",
+            ))
+        # Dangerous defaults
+        if _DEBUG_MODE_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title="CWE-1188: Debug mode enabled in Java at line " + str(lineno),
+                description="Debug mode is enabled — this may leak stack traces, internal state, or sensitive data in production.",
+                line=lineno,
+                suggestion="Gate debug mode behind an environment variable or Spring profile: `@Profile(\"dev\")`.",
+                rule_id="JV-017", cwe="CWE-1188", agent="java-analyzer",
+                confidence=0.90, analysis_kind="pattern",
+            ))
+        if _INSECURE_TLS_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title="CWE-295: TLS certificate validation disabled in Java",
+                description="TLS certificate validation is bypassed — vulnerable to MITM attacks.",
+                line=lineno,
+                suggestion="Remove the trust-all TrustManager and use the default JVM trust store with proper certificate validation.",
+                rule_id="JV-018", cwe="CWE-295", agent="java-analyzer",
+                confidence=0.95, analysis_kind="pattern",
+            ))
+        if _INSECURE_COOKIE_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title="CWE-614: Insecure cookie configuration in Java",
+                description="Cookie Secure or HttpOnly flag is disabled — cookies may be exposed over HTTP or to JavaScript.",
+                line=lineno,
+                suggestion="Set `cookie.setSecure(true)` and `cookie.setHttpOnly(true)` for all sensitive cookies.",
+                rule_id="JV-019", cwe="CWE-614", agent="java-analyzer",
+                confidence=0.88, analysis_kind="pattern",
+            ))
+        if _CORS_WILDCARD_JAVA_RE.search(line):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title="CWE-942: CORS allows all origins in Java",
+                description="CORS is configured to allow all origins — any website can make authenticated requests.",
+                line=lineno,
+                suggestion="Restrict CORS to specific trusted origins: `setAllowedOrigins(Arrays.asList(\"https://example.com\"))`.",
+                rule_id="JV-020", cwe="CWE-942", agent="java-analyzer",
+                confidence=0.92, analysis_kind="pattern",
             ))
         # JV-016: Log injection (CWE-117)
         _JAVA_LOG_INJECT_RE = re.compile(

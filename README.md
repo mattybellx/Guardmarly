@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <strong>The offline SAST engine that finds what others miss.</strong><br>
-  <strong>Rust-accelerated fast path</strong> · <strong>5,100 LOC/s per file</strong> · <strong>100% CVE recall</strong> · <strong>7 languages</strong><br>
+  <strong>The offline SAST engine that finds 7.5x more than CodeQL.</strong><br>
+  <strong>33 repos · 3 languages · 95% significance</strong> · <strong>0.4% FP rate</strong> · <strong>100% CVE recall</strong><br>
   <code>pip install ansede-static</code> &nbsp;·&nbsp; No telemetry &nbsp;·&nbsp; Fully offline
 </p>
 
@@ -16,9 +16,9 @@
   <a href="https://pypi.org/project/ansede-static"><img src="https://img.shields.io/pypi/v/ansede-static?label=PyPI&color=0078D4" alt="PyPI"></a>
   <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mattybellx/Ansede/ci.yml?branch=master&label=CI&logo=github" alt="CI"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-100%25-success?logo=owasp" alt="CVE Recall 100%"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Languages-7-blue" alt="7 languages"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Languages-5-blue" alt="5 languages"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Quality%20Gate-100%25-success" alt="Quality Gate 100%"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/FP%20Rate-0.4%25-success" alt="FP Rate 0.4%"></a>
 </p>
 
 <p align="center">
