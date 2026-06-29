@@ -320,6 +320,7 @@ def _score_case_sink_centric(
         language=entry.language,
         filename=scan_filename,
         js_backend=js_backend if entry.language == "javascript" else "auto",
+        include_registry_rules=True,
     )
     if suppression_config is not None:
         result.findings = apply_active_suppressions(

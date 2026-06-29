@@ -27,7 +27,7 @@ rules:
 
   - id: registry/spring/auth/missing-preauthorize
     title: "Spring endpoint without @PreAuthorize or @Secured"
-    cwe: CWE-306
+    cwe: CWE-862
     severity: high
     pattern_type: regex
     regex: "@(?:GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)(?!.*@PreAuthorize|.*@Secured)"
@@ -226,3 +226,51 @@ rules:
       - @CacheEvict(key = "#id")
       - cache.put(request.getParameter(
     suggestion: "Derive cache keys from validated canonical identifiers only"
+
+  - id: registry/spring/ssrf/url-openconnection
+    title: "SSRF via URL.openConnection with user-controlled URL"
+    cwe: CWE-918
+    severity: high
+    pattern_type: regex
+    regex: "(?:new\\s+URL\\(.*request\\.getParameter|URL\\(.*request\\.getParameter|openConnection\\(\\)|openStream\\(\\))"
+    suggestion: "Validate URLs against an allowlist. Never pass user-controlled URLs directly to URL.openConnection()."
+
+  - id: registry/spring/redirect/user-controlled
+    title: "Open Redirect via user-controlled redirect URL"
+    cwe: CWE-601
+    severity: high
+    pattern_type: regex
+    regex: "(?:sendRedirect\\(|redirect:|ModelAndView\\().*(?:request\\.getParameter|request\\.getQuery|request\\.getHeader)"
+    suggestion: "Validate redirect URLs against a fixed allowlist. Never redirect to user-controlled URLs."
+
+  - id: registry/spring/session/fixation
+    title: "Session fixation — session not invalidated after login"
+    cwe: CWE-384
+    severity: medium
+    pattern_type: regex
+    regex: "(?:request\\.getSession\\(\\)|HttpSession)(?!.*\\.invalidate\\(\\))"
+    suggestion: "Invalidate the session after authentication: request.getSession().invalidate()"
+
+  - id: registry/spring/info-leak/stacktrace
+    title: "Stack trace / exception details exposed in error response"
+    cwe: CWE-209
+    severity: medium
+    pattern_type: regex
+    regex: "(?:e\\.printStackTrace\\(\\)|e\\.getMessage\\(\\)|ex\\.getMessage\\(\\)|printStackTrace\\(\\))"
+    suggestion: "Log detailed errors server-side. Return generic error messages to clients."
+
+  - id: registry/spring/log/injection
+    title: "Log injection via user-controlled data in log statements"
+    cwe: CWE-117
+    severity: medium
+    pattern_type: regex
+    regex: "(?:log\\.(?:info|warn|error|debug|trace)|logger\\.(?:info|warn|error|debug|trace))\\([^)]*request\\.getParameter"
+    suggestion: "Sanitize or encode user input before logging. Use parameterized logging."
+
+  - id: registry/spring/jwt/hardcoded-secret-string
+    title: "Hardcoded JWT or HMAC signing secret in source code"
+    cwe: CWE-798
+    severity: critical
+    pattern_type: regex
+    regex: "(?:String\\s+SECRET\\s*=|String\\s+JWT_SECRET\\s*=|String\\s+SIGNING_KEY\\s*=).*\"[A-Za-z0-9+/=]{8,}\""
+    suggestion: "Move secrets to environment variables or Spring Vault. Rotate immediately if committed."
