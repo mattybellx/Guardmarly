@@ -168,14 +168,10 @@ def run_ansede(repo_path: Path, lang: str) -> dict[str, Any]:
     """Run ansede-static on a repo and return results."""
     start = time.perf_counter()
     try:
-        # Use the installed ansede-static CLI binary
-        ansede_bin = shutil.which("ansede-static")
-        if not ansede_bin:
-            ansede_bin = str(Path(sys.executable).parent / "ansede-static")
-            if not Path(ansede_bin).exists():
-                ansede_bin = str(Path(sys.executable).parent / "ansede-static.exe")
+        # Prefer the local venv's binary to avoid conflicts
+        ansede_bin = str(Path(__file__).resolve().parent.parent / ".venv" / "Scripts" / "ansede-static.exe")
         if not Path(ansede_bin).exists():
-            raise FileNotFoundError(f"ansede-static not found at {ansede_bin}")
+            ansede_bin = shutil.which("ansede-static") or "ansede-static"
         result = _run(
             [ansede_bin, str(repo_path.resolve()), "--format", "json", "--cluster"],
             timeout=600,
