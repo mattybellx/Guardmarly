@@ -200,7 +200,7 @@ rules:
     severity: high
     pattern_type: taint_sink
     sinks:
-      - @ModelAttribute
+      - "@ModelAttribute"
       - BeanUtils.copyProperties(request
       - objectMapper.convertValue(requestBody,
     suggestion: "Bind only allowlisted fields and use dedicated DTOs"
@@ -274,3 +274,136 @@ rules:
     pattern_type: regex
     regex: "(?:String\\s+SECRET\\s*=|String\\s+JWT_SECRET\\s*=|String\\s+SIGNING_KEY\\s*=).*\"[A-Za-z0-9+/=]{8,}\""
     suggestion: "Move secrets to environment variables or Spring Vault. Rotate immediately if committed."
+
+  # ── Multi-Stage Modeling Rules (Track 2: enhanced ownership verification) ──
+
+  - id: registry/spring/auth/authenticated-ownership-bypass
+    title: "Sensitive sink accessed without session ownership validation"
+    cwe: CWE-862
+    severity: critical
+    pattern_type: route_aware
+    rule_type: multi_stage
+    description: |
+      Flags Spring MVC routes that have authentication guards (e.g., @PreAuthorize)
+      but lack resource-level ownership verification. Stage 1 confirms the route
+      has an auth mechanism (CWE-285 satisfied). Stage 2 checks whether the user's
+      identity is validated against the requested resource's ownership. If user_id
+      is never compared against resource.owner_id (or equivalent), the finding fires.
+    route_aware:
+      entrypoint: "@RequestMapping|@GetMapping|@PostMapping|@PutMapping|@DeleteMapping|@PatchMapping"
+      auth_guards:
+        - "@PreAuthorize"
+        - "@Secured"
+        - "@RolesAllowed"
+        - "SecurityContextHolder.getContext()"
+        - "Authentication authentication"
+        - "@Authenticated"
+      sensitive_sinks:
+        - "repository.save"
+        - "repository.delete"
+        - "repository.deleteById"
+        - "entityManager.remove"
+        - "entityManager.persist"
+        - "jdbcTemplate.update"
+        - "jdbcTemplate.execute"
+        - "mongoTemplate.save"
+        - "mongoTemplate.remove"
+        - "redisTemplate.delete"
+        - "s3Client.putObject"
+        - "s3Client.deleteObject"
+      ownership_patterns:
+        required:
+          - "user_id\\s*==\\s*\\w+\\.owner_id"
+          - "user\\.getId\\(\\)\\s*==\\s*\\w+\\.getOwnerId\\(\\)"
+          - "principal\\.getName\\(\\)\\s*\\.equals\\s*\\(\\w+\\.getOwner\\(\\)\\)"
+          - "authentication\\.getName\\(\\)\\s*\\.equals"
+          - "Objects\\.equals\\(.*getOwnerId\\(\\).*getUserId\\(\\)\\)"
+          - "\\.findByIdAndUserId\\("
+          - "\\.findByOwnerId\\("
+          - "\\.findByUser\\("
+          - "\\.existsByIdAndUserId\\("
+        absent_patterns:
+          - "\\.findById\\("
+          - "\\.findAll\\("
+          - "\\.getOne\\("
+      context_guards:
+        - "SecurityContextHolder.getContext().getAuthentication()"
+        - "@AuthenticationPrincipal"
+        - "Principal principal"
+    suggestion: |
+      Verify that the authenticated user owns the resource before performing
+      sensitive operations. Replace repository.findById(id) with
+      repository.findByIdAndUserId(id, currentUserId) or add an explicit
+      ownership check: if (!resource.getOwnerId().equals(currentUserId))
+      throw new AccessDeniedException(...).
+
+  - id: registry/spring/auth/missing-ownership-check-findbyid
+    title: "IDOR: repository.findById() without verifying user ownership"
+    cwe: CWE-639
+    severity: critical
+    pattern_type: route_aware
+    rule_type: multi_stage
+    description: |
+      Detects Spring Data JPA endpoints that fetch resources by ID without
+      confirming the authenticated user owns the resource. This is the most
+      common IDOR pattern in Spring applications.
+    route_aware:
+      entrypoint: "@RequestMapping|@GetMapping|@PostMapping|@PutMapping|@DeleteMapping|@PatchMapping"
+      auth_guards:
+        - "@PreAuthorize"
+        - "@Secured"
+        - "@RolesAllowed"
+        - "SecurityContextHolder"
+        - "@Authenticated"
+      sensitive_sinks:
+        - ".findById("
+        - ".getOne("
+        - ".getById("
+        - ".findByEmail("
+        - ".findByUsername("
+      ownership_patterns:
+        absent_patterns:
+          - "findByIdAndUserId"
+          - "findByIdAndOwner"
+          - "findByUser"
+          - "findByOwnerId"
+          - "getOwnerId"
+          - "getUserId"
+          - "owner_id"
+          - "user_id"
+    suggestion: |
+      Use ownership-scoped queries: replace findById(id) with
+      findByIdAndUserId(id, currentUserId) or add manual ownership
+      verification after fetch.
+
+  - id: registry/spring/auth/redirect-ownership-bypass
+    title: "Open redirect with ownership bypass — user-controlled redirect after auth"
+    cwe: CWE-601
+    severity: high
+    pattern_type: multi_stage
+    description: |
+      Flags redirect-after-login flows where the redirect target is
+      user-controlled AND the target resource's ownership is not verified
+      post-redirect. This combines CWE-601 (open redirect) with CWE-639
+      (IDOR) to catch chained exploits.
+    route_aware:
+      entrypoint: "@PostMapping|@RequestMapping"
+      auth_guards:
+        - "@PreAuthorize"
+        - "authentication"
+        - "SecurityContextHolder"
+      sensitive_sinks:
+        - "redirect:"
+        - "sendRedirect("
+        - "RedirectView("
+        - "ModelAndView(\"redirect:"
+        - "return \"redirect:"
+      taint_sources:
+        - "request.getParameter(\"redirect\")"
+        - "request.getParameter(\"next\")"
+        - "request.getParameter(\"returnUrl\")"
+        - "request.getParameter(\"url\")"
+    suggestion: |
+      Validate redirect targets against a fixed allowlist of local paths.
+      Never redirect to user-controlled URLs after authentication. Use a
+      server-side session to store the intended destination.

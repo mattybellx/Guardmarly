@@ -2632,6 +2632,18 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                     # is an ast.Call (likely an ORM expression object).
                     if sink == "execute" and node.args and isinstance(node.args[0], ast.Call):
                         continue
+                    # Safe subprocess guard: subprocess.run(["cmd","arg"]) with
+                    # list-form args and no shell=True is the safe API form.
+                    # Only flag if shell=True is present or args are a string.
+                    if sink in ("subprocess.call", "subprocess.run", "subprocess.Popen",
+                                 "subprocess.check_call", "subprocess.check_output"):
+                        has_shell_true = any(
+                            kw.arg == "shell" and isinstance(kw.value, ast.Constant) and kw.value.value is True
+                            for kw in node.keywords
+                        )
+                        has_list_args = node.args and isinstance(node.args[0], ast.List)
+                        if not has_shell_true and has_list_args:
+                            continue  # Safe: list-form args without shell=True
                     cwe, vuln_type, configured_severity = _unpack_sink_info(TAINT_SINKS[sink])
                     default_severity = Severity.CRITICAL if "Injection" in vuln_type else Severity.HIGH
                     sev = _severity_from_name(configured_severity, default_severity)
@@ -2646,6 +2658,15 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         for kw in node.keywords:
                             if kw.arg not in ("sql", "query", "stmt", None):
                                 safe_params.add(kw.value)
+                        # Deep-audit improvement: if the SQL string itself uses
+                        # ? or %s placeholders and there are parameter args,
+                        # the query IS parameterized — mark the first arg safe too.
+                        if node.args and len(node.args) > 1:
+                            first_arg = node.args[0]
+                            if isinstance(first_arg, ast.Constant) and isinstance(first_arg.value, str):
+                                sql_text = first_arg.value
+                                if "?" in sql_text or "%s" in sql_text:
+                                    safe_params.add(first_arg)
 
                     all_args = node.args + [kw.value for kw in node.keywords]
                     for arg_node in all_args:

@@ -50,6 +50,74 @@ _SAVE_RE = re.compile(r"SaveChanges(?:Async)?\s*\(", re.IGNORECASE)
 _XXE_ENTRY_RE = re.compile(r"\b(?:XmlDocument|XmlReader|XmlReaderSettings)\b", re.IGNORECASE)
 _SAFE_DTD_RE = re.compile(r"DtdProcessing\s*=\s*DtdProcessing\.(?:Prohibit|Ignore)", re.IGNORECASE)
 
+# Phase A — Unsafe deserialization (CWE-502)
+_CS_DESERIALIZATION_RE = re.compile(
+    r"(?:new\s+BinaryFormatter|BinaryFormatter\s+\w+\s*=|\.Deserialize\s*\(|"
+    r"new\s+LosFormatter|LosFormatter\s+\w+\s*=|"
+    r"new\s+ObjectStateFormatter|ObjectStateFormatter\s+\w+\s*=|"
+    r"new\s+NetDataContractSerializer|NetDataContractSerializer\s+\w+\s*=|"
+    r"new\s+SoapFormatter|SoapFormatter\s+\w+\s*=|"
+    r"JavaScriptSerializer\s*\(\s*\)\s*\.\s*Deserialize)",
+    re.IGNORECASE,
+)
+# Phase A — Command injection (CWE-78)
+_CS_CMD_INJECTION_RE = re.compile(
+    r"(?:Process\.Start\s*\(|new\s+Process\s*\(\s*\)\s*\{|\.StartInfo\s*=\s*new)",
+    re.IGNORECASE,
+)
+# Phase A — SSRF (CWE-918)
+_CS_SSRF_RE = re.compile(
+    r"(?:HttpClient\.Get(?:String|Stream|ByteArray)?Async\s*\(|"
+    r"WebClient\.DownloadString\s*\(|WebRequest\.Create\s*\(|"
+    r"RestClient\.Execute\s*\()",
+    re.IGNORECASE,
+)
+# Phase A — Hardcoded secrets (CWE-798)
+_CS_HARDCODED_SECRET_RE = re.compile(
+    r'\b(?:password|passwd|pwd|secret|apiKey|apikey|connectionString|jwtSecret)\s*=\s*"[^"]{3,}"',
+    re.IGNORECASE,
+)
+# Phase A — Insecure TLS (CWE-295)
+_CS_INSECURE_TLS_RE = re.compile(
+    r'(?:ServicePointManager\.ServerCertificateValidationCallback\s*=\s*\([^)]*\)\s*=>\s*true|'
+    r'ServerCertificateCustomValidationCallback\s*=\s*\([^)]*\)\s*=>\s*true)',
+    re.IGNORECASE,
+)
+# Phase A — Path traversal (CWE-22)
+_CS_PATH_TRAVERSAL_RE = re.compile(
+    r"(?:Path\.Combine\s*\(|File\.ReadAll(?:Text|Bytes|Lines)?\s*\(|File\.Open\s*\(|"
+    r"Directory\.GetFiles\s*\(|Server\.MapPath\s*\()",
+    re.IGNORECASE,
+)
+# Phase A — Open redirect (CWE-601)
+_CS_OPEN_REDIRECT_RE = re.compile(
+    r"(?:Redirect\s*\(|RedirectToAction\s*\(|RedirectToRoute\s*\(|"
+    r"RedirectToPage\s*\(|LocalRedirect\s*\()",
+    re.IGNORECASE,
+)
+# Phase A — SQL injection via raw queries (CWE-89)
+_CS_SQLI_RAW_RE = re.compile(
+    r'(?:ExecuteSqlRaw\s*\(|ExecuteSqlInterpolated\s*\(|FromSqlRaw\s*\(|'
+    r'ExecuteSqlCommand\s*\(|SqlQueryRaw\s*\()',
+    re.IGNORECASE,
+)
+# Phase A — XSS via unencoded output (CWE-79)
+_CS_XSS_RE = re.compile(
+    r'@Html\.Raw\s*\(|Response\.Write\s*\(|\.InnerHtml\s*=|MvcHtmlString\.Create\s*\(',
+    re.IGNORECASE,
+)
+# Phase A — Mass assignment / over-posting (CWE-915)
+_CS_MASS_ASSIGNMENT_RE = re.compile(
+    r'(?:TryUpdateModelAsync?\s*\(|UpdateModelAsync?\s*\()',
+    re.IGNORECASE,
+)
+# Phase A — Log injection (CWE-117)
+_CS_LOG_INJECTION_RE = re.compile(
+    r'(?:\.Log(?:Information|Warning|Error|Debug|Trace)\s*\([^)]*\+|'
+    r'\.Log(?:Information|Warning|Error|Debug|Trace)\s*\([^)]*String\.Format)',
+    re.IGNORECASE,
+)
+
 
 @dataclass(frozen=True)
 class _CSharpMethod:
@@ -272,6 +340,19 @@ def _has_id_route(method: _CSharpMethod) -> bool:
 
 def _has_ownership_guard(body: str) -> bool:
     return bool(_OWNERSHIP_RE.search(body))
+
+
+def _has_tainted_param_cs(method: _CSharpMethod) -> bool:
+    """Check if method signature has parameters that could carry user input."""
+    tainted_types = {"string", "int", "long", "Guid", "object", "dynamic"}
+    for param in method.params:
+        for tt in tainted_types:
+            if tt in param:
+                return True
+    # Also check if body references Request, HttpContext, or [FromBody]
+    if re.search(r"Request\.|HttpContext\.|\[FromBody\]|\[FromQuery\]|\[FromRoute\]", method.body, re.IGNORECASE):
+        return True
+    return bool(method.params)  # Any parameter could be tainted
 
 
 def _is_admin_controller_source(source: str) -> bool:
@@ -874,6 +955,80 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                     confidence=0.75,
                     analysis_kind="pattern",
                 ))
+
+        # ── Phase A: Enhanced C# vulnerability classes ──
+
+        # CS-021: Unsafe deserialization (CWE-502)
+        if _CS_DESERIALIZATION_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-502: Unsafe .NET deserialization in `{method.name}()`",
+                description="BinaryFormatter, LosFormatter, or similar unsafe deserializer is used. These are known RCE vectors.",
+                line=_first_matching_line(method.body, _CS_DESERIALIZATION_RE, method.start_line),
+                suggestion="Use a safe serializer like System.Text.Json or implement a SerializationBinder allowlist.",
+                rule_id="CS-021", cwe="CWE-502", agent="csharp-analyzer",
+                confidence=0.95, analysis_kind="pattern",
+            ))
+
+        # CS-022: Command injection via Process.Start (CWE-78)
+        if _CS_CMD_INJECTION_RE.search(method.body) and _has_tainted_param_cs(method):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-78: Command injection via Process.Start in `{method.name}()`",
+                description="Process.Start is invoked with potentially user-controlled input.",
+                line=_first_matching_line(method.body, _CS_CMD_INJECTION_RE, method.start_line),
+                suggestion="Avoid Process.Start with user input. Use argument arrays and validate against an allowlist.",
+                rule_id="CS-022", cwe="CWE-78", agent="csharp-analyzer",
+                confidence=0.88, analysis_kind="taint_flow",
+            ))
+
+        # CS-023: SSRF via HttpClient/WebClient (CWE-918)
+        if _CS_SSRF_RE.search(method.body) and _has_tainted_param_cs(method):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-918: SSRF via HTTP client in `{method.name}()`",
+                description="HTTP client is called with potentially user-controlled URL.",
+                line=_first_matching_line(method.body, _CS_SSRF_RE, method.start_line),
+                suggestion="Validate URLs against a strict allowlist. Never pass user-controlled URLs directly to HTTP clients.",
+                rule_id="CS-023", cwe="CWE-918", agent="csharp-analyzer",
+                confidence=0.82, analysis_kind="taint_flow",
+            ))
+
+        # CS-024: Path traversal via file APIs (CWE-22)
+        if _CS_PATH_TRAVERSAL_RE.search(method.body) and _has_tainted_param_cs(method):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-22: Path traversal via file API in `{method.name}()`",
+                description="File or path API accessed with potentially user-controlled input.",
+                line=_first_matching_line(method.body, _CS_PATH_TRAVERSAL_RE, method.start_line),
+                suggestion="Normalize paths against a trusted base directory and reject paths that escape it.",
+                rule_id="CS-024", cwe="CWE-22", agent="csharp-analyzer",
+                confidence=0.80, analysis_kind="taint_flow",
+            ))
+
+        # CS-025: XSS via Html.Raw or Response.Write (CWE-79)
+        if _CS_XSS_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-79: XSS via unencoded output in `{method.name}()`",
+                description="Html.Raw, Response.Write, or InnerHtml assignment used without encoding.",
+                line=_first_matching_line(method.body, _CS_XSS_RE, method.start_line),
+                suggestion="Use encoded output helpers. Avoid Html.Raw() with user input.",
+                rule_id="CS-025", cwe="CWE-79", agent="csharp-analyzer",
+                confidence=0.85, analysis_kind="pattern",
+            ))
+
+        # CS-026: Mass assignment / over-posting (CWE-915)
+        if _CS_MASS_ASSIGNMENT_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-915: Mass assignment risk in `{method.name}()`",
+                description="TryUpdateModelAsync/UpdateModelAsync can bind unintended properties.",
+                line=_first_matching_line(method.body, _CS_MASS_ASSIGNMENT_RE, method.start_line),
+                suggestion="Use explicit DTOs or [BindRequired] attributes to control which properties can be bound.",
+                rule_id="CS-026", cwe="CWE-915", agent="csharp-analyzer",
+                confidence=0.72, analysis_kind="pattern",
+            ))
 
     for lineno, line in enumerate(source.splitlines(), start=1):
         if _HARDCODED_CONN_RE.search(line):

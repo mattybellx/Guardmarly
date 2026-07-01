@@ -198,7 +198,7 @@ def scan_file(
             result = run_go_analysis(code, filename=str(p))
         elif ext in _JAVA_EXTS:
             from ansede_static.java_analyzer import analyze_java
-            result = analyze_java(code, filename=str(p))
+            result = analyze_java(code, filename=str(p), global_graph=shared_graph)
         elif ext in _CSHARP_EXTS:
             from ansede_static.csharp_analyzer import analyze_csharp
             result = analyze_csharp(code, filename=str(p))
@@ -266,7 +266,7 @@ def scan_files(
                 result = run_go_analysis(code, filename=str(p))
             elif ext in _JAVA_EXTS:
                 from ansede_static.java_analyzer import analyze_java
-                result = analyze_java(code, filename=str(p))
+                result = analyze_java(code, filename=str(p), global_graph=shared_graph)
             elif ext in _CSHARP_EXTS:
                 from ansede_static.csharp_analyzer import analyze_csharp
                 result = analyze_csharp(code, filename=str(p))
@@ -326,7 +326,8 @@ def scan_code(
             result = run_go_analysis(code, filename=filename)
         elif language == "java":
             from ansede_static.java_analyzer import analyze_java
-            result = analyze_java(code, filename=filename)
+            result = analyze_java(code, filename=filename,
+                                  global_graph=_get_default_global_graph())
         elif language in ("csharp", "cs", "c#"):
             from ansede_static.csharp_analyzer import analyze_csharp
             result = analyze_csharp(code, filename=filename)

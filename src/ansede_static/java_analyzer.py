@@ -47,11 +47,24 @@ _PUBLIC_ROUTE_RE = re.compile(r"/(?:login|logout|register|signup|health|ready|st
 _SECURITY_CONTEXT_RE = re.compile(r"SecurityContextHolder|getAuthentication\(|isAuthenticated\(|hasRole\(|hasAuthority\(|principal\b", re.IGNORECASE)
 _OWNERSHIP_RE = re.compile(r"userId|ownerId|accountId|tenantId|currentUser|getCurrentUser|principal\.|authentication\.getName|findByIdAndUserId|where\s*\(|filter\s*\(", re.IGNORECASE)
 _SQLI_RE = re.compile(
-    r"(?:createQuery|JdbcTemplate\.(?:query|execute)|\w+\.executeQuery)\s*\((?:[^\n;]*\+[^\n;]*|[^\n;]*String\.format\s*\()",
+    r"(?:createQuery|JdbcTemplate\.(?:query|execute)|\w+\.executeQuery|prepareCall|prepareStatement|createStatement)\s*\((?:(?:[^\n;]*\+[^\n;]*|[^\n;]*String\.format\s*\()|(?:[^)\n;]*(?:sql|query|hql|jpql|statement)[^)\n;]*))",
+    re.IGNORECASE,
+)
+# Sink-only regex: catches prepareCall/executeQuery without inline concat (lower confidence, needs taint confirmation)
+_SQLI_SINK_RE = re.compile(
+    r"(?:createQuery|JdbcTemplate\.(?:query|execute)|\w+\.executeQuery|prepareCall|prepareStatement|createStatement)\s*\(",
     re.IGNORECASE,
 )
 _CMD_INJECTION_RE = re.compile(r"Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\(", re.IGNORECASE)
-_WEAK_CRYPTO_JAVA_RE = re.compile(r"MessageDigest\.getInstance\(\s*[\"']MD5[\"']|MessageDigest\.getInstance\(\s*[\"']SHA1[\"']|[\"']MD5[\"']|[\"']SHA-?1[\"']", re.IGNORECASE)
+_WEAK_CRYPTO_JAVA_RE = re.compile(r"MessageDigest\.getInstance\(\s*[\"']MD5[\"']|MessageDigest\.getInstance\(\s*[\"']SHA1[\"']|[\"']MD5[\"']|[\"']SHA-?1[\"']|Cipher\.getInstance\(\s*[\"'](?:DES|RC2|RC4|Blowfish)", re.IGNORECASE)
+# OWASP ldapi: LDAP injection via unsanitized LDAP filters (expanded)
+_LDAP_INJECTION_RE = re.compile(r"(?:LDAP|ldap|InitialDirContext|DirContext|LdapContext|InitialLdapContext)\.(?:search|lookup|list|listBindings)\s*\(|new\s+Initial(?:Dir|Ldap)Context\s*\(", re.IGNORECASE)
+# OWASP xpathi: XPath injection via unsanitized XPath expressions (expanded)
+_XPATH_INJECTION_RE = re.compile(r"XPathFactory\.newInstance|XPath\.(?:compile|evaluate|selectNodes|selectSingleNode)\s*\(|XPathExpression\.evaluate\s*\(", re.IGNORECASE)
+# OWASP weakrand: java.util.Random / Math.random without SecureRandom
+_WEAK_RANDOM_RE = re.compile(r"new\s+Random\s*\(|Math\.random\s*\(", re.IGNORECASE)
+# OWASP trustbound: session/request attribute set without validation
+_TRUST_BOUNDARY_RE = re.compile(r"(?:session|request)\.(?:setAttribute|putValue)\s*\(", re.IGNORECASE)
 _SSRF_JAVA_RE = re.compile(r"URL\s*\([^)]*\)|HttpURLConnection|openConnection\(", re.IGNORECASE)
 _REDIRECT_JAVA_RE = re.compile(r"sendRedirect\s*\(", re.IGNORECASE)
 _XSS_WRITE_JAVA_RE = re.compile(r"\.(?:getWriter|getOutputStream|write)\s*\(\s*.*\+.*\)", re.IGNORECASE)
@@ -82,11 +95,66 @@ _INSECURE_TLS_JAVA_RE = re.compile(
 )
 _INSECURE_COOKIE_JAVA_RE = re.compile(r'setSecure\s*\(\s*false\s*\)|setHttpOnly\s*\(\s*false\s*\)', re.IGNORECASE)
 _CORS_WILDCARD_JAVA_RE = re.compile(r'setAllowedOrigins\s*\(\s*\"?\*\"?\s*\)|allowedOrigins\s*\(\s*\"?\*\"?\s*\)', re.IGNORECASE)
-_REQUEST_TAINT_RE = re.compile(r"\b\w+\s+(?P<name>\w+)\s*=\s*\w*request\.getParameter\(", re.IGNORECASE)
-_FILE_SINK_RE = re.compile(r"new\s+File(?:InputStream)?\s*\(|Paths\.get\s*\(", re.IGNORECASE)
+_REQUEST_TAINT_RE = re.compile(
+    r"(?:\b\w[\w<>\[\],\s]*\s+)?(?P<name>\w+)\s*=\s*\w*request\.(?:getParameter|getHeader|getQueryString|getCookies|getInputStream)\(",
+    re.IGNORECASE,
+)
+_FILE_SINK_RE = re.compile(r"new\s+(?:[\w.]+\.)*File(?:InputStream)?\s*\(|Paths\.get\s*\(", re.IGNORECASE)
 _PATH_PARAM_RE = re.compile(r"\{[^}]*id[^}]*\}", re.IGNORECASE)
+
+# Phase A — Unsafe deserialization (CWE-502)
+_DESERIALIZATION_RE = re.compile(
+    r"(?:new\s+ObjectInputStream\s*\(|ObjectInputStream\s+\w+\s*=\s*new|\.readObject\s*\(|"
+    r"new\s+XMLDecoder\s*\(|XMLDecoder\s+\w+\s*=\s*new|\.readObject\s*\(\s*new\s+BufferedInputStream|"
+    r"ObjectInputStream\s*\(\s*new\s+ByteArrayInputStream)",
+    re.IGNORECASE,
+)
+# Phase A — XXE via insecure XML parsing (CWE-611)
+_XXE_RE = re.compile(
+    r"(?:DocumentBuilderFactory\.newInstance\(\)|SAXParserFactory\.newInstance\(\)|"
+    r"XMLInputFactory\.newFactory\(\)|XMLReaderFactory\.createXMLReader\(\)|"
+    r"TransformerFactory\.newInstance\(\))",
+    re.IGNORECASE,
+)
+_XXE_SAFE_RE = re.compile(
+    r"(?:setFeature\(\s*\"http://apache\.org/xml/features/disallow-doctype-decl\"\s*,\s*true\s*\)|"
+    r"setFeature\(\s*\"http://xml\.org/sax/features/external-general-entities\"\s*,\s*false\s*\)|"
+    r"setFeature\(\s*\"http://xml\.org/sax/features/external-parameter-entities\"\s*,\s*false\s*\))",
+    re.IGNORECASE,
+)
+# Phase A — JNDI injection (CWE-917)
+_JNDI_RE = re.compile(
+    r"(?:InitialContext\s*\(\s*\)\s*\.\s*lookup\s*\(|\.lookup\s*\(\s*[\"'](?:ldap|rmi|dns|iiop)://)",
+    re.IGNORECASE,
+)
+# Phase A — Expression injection (CWE-917): SpEL, OGNL, MVEL
+_EXPR_INJECTION_RE = re.compile(
+    r"(?:new\s+SpelExpressionParser\s*\(\)|ExpressionParser\s+\w+\s*=\s*new|"
+    r"\.parseExpression\s*\(|Ognl\.getValue\s*\(|Ognl\.setValue\s*\(|"
+    r"MVEL\.eval\s*\(|MVEL\.executeExpression\s*\()",
+    re.IGNORECASE,
+)
+# Phase A — Server-Side Template Injection (SSTI) in Java
+_SSTI_JAVA_RE = re.compile(
+    r"(?:Velocity\.evaluate\s*\(|FreeMarker\.(?:process|render)|Template\s*\(\s*fileName|"
+    r"Thymeleaf\s*\(\s*templateName|StringTemplate\s*\(\s*userInput)",
+    re.IGNORECASE,
+)
+# Phase A — Log injection (CWE-117)
+_LOG_INJECTION_JAVA_RE = re.compile(
+    r"(?:log\.(?:info|warning|warn|severe|error|debug|trace|config|fine|finer|finest)\s*\(\s*[^)]*\+|"
+    r"logger\.(?:info|warning|warn|severe|error|debug|trace|config|fine|finer|finest)\s*\(\s*[^)]*\+|"
+    r"LOGGER\.(?:info|warning|warn|severe|error|debug|trace|config|fine|finer|finest)\s*\(\s*[^)]*\+|"
+    r"LOG\.(?:info|warning|warn|severe|error|debug|trace|config|fine|finer|finest)\s*\(\s*[^)]*\+|"
+    r"String\.format\s*\(\s*\"[^\"]*\{\s*\}\"[^)]*\+)",
+    re.IGNORECASE,
+)
 _METHOD_RE = re.compile(
     r"^\s*(?:public|protected|private)\s+(?:static\s+)?(?:final\s+)?(?:synchronized\s+)?(?:<[\w\s,?<>]+>\s*)?[\w\[\]<>.,?\s]+\s+(?P<name>[A-Za-z_]\w*)\s*\((?P<params>[^)]*)\)\s*(?:throws\s+[^{]+)?\{\s*$"
+)
+# Matches method signature start without requiring the opening brace
+_METHOD_SIG_START_RE = re.compile(
+    r"^\s*(?:public|protected|private)\s+(?:static\s+)?(?:final\s+)?(?:synchronized\s+)?(?:<[\w\s,?<>]+>\s*)?[\w\[\]<>.,?\s]+\s+(?P<name>[A-Za-z_]\w*)\s*\((?P<params>[^)]*)\)\s*$"
 )
 _CLASS_RE = re.compile(r"\bclass\s+(?P<name>[A-Za-z_]\w*)")
 _ANNOTATION_RE = re.compile(r"^\s*@(?P<name>[\w.]+)(?:\((?P<args>.*)\))?\s*$")
@@ -186,7 +254,26 @@ def _collect_methods(source: str) -> list[_JavaMethod]:
             class_stack.append(_ClassScope(_parse_annotations(pending_annotations), brace_depth + line.count("{") - line.count("}")))
             pending_annotations = []
         else:
+            # Try single-line method match first, then multi-line signature
             method_match = _METHOD_RE.match(line)
+            # Check for multi-line signature (no { on this line)
+            sig_match = _METHOD_SIG_START_RE.match(line)
+            if not method_match and sig_match and not stripped.startswith(("if ", "for ", "while ", "switch ", "catch ")):
+                # Multi-line signature: accumulate until we find {
+                sig_lines = [line]
+                sig_cursor = index + 1
+                found_brace = False
+                while sig_cursor < len(lines):
+                    sig_lines.append(lines[sig_cursor])
+                    if "{" in lines[sig_cursor]:
+                        found_brace = True
+                        break
+                    sig_cursor += 1
+                if found_brace:
+                    method_match = sig_match  # Use sig_match params
+                    line = " ".join(sig_lines)  # Joined signature
+                    index = sig_cursor  # Skip the accumulated lines
+            
             if method_match and not stripped.startswith(("if ", "for ", "while ", "switch ", "catch ")):
                 method_annotations = _parse_annotations(pending_annotations)
                 class_annotations = class_stack[-1].annotations if class_stack else ()
@@ -268,18 +355,46 @@ def _has_ownership_guard(body: str) -> bool:
 def _has_tainted_param(method: _JavaMethod) -> bool:
     """Check if a method has parameters that look user-controlled (request-derived)."""
     body = method.body
-    return bool(re.search(r"getParameter\(|getQueryString\(|getHeader\(|getInputStream\(", body, re.IGNORECASE))
+    return bool(re.search(r"getParameter\(|getQueryString\(|getHeader\(|getInputStream\(|getCookies\(", body, re.IGNORECASE))
 
 
 def _collect_tainted_names(method: _JavaMethod) -> set[str]:
-    tainted = {
-        name for name in method.params
-        if name.lower().endswith(("id", "path", "file", "filename"))
-    }
-    for line in method.body.splitlines():
+    """Two-pass taint tracking: identify variables carrying user input.
+
+    Pass 1: find variables assigned from request sources (getParameter, getHeader, etc.)
+    Pass 2: propagate taint through assignments and concatenations.
+    """
+    tainted: set[str] = set()
+    lines = method.body.splitlines()
+
+    # Pass 1: direct request-derived taint
+    for line in lines:
         match = _REQUEST_TAINT_RE.search(line)
         if match:
             tainted.add(match.group("name"))
+
+    # Pass 2: propagate through assignments (repeat until stable)
+    changed = True
+    while changed:
+        changed = False
+        for line in lines:
+            # Pattern: Type varName = expression_involving_tainted_var;
+            assign = re.search(
+                r"\b\w[\w<>\[\],\s]*\s+(?P<name>\w+)\s*=\s*(?P<rhs>.+?);\s*$",
+                line,
+            )
+            if not assign:
+                continue
+            rhs = assign.group("rhs")
+            new_name = assign.group("name")
+            # Check if RHS contains any tainted variable
+            for t in list(tainted):
+                if re.search(r"\b" + re.escape(t) + r"\b", rhs):
+                    if new_name not in tainted:
+                        tainted.add(new_name)
+                        changed = True
+                        break
+
     return tainted
 
 
@@ -480,6 +595,298 @@ def _enrich_with_javac(findings: list[Finding], source: str) -> list[Finding]:
     return findings
 
 
+def _append_method_level_regex_findings(source: str, findings: list[Finding]) -> None:
+    """Run method-level regex checks the AST analyzer misses and merge.
+    
+    The AST analyzer has limited taint tracking (only checks method params,
+    not local variables). This runs the full regex method-level rules
+    for complete coverage.
+    """
+    existing_keys: set[tuple[int, str]] = set()
+    for f in findings:
+        existing_keys.add((f.line or 0, f.rule_id or ""))
+
+    methods = _collect_methods(source)
+    for method in methods:
+        # JV-010: Open redirect via sendRedirect (CWE-601) — AST misses local vars
+        if _REDIRECT_JAVA_RE.search(method.body):
+            line = _first_matching_line(method.body, _REDIRECT_JAVA_RE, method.start_line)
+            key = (line, "JV-010")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-601: Open redirect via sendRedirect in `{method.name}()`",
+                    description="HttpServletResponse.sendRedirect() is called with a URL that may be attacker-influenced.",
+                    line=line,
+                    suggestion="Validate the redirect target against an allowlist or use a mapping instead of user-supplied URLs.",
+                    rule_id="JV-010", cwe="CWE-601", agent="java-analyzer",
+                    confidence=0.72, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+        # JV-015: Session fixation (CWE-384) — AST might miss Spring patterns
+        if (_has_route(method) and _has_auth(method)
+                and not re.search(r"changeSessionId|session\.invalidate|session\.(?:setAttribute|removeAttribute)|ServletRequest\.changeSessionId", method.body, re.IGNORECASE)
+                and re.search(r"login|authenticate|UserDetails|Authentication\.setAuthenticated", method.body, re.IGNORECASE)):
+            key = (method.start_line, "JV-015")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-384: Session not regenerated on authentication in `{method.name}()`",
+                    description="The method performs authentication but does not call changeSessionId() or invalidate the existing session, enabling session fixation attacks.",
+                    line=method.start_line,
+                    suggestion="Call request.changeSessionId() after successful authentication to prevent session fixation.",
+                    rule_id="JV-015", cwe="CWE-384", agent="java-analyzer",
+                    confidence=0.72, analysis_kind="route_heuristic",
+                ))
+                existing_keys.add(key)
+
+        # JV-011: XSS via response write (CWE-79)
+        if _XSS_WRITE_JAVA_RE.search(method.body):
+            line = _first_matching_line(method.body, _XSS_WRITE_JAVA_RE, method.start_line)
+            key = (line, "JV-011")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-79: XSS via unencoded response write in `{method.name}()`",
+                    description="response.getWriter().write() outputs user-controlled data without HTML encoding.",
+                    line=line,
+                    suggestion="Encode output with an HTML encoder or use a template engine that auto-escapes.",
+                    rule_id="JV-011", cwe="CWE-79", agent="java-analyzer",
+                    confidence=0.7, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+        # JV-004ext: SQLi with tainted input (method-level taint, lower confidence)
+        if _SQLI_SINK_RE.search(method.body) and _has_tainted_param(method):
+            line = _first_matching_line(method.body, _SQLI_SINK_RE, method.start_line)
+            key = (line, "JV-004")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-89: SQL execution with tainted input in `{method.name}()`",
+                    description="SQL execution method called in a request handler with user-controlled input.",
+                    line=line, suggestion="Use prepared statements with bind parameters.",
+                    rule_id="JV-004", cwe="CWE-89", agent="java-analyzer",
+                    confidence=0.55, analysis_kind="taint_flow",
+                ))
+                existing_keys.add(key)
+
+        # JV-007ext: Path traversal with tainted input (method-level taint, lower confidence)
+        if _FILE_SINK_RE.search(method.body) and _has_tainted_param(method):
+            line = _first_matching_line(method.body, _FILE_SINK_RE, method.start_line)
+            key = (line, "JV-007")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-22: User-controlled path reaches file API in `{method.name}()`",
+                    description="File API uses potentially user-controlled input.",
+                    line=line, suggestion="Validate paths against an allowlist.",
+                    rule_id="JV-007", cwe="CWE-22", agent="java-analyzer",
+                    confidence=0.52, analysis_kind="taint_flow",
+                ))
+                existing_keys.add(key)
+
+        # JV-008ext: Command injection with tainted input (method-level taint, lower confidence)
+        if _CMD_INJECTION_RE.search(method.body) and _has_tainted_param(method):
+            line = _first_matching_line(method.body, _CMD_INJECTION_RE, method.start_line)
+            key = (line, "JV-008")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title=f"CWE-78: OS command injection in `{method.name}()`",
+                    description="Runtime.exec/ProcessBuilder with user-controlled input.",
+                    line=line, suggestion="Avoid passing user input to exec/ProcessBuilder.",
+                    rule_id="JV-008", cwe="CWE-78", agent="java-analyzer",
+                    confidence=0.55, analysis_kind="taint_flow",
+                ))
+                existing_keys.add(key)
+
+        # JV-021: Weak random (OWASP weakrand)
+        if _WEAK_RANDOM_RE.search(method.body):
+            line = _first_matching_line(method.body, _WEAK_RANDOM_RE, method.start_line)
+            key = (line, "JV-021")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-330: Weak random number generator in `{method.name}()`",
+                    description="java.util.Random or Math.random() used — not cryptographically secure.",
+                    line=line,
+                    suggestion="Use java.security.SecureRandom for security-sensitive randomness.",
+                    rule_id="JV-021", cwe="CWE-330", agent="java-analyzer",
+                    confidence=0.85, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+        # JV-022: Weak crypto (OWASP crypto)
+        if _WEAK_CRYPTO_JAVA_RE.search(method.body):
+            line = _first_matching_line(method.body, _WEAK_CRYPTO_JAVA_RE, method.start_line)
+            key = (line, "JV-022")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-327: Weak cryptographic hash in `{method.name}()`",
+                    description="MD5 or SHA-1 used for hashing — vulnerable to collision attacks.",
+                    line=line,
+                    suggestion="Use SHA-256 or SHA-3 via MessageDigest.getInstance(\"SHA-256\").",
+                    rule_id="JV-022", cwe="CWE-327", agent="java-analyzer",
+                    confidence=0.90, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+        # JV-023: Trust boundary violation (OWASP trustbound)
+        if _TRUST_BOUNDARY_RE.search(method.body) and _has_tainted_param(method):
+            line = _first_matching_line(method.body, _TRUST_BOUNDARY_RE, method.start_line)
+            key = (line, "JV-023")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title=f"CWE-501: Trust boundary violation in `{method.name}()`",
+                    description="Session/request attribute set with potentially untrusted data.",
+                    line=line,
+                    suggestion="Validate or sanitize data before storing in session/request attributes.",
+                    rule_id="JV-023", cwe="CWE-501", agent="java-analyzer",
+                    confidence=0.70, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+
+def _append_line_level_findings(source: str, findings: list[Finding]) -> None:
+    """Run per-line regex checks and append findings not already present.
+    
+    The AST analyzer covers method-level patterns but misses line-level
+    checks like hardcoded secrets, debug mode, insecure TLS, etc.
+    This function runs those checks and deduplicates against existing findings.
+    """
+    existing_keys: set[tuple[int, str]] = set()
+    for f in findings:
+        existing_keys.add((f.line or 0, f.rule_id or ""))
+
+    for lineno, line in enumerate(source.splitlines(), start=1):
+        if _HARDCODED_SECRET_RE.search(line):
+            key = (lineno, "JV-006")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title="CWE-798: Hardcoded credential in Java source",
+                    description="A password/apiKey/secret literal is assigned directly in code.",
+                    line=lineno,
+                    suggestion="Move credentials to environment variables or a secrets manager and rotate the exposed value.",
+                    rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                    confidence=0.96, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _HARDCODED_TOKEN_RE.search(line):
+            key = (lineno, "JV-006")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title="CWE-798: Hardcoded auth token in Java source",
+                    description="An auth token or signing key is hardcoded — this is visible in version control and grants access.",
+                    line=lineno,
+                    suggestion="Move tokens to environment variables or a secrets manager. Rotate this token immediately.",
+                    rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                    confidence=0.97, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _AWS_CRED_JAVA_RE.search(line):
+            key = (lineno, "JV-006")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title="CWE-798: Hardcoded AWS credential in Java source",
+                    description="An AWS access key or secret is hardcoded — this grants cloud access to anyone with repository access.",
+                    line=lineno,
+                    suggestion="Use AWS IAM roles, instance profiles, or a secrets manager. Rotate this key immediately.",
+                    rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                    confidence=0.98, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _DB_CONN_JAVA_RE.search(line):
+            key = (lineno, "JV-006")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title="CWE-798: Database connection string with embedded credentials in Java",
+                    description="A database connection string contains embedded credentials — visible in version control.",
+                    line=lineno,
+                    suggestion="Use environment variables or a secrets manager for database credentials. Rotate this credential.",
+                    rule_id="JV-006", cwe="CWE-798", agent="java-analyzer",
+                    confidence=0.97, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _DEBUG_MODE_JAVA_RE.search(line):
+            key = (lineno, "JV-017")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title="CWE-1188: Debug mode enabled in Java at line " + str(lineno),
+                    description="Debug mode is enabled — this may leak stack traces, internal state, or sensitive data in production.",
+                    line=lineno,
+                    suggestion="Gate debug mode behind an environment variable or Spring profile: `@Profile(\"dev\")`.",
+                    rule_id="JV-017", cwe="CWE-1188", agent="java-analyzer",
+                    confidence=0.90, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _INSECURE_TLS_JAVA_RE.search(line):
+            key = (lineno, "JV-018")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title="CWE-295: TLS certificate validation disabled in Java",
+                    description="TLS certificate validation is bypassed — vulnerable to MITM attacks.",
+                    line=lineno,
+                    suggestion="Remove the trust-all TrustManager and use the default JVM trust store with proper certificate validation.",
+                    rule_id="JV-018", cwe="CWE-295", agent="java-analyzer",
+                    confidence=0.95, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _INSECURE_COOKIE_JAVA_RE.search(line):
+            key = (lineno, "JV-019")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title="CWE-614: Insecure cookie configuration in Java",
+                    description="Cookie Secure or HttpOnly flag is disabled — cookies may be exposed over HTTP or to JavaScript.",
+                    line=lineno,
+                    suggestion="Set `cookie.setSecure(true)` and `cookie.setHttpOnly(true)` for all sensitive cookies.",
+                    rule_id="JV-019", cwe="CWE-614", agent="java-analyzer",
+                    confidence=0.88, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        if _CORS_WILDCARD_JAVA_RE.search(line):
+            key = (lineno, "JV-020")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title="CWE-942: CORS allows all origins in Java",
+                    description="CORS is configured to allow all origins — any website can make authenticated requests.",
+                    line=lineno,
+                    suggestion="Restrict CORS to specific trusted origins: `setAllowedOrigins(Arrays.asList(\"https://example.com\"))`.",
+                    rule_id="JV-020", cwe="CWE-942", agent="java-analyzer",
+                    confidence=0.92, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+        # JV-016: Log injection (CWE-117)
+        _JAVA_LOG_INJECT_RE = re.compile(
+            r'(?:logger|log)\.(?:info|warning|severe|fine|finer|finest|error|debug)\s*\([^)]*\+',
+            re.IGNORECASE,
+        )
+        if _JAVA_LOG_INJECT_RE.search(line):
+            key = (lineno, "JV-016")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.MEDIUM,
+                    title="CWE-117: Log injection via string concatenation in Java",
+                    description="Logger call uses string concatenation with potentially user-controlled data, enabling CRLF injection into logs.",
+                    line=lineno,
+                    suggestion="Use parameterized logging: `log.warning(\"Login from {0}\", user)` to avoid log injection.",
+                    rule_id="JV-016", cwe="CWE-117", agent="java-analyzer",
+                    confidence=0.80, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
+
+
 def analyze_java(
     source: str,
     filename: str = "<input>",
@@ -490,8 +897,11 @@ def analyze_java(
     # ── Tree-sitter AST path (primary) ───────────────────────────────
     if _AST_AVAILABLE:
         try:
-            ast_result = analyze_java_ast(source, filename)
+            ast_result = analyze_java_ast(source, filename, global_graph=global_graph)
             ast_result.lines_scanned = len(source.splitlines())
+            # Merge: also run line-level and method-level regex checks the AST path misses
+            _append_line_level_findings(source, ast_result.findings)
+            _append_method_level_regex_findings(source, ast_result.findings)
             return ast_result
         except Exception:
             _log.debug("AST analysis failed for %r — falling back to regex", filename, exc_info=True)
@@ -551,6 +961,16 @@ def analyze_java(
                 suggestion="Use prepared statements, named parameters, or ORM bind variables instead of building SQL text dynamically.",
                 rule_id="JV-004", cwe="CWE-89", agent="java-analyzer",
                 confidence=0.95, analysis_kind="taint_flow",
+            ))
+        elif _SQLI_SINK_RE.search(method.body) and _has_tainted_param(method):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-89: SQL execution with tainted input in `{method.name}()`",
+                description="SQL execution method called in a request handler — if the query includes user input without parameterization, this is SQL injection.",
+                line=_first_matching_line(method.body, _SQLI_SINK_RE, method.start_line),
+                suggestion="Use prepared statements with bind parameters instead of building SQL from request data.",
+                rule_id="JV-004", cwe="CWE-89", agent="java-analyzer",
+                confidence=0.72, analysis_kind="taint_flow",
             ))
 
         if re.search(r"ObjectInputStream\s*\w*\s*=|ObjectInputStream\s*\(", method.body) and re.search(r"\.readObject\s*\(", method.body):
@@ -675,6 +1095,56 @@ def analyze_java(
                     rule_id="JV-015", cwe="CWE-384", agent="java-analyzer",
                     confidence=0.72, analysis_kind="route_heuristic",
                 ))
+
+        # ── Phase A: Enhanced Java vulnerability classes ──
+
+        # JV-016: XXE via insecure XML parsing (CWE-611)
+        if _XXE_RE.search(method.body) and not _XXE_SAFE_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-611: XXE via insecure XML parser in `{method.name}()`",
+                description="XML parser factory created without disabling external entities and DTD processing.",
+                line=_first_matching_line(method.body, _XXE_RE, method.start_line),
+                suggestion="Configure XML parsers with FEATURE_SECURE_PROCESSING and disable DTDs and external entities.",
+                rule_id="JV-016", cwe="CWE-611", agent="java-analyzer",
+                confidence=0.90, analysis_kind="pattern",
+            ))
+
+        # JV-017: JNDI injection (CWE-917)
+        if _JNDI_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-917: JNDI lookup with potentially attacker-controlled URL in `{method.name}()`",
+                description="InitialContext.lookup() with a dynamic URI can lead to JNDI injection and remote code execution.",
+                line=_first_matching_line(method.body, _JNDI_RE, method.start_line),
+                suggestion="Restrict JNDI lookups to trusted local names only. Never pass user input to lookup().",
+                rule_id="JV-017", cwe="CWE-917", agent="java-analyzer",
+                confidence=0.88, analysis_kind="pattern",
+            ))
+
+        # JV-018: Expression injection via SpEL/OGNL/MVEL (CWE-917)
+        if _EXPR_INJECTION_RE.search(method.body) and _has_tainted_param(method):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-917: Expression injection in `{method.name}()`",
+                description="Expression language (SpEL/OGNL/MVEL) is evaluated with potentially user-controlled input.",
+                line=_first_matching_line(method.body, _EXPR_INJECTION_RE, method.start_line),
+                suggestion="Never evaluate untrusted expressions. Use explicit logic paths instead of expression evaluation.",
+                rule_id="JV-018", cwe="CWE-917", agent="java-analyzer",
+                confidence=0.85, analysis_kind="taint_flow",
+            ))
+
+        # JV-019: SSTI via template engines (CWE-94)
+        if _SSTI_JAVA_RE.search(method.body) and _has_tainted_param(method):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-94: Server-side template injection in `{method.name}()`",
+                description="Template engine is invoked with potentially user-controlled template name or content.",
+                line=_first_matching_line(method.body, _SSTI_JAVA_RE, method.start_line),
+                suggestion="Never let users control template names or content. Use a fixed template with controlled data binding.",
+                rule_id="JV-019", cwe="CWE-94", agent="java-analyzer",
+                confidence=0.82, analysis_kind="taint_flow",
+            ))
 
     for lineno, line in enumerate(source.splitlines(), start=1):
         if _HARDCODED_SECRET_RE.search(line):

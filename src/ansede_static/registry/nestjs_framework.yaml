@@ -16,7 +16,11 @@ rules:
     cwe: CWE-306
     severity: high
     pattern_type: regex
-    regex: "@(?:Get|Post|Put|Patch|Delete)\\((?:[^)]*|)\\)\\s*(?:async\\s*)?\\w+"
+    regex: "(?<!@UseGuards\\([^)]*\\)\\s*)@(?:Get|Post|Put|Patch|Delete)\\((?:[^)]*|)\\)\\s*(?:async\\s*)?\\w+"
+    confidence: 0.55
+    context_confirm: "@UseGuards|@Roles|@Public"
+    negate_context: true
+    context_lines: 15
     suggestion: "Add @UseGuards(AuthGuard) and @Roles('admin') to all protected endpoints"
 
   - id: registry/nestjs/sqli/typeorm-raw
@@ -61,9 +65,12 @@ rules:
     cwe: CWE-306
     severity: low
     pattern_type: regex
-    regex: "@Controller\\([^)]*\\)\\s*(?!.*@UseGuards)"
+    regex: "@Controller\\([^)]*\\)"
+    confidence: 0.20
+    context_confirm: "@UseGuards|@AuthGuard|@Public"
+    negate_context: true
+    context_lines: 5
     suggestion: "Apply @UseGuards(JwtAuthGuard) at the controller class level"
-    confidence: 0.25
     path_exclude: "/(?:node_modules|dist|lib|src\\/generated)/"
 
   - id: registry/nestjs/pipe/no-validation

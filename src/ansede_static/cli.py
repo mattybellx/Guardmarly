@@ -126,6 +126,8 @@ _SKIP_EXACT_SUFFIXES: frozenset[str] = frozenset({
     ".d.ts",
     ".min.js",
     ".min.css",
+    "_test.py",
+    "_tests.py",
 })
 
 _SKIP_EXTENSIONS: frozenset[str] = frozenset({
@@ -165,6 +167,16 @@ _SKIP_PATH_PATTERNS: tuple[re.Pattern[str], ...] = (
 
 _SKIP_LARGE_FILES = 1024 * 500
 
+# Global override settable via CLI --max-file-kb
+_MAX_FILE_KB_OVERRIDE: int | None = None
+
+
+def _get_max_file_bytes() -> int:
+    """Return the current max file size in bytes (respects --max-file-kb override)."""
+    if _MAX_FILE_KB_OVERRIDE is not None:
+        return _MAX_FILE_KB_OVERRIDE * 1024
+    return _SKIP_LARGE_FILES
+
 
 def _should_skip_file(path: Path) -> tuple[bool, str]:
     """Return whether a file should be skipped for performance/noise reasons."""
@@ -185,7 +197,7 @@ def _should_skip_file(path: Path) -> tuple[bool, str]:
     except OSError:
         size = 0
 
-    if size > _SKIP_LARGE_FILES:
+    if size > _get_max_file_bytes():
         return True, f"large file: {size} bytes"
 
     return False, ""
@@ -491,7 +503,7 @@ def _analyze_file(
         result = run_go_analysis(code, filename=str(path), global_graph=global_graph)
     elif lang == "java":
         from ansede_static.java_analyzer import analyze_java
-        result = analyze_java(code, filename=str(path))
+        result = analyze_java(code, filename=str(path), global_graph=global_graph)
     elif lang == "csharp":
         from ansede_static.csharp_analyzer import analyze_csharp
         result = analyze_csharp(code, filename=str(path))
@@ -1509,6 +1521,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Abort analysis of a single file after this many seconds (default: 30).",
     )
     parser.add_argument(
+        "--max-file-kb", type=int, default=None, metavar="KB",
+        help="Skip source files larger than this size in KB (default: 500). Lower for massive monorepos to avoid timeouts.",
+    )
+    parser.add_argument(
         "--sbom", choices=["cyclonedx", "spdx"], default=None, metavar="FORMAT",
         help="Generate a Software Bill of Materials in CycloneDX or SPDX JSON format.",
     )
@@ -2072,6 +2088,11 @@ def _main_impl() -> None:
 
     if getattr(args, "guarded_fix", False) and args.stdin:
         parser.error("--guarded-fix is not supported with --stdin")
+
+    # ── Apply --max-file-kb override ────────────────────────────────────
+    if getattr(args, "max_file_kb", None) is not None:
+        global _MAX_FILE_KB_OVERRIDE
+        _MAX_FILE_KB_OVERRIDE = args.max_file_kb
 
     # ── License feature gating ──────────────────────────────────────────
     gate = LicenseFeatureGate()

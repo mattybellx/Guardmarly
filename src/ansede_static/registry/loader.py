@@ -61,6 +61,7 @@ _FRAMEWORK_MARKERS: dict[str, list[tuple[str, list[str]]]] = {
     ],
     "javascript": [
         ("express_js", ["require('express')", 'require("express")', "from 'express'", 'from "express"', "express()"]),
+        ("hono_framework", ["from 'hono'", 'from "hono"', "new Hono(", "import { Hono }", "c.req.query", "c.req.param", "c.html(", "c.json("]),
         ("pug_js", ["require('pug')", 'require("pug")', "from 'pug'", 'from "pug"', "pug.compile(", "pug.render(", "pug.compileFile("] ),
         ("ldap_js", ["require('ldapjs')", 'require("ldapjs")', "from 'ldapts'", 'from "ldapts"', "search(baseDN", "search(filter)"]),
         ("jwt_js", ["require('jsonwebtoken')", 'require("jsonwebtoken")', "jwt.verify(", "jwt.sign(", "new SignJWT("]),
