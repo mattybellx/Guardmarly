@@ -271,6 +271,8 @@ class GoSecurityWalker:
         self._detect_hardcoded_secrets()
         self._detect_dangerous_defaults()
         self._detect_regex_sinks()
+        self._detect_template_ssti()
+        self._detect_missing_constant_time_compare()
         return self.findings
 
     _GO_SECRET_PATTERNS: List[Tuple[str, str]] = [
@@ -381,6 +383,80 @@ class GoSecurityWalker:
                             analysis_kind="go-ast-sink",
                         ))
                         break
+
+    def _detect_template_ssti(self) -> None:
+        """CWE-94: Detect text/template used instead of html/template in web handlers.
+
+        ``text/template`` does not auto-escape HTML, making it vulnerable to SSTI
+        when user input is interpolated. Flag when it's imported in files that
+        handle HTTP (have route registrations) without a corresponding
+        ``html/template`` import.
+        """
+        has_text_template = any("text/template" in p for p in self._imports.values())
+        has_html_template = any("html/template" in p for p in self._imports.values())
+        is_web_handler = bool(self._handlers) or any(
+            kw in self.code for kw in ("http.HandleFunc", "http.Handle", "gin.", "echo.", "fiber.", "chi.", "mux.", "router.")
+        )
+
+        if has_text_template and not has_html_template and is_web_handler:
+            # Find the import line
+            for lineno, line in enumerate(self.code.splitlines(), start=1):
+                if "text/template" in line:
+                    self.findings.append(Finding(
+                        category="security",
+                        severity=Severity.HIGH,
+                        title="CWE-94: text/template used in web handler (SSTI risk)",
+                        description="text/template is imported without html/template in a web handler file. "
+                                    "text/template does not auto-escape HTML/JS, enabling server-side template "
+                                    "injection when user input reaches template execution.",
+                        line=lineno,
+                        suggestion="Replace 'text/template' with 'html/template' for automatic context-aware escaping.",
+                        rule_id="GO-94",
+                        cwe="CWE-94",
+                        agent="go-analyzer",
+                        confidence=0.82,
+                        analysis_kind="go-ast-ssti",
+                    ))
+                    break
+
+    def _detect_missing_constant_time_compare(self) -> None:
+        """CWE-208: Flag string comparisons that should use crypto/subtle.ConstantTimeCompare.
+
+        Detects ``==`` or ``!=`` comparisons on strings that appear to be
+        security-sensitive (tokens, HMACs, signatures, passwords) in auth
+        or crypto contexts.
+        """
+        has_crypto_subtle = any("crypto/subtle" in p for p in self._imports.values())
+        if has_crypto_subtle:
+            return  # Already importing crypto/subtle — assume they know about it
+
+        _SECURITY_STRING_CMP_RE = re.compile(
+            r"(?:token|secret|hash|hmac|signature|mac|password|api[_-]?key|auth)\s*(?:==|!=)\s*",
+            re.IGNORECASE,
+        )
+
+        for lineno, line in enumerate(self.code.splitlines(), start=1):
+            if _SECURITY_STRING_CMP_RE.search(line):
+                # Only flag in functions that look auth/crypto-related
+                context_start = max(0, lineno - 10)
+                context = "\n".join(self.code.splitlines()[context_start:lineno])
+                if re.search(r"(?:func\s+\w*(?:Auth|Verify|Check|Validate|Login|Crypto|Hash|Sign|HMAC))", context, re.IGNORECASE):
+                    self.findings.append(Finding(
+                        category="security",
+                        severity=Severity.MEDIUM,
+                        title="CWE-208: String comparison of security value — not timing-safe",
+                        description=f"Security-sensitive string comparison at L{lineno} uses `==` instead "
+                                    "of `crypto/subtle.ConstantTimeCompare`. This is vulnerable to timing attacks "
+                                    "that can leak the expected value byte-by-byte.",
+                        line=lineno,
+                        suggestion="Use `subtle.ConstantTimeCompare([]byte(a), []byte(b))` to prevent timing side-channel attacks.",
+                        rule_id="GO-208",
+                        cwe="CWE-208",
+                        agent="go-analyzer",
+                        confidence=0.68,
+                        analysis_kind="go-ast-timing",
+                    ))
+                    break  # One finding per file is enough
 
     def _walk_decl(self, decl: GoFuncDecl) -> None:
         prev = self._current_func
