@@ -59,25 +59,6 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     # Fiber framework
     "c.Params": "Fiber URL path parameter",
     "c.Body": "Fiber request body",
-    "c.Query": "Fiber query parameter",
-    "c.Get": "Fiber request header",
-    "c.GetReqHeaders": "Fiber all request headers",
-    # Echo framework additions
-    "c.QueryParam": "Echo query parameter",
-    "c.Param": "Echo URL path parameter",
-    "c.FormValue": "Echo form/query value",
-    "c.RealIP": "Echo client IP",
-    # Standard library http.Request (for middleware handlers)
-    "r.URL.Path": "HTTP request path",
-    "r.URL.RawQuery": "HTTP raw query string",
-    "r.Host": "HTTP Host header",
-    "r.Referer": "HTTP Referer header",
-    "r.UserAgent": "HTTP User-Agent header",
-    # Gorilla/mux router
-    "mux.Vars": "URL path variables (gorilla/mux)",
-    # GraphQL / gRPC sources
-    "json.RawMessage": "Raw JSON input (untrusted)",
-    "proto.Unmarshal": "Protobuf deserialization (untrusted)",
 }
 
 _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
@@ -130,22 +111,6 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     # Additional HTTP client sinks for SSRF
     "http.Client.Do": ("CWE-918", "SSRF via http.Client.Do", "high"),
     "resty.New": ("CWE-918", "SSRF via resty HTTP client", "high"),
-    # MongoDB / NoSQL injection
-    "mongo.Collection.Find": ("CWE-943", "NoSQL Injection via MongoDB Find", "critical"),
-    "mongo.Collection.FindOne": ("CWE-943", "NoSQL Injection via MongoDB FindOne", "critical"),
-    "mongo.Collection.Aggregate": ("CWE-943", "NoSQL Injection via MongoDB Aggregate", "critical"),
-    "bson.M": ("CWE-943", "NoSQL Injection via raw BSON map", "high"),
-    # Template injection (SSTI) — text/template without html/template
-    "text/template.Template.Execute": ("CWE-94", "SSTI via text/template.Execute()", "critical"),
-    "text/template.Template.ExecuteTemplate": ("CWE-94", "SSTI via text/template.ExecuteTemplate()", "critical"),
-    # Zip / tar path traversal (Zip Slip)
-    "archive/zip.FileHeader.Name": ("CWE-22", "Zip Slip via archive/zip", "high"),
-    "archive/tar.Header.Name": ("CWE-22", "Zip Slip via archive/tar", "high"),
-    # Redis / cache injection
-    "redis.Client.Do": ("CWE-943", "Redis command injection via raw Do()", "high"),
-    # SQL via ORM wrappers
-    "gorm.DB.Raw": ("CWE-89", "SQL Injection via GORM Raw()", "critical"),
-    "gorm.DB.Exec": ("CWE-89", "SQL Injection via GORM Exec()", "critical"),
 }
 
 # ── Known-safe unsafe.Pointer patterns ──────────────────────────────────
