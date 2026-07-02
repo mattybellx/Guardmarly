@@ -144,11 +144,17 @@ class ContextAnalyzer:
         'test_', '_test', '_spec', 'spec_', 'conftest.', '.test.', '.spec.',
         'tests/', '/tests', 'test_suite', 'unit_test', 'integration_test',
         '__tests__', '.test.', '.spec.',
+        # C# convention: *Tests.cs, *Test.cs files (e.g., BsonReaderTests.cs)
+        'tests.cs', 'Tests.cs', 'test.cs', 'Test.cs',
         # Directory-based patterns (forward + backslash for Windows)
         '/test/', '\\test\\', '/tests/', '\\tests\\',
         '/e2e/', '\\e2e\\',
         '/spec/', '\\spec\\', '/cypress/', '\\cypress\\',
         '/playwright/', '\\playwright\\',
+        # Perf / benchmark / example directories (non-production code)
+        '/perf/', '\\perf\\', '/bench/', '\\bench\\',
+        '/benchmarks/', '\\benchmarks\\', '/examples/', '\\examples\\',
+        '/example/', '\\example\\',
     ]
 
     MOCK_PATTERNS = [
@@ -159,6 +165,10 @@ class ContextAnalyzer:
         '/demo/', '\\demo\\', '/docs/', '\\docs\\',
         '/documentation/', '\\documentation\\', '/tutorial/', '\\tutorial\\',
         '/samples/', '\\samples\\', '/sample/', '\\sample\\',
+        # Build tooling / benchmark / perf directories
+        '/perf/', '\\perf\\', '/bench/', '\\bench\\',
+        '/benchmarks/', '\\benchmarks\\',
+        '/build-tools/', '\\build-tools\\', '/build-scripts/', '\\build-scripts\\',
     ]
 
     GENERATED_PATTERNS = [
@@ -176,6 +186,52 @@ class ContextAnalyzer:
         'flask/src/', 'flask\\src\\',
         'django/django/', 'django\\django\\',
     ]
+
+    # ── Library-purpose patterns ────────────────────────────────────────
+    # Files/classes whose core purpose is the "dangerous" operation being flagged.
+    # A JSON parser WILL deserialize; an HTTP client WILL make requests.
+    # Flagging these is like warning a knife that it can cut.
+    LIBRARY_PURPOSE_FILE_PATTERNS: list[str] = [
+        # JSON/XML serialization libraries
+        'newtonsoft.json', 'Newtonsoft.Json',
+        'system.text.json', 'System.Text.Json',
+        'jackson', 'Jackson', 'gson', 'Gson',
+        'xmlserializer', 'XmlSerializer', 'datacontractserializer',
+        'binaryformatter', 'BinaryFormatter',
+        'soapformatter', 'SoapFormatter',
+        'losformatter', 'LosFormatter',
+        'objectstateformatter', 'ObjectStateFormatter',
+        # HTTP client libraries (they ARE supposed to make HTTP requests)
+        '/requests/', '\\requests\\',
+        'restsharp', 'RestSharp',
+        'httpclient', 'HttpClient',
+        # Template engines (they ARE supposed to render HTML)
+        'jinja', 'Jinja', 'mako', 'Mako',
+        'handlebars', 'Handlebars', 'mustache',
+        # ORM / DB libraries (they ARE supposed to execute queries)
+        'sqlalchemy', 'SQLAlchemy', 'entityframework', 'EntityFramework',
+        'dapper', 'Dapper', 'hibernate', 'Hibernate',
+        # Serialization helpers
+        'pickle', 'dill', 'cloudpickle',
+        'marshmallow', 'pydantic',
+    ]
+
+    # CWE-rule pairs that are library-purpose by design — suppress when
+    # the file belongs to a known library-purpose path.
+    LIBRARY_PURPOSE_SUPPRESS_CWES: frozenset[str] = frozenset({
+        "CWE-502",  # Unsafe deserialization (JSON/XML libs do this)
+        "CWE-918",  # SSRF (HTTP clients do this)
+        "CWE-611",  # XXE (XML parsers handle XML)
+        "CWE-79",   # XSS (template engines render HTML)
+        "CWE-89",   # SQL injection (ORMs build queries)
+    })
+
+    # Quality/architecture rules that are not security findings.
+    # These are useful for code review but noise in security scans.
+    QUALITY_CWES: frozenset[str] = frozenset({
+        "CWE-617",   # Assertion / exception swallowing
+        "CWE-1120",  # Cyclomatic complexity
+    })
 
     @staticmethod
     def is_test_context(file_path: str, code_snippet: str) -> tuple[bool, str]:
@@ -255,6 +311,55 @@ class ContextAnalyzer:
             if pattern in path_lower:
                 return True, f"Framework internal pattern '{pattern}'"
         return False, ""
+
+    # ── Comment-line cache ──────────────────────────────────────────────
+    _comment_line_cache: dict[str, set[int]] = {}
+
+    @staticmethod
+    def is_comment_line(file_path: str, line_number: int) -> bool:
+        """Check if a specific line is purely a comment (not mixed code+comment).
+
+        Supports Python (#), JS/Go/C# (//), and C-style (/* */) single-line comments.
+        Results are cached per file for performance.
+        """
+        import os
+        norm = os.path.normpath(str(file_path))
+        if norm not in ContextAnalyzer._comment_line_cache:
+            try:
+                with open(file_path, encoding="utf-8", errors="replace") as fh:
+                    lines = fh.readlines()
+            except (OSError, UnicodeDecodeError):
+                return False
+            comment_lines: set[int] = set()
+            in_block = False
+            for idx, raw in enumerate(lines, start=1):
+                stripped = raw.strip()
+                if not stripped:
+                    continue
+                # Block comment tracking (/* ... */)
+                if in_block:
+                    comment_lines.add(idx)
+                    if "*/" in stripped:
+                        in_block = False
+                    continue
+                if stripped.startswith("/*"):
+                    comment_lines.add(idx)
+                    if "*/" not in stripped:
+                        in_block = True
+                    continue
+                # Single-line comments
+                if stripped.startswith("#") or stripped.startswith("//"):
+                    comment_lines.add(idx)
+                    continue
+                # Python: line that is ONLY a docstring-like string (not mixed code)
+                if stripped.startswith('"""') or stripped.startswith("'''"):
+                    comment_lines.add(idx)
+                    continue
+                # Check for // at end of code line — but only if the // is not inside a string
+                # Conservative: if line has code before //, it's NOT a pure comment
+
+            ContextAnalyzer._comment_line_cache[norm] = comment_lines
+        return line_number in ContextAnalyzer._comment_line_cache.get(norm, set())
 
 
 class SafePatternDetector:

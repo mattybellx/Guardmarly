@@ -148,7 +148,10 @@ def _is_framework_internal_js_path(filename: str) -> bool:
 def _is_test_js_path(filename: str) -> bool:
     """Check if the file path suggests a test file."""
     path_norm = _normalized_path(filename)
-    return any(m in path_norm for m in ("/test/", "/tests/", "/__tests__/", "/spec/", "/e2e/"))
+    return any(m in path_norm for m in (
+        "/test/", "/tests/", "/__tests__/", "/spec/", "/e2e/",
+        "/perf/", "/bench/", "/benchmarks/", "/examples/",
+    ))
 
 
 def _downgrade_noise_findings(

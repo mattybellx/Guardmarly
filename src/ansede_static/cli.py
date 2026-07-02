@@ -2784,10 +2784,30 @@ def _main_impl() -> None:
             _is_test, _ = ContextAnalyzer.is_test_context(r.file_path, "")
             _is_mock, _ = ContextAnalyzer.is_mock_context(r.file_path, "")
             _is_gen, _ = ContextAnalyzer.is_generated(r.file_path)
-            _is_test_file = _is_test or _is_mock or _is_gen
+            _is_fw, _ = ContextAnalyzer.is_framework_internal(r.file_path)
+            _is_lib = any(p in r.file_path.replace('\\', '/').lower()
+                         for p in ContextAnalyzer.LIBRARY_PURPOSE_FILE_PATTERNS)
+            _is_test_file = _is_test or _is_mock or _is_gen or _is_fw
             _new = []
             for f in r.findings:
-                if _is_test_file and f.severity in ("low", "medium"):
+                # Framework-internal code: filter ALL findings (design decisions, not bugs)
+                if _is_fw:
+                    _strict_filtered += 1
+                    continue
+                # Library-purpose code: suppress findings that ARE the library's job
+                if _is_lib and f.cwe in ContextAnalyzer.LIBRARY_PURPOSE_SUPPRESS_CWES:
+                    _strict_filtered += 1
+                    continue
+                # Quality/architecture metrics: not security findings
+                if f.cwe in ContextAnalyzer.QUALITY_CWES:
+                    _strict_filtered += 1
+                    continue
+                # Test/mock/generated files: filter all except hardcoded secrets (relevant in test configs)
+                if _is_test_file and f.cwe != "CWE-798":
+                    _strict_filtered += 1
+                    continue
+                # Skip findings on pure comment lines (# DEBUG = True, etc.)
+                if f.line and ContextAnalyzer.is_comment_line(r.file_path, f.line):
                     _strict_filtered += 1
                     continue
                 if f.severity not in ("critical", "high"):

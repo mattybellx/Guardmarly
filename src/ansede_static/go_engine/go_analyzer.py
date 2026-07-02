@@ -113,6 +113,15 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "resty.New": ("CWE-918", "SSRF via resty HTTP client", "high"),
 }
 
+# ── Known-safe unsafe.Pointer patterns ──────────────────────────────────
+# These use unsafe.Pointer for zero-allocation performance in well-audited
+# standard library patterns (e.g., WebSocket masking, hash mixing).
+_GO_SAFE_UNSAFE_FILES: tuple[str, ...] = (
+    "/mask.go",           # gorilla/websocket WebSocket masking
+    "/mask_amd64.go",
+    "/mask_386.go",
+)
+
 _GO_AUTH_MIDDLEWARE_PATTERNS: List[str] = [
     "auth", "Auth", "middleware", "Middleware", "guard", "Guard",
     "RequireAuth", "WithAuth", "Authenticate", "Authorize",
@@ -365,7 +374,12 @@ class GoSecurityWalker:
             (r"gob\.NewDecoder", "CWE-502", "Unsafe deserialization via gob.NewDecoder", "critical"),
             (r"unsafe\.Pointer\s*\(", "CWE-822", "Unsafe pointer dereference via unsafe.Pointer", "high"),
         ]
+        # Skip known-safe unsafe.Pointer patterns (WebSocket masking, etc.)
+        _filename_lower = self.filename.lower().replace("\\", "/")
+        _skip_unsafe = any(m in _filename_lower for m in _GO_SAFE_UNSAFE_FILES)
         for pattern, cwe, title, severity in _GO_REGEX_SINKS:
+            if _skip_unsafe and "unsafe.Pointer" in pattern:
+                continue
             if re.search(pattern, self.code, re.IGNORECASE):
                 for lineno, line in enumerate(self.code.splitlines(), start=1):
                     if re.search(pattern, line, re.IGNORECASE):

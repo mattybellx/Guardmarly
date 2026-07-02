@@ -407,7 +407,7 @@ class FileMetadata:
         name_lower = file_path_obj.name.lower()
         path_lower = file_path_str.lower()
 
-        is_test = any(marker in path_lower for marker in ['test_', '_test', '_spec', 'spec_', 'conftest.'])
+        is_test = any(marker in path_lower for marker in ['test_', '_test', '_spec', 'spec_', 'conftest.', '/perf/', '\\perf\\', '/bench/', '\\bench\\', '/benchmarks/', '/examples/', '/example/'])
         is_mock = any(marker in path_lower for marker in ['mock_', '_mock', 'fixtures/', '/fixtures', 'fixture'])
         is_generated = any(marker in path_lower for marker in ['.d.ts', '.gen.', '.generated.', 'dist/', '__pycache__'])
         is_template = file_path_obj.suffix in ('.jinja', '.j2', '.jinja2', '.hbs', '.handlebars')

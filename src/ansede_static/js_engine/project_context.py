@@ -88,6 +88,7 @@ _NODE_PATH_MARKERS: tuple[str, ...] = (
 _TEST_PATH_MARKERS: tuple[str, ...] = (
     "/test/", "/tests/", "/__tests__/", "/spec/",
     "/e2e/", "/cypress/", "/playwright/",
+    "/perf/", "/bench/", "/benchmarks/", "/examples/",
 )
 
 
