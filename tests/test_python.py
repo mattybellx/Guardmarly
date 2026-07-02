@@ -1999,7 +1999,7 @@ def render():
     template = request.args.get('template', '')
     return render_template_string(template)
 """
-        assert _has_cwe(code, "CWE-79")
+        assert _has_cwe(code, "CWE-94")
 
     def test_jinja2_template_from_string_tainted(self):
         code = """
