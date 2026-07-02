@@ -1056,7 +1056,10 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 confidence=0.72, analysis_kind="pattern",
             ))
 
-        # CS-027: LDAP injection (CWE-90)
+    # ── Phase 1b: New C# vulnerability classes ──
+
+    # CS-027: LDAP injection (CWE-90)
+    for method in _collect_methods(source):
         if _CS_LDAP_INJECTION_RE.search(method.body):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
@@ -1068,7 +1071,8 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 confidence=0.85, analysis_kind="pattern",
             ))
 
-        # CS-028: Weak cryptography (CWE-327/328)
+    # CS-028: Weak cryptography (CWE-327/328)
+    for method in _collect_methods(source):
         if _CS_WEAK_CRYPTO_RE.search(method.body):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
@@ -1080,7 +1084,8 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 confidence=0.92, analysis_kind="pattern",
             ))
 
-        # CS-029: NoSQL injection — MongoDB/CosmosDB (CWE-943)
+    # CS-029: NoSQL injection — MongoDB/CosmosDB (CWE-943)
+    for method in _collect_methods(source):
         if _CS_NOSQL_INJECTION_RE.search(method.body) and _has_tainted_param_cs(method):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
