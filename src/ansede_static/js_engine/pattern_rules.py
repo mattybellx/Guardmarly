@@ -760,7 +760,7 @@ RULES: list[Rule] = [
         "JS-084", "CWE-116",
         "CWE-116: Incomplete sanitization — missing backslash escape in regex at line {line}",
         "Regex pattern without backslash escaping at L{line}: `{snippet}`. Special regex characters in user input cause ReDoS or bypass.",
-        "Escape special regex characters: `.replace(/[.*+?^${}()|[\]\\]/g, '\\\\$&')` before using input in RegExp.",
+        "Escape special regex characters: `.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\\\\\$&amp;')` before using input in RegExp.",
         Severity.HIGH,
         r'new\s+RegExp\s*\(\s*(?:req\.|request\.|params\.|query\.|body\.|\w+)',
         exclude_pattern=r'\.replace\s*\(\s*/\[\.\*\+',

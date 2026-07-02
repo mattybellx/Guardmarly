@@ -1288,7 +1288,7 @@ def main() -> None:
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# v5.2.2 — Comparison page, Demo booking, Lead capture
+# v5.3.0 — Comparison page, Demo booking, Lead capture, Blog, unified dark UI
 # ══════════════════════════════════════════════════════════════════════════
 
 @app.route("/compare")

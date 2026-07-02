@@ -248,12 +248,20 @@ fn _core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(fast_pattern_rules, m)?)?;
     Ok(())
 }
+#[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn test_parse_python() {
+        let result = parse_with_language("x = 1", "python");
+        assert!(result.is_ok());
+        assert!(!result.unwrap().is_empty());
+    }
+
+    #[test]
+    fn test_parse_unsupported_language() {
+        let result = parse_with_language("x = 1", "ruby");
+        assert!(result.is_err());
     }
 }
