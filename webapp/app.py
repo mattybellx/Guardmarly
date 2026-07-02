@@ -1309,6 +1309,43 @@ def whitepaper():
     return "Whitepaper not found", 404
 
 
+@app.route("/blog")
+def blog():
+    """Technical blog — IFDS deep-dive and benchmark data."""
+    import markdown as _md
+    blog_path = _REPO_ROOT / "docs" / "blog" / "why-your-sast-misses-86-percent.md"
+    if not blog_path.exists():
+        return "Blog post not found", 404
+
+    raw = blog_path.read_text(encoding="utf-8")
+    # Strip YAML frontmatter if present
+    if raw.startswith("---"):
+        end = raw.find("---", 3)
+        if end != -1:
+            raw = raw[end + 3:]
+
+    html_body = _md.markdown(raw, extensions=["fenced_code", "tables", "codehilite"])
+
+    blog_html = """<div class="page-wrap" style="max-width:800px">
+  <div class="hero" style="padding-top:20px">
+    <div class="hero-badge">Technical Deep-Dive &bull; July 2026</div>
+  </div>
+  <article style="font-size:1.05rem;line-height:1.8;color:var(--text-secondary)">
+    {body}
+  </article>
+  <div class="cta-banner" style="margin-top:48px">
+    <h2>Try it on your own code</h2>
+    <p>Compare Ansede against your current SAST tool in 30 seconds.</p>
+    <div class="cta-buttons">
+      <a href="/compare" class="btn btn-primary">See Comparison</a>
+      <a href="/demo" class="btn btn-secondary">Book a Demo</a>
+    </div>
+  </div>
+</div>""".format(body=html_body)
+
+    return _HTML.replace("{{title}}", "Why Your SAST Misses 86% of CVEs").replace("{{body}}", blog_html)
+
+
 @app.route("/api/demo-request", methods=["POST"])
 def api_demo_request():
     """Capture demo request leads."""
