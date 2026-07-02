@@ -2,14 +2,28 @@
 
 This page documents every benchmark run performed on `ansede-static` with raw, unfiltered results. No cherry-picking. All runs are reproducible from the repository root.
 
-_Last updated: 2026-06-26 (v2.3.1)_
+_Last updated: 2026-07-02 (v5.2.0)_
+
+## OWASP Benchmark v1.2 (Industry Standard)
+
+**First time Ansede beats Semgrep on OWASP recall.**
+
+| Metric | Ansede | Semgrep OSS |
+|---|---|---|
+| Recall | **62.0%** | 59.4% |
+| Precision | 47.1% | 61.8% |
+| True Positives | **877** | 840 |
+| False Positives | 984 | 520 |
+| Cases | 2,740 | 2,740 |
+
+Per-category breakdown and interactive dashboard: [`benchmarks/owasp_scorecard.html`](../benchmarks/owasp_scorecard.html)
 
 ## Unit Test Suite
 
 | Metric | Result |
 |---|---|
-| Tests | **1,127 passed** |
-| Time | **17.70s** |
+| Tests | **1,207 passed** |
+| Time | **17.3s** |
 
 ## Quality Benchmark
 

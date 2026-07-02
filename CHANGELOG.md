@@ -3,6 +3,39 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [5.2.0] — 2026-07-02
+
+### Added
+- **Interprocedural IFDS Taint Analysis** — Taint now tracks across method boundaries within Java files. Caller→callee param mapping, callee→caller return value propagation via `v2_java_bridge.py` (+140 lines)
+- **CWE-330 Weak Random Detector** (`JV-025`) — AST-based detection of `java.util.Random`, `Math.random()`, hardcoded PRNG seeds. 100% OWASP weakrand recall (493/493 cases)
+- **CWE-614 Insecure Cookie Detector** (`JV-026`) — Detects `setSecure(false)`, missing Secure flag on auth-named cookies. 100% OWASP securecookie recall (67/67 cases)
+- **CWE-501 Trust Boundary Detector** (`JV-027`) — Flags untrusted data stored in `session.setAttribute()`. +7.3pp OWASP trustbound recall. FP guards: skips methods with auth annotations, validation patterns
+- **CWE-328 Weak Hash Expansion** — Now detects Guava `Hashing.md5()`, Apache `DigestUtils.md5Hex()`, variable-based algorithm selection
+
+### Changed — Detection (Recall +17.1pp)
+- **OWASP recall: 44.9% → 62.0%** — Now beats Semgrep (59.4%) on the industry-standard benchmark. +242 true positives.
+- **XSS: 50.0% → 65.9%** — IFDS-based interprocedural taint flow through helper methods
+- **CMDi: 50.8% → 63.5%** — Interprocedural IFDS propagates taint through command-building helpers
+- Fixed broken IFDS bridge import (`run_ifds_analysis` → `run_ifds_tabulation`). Bridge was silently crashing; now produces findings for CWE-89, CWE-78, CWE-79
+- Intra-file method-return propagation: `buildQuery(taintedArg)` → return value → SQL sink now detected
+- IFDS result cache: avoids re-running solver on identical method bodies (helps real-world repos)
+
+### Changed — Precision
+- XSS: non-HTTP writer guard (`FileWriter`, `StringWriter`, `ByteArrayOutputStream`) — skips non-response output streams
+- Trust Boundary: skips methods with `@PreAuthorize`/`@Secured` and validation patterns (`ESAPI`, `HtmlUtils.htmlEscape`, `Integer.parseInt`)
+- SQLi: PreparedStatement FPR guard strengthened — skips methods where ALL SQL calls use `?` parameterization
+
+### Added — Documentation & Tooling
+- **OWASP Scorecard Generator** (`benchmarks/generate_owasp_scorecard.py`) — Self-contained HTML dashboard with per-category breakdown
+- **CI Workflow Example** (`ci-workflow.example.yml`) — GitHub Actions with SARIF upload to Code Scanning
+- **World's Best Roadmap** (`docs/WORLD_BEST_ROADMAP.md`) — Full implementation plan with safety gates
+- 12 new tests (1,207 total, all passing)
+
+### Fixed
+- `v2_java_bridge.py`: Source pattern regexes now correctly capture variable names (not type names) from `String x = request.getParameter()` assignments
+- `v2_java_bridge.py`: Added `run_ifds_analysis()` alias for backward compatibility
+- `java_ast_analyzer.py`: `_ALL_CHECKERS` ordering — new detectors registered correctly
+
 ## [5.0.0] — 2026-06-27
 
 ### Added

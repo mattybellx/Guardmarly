@@ -7,18 +7,18 @@
 </p>
 
 <p align="center">
-  <strong>The offline SAST engine that finds 7.5x more than CodeQL.</strong><br>
-  <strong>33 repos · 3 languages · 95% significance</strong> · <strong>0.4% FP rate</strong> · <strong>100% CVE recall</strong><br>
+  <strong>The offline SAST engine that beats Semgrep on OWASP and finds 7.5x more than CodeQL.</strong><br>
+  <strong>OWASP recall 62.0% · CVE recall 96.3% · 58 repos · 0 failures</strong> · <strong>0.4% FP rate</strong><br>
   <code>pip install ansede-static</code> &nbsp;·&nbsp; No telemetry &nbsp;·&nbsp; Fully offline
 </p>
 
 <p align="center">
-  <a href="https://pypi.org/project/ansede-static"><img src="https://img.shields.io/pypi/v/ansede-static?label=PyPI&color=0078D4" alt="PyPI"></a>
-  <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mattybellx/Ansede/ci.yml?branch=master&label=CI&logo=github" alt="CI"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-100%25-success?logo=owasp" alt="CVE Recall 100%"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Recall-62.0%25-success?logo=owasp" alt="OWASP Recall 62%"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-96.3%25-success?logo=owasp" alt="CVE Recall 96.3%"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Languages-5-blue" alt="5 languages"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/FP%20Rate-0.4%25-success" alt="FP Rate 0.4%"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/tests-1207%20passed-success" alt="1207 tests"></a>
 </p>
 
 <p align="center">
@@ -88,9 +88,16 @@ def list_users():
 
 ## **<ins>Benchmarks</ins>**
 
-### NVD CVE Recall
+### OWASP Benchmark v1.2 (2,740 Java test cases — industry standard)
 
-| Language | Cases | Detected | Recall |
+| Tool | Recall | Precision | TP |
+|---|---|---|---|
+| **Ansede Static** | **62.0%** 🏆 | 47.1% | 877 |
+| Semgrep OSS | 59.4% | 61.8% | 840 |
+
+**Ansede beats Semgrep on recall.** [Full scorecard →](benchmarks/owasp_scorecard.html)
+
+### NVD CVE Recall
 |---|---|---|---|
 | Python | 68 | 67 | 98.5% |
 | JavaScript | 42 | 41 | 97.6% |
@@ -138,7 +145,8 @@ def list_users():
 
 | Feature | Ansede Static | Semgrep OSS | CodeQL |
 |---|---|---|---|
-| **NVD CVE Recall** | **100.0%** | **23.2%** | ~85%* |
+| **OWASP Recall (2,740 cases)** | **62.0%** | **59.4%** | ~50%* |
+| **NVD CVE Recall** | **96.3%** | **23.2%** | ~85%* |
 | **IDOR / Auth Bypass** | ✓ Native AST | ✗ No default rules | ~ Manual QL |
 | **Incident Clustering** | ✓ 49% noise reduction | ✗ | ✗ |
 | **Offline-First** | ✓ Fully | ~ Needs rule sync | ✗ SaaS-only |

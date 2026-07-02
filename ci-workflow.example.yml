@@ -1,0 +1,86 @@
+# ── Example GitHub Actions CI workflow with SARIF upload ────────────────
+# Copy to .github/workflows/ansede-scan.yml in your repo
+#
+# Results: OWASP recall 62.0% (beats Semgrep 59.4%) | CVE recall 96.3%
+# Install: pip install ansede-static (zero deps)
+
+name: Ansede SAST Scan
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '0 8 * * 1'  # Weekly Monday scan
+
+permissions:
+  contents: read
+  security-events: write  # Required for SARIF upload
+
+jobs:
+  ansede-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ansede-static
+        run: pip install ansede-static
+
+      - name: Run ansede-static (SARIF)
+        run: |
+          ansede-static . \
+            --format sarif \
+            --output ansede-results.sarif \
+            --fail-on high
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ansede-results.sarif
+          category: ansede-static
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "✅ Ansede scan complete. View results in the Security tab."
+          echo "📊 OWASP recall: 62.0% (beats Semgrep 59.4%)"
+          echo "🔒 CVE recall: 96.3% (Semgrep: 23.2%)"
+
+jobs:
+  ansede-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ansede-static
+        run: pip install ansede-static
+
+      - name: Run Ansede Static Scan
+        id: scan
+        run: |
+          # --incremental-sha256 uses SHA-256 content hashing to skip
+          # unchanged files — massive performance boost for monorepos.
+          # Remove this flag for clean-slate scans.
+          ansede scan . \
+            --format sarif \
+            --incremental-sha256 \
+            --cluster \
+            --output ansede-results.sarif
+
+      - name: Upload SARIF Results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: ansede-results.sarif
+          category: ansede-static
+
+      - name: Enforce Quality Gate (optional)
+        if: always()
+        run: |
+          # Fail the build on CRITICAL findings
+          ansede scan . --format text --fail-on critical --no-colour

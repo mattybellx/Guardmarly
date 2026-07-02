@@ -462,3 +462,237 @@ def test_apply_fixes_updates_java_csharp_and_go_sources(tmp_path):
     assert applied >= 2  # CS + GO
     assert "[Authorize] public IActionResult Users()" in cs_file.read_text(encoding="utf-8")
     assert "RequireAuth(adminHandler)" in go_file.read_text(encoding="utf-8")
+
+
+# ── New Java detector tests: CWE-330, CWE-614, expanded CWE-328 ───────
+
+JAVA_WEAK_RANDOM_SECURITY_CONTEXT = """
+import java.util.Random;
+import javax.servlet.http.HttpServletRequest;
+
+public class TokenGenerator {
+    public String generateToken(HttpServletRequest request) {
+        Random rng = new Random();
+        long token = rng.nextLong();
+        return Long.toHexString(token);
+    }
+}
+"""
+
+JAVA_WEAK_RANDOM_FIELD = """
+import java.util.Random;
+
+public class SessionManager {
+    public String createSessionId() {
+        Random rng = new Random();
+        return Long.toString(rng.nextLong(), 36);
+    }
+}
+"""
+
+JAVA_WEAK_RANDOM_MATH = """
+public class PasswordReset {
+    public int generateCode() {
+        return (int)(Math.random() * 1000000);
+    }
+}
+"""
+
+JAVA_WEAK_RANDOM_HARDCODED_SEED = """
+import java.util.Random;
+
+public class PredictableGenerator {
+    public long nextValue() {
+        Random rng = new Random(12345L);
+        return rng.nextLong();
+    }
+}
+"""
+
+JAVA_SECURE_RANDOM_OK = """
+import java.security.SecureRandom;
+
+public class SecureTokenGenerator {
+    public String generateToken() {
+        SecureRandom rng = new SecureRandom();
+        byte[] bytes = new byte[32];
+        rng.nextBytes(bytes);
+        return java.util.Base64.getEncoder().encodeToString(bytes);
+    }
+}
+"""
+
+JAVA_INSECURE_COOKIE_EXPLICIT_FALSE = """
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+public class CookieController {
+    public void setAuthCookie(HttpServletResponse response) {
+        Cookie authCookie = new Cookie("session_id", "abc123");
+        authCookie.setSecure(false);
+        response.addCookie(authCookie);
+    }
+}
+"""
+
+JAVA_INSECURE_COOKIE_MISSING_SECURE = """
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+public class LoginHandler {
+    public void login(HttpServletResponse response) {
+        Cookie sessionCookie = new Cookie("auth_token", "xyz789");
+        sessionCookie.setHttpOnly(true);
+        // Missing: setSecure(true)
+        response.addCookie(sessionCookie);
+    }
+}
+"""
+
+JAVA_SECURE_COOKIE_OK = """
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+public class SecureCookieHandler {
+    public void setCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("session", "abc");
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+    }
+}
+"""
+
+JAVA_WEAK_CRYPTO_GUAVA_MD5 = """
+import com.google.common.hash.Hashing;
+
+public class PasswordHasher {
+    public String hash(String password) {
+        return Hashing.md5().hashString(password).toString();
+    }
+}
+"""
+
+JAVA_WEAK_CRYPTO_DIGEST_UTILS = """
+import org.apache.commons.codec.digest.DigestUtils;
+
+public class LegacyHasher {
+    public String checksum(String data) {
+        return DigestUtils.md5Hex(data);
+    }
+}
+"""
+
+JAVA_WEAK_CRYPTO_VARIABLE = """
+import java.security.MessageDigest;
+
+public class DynamicHasher {
+    public byte[] hash(String data) throws Exception {
+        String algo = "MD5";
+        MessageDigest md = MessageDigest.getInstance(algo);
+        return md.digest(data.getBytes());
+    }
+}
+"""
+
+JAVA_STRONG_CRYPTO_OK = """
+import java.security.MessageDigest;
+
+public class ModernHasher {
+    public byte[] hash(String data) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        return md.digest(data.getBytes());
+    }
+}
+"""
+
+
+# ── CWE-330 Tests ──────────────────────────────────────────────────────
+
+def test_detects_weak_random_in_security_context():
+    result = scan_code(JAVA_WEAK_RANDOM_SECURITY_CONTEXT, language="java",
+                        filename="TokenGenerator.java")
+    assert "JV-025" in _rule_ids(result) or "JV-021" in _rule_ids(result), \
+        f"Expected JV-025 or JV-021, got {_rule_ids(result)}"
+
+
+def test_detects_weak_random_in_session_context():
+    result = scan_code(JAVA_WEAK_RANDOM_FIELD, language="java",
+                        filename="SessionManager.java")
+    assert "JV-025" in _rule_ids(result) or "JV-021" in _rule_ids(result), \
+        f"Expected JV-025 or JV-021, got {_rule_ids(result)}"
+
+
+def test_detects_math_random():
+    result = scan_code(JAVA_WEAK_RANDOM_MATH, language="java",
+                        filename="PasswordReset.java")
+    assert "JV-025" in _rule_ids(result) or "JV-021" in _rule_ids(result), \
+        f"Expected JV-025 or JV-021, got {_rule_ids(result)}"
+
+
+def test_detects_hardcoded_random_seed():
+    result = scan_code(JAVA_WEAK_RANDOM_HARDCODED_SEED, language="java",
+                        filename="PredictableGenerator.java")
+    # Either the AST analyzer (JV-025) or regex analyzer (JV-021) should catch this
+    assert "JV-025" in _rule_ids(result) or "JV-021" in _rule_ids(result), \
+        f"Expected JV-025 or JV-021, got {_rule_ids(result)}"
+
+
+def test_does_not_flag_secure_random():
+    result = scan_code(JAVA_SECURE_RANDOM_OK, language="java",
+                        filename="SecureTokenGenerator.java")
+    assert "JV-025" not in _rule_ids(result) and "JV-021" not in _rule_ids(result), \
+        f"SecureRandom should NOT trigger CWE-330, got {_rule_ids(result)}"
+
+
+# ── CWE-614 Tests ──────────────────────────────────────────────────────
+
+def test_detects_set_secure_false():
+    result = scan_code(JAVA_INSECURE_COOKIE_EXPLICIT_FALSE, language="java",
+                        filename="CookieController.java")
+    assert "JV-026" in _rule_ids(result) or "JV-019" in _rule_ids(result), \
+        f"Expected JV-026 or JV-019 for setSecure(false), got {_rule_ids(result)}"
+
+
+def test_detects_missing_secure_flag_on_auth_cookie():
+    result = scan_code(JAVA_INSECURE_COOKIE_MISSING_SECURE, language="java",
+                        filename="LoginHandler.java")
+    assert "JV-026" in _rule_ids(result) or "JV-019" in _rule_ids(result), \
+        f"Expected JV-026 or JV-019 for missing setSecure, got {_rule_ids(result)}"
+
+
+def test_does_not_flag_secure_cookie():
+    result = scan_code(JAVA_SECURE_COOKIE_OK, language="java",
+                        filename="SecureCookieHandler.java")
+    assert "JV-026" not in _rule_ids(result) and "JV-019" not in _rule_ids(result), \
+        f"Secure cookie should NOT trigger CWE-614, got {_rule_ids(result)}"
+
+
+# ── CWE-328 Expanded Tests ─────────────────────────────────────────────
+
+def test_detects_guava_hashing_md5():
+    result = scan_code(JAVA_WEAK_CRYPTO_GUAVA_MD5, language="java",
+                        filename="PasswordHasher.java")
+    assert "JV-012" in _rule_ids(result), \
+        f"Expected JV-012 for Guava Hashing.md5(), got {_rule_ids(result)}"
+
+
+def test_detects_digest_utils_md5_hex():
+    result = scan_code(JAVA_WEAK_CRYPTO_DIGEST_UTILS, language="java",
+                        filename="LegacyHasher.java")
+    assert "JV-012" in _rule_ids(result), \
+        f"Expected JV-012 for DigestUtils.md5Hex(), got {_rule_ids(result)}"
+
+
+def test_detects_variable_weak_algo():
+    result = scan_code(JAVA_WEAK_CRYPTO_VARIABLE, language="java",
+                        filename="DynamicHasher.java")
+    assert "JV-012" in _rule_ids(result), \
+        f"Expected JV-012 for variable 'MD5', got {_rule_ids(result)}"
+
+
+def test_does_not_flag_sha256():
+    result = scan_code(JAVA_STRONG_CRYPTO_OK, language="java",
+                        filename="ModernHasher.java")
+    assert "JV-012" not in _rule_ids(result), \
+        f"SHA-256 should NOT trigger CWE-328, got {_rule_ids(result)}"

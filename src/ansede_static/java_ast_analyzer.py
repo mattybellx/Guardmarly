@@ -10,6 +10,7 @@ Architecture mirrors js_ast_analyzer.py: parse → extract → match → report.
 """
 from __future__ import annotations
 
+import hashlib
 import logging
 import re
 from dataclasses import dataclass, field
@@ -26,6 +27,12 @@ _log = logging.getLogger(__name__)
 # ── tree-sitter setup ───────────────────────────────────────────────────────
 JAVA_LANGUAGE = Language(tsjava.language())
 _JAVA_PARSER = Parser(JAVA_LANGUAGE)
+
+# ── IFDS result cache ───────────────────────────────────────────────────────
+# Keyed by (method_sig, source_hash) → {method_name: [findings]}
+# Avoids re-running the expensive IFDS solver on identical method bodies
+_IFDS_CACHE: dict[tuple[str, str], dict[str, list[dict[str, Any]]]] = {}
+_MAX_CACHE_SIZE = 256
 
 # ── Constants ───────────────────────────────────────────────────────────────
 _ROUTE_ANNOTATIONS: frozenset[str] = frozenset({
@@ -760,31 +767,377 @@ def _body_line_to_file(method: _JavaMethod, body_line: int) -> int:
 
 
 
-def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
-    """CWE-89: SQL injection — origin-aware taint + regex patterns + FPR guards."""
-    from ansede_static.java_taint_origins import collect_taint_origins, has_user_origin
+# ── CWE-330: Weak Random (OWASP weakrand category) ─────────────────────
+_WEAK_RANDOM_CLASSES: frozenset[str] = frozenset({
+    "Random", "java.util.Random", "ThreadLocalRandom",
+})
+_WEAK_RANDOM_METHODS: frozenset[str] = frozenset({
+    "Math.random",
+})
+_SECURE_RANDOM_CLASSES: frozenset[str] = frozenset({
+    "SecureRandom", "java.security.SecureRandom",
+})
 
+
+def _check_weak_random(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
+    """CWE-330: Use of insufficiently random values (predictable PRNG).
+
+    Detects:
+    - ``new Random()`` or ``new java.util.Random()`` in security-sensitive contexts
+    - ``Math.random()`` calls
+    - Ignores ``new SecureRandom()`` (the correct fix)
+    - Flags ThreadLocalRandom for non-security contexts where predictability matters
+    """
     findings: list[Finding] = []
     for method in methods:
         body_bytes = method.body.encode("utf-8")
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+        creations = _collect_object_creations(body_tree, body_bytes)
+        calls = _collect_method_invocations(body_tree, body_bytes)
+
+        # Pattern 1: new Random() or new java.util.Random()
+        for class_name, arguments, line in creations:
+            if class_name in _WEAK_RANDOM_CLASSES:
+                # Check context: if used for token/session/crypto, flag it
+                context_lines = method.body.split("\n")
+                line_idx = line - 1
+                context_start = max(0, line_idx - 2)
+                context_end = min(len(context_lines), line_idx + 5)
+                context = "\n".join(context_lines[context_start:context_end]).lower()
+
+                security_keywords = (
+                    "token", "session", "crypto", "password", "secret", "key",
+                    "auth", "nonce", "csrf", "otp", "reset", "verification",
+                    "secure", "credential", "sign",
+                )
+                is_security_context = any(kw in context for kw in security_keywords)
+
+                # Always flag if it's a field declaration (likely reused)
+                is_field = "private" in context or "public" in context or "protected" in context
+
+                if is_security_context or is_field:
+                    fl = _body_line_to_file(method, line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-330: Weak PRNG (`{class_name}`) at line {fl}",
+                        description=f"`new {class_name}()` used at L{fl}. `java.util.Random` is not "
+                                    "cryptographically secure. An attacker can predict its output.",
+                        suggestion="Use `java.security.SecureRandom` for security-sensitive values "
+                                  "(tokens, session IDs, crypto keys). `new SecureRandom()` is the "
+                                  "drop-in replacement.",
+                        severity=Severity.HIGH,
+                        rule_id="JV-025",
+                        cwe="CWE-330",
+                    ))
+                    continue
+
+                # Flag unconditionally in methods with auth/route annotations
+                if method.has_auth or method.route_paths or method.annotations:
+                    fl = _body_line_to_file(method, line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-330: Weak PRNG (`{class_name}`) in web handler at line {fl}",
+                        description=f"`new {class_name}()` at L{fl} in a web-facing method. "
+                                    "Weak randomness in web endpoints enables session prediction and "
+                                    "CSRF token bypass.",
+                        suggestion="Use `java.security.SecureRandom` for web-facing random values.",
+                        severity=Severity.MEDIUM,
+                        rule_id="JV-025",
+                        cwe="CWE-330",
+                    ))
+
+        # Pattern 2: Math.random() calls
+        for call in calls:
+            if call.callee == "random" and call.receiver == "Math":
+                fl = _body_line_to_file(method, call.line)
+                findings.append(_make_finding(
+                    line=fl,
+                    title=f"CWE-330: `Math.random()` at line {fl}",
+                    description=f"`Math.random()` at L{fl} is not cryptographically secure. "
+                                "Its 48-bit seed can be brute-forced in minutes.",
+                    suggestion="Use `java.security.SecureRandom` for security-sensitive values.",
+                    severity=Severity.HIGH,
+                    rule_id="JV-025",
+                    cwe="CWE-330",
+                ))
+
+        # Pattern 3: new Random(seed) — even worse, seed is hardcoded
+        for class_name, arguments, line in creations:
+            if class_name in _WEAK_RANDOM_CLASSES and arguments:
+                seed_val = arguments[0].strip()
+                # If seed is a literal number or string, it's trivially predictable
+                if re.match(r'^\d+[L]?$', seed_val) or seed_val.startswith('"'):
+                    fl = _body_line_to_file(method, line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-330: Predictable PRNG seed at line {fl}",
+                        description=f"`new {class_name}({seed_val})` at L{fl} uses a hardcoded seed. "
+                                    "This makes the random sequence 100% reproducible by an attacker.",
+                        suggestion="Use `new SecureRandom()` which auto-seeds from OS entropy.",
+                        severity=Severity.CRITICAL,
+                        rule_id="JV-025",
+                        cwe="CWE-330",
+                    ))
+
+    return findings
+
+
+# ── CWE-614: Insecure Cookie ────────────────────────────────────────────
+_INSECURE_COOKIE_METHODS: frozenset[str] = frozenset({
+    "setSecure", "setHttpOnly",
+})
+
+
+def _check_insecure_cookie(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
+    """CWE-614: Sensitive cookie without Secure/HttpOnly flag.
+
+    Detects:
+    - ``cookie.setSecure(false)`` — explicitly disabling the Secure flag
+    - Missing ``setSecure(true)`` on Cookie construction
+    - ``Cookie`` constructor without security flags
+    """
+    findings: list[Finding] = []
+    for method in methods:
+        body_bytes = method.body.encode("utf-8")
+        body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+        creations = _collect_object_creations(body_tree, body_bytes)
+        calls = _collect_method_invocations(body_tree, body_bytes)
+
+        # Track cookies and their security state
+        cookie_vars: dict[str, dict[str, bool]] = {}  # var_name → {"secure": bool, "httponly": bool}
+
+        # Pattern 1: new Cookie(name, value) — check for missing security setup
+        for class_name, arguments, line in creations:
+            if class_name == "Cookie":
+                # Find the variable name assigned from this creation
+                context_lines = method.body.split("\n")
+                line_idx = line - 1
+                if line_idx < len(context_lines):
+                    decl_line = context_lines[line_idx]
+                    var_match = re.search(r'(\w+)\s*=\s*new\s+Cookie\s*\(', decl_line)
+                    if var_match:
+                        cookie_var = var_match.group(1)
+                        cookie_vars[cookie_var] = {"secure": False, "httponly": False}
+
+        # Pattern 2: cookie.setSecure(false) — explicitly insecure
+        for call in calls:
+            if call.callee == "setSecure" and call.receiver in cookie_vars:
+                if call.arguments and call.arguments[0].strip().lower() == "false":
+                    fl = _body_line_to_file(method, call.line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-614: Cookie Secure flag explicitly disabled at line {fl}",
+                        description=f"`{call.receiver}.setSecure(false)` at L{fl} explicitly disables "
+                                    "the Secure flag. The cookie will be sent over unencrypted HTTP.",
+                        suggestion="Use `cookie.setSecure(true)` to restrict the cookie to HTTPS only.",
+                        severity=Severity.HIGH,
+                        rule_id="JV-026",
+                        cwe="CWE-614",
+                    ))
+                elif call.arguments and call.arguments[0].strip().lower() == "true":
+                    cookie_vars[call.receiver]["secure"] = True
+
+            if call.callee == "setHttpOnly" and call.receiver in cookie_vars:
+                if call.arguments and call.arguments[0].strip().lower() == "true":
+                    cookie_vars[call.receiver]["httponly"] = True
+
+        # Pattern 3: Cookie created in web handler without setSecure(true)
+        # Only flag if the cookie has a sensitive-sounding name
+        for var_name, flags in cookie_vars.items():
+            if not flags["secure"]:
+                # Check if cookie name suggests sensitive content
+                # Read the creation line context
+                for class_name, arguments, line in creations:
+                    if class_name != "Cookie":
+                        continue
+                    context_lines = method.body.split("\n")
+                    line_idx = line - 1
+                    if line_idx < len(context_lines):
+                        decl_line = context_lines[line_idx]
+                        if var_name in decl_line.split("=")[0]:
+                            cookie_name = arguments[0].strip(" \"'") if arguments else ""
+                            sensitive_names = (
+                                "session", "auth", "token", "jwt", "sid", "csrf",
+                                "cred", "login", "user", "pass", "secret",
+                            )
+                            if any(sn in cookie_name.lower() for sn in sensitive_names):
+                                fl = _body_line_to_file(method, line)
+                                findings.append(_make_finding(
+                                    line=fl,
+                                    title=f"CWE-614: Sensitive cookie without Secure flag at line {fl}",
+                                    description=f"Cookie `{cookie_name}` at L{fl} is created without "
+                                                "`setSecure(true)`. Sensitive cookies sent over HTTP "
+                                                "can be intercepted via MITM attacks.",
+                                    suggestion="Add `{}.setSecure(true)` and `{}.setHttpOnly(true)` "
+                                              "to protect this cookie.".format(var_name, var_name),
+                                    severity=Severity.HIGH,
+                                    rule_id="JV-026",
+                                    cwe="CWE-614",
+                                ))
+                            break
+
+    return findings
+
+
+def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
+    """CWE-89: SQL injection — origin-aware taint + IFDS + regex patterns + FPR guards."""
+    from ansede_static.java_taint_origins import collect_taint_origins, has_user_origin
+
+    findings: list[Finding] = []
+    # Pre-compute method name set for intra-file call resolution
+    method_names = {m.name for m in methods}
+
+    # ── Interprocedural IFDS pass (run once for all methods with cross-calls) ──
+    ifds_all_findings: dict[str, list[dict[str, Any]]] = {}  # method_name → findings
+    if len(methods) > 1:
+        # Fast check: are there any cross-method calls in this file?
+        _has_cross_calls = False
+        for method in methods:
+            for other in methods:
+                if other.name != method.name and other.name in method.body:
+                    _has_cross_calls = True
+                    break
+            if _has_cross_calls:
+                break
+        if _has_cross_calls:
+            # Check cache first
+            source_hash = hashlib.md5(source).hexdigest()[:12]
+            body_sig = "|".join(sorted(f"{m.name}:{hashlib.md5(m.body.encode()).hexdigest()[:8]}" for m in methods))
+            cache_key = (body_sig, source_hash)
+            if cache_key in _IFDS_CACHE:
+                ifds_all_findings = _IFDS_CACHE[cache_key]
+            else:
+                try:
+                    from ansede_static.v2_java_bridge import run_interprocedural_ifds
+                    all_ifds = run_interprocedural_ifds(methods, source)
+                    for f in all_ifds:
+                        method_name = f.get("method", "")
+                        ifds_all_findings.setdefault(method_name, []).append(f)
+                    # Cache the result
+                    if len(_IFDS_CACHE) < _MAX_CACHE_SIZE:
+                        _IFDS_CACHE[cache_key] = dict(ifds_all_findings)
+                except Exception as exc:
+                    _log.debug("Interprocedural IFDS failed: %s", exc)
+
+    for method in methods:
+        body_bytes = method.body.encode("utf-8")
+        body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+
+        _has_taint = any(s in method.body for s in ("getParameter", "getHeader", "getCookies",
+                                                      "getQueryString", "getTheParameter", "getTheValue"))
+        if not _has_taint:
+            continue
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
         calls = _collect_method_invocations(body_tree, body_bytes)
 
-        # ── Pattern 0: IFDS-lite forward propagation ──
-        try:
-            from ansede_static.v2_java_bridge import run_ifds_analysis
-            ifds_findings = run_ifds_analysis(body_tree, body_bytes, method.params)
-            for f in ifds_findings:
-                if f["cwe"] == "CWE-89":
-                    findings.append(_make_finding(
-                        line=0, title=f"CWE-89: SQLi (IFDS) — {f['tainted_vars']}",
-                        description=f"IFDS taint at SQL sink: {f['text'][:100]}",
-                        suggestion="Use parameterized queries.",
-                        severity=Severity.CRITICAL, rule_id="JV-004", cwe="CWE-89"))
-        except Exception:
-            pass
+        # FPR guard: skip if ALL SQL calls use parameterized queries
+        _sql_calls_in_method = [c for c in calls if c.callee in _SQLI_METHODS]
+        if _sql_calls_in_method and all(
+            _is_parameterized_sql(c.raw) or (c.callee in ("executeQuery", "execute") and not c.arguments)
+            for c in _sql_calls_in_method
+        ):
+            continue  # All SQL is parameterized — safe, skip IFDS
+
+        # ── Pattern 0: IFDS findings (from interprocedural or intra pass) ──
+        ifds_tainted_vars: set[str] = set()
+        # First, consume interprocedural IFDS results
+        for f in ifds_all_findings.get(method.name, []):
+            cwe = f.get("cwe", "CWE-89")
+            tainted_names = f.get("tainted_vars", [])
+            if isinstance(tainted_names, str):
+                tainted_names = [tainted_names]
+            ifds_tainted_vars.update(tainted_names)
+            sink_text = f.get("text", "")
+            sink_line = 0
+            for line_idx, body_line in enumerate(method.body.split("\n")):
+                if sink_text[:60] in body_line:
+                    sink_line = line_idx + 1
+                    break
+            if sink_line:
+                fl = _body_line_to_file(method, sink_line)
+                rule_id = f.get("rule_id", "JV-004")
+                severity = Severity.CRITICAL if cwe in ("CWE-89", "CWE-78") else Severity.HIGH
+                sink_type = {"CWE-89": "SQL", "CWE-78": "command", "CWE-79": "XSS"}.get(cwe, "data")
+                findings.append(_make_finding(
+                    line=fl,
+                    title=f"{cwe}: {sink_type} injection (interproc IFDS) — tainted {tainted_names} at line {fl}",
+                    description=f"Interprocedural IFDS: {tainted_names} flows across methods to {cwe} sink.",
+                    suggestion="Use parameterized queries / input validation.",
+                    severity=severity, rule_id=rule_id, cwe=cwe, confidence=0.92))
+
+        # Fallback: run intra-procedural IFDS only if method has sinks
+        _has_any_sinks_for_ifds = any(
+            c.callee in _SQLI_METHODS or c.callee in ("exec", "write", "print", "println", "append")
+            or c.receiver == "Runtime"
+            for c in calls
+        )
+        if _has_any_sinks_for_ifds and (not ifds_all_findings or method.name not in ifds_all_findings):
+            try:
+                from ansede_static.v2_java_bridge import run_ifds_analysis
+                intra_findings = run_ifds_analysis(body_tree, body_bytes, method.params)
+                for f in intra_findings:
+                    cwe = f.get("cwe", "CWE-89")
+                    tainted_names = f.get("tainted_vars", [])
+                    if isinstance(tainted_names, str):
+                        tainted_names = [tainted_names]
+                    ifds_tainted_vars.update(tainted_names)
+                    sink_text = f.get("text", "")
+                    sink_line = 0
+                    for line_idx, body_line in enumerate(method.body.split("\n")):
+                        if sink_text[:60] in body_line:
+                            sink_line = line_idx + 1
+                            break
+                    if sink_line:
+                        fl = _body_line_to_file(method, sink_line)
+                        rule_id = f.get("rule_id", "JV-004")
+                        severity = Severity.CRITICAL if cwe in ("CWE-89", "CWE-78") else Severity.HIGH
+                        sink_type = {"CWE-89": "SQL", "CWE-78": "command", "CWE-79": "XSS"}.get(cwe, "data")
+                        findings.append(_make_finding(
+                            line=fl,
+                            title=f"{cwe}: {sink_type} injection (IFDS) — tainted {tainted_names} at line {fl}",
+                            description=f"IFDS taint analysis: {tainted_names} flows to {cwe} sink.",
+                            suggestion="Use parameterized queries / input validation.",
+                            severity=severity, rule_id=rule_id, cwe=cwe, confidence=0.92))
+            except Exception as exc:
+                _log.debug("IFDS analysis skipped for %s: %s", method.name, exc)
+
+        # ── Pattern 0b: Intraprocedural dataflow (java_dataflow) ──
+        # Only run dataflow if there are taint sources AND SQL sink calls in the method body
+        _has_sql_sinks = any(s in method.body for s in ("executeQuery", "executeUpdate", "createQuery",
+                                                           "prepareStatement", "createStatement"))
+        _has_taint_sources = any(s in method.body for s in ("getParameter", "getHeader", "getCookies",
+                                                              "getQueryString", "getTheParameter", "getTheValue"))
+        if _has_sql_sinks and _has_taint_sources:
+            try:
+                from ansede_static.java_dataflow import run_intraprocedural_dataflow
+                df_result = run_intraprocedural_dataflow(body_tree, body_bytes, method.params)
+                for sink_finding in df_result.tainted_at_sinks:
+                    tainted_vars = sink_finding.get("tainted_vars", [])
+                    ifds_tainted_vars.update(tainted_vars)
+                    cwe = sink_finding.get("cwe", "CWE-89")
+                    rule_id = sink_finding.get("rule_id", "JV-004")
+                    # Find line number
+                    sink_text = sink_finding.get("text", "")
+                    sink_line = 0
+                    for line_idx, body_line in enumerate(method.body.split("\n")):
+                        if sink_text[:60] in body_line:
+                            sink_line = line_idx + 1
+                            break
+                    if sink_line:
+                        fl = _body_line_to_file(method, sink_line)
+                        findings.append(_make_finding(
+                            line=fl,
+                            title=f"{cwe}: Dataflow taint — {tainted_vars} at line {fl}",
+                            description=f"Forward dataflow: {tainted_vars} reaches {cwe} sink. "
+                                        f"Sink: {sink_text[:100]}",
+                            suggestion="Use parameterized queries or input validation.",
+                            severity=Severity.CRITICAL if cwe in ("CWE-89", "CWE-78") else Severity.HIGH,
+                            rule_id=rule_id, cwe=cwe,
+                            confidence=0.88,
+                        ))
+            except Exception as exc:
+                _log.debug("Dataflow analysis skipped for %s: %s", method.name, exc)
 
         # Object-sensitive FPR guard: track parameterized vs dynamic statements
         from ansede_static.statement_tracker import classify_statement_variables, is_safe_sql_call
@@ -811,12 +1164,46 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
 
         # ── Pattern 4: StringBuilder.append().toString() chains ──
         builder_vars: set[str] = set()
+        builder_tainted: dict[str, set[str]] = {}  # sb_var → set of tainted vars that fed it
         for t_var in origins:
-            if re.search(r'\.append\s*\(\s*' + re.escape(t_var), method.body):
-                for m2 in re.finditer(r'(\w+)\s*=\s*new\s+StringBuilder', method.body):
-                    builder_vars.add(m2.group(1))
-                for m2 in re.finditer(r'(\w+)\.toString\(\)', method.body):
-                    builder_vars.add(m2.group(1))
+            # Find: sb.append(taintedVar)
+            for m in re.finditer(r'(\w+)\.append\s*\(\s*' + re.escape(t_var) + r'\s*\)', method.body):
+                sb_var = m.group(1)
+                builder_tainted.setdefault(sb_var, set()).add(t_var)
+                builder_vars.add(sb_var)
+            # Also: sb.append("SELECT..." + taintedVar)
+            for m in re.finditer(r'(\w+)\.append\s*\(\s*"[^"]*"\s*\+\s*' + re.escape(t_var), method.body):
+                sb_var = m.group(1)
+                builder_tainted.setdefault(sb_var, set()).add(t_var)
+                builder_vars.add(sb_var)
+
+        # Propagate builder taint to toString() result
+        builder_to_string_vars: set[str] = set()
+        for sb_var in builder_tainted:
+            # Find: StringVar = sb_var.toString()
+            for m in re.finditer(r'(\w+)\s*=\s*' + re.escape(sb_var) + r'\.toString\(\)', method.body):
+                builder_to_string_vars.add(m.group(1))
+            # Also: sb_var.toString() passed directly to a sink
+            builder_to_string_vars.add(sb_var)  # the sb itself is tainted
+
+        # ── Pattern 4b: Simple concat SQL strings with tainted vars ──
+        # "SELECT..." + taintedVar → variable → SQL sink
+        simple_concat_vars: set[str] = set()
+        for t_var in origins:
+            # Var = "SELECT..." + taintedVar
+            for m in re.finditer(r'(\w+)\s*=\s*"[^"]*"\s*\+\s*' + re.escape(t_var), method.body):
+                simple_concat_vars.add(m.group(1))
+            # Var = taintedVar + "..."
+            for m in re.finditer(r'(\w+)\s*=\s*' + re.escape(t_var) + r'\s*\+\s*"[^"]*"', method.body):
+                simple_concat_vars.add(m.group(1))
+            # Var = "SELECT..." + taintedVar + "..."
+            for m in re.finditer(r'(\w+)\s*=\s*"[^"]*"\s*\+\s*' + re.escape(t_var) + r'\s*\+\s*"[^"]*"', method.body):
+                simple_concat_vars.add(m.group(1))
+            # Var = baseQuery + taintedVar (two variables concatenated)
+            for m in re.finditer(r'(\w+)\s*=\s*(\w+)\s*\+\s*' + re.escape(t_var), method.body):
+                simple_concat_vars.add(m.group(1))
+            for m in re.finditer(r'(\w+)\s*=\s*' + re.escape(t_var) + r'\s*\+\s*(\w+)', method.body):
+                simple_concat_vars.add(m.group(1))
 
         for call in calls:
             if call.callee not in _SQLI_METHODS:
@@ -842,7 +1229,14 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
             has_user = has_user_origin(call.arguments, origins, method.params)
             has_concat = any(arg.strip() in tainted_concat_vars for arg in call.arguments)
             has_format = any(arg.strip() in format_vars for arg in call.arguments)
-            has_builder = any(arg.strip() in builder_vars for arg in call.arguments)
+            has_builder = any(arg.strip() in builder_to_string_vars for arg in call.arguments)
+            has_simple_concat = any(arg.strip() in simple_concat_vars for arg in call.arguments)
+            # Also check: if any argument contains a tainted variable name (var-to-var concat)
+            has_tainted_arg = any(
+                any(t_var in arg for t_var in origins) or
+                any(t_var in arg for t_var in ifds_tainted_vars)
+                for arg in call.arguments
+            )
             
             # Pattern 5: SQL string literal directly containing concat or format
             has_inline_sql = bool(re.search(
@@ -853,7 +1247,7 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
                 call.raw
             ))
 
-            if not (has_user or has_concat or has_format or has_builder or has_inline_sql):
+            if not (has_user or has_concat or has_format or has_builder or has_simple_concat or has_tainted_arg or has_inline_sql):
                 # Last-resort fallback: method has request source + SQL + concat anywhere
                 has_request = bool(re.search(
                     r'(?:getParameter|getHeader|getCookies|getQueryString|getTheParameter|getInputStream)\s*\(',
@@ -872,6 +1266,43 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
                 rule_id="JV-004",
                 cwe="CWE-89",
             ))
+
+        # ── Pattern 6: Intra-file helper method returns tainted SQL ──
+        # If method X calls helper Y(userInput) and Y returns a String that reaches a SQL sink
+        local_calls = [c for c in calls if c.callee in method_names and c.callee != method.name]
+        if local_calls:
+            # Find helper methods that build SQL from tainted params
+            for helper_call in local_calls:
+                helper = next((m for m in methods if m.name == helper_call.callee), None)
+                if helper is None:
+                    continue
+                # Does helper contain SQL patterns?
+                if not any(s in helper.body for s in ("Statement", "executeQuery", "executeUpdate",
+                                                       "prepareStatement", "createQuery")):
+                    continue
+                # Are any of helper_call's arguments tainted?
+                has_tainted_arg = False
+                for arg_text in helper_call.arguments:
+                    for t_var in origins:
+                        if t_var in arg_text:
+                            has_tainted_arg = True
+                            break
+                    for t_var in ifds_tainted_vars:
+                        if t_var in arg_text:
+                            has_tainted_arg = True
+                            break
+                if has_tainted_arg:
+                    fl = _body_line_to_file(method, helper_call.line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-89: SQLi via helper {helper_call.callee}() at line {fl}",
+                        description=f"Call to `{helper_call.callee}()` at L{fl} with tainted args. "
+                                    f"Helper method `{helper_call.callee}()` builds SQL from user input.",
+                        suggestion="Use parameterized queries. Never build SQL from user input in helper methods.",
+                        severity=Severity.CRITICAL, rule_id="JV-004", cwe="CWE-89",
+                        confidence=0.85,
+                    ))
+
     return findings
 
 
@@ -971,30 +1402,114 @@ def _check_cmd_injection(methods: list[_JavaMethod], source: bytes) -> list[Find
 
 
 def _check_weak_crypto(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
-    """CWE-328: Weak cryptographic algorithm detection."""
+    """CWE-328: Weak cryptographic algorithm detection.
+
+    Detects:
+    - ``MessageDigest.getInstance("MD5")`` / ``("SHA-1")``
+    - ``Cipher.getInstance("DES")`` / ``("RC4")`` / ``("RC2")`` / ``("Blowfish")``
+    - Guava ``Hashing.md5()`` / ``Hashing.sha1()``
+    - Apache Commons ``DigestUtils.md5Hex()`` / ``DigestUtils.sha1Hex()``
+    - Variable-based algorithm selection with weak default values
+    """
     findings: list[Finding] = []
     for method in methods:
-        calls = _collect_method_invocations(
-            _JAVA_PARSER.parse(method.body.encode("utf-8")).root_node,
-            method.body.encode("utf-8"),
-        )
+        body_bytes = method.body.encode("utf-8")
+        body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+        calls = _collect_method_invocations(body_tree, body_bytes)
+        creations = _collect_object_creations(body_tree, body_bytes)
+
+        # Pattern 1: MessageDigest.getInstance() / Cipher.getInstance() with weak algo
         for call in calls:
             if call.callee != "getInstance":
                 continue
             for arg in call.arguments:
+                arg_clean = arg.strip(" \"'")
                 for algo in _WEAK_CRYPTO_ALGOS:
-                    if algo.lower() in arg.lower():
+                    if algo.lower() in arg_clean.lower():
                         fl = _body_line_to_file(method, call.line)
                         findings.append(_make_finding(
                             line=fl,
                             title=f"CWE-328: Weak cryptographic algorithm ({algo}) at line {fl}",
-                            description=f"`MessageDigest.getInstance({algo})` or similar at L{fl}.",
+                            description=f"`getInstance({arg})` at L{fl}. {algo} is cryptographically "
+                                        "broken and vulnerable to collision attacks.",
                             suggestion="Use SHA-256 or stronger. For passwords, use bcrypt, scrypt, or Argon2.",
                             severity=Severity.HIGH,
                             rule_id="JV-012",
                             cwe="CWE-328",
                         ))
                         break
+
+        # Pattern 2: Guava Hashing.md5() / Hashing.sha1() / Hashing.sha256() — sha256 is OK
+        for call in calls:
+            if call.receiver == "Hashing":
+                algo_map = {
+                    "md5": ("MD5", Severity.HIGH),
+                    "sha1": ("SHA-1", Severity.HIGH),
+                    "sha256": None,  # OK — skip
+                    "sha384": None,  # OK — skip
+                    "sha512": None,  # OK — skip
+                }
+                algo_info = algo_map.get(call.callee.lower())
+                if algo_info is not None:
+                    algo, severity = algo_info
+                    fl = _body_line_to_file(method, call.line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-328: Weak hash via Guava `Hashing.{call.callee}()` at line {fl}",
+                        description=f"`Hashing.{call.callee}()` at L{fl}. Guava's {algo} is "
+                                    "cryptographically broken and should not be used for security.",
+                        suggestion="Use `Hashing.sha256()` or `Hashing.sha512()` instead.",
+                        severity=severity,
+                        rule_id="JV-012",
+                        cwe="CWE-328",
+                    ))
+
+        # Pattern 3: Apache Commons DigestUtils.md5Hex() / DigestUtils.sha1Hex()
+        for call in calls:
+            if call.callee in ("md5Hex", "sha1Hex", "md5", "sha1", "sha"):
+                # These are from org.apache.commons.codec.digest.DigestUtils
+                fl = _body_line_to_file(method, call.line)
+                weak_algo = call.callee.replace("Hex", "").upper()
+                findings.append(_make_finding(
+                    line=fl,
+                    title=f"CWE-328: Weak hash via `DigestUtils.{call.callee}()` at line {fl}",
+                    description=f"`DigestUtils.{call.callee}()` at L{fl}. {weak_algo} is "
+                                "cryptographically broken.",
+                    suggestion="Use `DigestUtils.sha256Hex()` or `DigestUtils.sha512Hex()` instead.",
+                    severity=Severity.HIGH,
+                    rule_id="JV-012",
+                    cwe="CWE-328",
+                ))
+
+        # Pattern 4: Hardcoded "MD5" or "SHA-1" string constants passed to getInstance
+        # Check for variable declarations like: String algo = "MD5";
+        # Then MessageDigest.getInstance(algo);
+        algo_vars: dict[str, str] = {}  # var → algorithm name
+        body_text = method.body
+        # Find String algo = "MD5" patterns
+        for m in re.finditer(r'(\w+)\s*=\s*"((?:MD5|SHA-?1|DES|RC[24]|Blowfish))"', body_text, re.IGNORECASE):
+            algo_vars[m.group(1)] = m.group(2).upper()
+        # Check if any getInstance call uses a variable holding a weak algo
+        for call in calls:
+            if call.callee != "getInstance":
+                continue
+            for arg in call.arguments:
+                var_name = arg.strip()
+                if var_name in algo_vars:
+                    weak_algo = algo_vars[var_name]
+                    fl = _body_line_to_file(method, call.line)
+                    findings.append(_make_finding(
+                        line=fl,
+                        title=f"CWE-328: Weak crypto via variable `{var_name}=\"{weak_algo}\"` at line {fl}",
+                        description=f"`getInstance({var_name})` at L{fl} uses `{weak_algo}` which is "
+                                    "cryptographically broken.",
+                        suggestion="Use SHA-256 or stronger.",
+                        severity=Severity.HIGH,
+                        rule_id="JV-012",
+                        cwe="CWE-328",
+                    ))
+                    break
+
     return findings
 
 
@@ -1066,10 +1581,15 @@ def _check_xss(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
         for call in calls:
             if call.callee in _XSS_OUTPUT_METHODS and has_user_origin(call.arguments, origins, method.params):
                 rcvr_lower = call.receiver.lower()
+                # FP guard: must have response/writer context — skip FileWriter, StringWriter, etc.
                 if rcvr_lower and rcvr_lower not in _XSS_RESPONSE_RECEIVERS:
                     if rcvr_lower not in origins and not any(
                         w in rcvr_lower for w in ('writer', 'output', 'response', 'printwriter', 'stream')):
                         continue
+                # FP guard: skip if the receiver is a non-HTTP writer (FileWriter, StringWriter, PrintWriter to file)
+                _non_http_writers = ('file', 'string', 'buffer', 'chararray', 'piped', 'bytearray')
+                if any(w in rcvr_lower for w in _non_http_writers):
+                    continue
                 # FPR guard: check if ESAPI/OWASP encoding is applied nearby
                 call_text = call.raw.lower()
                 if any(enc in call_text for enc in (
@@ -1116,7 +1636,7 @@ def _check_hardcoded_secrets(methods: list[_JavaMethod], source: bytes) -> list[
 
 
 def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
-    """CWE-22: Path traversal with origin-aware taint + NIO patterns."""
+    """CWE-22: Path traversal with origin-aware taint + NIO patterns + variable tracking."""
     from ansede_static.java_taint_origins import collect_taint_origins, has_user_origin
     findings: list[Finding] = []
     for method in methods:
@@ -1126,21 +1646,48 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
+
+        # Extended taint tracking: also collect tainted variables via AST
+        tainted_vars = _collect_tainted_variables_ast(body_tree, body_bytes, method.params,
+                                                       method.framework_tainted_params)
+        # Merge with origin tracking (origins is dict[str, set[str]] — extract keys)
+        all_tainted: set[str] = set(origins.keys()) | tainted_vars
+
+        # Pattern 0: direct object creation with tainted args
         creations = _collect_object_creations(body_tree, body_bytes)
         for class_name, args, line in creations:
-            if class_name in _PATH_TRAVERSAL_CLASSES and has_user_origin(args, origins, method.params):
-                fl = _body_line_to_file(method, line)
-                findings.append(_make_finding(
-                    line=fl, title=f"CWE-22: Path traversal via new {class_name}() at line {fl}",
-                    description=f"`new {class_name}()` with user-controlled path at L{fl}.",
-                    suggestion="Validate and sanitize file paths.",
-                    severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+            if class_name in _PATH_TRAVERSAL_CLASSES:
+                # Check origin-aware taint
+                if has_user_origin(args, origins, method.params):
+                    fl = _body_line_to_file(method, line)
+                    findings.append(_make_finding(
+                        line=fl, title=f"CWE-22: Path traversal via new {class_name}() at line {fl}",
+                        description=f"`new {class_name}()` with user-controlled path at L{fl}.",
+                        suggestion="Validate and sanitize file paths against a base directory.",
+                        severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+                    continue
+                # Check variable-level taint: any arg contains a tainted variable
+                for arg_text in args:
+                    for t_var in all_tainted:
+                        if t_var in arg_text:
+                            fl = _body_line_to_file(method, line)
+                            findings.append(_make_finding(
+                                line=fl,
+                                title=f"CWE-22: Path traversal via new {class_name}({t_var}) at line {fl}",
+                                description=f"`new {class_name}()` with tainted variable `{t_var}` at L{fl}.",
+                                suggestion="Validate and sanitize file paths against a base directory.",
+                                severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+                            break
+
+        # Pattern 1: method calls with tainted args (Paths.get, Files.read, etc.)
         calls = _collect_method_invocations(body_tree, body_bytes)
         for call in calls:
             is_path_sink = (call.callee == "get" and call.receiver == "Paths") or \
                            (call.callee in _PATH_TRAVERSAL_METHODS and call.receiver == "Files") or \
                            call.callee in _PATH_TRAVERSAL_METHODS
-            if is_path_sink and has_user_origin(call.arguments, origins, method.params):
+            if not is_path_sink:
+                continue
+            if has_user_origin(call.arguments, origins, method.params):
                 fl = _body_line_to_file(method, call.line)
                 findings.append(_make_finding(
                     line=fl,
@@ -1148,6 +1695,38 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
                     description=f"`{call.receiver}.{call.callee}()` with user-controlled path at L{fl}.",
                     suggestion="Validate and sanitize file paths.",
                     severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+                continue
+            # Variable-level check
+            for arg_text in call.arguments:
+                for t_var in all_tainted:
+                    if t_var in arg_text:
+                        fl = _body_line_to_file(method, call.line)
+                        findings.append(_make_finding(
+                            line=fl,
+                            title=f"CWE-22: Path traversal via {call.receiver}.{call.callee}({t_var}) at line {fl}",
+                            description=f"`{call.receiver}.{call.callee}()` with tainted variable `{t_var}` at L{fl}.",
+                            suggestion="Validate and sanitize file paths.",
+                            severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+                        break
+
+        # Pattern 2: Broader regex fallback for path construction with tainted vars
+        # "new File(" + taintedVar + ")" or similar patterns
+        for t_var in all_tainted:
+            if re.search(r'new\s+(?:File|Path|FileInputStream|FileReader)\s*\([^)]*' + re.escape(t_var), method.body):
+                # Find the line
+                for line_idx, body_line in enumerate(method.body.split("\n")):
+                    if t_var in body_line and re.search(r'new\s+(?:File|Path|FileInputStream|FileReader)', body_line):
+                        fl = _body_line_to_file(method, line_idx + 1)
+                        # Only add if not already found via AST
+                        if not any(f.line == fl and "CWE-22" in (f.cwe or "") for f in findings):
+                            findings.append(_make_finding(
+                                line=fl,
+                                title=f"CWE-22: Path traversal at line {fl}",
+                                description=f"File/path constructed with tainted variable `{t_var}` at L{fl}.",
+                                suggestion="Validate and sanitize file paths against a base directory.",
+                                severity=Severity.HIGH, rule_id="JV-008", cwe="CWE-22"))
+                        break
+
     return findings
 
 
@@ -1308,6 +1887,82 @@ def _check_interprocedural_taint(methods: list[_JavaMethod], source: bytes) -> l
     return []  # Wired via analyze_java_ast with global_graph parameter
 
 
+# ── CWE-501: Trust Boundary Violation ────────────────────────────────────
+# Detects: untrusted data placed into trusted storage (session.setAttribute
+# with request parameter values, or request.setAttribute with untrusted data)
+
+_TRUSTED_STORAGE_METHODS: frozenset[str] = frozenset({
+    "setAttribute",
+})
+
+
+def _check_trust_boundary(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
+    """CWE-501: Trust boundary violation — mixing trusted and untrusted data.
+
+    Detects:
+    - ``session.setAttribute("key", request.getParameter("key"))`` — untrusted → trusted
+    - ``request.setAttribute("key", untrustedValue)`` — mixing trust domains
+    """
+    findings: list[Finding] = []
+    for method in methods:
+        body_bytes = method.body.encode("utf-8")
+        body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+        calls = _collect_method_invocations(body_tree, body_bytes)
+
+        # FP guard: skip if method has auth annotations (authenticated context is a different trust boundary)
+        if method.has_auth:
+            continue
+
+        # FP guard: skip if body contains validation/sanitization patterns
+        _has_validation = bool(re.search(
+            r'(?:\.trim\s*\(|Integer\.parseInt|Long\.parseLong|\.isEmpty\s*\(|'
+            r'\.isBlank\s*\(|ESAPI\.|\.encodeFor|\.sanitize|StringEscapeUtils|'
+            r'HtmlUtils\.htmlEscape|Jsoup\.clean)',
+            method.body
+        ))
+        if _has_validation:
+            continue
+
+        # First collect tainted variables (from request.getParameter etc.)
+        tainted_vars = _collect_tainted_variables_ast(body_tree, body_bytes, method.params,
+                                                       method.framework_tainted_params)
+
+        for call in calls:
+            if call.callee != "setAttribute":
+                continue
+
+            # Trusted receiver: session
+            is_session_receiver = call.receiver.lower() in ("session", "httpsession", "req.getsession()")
+            # Request receiver: putting into request attr from another source
+            is_request_receiver = call.receiver.lower() in ("request", "req")
+
+            if not (is_session_receiver or is_request_receiver):
+                continue
+
+            # Check if any argument contains tainted data
+            for arg_text in call.arguments:
+                for t_var in tainted_vars:
+                    if t_var in arg_text:
+                        fl = _body_line_to_file(method, call.line)
+                        domain = "session" if is_session_receiver else "request"
+                        findings.append(_make_finding(
+                            line=fl,
+                            title=f"CWE-501: Trust boundary violation at line {fl}",
+                            description=f"Untrusted data `{t_var}` from request parameter is stored "
+                                        f"in `{domain}.setAttribute()` at L{fl}. This mixes trusted "
+                                        "and untrusted data across the trust boundary.",
+                            suggestion="Validate and sanitize input before storing in trusted context, "
+                                      "or use a separate namespace for user-supplied data.",
+                            severity=Severity.MEDIUM,
+                            rule_id="JV-027",
+                            cwe="CWE-501",
+                            confidence=0.80,
+                        ))
+                        break
+
+    return findings
+
+
 # ── Main analyzer ───────────────────────────────────────────────────────────
 
 _ALL_CHECKERS: list[tuple[str, Any]] = [
@@ -1322,6 +1977,9 @@ _ALL_CHECKERS: list[tuple[str, Any]] = [
     ("CWE-862 Auth", _check_auth_bypass),
     ("CWE-90 LDAP", _check_ldap_injection),
     ("CWE-643 XPath", _check_xpath_injection),
+    ("CWE-330 WeakRandom", _check_weak_random),
+    ("CWE-614 InsecureCookie", _check_insecure_cookie),
+    ("CWE-501 TrustBoundary", _check_trust_boundary),
     ("Interprocedural", _check_interprocedural_taint),
 ]
 
