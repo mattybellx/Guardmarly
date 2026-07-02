@@ -1,0 +1,24 @@
+# Render Blueprint — auto-deploys ansede-static webapp + license server
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: ansede-static
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r webapp/requirements.txt
+    startCommand: cd webapp && python app.py
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: STRIPE_SECRET
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: BASE_URL
+        value: https://ansede-static.onrender.com
+      - key: SECRET_KEY
+        generateValue: true
