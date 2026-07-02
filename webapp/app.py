@@ -95,6 +95,10 @@ def _add_security_headers(response):
     response.headers["X-XSS-Protection"] = "1; mode=block"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    response.headers["X-RateLimit-Limit"] = str(_RATE_LIMIT_MAX_REQUESTS)
+    # Cache static pages for 1 hour
+    if request.path in ("/", "/compare", "/blog", "/leaderboard", "/autofix-studio") and request.method == "GET":
+        response.headers["Cache-Control"] = "public, max-age=3600"
     if request.is_secure or BASE_URL.startswith("https://"):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
@@ -786,6 +790,7 @@ input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(99
     </a>
     <div class="nav-links">
       <a href="/compare">Compare</a>
+      <a href="/blog">Blog</a>
       <a href="/#pricing">Pricing</a>
       <a href="/leaderboard">Leaderboard</a>
       <a href="/demo" class="nav-cta">Book a Demo</a>

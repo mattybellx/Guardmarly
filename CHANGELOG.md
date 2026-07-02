@@ -3,6 +3,29 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [5.3.0] — 2026-07-02
+
+### Added
+- **Go SSTI Detector** (`GO-94`) — Flags `text/template` import without `html/template` in web handler files (server-side template injection risk)
+- **Go Timing Attack Detector** (`GO-208`) — Detects `==`/`!=` comparisons on security-sensitive strings missing `crypto/subtle.ConstantTimeCompare`
+- **Technical Blog** — Published "Why Your SAST Scanner Misses 86% of Real Vulnerabilities" at `/blog` with IFDS deep-dive, 3-tool comparison data, and CI integration guide
+- **PR Auto-Submission Bot** (`tools/pr_bot.py`) — Clones, scans, and submits fix PRs to open-source repos. Supports `--dry-run`, `--min-findings`, `--min-stars` filtering
+- **Blog Publishing Script** (`scripts/post_blog.py`) — Posts to dev.to and Medium via their APIs
+- **Blog link** in site navigation header
+
+### Fixed
+- **`/success` route dead-code bug** — Key lookup loop was orphaned after leaderboard route; license keys now correctly displayed after Stripe payment
+- **Blog 500 error** — `.format()` curly brace conflict in code blocks; switched to `str.replace()`
+- **CI pipeline** — Added `tree-sitter-java` and `treesitter` extras to CI install; fixed JV-019 cookie check in AST merge path
+- **Render deploy errors** — Added `markdown>=3.0` to `webapp/requirements.txt`
+
+### Changed
+- **Unified premium dark UI** — All pages (`/`, `/compare`, `/demo`, `/leaderboard`, `/blog`, `/lookup`) now use a consistent glass-morphism dark design system with gradient accents, mouse-glow cards, and responsive layout
+- **Version bumped** to 5.3.0
+- **Added `ruff` lint step** to CI pipeline
+- **Added `Cache-Control` and `X-RateLimit` headers** to webapp responses
+- **Added `__init__.py`** to `dsl/` package
+
 ## [5.2.0] — 2026-07-02
 
 ### Added
