@@ -5,9 +5,38 @@ Thanks for helping keep `ansede-static` safe and trustworthy.
 ## Supported Versions
 
 | Version | Supported |
-|---------|-----------|
-| 1.x     | ✅ Current |
-| < 1.0   | ❌ No longer supported |
+|---|---|
+| 5.2.x (latest) | ✅ Active |
+| 5.1.x | ✅ Security fixes |
+| 5.0.x | ✅ Security fixes |
+| 4.x | ❌ No longer supported |
+| < 4.0 | ❌ No longer supported |
+
+## Reporting a Vulnerability
+
+**Do not open a public issue.** Use GitHub's private vulnerability reporting:
+
+👉 https://github.com/mattybellx/Ansede/security/advisories/new
+
+We respond within 48 hours. Fixes published within 7 days.
+
+### What to include
+- Version: `ansede-static --version`
+- Steps to reproduce
+- Impact assessment (if known)
+
+### Scope
+- Scanner engine, CLI, analysis rules
+- Supply chain issues in PyPI packages
+- License server authentication bypass
+
+### Out of scope
+- Example/test code under `samples/` or `campaign/`
+- Issues requiring physical machine access
+- Social engineering
+
+## Advisories
+https://github.com/mattybellx/Ansede/security/advisories
 
 ## Where to report
 

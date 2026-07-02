@@ -1,0 +1,65 @@
+name: Weekly SAST Benchmark Leaderboard
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday at 8am UTC
+  workflow_dispatch:       # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install ansede-static
+        run: pip install ansede-static
+
+      - name: Install Semgrep
+        run: pip install semgrep
+
+      - name: Run OWASP Benchmark
+        run: python -m benchmarks.owasp_head_to_head
+        continue-on-error: true
+
+      - name: Run CVE Recall
+        run: python -m benchmarks.cve_recall_runner
+        continue-on-error: true
+
+      - name: Update leaderboard JSON
+        run: |
+          python -c "
+          import json
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          owasp = json.loads(Path('benchmarks/owasp_head_to_head.json').read_text())
+          
+          leaderboard = {
+              'updated': datetime.now(timezone.utc).isoformat(),
+              'owasp_recall': {
+                  'ansede': owasp['ansede']['recall'],
+                  'semgrep': owasp['semgrep']['recall']
+              },
+              'ansede_tp': owasp['ansede']['tp'],
+              'semgrep_tp': owasp['semgrep']['tp'],
+              'cases': owasp['cases']
+          }
+          
+          Path('benchmarks/weekly_leaderboard.json').write_text(json.dumps(leaderboard, indent=2))
+          print(f'Updated: ansede={leaderboard[\"owasp_recall\"][\"ansede\"]}% semgrep={leaderboard[\"owasp_recall\"][\"semgrep\"]}%')
+          "
+
+      - name: Commit updated benchmarks
+        run: |
+          git config user.name "ansede-benchmark-bot"
+          git config user.email "bot@ansede.dev"
+          git add benchmarks/owasp_head_to_head.json benchmarks/weekly_leaderboard.json 2>/dev/null || true
+          git diff --staged --quiet || git commit -m "Weekly benchmark update [skip ci]"
+          git push
