@@ -117,6 +117,19 @@ _CS_LOG_INJECTION_RE = re.compile(
     r'\.Log(?:Information|Warning|Error|Debug|Trace)\s*\([^)]*String\.Format)',
     re.IGNORECASE,
 )
+_CS_LDAP_INJECTION_RE = re.compile(
+    r'(?:DirectorySearcher\s*\(|\.FindOne\s*\(|\.FindAll\s*\(|new\s+DirectoryEntry\s*\()',
+    re.IGNORECASE,
+)
+_CS_WEAK_CRYPTO_RE = re.compile(
+    r'(?:MD5CryptoServiceProvider|SHA1CryptoServiceProvider|DESCryptoServiceProvider|'
+    r'RC2CryptoServiceProvider|MD5\.Create\s*\(|SHA1\.Create\s*\()',
+    re.IGNORECASE,
+)
+_CS_NOSQL_INJECTION_RE = re.compile(
+    r'(?:\.Find\s*\(\s*new\s*BsonDocument|\.FindOneAndUpdate\s*\(|Builders<[^>]+>\.Filter\.)',
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -1028,6 +1041,42 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 suggestion="Use explicit DTOs or [BindRequired] attributes to control which properties can be bound.",
                 rule_id="CS-026", cwe="CWE-915", agent="csharp-analyzer",
                 confidence=0.72, analysis_kind="pattern",
+            ))
+
+        # CS-027: LDAP injection (CWE-90)
+        if _CS_LDAP_INJECTION_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-90: LDAP injection via DirectorySearcher in `{method.name}()`",
+                description="LDAP query constructed with potentially user-controlled input.",
+                line=_first_matching_line(method.body, _CS_LDAP_INJECTION_RE, method.start_line),
+                suggestion="Use parameterized LDAP queries or encode special characters in search filters.",
+                rule_id="CS-027", cwe="CWE-90", agent="csharp-analyzer",
+                confidence=0.85, analysis_kind="pattern",
+            ))
+
+        # CS-028: Weak cryptography (CWE-327/328)
+        if _CS_WEAK_CRYPTO_RE.search(method.body):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-327: Weak cryptography in `{method.name}()`",
+                description="MD5, SHA1, DES, or RC2 used for security-sensitive operations.",
+                line=_first_matching_line(method.body, _CS_WEAK_CRYPTO_RE, method.start_line),
+                suggestion="Use SHA256 or stronger. For passwords, use PBKDF2 or Argon2.",
+                rule_id="CS-028", cwe="CWE-327", agent="csharp-analyzer",
+                confidence=0.92, analysis_kind="pattern",
+            ))
+
+        # CS-029: NoSQL injection (CWE-943)
+        if _CS_NOSQL_INJECTION_RE.search(method.body) and _has_tainted_param_cs(method):
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-943: NoSQL injection in `{method.name}()`",
+                description="MongoDB/CosmosDB query with user-controlled input.",
+                line=_first_matching_line(method.body, _CS_NOSQL_INJECTION_RE, method.start_line),
+                suggestion="Use parameterized BSON documents. Never concatenate user input into query filters.",
+                rule_id="CS-029", cwe="CWE-943", agent="csharp-analyzer",
+                confidence=0.88, analysis_kind="taint_flow",
             ))
 
     for lineno, line in enumerate(source.splitlines(), start=1):
