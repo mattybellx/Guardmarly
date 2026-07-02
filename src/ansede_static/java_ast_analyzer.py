@@ -149,39 +149,6 @@ _XPATH_SINK_PACKAGES: frozenset[str] = frozenset({
     "javax.xml.xpath",
 })
 
-# ── Deserialization sinks (CWE-502) ──────────────────────────────────────
-_DESERIALIZATION_SINK_CLASSES: frozenset[str] = frozenset({
-    "ObjectInputStream", "XMLDecoder", "Jackson2ObjectMapperBuilder",
-})
-
-_DESERIALIZATION_SINK_METHODS: frozenset[str] = frozenset({
-    "readObject", "readUnshared", "readResolve", "decodeObject",
-    "deserialize", "fromXML", "fromJSON",
-})
-
-# ── NoSQL injection sinks (CWE-943) ──────────────────────────────────────
-_NOSQL_SINK_CLASSES: frozenset[str] = frozenset({
-    "MongoCollection", "MongoDatabase", "MongoClient",
-    "Document", "BasicDBObject", "BsonDocument",
-    "Query", "Criteria",
-})
-
-_NOSQL_SINK_METHODS: frozenset[str] = frozenset({
-    "find", "findOne", "aggregate", "updateOne", "updateMany",
-    "deleteOne", "deleteMany", "replaceOne",
-    "where", "andOperator", "orOperator",
-})
-
-# ── SSTI / template injection sinks (CWE-94) ─────────────────────────────
-_SSTI_SINK_CLASSES: frozenset[str] = frozenset({
-    "VelocityEngine", "Template", "FreeMarkerTemplate",
-    "ThymeleafTemplate", "MustacheTemplate",
-})
-
-_SSTI_SINK_METHODS: frozenset[str] = frozenset({
-    "evaluate", "merge", "process", "render",
-})
-
 # ── Framework annotation taint (parameter-level) ─────────────────────────
 # Annotations on method parameters that mark them as tainted user input
 _FRAMEWORK_TAINT_ANNOTATIONS: frozenset[str] = frozenset({
@@ -1994,60 +1961,6 @@ def _check_trust_boundary(methods: list[_JavaMethod], source: bytes) -> list[Fin
     return findings
 
 
-# ── CWE-502 Deserialization checker ──────────────────────────────────────
-
-def _check_deserialization(methods: list[_JavaMethod], calls: list[_JavaCall], source: bytes) -> list[Finding]:
-    findings: list[Finding] = []
-    for call in calls:
-        if call.callee in _DESERIALIZATION_SINK_METHODS:
-            findings.append(Finding(
-                category="security", severity=Severity.CRITICAL,
-                title=f"CWE-502: Unsafe deserialization via {call.callee}() at line {call.line}",
-                description=f"Deserialization at L{call.line} may process untrusted data.",
-                line=call.line, rule_id="JV-502", cwe="CWE-502",
-                agent="java-ast-analyzer", confidence=0.90,
-                suggestion="Use a safe deserialization approach with type allowlisting.",
-                analysis_kind="pattern",
-            ))
-    return findings
-
-
-# ── CWE-943 NoSQL injection checker ──────────────────────────────────────
-
-def _check_nosql_injection(methods: list[_JavaMethod], calls: list[_JavaCall], source: bytes) -> list[Finding]:
-    findings: list[Finding] = []
-    for call in calls:
-        if call.callee in _NOSQL_SINK_METHODS:
-            findings.append(Finding(
-                category="security", severity=Severity.CRITICAL,
-                title=f"CWE-943: NoSQL injection via {call.callee}() at line {call.line}",
-                description=f"NoSQL query at L{call.line} may be constructed with user input.",
-                line=call.line, rule_id="JV-943", cwe="CWE-943",
-                agent="java-ast-analyzer", confidence=0.85,
-                suggestion="Use parameterized queries with org.bson.Document or Filters builders.",
-                analysis_kind="pattern",
-            ))
-    return findings
-
-
-# ── CWE-94 SSTI checker ─────────────────────────────────────────────────
-
-def _check_ssti_injection(methods: list[_JavaMethod], calls: list[_JavaCall], source: bytes) -> list[Finding]:
-    findings: list[Finding] = []
-    for call in calls:
-        if call.callee in _SSTI_SINK_METHODS:
-            findings.append(Finding(
-                category="security", severity=Severity.CRITICAL,
-                title=f"CWE-94: SSTI via {call.callee}() at line {call.line}",
-                description=f"Template evaluation at L{call.line} may process user-controlled input.",
-                line=call.line, rule_id="JV-094", cwe="CWE-94",
-                agent="java-ast-analyzer", confidence=0.85,
-                suggestion="Never pass user input directly to template engines. Use sandboxed templates.",
-                analysis_kind="pattern",
-            ))
-    return findings
-
-
 # ── Main analyzer ───────────────────────────────────────────────────────────
 
 _ALL_CHECKERS: list[tuple[str, Any]] = [
@@ -2066,9 +1979,6 @@ _ALL_CHECKERS: list[tuple[str, Any]] = [
     ("CWE-614 InsecureCookie", _check_insecure_cookie),
     ("CWE-501 TrustBoundary", _check_trust_boundary),
     ("Interprocedural", _check_interprocedural_taint),
-    ("CWE-502 Deserialization", _check_deserialization),
-    ("CWE-943 NoSQL", _check_nosql_injection),
-    ("CWE-94 SSTI", _check_ssti_injection),
 ]
 
 
