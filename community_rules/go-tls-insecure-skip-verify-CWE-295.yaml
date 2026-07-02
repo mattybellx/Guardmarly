@@ -1,0 +1,24 @@
+# Go TLS InsecureSkipVerify — CWE-295 (Improper Certificate Validation)
+# ====================================================================
+# Setting InsecureSkipVerify=true disables TLS certificate validation,
+# making the application vulnerable to man-in-the-middle attacks.
+id: community/go-tls-insecure-skip-verify-CWE-295
+title: "Go TLS certificate verification disabled (InsecureSkipVerify)"
+cwe: CWE-295
+severity: high
+language: go
+description: |
+  The Go application disables TLS certificate verification by setting
+  `InsecureSkipVerify: true` in a `tls.Config`. This allows any attacker
+  with network access to perform a man-in-the-middle attack, intercepting
+  or modifying traffic.
+pattern: |
+  InsecureSkipVerify\s*:\s*true
+fix: |
+  Remove `InsecureSkipVerify: true` or set it to `false`. If custom CAs
+  are needed, use `RootCAs` with a properly configured certificate pool.
+tags:
+  - owasp:A02
+  - go
+  - tls
+  - certificate-validation

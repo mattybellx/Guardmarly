@@ -1,0 +1,27 @@
+# Spring Security CSRF disabled — CWE-352 (Cross-Site Request Forgery)
+# ====================================================================
+# Disabling CSRF protection exposes state-changing endpoints to cross-site
+# request forgery attacks.
+id: community/java-spring-csrf-disabled-CWE-352
+title: "Spring Security CSRF protection explicitly disabled"
+cwe: CWE-352
+severity: high
+language: java
+frameworks: [spring-boot, spring-security]
+description: |
+  Spring Security's CSRF protection is explicitly disabled via
+  `.csrf().disable()` or `csrf().ignoringAntMatchers()`. This allows
+  attackers to craft requests that perform state-changing operations
+  on behalf of authenticated users without their knowledge.
+pattern: |
+  \.csrf\(\)\s*\.\s*disable\(\)
+fix: |
+  Instead of disabling CSRF entirely, exclude only the necessary
+  endpoints or use CSRF tokens. For REST APIs, consider using
+  stateless authentication (JWT/OAuth2) which is inherently
+  immune to CSRF.
+tags:
+  - owasp:A01
+  - java
+  - spring
+  - csrf

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated": "2026-05-25",
+  "updated": "2026-07-02",
   "rules": [
     {
       "id": "community/flask-missing-rate-limit-CWE-307",
@@ -9,9 +9,7 @@
       "severity": "high",
       "language": "python",
       "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/flask-missing-rate-limit-CWE-307.yaml",
-      "tags": [
-        "owasp:A07"
-      ]
+      "tags": ["owasp:A07"]
     },
     {
       "id": "community/express-missing-helmet-CWE-693",
@@ -20,11 +18,43 @@
       "severity": "medium",
       "language": "javascript",
       "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/express-missing-helmet-CWE-693.yaml",
-      "tags": [
-        "owasp:A05",
-        "express",
-        "helmet"
-      ]
+      "tags": ["owasp:A05", "express", "helmet"]
+    },
+    {
+      "id": "community/django-debug-enabled-CWE-489",
+      "title": "Django DEBUG mode enabled (information disclosure)",
+      "cwe": "CWE-489",
+      "severity": "high",
+      "language": "python",
+      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/django-debug-enabled-CWE-489.yaml",
+      "tags": ["owasp:A05", "django", "debug", "information-disclosure"]
+    },
+    {
+      "id": "community/express-missing-csp-CWE-693",
+      "title": "Express.js app missing Content-Security-Policy header",
+      "cwe": "CWE-693",
+      "severity": "medium",
+      "language": "javascript",
+      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/express-missing-csp-CWE-693.yaml",
+      "tags": ["owasp:A05", "express", "csp", "xss-prevention"]
+    },
+    {
+      "id": "community/go-tls-insecure-skip-verify-CWE-295",
+      "title": "Go TLS certificate verification disabled (InsecureSkipVerify)",
+      "cwe": "CWE-295",
+      "severity": "high",
+      "language": "go",
+      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/go-tls-insecure-skip-verify-CWE-295.yaml",
+      "tags": ["owasp:A02", "go", "tls", "certificate-validation"]
+    },
+    {
+      "id": "community/java-spring-csrf-disabled-CWE-352",
+      "title": "Spring Security CSRF protection explicitly disabled",
+      "cwe": "CWE-352",
+      "severity": "high",
+      "language": "java",
+      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/java-spring-csrf-disabled-CWE-352.yaml",
+      "tags": ["owasp:A01", "java", "spring", "csrf"]
     }
   ]
 }

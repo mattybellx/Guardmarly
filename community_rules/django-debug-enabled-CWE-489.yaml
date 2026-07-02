@@ -1,0 +1,24 @@
+# Django DEBUG=True in production — CWE-489 (Active Debug Code)
+# ====================================================================
+# DEBUG=True leaks stack traces, settings, and environment variables
+# to end users. Never deploy with DEBUG=True.
+id: community/django-debug-enabled-CWE-489
+title: "Django DEBUG mode enabled (information disclosure)"
+cwe: CWE-489
+severity: high
+language: python
+frameworks: [django]
+description: |
+  Django's DEBUG setting is True, which leaks detailed error pages including
+  stack traces, local variables, settings, and environment variables to
+  end users. This exposes internal application structure and potentially
+  sensitive credentials.
+pattern: |
+  DEBUG\s*=\s*True
+fix: |
+  Set `DEBUG = False` in production and configure proper error handling.
+tags:
+  - owasp:A05
+  - django
+  - debug
+  - information-disclosure

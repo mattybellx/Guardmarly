@@ -1,0 +1,24 @@
+# Express.js missing Content-Security-Policy header — CWE-693
+# ====================================================================
+# Without CSP headers, XSS and data injection attacks are harder to mitigate.
+# Every Express app should set a Content-Security-Policy header.
+id: community/express-missing-csp-CWE-693
+title: "Express.js app missing Content-Security-Policy header"
+cwe: CWE-693
+severity: medium
+language: javascript
+frameworks: [express]
+description: |
+  The Express application does not set a Content-Security-Policy header.
+  Without CSP, the browser cannot distinguish between legitimate and
+  injected scripts, making XSS and data exfiltration attacks easier.
+pattern: |
+  (app\.use\(helmet|helmet\.contentSecurityPolicy|res\.setHeader\(['"]Content-Security-Policy)
+fix: |
+  Use helmet.contentSecurityPolicy() or manually set the CSP header:
+  `app.use((req, res, next) => { res.setHeader('Content-Security-Policy', "default-src 'self'"); next(); });`
+tags:
+  - owasp:A05
+  - express
+  - csp
+  - xss-prevention
