@@ -1354,7 +1354,8 @@ def blog():
       <a href="/demo" class="btn btn-secondary">Book a Demo</a>
     </div>
   </div>
-</div>""".format(body=html_body)
+</div>"""
+    blog_html = blog_html.replace("{body}", html_body)
 
     return _HTML.replace("{{title}}", "Why Your SAST Misses 86% of CVEs").replace("{{body}}", blog_html)
 
