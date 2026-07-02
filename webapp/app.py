@@ -1329,7 +1329,10 @@ def blog():
             raw = raw[end + 3:]
 
     if _md is not None:
-        html_body = _md.markdown(raw, extensions=["fenced_code", "tables", "codehilite"])
+        try:
+            html_body = _md.markdown(raw, extensions=["fenced_code", "tables"])
+        except Exception:
+            html_body = _md.markdown(raw)
     else:
         # Fallback: basic HTML conversion
         html_body = "<pre style=\"white-space:pre-wrap;font-family:var(--font-mono);font-size:0.9rem;line-height:1.7\">"
