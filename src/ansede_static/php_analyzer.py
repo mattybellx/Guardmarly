@@ -163,7 +163,7 @@ _LOG_INJ_RE = re.compile(
 
 def _scan_with_regex(code: str, findings: list[Finding]) -> None:
     """Scan PHP code with all regex patterns."""
-    lines = code.splitlines()
+    code.splitlines()
 
     def _add_finding(rule_id: str, title: str, cwe: str, severity: Severity,
                      match: re.Match, suggestion: str, confidence: float = 0.7,

@@ -3850,8 +3850,8 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
             description=(
                 f"`{fname}()` is a route handler with no authentication decorator. "
                 f"Any unauthenticated caller can reach this endpoint."
-                + (f" It is on an `/admin` path — critical privilege-escalation risk." if is_admin else "")
-                + f" Missing: `@login_required` or equivalent."
+                + (" It is on an `/admin` path — critical privilege-escalation risk." if is_admin else "")
+                + " Missing: `@login_required` or equivalent."
             ),
             line=fnode.lineno,
             suggestion="Add `@login_required` above `@app.route`. For admin routes, also verify elevated role.",
@@ -6076,7 +6076,6 @@ def _rule_43(ctx: _Ctx) -> list[Finding]:
     )
     func_defs = ctx.func_defs
     for fname, fnode in func_defs.items():
-        first_line = fnode.lineno
         # Check decorators on function
         has_mutating_decorator = False
         for deco in fnode.decorator_list:

@@ -457,7 +457,7 @@ class PrattSecurityWalker:
                 self._tainted_vars.add(assign.left.name)
         elif isinstance(assign.left, MemberExpr):
             # Member assignment — check if it's a dangerous sink path
-            prop_name = _resolve_identifier_name(assign.left.property)
+            _resolve_identifier_name(assign.left.property)
             full_name = _resolve_identifier_name(assign.left)
             if full_name:
                 full_lower = full_name.lower()

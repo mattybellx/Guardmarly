@@ -126,7 +126,7 @@ def _extract_js_imports(path: Path) -> list[str]:
         if module_path.startswith("."):
             candidate = (current_dir / module_path).resolve(strict=False)
             for ext in (".js", ".ts", ".jsx", ".tsx", ".mjs", ".mts", "/index.js", "/index.ts"):
-                resolved = candidate.with_name(candidate.name + ext) if "/" not in ext else candidate.parent / ext.lstrip("/")
+                candidate.with_name(candidate.name + ext) if "/" not in ext else candidate.parent / ext.lstrip("/")
                 if Path(str(candidate) + ext).exists():
                     imports.add(str(Path(str(candidate) + ext).resolve(strict=False)))
                     break

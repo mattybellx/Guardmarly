@@ -1166,7 +1166,7 @@ def _generate_heuristic_snippet(
     elif agent and akind:
         parts.append(f'    if "{agent}" in (finding.agent or "").lower():')
         if akind == "incident-cluster":
-            parts.append(f'        if "incident" in akind or "cluster" in akind:')
+            parts.append('        if "incident" in akind or "cluster" in akind:')
             parts.append(f'            return Verdict.LIKELY_FP, "Incident-cluster in {agent} — {cwe}"')
         elif akind:
             parts.append(f'        if "{akind}" in akind:')
@@ -1195,5 +1195,5 @@ def print_suggestions(suggestions: list[dict[str, str]]) -> None:
         for line in s['suggested_rule'].split("\n"):
             print(f"  {line}")
     print(f"\n{'=' * 70}")
-    print(f"To apply: paste the suggested code into the _classify_finding() function in audit.py")
+    print("To apply: paste the suggested code into the _classify_finding() function in audit.py")
     print(f"{'=' * 70}")

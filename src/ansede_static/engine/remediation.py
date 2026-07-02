@@ -361,9 +361,9 @@ class MultiLineRefactorer:
                 if var_match:
                     var_name = var_match.group(2)
                     after_lines = [
-                        f"import os",
+                        "import os",
                         f"if not os.path.abspath({var_name}).startswith(SAFE_DIR):",
-                        f"    raise ValueError('Path traversal detected')",
+                        "    raise ValueError('Path traversal detected')",
                         f"with open(os.path.abspath({var_name})) as f:",
                     ]
                     after = "\n".join(after_lines).strip()

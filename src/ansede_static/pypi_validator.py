@@ -242,7 +242,7 @@ class PyPIValidator:
 
         try:
             import ansede_static
-            print(f"  ✅ Main package imports: OK")
+            print("  ✅ Main package imports: OK")
 
             # Try to import key modules
             modules = [

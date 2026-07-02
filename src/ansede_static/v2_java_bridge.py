@@ -5,7 +5,8 @@ Converts method bodies → CFGNodes with flow functions → runs IFDSSolver
 """
 from __future__ import annotations
 
-import logging, re
+import logging
+import re
 from typing import Any
 
 from ansede_static.v2.ifds import (
@@ -280,7 +281,7 @@ def run_interprocedural_ifds(
             if callee_name not in method_names or callee_name == func_id:
                 continue  # Skip external calls and self-recursion
 
-            callee = method_map[callee_name]
+            method_map[callee_name]
             if callee_name not in method_nodes:
                 continue
 

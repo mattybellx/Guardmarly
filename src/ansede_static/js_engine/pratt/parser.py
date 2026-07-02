@@ -250,7 +250,6 @@ class PrattParser:
             if prop_tok.type not in (TokenType.IDENTIFIER, TokenType.STRING):
                 self._error(f"expected property name after ., got {prop_tok.type.name}")
                 return left
-            computed = ttype == TokenType.LBRACKET
             optional = ttype == TokenType.QUESTION_DOT
             return MemberExpr(
                 object=left,
@@ -489,7 +488,6 @@ class PrattParser:
         self.lexer.advance()  # eat new
         tok = self.lexer.peek()
         callee = self._parse_prefix(tok)
-        args: Tuple["Expr", ...] = ()
         if self._check(TokenType.LPAREN):
             call = self._parse_call_expr(callee) if callee else None
             if isinstance(call, CallExpr):

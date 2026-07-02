@@ -1,0 +1,57 @@
+{
+  "ts": "2026-07-01T17:01:19.949412",
+  "accuracy_pct": 79.1,
+  "counts": {
+    "FP_SAFE": 40,
+    "FP_WRONG": 15,
+    "TP": 408,
+    "FP_LINE": 53,
+    "UNCERTAIN": 0
+  },
+  "by_cwe": {
+    "CWE-79": {
+      "FP_SAFE": 24,
+      "TP": 142,
+      "FP_LINE": 1
+    },
+    "CWE-89": {
+      "FP_WRONG": 1,
+      "TP": 38,
+      "FP_SAFE": 9
+    },
+    "CWE-22": {
+      "TP": 79,
+      "FP_WRONG": 10,
+      "FP_LINE": 3
+    },
+    "CWE-501": {
+      "FP_LINE": 9
+    },
+    "CWE-328": {
+      "TP": 81,
+      "FP_LINE": 33
+    },
+    "CWE-327": {
+      "TP": 33,
+      "FP_WRONG": 4
+    },
+    "CWE-78": {
+      "FP_LINE": 7,
+      "TP": 24
+    },
+    "CWE-90": {
+      "TP": 2
+    },
+    "CWE-330": {
+      "TP": 7
+    },
+    "CWE-614": {
+      "FP_SAFE": 7
+    },
+    "CWE-643": {
+      "TP": 2
+    }
+  },
+  "total_files": 500,
+  "total_findings": 516
+}

@@ -107,7 +107,7 @@ def _get_few_shot_context(
     # Tier 2: Persistent memory examples (learned from past triage)
     if len(examples) < max_examples:
         memory = _load_llm_memory()
-        remaining = max_examples - len(examples)
+        max_examples - len(examples)
         for entry in memory:
             if len(examples) >= max_examples:
                 break

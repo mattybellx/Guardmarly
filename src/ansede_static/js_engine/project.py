@@ -694,7 +694,7 @@ def _parse_class_methods(code: str, file_path: str) -> tuple[dict[str, JsClassDe
 		class_close = _consume_balanced_segment(code, class_brace_index, "{", "}")
 		if class_close is None:
 			continue
-		class_body = code[class_brace_index + 1:class_close]
+		code[class_brace_index + 1:class_close]
 		class_body_masked = masked[class_brace_index + 1:class_close]
 		class_line = code.count("\n", 0, class_match.start()) + 1
 		property_types: dict[str, str] = {}

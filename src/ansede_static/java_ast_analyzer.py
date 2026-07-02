@@ -308,12 +308,10 @@ def _parse_method_invocation(node: Node, source: bytes) -> _JavaCall:
 
     # Collect all identifiers — the last one before argument_list is the method name
     identifiers: list[str] = []
-    has_nested_invocation = False
     for child in node.children:
         if child.type == "identifier":
             identifiers.append(_node_text(child, source))
         elif child.type == "method_invocation":
-            has_nested_invocation = True
             # For chained calls like Runtime.getRuntime().exec():
             # extract the first identifier from the nested invocation as the receiver
             nested_ids: list[str] = []
@@ -464,7 +462,7 @@ def _collect_methods(source: bytes, tree: Node) -> list[_JavaMethod]:
         pending_annotations: list[str] = []
 
         for child in class_body.children:
-            text = _node_text(child, source).strip() if child.type != "block" else ""
+            _node_text(child, source).strip() if child.type != "block" else ""
 
             # Collect annotations
             if child.type == "marker_annotation" or child.type == "annotation":
@@ -1416,7 +1414,7 @@ def _check_weak_crypto(methods: list[_JavaMethod], source: bytes) -> list[Findin
         body_bytes = method.body.encode("utf-8")
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
         calls = _collect_method_invocations(body_tree, body_bytes)
-        creations = _collect_object_creations(body_tree, body_bytes)
+        _collect_object_creations(body_tree, body_bytes)
 
         # Pattern 1: MessageDigest.getInstance() / Cipher.getInstance() with weak algo
         for call in calls:

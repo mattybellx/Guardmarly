@@ -257,7 +257,7 @@ def _scan_cwe_78(code: str) -> list[Finding]:
         if line in seen_lines:
             continue
         seen_lines.add(line)
-        snip = _snippet(code, m.start(), 120)
+        _snippet(code, m.start(), 120)
         findings.append(_make_minified_finding(
             cwe="CWE-78",
             title=f"CWE-78: OS command execution in minified code at line {line}",

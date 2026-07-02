@@ -214,7 +214,7 @@ def _apply_transfer(
         # Check if RHS is a method call on tainted receiver
         call_match = re.search(r'(\w+)\.(\w+)\s*\(', rhs)
         if call_match:
-            receiver, callee = call_match.group(1), call_match.group(2)
+            receiver, _callee = call_match.group(1), call_match.group(2)
             if receiver in taint:
                 taint.add(lhs)
     

@@ -1,0 +1,94 @@
+language: javascript
+framework: hono
+version: "1.0"
+description: "Hono web framework security rules"
+rules:
+  - id: registry/hono/sqli/d1-raw
+    title: "SQL Injection via Hono D1 raw query"
+    cwe: CWE-89
+    severity: critical
+    pattern_type: taint_sink
+    sinks:
+      - c.env.DB.exec("SELECT
+      - c.env.DB.prepare("SELECT
+      - db.exec("SELECT
+      - stmt.bind(
+    suggestion: "Use D1's prepared statements with .bind() for parameterized queries"
+
+  - id: registry/hono/xss/html-unescaped
+    title: "XSS via Hono c.html() with user input"
+    cwe: CWE-79
+    severity: high
+    pattern_type: taint_sink
+    sinks:
+      - c.html(user
+      - c.html(req
+      - c.html(body
+      - c.html(param
+    suggestion: "Use Hono's JSX auto-escaping or sanitize user input before c.html()"
+
+  - id: registry/hono/auth/no-auth-middleware
+    title: "Hono route without authentication middleware"
+    cwe: CWE-306
+    severity: high
+    pattern_type: regex
+    regex: "app\\.(?:get|post|put|delete|patch)\\(['\"][^'\"]+['\"]\\s*,\\s*\\(c\\)"
+    confidence: 0.60
+    context_confirm: "auth|jwt|bearer|middleware|guard"
+    negate_context: true
+    context_lines: 8
+    suggestion: "Add authentication middleware before the route handler"
+
+  - id: registry/hono/cors/allow-all
+    title: "Hono CORS configured for all origins"
+    cwe: CWE-346
+    severity: high
+    pattern_type: regex
+    regex: "cors\\(\\{\\s*origin\\s*:\\s*['\"]\\*['\"]"
+    suggestion: "Restrict CORS origin to trusted domains only"
+
+  - id: registry/hono/ssrf/fetch-user-url
+    title: "SSRF via Hono fetch with user-controlled URL"
+    cwe: CWE-918
+    severity: high
+    pattern_type: taint_sink
+    sinks:
+      - fetch(c.req.query(
+      - fetch(c.req.param(
+      - await fetch(url
+    suggestion: "Validate and restrict URLs passed to fetch() with a strict allowlist"
+
+  - id: registry/hono/path/traversal-file
+    title: "Path Traversal via Hono file serving"
+    cwe: CWE-22
+    severity: high
+    pattern_type: taint_sink
+    sinks:
+      - c.body(await readFile(
+      - serveStatic({ path:
+      - readFile(c.req.query(
+    suggestion: "Normalize paths and verify they stay within the allowed directory"
+
+  - id: registry/hono/rate-limit/missing
+    title: "Hono route without rate limiting"
+    cwe: CWE-307
+    severity: medium
+    pattern_type: regex
+    regex: "app\\.(?:get|post|put|delete|patch)\\(['\"][^'\"]+['\"]"
+    confidence: 0.35
+    context_confirm: "rateLimiter|rateLimit|rate.limit|ratelimit"
+    negate_context: true
+    context_lines: 5
+    suggestion: "Add rate limiting: app.use(rateLimiter({ windowMs: 60000, max: 100 }))"
+
+  - id: registry/hono/validation/no-input-validation
+    title: "Hono route without input validation (zod/valibot)"
+    cwe: CWE-20
+    severity: medium
+    pattern_type: regex
+    regex: "c\\.req\\.(?:query|param|json|parseBody|text)\\(\\)"
+    confidence: 0.30
+    context_confirm: "zod|valibot|z\\.|v\\."
+    negate_context: true
+    context_lines: 8
+    suggestion: "Validate all user input with zod or valibot schemas"

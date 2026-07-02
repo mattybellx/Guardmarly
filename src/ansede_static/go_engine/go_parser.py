@@ -515,9 +515,7 @@ class GoParser:
         self.lexer.advance()
         if self.lexer.check(GoTokenType.LBRACE):
             return GoForStmt(init=None, cond=None, post=None, body=self._parse_block())
-        init: Optional[GoStmt] = None
         cond: Optional[GoExpr] = None
-        post: Optional[GoStmt] = None
         # for range ...
         if self.lexer.check(GoTokenType.RANGE) or self._is_range_expr():
             key: Optional[GoExpr] = None
@@ -643,7 +641,7 @@ class GoParser:
             if self.lexer.check(GoTokenType.RBRACKET):
                 self.lexer.advance()
                 return GoIdent("[]" + self._resolve_type_name(self._parse_type_expr()))
-            size = self._parse_expr()
+            self._parse_expr()
             self.lexer.expect(GoTokenType.RBRACKET)
             return GoIdent("[]" + self._resolve_type_name(self._parse_type_expr()))
         if tok.type == GoTokenType.MAP:

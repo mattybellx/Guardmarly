@@ -147,9 +147,9 @@ def generate_pr_body(
         if not result.file_path:
             continue
         try:
-            src = Path(result.file_path).read_text(encoding="utf-8", errors="replace")
+            Path(result.file_path).read_text(encoding="utf-8", errors="replace")
         except OSError:
-            src = ""
+            pass
         for finding in result.findings:
             if not finding.auto_fix:
                 continue

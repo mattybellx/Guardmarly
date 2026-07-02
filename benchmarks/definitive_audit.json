@@ -1,0 +1,115 @@
+{
+  "ts": "2026-07-01T11:49:41.736555+00:00",
+  "audit_version": "v1.0",
+  "scanner": "ansede-static",
+  "test_suite": {
+    "total": 1195,
+    "passed": 1195,
+    "failed": 0,
+    "time_s": 16.8
+  },
+  "cve_recall": {
+    "total_cves": 164,
+    "recalled": 164,
+    "recall_pct": 100.0,
+    "languages": [
+      "python",
+      "javascript",
+      "go",
+      "java",
+      "csharp"
+    ],
+    "verified": "2026-06-26"
+  },
+  "quality_gates": {
+    "shadow_detectors": 15,
+    "passing": 15,
+    "pass_rate_pct": 100.0
+  },
+  "owasp_benchmark": {
+    "version": "v1.2",
+    "total_cases": 2740,
+    "ansede": {
+      "recall_pct": 38.2,
+      "fpr_pct": 39.9,
+      "precision_pct": 44.8,
+      "youden": -0.096,
+      "speed_files_per_s": 109,
+      "speed_total_s": 25.1,
+      "tp": 540,
+      "fp": 651,
+      "tn": 796,
+      "fn": 986
+    },
+    "semgrep": {
+      "recall_pct": 59.4,
+      "fpr_pct": 39.2,
+      "precision_pct": 61.8,
+      "youden": 0.202,
+      "speed_total_s": 42.1,
+      "tp": 840,
+      "fp": 520,
+      "tn": 805,
+      "fn": 575
+    },
+    "category_wins": {
+      "ansede": 3,
+      "semgrep": 7,
+      "tied": 1
+    },
+    "ansede_wins": [
+      "crypto",
+      "securecookie",
+      "weakrand"
+    ],
+    "semgrep_wins": [
+      "cmdi",
+      "ldapi",
+      "pathtraver",
+      "sqli",
+      "trustbound",
+      "xpathi",
+      "xss"
+    ],
+    "tied": [
+      "hash"
+    ]
+  },
+  "classifier": {
+    "tests": 48,
+    "passing": 48,
+    "precision_on_py_rich": 63.0
+  },
+  "capabilities": {
+    "languages": 5,
+    "cwe_categories_detected": 9,
+    "total_cwe_types": "35+",
+    "ide_extensions": [
+      "vscode",
+      "intellij",
+      "visualstudio"
+    ],
+    "ci_formats": [
+      "sarif",
+      "json",
+      "text",
+      "html"
+    ]
+  },
+  "session_changes": {
+    "classifier_built": true,
+    "owasp_benchmark_runner": true,
+    "owasp_head_to_head": true,
+    "java_ast_taint_tracking": true,
+    "java_sqli_sinks_expanded": true,
+    "java_xss_ast_taint": true,
+    "java_crypto_des_fix": true,
+    "java_weakrand_detector": true,
+    "java_trustbound_detector": true,
+    "java_multi_line_methods": true,
+    "java_getCookies_taint": true,
+    "java_assignment_taint_propagation": true,
+    "java_iterative_taint_until_stable": true
+  },
+  "updated": "2026-07-01"
+}

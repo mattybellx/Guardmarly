@@ -354,20 +354,19 @@ class Lexer:
             if m:
                 raw = m.group()
                 try:
-                    value: object = 0
                     if raw.startswith("0x") or raw.startswith("0X"):
-                        value = int(raw.replace("_", "").rstrip("n"), 16)
+                        int(raw.replace("_", "").rstrip("n"), 16)
                     elif raw.startswith("0o") or raw.startswith("0O"):
-                        value = int(raw.replace("_", "").rstrip("n"), 8)
+                        int(raw.replace("_", "").rstrip("n"), 8)
                     elif raw.startswith("0b") or raw.startswith("0B"):
-                        value = int(raw.replace("_", "").rstrip("n"), 2)
+                        int(raw.replace("_", "").rstrip("n"), 2)
                     elif raw.rstrip("n").replace(".", "").isdigit():
                         cleaned = raw.replace("_", "").rstrip("n")
-                        value = int(cleaned) if cleaned.isdigit() else float(cleaned)
+                        int(cleaned) if cleaned.isdigit() else float(cleaned)
                     else:
-                        value = float(raw.replace("_", "").rstrip("n"))
+                        float(raw.replace("_", "").rstrip("n"))
                 except (ValueError, SyntaxError):
-                    value = 0
+                    pass
                 self._advance(len(raw))
                 return self._make_token(TokenType.NUMBER, raw, line, col, raw=raw)
 

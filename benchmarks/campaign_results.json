@@ -1,0 +1,43 @@
+{
+  "ts": "2026-07-01T16:16:26.964797",
+  "files_scanned": 500,
+  "total_findings": 599,
+  "new_findings_after_fixpoint": 0,
+  "interprocedural_findings": 1,
+  "by_cwe": {
+    "CWE-79": 250,
+    "CWE-89": 48,
+    "CWE-22": 92,
+    "CWE-501": 9,
+    "CWE-328": 114,
+    "CWE-327": 37,
+    "CWE-78": 31,
+    "CWE-90": 2,
+    "CWE-330": 7,
+    "CWE-614": 7,
+    "CWE-643": 2
+  },
+  "by_rule": {
+    "JV-011": 104,
+    "JV-030": 1,
+    "JV-006": 146,
+    "JV-007": 81,
+    "JV-023": 9,
+    "JV-012": 114,
+    "JV-022": 37,
+    "JV-008": 42,
+    "JV-004": 47,
+    "JV-025": 2,
+    "JV-021": 7,
+    "JV-019": 7,
+    "JV-026": 2
+  },
+  "fixpoint_stats": {
+    "iterations": 2,
+    "edges_processed": 810,
+    "summaries_updated": 1
+  },
+  "total_time_s": 50.1,
+  "errors": [],
+  "summary_summaries": 1105
+}

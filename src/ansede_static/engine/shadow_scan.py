@@ -254,7 +254,7 @@ def _attribute_ifds_only(entry: DiffEntry, finding: Finding) -> None:
         )
     elif "minified" in analysis_kind.lower():
         entry.attribution = (
-            f"Triggered by minified-heuristic on bundled code. "
+            "Triggered by minified-heuristic on bundled code. "
             "Shadow scan uses similar regex heuristics — this may be an overlapping hit. "
             "Check if source-map resolution could improve confidence."
         )

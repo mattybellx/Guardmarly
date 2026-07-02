@@ -328,7 +328,7 @@ def _build_semgrep_rule(
     patterns = mapping.get("patterns", [])
     patterns_yaml = _yaml_value(patterns, 2)
 
-    tags_yaml = _yaml_value([f"ansede", f"cwe-{cwe.lower().replace('-', '')}" if cwe else "security"], 2)
+    tags_yaml = _yaml_value(["ansede", f"cwe-{cwe.lower().replace('-', '')}" if cwe else "security"], 2)
 
     return f"""rules:
   - id: ansede-{rule_id.lower()}

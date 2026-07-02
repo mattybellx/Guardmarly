@@ -319,7 +319,7 @@ class RouteAnalyzer:
     def extract_routes(content: str, file_path: str) -> list[RouteHandler]:
         """Extract route handlers from Express/Nest/Next.js code."""
         routes: list[RouteHandler] = []
-        lines = content.splitlines()
+        content.splitlines()
 
         # Express routes
         for match in RouteAnalyzer.EXPRESS_ROUTE_RE.finditer(content):

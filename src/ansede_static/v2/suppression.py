@@ -53,7 +53,7 @@ def parse_suppressions(source: str, file_path: str = "<unknown>") -> dict[int, f
             continue
 
         ids_text = (m.group("ids") or "").strip()
-        reason = (m.group("reason") or "").strip()
+        (m.group("reason") or "").strip()
 
         rule_ids = frozenset(_RULE_ID_RE.findall(ids_text))
 

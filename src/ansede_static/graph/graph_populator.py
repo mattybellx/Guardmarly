@@ -62,7 +62,7 @@ def populate_from_flat_table(store: GraphStore, flat: dict[str, Any],
 def _infer_node_type(n: dict[str, Any]) -> str:
     """Infer the node_type from tree-sitter AST kind."""
     kind = n.get("kind", "")
-    name = n.get("text", "")
+    n.get("text", "")
     depth = n.get("depth", 0)
 
     # Deep leaves with literal values

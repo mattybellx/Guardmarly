@@ -255,7 +255,7 @@ class InterproceduralTaintAnalysis:
         elif isinstance(node, AssignNode):
             return f"assign:{node.target}"
         elif isinstance(node, ReturnNode):
-            return f"return"
+            return "return"
         else:
             return node.__class__.__name__.lower()
     

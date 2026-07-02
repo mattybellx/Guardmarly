@@ -89,7 +89,7 @@ def _path_contains_any(path: str, segments: frozenset[str]) -> bool:
 
 def _is_parameterized_sql(code: str, title: str, description: str) -> bool:
     """Check if SQL appears to use parameterized queries."""
-    text = f"{title} {description} {code}".lower()
+    f"{title} {description} {code}".lower()
     # Strong parameterization signals
     if re.search(r"execute\s*\(\s*\w+\s*,\s*\([^)]+\)", code, re.IGNORECASE):
         return True
@@ -441,12 +441,12 @@ class Classifier:
         if cwe_signal <= -0.5:
             return ClassifiedFinding(
                 Verdict.LIKELY_FP, adjusted + 0.1,
-                f"CWE-specific FP pattern detected"
+                "CWE-specific FP pattern detected"
             )
         elif cwe_signal >= 0.5:
             return ClassifiedFinding(
                 Verdict.LIKELY_TP, adjusted,
-                f"CWE-specific TP pattern confirmed"
+                "CWE-specific TP pattern confirmed"
             )
 
         if adjusted >= self.HIGH_CONF_THRESHOLD:

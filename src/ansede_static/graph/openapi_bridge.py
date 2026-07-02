@@ -137,8 +137,8 @@ def _extract_openapi_routes(spec: dict[str, Any]) -> list[dict[str, Any]]:
     routes: list[dict[str, Any]] = []
 
     # Determine spec version
-    swagger_version = str(spec.get("swagger", "") or "")
-    openapi_version = str(spec.get("openapi", "") or "")
+    str(spec.get("swagger", "") or "")
+    str(spec.get("openapi", "") or "")
 
     paths = spec.get("paths", {})
     if not isinstance(paths, dict):

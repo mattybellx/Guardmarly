@@ -1,0 +1,475 @@
+{
+  "timestamp": "2026-06-29 14:59 UTC",
+  "ansede_version": "5.1.0",
+  "results": [
+    {
+      "name": "flask",
+      "lang": "python",
+      "files": 83,
+      "lines": 18337,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 406,
+          "time_s": 17.3,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 7.3,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "requests",
+      "lang": "python",
+      "files": 37,
+      "lines": 12032,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 79,
+          "time_s": 9.7,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 2,
+          "time_s": 7.1,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "fastapi",
+      "lang": "python",
+      "files": 1129,
+      "lines": 111583,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1798,
+          "time_s": 396.5,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 7,
+          "time_s": 12.3,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "django",
+      "lang": "python",
+      "files": 2924,
+      "lines": 522624,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 0,
+          "time_s": 600.0,
+          "error": "Command '['C:\\\\Users\\\\matth\\\\OneDrive\\\\Desktop\\\\ansede-static-focus\\\\.venv\\\\Scripts\\\\ansede-static.exe', 'C:\\\\Users\\\\matth\\\\OneDrive\\\\Desktop\\\\ansede-static-focus\\\\benchmarks\\\\report\\\\.repo_cache\\\\dja"
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 9,
+          "time_s": 23.6,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "scrapy",
+      "lang": "python",
+      "files": 443,
+      "lines": 79110,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 572,
+          "time_s": 207.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 10,
+          "time_s": 9.0,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "express",
+      "lang": "javascript",
+      "files": 141,
+      "lines": 21440,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 327,
+          "time_s": 11.5,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 41,
+          "time_s": 6.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "axios",
+      "lang": "javascript",
+      "files": 228,
+      "lines": 36754,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 153,
+          "time_s": 18.9,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 6.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "lodash",
+      "lang": "javascript",
+      "files": 55,
+      "lines": 119100,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 8,
+          "time_s": 22.8,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 10.6,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "moment",
+      "lang": "javascript",
+      "files": 766,
+      "lines": 339124,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 56,
+          "time_s": 70.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 8.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "socket.io",
+      "lang": "javascript",
+      "files": 375,
+      "lines": 64218,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 44,
+          "time_s": 35.8,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 18,
+          "time_s": 10.0,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "spring-petclinic",
+      "lang": "java",
+      "files": 47,
+      "lines": 3796,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 24,
+          "time_s": 1.1,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 5.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "gson",
+      "lang": "java",
+      "files": 262,
+      "lines": 55620,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 11,
+          "time_s": 6.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 6.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "log4j",
+      "lang": "java",
+      "files": 2583,
+      "lines": 348916,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 205,
+          "time_s": 49.7,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 36.8,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "gin",
+      "lang": "go",
+      "files": 99,
+      "lines": 24099,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1,
+          "time_s": 1.5,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 2,
+          "time_s": 5.7,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "echo",
+      "lang": "go",
+      "files": 102,
+      "lines": 39817,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 2,
+          "time_s": 1.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 3,
+          "time_s": 7.6,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "cobra",
+      "lang": "go",
+      "files": 36,
+      "lines": 16765,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1,
+          "time_s": 2.2,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 9.3,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "CleanArchitecture",
+      "lang": "csharp",
+      "files": 362,
+      "lines": 11397,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 3,
+          "time_s": 4.9,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 7.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    },
+    {
+      "name": "eShopOnWeb",
+      "lang": "csharp",
+      "files": 254,
+      "lines": 10733,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 28,
+          "time_s": 3.7,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 8.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 0,
+          "error": "not installed"
+        }
+      }
+    }
+  ],
+  "cve_recall": null
+}

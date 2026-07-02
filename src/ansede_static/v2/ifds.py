@@ -292,11 +292,9 @@ class IFDSSolver:
         
         # Handle function returns (return-to-call-site edges)
         if node.label.startswith("exit:"):
-            func_id = node.function_id
             # Find call sites that called this function
             for (from_n, to_n, c), _ in self._edge_flows.items():
                 if from_n.function_id in self._call_sites.values() and c == context:
-                    caller_func = from_n.function_id
                     # Propagate back to return node
                     new_context = context.pop()
                     self._add_fact_at_node(to_n, new_context, fact)

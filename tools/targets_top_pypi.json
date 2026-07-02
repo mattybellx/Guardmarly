@@ -1,0 +1,11 @@
+[
+  {"repo": "psf/requests", "language": "python", "stars": 52000},
+  {"repo": "pallets/flask", "language": "python", "stars": 68000},
+  {"repo": "tiangolo/fastapi", "language": "python", "stars": 78000},
+  {"repo": "pallets/werkzeug", "language": "python", "stars": 6600},
+  {"repo": "pytest-dev/pytest", "language": "python", "stars": 12000},
+  {"repo": "encode/httpx", "language": "python", "stars": 13000},
+  {"repo": "urllib3/urllib3", "language": "python", "stars": 3800},
+  {"repo": "boto/boto3", "language": "python", "stars": 9600},
+  {"repo": "aio-libs/aiohttp", "language": "python", "stars": 15000}
+]

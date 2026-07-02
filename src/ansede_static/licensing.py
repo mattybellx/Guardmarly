@@ -329,7 +329,7 @@ def format_license_status(license_info: LicenseInfo | None = None) -> str:
     if license_info.expires_at > 0:
         lines.append(f"  Expires    : {license_info.days_remaining} days remaining")
     else:
-        lines.append(f"  Expires    : Never (perpetual)")
+        lines.append("  Expires    : Never (perpetual)")
 
     if license_info.tier == "free":
         lines.append(f"  Daily limit: {license_info.max_scans_per_day} scans/day")

@@ -1,0 +1,11 @@
+{
+  "ts": "2026-06-30T19:06:40.676636+00:00",
+  "completed": 30,
+  "failed": 0,
+  "total_loc": 1308846,
+  "ansede_total": 1731,
+  "ansede_tp": 1706,
+  "ansede_fp": 25,
+  "sg_total": 2073,
+  "precision": 98.6
+}

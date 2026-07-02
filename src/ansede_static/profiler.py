@@ -80,16 +80,16 @@ class ScanProfiler:
     def print_summary(self) -> None:
         """Print a human-readable summary to stderr."""
         data = self.to_json()
-        print(f"\nProfile Summary:", file=__import__("sys").stderr)
+        print("\nProfile Summary:", file=__import__("sys").stderr)
         print(f"  Total: {data['total_ms']:.0f}ms", file=__import__("sys").stderr)
-        print(f"  Phases:", file=__import__("sys").stderr)
+        print("  Phases:", file=__import__("sys").stderr)
         for phase, ms in data["phases"].items():
             pct = ms / data["total_ms"] * 100 if data["total_ms"] else 0
             print(f"    {phase:<20s} {ms:>10.1f}ms ({pct:>5.1f}%)",
                   file=__import__("sys").stderr)
         slowest = list(data["file_phases"].items())[:5]
         if slowest:
-            print(f"  Slowest files:", file=__import__("sys").stderr)
+            print("  Slowest files:", file=__import__("sys").stderr)
             for fname, phases in slowest:
                 total = sum(phases.values())
                 print(f"    {Path(fname).name:<30s} {total:>10.1f}ms "

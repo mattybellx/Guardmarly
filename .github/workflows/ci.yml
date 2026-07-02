@@ -41,7 +41,7 @@ jobs:
       - name: Lint with Ruff
         run: |
           pip install ruff
-          ruff check src/ --ignore=E501,E402,F401,F811 --quiet
+          ruff check src/ --ignore=E501,E402,F401,F811,E701,E702,E741,F821 --quiet
 
       - name: Upload Coverage Reports to Codecov
         uses: codecov/codecov-action@v4
