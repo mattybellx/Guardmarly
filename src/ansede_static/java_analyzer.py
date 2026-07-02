@@ -56,7 +56,7 @@ _SQLI_SINK_RE = re.compile(
     re.IGNORECASE,
 )
 _CMD_INJECTION_RE = re.compile(r"Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\(", re.IGNORECASE)
-_WEAK_CRYPTO_JAVA_RE = re.compile(r"MessageDigest\.getInstance\(\s*[\"']MD5[\"']|MessageDigest\.getInstance\(\s*[\"']SHA1[\"']|[\"']MD5[\"']|[\"']SHA-?1[\"']|Cipher\.getInstance\(\s*[\"'](?:DES|RC2|RC4|Blowfish)", re.IGNORECASE)
+_WEAK_CRYPTO_JAVA_RE = re.compile(r"MessageDigest\.getInstance\(\s*[\"']MD5[\"']|MessageDigest\.getInstance\(\s*[\"']SHA1[\"']|[\"']MD5[\"']|[\"']SHA-?1[\"']|Cipher\.getInstance\(\s*[\"'](?:DES|RC2|RC4|Blowfish)|Hashing\.(?:md5|sha1)\s*\(\)|DigestUtils\.(?:md5|sha1)(?:Hex)?\s*\(", re.IGNORECASE)
 # OWASP ldapi: LDAP injection via unsanitized LDAP filters (expanded)
 _LDAP_INJECTION_RE = re.compile(r"(?:LDAP|ldap|InitialDirContext|DirContext|LdapContext|InitialLdapContext)\.(?:search|lookup|list|listBindings)\s*\(|new\s+Initial(?:Dir|Ldap)Context\s*\(", re.IGNORECASE)
 # OWASP xpathi: XPath injection via unsanitized XPath expressions (expanded)
@@ -94,6 +94,9 @@ _INSECURE_TLS_JAVA_RE = re.compile(
     re.IGNORECASE,
 )
 _INSECURE_COOKIE_JAVA_RE = re.compile(r'setSecure\s*\(\s*false\s*\)|setHttpOnly\s*\(\s*false\s*\)', re.IGNORECASE)
+_COOKIE_CREATION_RE = re.compile(r'new\s+Cookie\s*\(', re.IGNORECASE)
+_COOKIE_ADD_RE = re.compile(r'addCookie\s*\(', re.IGNORECASE)
+_COOKIE_SECURE_TRUE_RE = re.compile(r'setSecure\s*\(\s*true\s*\)', re.IGNORECASE)
 _CORS_WILDCARD_JAVA_RE = re.compile(r'setAllowedOrigins\s*\(\s*\"?\*\"?\s*\)|allowedOrigins\s*\(\s*\"?\*\"?\s*\)', re.IGNORECASE)
 _REQUEST_TAINT_RE = re.compile(
     r"(?:\b\w[\w<>\[\],\s]*\s+)?(?P<name>\w+)\s*=\s*\w*request\.(?:getParameter|getHeader|getQueryString|getCookies|getInputStream)\(",
@@ -1144,6 +1147,33 @@ def analyze_java(
                 suggestion="Never let users control template names or content. Use a fixed template with controlled data binding.",
                 rule_id="JV-019", cwe="CWE-94", agent="java-analyzer",
                 confidence=0.82, analysis_kind="taint_flow",
+            ))
+
+        # JV-021: Weak random (OWASP weakrand)
+        if _WEAK_RANDOM_RE.search(method.body):
+            line = _first_matching_line(method.body, _WEAK_RANDOM_RE, method.start_line)
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-330: Weak random number generator in `{method.name}()`",
+                description="java.util.Random or Math.random() used — not cryptographically secure.",
+                line=line,
+                suggestion="Use java.security.SecureRandom for security-sensitive randomness.",
+                rule_id="JV-021", cwe="CWE-330", agent="java-analyzer",
+                confidence=0.85, analysis_kind="pattern",
+            ))
+
+        # JV-019 (cookie): Cookie created and added without setSecure(true) (CWE-614)
+        if (_COOKIE_CREATION_RE.search(method.body) and _COOKIE_ADD_RE.search(method.body)
+                and not _COOKIE_SECURE_TRUE_RE.search(method.body)):
+            line = _first_matching_line(method.body, _COOKIE_CREATION_RE, method.start_line)
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-614: Cookie missing Secure flag in `{method.name}()`",
+                description="A Cookie is created and added to the response without calling setSecure(true).",
+                line=line,
+                suggestion="Call cookie.setSecure(true) to prevent transmission over unencrypted connections.",
+                rule_id="JV-019", cwe="CWE-614", agent="java-analyzer",
+                confidence=0.80, analysis_kind="pattern",
             ))
 
     for lineno, line in enumerate(source.splitlines(), start=1):
