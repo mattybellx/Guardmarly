@@ -658,6 +658,23 @@ def _append_method_level_regex_findings(source: str, findings: list[Finding]) ->
                     rule_id="JV-011", cwe="CWE-79", agent="java-analyzer",
                     confidence=0.7, analysis_kind="pattern",
                 ))
+
+        # JV-019: Cookie created and added without setSecure(true) (CWE-614)
+        if (_COOKIE_CREATION_RE.search(method.body) and _COOKIE_ADD_RE.search(method.body)
+                and not _COOKIE_SECURE_TRUE_RE.search(method.body)):
+            line = _first_matching_line(method.body, _COOKIE_CREATION_RE, method.start_line)
+            key = (line, "JV-019")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-614: Cookie missing Secure flag in `{method.name}()`",
+                    description="A Cookie is created and added to the response without calling setSecure(true).",
+                    line=line,
+                    suggestion="Add `cookie.setSecure(true)` and `cookie.setHttpOnly(true)` for all sensitive cookies.",
+                    rule_id="JV-019", cwe="CWE-614", agent="java-analyzer",
+                    confidence=0.82, analysis_kind="pattern",
+                ))
+                existing_keys.add(key)
                 existing_keys.add(key)
 
         # JV-004ext: SQLi with tainted input (method-level taint, lower confidence)
