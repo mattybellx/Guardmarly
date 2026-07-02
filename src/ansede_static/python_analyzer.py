@@ -126,6 +126,15 @@ TAINT_SOURCES: dict[str, str] = {
     "request.user_agent":     "HTTP User-Agent header",
     # Path/route parameters
     "kwargs":                 "route parameter (dict from URL path)",
+    # Bottle / Pyramid / Sanic / Falcon web framework sources
+    "request.query":          "HTTP query parameter (Bottle/Sanic)",
+    "request.forms":          "HTTP form data (Bottle)",
+    "request.params":         "merged GET+POST params (Pyramid/Bottle)",
+    "request.json_body":      "parsed JSON body (Pyramid)",
+    "req.params":             "route path parameter (Falcon)",
+    "req.media":              "parsed request body (Falcon)",
+    "req.get_param":          "query/form parameter (Falcon)",
+    "req.stream":             "raw request body stream (Falcon)",
     # Standard input
     "input":                  "user console input",
     "sys.argv":               "command-line argument",
@@ -137,6 +146,15 @@ TAINT_SOURCES: dict[str, str] = {
     "open":                   "file contents (may be attacker-controlled)",
     "pathlib.Path.read_text": "file contents (may be attacker-controlled)",
     "pathlib.Path.read_bytes":"file contents (may be attacker-controlled)",
+    # Network / URL sources
+    "urllib.request.urlopen": "HTTP response body (may be attacker-controlled)",
+    "socket.recv":            "network socket data (untrusted)",
+    "requests.get":           "HTTP response (may be attacker-controlled)",
+    "httpx.get":              "HTTP response (may be attacker-controlled)",
+    # XML / external data sources
+    "xml.etree.ElementTree.parse": "parsed XML (may contain XXE/tainted data)",
+    "lxml.etree.parse":       "parsed XML via lxml (may contain XXE)",
+    "defusedxml.ElementTree.parse": "safely parsed XML (defusedxml)",
     # Unsafe deserialization (result already tainted)
     "json.loads":             "parsed JSON (may be from untrusted source)",
     "yaml.load":              "parsed YAML (unsafe loader)",
