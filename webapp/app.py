@@ -1312,7 +1312,11 @@ def whitepaper():
 @app.route("/blog")
 def blog():
     """Technical blog — IFDS deep-dive and benchmark data."""
-    import markdown as _md
+    try:
+        import markdown as _md
+    except ImportError:
+        _md = None
+
     blog_path = _REPO_ROOT / "docs" / "blog" / "why-your-sast-misses-86-percent.md"
     if not blog_path.exists():
         return "Blog post not found", 404
@@ -1324,7 +1328,13 @@ def blog():
         if end != -1:
             raw = raw[end + 3:]
 
-    html_body = _md.markdown(raw, extensions=["fenced_code", "tables", "codehilite"])
+    if _md is not None:
+        html_body = _md.markdown(raw, extensions=["fenced_code", "tables", "codehilite"])
+    else:
+        # Fallback: basic HTML conversion
+        html_body = "<pre style=\"white-space:pre-wrap;font-family:var(--font-mono);font-size:0.9rem;line-height:1.7\">"
+        html_body += raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        html_body += "</pre>"
 
     blog_html = """<div class="page-wrap" style="max-width:800px">
   <div class="hero" style="padding-top:20px">

@@ -1,3 +1,4 @@
 flask>=3.0
 stripe>=9.0
 gunicorn>=23.0
+markdown>=3.0
