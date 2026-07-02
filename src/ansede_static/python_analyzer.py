@@ -313,9 +313,6 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
     "etree.iterparse":            ("CWE-611", "XML External Entity (XXE) via iterparse"),
     "etree.XMLParser":            ("CWE-611", "XML External Entity (XXE) via custom parser"),
     # SSTI — CWE-94/1336
-    "render_template_string":     ("CWE-94", "Server-Side Template Injection (Jinja2)"),
-    "render_template":            ("CWE-94", "Server-Side Template Injection (Jinja2)"),
-    "Template.render":            ("CWE-94", "Server-Side Template Injection (Jinja2)"),
     "jinja2.Environment.from_string":("CWE-94", "Server-Side Template Injection (Jinja2)"),
     "mako.template.Template":     ("CWE-94", "Server-Side Template Injection (Mako)"),
     "django.template.Template":   ("CWE-94", "Server-Side Template Injection (Django)"),
