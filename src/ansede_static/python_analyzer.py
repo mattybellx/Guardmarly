@@ -119,6 +119,50 @@ TAINT_SOURCES: dict[str, str] = {
     "request.match_info":     "aiohttp route path parameters",
     "request.text":           "aiohttp request body as text",
     "request.post":           "aiohttp form data",
+    # Bottle web framework request sources
+    "request.query":          "Bottle query parameter",
+    "request.forms":          "Bottle form data",
+    "request.params":         "Bottle merged GET+POST params",
+    "request.json_body":      "Bottle parsed JSON body",
+    # Pyramid web framework request sources
+    "request.matchdict":      "Pyramid URL path parameters",
+    "request.GET":            "Pyramid query parameters",
+    "request.POST":           "Pyramid form data",
+    # Sanic web framework request sources
+    "request.args":           "Sanic query parameters",
+    "request.form":           "Sanic form data",
+    "request.json":           "Sanic parsed JSON body",
+    "request.files":          "Sanic uploaded file",
+    # Falcon web framework request sources
+    "req.params":             "Falcon URL path parameters",
+    "req.media":              "Falcon parsed request body",
+    "req.get_param":          "Falcon query/form parameter",
+    "req.stream":             "Falcon raw request body stream",
+    # CherryPy web framework request sources
+    "cherrypy.request.params":"CherryPy request parameters",
+    "cherrypy.request.json":  "CherryPy parsed JSON body",
+    # Network / socket sources
+    "urllib.request.urlopen": "remote HTTP response",
+    "socket.recv":            "network socket data",
+    "socket.recvfrom":        "network socket data",
+    "httpx.get":              "remote HTTP response",
+    "httpx.post":             "remote HTTP response",
+    "httpx.request":          "remote HTTP response",
+    "aiohttp.ClientSession.get": "remote HTTP response",
+    # XML / data format parsers
+    "xml.etree.ElementTree.parse":  "parsed XML",
+    "lxml.etree.parse":             "parsed XML",
+    "defusedxml.ElementTree.parse": "parsed XML",
+    "xml.dom.minidom.parse":        "parsed XML",
+    "xml.sax.parseString":          "parsed XML",
+    "toml.load":                    "parsed TOML",
+    "tomllib.load":                 "parsed TOML",
+    "configparser.ConfigParser.read":"parsed config",
+    # Message queue / event sources
+    "kafka.KafkaConsumer":   "Kafka message",
+    "pika.BlockingConnection":"RabbitMQ message",
+    "redis.Redis.get":       "Redis value",
+    "redis.StrictRedis.get": "Redis value",
     "request.url":            "request URL",
     "request.path":           "request path",
     "request.host":           "request Host header",
@@ -266,6 +310,17 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
     "xml.etree.ElementTree.parse":("CWE-611", "XML External Entity (XXE) via ElementTree"),
     "etree.iterparse":            ("CWE-611", "XML External Entity (XXE) via iterparse"),
     "etree.XMLParser":            ("CWE-611", "XML External Entity (XXE) via custom parser"),
+    # SSTI — CWE-94/1336
+    "jinja2.Environment.from_string":("CWE-94", "Server-Side Template Injection (Jinja2)"),
+    "mako.template.Template":     ("CWE-94", "Server-Side Template Injection (Mako)"),
+    "django.template.Template":   ("CWE-94", "Server-Side Template Injection (Django)"),
+    "django.template.loader.render_to_string":("CWE-94", "Server-Side Template Injection (Django)"),
+    # ZipSlip — CWE-22
+    "tarfile.extract":            ("CWE-22", "ZipSlip via tarfile extract"),
+    "tarfile.extractall":         ("CWE-22", "ZipSlip via tarfile extractall"),
+    "zipfile.ZipFile.extract":    ("CWE-22", "ZipSlip via zipfile extract"),
+    "zipfile.ZipFile.extractall": ("CWE-22", "ZipSlip via zipfile extractall"),
+    "shutil.unpack_archive":      ("CWE-22", "ZipSlip via shutil unpack"),
     # HTTP Response Splitting — CWE-113
     "make_response":              ("CWE-113", "HTTP Response Splitting"),
     "Response":                   ("CWE-113", "HTTP Response Splitting"),
