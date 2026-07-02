@@ -36,6 +36,11 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     "r.Cookie": "HTTP cookie",
     "r.URL": "HTTP request URL",
     "r.Body": "HTTP request body",
+    "r.URL.Path": "HTTP URL path (stdlib)",
+    "r.URL.RawQuery": "HTTP URL raw query (stdlib)",
+    "r.Host": "HTTP Host header (stdlib)",
+    "r.Referer": "HTTP Referer header (stdlib)",
+    "r.UserAgent": "HTTP User-Agent header (stdlib)",
     "r.RemoteAddr": "Client IP address",
     "os.Args": "CLI argument",
     "flag.Args": "CLI flag argument",
@@ -48,6 +53,8 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     "fmt.Scanln": "Console input",
     # Chi router
     "chi.URLParam": "URL path parameter (chi router)",
+    # gorilla/mux router
+    "mux.Vars": "URL path variables (gorilla/mux)",
     # Gin framework
     "c.Query": "Gin query parameter",
     "c.Param": "Gin URL path parameter",
@@ -56,9 +63,17 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     "c.GetRawData": "Gin raw request body",
     # Echo framework
     "c.FormValue": "Echo form/query value",
+    "c.QueryParam": "Echo query parameter",
+    "c.Param": "Echo URL path parameter",
+    "c.RealIP": "Echo client real IP",
     # Fiber framework
     "c.Params": "Fiber URL path parameter",
     "c.Body": "Fiber request body",
+    "c.Query": "Fiber query parameter",
+    "c.Get": "Fiber request header",
+    "c.GetReqHeaders": "Fiber all request headers",
+    "c.FormValue": "Fiber form value",
+    "c.Cookies": "Fiber cookie value",
 }
 
 _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
@@ -111,6 +126,32 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     # Additional HTTP client sinks for SSRF
     "http.Client.Do": ("CWE-918", "SSRF via http.Client.Do", "high"),
     "resty.New": ("CWE-918", "SSRF via resty HTTP client", "high"),
+    # MongoDB injection — CWE-943
+    "mongo.Collection.Find": ("CWE-943", "NoSQL Injection via MongoDB find", "critical"),
+    "mongo.Collection.FindOne": ("CWE-943", "NoSQL Injection via MongoDB findOne", "critical"),
+    "mongo.Collection.Aggregate": ("CWE-943", "NoSQL Injection via MongoDB aggregate", "critical"),
+    "mongo.Collection.UpdateOne": ("CWE-943", "NoSQL Injection via MongoDB updateOne", "critical"),
+    "mongo.Collection.DeleteOne": ("CWE-943", "NoSQL Injection via MongoDB deleteOne", "critical"),
+    # SSTI — CWE-94/1336
+    "text/template.Template.Execute": ("CWE-94", "Server-Side Template Injection via text/template", "critical"),
+    "text/template.Template.ExecuteTemplate": ("CWE-94", "Server-Side Template Injection via text/template", "critical"),
+    "html/template.Template.Execute": ("CWE-94", "Server-Side Template Injection via html/template", "critical"),
+    # ZipSlip — CWE-22 via archive extraction
+    "archive/zip.NewReader": ("CWE-22", "ZipSlip via archive/zip", "high"),
+    "archive/zip.File.Open": ("CWE-22", "ZipSlip via zip.File.Open (no path sanitization)", "high"),
+    "archive/tar.NewReader": ("CWE-22", "ZipSlip via archive/tar", "high"),
+    "archive/tar.Reader.Next": ("CWE-22", "ZipSlip via tar.Reader.Next (no path sanitization)", "high"),
+    # GORM SQL injection — CWE-89
+    "gorm.DB.Raw": ("CWE-89", "SQL Injection via GORM Raw", "critical"),
+    "gorm.DB.Exec": ("CWE-89", "SQL Injection via GORM Exec", "critical"),
+    "DB.Raw": ("CWE-89", "SQL Injection via GORM Raw (db instance)", "critical"),
+    "DB.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),
+    "db.Raw": ("CWE-89", "SQL Injection via GORM Raw (db instance)", "critical"),
+    "db.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),
+    # Redis command injection — CWE-78
+    "redis.Client.Do": ("CWE-78", "Command Injection via Redis Do", "high"),
+    "redis.Client.Send": ("CWE-78", "Command Injection via Redis Send", "high"),
+    "redis.NewClient": ("CWE-200", "Redis client created without TLS", "low"),
 }
 
 # ── Known-safe unsafe.Pointer patterns ──────────────────────────────────
