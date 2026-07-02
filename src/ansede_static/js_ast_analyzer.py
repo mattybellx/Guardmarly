@@ -824,12 +824,12 @@ def _check_file_upload_js(code: str, calls: list[JsCall]) -> list[Finding]:
         re.IGNORECASE,
     )
     lines = code.splitlines()
-    has_upload = any(_UPLOAD_RECEIVE_RE.search(l) for l in lines)
-    has_save = any(_UPLOAD_SAVE_RE.search(l) for l in lines)
-    has_validation = any(_UPLOAD_VALIDATION_RE.search(l) for l in lines)
+    has_upload = any(_UPLOAD_RECEIVE_RE.search(ln) for ln in lines)
+    has_save = any(_UPLOAD_SAVE_RE.search(ln) for ln in lines)
+    has_validation = any(_UPLOAD_VALIDATION_RE.search(ln) for ln in lines)
     if not (has_upload and has_save) or has_validation:
         return findings
-    line = next((i + 1 for i, l in enumerate(lines) if _UPLOAD_RECEIVE_RE.search(l)), 1)
+    line = next((i + 1 for i, ln in enumerate(lines) if _UPLOAD_RECEIVE_RE.search(ln)), 1)
     findings.append(_make_finding(
         line=line,
         title=f"CWE-434: File upload at line {line} lacks content-type validation",
@@ -869,12 +869,12 @@ def _check_idor_js(code: str) -> list[Finding]:
         re.IGNORECASE,
     )
     lines = code.splitlines()
-    has_auth = any(_AUTH_MIDDLEWARE_RE.search(l) for l in lines)
-    has_direct_access = any(_DIRECT_OBJECT_ACCESS_RE.search(l) for l in lines)
-    has_owner_filter = any(_OWNER_FILTER_RE.search(l) for l in lines)
+    has_auth = any(_AUTH_MIDDLEWARE_RE.search(ln) for ln in lines)
+    has_direct_access = any(_DIRECT_OBJECT_ACCESS_RE.search(ln) for ln in lines)
+    has_owner_filter = any(_OWNER_FILTER_RE.search(ln) for ln in lines)
     if not (has_auth and has_direct_access) or has_owner_filter:
         return findings
-    line = next((i + 1 for i, l in enumerate(lines) if _DIRECT_OBJECT_ACCESS_RE.search(l)), 1)
+    line = next((i + 1 for i, ln in enumerate(lines) if _DIRECT_OBJECT_ACCESS_RE.search(ln)), 1)
     findings.append(_make_finding(
         line=line,
         title=f"CWE-639: Possible IDOR — authenticated object access without ownership check at line {line}",

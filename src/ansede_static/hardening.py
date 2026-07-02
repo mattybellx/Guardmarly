@@ -130,7 +130,7 @@ def _build_line_map(content: str, lines: list[str]) -> dict[int, tuple[int, int]
     virtual_line = 1
 
     # Common statement delimiters in minified code
-    delimiters = [';', '}', '{']
+    _delimiters = [';', '}', '{']
 
     for actual_line_no, actual_line in enumerate(lines, start=1):
         if not actual_line.strip():
@@ -355,7 +355,7 @@ class StreamingASTParser:
         """
         chunks: list[str] = []
         current_chunk: list[str] = []
-        in_def = False
+        _in_def = False
         indent_level = 0
 
         for line in content.splitlines():
@@ -364,7 +364,7 @@ class StreamingASTParser:
                 if current_chunk and indent_level == 0:
                     chunks.append("\n".join(current_chunk))
                     current_chunk = []
-                in_def = True
+                _in_def = True
                 indent_level = 0
 
             current_chunk.append(line)
@@ -404,7 +404,7 @@ class FileMetadata:
         file_path_obj = Path(file_path_str)
 
         # Determine if test/mock/generated
-        name_lower = file_path_obj.name.lower()
+        _name_lower = file_path_obj.name.lower()
         path_lower = file_path_str.lower()
 
         is_test = any(marker in path_lower for marker in ['test_', '_test', '_spec', 'spec_', 'conftest.', '/perf/', '\\perf\\', '/bench/', '\\bench\\', '/benchmarks/', '/examples/', '/example/'])
@@ -444,7 +444,7 @@ class FileMetadata:
 # PART 5: Integration Points
 # ════════════════════════════════════════════════════════════════════════════
 
-def should_suppress_in_test_context(finding: 'Finding', metadata: FileMetadata) -> bool:
+def should_suppress_in_test_context(finding: 'Finding', metadata: FileMetadata) -> bool:  # noqa: F821
     """Determine if a finding should be suppressed due to test/mock context."""
     # CWE-798 (hardcoded secrets) in test files should be downgraded/suppressed
     if metadata.is_test_file or metadata.is_mock_file:

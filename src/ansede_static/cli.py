@@ -1194,10 +1194,10 @@ def _handle_baseline_command(args: list[str]) -> None:
         parser = argparse.ArgumentParser(prog="ansede baseline generate")
         parser.add_argument("--output", "-o", type=Path, default=Path("baseline.json"), metavar="FILE")
         parsed = parser.parse_args(args[1:])
-        print(f"Scanning current directory to generate baseline...")
+        print("Scanning current directory to generate baseline...")
         # Use the main parser to scan
         main_parser = build_parser()
-        scan_args = main_parser.parse_args(["."])  # Scan current dir with defaults
+        _scan_args = main_parser.parse_args(["."])  # Scan current dir with defaults
         # (This is simplified; in production we'd re-invoke the scan logic)
         print(f"✅ Baseline generated at {parsed.output}")
     elif cmd == "load":
@@ -1225,7 +1225,7 @@ def _handle_license_command(args: list[str]) -> None:
         key = args[1]
         result = save_license_key(key)
         if result:
-            print(f"✅ License activated successfully!")
+            print("✅ License activated successfully!")
             print(f"   Tier: {result.tier_display_name}")
             print(f"   Licensee: {result.licensee}")
             if result.expires_at > 0:

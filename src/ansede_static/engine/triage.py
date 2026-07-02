@@ -521,10 +521,10 @@ class SafePatternDetector:
         has_strong = SafePatternDetector.STRONG_HASH_RE.search(snippet)
 
         if has_strong and not has_weak:
-            return True, f"Strong hashing algorithm detected"
+            return True, "Strong hashing algorithm detected"
 
         if has_weak:
-            return False, f"Weak hashing algorithm in use"
+            return False, "Weak hashing algorithm in use"
 
         return False, ""
 
@@ -562,7 +562,7 @@ class CWETriageRules:
             return TriageResult(
                 is_true_positive=False,
                 confidence=0.85,
-                reason=f"Example/demo secret value detected",
+                reason="Example/demo secret value detected",
                 remediation_level="low"
             )
 
