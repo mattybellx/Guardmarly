@@ -59,10 +59,6 @@ Changelog = "https://github.com/mattybellx/Ansede/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ansede_static"]
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["ansede_static*"]
 artifacts = [
     "src/ansede_static/schemas/ansede.schema.json",
     "src/ansede_static/schemas/rule_schema.json",
