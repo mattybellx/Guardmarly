@@ -218,7 +218,7 @@ class ContextAnalyzer:
         # Fake data / random generators
         'faker', 'Faker', 'fake-data', 'fake_data',
         # String validation / sanitization libraries
-        'validator.js', 'validatorjs', 'Validator',
+        'validator.js', 'validatorjs', 'Validator', '/validator/',
         # Date/time formatting
         'date-fns', 'datefns', 'moment', 'Moment', 'dateutil',
         # IO / file-system libraries (not SQL — CWE-89 misclass)
@@ -244,6 +244,8 @@ class ContextAnalyzer:
         "CWE-94",   # Code injection (coverage tools, build scripts use exec)
         "CWE-643",  # XPath injection (XML/HTML sanitizer libs)
         "CWE-78",   # Command injection (CLI tools, build scripts)
+        "CWE-798",  # Hardcoded secrets (test fixtures in libs)
+        "CWE-295",  # Certificate validation (HTTP client tests)
     })
 
     # Quality/architecture rules that are not security findings.
