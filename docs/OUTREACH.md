@@ -130,3 +130,119 @@ Tags: #security #python #sast #devops #cybersecurity
 - **Reply to every comment.** Engagement drives visibility
 - **Wait 24h between platforms.** HN first, then Reddit next day
 - **Use a throwaway account with no history.** Fresh accounts get less scrutiny for Show HN than accounts with sketchy history
+
+
+# Extended Channels (Beyond HN/Reddit/dev.to)
+
+## OWASP Slack — #tools channel (40k+ members)
+
+Join: https://owasp.org/slack/invite
+
+Post in #tools as a research question — NOT as promotion:
+
+> Has anyone benchmarked their SAST tool against the OWASP Benchmark v1.2
+> recently? I ran Semgrep OSS and CodeQL through and got 59.4% and ~50%
+> recall respectively. Curious if others have gotten different numbers
+> with different configurations.
+
+This reads as genuine research. When people ask what tool got higher
+numbers, you mention Ansede naturally in the reply. The OWASP community
+is where AppSec buyers hang out.
+
+---
+
+## GitHub — Submit to 5 "Awesome" Lists (10 min each)
+
+Each PR is literally one line in a markdown file:
+
+| Repo | Stars | PR Content |
+|---|---|---|
+| `analysis-tools-dev/static-analysis` | 13k | `[ansede-static](https://github.com/mattybellx/Ansede) — Offline SAST with 96.3% CVE recall, IFDS taint analysis. Python/JS/Go/Java/C#.` |
+| `sbilly/awesome-security` | 12k | Same |
+| `devsecops/awesome-devsecops` | 5k | Add under SAST section |
+| `guibranco/awesome-python-security` | 2k | Add under Static Analysis |
+| `TonnyL/Awesome_APIs` | N/A | Skip this one |
+
+These lists drive steady organic traffic. Every star = a developer who
+might try the tool.
+
+---
+
+## Python/JS Security Newsletters
+
+| Newsletter | Subscribers | How |
+|---|---|---|
+| **Python Weekly** | 50k+ | Email `editor@pythonweekly.com` — they love new tools |
+| **PyCoder's Weekly** | 25k+ | GitHub issue: `pycoders/pycoders-weekly` |
+| **TL;DR Sec** | 30k+ | tldrsec.com/submit — they love benchmark data |
+| **JavaScript Weekly** | 150k+ | Reply to any issue with a tip |
+| **Snyk Blog** | — | They feature comparison tools — email their DevRel |
+
+---
+
+## YouTube — Benchmark Demo (no face needed)
+
+Record a 5-min OBS screen capture:
+
+1. `pip install ansede-static` ...done
+2. `ansede-static benchmarks/owasp/src/` → shows real findings
+3. Open `benchmarks/owasp_scorecard.html` in browser
+4. Side-by-side: Semgrep result vs Ansede result
+5. End: `pip install ansede-static` on screen
+
+Upload with title: *"SAST Scanner Finds 96% of CVEs (Semgrep: 23%) — Benchmark Demo"*
+
+No face, no voice needed. Text overlays only. Throwaway Google account.
+
+---
+
+## Stack Overflow — Answer Security Questions
+
+Search for: `[python] [security] sast` or `[javascript] static analysis security`
+
+Answer questions about SAST tools. Include Ansede when it's the right
+fit. One honest answer per week = steady traffic. Don't spam — only
+answer when genuinely relevant.
+
+---
+
+## G2 / Capterra — List the Product
+
+List Ansede on G2 under "Static Application Security Testing." It's
+free. You don't need to be a company. The category page gets thousands
+of enterprise buyers comparing tools. Being listed next to Snyk,
+Checkmarx, and Fortify with benchmark data is powerful.
+
+---
+
+## Slack/Discord Communities
+
+| Community | Channel | Approach |
+|---|---|---|
+| **Python Discord** | #projects | Share as open-source project |
+| **The Cyber Mentor** | #tools | Ask for feedback on methodology |
+| **InfoSec Prep** | #appsec | Discuss CVE recall benchmarks |
+| **OWASP Chapters** | local channels | Offer to present at meetups |
+
+Template: 
+> "I ran some SAST benchmarks and got unexpected results. Would love
+> feedback on my methodology. 96% CVE recall vs 23% for Semgrep OSS
+> seems too good to be true — am I missing something?"
+
+This invites critique (which builds credibility) rather than feels
+like promotion.
+
+---
+
+## Summary: Effort vs Impact
+
+| Channel | Time | Reach | Buyer Quality |
+|---|---|---|---|
+| Awesome lists PR | 10 min each | ⭐⭐⭐ | ⭐⭐⭐ |
+| OWASP Slack | 5 min | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Python Weekly email | 2 min | ⭐⭐⭐⭐ | ⭐⭐ |
+| TL;DR Sec submit | 2 min | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| YouTube demo | 1 hour | ⭐⭐ | ⭐⭐ |
+| Stack Overflow answers | 10 min/week | ⭐ | ⭐⭐⭐ |
+| G2 listing | 15 min | ⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Discord communities | 5 min each | ⭐ | ⭐⭐⭐ |
