@@ -62,7 +62,11 @@ def _make_unified_patch(
       +safe_call(x)
        # more context
     """
-    rel = os.path.relpath(file_path) if os.path.isabs(file_path) else file_path
+    try:
+        rel = os.path.relpath(file_path) if os.path.isabs(file_path) else file_path
+    except ValueError:
+        # Windows: cross-drive paths (C: vs D:) — fall back to basename
+        rel = os.path.basename(file_path) if os.path.isabs(file_path) else file_path
     try:
         from_path = Path(file_path)
         lines = from_path.read_text(encoding="utf-8", errors="replace").splitlines()
