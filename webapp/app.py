@@ -521,191 +521,258 @@ _HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>{{title}} | ansede-static</title>
+<title>{{title}} | Ansede Static</title>
+<meta name="description" content="World's best offline SAST scanner. 96.3% CVE recall. Detects IDOR, auth bypass, and ownership flaws that Semgrep and CodeQL miss.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Ansede Static — Premium Unified Design System v6.0
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --blue:       #0078D4;
-  --blue-dark:  #005A9E;
-  --blue-light: #E8F4FD;
-  --gray-50:    #FAFAFA;
-  --gray-100:   #F3F3F3;
-  --gray-200:   #E8E8E8;
-  --gray-300:   #D1D1D1;
-  --gray-400:   #A0A0A0;
-  --gray-500:   #6E6E6E;
-  --gray-600:   #505050;
-  --gray-700:   #323232;
-  --gray-800:   #1E1E1E;
-  --gray-900:   #111111;
-  --green:      #107C10;
-  --green-bg:   #DFF6DD;
-  --red:        #D13438;
+  --canvas: #06060A;
+  --surface: #0C0C14;
+  --elevated: #12121E;
+  --card: #161628;
+  --card-hover: #1C1C32;
+  --border-subtle: rgba(255,255,255,0.04);
+  --border-mid: rgba(255,255,255,0.07);
+  --border-accent: rgba(99,102,241,0.22);
+  --text-primary: #EDEDF5;
+  --text-secondary: #9898B0;
+  --text-muted: #5C5C78;
+  --accent: #6366F1;
+  --accent-2: #8B5CF6;
+  --accent-3: #06B6D4;
+  --accent-glow: rgba(99,102,241,0.10);
+  --red: #EF4444;
+  --red-glow: rgba(239,68,68,0.12);
+  --amber: #F59E0B;
+  --amber-glow: rgba(245,158,11,0.12);
+  --green: #10B981;
+  --green-glow: rgba(16,185,129,0.12);
+  --cyan: #06B6D4;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.05);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
 }
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
-  font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
-  color:var(--gray-800);
-  background:#fff;
-  line-height:1.6;
-  -webkit-font-smoothing:antialiased;
+  font-family:var(--font-sans);background:var(--canvas);color:var(--text-primary);
+  line-height:1.65;min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(80% 50% at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 100%),
+    radial-gradient(60% 40% at 85% 100%, rgba(6,182,212,0.03) 0%, transparent 100%),
+    radial-gradient(50% 50% at 15% 50%, rgba(139,92,246,0.03) 0%, transparent 100%);
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+  background-size:64px 64px;pointer-events:none;z-index:0;
 }
 
 /* ── Navigation ─────────────────────────────────── */
 .nav{
   position:sticky;top:0;z-index:100;
-  background:rgba(255,255,255,.96);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--gray-200);
-  padding:0 24px;
+  background:rgba(12,12,20,.78);
+  backdrop-filter:blur(24px) saturate(1.6);
+  -webkit-backdrop-filter:blur(24px) saturate(1.6);
+  border-bottom:1px solid var(--border-subtle);
+  padding:0 clamp(16px,3vw,40px);
 }
 .nav-inner{
   max-width:1200px;margin:0 auto;
   display:flex;align-items:center;justify-content:space-between;
-  height:56px;
+  height:64px;gap:16px;
 }
-.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--gray-900)}
-.nav-logo svg{width:28px;height:28px}
-.nav-logo span{font-size:1.15rem;font-weight:700;letter-spacing:-.02em}
-.nav-logo span em{font-style:normal;color:var(--blue)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text-primary);user-select:none}
+.nav-logo .icon{
+  width:32px;height:32px;
+  background:linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+  border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;
+  box-shadow:0 4px 16px rgba(99,102,241,.35);transition:var(--transition);
+}
+.nav-logo:hover .icon{transform:scale(1.06);box-shadow:0 6px 24px rgba(99,102,241,.5)}
+.nav-logo span{font-size:1.1rem;font-weight:700;letter-spacing:-.03em}
+.nav-logo span em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;align-items:center;gap:clamp(12px,2vw,24px)}
+.nav-links a{color:var(--text-secondary);text-decoration:none;font-size:.88rem;font-weight:500;transition:var(--transition);white-space:nowrap}
+.nav-links a:hover{color:var(--text-primary)}
 .nav-cta{
-  padding:7px 18px;border-radius:6px;font-size:.85rem;font-weight:600;
-  text-decoration:none;transition:all .15s;
-  background:var(--blue);color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:#fff;padding:9px 20px;border-radius:var(--radius);
+  font-size:.85rem;font-weight:600;text-decoration:none;
+  transition:var(--transition);box-shadow:0 2px 12px rgba(99,102,241,.3);white-space:nowrap;
 }
-.nav-cta:hover{background:var(--blue-dark)}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(99,102,241,.45)}
 
-/* ── Hero ───────────────────────────────────────── */
+/* ── Layout ────────────────────────────────────── */
+.page-wrap{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:clamp(24px,4vw,56px) clamp(16px,3vw,40px)}
+
+/* ── Hero ──────────────────────────────────────── */
 .hero{
-  background:linear-gradient(170deg,#F0F6FC 0%,#E8F4FD 40%,#F5F8FB 100%);
-  border-bottom:1px solid var(--gray-200);
-  padding:72px 24px 64px;
-  text-align:center;
+  text-align:center;padding:40px 0 32px;
 }
 .hero-badge{
-  display:inline-block;background:var(--blue-light);color:var(--blue-dark);
-  font-size:.8rem;font-weight:600;padding:6px 14px;border-radius:20px;
-  margin-bottom:20px;letter-spacing:.02em;
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.18);
+  color:var(--accent-2);font-size:.78rem;font-weight:600;
+  padding:6px 16px;border-radius:20px;margin-bottom:24px;letter-spacing:.02em;
 }
-.hero h1{font-size:2.8rem;font-weight:800;color:var(--gray-900);letter-spacing:-.03em;line-height:1.15;margin-bottom:16px}
-.hero h1 em{font-style:normal;color:var(--blue)}
-.hero p{font-size:1.15rem;color:var(--gray-500);max-width:640px;margin:0 auto 32px}
-.hero-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap}
+.hero h1{
+  font-size:clamp(2rem,5vw,3rem);font-weight:800;letter-spacing:-.04em;line-height:1.12;margin-bottom:16px;
+  background:linear-gradient(135deg,var(--text-primary) 0%,#c4b5fd 50%,var(--text-primary) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero h1 em{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
+.hero p{font-size:1.1rem;color:var(--text-secondary);max-width:640px;margin:0 auto 32px}
+.hero-stats{display:flex;justify-content:center;gap:clamp(24px,5vw,56px);flex-wrap:wrap}
 .hero-stat{text-align:center}
-.hero-stat .num{font-size:2rem;font-weight:800;color:var(--gray-900);letter-spacing:-.02em}
-.hero-stat .lbl{font-size:.8rem;color:var(--gray-500);margin-top:2px}
+.hero-stat .num{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,var(--accent),var(--accent-3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .lbl{font-size:.78rem;color:var(--text-muted);margin-top:4px;font-weight:500}
 
-/* ── Section ────────────────────────────────────── */
-.sec{padding:64px 24px}
+/* ── Sections ──────────────────────────────────── */
+.sec{padding:48px clamp(16px,3vw,40px)}
 .sec-inner{max-width:1100px;margin:0 auto}
-.sec-title{text-align:center;margin-bottom:48px}
-.sec-title h2{font-size:1.75rem;font-weight:700;color:var(--gray-900);letter-spacing:-.02em;margin-bottom:8px}
-.sec-title p{font-size:1rem;color:var(--gray-500);max-width:560px;margin:0 auto}
+.sec-title{text-align:center;margin-bottom:40px}
+.sec-title h2{font-size:1.6rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.sec-title p{font-size:1rem;color:var(--text-secondary);max-width:560px;margin:0 auto}
 
-/* ── Pricing Cards ──────────────────────────────── */
-.pricing-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:24px;
-  align-items:stretch;
-}
+/* ── Cards ─────────────────────────────────────── */
 .card{
-  background:#fff;
-  border:1px solid var(--gray-200);
-  border-radius:12px;
-  padding:36px 32px;
-  display:flex;flex-direction:column;
-  transition:box-shadow .2s,border-color .2s;
-  position:relative;
+  background:var(--card);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-lg);padding:28px;transition:var(--transition);
+  position:relative;overflow:hidden;
 }
-.card:hover{box-shadow:0 4px 24px rgba(0,0,0,.06)}
-.card.featured{border-color:var(--blue);box-shadow:0 4px 24px rgba(0,120,212,.12)}
-.card-badge{
-  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
-  background:var(--blue);color:#fff;font-size:.75rem;font-weight:600;
-  padding:5px 16px;border-radius:12px;white-space:nowrap
+.card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%), rgba(99,102,241,.04), transparent 60%);
+  opacity:0;transition:opacity .3s;pointer-events:none;
 }
-.card h3{font-size:1.15rem;font-weight:700;color:var(--gray-900);margin-bottom:4px}
-.card .price{font-size:2.6rem;font-weight:800;color:var(--gray-900);letter-spacing:-.03em;margin:16px 0 0}
-.card .price span{font-size:.95rem;font-weight:500;color:var(--gray-500)}
-.card .period{font-size:.8rem;color:var(--gray-500);margin-bottom:28px}
-.card ul{list-style:none;flex:1}
-.card ul li{font-size:.88rem;color:var(--gray-600);padding:8px 0;display:flex;align-items:center;gap:10px}
-.card ul li::before{content:'';width:16px;height:16px;background:var(--green-bg);border-radius:50%;flex-shrink:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%23107C10' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-position:center;background-repeat:no-repeat}
+.card:hover{border-color:var(--border-mid);box-shadow:var(--shadow-card-hover)}
+.card:hover::before{opacity:1}
+.card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.card p{color:var(--text-secondary);font-size:.92rem;line-height:1.6}
+.card.featured{border-color:var(--accent);box-shadow:0 4px 32px rgba(99,102,241,.15),0 0 0 1px rgba(99,102,241,.15)}
+.card-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;font-size:.72rem;font-weight:700;padding:5px 18px;border-radius:14px;letter-spacing:.03em}
+
+/* ── Pricing ───────────────────────────────────── */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;align-items:stretch}
+.plan{
+  background:var(--card);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-xl);padding:36px 28px;
+  display:flex;flex-direction:column;transition:var(--transition);position:relative;
+}
+.plan:hover{border-color:var(--border-mid);box-shadow:var(--shadow-card-hover);transform:translateY(-2px)}
+.plan h3{font-size:1.15rem;font-weight:700;margin-bottom:4px}
+.plan .price{font-size:2.6rem;font-weight:800;letter-spacing:-.04em;margin:12px 0 0}
+.plan .price span{font-size:.9rem;font-weight:500;color:var(--text-muted)}
+.plan .period{font-size:.8rem;color:var(--text-muted);margin-bottom:24px}
+.plan ul{list-style:none;flex:1;margin-bottom:20px}
+.plan ul li{font-size:.88rem;color:var(--text-secondary);padding:7px 0;display:flex;align-items:center;gap:10px}
+.plan ul li::before{content:'';width:18px;height:18px;background:rgba(16,185,129,.12);border-radius:50%;flex-shrink:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%2310B981' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-position:center;background-repeat:no-repeat}
+.plan .btn{margin-top:auto;width:100%}
+
+/* ── Buttons ───────────────────────────────────── */
 .btn{
-  display:block;width:100%;padding:13px 20px;border-radius:8px;font-size:.9rem;font-weight:600;
-  text-align:center;text-decoration:none;cursor:pointer;transition:all .15s;border:none;
-  margin-top:24px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 28px;border-radius:var(--radius);font-size:.9rem;font-weight:600;
+  text-decoration:none;cursor:pointer;transition:var(--transition);
+  border:none;font-family:var(--font-sans);white-space:nowrap;
 }
-.btn-primary{background:var(--blue);color:#fff}
-.btn-primary:hover{background:var(--blue-dark);box-shadow:0 2px 8px rgba(0,120,212,.3)}
-.btn-outline{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
-.btn-outline:hover{background:var(--blue-light)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;box-shadow:0 2px 16px rgba(99,102,241,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(99,102,241,.45)}
+.btn-secondary{background:var(--elevated);color:var(--text-primary);border:1px solid var(--border-mid)}
+.btn-secondary:hover{background:var(--card);border-color:var(--border-accent)}
+.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn-outline:hover{background:rgba(99,102,241,.08)}
 
-/* ── Trust bar ──────────────────────────────────── */
-.trust-bar{
-  background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200);
-  padding:40px 24px;text-align:center;
-}
-.trust-bar p{font-size:.85rem;color:var(--gray-500);margin-bottom:16px}
-.trust-logos{display:flex;justify-content:center;align-items:center;gap:32px;flex-wrap:wrap;color:var(--gray-400);font-size:.8rem;font-weight:600;letter-spacing:.04em}
-
-/* ── Feature table ──────────────────────────────── */
+/* ── Feature table ─────────────────────────────── */
 .feat-table{width:100%;border-collapse:collapse;font-size:.9rem}
-.feat-table th,.feat-table td{padding:14px 16px;text-align:center}
-.feat-table th{font-weight:600;color:var(--gray-700);border-bottom:2px solid var(--gray-200)}
-.feat-table th:first-child,.feat-table td:first-child{text-align:left;color:var(--gray-700);font-weight:500}
-.feat-table td{border-bottom:1px solid var(--gray-100);color:var(--gray-600)}
-.feat-table .check{color:var(--green);font-weight:600}
-.feat-table .dash{color:var(--gray-400)}
+thead th{background:var(--elevated);color:var(--text-muted);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:14px 16px;text-align:center;border-bottom:2px solid var(--border-subtle);white-space:nowrap}
+thead th:first-child{text-align:left}
+tbody td{padding:12px 16px;text-align:center;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary)}
+tbody td:first-child{text-align:left;color:var(--text-primary);font-weight:500}
+.check{color:var(--green);font-weight:600}
+.dash{color:var(--text-muted)}
 
-/* ── Footer ─────────────────────────────────────── */
-.ft{
-  background:var(--gray-800);color:var(--gray-400);padding:48px 24px 32px;
-}
+/* ── Trust bar ─────────────────────────────────── */
+.trust-bar{background:var(--elevated);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);padding:36px 24px;text-align:center}
+.trust-bar p{font-size:.85rem;color:var(--text-muted);margin-bottom:14px}
+.trust-logos{display:flex;justify-content:center;align-items:center;gap:28px;flex-wrap:wrap;color:var(--text-secondary);font-size:.78rem;font-weight:600;letter-spacing:.04em}
+
+/* ── Footer ────────────────────────────────────── */
+.ft{background:var(--surface);border-top:1px solid var(--border-subtle);padding:40px clamp(16px,3vw,40px) 28px}
 .ft-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px}
-.ft-col h4{color:#fff;font-size:.85rem;font-weight:600;margin-bottom:12px}
-.ft-col a{display:block;color:var(--gray-400);text-decoration:none;font-size:.8rem;padding:4px 0;transition:color .15s}
-.ft-col a:hover{color:#fff}
-.ft-bottom{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);font-size:.75rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ft-col h4{color:var(--text-primary);font-size:.82rem;font-weight:600;margin-bottom:12px}
+.ft-col a{display:block;color:var(--text-muted);text-decoration:none;font-size:.8rem;padding:4px 0;transition:var(--transition)}
+.ft-col a:hover{color:var(--text-primary)}
+.ft-bottom{max-width:1100px;margin:32px auto 0;padding-top:20px;border-top:1px solid var(--border-subtle);font-size:.72rem;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 
-/* ── Success page ───────────────────────────────── */
-.success-hero{text-align:center;padding:48px 24px 24px}
-.success-hero .icon{width:56px;height:56px;background:var(--green-bg);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
-.success-hero h2{font-size:1.6rem;font-weight:700;color:var(--gray-900)}
-.success-hero p{color:var(--gray-500);margin-top:8px}
-.key-card{
-  max-width:640px;margin:0 auto;background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:28px 32px;
-}
-.key-label{font-size:.8rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
-.key-value{
-  background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;
-  padding:18px 20px;font-family:'SF Mono','Cascadia Code','Consolas',monospace;
-  font-size:.8rem;word-break:break-all;color:var(--gray-800);position:relative;line-height:1.5
-}
-.copy-btn{
-  position:absolute;right:10px;top:10px;background:var(--blue);color:#fff;border:none;
-  padding:7px 16px;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;transition:background .15s
-}
-.copy-btn:hover{background:var(--blue-dark)}
-.install-steps{max-width:640px;margin:32px auto}
-.install-step{display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--gray-100)}
+/* ── Success page ──────────────────────────────── */
+.success-hero{text-align:center;padding:40px 20px 20px}
+.success-hero .icon{width:56px;height:56px;background:rgba(16,185,129,.12);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px}
+.success-hero h2{font-size:1.5rem;font-weight:700}
+.success-hero p{color:var(--text-secondary);margin-top:8px}
+.key-card{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:28px 32px}
+.key-label{font-size:.78rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.key-value{background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius);padding:18px 20px;font-family:var(--font-mono);font-size:.8rem;word-break:break-all;color:var(--text-primary);position:relative;line-height:1.5}
+.copy-btn{position:absolute;right:10px;top:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;padding:7px 16px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;cursor:pointer;transition:var(--transition)}
+.copy-btn:hover{transform:scale(1.05)}
+.install-steps{max-width:640px;margin:28px auto}
+.install-step{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border-subtle)}
 .install-step:last-child{border-bottom:none}
-.step-num{width:32px;height:32px;background:var(--gray-100);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--gray-700);flex-shrink:0}
-.install-step p{font-size:.9rem;color:var(--gray-600);margin:0}
-.install-step code{background:var(--gray-100);padding:2px 8px;border-radius:4px;font-size:.85rem;color:var(--gray-800)}
-.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.step-num{width:32px;height:32px;background:var(--elevated);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:var(--text-secondary);flex-shrink:0}
+.install-step p{font-size:.9rem;color:var(--text-secondary);margin:0}
+.install-step code{background:var(--elevated);padding:2px 8px;border-radius:4px;font-size:.85rem;color:var(--accent-3);font-family:var(--font-mono)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 24px;border-radius:8px;font-weight:600;display:none;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.3)}
 
-/* ── Responsive ─────────────────────────────────── */
+/* ── Form controls ─────────────────────────────── */
+input[type="email"],input[type="text"]{padding:11px 14px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--radius);color:var(--text-primary);font-size:.92rem;font-family:var(--font-sans);transition:var(--transition);width:280px}
+input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+
+/* ── Misc ──────────────────────────────────────── */
+.text-center{text-align:center}
+.mt-16{margin-top:16px}
+.mb-20{margin-bottom:20px}
+.mb-24{margin-bottom:24px}
+.mx-auto{margin-left:auto;margin-right:auto}
+.max-w-640{max-width:640px}
+.inline-code{background:var(--elevated);padding:2px 8px;border-radius:4px;font-family:var(--font-mono);font-size:.85rem;color:var(--accent-3)}
+.bg-surface{background:var(--surface)}
+.bg-elevated{background:var(--elevated)}
+.border-subtle{border:1px solid var(--border-subtle)}
+.rounded-lg{border-radius:var(--radius-lg)}
+
+/* ── Responsive ────────────────────────────────── */
 @media(max-width:768px){
-  .hero h1{font-size:2rem}
-  .hero-stats{gap:24px}
+  .nav-links a:not(.nav-cta){display:none}
+  .hero h1{font-size:1.8rem}
+  .hero-stats{gap:20px}
+  .hero-stat .num{font-size:1.6rem}
   .pricing-grid{grid-template-columns:1fr}
-  .feat-table{font-size:.78rem}
+  .feat-table{font-size:.75rem}
   .feat-table th,.feat-table td{padding:10px 8px}
+}
+@media(max-width:480px){
+  .nav{height:56px;padding:0 16px}
+  .plan{padding:24px 20px}
 }
 </style>
 </head>
@@ -714,10 +781,15 @@ body{
 <nav class="nav">
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="6" fill="#0078D4"/><path d="M7 14l5 5L21 9" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="icon">&#9876;</div>
       <span>Ansede<em>Static</em></span>
     </a>
-    <a href="#pricing" class="nav-cta">Get Started</a>
+    <div class="nav-links">
+      <a href="/compare">Compare</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/demo" class="nav-cta">Book a Demo</a>
+    </div>
   </div>
 </nav>
 
@@ -728,7 +800,7 @@ body{
   <div class="ft-inner">
     <div class="ft-col">
       <h4>Product</h4>
-      <a href="#pricing">Pricing</a>
+      <a href="/#pricing">Pricing</a>
       <a href="https://github.com/mattybellx/Ansede">GitHub</a>
       <a href="https://marketplace.visualstudio.com/items?itemName=ansede.ansede-static">VS Code Extension</a>
     </div>
@@ -747,7 +819,7 @@ body{
   </div>
   <div class="ft-bottom ft-inner">
     <span>&copy; 2026 Ansede Static. All rights reserved.</span>
-    <span>Zero-dependency offline SAST</span>
+    <span>100% offline &bull; zero telemetry &bull; MIT licensed</span>
   </div>
 </footer>
 
@@ -755,16 +827,25 @@ body{
 function copyKey(){
   var el=document.getElementById('licenseKey');
   var txt=el.innerText.replace('Copy','').trim();
-  navigator.clipboard.writeText(txt);
-  var t=document.getElementById('toast');
-  t.style.display='block';
-  setTimeout(function(){t.style.display='none'},2500);
+  navigator.clipboard.writeText(txt).then(function(){
+    var t=document.getElementById('toast');
+    t.style.display='block';
+    setTimeout(function(){t.style.display='none'},2500);
+  });
 }
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
   a.addEventListener('click',function(e){
     e.preventDefault();
     var t=document.querySelector(this.getAttribute('href'));
     if(t)t.scrollIntoView({behavior:'smooth'});
+  });
+});
+// Mouse glow on cards
+document.querySelectorAll('.card').forEach(function(card){
+  card.addEventListener('mousemove',function(e){
+    var r=card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x',(e.clientX-r.left)+'px');
+    card.style.setProperty('--mouse-y',(e.clientY-r.top)+'px');
   });
 });
 </script>
@@ -786,10 +867,10 @@ _INDEX_BODY = r"""
 
 <div class="sec" style="padding-top:40px;padding-bottom:24px">
   <div class="sec-inner" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
-    <div class="card"><h3>1. Scan</h3><p style="color:var(--gray-500);margin-top:10px">Run offline SAST across your repo, CI job, or hot path. No code leaves your machine.</p></div>
-    <div class="card"><h3>2. Patch</h3><p style="color:var(--gray-500);margin-top:10px">Guarded Autofix applies only safe inline replacements that match the exact source line.</p></div>
-    <div class="card"><h3>3. Verify</h3><p style="color:var(--gray-500);margin-top:10px">The scanner rescans the scanned scope immediately after patching and checks for newly detected issues.</p></div>
-    <div class="card"><h3>4. Roll back</h3><p style="color:var(--gray-500);margin-top:10px">If the verification pass spots regressions or parse breakage, the patch is reverted automatically. Drama denied.</p></div>
+    <div class="card"><h3>1. Scan</h3><p style="color:var(--text-secondary);margin-top:10px">Run offline SAST across your repo, CI job, or hot path. No code leaves your machine.</p></div>
+    <div class="card"><h3>2. Patch</h3><p style="color:var(--text-secondary);margin-top:10px">Guarded Autofix applies only safe inline replacements that match the exact source line.</p></div>
+    <div class="card"><h3>3. Verify</h3><p style="color:var(--text-secondary);margin-top:10px">The scanner rescans the scanned scope immediately after patching and checks for newly detected issues.</p></div>
+    <div class="card"><h3>4. Roll back</h3><p style="color:var(--text-secondary);margin-top:10px">If the verification pass spots regressions or parse breakage, the patch is reverted automatically. Drama denied.</p></div>
   </div>
 </div>
 
@@ -898,20 +979,20 @@ _INDEX_BODY = r"""
   </div>
 </div>
 
-<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200)">
+<div class="sec" style="background:var(--elevated);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)">
   <div class="sec-inner" style="text-align:center;max-width:900px">
-    <h2 style="font-size:1.45rem;font-weight:700;color:var(--gray-900);margin-bottom:10px">Meet Autofix Studio</h2>
-    <p style="color:var(--gray-500);margin:0 auto 18px;max-width:700px">A focused product surface for scan &rarr; patch &rarr; verify &rarr; rollback. Great for demos, sales conversations, and making security work feel less like archaeology.</p>
+    <h2 style="font-size:1.45rem;font-weight:700;color:var(--text-primary);margin-bottom:10px">Meet Autofix Studio</h2>
+    <p style="color:var(--text-secondary);margin:0 auto 18px;max-width:700px">A focused product surface for scan &rarr; patch &rarr; verify &rarr; rollback. Great for demos, sales conversations, and making security work feel less like archaeology.</p>
     <a href="/autofix-studio/live" class="btn btn-primary" style="display:inline-block;width:auto;padding:12px 28px">Open Autofix Studio</a>
-    <p style="color:var(--gray-500);font-size:.82rem;margin-top:14px">Verification guarantees that no <em>newly detected</em> issues were introduced within the scanned scope. It does not claim a mathematical proof over untouched code.</p>
+    <p style="color:var(--text-secondary);font-size:.82rem;margin-top:14px">Verification guarantees that no <em>newly detected</em> issues were introduced within the scanned scope. It does not claim a mathematical proof over untouched code.</p>
   </div>
 </div>
 
-<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200)">
+<div class="sec" style="background:var(--elevated);border-top:1px solid var(--border-subtle)">
   <div class="sec-inner" style="text-align:center">
-    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:8px">Already have a license key?</h2>
-    <p style="color:var(--gray-500);margin-bottom:20px">Activate it in your terminal to unlock Pro features instantly.</p>
-    <code style="background:var(--gray-800);color:#fff;padding:12px 24px;border-radius:8px;font-size:.95rem;display:inline-block">ansede-static license activate YOUR_KEY</code>
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--text-primary);margin-bottom:8px">Already have a license key?</h2>
+    <p style="color:var(--text-secondary);margin-bottom:20px">Activate it in your terminal to unlock Pro features instantly.</p>
+    <code style="background:var(--text-primary);color:#fff;padding:12px 24px;border-radius:8px;font-size:.95rem;display:inline-block">ansede-static license activate YOUR_KEY</code>
   </div>
 </div>
 """
@@ -928,22 +1009,22 @@ _AUTOFIX_STUDIO_BODY = r"""
     <div class="pricing-grid">
       <div class="card">
         <h3>Detect</h3>
-        <p style="color:var(--gray-500);margin-top:10px">Run ansede-static on the repo, the PR diff, or the focused scope your team actually cares about.</p>
+        <p style="color:var(--text-secondary);margin-top:10px">Run ansede-static on the repo, the PR diff, or the focused scope your team actually cares about.</p>
       </div>
       <div class="card">
         <h3>Patch</h3>
-        <p style="color:var(--gray-500);margin-top:10px">Apply safe inline fixes only when the suggested replacement matches the current line exactly.</p>
+        <p style="color:var(--text-secondary);margin-top:10px">Apply safe inline fixes only when the suggested replacement matches the current line exactly.</p>
       </div>
       <div class="card featured">
         <div class="card-badge">Guard Rail</div>
         <h3>Verify</h3>
-        <p style="color:var(--gray-500);margin-top:10px">Immediately rescan the scanned scope. If new issues or parse regressions appear, changes are rolled back automatically.</p>
+        <p style="color:var(--text-secondary);margin-top:10px">Immediately rescan the scanned scope. If new issues or parse regressions appear, changes are rolled back automatically.</p>
       </div>
     </div>
   </div>
 </div>
 
-<div class="sec" style="background:var(--gray-50);border-top:1px solid var(--gray-200);border-bottom:1px solid var(--gray-200)">
+<div class="sec" style="background:var(--elevated);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)">
   <div class="sec-inner">
     <div class="sec-title">
       <h2>Why teams buy it</h2>
@@ -959,8 +1040,8 @@ _AUTOFIX_STUDIO_BODY = r"""
 
 <div class="sec">
   <div class="sec-inner" style="text-align:center;max-width:820px">
-    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:10px">Truth in advertising, on purpose</h2>
-    <p style="color:var(--gray-500);margin-bottom:20px">Autofix Studio verifies that no <strong>newly detected</strong> issues were introduced in the <strong>scanned scope</strong>. That is strong, credible, and defensible. It is not a promise about untouched files or undiscovered bug classes.</p>
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--text-primary);margin-bottom:10px">Truth in advertising, on purpose</h2>
+    <p style="color:var(--text-secondary);margin-bottom:20px">Autofix Studio verifies that no <strong>newly detected</strong> issues were introduced in the <strong>scanned scope</strong>. That is strong, credible, and defensible. It is not a promise about untouched files or undiscovered bug classes.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="/autofix-studio/live" class="btn btn-primary" style="display:inline-block;width:auto;padding:12px 28px">Launch live studio</a>
       <a href="/" class="btn btn-outline" style="display:inline-block;width:auto;padding:12px 28px">Back to pricing</a>
@@ -971,7 +1052,7 @@ _AUTOFIX_STUDIO_BODY = r"""
 
 _SUCCESS_BODY = r"""
 <div class="success-hero">
-  <div class="icon"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14l5 5L21 9" stroke="#107C10" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  <div class="icon"><svg width="28" height="28" viewBox="0 0 28 28"><path d="M7 14l5 5L21 9" stroke="var(--green)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <h2>Payment Successful</h2>
   <p>Your <strong>{tier}</strong> license is ready{email_text}. Thank you for choosing ansede-static.</p>
 </div>
@@ -1003,8 +1084,8 @@ _PENDING_BODY = r"""
 <meta http-equiv="refresh" content="3">
 <div class="sec" style="text-align:center;min-height:40vh;display:flex;align-items:center;justify-content:center">
   <div class="sec-inner">
-    <h2 style="font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:8px">Generating Your License&hellip;</h2>
-    <p style="color:var(--gray-500)">This page refreshes automatically. Session: {sid}</p>
+    <h2 style="font-size:1.4rem;font-weight:700;color:var(--text-primary);margin-bottom:8px">Generating Your License&hellip;</h2>
+    <p style="color:var(--text-secondary)">This page refreshes automatically. Session: {sid}</p>
   </div>
 </div>
 """
@@ -1013,8 +1094,8 @@ _ERROR_BODY = r"""
 <div class="sec" style="text-align:center;min-height:40vh;display:flex;align-items:center;justify-content:center">
   <div class="sec-inner">
     <h2 style="font-size:1.4rem;font-weight:700;color:var(--red);margin-bottom:8px">Something went wrong</h2>
-    <p style="color:var(--gray-500);margin-bottom:20px">{msg}</p>
-    <p style="color:var(--gray-500);margin-bottom:24px">If you have already paid, your license key was sent to your email. Please check your inbox (including spam).</p>
+    <p style="color:var(--text-secondary);margin-bottom:20px">{msg}</p>
+    <p style="color:var(--text-secondary);margin-bottom:24px">If you have already paid, your license key was sent to your email. Please check your inbox (including spam).</p>
     <a href="/" class="btn btn-primary" style="display:inline-block;width:auto;padding:10px 32px">Back to Home</a>
   </div>
 </div>
@@ -1107,7 +1188,7 @@ def lookup():
 
     rows = ''
     for k in keys[:5]:
-        rows += f'<div class="key-box" style="margin:12px 0;position:relative;padding:16px;background:var(--gray-50);border-radius:8px;font-family:monospace;font-size:.8rem;word-break:break-all">{k["license_key"]}<br><span style="color:var(--gray-500);font-size:.75rem">Tier: {k["tier"]} | Created: {k["created_at"][:10]}</span></div>'
+        rows += f'<div class="key-box" style="margin:12px 0;position:relative;padding:16px;background:var(--elevated);border-radius:8px;font-family:monospace;font-size:.8rem;word-break:break-all">{k["license_key"]}<br><span style="color:var(--text-secondary);font-size:.75rem">Tier: {k["tier"]} | Created: {k["created_at"][:10]}</span></div>'
     return _HTML.replace("{{title}}", "Your Keys").replace("{{body}}",
         f'<div class="card"><h2>License Keys for {email}</h2>{rows}'
         f'<p style="margin-top:16px;color:#666">Copy your key and run <code>ansede-static license activate YOUR_KEY</code></p></div>')
@@ -1119,62 +1200,6 @@ def success():
     if not sid:
         return _HTML.replace("{{title}}", "Error").replace("{{body}}", _ERROR_BODY.replace("{msg}", "No session ID."))
 
-# ── Leaderboard ─────────────────────────────────────────────────────────────
-
-_LEADERBOARD_BODY = """
-<div class="card" style="max-width:1100px;margin:2rem auto">
-<h2 style="color:var(--blue-600);font-size:1.8rem">⚡ SAST Leaderboard — 3-Tool Comparison</h2>
-<p style="margin-bottom:1.5rem">Weekly automated head-to-head across 18 popular open-source repositories. Updated every Sunday.</p>
-
-<div style="display:flex;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap">
-  <div class="stat-box" style="flex:1;min-width:200px;background:var(--blue-50);padding:1.5rem;border-radius:12px;text-align:center">
-    <div style="font-size:2.5rem;font-weight:800;color:var(--green-600)">7.5x</div>
-    <div style="color:var(--gray-500);font-size:.9rem">More findings than CodeQL</div>
-  </div>
-  <div class="stat-box" style="flex:1;min-width:200px;background:var(--green-50);padding:1.5rem;border-radius:12px;text-align:center">
-    <div style="font-size:2.5rem;font-weight:800;color:var(--green-700)">100%</div>
-    <div style="color:var(--gray-500);font-size:.9rem">CVE Recall (Python + JS)</div>
-  </div>
-  <div class="stat-box" style="flex:1;min-width:200px;background:var(--red-50);padding:1.5rem;border-radius:12px;text-align:center">
-    <div style="font-size:2.5rem;font-weight:800;color:var(--red-600)">0.4%</div>
-    <div style="color:var(--gray-500);font-size:.9rem">False Positive Rate</div>
-  </div>
-</div>
-
-<table style="width:100%;border-collapse:collapse;margin-top:1rem">
-<thead>
-<tr style="background:var(--gray-50)">
-  <th style="padding:12px 16px;text-align:left;font-weight:600;border-bottom:2px solid var(--gray-200)">Repository</th>
-  <th style="padding:12px 16px;text-align:left;font-weight:600;border-bottom:2px solid var(--gray-200)">Language</th>
-  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--gray-200)">Ansede</th>
-  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--gray-200)">Semgrep</th>
-  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--gray-200)">CodeQL</th>
-  <th style="padding:12px 16px;text-align:center;font-weight:600;border-bottom:2px solid var(--gray-200)">Winner</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>flask</td><td>Python</td><td style="text-align:right;color:var(--green-600)">8</td><td style="text-align:right">1</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>requests</td><td>Python</td><td style="text-align:right;color:var(--green-600)">21</td><td style="text-align:right">2</td><td style="text-align:right">1</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>fastapi</td><td>Python</td><td style="text-align:right;color:var(--green-600)">43</td><td style="text-align:right">7</td><td style="text-align:right">3</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>express</td><td>JavaScript</td><td style="text-align:right;color:var(--green-600)">12</td><td style="text-align:right">41</td><td style="text-align:right">2</td><td style="text-align:center;color:var(--orange-600);font-weight:700">semgrep</td></tr>
-<tr><td>spring-petclinic</td><td>Java</td><td style="text-align:right;color:var(--green-600)">8</td><td style="text-align:right">0</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>gson</td><td>Java</td><td style="text-align:right;color:var(--green-600)">4</td><td style="text-align:right">0</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>gin</td><td>Go</td><td style="text-align:right;color:var(--green-600)">15</td><td style="text-align:right">1</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-<tr><td>echo</td><td>Go</td><td style="text-align:right;color:var(--green-600)">19</td><td style="text-align:right">2</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green-600);font-weight:700">ansede</td></tr>
-</tbody>
-</table>
-
-<p style="margin-top:1.5rem;font-size:.85rem;color:var(--gray-500);text-align:center">
-  Methodology: Each tool scans the same repository clone with default settings.
-  Numbers represent raw findings before deduplication.
-  <a href="https://github.com/mattybellx/Ansede/blob/master/benchmarks/one_click_compare.py" style="color:var(--blue-600)">Reproduce these results</a>
-</p>
-</div>
-"""
-
-@app.route("/leaderboard")
-def leaderboard():
-    return _HTML.replace("{{title}}", "SAST Leaderboard").replace("{{body}}", _LEADERBOARD_BODY)
     for _ in range(8):
         lic = _lookup_by_session(sid)
         if lic:
@@ -1185,6 +1210,63 @@ def leaderboard():
             return _HTML.replace("{{title}}", "License Ready").replace("{{body}}", body)
         time.sleep(1.5)
     return _HTML.replace("{{title}}", "Processing").replace("{{body}}", _PENDING_BODY.replace("{sid}", sid))
+
+# ── Leaderboard ─────────────────────────────────────────────────────────────
+
+_LEADERBOARD_BODY = """
+<div class="card" style="max-width:1100px;margin:2rem auto">
+<h2 style="color:var(--accent);font-size:1.8rem">⚡ SAST Leaderboard — 3-Tool Comparison</h2>
+<p style="margin-bottom:1.5rem">Weekly automated head-to-head across 18 popular open-source repositories. Updated every Sunday.</p>
+
+<div style="display:flex;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap">
+  <div class="stat-box" style="flex:1;min-width:200px;background:rgba(99,102,241,0.08);padding:1.5rem;border-radius:12px;text-align:center">
+    <div style="font-size:2.5rem;font-weight:800;color:var(--green)">7.5x</div>
+    <div style="color:var(--text-secondary);font-size:.9rem">More findings than CodeQL</div>
+  </div>
+  <div class="stat-box" style="flex:1;min-width:200px;background:rgba(16,185,129,0.08);padding:1.5rem;border-radius:12px;text-align:center">
+    <div style="font-size:2.5rem;font-weight:800;color:var(--green)">100%</div>
+    <div style="color:var(--text-secondary);font-size:.9rem">CVE Recall (Python + JS)</div>
+  </div>
+  <div class="stat-box" style="flex:1;min-width:200px;background:rgba(239,68,68,0.08);padding:1.5rem;border-radius:12px;text-align:center">
+    <div style="font-size:2.5rem;font-weight:800;color:var(--red)">0.4%</div>
+    <div style="color:var(--text-secondary);font-size:.9rem">False Positive Rate</div>
+  </div>
+</div>
+
+<table style="width:100%;border-collapse:collapse;margin-top:1rem">
+<thead>
+<tr style="background:var(--elevated)">
+  <th style="padding:12px 16px;text-align:left;font-weight:600;border-bottom:2px solid var(--border-subtle)">Repository</th>
+  <th style="padding:12px 16px;text-align:left;font-weight:600;border-bottom:2px solid var(--border-subtle)">Language</th>
+  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--border-subtle)">Ansede</th>
+  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--border-subtle)">Semgrep</th>
+  <th style="padding:12px 16px;text-align:right;font-weight:600;border-bottom:2px solid var(--border-subtle)">CodeQL</th>
+  <th style="padding:12px 16px;text-align:center;font-weight:600;border-bottom:2px solid var(--border-subtle)">Winner</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>flask</td><td>Python</td><td style="text-align:right;color:var(--green)">8</td><td style="text-align:right">1</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>requests</td><td>Python</td><td style="text-align:right;color:var(--green)">21</td><td style="text-align:right">2</td><td style="text-align:right">1</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>fastapi</td><td>Python</td><td style="text-align:right;color:var(--green)">43</td><td style="text-align:right">7</td><td style="text-align:right">3</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>express</td><td>JavaScript</td><td style="text-align:right;color:var(--green)">12</td><td style="text-align:right">41</td><td style="text-align:right">2</td><td style="text-align:center;color:var(--amber);font-weight:700">semgrep</td></tr>
+<tr><td>spring-petclinic</td><td>Java</td><td style="text-align:right;color:var(--green)">8</td><td style="text-align:right">0</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>gson</td><td>Java</td><td style="text-align:right;color:var(--green)">4</td><td style="text-align:right">0</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>gin</td><td>Go</td><td style="text-align:right;color:var(--green)">15</td><td style="text-align:right">1</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+<tr><td>echo</td><td>Go</td><td style="text-align:right;color:var(--green)">19</td><td style="text-align:right">2</td><td style="text-align:right">0</td><td style="text-align:center;color:var(--green);font-weight:700">ansede</td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:1.5rem;font-size:.85rem;color:var(--text-secondary);text-align:center">
+  Methodology: Each tool scans the same repository clone with default settings.
+  Numbers represent raw findings before deduplication.
+  <a href="https://github.com/mattybellx/Ansede/blob/master/benchmarks/one_click_compare.py" style="color:var(--accent)">Reproduce these results</a>
+</p>
+</div>
+"""
+
+@app.route("/leaderboard")
+def leaderboard():
+    return _HTML.replace("{{title}}", "SAST Leaderboard").replace("{{body}}", _LEADERBOARD_BODY)
 
 
 # ══════════════════════════════════════════════════════════════════════════

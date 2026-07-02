@@ -4,105 +4,612 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book a Demo — Ansede Static</title>
+<meta name="description" content="See Ansede scan your code live in a 30-minute personalized demo. Discover what your current SAST tool is missing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0d1117; color:#c9d1d9; line-height:1.6; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
-.container { max-width:600px; width:100%; }
-.card { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:2.5rem; }
-h1 { font-size:1.8rem; color:#58a6ff; margin-bottom:0.5rem; }
-.subtitle { color:#8b949e; margin-bottom:2rem; }
-.form-group { margin-bottom:1.2rem; }
-label { display:block; color:#8b949e; font-size:0.85rem; margin-bottom:0.3rem; }
-input, textarea, select { width:100%; padding:0.7rem; background:#0d1117; border:1px solid #30363d; border-radius:6px; color:#c9d1d9; font-size:0.95rem; font-family:inherit; }
-input:focus, textarea:focus, select:focus { border-color:#58a6ff; outline:none; }
-button { width:100%; padding:0.9rem; background:#238636; color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:bold; cursor:pointer; transition:background 0.2s; }
-button:hover { background:#2ea043; }
-.success { background:#1a3a2a; border:1px solid #3fb950; border-radius:8px; padding:1.5rem; text-align:center; display:none; }
-.success h2 { color:#3fb950; }
-.benefits { margin:1.5rem 0; padding:1rem; background:#0d1117; border-radius:8px; }
-.benefits h3 { color:#8b949e; font-size:0.85rem; margin-bottom:0.8rem; text-transform:uppercase; }
-.benefits ul { list-style:none; }
-.benefits ul li { padding:0.3rem 0; font-size:0.9rem; }
-.benefits ul li::before { content:"✅ "; }
-.back { text-align:center; margin-top:1.5rem; }
-.back a { color:#58a6ff; text-decoration:none; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   Ansede Static — Premium Unified Design System v6.0
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --canvas: #06060A;
+  --surface: #0C0C14;
+  --elevated: #12121E;
+  --card: #161628;
+  --card-hover: #1C1C32;
+  --border-subtle: rgba(255,255,255,0.04);
+  --border-mid: rgba(255,255,255,0.07);
+  --border-accent: rgba(99,102,241,0.22);
+  --text-primary: #EDEDF5;
+  --text-secondary: #9898B0;
+  --text-muted: #5C5C78;
+  --accent: #6366F1;
+  --accent-2: #8B5CF6;
+  --accent-3: #06B6D4;
+  --accent-glow: rgba(99,102,241,0.10);
+  --red: #EF4444;
+  --red-glow: rgba(239,68,68,0.12);
+  --amber: #F59E0B;
+  --amber-glow: rgba(245,158,11,0.12);
+  --green: #10B981;
+  --green-glow: rgba(16,185,129,0.12);
+  --cyan: #06B6D4;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.05);
+  --shadow-glow: 0 4px 24px var(--accent-glow);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--canvas);
+  color: var(--text-primary);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Ambient backgrounds */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(80% 50% at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 100%),
+    radial-gradient(60% 40% at 85% 100%, rgba(6,182,212,0.03) 0%, transparent 100%),
+    radial-gradient(50% 50% at 15% 50%, rgba(139,92,246,0.03) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Header */
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12, 12, 20, 0.78);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 clamp(16px, 3vw, 40px);
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+
+.app-header .logo-group {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; user-select: none;
+}
+
+.app-header .logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+  transition: var(--transition);
+}
+
+.app-header .logo-group:hover .logo-icon {
+  transform: scale(1.06);
+  box-shadow: 0 6px 24px rgba(99,102,241,0.5);
+}
+
+.app-header .logo-text {
+  font-weight: 700; font-size: 17px; letter-spacing: -0.03em;
+  color: var(--text-primary); white-space: nowrap;
+}
+
+.app-header .logo-text em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.app-header .nav-links {
+  display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
+}
+
+.app-header .nav-links a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 0.88rem; font-weight: 500;
+  transition: var(--transition); border-radius: var(--radius-sm); white-space: nowrap;
+}
+
+.app-header .nav-links a:hover { color: var(--text-primary); }
+
+.app-header .nav-cta {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; padding: 9px 20px; border-radius: var(--radius);
+  font-size: 0.85rem; font-weight: 600; text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 2px 12px rgba(99,102,241,0.3); white-space: nowrap;
+}
+
+.app-header .nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.45);
+}
+
+/* Layout */
+.page-wrap {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 40px);
+}
+
+/* Hero */
+.hero {
+  text-align: center; padding: 40px 0 32px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.18);
+  color: var(--accent-2); font-size: 0.78rem; font-weight: 600;
+  padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1.12; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, #c4b5fd 50%, var(--text-primary) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero p {
+  font-size: 1.1rem; color: var(--text-secondary);
+  max-width: 640px; margin: 0 auto 32px;
+}
+
+.hero-stats {
+  display: flex; justify-content: center;
+  gap: clamp(24px, 5vw, 56px); flex-wrap: wrap;
+}
+
+.hero-stat { text-align: center; }
+
+.hero-stat .num {
+  font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-stat .lbl {
+  font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; font-weight: 500;
+}
+
+/* Sections */
+.section { margin-bottom: 48px; }
+
+.section-title {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Cards */
+.card {
+  background: var(--card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99,102,241,0.04), transparent 60%);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+
+.card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-card-hover); }
+.card:hover::before { opacity: 1; }
+
+.card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; }
+
+.card.win { border-left: 3px solid var(--green); }
+.card.loss { border-left: 3px solid var(--red); }
+.card.neutral { border-left: 3px solid var(--amber); }
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); background: var(--card);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+thead th {
+  background: var(--elevated); color: var(--text-muted);
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 14px 16px; text-align: left;
+  border-bottom: 1px solid var(--border-subtle); white-space: nowrap;
+}
+
+tbody td {
+  padding: 12px 16px; border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(99,102,241,0.03); }
+
+td.win { color: var(--green); font-weight: 600; }
+td.lose { color: var(--red); }
+td.tie { color: var(--amber); }
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
+}
+
+.badge-green { background: rgba(16,185,129,0.12); color: var(--green); }
+.badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
+.badge-blue { background: rgba(99,102,241,0.12); color: var(--accent-2); }
+.badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 28px; border-radius: var(--radius);
+  font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  cursor: pointer; transition: var(--transition);
+  border: none; font-family: var(--font-sans); white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; box-shadow: 0 2px 16px rgba(99,102,241,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(99,102,241,0.45);
+}
+
+.btn-secondary {
+  background: var(--elevated); color: var(--text-primary);
+  border: 1px solid var(--border-mid);
+}
+
+.btn-secondary:hover { background: var(--card); border-color: var(--border-accent); }
+
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.plan {
+  background: var(--card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl); padding: 36px 28px;
+  display: flex; flex-direction: column;
+  transition: var(--transition); position: relative;
+}
+
+.plan:hover {
+  border-color: var(--border-mid);
+  box-shadow: var(--shadow-card-hover); transform: translateY(-2px);
+}
+
+.plan.featured {
+  border-color: var(--accent);
+  box-shadow: 0 4px 32px rgba(99,102,241,0.15), 0 0 0 1px rgba(99,102,241,0.15);
+}
+
+.plan-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; font-size: 0.72rem; font-weight: 700;
+  padding: 5px 18px; border-radius: 14px; letter-spacing: 0.03em;
+}
+
+.plan h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+.plan .price { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; margin: 12px 0 0; }
+.plan .price span { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+.plan .period { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
+.plan ul { list-style: none; flex: 1; margin-bottom: 20px; }
+.plan ul li { font-size: 0.88rem; color: var(--text-secondary); padding: 7px 0; display: flex; align-items: center; gap: 10px; }
+.plan ul li::before { content: ''; width: 18px; height: 18px; background: rgba(16,185,129,0.12); border-radius: 50%; flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%2310B981' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center; background-repeat: no-repeat; }
+
+.plan .btn { margin-top: auto; width: 100%; }
+
+/* CTA Banner */
+.cta-banner {
+  text-align: center; padding: 40px 20px; margin: 48px 0 24px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04));
+  border: 1px solid rgba(99,102,241,0.12); border-radius: var(--radius-xl);
+}
+
+.cta-banner h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+.cta-banner p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 20px; }
+
+.cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Forms */
+.form-group { margin-bottom: 1.2rem; }
+
+.form-group label {
+  display: block; color: var(--text-muted);
+  font-size: 0.82rem; font-weight: 500; margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 11px 14px;
+  background: var(--surface); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius); color: var(--text-primary);
+  font-size: 0.92rem; font-family: var(--font-sans);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--accent); outline: none;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* Footer */
+.app-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px clamp(16px, 3vw, 40px) 28px; margin-top: 56px;
+  position: relative; z-index: 1;
+}
+
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px;
+}
+
+.footer-col h4 { color: var(--text-primary); font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; }
+.footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; padding: 4px 0; transition: var(--transition); }
+.footer-col a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  max-width: 1200px; margin: 32px auto 0; padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.72rem; color: var(--text-muted);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #fff; padding: 10px 24px;
+  border-radius: 8px; font-weight: 600; display: none; z-index: 999;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Code */
+code {
+  background: var(--elevated); padding: 2px 8px; border-radius: 4px;
+  font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-header .nav-links a:not(.nav-cta) { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero-stats { gap: 20px; }
+  .hero-stat .num { font-size: 1.8rem; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .app-header { padding: 0 16px; height: 56px; }
+  .plan { padding: 24px 20px; }
+}
+
+/* Mouse-glow disable on touch */
+@media (hover: none) {
+  .card::before { display: none; }
+}
+
+
+/* Demo-specific overrides */
+body {
+  display: flex; flex-direction: column; min-height: 100vh;
+}
+.page-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  max-width: 640px; width: 100%;
+}
+.demo-card {
+  background: var(--card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl); padding: 40px 36px;
+  width: 100%; transition: var(--transition);
+}
+.demo-card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-card-hover); }
+.demo-card h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+.demo-card .subtitle { color: var(--text-secondary); margin-bottom: 28px; }
+
+.benefits-box {
+  background: var(--elevated); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 24px;
+}
+.benefits-box h3 { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+.benefits-box ul { list-style: none; }
+.benefits-box ul li { font-size: 0.88rem; color: var(--text-secondary); padding: 5px 0; display: flex; align-items: center; gap: 10px; }
+.benefits-box ul li::before { content: '\2713'; color: var(--green); font-weight: 700; font-size: 1rem; }
+
+.back-link { text-align: center; margin-top: 24px; }
+.back-link a { color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition); }
+.back-link a:hover { color: var(--text-primary); }
+
+.success-card {
+  background: var(--card); border: 1px solid var(--green);
+  border-radius: var(--radius-xl); padding: 48px 36px;
+  text-align: center; display: none;
+}
+.success-card .check-icon {
+  width: 56px; height: 56px; background: rgba(16,185,129,0.12);
+  border-radius: 50%; display: inline-flex; align-items: center;
+  justify-content: center; margin-bottom: 16px; font-size: 24px;
+}
+.success-card h2 { color: var(--green); font-size: 1.4rem; margin-bottom: 12px; }
+.success-card p { color: var(--text-secondary); margin-bottom: 12px; }
 </style>
 </head>
 <body>
-<div class="container">
-    <div class="card" id="form-card">
-        <h1>📅 Book a Demo</h1>
-        <p class="subtitle">See Ansede scan your code in 30 minutes. No setup required.</p>
-        
-        <div class="benefits">
-            <h3>What you'll see</h3>
-            <ul>
-                <li>Live scan of your repository</li>
-                <li>Side-by-side comparison with your current SAST tool</li>
-                <li>CVEs your current tool missed</li>
-                <li>IDOR/auth vulnerabilities only Ansede detects</li>
-                <li>Custom pricing for your team size</li>
-            </ul>
+
+<header class="app-header">
+  <a href="/" class="logo-group">
+    <div class="logo-icon">&#9876;</div>
+    <div class="logo-text">Ansede<em>Static</em></div>
+  </a>
+  <nav class="nav-links">
+    <a href="/compare">Compare</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/leaderboard">Leaderboard</a>
+    <a href="/demo" class="nav-cta">Book a Demo</a>
+  </nav>
+</header>
+
+<div class="page-wrap">
+  <div>
+    <div class="demo-card" id="form-card">
+      <h1>Book a Demo</h1>
+      <p class="subtitle">See Ansede scan your code in 30 minutes. No setup required.</p>
+
+      <div class="benefits-box">
+        <h3>What You Will See</h3>
+        <ul>
+          <li>Live scan of your repository</li>
+          <li>Side-by-side comparison with your current SAST tool</li>
+          <li>CVEs your current tool missed</li>
+          <li>IDOR / auth vulnerabilities only Ansede detects</li>
+          <li>Custom pricing for your team size</li>
+        </ul>
+      </div>
+
+      <form id="demo-form" onsubmit="return submitDemo(event)">
+        <div class="form-group">
+          <label>Work Email *</label>
+          <input type="email" id="email" required placeholder="you@company.com" autocomplete="email">
         </div>
-
-        <form id="demo-form" onsubmit="submitDemo(event)">
-            <div class="form-group">
-                <label>Work Email *</label>
-                <input type="email" id="email" required placeholder="you@company.com">
-            </div>
-            <div class="form-group">
-                <label>Company *</label>
-                <input type="text" id="company" required placeholder="Acme Corp">
-            </div>
-            <div class="form-group">
-                <label>Team Size</label>
-                <select id="team-size">
-                    <option>1-10 developers</option>
-                    <option>11-50 developers</option>
-                    <option>51-200 developers</option>
-                    <option>200+ developers</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Current SAST Tool</label>
-                <select id="current-tool">
-                    <option>Semgrep</option>
-                    <option>CodeQL / GitHub Advanced Security</option>
-                    <option>SonarQube</option>
-                    <option>Snyk</option>
-                    <option>Checkmarx</option>
-                    <option>Fortify</option>
-                    <option>Bandit</option>
-                    <option>None / Evaluating options</option>
-                    <option>Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>What languages does your team use?</label>
-                <input type="text" id="languages" placeholder="Python, JavaScript, Java, Go, C#...">
-            </div>
-            <div class="form-group">
-                <label>Any specific concerns or questions?</label>
-                <textarea id="message" rows="3" placeholder="Tell us what you're looking for..."></textarea>
-            </div>
-            <button type="submit">Request Demo →</button>
-        </form>
+        <div class="form-group">
+          <label>Company *</label>
+          <input type="text" id="company" required placeholder="Acme Corp" autocomplete="organization">
+        </div>
+        <div class="form-group">
+          <label>Team Size</label>
+          <select id="team-size">
+            <option>1&ndash;10 developers</option>
+            <option>11&ndash;50 developers</option>
+            <option>51&ndash;200 developers</option>
+            <option>200+ developers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Current SAST Tool</label>
+          <select id="current-tool">
+            <option>Semgrep</option>
+            <option>CodeQL / GitHub Advanced Security</option>
+            <option>SonarQube</option>
+            <option>Snyk</option>
+            <option>Checkmarx</option>
+            <option>Fortify</option>
+            <option>Bandit</option>
+            <option>None / Evaluating options</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>What languages does your team use?</label>
+          <input type="text" id="languages" placeholder="Python, JavaScript, Java, Go, C#...">
+        </div>
+        <div class="form-group">
+          <label>Any specific concerns or questions?</label>
+          <textarea id="message" rows="3" placeholder="Tell us what you are looking for..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Request Demo &rarr;</button>
+      </form>
     </div>
 
-    <div class="success" id="success-card">
-        <h2>✅ Demo Requested!</h2>
-        <p style="margin-top:1rem;">Thanks! We'll reach out within 24 hours to schedule your personalized demo.</p>
-        <p style="margin-top:0.5rem;color:#8b949e;">In the meantime, try Ansede free:</p>
-        <p style="margin-top:0.5rem;"><code style="background:#0d1117;padding:0.3rem 0.6rem;border-radius:4px;">pip install ansede-static</code></p>
+    <div class="success-card" id="success-card">
+      <div class="check-icon">&#10003;</div>
+      <h2>Demo Requested!</h2>
+      <p>Thanks! We will reach out within 24 hours to schedule your personalized demo.</p>
+      <p style="color:var(--text-muted);font-size:0.85rem;">In the meantime, try Ansede free:</p>
+      <code style="display:inline-block;margin-top:8px;padding:10px 18px;">pip install ansede-static</code>
     </div>
 
-    <p class="back"><a href="/compare">← Back to comparison</a></p>
+    <p class="back-link"><a href="/compare">&larr; Back to comparison</a></p>
+  </div>
 </div>
+
+<footer class="app-footer" style="margin-top:0">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="/#pricing">Pricing</a>
+      <a href="https://github.com/mattybellx/Ansede">GitHub</a>
+      <a href="https://pypi.org/project/ansede-static/">PyPI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md">Benchmarks</a>
+      <a href="/compare">Comparison</a>
+      <a href="/leaderboard">Leaderboard</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="https://github.com/mattybellx/Ansede/issues">Report an Issue</a>
+      <a href="mailto:support@ansede.dev">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Ansede Static. All rights reserved.</span>
+    <span>100% offline &bull; zero telemetry &bull; MIT licensed</span>
+  </div>
+</footer>
 
 <script>
 function submitDemo(e) {
     e.preventDefault();
-    const data = {
+    var data = {
         email: document.getElementById('email').value,
         company: document.getElementById('company').value,
         teamSize: document.getElementById('team-size').value,
@@ -111,20 +618,19 @@ function submitDemo(e) {
         message: document.getElementById('message').value,
         timestamp: new Date().toISOString()
     };
-    
-    // Send to backend for lead capture
+
     fetch('/api/demo-request', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
-    }).then(r => r.json()).then(d => {
+    }).then(function(r){ return r.json(); }).then(function(d) {
         document.getElementById('form-card').style.display = 'none';
         document.getElementById('success-card').style.display = 'block';
-    }).catch(() => {
-        // Even if backend fails, show success
+    }).catch(function() {
         document.getElementById('form-card').style.display = 'none';
         document.getElementById('success-card').style.display = 'block';
     });
+    return false;
 }
 </script>
 </body>

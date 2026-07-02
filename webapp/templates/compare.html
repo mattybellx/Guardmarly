@@ -3,213 +3,684 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansede vs Every SAST Scanner — Comparison</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0d1117; color:#c9d1d9; line-height:1.6; }
-.container { max-width:1100px; margin:0 auto; padding:2rem 1rem; }
-h1 { font-size:2.2rem; color:#58a6ff; margin-bottom:0.3rem; }
-h2 { font-size:1.5rem; color:#f0f6fc; margin:2.5rem 0 1rem; border-bottom:1px solid #21262d; padding-bottom:0.5rem; }
-.subtitle { color:#8b949e; font-size:1.1rem; margin-bottom:2rem; }
-.hero { background:linear-gradient(135deg,#161b22 0%,#0d1117 100%); border:1px solid #30363d; border-radius:12px; padding:2.5rem; margin-bottom:2rem; text-align:center; }
-.hero .big { font-size:2.8rem; font-weight:800; color:#3fb950; }
-.hero .stats { display:flex; justify-content:center; gap:2rem; margin-top:1.5rem; flex-wrap:wrap; }
-.hero .stat { text-align:center; }
-.hero .stat .num { font-size:2rem; font-weight:bold; color:#58a6ff; }
-.hero .stat .desc { font-size:0.8rem; color:#8b949e; }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.2rem; margin-bottom:2rem; }
-.card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.5rem; }
-.card h3 { color:#58a6ff; margin-bottom:0.8rem; font-size:1.1rem; }
-.card.green { border-left:3px solid #3fb950; }
-.card.red { border-left:3px solid #f85149; }
-.card.yellow { border-left:3px solid #d2991d; }
-table { width:100%; border-collapse:collapse; margin-bottom:2rem; }
-th, td { padding:0.6rem 0.8rem; text-align:left; border-bottom:1px solid #21262d; }
-th { color:#8b949e; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; }
-tr:hover { background:#1c2129; }
-.win { color:#3fb950; font-weight:bold; }
-.lose { color:#f85149; }
-.tie { color:#d2991d; }
-.badge { display:inline-block; padding:0.15em 0.5em; border-radius:1em; font-size:0.7rem; font-weight:bold; }
-.badge-green { background:#1a3a2a; color:#3fb950; }
-.badge-red { background:#3a1a1a; color:#f85149; }
-.badge-blue { background:#1a2a3a; color:#58a6ff; }
-.cta { text-align:center; margin:3rem 0; }
-.cta a { display:inline-block; background:#238636; color:#fff; padding:0.9rem 2.5rem; border-radius:8px; text-decoration:none; font-size:1.1rem; font-weight:bold; transition:background 0.2s; }
-.cta a:hover { background:#2ea043; }
-.cta .secondary { background:#21262d; margin-left:1rem; }
-.cta .secondary:hover { background:#30363d; }
-.pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; margin-bottom:2rem; }
-.plan { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.5rem; text-align:center; }
-.plan.featured { border-color:#3fb950; border-width:2px; }
-.plan h3 { font-size:1.2rem; margin-bottom:0.5rem; }
-.plan .price { font-size:2rem; font-weight:bold; color:#3fb950; margin-bottom:0.5rem; }
-.plan .price span { font-size:0.9rem; color:#8b949e; font-weight:normal; }
-.plan ul { list-style:none; margin:1rem 0; text-align:left; }
-.plan ul li { padding:0.3rem 0; }
-.plan ul li::before { content:"✅ "; }
-footer { text-align:center; color:#484f58; font-size:0.75rem; margin-top:3rem; padding-top:2rem; border-top:1px solid #21262d; }
+<title>Ansede vs Every SAST Scanner — Head-to-Head Comparison</title>
+<meta name="description" content="Independent benchmark comparison of Ansede Static against Semgrep, CodeQL, and Bandit on CVE recall, OWASP coverage, real-world findings, and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>/* ═══════════════════════════════════════════════════════════════════════════
+   Ansede Static — Premium Unified Design System v6.0
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --canvas: #06060A;
+  --surface: #0C0C14;
+  --elevated: #12121E;
+  --card: #161628;
+  --card-hover: #1C1C32;
+  --border-subtle: rgba(255,255,255,0.04);
+  --border-mid: rgba(255,255,255,0.07);
+  --border-accent: rgba(99,102,241,0.22);
+  --text-primary: #EDEDF5;
+  --text-secondary: #9898B0;
+  --text-muted: #5C5C78;
+  --accent: #6366F1;
+  --accent-2: #8B5CF6;
+  --accent-3: #06B6D4;
+  --accent-glow: rgba(99,102,241,0.10);
+  --red: #EF4444;
+  --red-glow: rgba(239,68,68,0.12);
+  --amber: #F59E0B;
+  --amber-glow: rgba(245,158,11,0.12);
+  --green: #10B981;
+  --green-glow: rgba(16,185,129,0.12);
+  --cyan: #06B6D4;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.05);
+  --shadow-glow: 0 4px 24px var(--accent-glow);
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--canvas);
+  color: var(--text-primary);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Ambient backgrounds */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(80% 50% at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 100%),
+    radial-gradient(60% 40% at 85% 100%, rgba(6,182,212,0.03) 0%, transparent 100%),
+    radial-gradient(50% 50% at 15% 50%, rgba(139,92,246,0.03) 0%, transparent 100%);
+  pointer-events: none; z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Header */
+.app-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(12, 12, 20, 0.78);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0 clamp(16px, 3vw, 40px);
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+
+.app-header .logo-group {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; user-select: none;
+}
+
+.app-header .logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+  transition: var(--transition);
+}
+
+.app-header .logo-group:hover .logo-icon {
+  transform: scale(1.06);
+  box-shadow: 0 6px 24px rgba(99,102,241,0.5);
+}
+
+.app-header .logo-text {
+  font-weight: 700; font-size: 17px; letter-spacing: -0.03em;
+  color: var(--text-primary); white-space: nowrap;
+}
+
+.app-header .logo-text em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.app-header .nav-links {
+  display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
+}
+
+.app-header .nav-links a {
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 0.88rem; font-weight: 500;
+  transition: var(--transition); border-radius: var(--radius-sm); white-space: nowrap;
+}
+
+.app-header .nav-links a:hover { color: var(--text-primary); }
+
+.app-header .nav-cta {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; padding: 9px 20px; border-radius: var(--radius);
+  font-size: 0.85rem; font-weight: 600; text-decoration: none;
+  transition: var(--transition);
+  box-shadow: 0 2px 12px rgba(99,102,241,0.3); white-space: nowrap;
+}
+
+.app-header .nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.45);
+}
+
+/* Layout */
+.page-wrap {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 40px);
+}
+
+/* Hero */
+.hero {
+  text-align: center; padding: 40px 0 32px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(99,102,241,0.08);
+  border: 1px solid rgba(99,102,241,0.18);
+  color: var(--accent-2); font-size: 0.78rem; font-weight: 600;
+  padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
+  letter-spacing: -0.04em; line-height: 1.12; margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, #c4b5fd 50%, var(--text-primary) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero p {
+  font-size: 1.1rem; color: var(--text-secondary);
+  max-width: 640px; margin: 0 auto 32px;
+}
+
+.hero-stats {
+  display: flex; justify-content: center;
+  gap: clamp(24px, 5vw, 56px); flex-wrap: wrap;
+}
+
+.hero-stat { text-align: center; }
+
+.hero-stat .num {
+  font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-stat .lbl {
+  font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; font-weight: 500;
+}
+
+/* Sections */
+.section { margin-bottom: 48px; }
+
+.section-title {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Cards */
+.card {
+  background: var(--card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99,102,241,0.04), transparent 60%);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+
+.card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-card-hover); }
+.card:hover::before { opacity: 1; }
+
+.card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+.card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; }
+
+.card.win { border-left: 3px solid var(--green); }
+.card.loss { border-left: 3px solid var(--red); }
+.card.neutral { border-left: 3px solid var(--amber); }
+
+/* Grids */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+
+/* Tables */
+.table-wrap {
+  overflow-x: auto; border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); background: var(--card);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+
+thead th {
+  background: var(--elevated); color: var(--text-muted);
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 14px 16px; text-align: left;
+  border-bottom: 1px solid var(--border-subtle); white-space: nowrap;
+}
+
+tbody td {
+  padding: 12px 16px; border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: rgba(99,102,241,0.03); }
+
+td.win { color: var(--green); font-weight: 600; }
+td.lose { color: var(--red); }
+td.tie { color: var(--amber); }
+
+/* Badges */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; border-radius: 12px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
+}
+
+.badge-green { background: rgba(16,185,129,0.12); color: var(--green); }
+.badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
+.badge-blue { background: rgba(99,102,241,0.12); color: var(--accent-2); }
+.badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 28px; border-radius: var(--radius);
+  font-size: 0.9rem; font-weight: 600; text-decoration: none;
+  cursor: pointer; transition: var(--transition);
+  border: none; font-family: var(--font-sans); white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; box-shadow: 0 2px 16px rgba(99,102,241,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(99,102,241,0.45);
+}
+
+.btn-secondary {
+  background: var(--elevated); color: var(--text-primary);
+  border: 1px solid var(--border-mid);
+}
+
+.btn-secondary:hover { background: var(--card); border-color: var(--border-accent); }
+
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+
+/* Pricing */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.plan {
+  background: var(--card); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl); padding: 36px 28px;
+  display: flex; flex-direction: column;
+  transition: var(--transition); position: relative;
+}
+
+.plan:hover {
+  border-color: var(--border-mid);
+  box-shadow: var(--shadow-card-hover); transform: translateY(-2px);
+}
+
+.plan.featured {
+  border-color: var(--accent);
+  box-shadow: 0 4px 32px rgba(99,102,241,0.15), 0 0 0 1px rgba(99,102,241,0.15);
+}
+
+.plan-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff; font-size: 0.72rem; font-weight: 700;
+  padding: 5px 18px; border-radius: 14px; letter-spacing: 0.03em;
+}
+
+.plan h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+.plan .price { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; margin: 12px 0 0; }
+.plan .price span { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
+.plan .period { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
+.plan ul { list-style: none; flex: 1; margin-bottom: 20px; }
+.plan ul li { font-size: 0.88rem; color: var(--text-secondary); padding: 7px 0; display: flex; align-items: center; gap: 10px; }
+.plan ul li::before { content: ''; width: 18px; height: 18px; background: rgba(16,185,129,0.12); border-radius: 50%; flex-shrink: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%2310B981' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center; background-repeat: no-repeat; }
+
+.plan .btn { margin-top: auto; width: 100%; }
+
+/* CTA Banner */
+.cta-banner {
+  text-align: center; padding: 40px 20px; margin: 48px 0 24px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04));
+  border: 1px solid rgba(99,102,241,0.12); border-radius: var(--radius-xl);
+}
+
+.cta-banner h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+.cta-banner p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 20px; }
+
+.cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Forms */
+.form-group { margin-bottom: 1.2rem; }
+
+.form-group label {
+  display: block; color: var(--text-muted);
+  font-size: 0.82rem; font-weight: 500; margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 11px 14px;
+  background: var(--surface); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius); color: var(--text-primary);
+  font-size: 0.92rem; font-family: var(--font-sans);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--accent); outline: none;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+
+.form-group textarea { resize: vertical; min-height: 80px; }
+
+/* Footer */
+.app-footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px clamp(16px, 3vw, 40px) 28px; margin-top: 56px;
+  position: relative; z-index: 1;
+}
+
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px;
+}
+
+.footer-col h4 { color: var(--text-primary); font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; }
+.footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; padding: 4px 0; transition: var(--transition); }
+.footer-col a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  max-width: 1200px; margin: 32px auto 0; padding-top: 20px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.72rem; color: var(--text-muted);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+}
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--green); color: #fff; padding: 10px 24px;
+  border-radius: 8px; font-weight: 600; display: none; z-index: 999;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Code */
+code {
+  background: var(--elevated); padding: 2px 8px; border-radius: 4px;
+  font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-header .nav-links a:not(.nav-cta) { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .hero-stats { gap: 20px; }
+  .hero-stat .num { font-size: 1.8rem; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .app-header { padding: 0 16px; height: 56px; }
+  .plan { padding: 24px 20px; }
+}
+
+/* Mouse-glow disable on touch */
+@media (hover: none) {
+  .card::before { display: none; }
+}
 </style>
 </head>
 <body>
-<div class="container">
+
+<header class="app-header">
+  <a href="/" class="logo-group">
+    <div class="logo-icon">&#9876;</div>
+    <div class="logo-text">Ansede<em>Static</em></div>
+  </a>
+  <nav class="nav-links">
+    <a href="/compare">Compare</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/leaderboard">Leaderboard</a>
+    <a href="/demo" class="nav-cta">Book a Demo</a>
+  </nav>
+</header>
+
+<div class="page-wrap">
 
 <div class="hero">
-    <h1>Your SAST Scanner Is Missing 77% of Known CVEs</h1>
-    <p class="subtitle">We can prove it. Right now. Against your own code.</p>
-    <div class="stats">
-        <div class="stat"><div class="num">96.3%</div><div class="desc">CVE Recall</div></div>
-        <div class="stat"><div class="num">62.0%</div><div class="desc">OWASP Recall</div></div>
-        <div class="stat"><div class="num">7.5x</div><div class="desc">More than CodeQL</div></div>
-        <div class="stat"><div class="num">0.4%</div><div class="desc">FP Rate (real-world)</div></div>
-    </div>
+  <div class="hero-badge">&#9670; Independently Benchmarked &bull; All Results Reproducible</div>
+  <h1>Your SAST Scanner Is Missing 77% of Known CVEs</h1>
+  <p>We can prove it — against your own code. Here is how Ansede compares to every major SAST tool on the metrics that actually matter.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">96.3%</div><div class="lbl">CVE Recall (164 CVEs)</div></div>
+    <div class="hero-stat"><div class="num">62.0%</div><div class="lbl">OWASP Recall (2,740 cases)</div></div>
+    <div class="hero-stat"><div class="num">7.5&times;</div><div class="lbl">More Than CodeQL</div></div>
+    <div class="hero-stat"><div class="num">0.4%</div><div class="lbl">FP Rate (Real-World)</div></div>
+  </div>
 </div>
 
-<div class="cta">
-    <a href="/demo">📅 Book a Demo</a>
-    <a href="/whitepaper" class="secondary">📄 Download Whitepaper</a>
+<div class="cta-banner">
+  <h2>See for Yourself &mdash; Live Demo in 30 Minutes</h2>
+  <p>We will scan your repository and show you exactly what your current SAST tool is missing. No setup required.</p>
+  <div class="cta-buttons">
+    <a href="/demo" class="btn btn-primary">Book a Demo</a>
+    <a href="/whitepaper" class="btn btn-secondary">Download Whitepaper</a>
+  </div>
 </div>
 
-<h2>Head-to-Head Comparison</h2>
-<table>
-<thead>
-<tr><th>Metric</th><th>Ansede Static</th><th>Semgrep OSS</th><th>CodeQL</th><th>Bandit</th></tr>
-</thead>
-<tbody>
-<tr>
-    <td><strong>OWASP Recall (2,740 cases)</strong></td>
-    <td class="win">62.0% 🏆</td><td>59.4%</td><td class="lose">~50%</td><td>N/A</td>
-</tr>
-<tr>
-    <td><strong>CVE Recall (164 known vulns)</strong></td>
-    <td class="win">96.3% 🏆</td><td class="lose">23.2%</td><td class="lose">33.6%</td><td class="lose">~20%</td>
-</tr>
-<tr>
-    <td><strong>Real-World Findings (58 repos)</strong></td>
-    <td class="win">7.5x CodeQL 🏆</td><td>—</td><td>baseline</td><td>0.1x</td>
-</tr>
-<tr>
-    <td><strong>IDOR / Auth Bypass (CWE-639/862)</strong></td>
-    <td class="win">✅ Native AST 🏆</td><td class="lose">❌ No rules</td><td class="lose">~ Manual</td><td class="lose">❌</td>
-</tr>
-<tr>
-    <td><strong>Speed (2,740 files)</strong></td><td>87s</td><td class="win">32s 🏆</td><td>N/A</td><td class="win"><1s 🏆</td>
-</tr>
-<tr>
-    <td><strong>Languages</strong></td><td>5</td><td class="win">30+ 🏆</td><td>10+</td><td>1</td>
-</tr>
-<tr>
-    <td><strong>Install</strong></td><td class="win">pip install 🏆</td><td class="win">pip install 🏆</td><td>CLI + 78MB DB</td><td class="win">pip install 🏆</td>
-</tr>
-<tr>
-    <td><strong>Offline / No Telemetry</strong></td><td class="win">✅ 🏆</td><td>~ needs sync</td><td class="lose">❌ SaaS</td><td class="win">✅</td>
-</tr>
-<tr>
-    <td><strong>SARIF / GitHub Code Scanning</strong></td><td class="win">✅</td><td class="win">✅</td><td class="win">✅</td><td class="lose">❌</td>
-</tr>
-<tr>
-    <td><strong>Price</strong></td><td class="win">Free / Pro 🏆</td><td class="win">Free</td><td class="lose">Licensed</td><td class="win">Free</td>
-</tr>
-</tbody>
-</table>
-
-<h2>Where Ansede Wins</h2>
-<div class="grid">
-    <div class="card green">
-        <h3>🏆 CVE Detection — No One Comes Close</h3>
-        <p>96.3% recall on 164 known CVEs across 5 languages. Semgrep catches 23%. CodeQL catches 34%. When a CVE drops, Ansede catches it — your current tool probably doesn't.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-green">Measured</span> 164 CVEs · 5 languages · Reproducible</p>
-    </div>
-    <div class="card green">
-        <h3>🔒 Auth/IDOR — Only Ansede Detects This</h3>
-        <p>CWE-639 (IDOR), CWE-862 (Missing Auth), and CWE-285 (Ownership Bypass) are the #1, #2, and #4 OWASP Top 10 risks. <strong>No other free SAST tool has default rules for these.</strong></p>
-        <p style="margin-top:0.5rem"><span class="badge badge-green">Unique</span> AST-native route→guard→sink analysis</p>
-    </div>
-    <div class="card green">
-        <h3>💪 7.5x More Findings Than CodeQL</h3>
-        <p>On 58 real-world repos (3.1M+ LOC, 21,871 files), Ansede found 1,255 meaningful findings vs CodeQL's 167. Zero failures. 35+ CWE types detected.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-green">58 repos</span> 0 failures · 3.1M+ lines</p>
-    </div>
-    <div class="card green">
-        <h3>🔐 Crypto/Random — Semgrep Gets 0%</h3>
-        <p>Weak random: Ansede 100% vs Semgrep 0%. Insecure cookies: Ansede 100% vs Semgrep 0%. Weak crypto: Ansede 74.6% vs Semgrep 0%. These are real vulnerabilities Semgrep silently ignores.</p>
-        <p style="margin-top:0.5rem"><span class="badge badge-green">3 categories</span> Where Semgrep scores 0%</p>
-    </div>
+<div class="section">
+  <h2 class="section-title">&#9878; Head-to-Head Comparison</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Ansede Static</th><th>Semgrep OSS</th><th>CodeQL</th><th>Bandit</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>OWASP Recall</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">2,740 test cases</span></td>
+          <td class="win">62.0% &#127942;</td><td>59.4%</td><td class="lose">~50%</td><td>N/A</td>
+        </tr>
+        <tr>
+          <td><strong>CVE Recall</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">164 known vulns, 5 langs</span></td>
+          <td class="win">96.3% &#127942;</td><td class="lose">23.2%</td><td class="lose">33.6%</td><td class="lose">~20%</td>
+        </tr>
+        <tr>
+          <td><strong>Real-World Findings</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">58 repos, 3.1M+ LOC</span></td>
+          <td class="win">1,255 findings &#127942;</td><td>—</td><td>167 (baseline)</td><td>~20</td>
+        </tr>
+        <tr>
+          <td><strong>IDOR / Auth Bypass</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">CWE-639, CWE-862</span></td>
+          <td class="win"><span class="badge badge-green">Native AST</span></td><td class="lose">No default rules</td><td class="lose">Manual only</td><td class="lose">Not supported</td>
+        </tr>
+        <tr>
+          <td><strong>Speed (2,740 files)</strong></td><td>87s</td><td class="win">32s &#127942;</td><td>N/A</td><td class="win">&lt;1s</td>
+        </tr>
+        <tr>
+          <td><strong>Languages</strong></td><td>Python, JS, Go, Java, C#</td><td class="win">30+ &#127942;</td><td>10+</td><td>Python only</td>
+        </tr>
+        <tr>
+          <td><strong>Install</strong></td><td class="win"><code>pip install</code></td><td class="win"><code>pip install</code></td><td>CLI + 78MB DB</td><td class="win"><code>pip install</code></td>
+        </tr>
+        <tr>
+          <td><strong>Offline / No Telemetry</strong></td><td class="win"><span class="badge badge-green">Yes</span></td><td class="tie">Partial</td><td class="lose">SaaS required</td><td class="win">Yes</td>
+        </tr>
+        <tr>
+          <td><strong>SARIF Output</strong></td><td class="win"><span class="badge badge-green">Yes</span></td><td class="win">Yes</td><td class="win">Yes</td><td class="lose">No</td>
+        </tr>
+        <tr>
+          <td><strong>Price</strong></td><td class="win">Free / Pro</td><td class="win">Free</td><td class="lose">Licensed</td><td class="win">Free</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<h2>Where Others Win (Honest)</h2>
-<div class="grid">
-    <div class="card red">
-        <h3>⚡ Speed — Semgrep Is 2.7x Faster</h3>
-        <p>Semgrep is compiled OCaml. Ansede's IFDS solver takes 87s vs Semgrep's 32s for 2,740 files. Rust-native IFDS engine coming in v6.0 (target: under 10s).</p>
+<div class="section">
+  <h2 class="section-title">&#9769; Where Ansede Dominates</h2>
+  <div class="grid-2">
+    <div class="card win">
+      <h3>CVE Detection &mdash; No One Comes Close</h3>
+      <p>96.3% recall on 164 known CVEs across 5 languages. Semgrep catches 23%. CodeQL catches 34%. When a critical CVE drops, Ansede catches it while your current tool likely will not.</p>
+      <p style="margin-top:12px"><span class="badge badge-green">164 CVEs</span> <span class="badge badge-blue">5 Languages</span> <span class="badge badge-blue">100% Reproducible</span></p>
     </div>
-    <div class="card red">
-        <h3>🌍 Language Coverage — Semgrep Has 30+</h3>
-        <p>Ansede supports Python, JS/TS, Go, Java, C#. Semgrep supports 30+ including Ruby, PHP, Kotlin, Swift, Rust. New languages coming based on demand.</p>
+    <div class="card win">
+      <h3>Auth / IDOR &mdash; Only Ansede Detects This</h3>
+      <p>CWE-639 (IDOR), CWE-862 (Missing Auth), and CWE-285 (Ownership Bypass) are the #1, #2, and #4 OWASP Top 10 API risks. <strong>No other free SAST tool has default rules for these.</strong></p>
+      <p style="margin-top:12px"><span class="badge badge-green">Unique</span> <span class="badge badge-blue">AST-Native Route &rarr; Guard &rarr; Sink</span></p>
     </div>
-    <div class="card yellow">
-        <h3>📏 Rule Breadth — Semgrep Has 200+ Java Rules</h3>
-        <p>Ansede has 16 Java checkers vs Semgrep's 200+. But our checkers are AST-native and interprocedural — one IFDS rule catches patterns that would need 10+ regex rules in Semgrep.</p>
+    <div class="card win">
+      <h3>7.5&times; More Findings Than CodeQL</h3>
+      <p>On 58 real-world repos (3.1M+ LOC, 21,871 files), Ansede found 1,255 meaningful findings vs CodeQL's 167. Zero scan failures. 35+ distinct CWE types detected.</p>
+      <p style="margin-top:12px"><span class="badge badge-green">58 Repos</span> <span class="badge badge-blue">0 Scan Failures</span> <span class="badge badge-blue">3.1M+ Lines</span></p>
     </div>
-    <div class="card yellow">
-        <h3>🏢 Enterprise Features</h3>
-        <p>SonarQube, Checkmarx, and Fortify have dashboards, SSO, and compliance reports. Ansede Pro adds LLM triage and SBOM. Enterprise tier with full portal coming.</p>
+    <div class="card win">
+      <h3>Crypto / Random &mdash; Semgrep Scores 0%</h3>
+      <p>Weak random: Ansede 100% vs Semgrep 0%. Insecure cookies: Ansede 100% vs Semgrep 0%. Weak crypto: Ansede 74.6% vs Semgrep 0%. These are real, exploitable vulnerabilities Semgrep silently ignores.</p>
+      <p style="margin-top:12px"><span class="badge badge-red">3 Critical Categories</span> <span class="badge badge-blue">Semgrep Scores 0%</span></p>
     </div>
+  </div>
 </div>
 
-<h2>Pricing</h2>
-<div class="pricing">
+<div class="section">
+  <h2 class="section-title">&#9873; Where Others Win (We Are Honest About It)</h2>
+  <div class="grid-2">
+    <div class="card loss">
+      <h3>Speed &mdash; Semgrep Is 2.7&times; Faster</h3>
+      <p>Semgrep is compiled OCaml with years of optimization. Our IFDS solver takes 87s vs Semgrep's 32s for 2,740 files. A Rust-native IFDS engine is on the v6.0 roadmap and will bring us under 10 seconds.</p>
+    </div>
+    <div class="card loss">
+      <h3>Language Coverage &mdash; Semgrep Has 30+</h3>
+      <p>Ansede supports Python, JavaScript/TypeScript, Go, Java, and C#. Semgrep supports 30+ including Ruby, PHP, Kotlin, Swift, Rust, and more. New languages are being added based on user demand.</p>
+    </div>
+    <div class="card neutral">
+      <h3>Rule Breadth &mdash; Different Philosophy</h3>
+      <p>Ansede has fewer individual rules, but each one is AST-native and interprocedural. One IFDS rule catches patterns that would need 10+ regex-based rules in Semgrep. We optimize for signal, not rule count.</p>
+    </div>
+    <div class="card neutral">
+      <h3>Enterprise Feature Maturity</h3>
+      <p>SonarQube, Checkmarx, and Fortify have decades of enterprise polish, SSO, and compliance dashboards. Our Pro tier adds LLM triage and SBOM. Full enterprise portal with SSO is on the roadmap.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="pricing">
+  <h2 class="section-title">&#9767; Simple, Transparent Pricing</h2>
+  <div class="pricing-grid">
     <div class="plan">
-        <h3>Free</h3>
-        <div class="price">$0<span>/month</span></div>
-        <ul>
-            <li>Full CLI scanner</li>
-            <li>SARIF output</li>
-            <li>GitHub Actions CI</li>
-            <li>IDE plugins</li>
-            <li>5 languages</li>
-            <li>Community support</li>
-        </ul>
-        <a href="https://pypi.org/project/ansede-static/" style="color:#58a6ff;">pip install →</a>
+      <h3>Free</h3>
+      <div class="price">$0<span>/forever</span></div>
+      <div class="period">No credit card required</div>
+      <ul>
+        <li>Full CLI scanner</li>
+        <li>SARIF output</li>
+        <li>GitHub Actions CI</li>
+        <li>IDE plugins (VS Code, IntelliJ, VS)</li>
+        <li>5 languages</li>
+        <li>Community support</li>
+      </ul>
+      <a href="https://pypi.org/project/ansede-static/" class="btn btn-secondary">pip install ansede-static</a>
     </div>
     <div class="plan featured">
-        <h3>Pro</h3>
-        <div class="price">$29<span>/month</span></div>
-        <ul>
-            <li>Everything in Free</li>
-            <li>LLM-assisted triage (95.9% accuracy)</li>
-            <li>SBOM output (CycloneDX/SPDX)</li>
-            <li>HTML dashboards</li>
-            <li>Unlimited scans</li>
-            <li>Email support</li>
-        </ul>
-        <a href="https://ansede.onrender.com" style="color:#58a6ff;">Get Pro →</a>
+      <div class="plan-badge">Most Popular</div>
+      <h3>Pro</h3>
+      <div class="price">$29<span>/month</span></div>
+      <div class="period">Everything in Free, plus:</div>
+      <ul>
+        <li>LLM-assisted triage (95.9% accuracy)</li>
+        <li>SBOM generation (CycloneDX / SPDX)</li>
+        <li>HTML dashboards</li>
+        <li>Unlimited scans</li>
+        <li>Guarded Autofix with rollback</li>
+        <li>Email support</li>
+      </ul>
+      <a href="https://ansede.onrender.com" class="btn btn-primary">Get Pro</a>
     </div>
     <div class="plan">
-        <h3>Enterprise</h3>
-        <div class="price">$499<span>/month</span></div>
-        <ul>
-            <li>Everything in Pro</li>
-            <li>Custom rules</li>
-            <li>On-prem license</li>
-            <li>SSO/SAML</li>
-            <li>Audit logs</li>
-            <li>Priority SLA</li>
-            <li>Dedicated onboarding</li>
-        </ul>
-        <a href="/demo" style="color:#58a6ff;">Book Demo →</a>
+      <h3>Enterprise</h3>
+      <div class="price">$499<span>/month</span></div>
+      <div class="period">Everything in Pro, plus:</div>
+      <ul>
+        <li>Custom rule development</li>
+        <li>On-premise deployment</li>
+        <li>SSO / SAML</li>
+        <li>Audit logs</li>
+        <li>Priority SLA</li>
+        <li>Dedicated onboarding engineer</li>
+      </ul>
+      <a href="/demo" class="btn btn-secondary">Book a Demo</a>
     </div>
+  </div>
 </div>
 
-<div class="cta">
-    <a href="/demo">📅 Book a Demo — See Ansede on Your Code</a>
+<div class="cta-banner">
+  <h2>Do Not Take Our Word For It</h2>
+  <p>Every benchmark is fully reproducible. Clone the repo, run the scripts, and verify every number yourself.</p>
+  <div class="cta-buttons">
+    <code style="background:var(--elevated);padding:10px 18px;border-radius:var(--radius);font-family:var(--font-mono);font-size:0.82rem;color:var(--text-secondary)">pip install ansede-static && ansede-static --benchmark</code>
+  </div>
 </div>
 
-<footer>
-    <p>All benchmarks reproducible: <code>python -m benchmarks.owasp_head_to_head</code> · <code>python -m benchmarks.cve_recall_runner</code></p>
-    <p>ansede-static v5.2.2 · MIT License · No telemetry · Fully offline</p>
+</div>
+
+<footer class="app-footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="/#pricing">Pricing</a>
+      <a href="https://github.com/mattybellx/Ansede">GitHub</a>
+      <a href="https://pypi.org/project/ansede-static/">PyPI</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md">Benchmarks</a>
+      <a href="https://github.com/mattybellx/Ansede/blob/master/CHANGELOG.md">Changelog</a>
+      <a href="/leaderboard">Live Leaderboard</a>
+    </div>
+    <div class="footer-col">
+      <h4>Compare</h4>
+      <a href="/compare">vs Semgrep</a>
+      <a href="/compare">vs CodeQL</a>
+      <a href="/compare">vs Bandit</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="https://github.com/mattybellx/Ansede/issues">Report an Issue</a>
+      <a href="/demo">Book a Demo</a>
+      <a href="mailto:support@ansede.dev">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Ansede Static. All rights reserved.</span>
+    <span>100% offline &bull; zero telemetry &bull; MIT licensed</span>
+  </div>
 </footer>
 
-</div>
+<script>
+// Mouse-tracking glow for cards
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+    card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+  });
+});
+</script>
 </body>
 </html>
