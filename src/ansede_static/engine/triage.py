@@ -203,17 +203,30 @@ class ContextAnalyzer:
         'objectstateformatter', 'ObjectStateFormatter',
         # HTTP client libraries (they ARE supposed to make HTTP requests)
         '/requests/', '\\requests\\',
-        'restsharp', 'RestSharp',
-        'httpclient', 'HttpClient',
-        # Template engines (they ARE supposed to render HTML)
+        'restsharp', 'RestSharp', 'got', 'Got',
+        'httpclient', 'HttpClient', 'okhttp', 'OkHttp', 'retrofit', 'Retrofit',
+        # Template engines / HTML tools (they ARE supposed to render HTML)
         'jinja', 'Jinja', 'mako', 'Mako',
         'handlebars', 'Handlebars', 'mustache',
+        'cheerio', 'Cheerio', 'marked', 'Marked',
         # ORM / DB libraries (they ARE supposed to execute queries)
         'sqlalchemy', 'SQLAlchemy', 'entityframework', 'EntityFramework',
         'dapper', 'Dapper', 'hibernate', 'Hibernate',
         # Serialization helpers
         'pickle', 'dill', 'cloudpickle',
         'marshmallow', 'pydantic',
+        # Fake data / random generators
+        'faker', 'Faker', 'fake-data', 'fake_data',
+        # String validation / sanitization libraries
+        'validator.js', 'validatorjs', 'Validator',
+        # Date/time formatting
+        'date-fns', 'datefns', 'moment', 'Moment', 'dateutil',
+        # IO / file-system libraries (not SQL — CWE-89 misclass)
+        'commons-io', 'commons_io', 'CommonsIO',
+        # Code coverage / analysis tools
+        'coveragepy', 'coverage.py', 'coverage',
+        # Build / dev / CLI tools
+        '/tools/', '\\tools\\', '/scripts/', '\\scripts\\', '/cmd/', '\\cmd\\',
     ]
 
     # CWE-rule pairs that are library-purpose by design — suppress when
@@ -223,7 +236,14 @@ class ContextAnalyzer:
         "CWE-918",  # SSRF (HTTP clients do this)
         "CWE-611",  # XXE (XML parsers handle XML)
         "CWE-79",   # XSS (template engines render HTML)
-        "CWE-89",   # SQL injection (ORMs build queries)
+        "CWE-89",   # SQL injection (ORMs/build tools — misclass on IO libs)
+        "CWE-1188", # Dangerous defaults (fake data generators, test configs)
+        "CWE-330",  # Weak randomness (fake data generators by design)
+        "CWE-116",  # Improper encoding (string/date validation libs)
+        "CWE-1333", # ReDoS (markdown parsers, validators match patterns)
+        "CWE-94",   # Code injection (coverage tools, build scripts use exec)
+        "CWE-643",  # XPath injection (XML/HTML sanitizer libs)
+        "CWE-78",   # Command injection (CLI tools, build scripts)
     })
 
     # Quality/architecture rules that are not security findings.
