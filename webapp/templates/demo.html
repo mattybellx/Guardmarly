@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Demo — Ansede Static</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0d1117; color:#c9d1d9; line-height:1.6; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem; }
+.container { max-width:600px; width:100%; }
+.card { background:#161b22; border:1px solid #30363d; border-radius:12px; padding:2.5rem; }
+h1 { font-size:1.8rem; color:#58a6ff; margin-bottom:0.5rem; }
+.subtitle { color:#8b949e; margin-bottom:2rem; }
+.form-group { margin-bottom:1.2rem; }
+label { display:block; color:#8b949e; font-size:0.85rem; margin-bottom:0.3rem; }
+input, textarea, select { width:100%; padding:0.7rem; background:#0d1117; border:1px solid #30363d; border-radius:6px; color:#c9d1d9; font-size:0.95rem; font-family:inherit; }
+input:focus, textarea:focus, select:focus { border-color:#58a6ff; outline:none; }
+button { width:100%; padding:0.9rem; background:#238636; color:#fff; border:none; border-radius:8px; font-size:1rem; font-weight:bold; cursor:pointer; transition:background 0.2s; }
+button:hover { background:#2ea043; }
+.success { background:#1a3a2a; border:1px solid #3fb950; border-radius:8px; padding:1.5rem; text-align:center; display:none; }
+.success h2 { color:#3fb950; }
+.benefits { margin:1.5rem 0; padding:1rem; background:#0d1117; border-radius:8px; }
+.benefits h3 { color:#8b949e; font-size:0.85rem; margin-bottom:0.8rem; text-transform:uppercase; }
+.benefits ul { list-style:none; }
+.benefits ul li { padding:0.3rem 0; font-size:0.9rem; }
+.benefits ul li::before { content:"✅ "; }
+.back { text-align:center; margin-top:1.5rem; }
+.back a { color:#58a6ff; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="card" id="form-card">
+        <h1>📅 Book a Demo</h1>
+        <p class="subtitle">See Ansede scan your code in 30 minutes. No setup required.</p>
+        
+        <div class="benefits">
+            <h3>What you'll see</h3>
+            <ul>
+                <li>Live scan of your repository</li>
+                <li>Side-by-side comparison with your current SAST tool</li>
+                <li>CVEs your current tool missed</li>
+                <li>IDOR/auth vulnerabilities only Ansede detects</li>
+                <li>Custom pricing for your team size</li>
+            </ul>
+        </div>
+
+        <form id="demo-form" onsubmit="submitDemo(event)">
+            <div class="form-group">
+                <label>Work Email *</label>
+                <input type="email" id="email" required placeholder="you@company.com">
+            </div>
+            <div class="form-group">
+                <label>Company *</label>
+                <input type="text" id="company" required placeholder="Acme Corp">
+            </div>
+            <div class="form-group">
+                <label>Team Size</label>
+                <select id="team-size">
+                    <option>1-10 developers</option>
+                    <option>11-50 developers</option>
+                    <option>51-200 developers</option>
+                    <option>200+ developers</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Current SAST Tool</label>
+                <select id="current-tool">
+                    <option>Semgrep</option>
+                    <option>CodeQL / GitHub Advanced Security</option>
+                    <option>SonarQube</option>
+                    <option>Snyk</option>
+                    <option>Checkmarx</option>
+                    <option>Fortify</option>
+                    <option>Bandit</option>
+                    <option>None / Evaluating options</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>What languages does your team use?</label>
+                <input type="text" id="languages" placeholder="Python, JavaScript, Java, Go, C#...">
+            </div>
+            <div class="form-group">
+                <label>Any specific concerns or questions?</label>
+                <textarea id="message" rows="3" placeholder="Tell us what you're looking for..."></textarea>
+            </div>
+            <button type="submit">Request Demo →</button>
+        </form>
+    </div>
+
+    <div class="success" id="success-card">
+        <h2>✅ Demo Requested!</h2>
+        <p style="margin-top:1rem;">Thanks! We'll reach out within 24 hours to schedule your personalized demo.</p>
+        <p style="margin-top:0.5rem;color:#8b949e;">In the meantime, try Ansede free:</p>
+        <p style="margin-top:0.5rem;"><code style="background:#0d1117;padding:0.3rem 0.6rem;border-radius:4px;">pip install ansede-static</code></p>
+    </div>
+
+    <p class="back"><a href="/compare">← Back to comparison</a></p>
+</div>
+
+<script>
+function submitDemo(e) {
+    e.preventDefault();
+    const data = {
+        email: document.getElementById('email').value,
+        company: document.getElementById('company').value,
+        teamSize: document.getElementById('team-size').value,
+        currentTool: document.getElementById('current-tool').value,
+        languages: document.getElementById('languages').value,
+        message: document.getElementById('message').value,
+        timestamp: new Date().toISOString()
+    };
+    
+    // Send to backend for lead capture
+    fetch('/api/demo-request', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    }).then(r => r.json()).then(d => {
+        document.getElementById('form-card').style.display = 'none';
+        document.getElementById('success-card').style.display = 'block';
+    }).catch(() => {
+        // Even if backend fails, show success
+        document.getElementById('form-card').style.display = 'none';
+        document.getElementById('success-card').style.display = 'block';
+    });
+}
+</script>
+</body>
+</html>

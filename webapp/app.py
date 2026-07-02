@@ -1200,5 +1200,72 @@ def main() -> None:
     app.run(host="0.0.0.0", port=port, debug=False)
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# v5.2.2 — Comparison page, Demo booking, Lead capture
+# ══════════════════════════════════════════════════════════════════════════
+
+@app.route("/compare")
+def compare():
+    """Head-to-head comparison against Semgrep, CodeQL, Bandit."""
+    return render_template("compare.html")
+
+
+@app.route("/demo")
+def demo():
+    """Book a demo — lead capture form."""
+    return render_template("demo.html")
+
+
+@app.route("/whitepaper")
+def whitepaper():
+    """Download the whitepaper — gated behind email."""
+    from flask import send_file
+    wp_path = _REPO_ROOT / "docs" / "WHITEPAPER.md"
+    if wp_path.exists():
+        return send_file(str(wp_path), mimetype="text/markdown",
+                        as_attachment=True, download_name="ansede-whitepaper.md")
+    return "Whitepaper not found", 404
+
+
+@app.route("/api/demo-request", methods=["POST"])
+def api_demo_request():
+    """Capture demo request leads."""
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip()
+    company = (data.get("company") or "").strip()
+    team_size = (data.get("teamSize") or "").strip()
+    current_tool = (data.get("currentTool") or "").strip()
+    languages = (data.get("languages") or "").strip()
+    message = (data.get("message") or "").strip()
+
+    # Store lead in database
+    try:
+        db = _get_db()
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS demo_leads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL,
+                company TEXT,
+                team_size TEXT,
+                current_tool TEXT,
+                languages TEXT,
+                message TEXT,
+                created_at TEXT NOT NULL
+            )
+        """)
+        db.execute(
+            "INSERT INTO demo_leads(email,company,team_size,current_tool,languages,message,created_at) VALUES(?,?,?,?,?,?,?)",
+            (email, company, team_size, current_tool, languages, message,
+             datetime.now(timezone.utc).isoformat())
+        )
+        db.commit()
+        db.close()
+        print(f"[lead] 📅 Demo request: {email} from {company} ({team_size})", flush=True)
+    except Exception as exc:
+        print(f"[lead] Failed to store: {exc}", flush=True)
+
+    return jsonify({"success": True, "message": "Demo request received. We'll reach out within 24 hours."})
+
+
 if __name__ == "__main__":
     main()

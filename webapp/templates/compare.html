@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ansede vs Every SAST Scanner — Comparison</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0d1117; color:#c9d1d9; line-height:1.6; }
+.container { max-width:1100px; margin:0 auto; padding:2rem 1rem; }
+h1 { font-size:2.2rem; color:#58a6ff; margin-bottom:0.3rem; }
+h2 { font-size:1.5rem; color:#f0f6fc; margin:2.5rem 0 1rem; border-bottom:1px solid #21262d; padding-bottom:0.5rem; }
+.subtitle { color:#8b949e; font-size:1.1rem; margin-bottom:2rem; }
+.hero { background:linear-gradient(135deg,#161b22 0%,#0d1117 100%); border:1px solid #30363d; border-radius:12px; padding:2.5rem; margin-bottom:2rem; text-align:center; }
+.hero .big { font-size:2.8rem; font-weight:800; color:#3fb950; }
+.hero .stats { display:flex; justify-content:center; gap:2rem; margin-top:1.5rem; flex-wrap:wrap; }
+.hero .stat { text-align:center; }
+.hero .stat .num { font-size:2rem; font-weight:bold; color:#58a6ff; }
+.hero .stat .desc { font-size:0.8rem; color:#8b949e; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.2rem; margin-bottom:2rem; }
+.card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.5rem; }
+.card h3 { color:#58a6ff; margin-bottom:0.8rem; font-size:1.1rem; }
+.card.green { border-left:3px solid #3fb950; }
+.card.red { border-left:3px solid #f85149; }
+.card.yellow { border-left:3px solid #d2991d; }
+table { width:100%; border-collapse:collapse; margin-bottom:2rem; }
+th, td { padding:0.6rem 0.8rem; text-align:left; border-bottom:1px solid #21262d; }
+th { color:#8b949e; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; }
+tr:hover { background:#1c2129; }
+.win { color:#3fb950; font-weight:bold; }
+.lose { color:#f85149; }
+.tie { color:#d2991d; }
+.badge { display:inline-block; padding:0.15em 0.5em; border-radius:1em; font-size:0.7rem; font-weight:bold; }
+.badge-green { background:#1a3a2a; color:#3fb950; }
+.badge-red { background:#3a1a1a; color:#f85149; }
+.badge-blue { background:#1a2a3a; color:#58a6ff; }
+.cta { text-align:center; margin:3rem 0; }
+.cta a { display:inline-block; background:#238636; color:#fff; padding:0.9rem 2.5rem; border-radius:8px; text-decoration:none; font-size:1.1rem; font-weight:bold; transition:background 0.2s; }
+.cta a:hover { background:#2ea043; }
+.cta .secondary { background:#21262d; margin-left:1rem; }
+.cta .secondary:hover { background:#30363d; }
+.pricing { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem; margin-bottom:2rem; }
+.plan { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.5rem; text-align:center; }
+.plan.featured { border-color:#3fb950; border-width:2px; }
+.plan h3 { font-size:1.2rem; margin-bottom:0.5rem; }
+.plan .price { font-size:2rem; font-weight:bold; color:#3fb950; margin-bottom:0.5rem; }
+.plan .price span { font-size:0.9rem; color:#8b949e; font-weight:normal; }
+.plan ul { list-style:none; margin:1rem 0; text-align:left; }
+.plan ul li { padding:0.3rem 0; }
+.plan ul li::before { content:"✅ "; }
+footer { text-align:center; color:#484f58; font-size:0.75rem; margin-top:3rem; padding-top:2rem; border-top:1px solid #21262d; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+    <h1>Your SAST Scanner Is Missing 77% of Known CVEs</h1>
+    <p class="subtitle">We can prove it. Right now. Against your own code.</p>
+    <div class="stats">
+        <div class="stat"><div class="num">96.3%</div><div class="desc">CVE Recall</div></div>
+        <div class="stat"><div class="num">62.0%</div><div class="desc">OWASP Recall</div></div>
+        <div class="stat"><div class="num">7.5x</div><div class="desc">More than CodeQL</div></div>
+        <div class="stat"><div class="num">0.4%</div><div class="desc">FP Rate (real-world)</div></div>
+    </div>
+</div>
+
+<div class="cta">
+    <a href="/demo">📅 Book a Demo</a>
+    <a href="/whitepaper" class="secondary">📄 Download Whitepaper</a>
+</div>
+
+<h2>Head-to-Head Comparison</h2>
+<table>
+<thead>
+<tr><th>Metric</th><th>Ansede Static</th><th>Semgrep OSS</th><th>CodeQL</th><th>Bandit</th></tr>
+</thead>
+<tbody>
+<tr>
+    <td><strong>OWASP Recall (2,740 cases)</strong></td>
+    <td class="win">62.0% 🏆</td><td>59.4%</td><td class="lose">~50%</td><td>N/A</td>
+</tr>
+<tr>
+    <td><strong>CVE Recall (164 known vulns)</strong></td>
+    <td class="win">96.3% 🏆</td><td class="lose">23.2%</td><td class="lose">33.6%</td><td class="lose">~20%</td>
+</tr>
+<tr>
+    <td><strong>Real-World Findings (58 repos)</strong></td>
+    <td class="win">7.5x CodeQL 🏆</td><td>—</td><td>baseline</td><td>0.1x</td>
+</tr>
+<tr>
+    <td><strong>IDOR / Auth Bypass (CWE-639/862)</strong></td>
+    <td class="win">✅ Native AST 🏆</td><td class="lose">❌ No rules</td><td class="lose">~ Manual</td><td class="lose">❌</td>
+</tr>
+<tr>
+    <td><strong>Speed (2,740 files)</strong></td><td>87s</td><td class="win">32s 🏆</td><td>N/A</td><td class="win"><1s 🏆</td>
+</tr>
+<tr>
+    <td><strong>Languages</strong></td><td>5</td><td class="win">30+ 🏆</td><td>10+</td><td>1</td>
+</tr>
+<tr>
+    <td><strong>Install</strong></td><td class="win">pip install 🏆</td><td class="win">pip install 🏆</td><td>CLI + 78MB DB</td><td class="win">pip install 🏆</td>
+</tr>
+<tr>
+    <td><strong>Offline / No Telemetry</strong></td><td class="win">✅ 🏆</td><td>~ needs sync</td><td class="lose">❌ SaaS</td><td class="win">✅</td>
+</tr>
+<tr>
+    <td><strong>SARIF / GitHub Code Scanning</strong></td><td class="win">✅</td><td class="win">✅</td><td class="win">✅</td><td class="lose">❌</td>
+</tr>
+<tr>
+    <td><strong>Price</strong></td><td class="win">Free / Pro 🏆</td><td class="win">Free</td><td class="lose">Licensed</td><td class="win">Free</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Where Ansede Wins</h2>
+<div class="grid">
+    <div class="card green">
+        <h3>🏆 CVE Detection — No One Comes Close</h3>
+        <p>96.3% recall on 164 known CVEs across 5 languages. Semgrep catches 23%. CodeQL catches 34%. When a CVE drops, Ansede catches it — your current tool probably doesn't.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-green">Measured</span> 164 CVEs · 5 languages · Reproducible</p>
+    </div>
+    <div class="card green">
+        <h3>🔒 Auth/IDOR — Only Ansede Detects This</h3>
+        <p>CWE-639 (IDOR), CWE-862 (Missing Auth), and CWE-285 (Ownership Bypass) are the #1, #2, and #4 OWASP Top 10 risks. <strong>No other free SAST tool has default rules for these.</strong></p>
+        <p style="margin-top:0.5rem"><span class="badge badge-green">Unique</span> AST-native route→guard→sink analysis</p>
+    </div>
+    <div class="card green">
+        <h3>💪 7.5x More Findings Than CodeQL</h3>
+        <p>On 58 real-world repos (3.1M+ LOC, 21,871 files), Ansede found 1,255 meaningful findings vs CodeQL's 167. Zero failures. 35+ CWE types detected.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-green">58 repos</span> 0 failures · 3.1M+ lines</p>
+    </div>
+    <div class="card green">
+        <h3>🔐 Crypto/Random — Semgrep Gets 0%</h3>
+        <p>Weak random: Ansede 100% vs Semgrep 0%. Insecure cookies: Ansede 100% vs Semgrep 0%. Weak crypto: Ansede 74.6% vs Semgrep 0%. These are real vulnerabilities Semgrep silently ignores.</p>
+        <p style="margin-top:0.5rem"><span class="badge badge-green">3 categories</span> Where Semgrep scores 0%</p>
+    </div>
+</div>
+
+<h2>Where Others Win (Honest)</h2>
+<div class="grid">
+    <div class="card red">
+        <h3>⚡ Speed — Semgrep Is 2.7x Faster</h3>
+        <p>Semgrep is compiled OCaml. Ansede's IFDS solver takes 87s vs Semgrep's 32s for 2,740 files. Rust-native IFDS engine coming in v6.0 (target: under 10s).</p>
+    </div>
+    <div class="card red">
+        <h3>🌍 Language Coverage — Semgrep Has 30+</h3>
+        <p>Ansede supports Python, JS/TS, Go, Java, C#. Semgrep supports 30+ including Ruby, PHP, Kotlin, Swift, Rust. New languages coming based on demand.</p>
+    </div>
+    <div class="card yellow">
+        <h3>📏 Rule Breadth — Semgrep Has 200+ Java Rules</h3>
+        <p>Ansede has 16 Java checkers vs Semgrep's 200+. But our checkers are AST-native and interprocedural — one IFDS rule catches patterns that would need 10+ regex rules in Semgrep.</p>
+    </div>
+    <div class="card yellow">
+        <h3>🏢 Enterprise Features</h3>
+        <p>SonarQube, Checkmarx, and Fortify have dashboards, SSO, and compliance reports. Ansede Pro adds LLM triage and SBOM. Enterprise tier with full portal coming.</p>
+    </div>
+</div>
+
+<h2>Pricing</h2>
+<div class="pricing">
+    <div class="plan">
+        <h3>Free</h3>
+        <div class="price">$0<span>/month</span></div>
+        <ul>
+            <li>Full CLI scanner</li>
+            <li>SARIF output</li>
+            <li>GitHub Actions CI</li>
+            <li>IDE plugins</li>
+            <li>5 languages</li>
+            <li>Community support</li>
+        </ul>
+        <a href="https://pypi.org/project/ansede-static/" style="color:#58a6ff;">pip install →</a>
+    </div>
+    <div class="plan featured">
+        <h3>Pro</h3>
+        <div class="price">$29<span>/month</span></div>
+        <ul>
+            <li>Everything in Free</li>
+            <li>LLM-assisted triage (95.9% accuracy)</li>
+            <li>SBOM output (CycloneDX/SPDX)</li>
+            <li>HTML dashboards</li>
+            <li>Unlimited scans</li>
+            <li>Email support</li>
+        </ul>
+        <a href="https://ansede.onrender.com" style="color:#58a6ff;">Get Pro →</a>
+    </div>
+    <div class="plan">
+        <h3>Enterprise</h3>
+        <div class="price">$499<span>/month</span></div>
+        <ul>
+            <li>Everything in Pro</li>
+            <li>Custom rules</li>
+            <li>On-prem license</li>
+            <li>SSO/SAML</li>
+            <li>Audit logs</li>
+            <li>Priority SLA</li>
+            <li>Dedicated onboarding</li>
+        </ul>
+        <a href="/demo" style="color:#58a6ff;">Book Demo →</a>
+    </div>
+</div>
+
+<div class="cta">
+    <a href="/demo">📅 Book a Demo — See Ansede on Your Code</a>
+</div>
+
+<footer>
+    <p>All benchmarks reproducible: <code>python -m benchmarks.owasp_head_to_head</code> · <code>python -m benchmarks.cve_recall_runner</code></p>
+    <p>ansede-static v5.2.2 · MIT License · No telemetry · Fully offline</p>
+</footer>
+
+</div>
+</body>
+</html>
