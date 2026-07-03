@@ -126,13 +126,13 @@ TAINT_SOURCES: dict[str, str] = {
     "request.json_body":      "Bottle parsed JSON body",
     # Pyramid web framework request sources
     "request.matchdict":      "Pyramid URL path parameters",
-    "request.GET":            "Pyramid query parameters",
-    "request.POST":           "Pyramid form data",
+    "request.GET":            "Pyramid query parameters",  # noqa: F601
+    "request.POST":           "Pyramid form data",  # noqa: F601
     # Sanic web framework request sources
-    "request.args":           "Sanic query parameters",
-    "request.form":           "Sanic form data",
-    "request.json":           "Sanic parsed JSON body",
-    "request.files":          "Sanic uploaded file",
+    "request.args":           "Sanic query parameters",  # noqa: F601
+    "request.form":           "Sanic form data",  # noqa: F601
+    "request.json":           "Sanic parsed JSON body",  # noqa: F601
+    "request.files":          "Sanic uploaded file",  # noqa: F601
     # Falcon web framework request sources
     "req.params":             "Falcon URL path parameters",
     "req.media":              "Falcon parsed request body",
@@ -2410,9 +2410,7 @@ def _detect_framework_root(file_path: str) -> bool:
 
         # Check for Python framework markers
         setup_py = parent / "setup.py"
-        setup_cfg = parent / "setup.cfg"
         pyproject = parent / "pyproject.toml"
-        init_py = parent / "__init__.py"
 
         is_python_framework = False
         if setup_py.exists() or (pyproject.exists() and not (parent / "tests").exists()):

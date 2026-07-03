@@ -64,15 +64,15 @@ _GO_TAINT_SOURCES: Dict[str, str] = {
     # Echo framework
     "c.FormValue": "Echo form/query value",
     "c.QueryParam": "Echo query parameter",
-    "c.Param": "Echo URL path parameter",
+    "c.Param": "Echo URL path parameter",  # noqa: F601
     "c.RealIP": "Echo client real IP",
     # Fiber framework
     "c.Params": "Fiber URL path parameter",
     "c.Body": "Fiber request body",
-    "c.Query": "Fiber query parameter",
+    "c.Query": "Fiber query parameter",  # noqa: F601
     "c.Get": "Fiber request header",
     "c.GetReqHeaders": "Fiber all request headers",
-    "c.FormValue": "Fiber form value",
+    "c.FormValue": "Fiber form value",  # noqa: F601
     "c.Cookies": "Fiber cookie value",
 }
 
@@ -145,9 +145,9 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "gorm.DB.Raw": ("CWE-89", "SQL Injection via GORM Raw", "critical"),
     "gorm.DB.Exec": ("CWE-89", "SQL Injection via GORM Exec", "critical"),
     "DB.Raw": ("CWE-89", "SQL Injection via GORM Raw (db instance)", "critical"),
-    "DB.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),
+    "DB.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),  # noqa: F601
     "db.Raw": ("CWE-89", "SQL Injection via GORM Raw (db instance)", "critical"),
-    "db.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),
+    "db.Exec": ("CWE-89", "SQL Injection via GORM Exec (db instance)", "critical"),  # noqa: F601
     # Redis command injection — CWE-78
     "redis.Client.Do": ("CWE-78", "Command Injection via Redis Do", "high"),
     "redis.Client.Send": ("CWE-78", "Command Injection via Redis Send", "high"),
