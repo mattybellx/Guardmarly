@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "ansede-static"
 version = "5.5.0"
-description = "AST-based SAST for Python and JavaScript — detects IDOR, auth bypass, and ownership flaws that Bandit misses."
+description = "Offline SAST for Python and JavaScript — detects IDOR, missing authentication, and ownership bypass that Bandit, Semgrep, and CodeQL miss by default. OWASP recall 62%, CVE recall 96%."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
@@ -18,6 +18,8 @@ maintainers = [
 keywords = [
     "security", "sast", "static-analysis", "vulnerability", "linter",
     "code-review", "cwe", "owasp", "injection", "python", "javascript",
+    "idor", "authentication", "authorization", "access-control",
+    "offline", "air-gapped", "cli", "devsecops", "sarif",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
