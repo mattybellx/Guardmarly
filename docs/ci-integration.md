@@ -5,7 +5,7 @@
 ### Basic scan
 
 ```yaml
-- uses: mattybellx/Ansede@v2.3.2
+- uses: mattybellx/Ansede@v5.5.0
   with:
     path: src/
     fail-on: high
@@ -90,7 +90,7 @@ stage('SAST Scan') {
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/mattybellx/Ansede
-    rev: v2.3.2
+    rev: v5.5.0
     hooks:
       - id: ansede-static
         args: [--incremental, --fail-on high]

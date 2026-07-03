@@ -10,7 +10,7 @@ Or install with extras for development:
 
 ```bash
 pip install "ansede-static[dev]"   # pytest, mypy, ruff
-pip install "ansede-static[rich]"   # rich terminal output
+pip install ansede-static              # standard install (includes rich terminal output)
 pip install "ansede-static[graph]"  # networkx for cross-language graphs
 ```
 

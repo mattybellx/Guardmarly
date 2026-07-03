@@ -1,6 +1,6 @@
 # Performance
 
-## v5.0.0 Speed Improvements
+## v5.5.0 Performance
 
 | Optimization | Impact |
 |-------------|--------|

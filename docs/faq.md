@@ -91,7 +91,7 @@ pip install --upgrade pip
 pip install ansede-static
 ```
 
-The package has zero external dependencies — no npm, no Node, no compilers needed.
+The package has one external dependency (rich, for terminal output) — no npm, no Node, no compilers needed.
 
 ### Binary download
 

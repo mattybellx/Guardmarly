@@ -6,46 +6,11 @@ Thanks for helping keep `ansede-static` safe and trustworthy.
 
 | Version | Supported |
 |---|---|
-| 5.2.x (latest) | ✅ Active |
+| 5.5.x (latest) | ✅ Active |
 | 5.1.x | ✅ Security fixes |
 | 5.0.x | ✅ Security fixes |
 | 4.x | ❌ No longer supported |
 | < 4.0 | ❌ No longer supported |
-
-## Reporting a Vulnerability
-
-**Do not open a public issue.** Use GitHub's private vulnerability reporting:
-
-👉 https://github.com/mattybellx/Ansede/security/advisories/new
-
-We respond within 48 hours. Fixes published within 7 days.
-
-### What to include
-- Version: `ansede-static --version`
-- Steps to reproduce
-- Impact assessment (if known)
-
-### Scope
-- Scanner engine, CLI, analysis rules
-- Supply chain issues in PyPI packages
-- License server authentication bypass
-
-### Out of scope
-- Example/test code under `samples/` or `campaign/`
-- Issues requiring physical machine access
-- Social engineering
-
-## Advisories
-https://github.com/mattybellx/Ansede/security/advisories
-
-## Where to report
-
-- **Private security vulnerabilities:**
-	- https://github.com/mattybellx/Ansede/security/advisories/new
-- **Non-sensitive bugs / false positives / false negatives:**
-	- GitHub Issues templates
-- **General questions:**
-	- GitHub Discussions
 
 ## Reporting a Vulnerability
 
@@ -57,11 +22,30 @@ Instead, use **GitHub private vulnerability reporting**:
 
 When reporting, please include:
 
-1. A description of the vulnerability
+1. Version: `ansede-static --version`
 2. Steps to reproduce
 3. Impact assessment (if known)
 
+### Scope
+- Scanner engine, CLI, analysis rules
+- Supply chain issues in PyPI packages
+- License server authentication bypass
+
+### Out of scope
+- Example/test code under `samples/` or `campaign/`
+- Issues requiring physical machine access
+- Social engineering
+
 We aim to acknowledge reports within **48 hours** and provide a fix within **7 days** for critical issues.
+
+## Advisories
+https://github.com/mattybellx/Ansede/security/advisories
+
+## Where to report
+
+- **Private security vulnerabilities:** GitHub Security Advisories (link above)
+- **Non-sensitive bugs / false positives / false negatives:** GitHub Issues
+- **General questions:** GitHub Discussions
 
 ### Suggested report format
 

@@ -24,7 +24,7 @@ jobs:
 
       - name: Run ansede scan → SARIF
         run: |
-          ansede scan . \
+          ansede-static . \
             --format sarif \
             --output results.sarif \
             --fail-on high \
@@ -45,7 +45,7 @@ That's it. After the workflow runs, findings appear under the **Security > Code 
 
 | Component | Minimum |
 |---|---|
-| ansede-static | v2.2.1+ |
+| ansede-static | v5.5.0+ |
 | github/codeql-action | v3.x |
 | SARIF format | `--format sarif` (default: text) |
 
@@ -56,7 +56,7 @@ That's it. After the workflow runs, findings appear under the **Security > Code 
 ```yaml
       - name: Run ansede scan
         run: |
-          ansede scan . \
+          ansede-static . \
             --format sarif \
             --output results.sarif \
             --fail-on critical   # exit code 1 if any critical finding
@@ -74,12 +74,12 @@ That's it. After the workflow runs, findings appear under the **Security > Code 
 ```yaml
       - name: Generate baseline (main branch only)
         if: github.ref == 'refs/heads/main'
-        run: ansede scan . --format sarif --baseline-update --baseline .ansede-baseline.json
+        run: ansede-static . --format sarif --baseline-update --baseline .ansede-baseline.json
 
       - name: Scan with baseline (PRs)
         if: github.event_name == 'pull_request'
         run: |
-          ansede scan . \
+          ansede-static . \
             --format sarif \
             --output results.sarif \
             --baseline .ansede-baseline.json
@@ -92,7 +92,7 @@ Only **new** findings (not in the baseline) are reported in the SARIF output and
 ```yaml
       - name: Run ansede scan
         run: |
-          ansede scan . \
+          ansede-static . \
             --format sarif \
             --output results.sarif \
             --exclude node_modules \
@@ -105,7 +105,7 @@ Only **new** findings (not in the baseline) are reported in the SARIF output and
 ```yaml
       - name: Run ansede scan
         run: |
-          ansede scan . \
+          ansede-static . \
             --format sarif \
             --output results.sarif \
             --timeout-per-file 60
@@ -233,5 +233,5 @@ No configuration needed — place the `.map` file alongside the bundle.
 | "No SARIF results uploaded" | Verify the SARIF file was created: `ls -la results.sarif` |
 | Code Scanning shows 0 alerts | Check `--fail-on` threshold; alerts below the threshold are reported but don't fail |
 | False positive in report | Add `# ansede: ignore[CWE-79]` to the line, or suppress via community rules |
-| Baseline not reducing noise | Regenerate baseline on main branch: `ansede scan . --baseline-update` |
+| Baseline not reducing noise | Regenerate baseline on main branch: `ansede-static . --baseline-update` |
 | Large SARIF file | Add `--exclude node_modules .venv` and increase `--timeout-per-file` |

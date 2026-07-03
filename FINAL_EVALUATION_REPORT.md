@@ -2,7 +2,7 @@
 ANSEDE STATIC — COMPREHENSIVE EVALUATION REPORT
 ================================================
 Date: 2026-07-02
-Version: 5.3.1-dev (with all precision fixes)
+Version: 5.5.0 (with all precision fixes)
 Methodology: Random GitHub repos, shallow clone, --strict mode
 Status: FINAL
 """
@@ -65,8 +65,8 @@ CVE_RECALL = {
 
 # OWASP Benchmark (from benchmarks/owasp_head_to_head.json)
 OWASP_BENCHMARK = {
-    "ansede_recall":  "~100%",
-    "semgrep_recall": "23.2%",
+    "ansede_recall":  "62.0%",
+    "semgrep_recall": "59.4%",
     "codeql_recall":  "33.6%",
 }
 
@@ -89,15 +89,15 @@ SEMGREP_H2H = [
 ]
 
 # Test suite
-TESTS = {"total":1232,"passed":1232,"time_sec":17.5}
+TESTS = {"total":1234,"passed":1234,"time_sec":19.6}
 
 SUMMARY = {
     "repos_scanned": 22,
     "languages": ["Python","JavaScript","TypeScript","Go","C#","Java"],
     "total_loc": 750000,
     "cve_recall_pct": 96.3,
-    "owasp_recall_vs_semgrep": "4.1x",
-    "owasp_recall_vs_codeql": "2.9x",
+    "owasp_recall_vs_semgrep": "1.04x (62.0 vs 59.4)",
+    "owasp_recall_vs_codeql": "1.84x (62.0 vs 33.6)",
     "clean_repos_pct": 45,  # 10/22 at 0-1 findings
     "avg_findings_per_repo": 2.1,
     "tests_passing": 1232,

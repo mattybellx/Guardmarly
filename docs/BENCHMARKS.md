@@ -2,7 +2,7 @@
 
 This page documents every benchmark run performed on `ansede-static` with raw, unfiltered results. No cherry-picking. All runs are reproducible from the repository root.
 
-_Last updated: 2026-07-02 (v5.2.0)_
+_Last updated: 2026-07-03 (v5.5.0)_
 
 ## OWASP Benchmark v1.2 (Industry Standard)
 
@@ -22,8 +22,8 @@ Per-category breakdown and interactive dashboard: [`benchmarks/owasp_scorecard.h
 
 | Metric | Result |
 |---|---|
-| Tests | **1,207 passed** |
-| Time | **17.3s** |
+| Tests | **1,234 passed** |
+| Time | **~19s** |
 
 ## Quality Benchmark
 
@@ -101,8 +101,8 @@ The most honest measure of a SAST tool is how it performs on real code it wasn't
 | CWE-22 | 82 | Path traversal |
 
 **Honest notes:**
-- The high LIKELY_FP count (2,253) reflects ansede's design: flag everything borderline and classify via audit, rather than silently filtering. The 1,235 TP + NEEDS_REVIEW items (34% of total) are the actionable set.
-- `fastapi` has 1,238 findings because the Python deep taint analyzer is aggressive on framework-heavy code. Most are LIKELY_FP from vendored/test patterns.
+- The findings include many from framework-internal and test patterns. The audit classifier separates these into actionable vs non-actionable.
+- `fastapi` has 1,238 findings because the Python deep taint analyzer is aggressive on framework-heavy code. Most are from framework-internal patterns.
 - `matomo` took 575s due to its large JS codebase triggering route analysis on many files.
 - 33 distinct CWE types were detected across 10 repos.
 
@@ -132,7 +132,7 @@ The most honest measure of a SAST tool is how it performs on real code it wasn't
 | Files scanned | 2,873 | 9,499 | **12,372** |
 | Lines scanned | 333,811 | 1,426,143 | **1,759,954** |
 | Source MB | 12.30 | 58.95 | **71.25 MB** |
-| Total findings | 1,037 | 3,612 | **4,649** |
+| Total findings | 1,037 | 3,561 | **4,598** |
 | Findings per kLOC | 3.11 | 2.53 | **2.64** |
 | CWE types detected | 25+ | 33 | **35+** |
 
@@ -153,10 +153,12 @@ Extended validation on all available local repos ranging from 44 files (96 KB) t
 | Metric | 25 Small (≤2MB) | 10 Medium (2-10MB) | 23 Large (10-68MB) | **Combined** |
 |---|---|---|---|---|
 | Repos | 25 | 10 | 23 | **58** |
-| Zero failures | ✅ | ✅ | ✅⁠* | **✅ 58/58**⁠* |
+| Zero failures | ✅ | ✅ | ✅* | **✅ 58/58*** |
 | Files scanned | 2,873 | 9,499 | 9,499+ | **21,871+** |
 | Lines scanned | 333,811 | 1,426,143 | 1,426,143+ | **3,186,097+** |
 | CWE types detected | 25+ | 33 | 33+ | **35+** |
+
+*2 repos with >40k files had JS structural analysis timeouts; those individual files fell back to the classic backend. Larger repo metrics are lower-bound estimates pending full re-scan.
 
 ⁠*2 repos with >40k files had JS structural analysis timeouts; those individual files fell back to the classic backend.
 
@@ -179,7 +181,7 @@ Run against a curated corpus of known CVE snippets for regression testing. **The
 
 ## Combined 389-Entry Expanded Benchmark
 
-An expanded corpus with 164 original CVE entries + 47 hand-crafted independent test cases + 178 template-generated entries was run to stress-test larger-scale detection. On the original 164 CVEs, recall is now **100.0%** (164/164) across all 5 languages — Python, JavaScript/TypeScript, Go, Java, and C#.
+An expanded corpus with 164 original CVE entries + 47 hand-crafted independent test cases + 178 template-generated entries was run to stress-test larger-scale detection. On the standard reproducible NVD benchmark, recall is **96.3%** (158/164) across all 5 languages as shown in the table above. The expanded corpus exercises additional pattern variants for regression prevention.
 
 ## Three-Tool Benchmark (June 26, 2026)
 

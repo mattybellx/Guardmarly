@@ -1,5 +1,5 @@
 name: 'ansede-static'
-description: 'Zero-dependency SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ categories. No GPU, no API keys.'
+description: 'Minimal-dependency SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ categories. No GPU, no API keys.'
 author: 'mattybellx'
 
 branding:

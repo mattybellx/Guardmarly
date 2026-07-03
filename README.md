@@ -128,7 +128,7 @@ def list_users():
 | **Web-wild precision** | **85.7%** |
 | **Phase 4 bridge** | Source-map resolution in active development |
 
-\*\*Transparency commitment:\*\* CVE recall is now 100.0% (164/164) across all 5 languages. Web-wild recall on minified/obfuscated code is ~70%. All benchmarks are reproducible from the repository root. No cherry-picked metrics. Full methodology in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
+**Transparency commitment:** CVE recall is 96.3% (158/164) across 5 languages on the reproducible benchmark. Synthetic pattern coverage is 100% (all CWE types detectable). Web-wild recall on minified/obfuscated code is ~70%. All benchmarks are reproducible from the repository root. Full methodology in [`docs/BENCHMARKS.md`](docs/BENCHMARKS.md).
 
 ### Performance
 
@@ -150,13 +150,13 @@ def list_users():
 | **IDOR / Auth Bypass** | ✓ Native AST | ✗ No default rules | ~ Manual QL |
 | **Incident Clustering** | ✓ 49% noise reduction | ✗ | ✗ |
 | **Offline-First** | ✓ Fully | ~ Needs rule sync | ✗ SaaS-only |
-| **Zero Dep Install** | ✓ `pip install` | ✗ Requires semgrep | ✗ DB build req. |
+| **Minimal Dep Install** | `pip install` | Requires semgrep | DB build req. |
 | **SBOM Output** | ✓ CycloneDX/SPDX | ✗ | ✗ |
 | **SARIF** | ✓ Free tier | ✓ | ✓ |
 | **LLM Triage** | ✓ (local Ollama) | ✗ | ✗ |
 | **IDE Plugins** | VS Code, IntelliJ, VS | VS Code only | VS Code only |
 | **Price** | Free + Pro | Free + Managed | SaaS-licensed |
-| **Head-to-Head Recall** (measured) | **100.0%** | **23.2%** | — |
+| **Head-to-Head Recall** (measured) | **96.3%** | **23.2%** | — |
 
 \*\*CodeQL recall is an estimate based on default rule coverage. Semgrep OSS recall measured via [`benchmarks.head_to_head`](benchmarks/head_to_head.py) on 164 CVE corpus. Exact figures vary by deployment.*
 
@@ -200,8 +200,8 @@ def list_users():
 | IDE | Status | Install |
 |---|---|---|
 | **VS Code** | ✓ Published | [Marketplace](https://marketplace.visualstudio.com/) |
-| **IntelliJ IDEA** | ✓ Beta | Plugin from releases |
-| **Visual Studio 2022** | ✓ Beta | VSIX from releases |
+| **IntelliJ IDEA** | Stable | Plugin from releases |
+| **Visual Studio 2022** | Stable | VSIX from releases |
 
 All plugins provide inline diagnostics, gutter decorations, and quick-fix suggestions.
 
@@ -210,7 +210,7 @@ All plugins provide inline diagnostics, gutter decorations, and quick-fix sugges
 ## **<ins>GitHub Action</ins>**
 
 ```yaml
-- uses: mattybellx/Ansede@v4.0.0
+- uses: mattybellx/Ansede@v5.5.0
   with:
     path: src/
     fail-on: high

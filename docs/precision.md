@@ -1,6 +1,6 @@
 # Precision
 
-## v5.0.0 — 21-Repo Scale Proof
+## v5.5.0 — 14-Repo Web-App Precision Audit
 
 ### Per-Language Precision
 
@@ -18,21 +18,21 @@
 
 `flask`, `express`, `petclinic`, `automapper`, `mediatr`, `carbon`, `monolog`, `rake`, `slim`
 
-### CVE Recall: 100% (164/164)
+### CVE Recall: 96.3% (158/164)
 
 | Language | CVEs | Recall |
 |----------|------|--------|
-| Python | 68 | 100% |
-| JavaScript | 42 | 100% |
+| Python | 68 | 98.5% |
+| JavaScript | 42 | 97.6% |
 | Java | 20 | 100% |
-| C# | 19 | 100% |
-| Go | 15 | 100% |
+| C# | 19 | 94.7% |
+| Go | 15 | 80.0% |
 
 ### 3-Tool Comparison (Python + JavaScript, 110 CVEs)
 
 | Tool | Recall |
 |------|--------|
-| **Ansede Static** | **100%** |
+| **Ansede Static** | **98.2%** |
 | Semgrep | 23.2% |
 | CodeQL | 33.6% |
 
