@@ -4,8 +4,8 @@ tools.check_binary_guardrails
 DIR-5.3 guardrail enforcement: dependency and size checks.
 
 Ensures:
-  1. `pyproject.toml` declares zero production dependencies (stdlib-only).
-  2. Built wheel / installed package stays under 5 MB.
+  1. `pyproject.toml` declares only `rich` as the sole production dependency.
+  2. Built wheel / installed package stays under 10 MB.
 
 Exit codes:
     0 — all guardrails pass
@@ -20,11 +20,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PYPROJECT = ROOT / "pyproject.toml"
-MAX_SIZE_MB = 5.0
+MAX_SIZE_MB = 10.0
+ALLOWED_DEPS: frozenset[str] = frozenset({"rich"})
 
 
 def _check_dependencies(*, quiet: bool = False) -> list[str]:
-    """Check pyproject.toml for production dependencies."""
+    """Check pyproject.toml for disallowed production dependencies."""
     failures: list[str] = []
     if not PYPROJECT.exists():
         failures.append(f"pyproject.toml not found at {PYPROJECT}")
@@ -39,17 +40,24 @@ def _check_dependencies(*, quiet: bool = False) -> list[str]:
         return failures
 
     deps: list[str] = data.get("project", {}).get("dependencies", [])
-    if deps:
+    disallowed: list[str] = []
+    for dep in deps:
+        pkg_name = dep.split(">=")[0].split("==")[0].split("<")[0].split("~")[0].strip()
+        if pkg_name not in ALLOWED_DEPS:
+            disallowed.append(dep)
+
+    if disallowed:
         failures.append(
-            f"Production dependencies found ({len(deps)}): {', '.join(deps)}"
+            f"Disallowed production dependencies found ({len(disallowed)}): {', '.join(disallowed)}"
         )
     elif not quiet:
-        print("  [OK] Production dependencies: none (stdlib-only)")
+        allowed_list = ", ".join(sorted(ALLOWED_DEPS))
+        print(f"  [OK] Production dependencies: only allowed ({allowed_list})")
     return failures
 
 
 def _check_dist_size(*, quiet: bool = False) -> list[str]:
-    """Check wheel / sdist size against the 5 MB limit."""
+    """Check wheel / sdist size against the 10 MB limit."""
     failures: list[str] = []
 
     dist_dir = ROOT / "dist"

@@ -451,7 +451,7 @@ _CWE_CONTRACTS: dict[str, RuleContract] = {
     "CWE-532": _contract(
         title="Sensitive information written to logs",
         category="security",
-        default_severity="high",
+        default_severity="medium",
         languages=("python",),
         cwe="CWE-532",
         precision="high",
@@ -475,7 +475,7 @@ _CWE_CONTRACTS: dict[str, RuleContract] = {
     "CWE-617": _contract(
         title="Silent exception swallowing or overly broad exception handling",
         category="error-handling",
-        default_severity="high",
+        default_severity="medium",
         languages=("python",),
         cwe="CWE-617",
         precision="medium",

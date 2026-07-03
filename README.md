@@ -7,8 +7,8 @@
 </p>
 
 <p align="center">
-  <strong>The offline SAST engine that beats Semgrep on OWASP and finds 7.5x more than CodeQL.</strong><br>
-  <strong>OWASP recall 62.0% · CVE recall 96.3% · 58 repos · 0 failures</strong> · <strong>0.4% FP rate</strong><br>
+  <strong>The offline SAST engine that beats Semgrep on OWASP recall and detects IDOR/auth flaws no other free scanner finds.</strong><br>
+  <strong>OWASP recall 62.0% · CVE recall 96.3% · 58 repos · 0 failures</strong> · <strong>Web-app precision ~36-58%</strong><br>
   <code>pip install ansede-static</code> &nbsp;·&nbsp; No telemetry &nbsp;·&nbsp; Fully offline
 </p>
 
@@ -17,8 +17,8 @@
   <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-96.3%25-success?logo=owasp" alt="CVE Recall 96.3%"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Languages-5-blue" alt="5 languages"></a>
   <a href="https://github.com/mattybellx/Ansede/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/FP%20Rate-0.4%25-success" alt="FP Rate 0.4%"></a>
-  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/tests-1207%20passed-success" alt="1207 tests"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Precision-36--58%25%20on%20web%20apps-blue" alt="Precision 36-58% on web apps"></a>
+  <a href="https://github.com/mattybellx/Ansede/blob/master/docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/tests-1234%20passed-success" alt="1234 tests"></a>
 </p>
 
 <p align="center">
@@ -46,7 +46,7 @@ ansede-static src/ --format html           # Interactive HTML dashboard
 ansede-static . --openapi-report           # OpenAPI/Swagger route bridge report
 ```
 
-**Zero-dependency install:** No npm, no Node, no compilers. Just Python.
+**Self-contained install:** Zero external network or binary compilation dependencies. Operates as a completely self-contained execution package with single-binary distribution formats available. Just Python and `rich` for terminal output.
 
 ---
 

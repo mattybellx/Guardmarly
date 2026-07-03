@@ -189,3 +189,41 @@ def get_explanation(cwe_id: str) -> str:
         return EXPLANATIONS[cwe_id]
         
     return f"### {cwe_id}\n\n**What it is:**\nThis vulnerability was detected based on data-flow and architectural heuristics. Consider reviewing the standard OWASP guidelines for {cwe_id}."
+
+
+def generate_remediation_snippet(rule_id: str) -> str:
+    """Return a concrete, copy-pasteable code remediation snippet for a given rule ID.
+
+    Used by reporters and the explain engine to show fix examples inline.
+    """
+    remediations: dict[str, str] = {
+        "ANSEDE-E2301": (
+            "if resource.owner_id != request.state.user.id:\n"
+            "    raise HTTPException(status_code=403, detail='Access Denied')"
+        ),
+        "ANSEDE-E2302": (
+            "@login_required\n"
+            "def protected_view(request):"
+        ),
+        "PY-019": (
+            "# Add ownership check before resource mutation\n"
+            "if resource.owner_id != current_user.id:\n"
+            "    abort(403)"
+        ),
+        "PY-020": (
+            "# Scope query by owner\n"
+            "db.execute('SELECT * FROM items WHERE id = ? AND owner_id = ?',\n"
+            "           (item_id, current_user.id))"
+        ),
+        "PY-016": (
+            "# Use parameterized queries\n"
+            "db.execute('SELECT * FROM users WHERE id = ?', (user_id,))"
+        ),
+        "JS-034": (
+            "// Verify JWT signature before trusting payload\n"
+            "const decoded = jwt.verify(token, secret, { algorithms: ['HS256'] });"
+        ),
+    }
+    return remediations.get(
+        rule_id, "# Apply appropriate framework permission controls."
+    )

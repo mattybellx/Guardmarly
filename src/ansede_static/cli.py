@@ -432,6 +432,49 @@ def _null_context():
     return contextlib.nullcontext()
 
 
+# ── Phase 3.4: ProcessPoolExecutor for GIL-free multi-core analysis ──────
+
+def _process_file_chunk(file_path_str: str) -> dict[str, Any]:
+    """Completely isolated multi-core worker process scope.
+
+    Each worker runs in its own process, bypassing Python's GIL for
+    CPU-bound AST parsing and analysis.
+    """
+    from ansede_static.python_analyzer import analyze_python
+    try:
+        results = analyze_python(
+            Path(file_path_str).read_text(encoding="utf-8", errors="replace"),
+            filename=file_path_str,
+        )
+        return {"file": file_path_str, "findings": results.findings, "success": True}
+    except Exception as e:
+        return {"file": file_path_str, "error": str(e), "success": False}
+
+
+def execute_parallel_analysis(
+    file_paths: list[str], max_workers: int
+) -> list[dict[str, Any]]:
+    """Enforce ProcessPoolExecutor to split heavy CPU execution across available hardware cores.
+
+    Uses ProcessPoolExecutor (not ThreadPoolExecutor) to achieve true
+    multi-core parallelism for AST parsing and taint analysis.
+    """
+    import os
+    from concurrent.futures import ProcessPoolExecutor
+
+    workers = min(max_workers, os.cpu_count() or 1)
+    aggregated_results: list[dict[str, Any]] = []
+
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        futures = [
+            executor.submit(_process_file_chunk, path) for path in file_paths
+        ]
+        for future in futures:
+            aggregated_results.append(future.result())
+
+    return aggregated_results
+
+
 def _analyze_file(
     path: Path,
     *,
@@ -896,6 +939,32 @@ def _filter_results_to_changed_lines(
             lines_scanned=result.lines_scanned,
         ))
     return filtered
+
+
+# ── Phase 4.3: Git diff-aware PR change isolation filter ──────────────
+
+def filter_findings_by_git_diff(
+    findings: list[dict[str, Any]], diff_map: dict[str, set[int]]
+) -> list[dict[str, Any]]:
+    """Drop findings unless they map directly to newly modified code paths.
+
+    Restricts scan outputs to newly introduced lines, preventing legacy code
+    warnings from blocking active production deployment runs.
+
+    Args:
+        findings: List of finding dicts with 'file' and 'line' keys.
+        diff_map: Mapping of file_path → set of changed line numbers.
+
+    Returns:
+        Filtered list containing only findings on changed lines.
+    """
+    isolated_findings: list[dict[str, Any]] = []
+    for issue in findings:
+        file_path = issue.get("file")
+        line_number = issue.get("line")
+        if file_path in diff_map and line_number in diff_map[file_path]:
+            isolated_findings.append(issue)
+    return isolated_findings
 
 
 def _parse_auto_fix_block(auto_fix: str) -> tuple[str, str] | None:

@@ -38,6 +38,12 @@ jobs:
       - name: Run Complete Test Suite
         run: python -m pytest tests/test_analysis_compat.py tests/test_async_scanner.py tests/test_audit_engine.py tests/test_auto_rules.py tests/test_cache.py tests/test_classifier.py tests/test_cli.py tests/test_clustering.py tests/test_community_rules.py tests/test_confidence.py tests/test_config.py tests/test_cross_file.py tests/test_cvss.py tests/test_datascience.py tests/test_entropy.py tests/test_explain.py tests/test_java_csharp_analyzers.py tests/test_js.py tests/test_js_ast.py tests/test_js_minified_project_index.py tests/test_js_structure_cache.py tests/test_noise_policies.py tests/test_phase2_registry_expansion.py tests/test_phase4_diagnostics.py tests/test_pr_generator.py tests/test_python.py tests/test_remediation.py tests/test_reporters.py tests/test_rules.py tests/test_symbolic_guards.py tests/test_triage.py tests/test_yaml_rules.py --tb=short -q
 
+      - name: Execute Strict Type Checking (Mypy)
+        run: |
+          pip install mypy
+          mypy --strict src/
+        continue-on-error: true
+
       - name: Lint with Ruff
         run: |
           pip install ruff

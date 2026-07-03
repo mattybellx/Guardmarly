@@ -1,0 +1,52 @@
+# Custom Security Checks (User-Defined Rules)
+#
+# This file demonstrates the declarative YAML schema for writing
+# custom security assertions without modifying core engine logic.
+#
+# Schema version: 1.0
+# Documentation: https://github.com/mattybellx/Ansede/blob/main/docs/writing-rules.md
+
+rules:
+  - id: ANS-CUSTOM-DECORATOR
+    metadata:
+      title: Missing Required Multi-Tenant Context Filter
+      severity: HIGH
+      description: Flags route handlers that do not call active isolation hooks.
+    target_layers: [python]
+    patterns:
+      - pattern-match:
+          node_type: FunctionDef
+          contains_assignment:
+            variable: "tenant_id"
+          excludes_validation:
+            pattern: "verify_tenant_boundary"
+
+  - id: ANS-CUSTOM-OWNERSHIP
+    metadata:
+      title: Database Query Missing Ownership Scope
+      severity: HIGH
+      description: Flags database queries that fetch resources by ID without filtering by owner.
+    target_layers: [python]
+    patterns:
+      - pattern-match:
+          node_type: Call
+          contains:
+            pattern: "db.execute"
+          excludes:
+            pattern: "owner_id"
+
+  - id: ANS-CUSTOM-RATE-LIMIT
+    metadata:
+      title: Authentication Endpoint Missing Rate Limiting
+      severity: MEDIUM
+      description: Flags login/authentication routes that lack rate-limiter middleware.
+    target_layers: [python, javascript]
+    patterns:
+      - pattern-match:
+          node_type: FunctionDef
+          contains_decorator:
+            pattern: "route|post|get"
+          contains_path:
+            pattern: "login|auth|signin"
+          excludes_decorator:
+            pattern: "limiter|rate_limit|throttle"
