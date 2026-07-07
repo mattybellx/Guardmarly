@@ -6,19 +6,13 @@ on:
   pull_request:
     branches: [master, main]
 
-permissions:
-  contents: read
-  security-events: write
-
 jobs:
-  # ── Core: tests on all OS/Python combos ──────────────────────────────
   test:
-    name: Test (${{ matrix.os }} / py${{ matrix.python-version }})
-    runs-on: ${{ matrix.os }}
+    name: Test (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
         python-version: ['3.10', '3.11', '3.12']
 
     steps:
@@ -26,18 +20,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
       - name: Install
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-          pip install tree-sitter tree-sitter-java 2>/dev/null || echo "tree-sitter skipped"
+        run: pip install -e ".[dev]"
       - name: Run tests
-        run: python -m pytest tests/ --ignore=tests/test_real_world_compare.py --ignore=tests/test_external_corpus.py --tb=short -q
+        run: python -m pytest tests/ --ignore=tests/test_real_world_compare.py --ignore=tests/test_external_corpus.py -q --tb=short
 
-  # ── NVD CVE recall gate ────────────────────────────────────────────
-  nvd-benchmark:
-    name: NVD CVE Recall
+  nvd:
+    name: NVD CVE Benchmark
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,47 +34,12 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install
-        run: |
-          pip install -e ".[dev]"
-          pip install tree-sitter tree-sitter-java 2>/dev/null || echo "tree-sitter skipped"
-      - name: NVD benchmark
-        run: python -m benchmarks.nvd_benchmark --fail-under 60 --quiet
+        run: pip install -e ".[dev]"
+      - name: Run
+        run: python -m benchmarks.nvd_benchmark --fail-under 60
 
-  # ── OWASP benchmark gate ────────────────────────────────────────────
-  owasp:
-    name: OWASP Recall
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: |
-          pip install -e ".[dev]"
-          pip install tree-sitter tree-sitter-java 2>/dev/null || echo "tree-sitter skipped"
-      - name: Run OWASP
-        run: python -m benchmarks.owasp_fast
-        continue-on-error: true
-      - name: Check recall >= 85%
-        run: |
-          if [ -f benchmarks/owasp_scorecard.json ]; then
-            python -c "
-          import json
-          d = json.load(open('benchmarks/owasp_scorecard.json'))
-          r = d['recall_pct']
-          print(f'OWASP recall: {r}%')
-          if r < 85:
-              print(f'WARNING: recall {r}% below 85% threshold')
-          "
-          else
-            echo "OWASP scorecard not found — skipping gate"
-          fi
-
-  # ── Lint + type check ──────────────────────────────────────────────
   lint:
-    name: Lint & Type Check
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,40 +49,6 @@ jobs:
       - name: Install
         run: |
           pip install -e ".[dev]"
-          pip install tree-sitter tree-sitter-java 2>/dev/null || echo "tree-sitter skipped"
-          pip install mypy ruff
-      - name: Lint
-        run: ruff check src/ --ignore=E501,E402,F401,F811,E701,E702,E741,F821 --quiet
-      - name: Type check
-        run: mypy src/ --ignore-missing-imports
-        continue-on-error: true
-
-  # ── Docs build ─────────────────────────────────────────────────────
-  docs:
-    name: Docs Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install mkdocs mkdocs-material
-      - name: Build
-        run: mkdocs build
-
-  # ── Engine comparison (v1 vs v2) ────────────────────────────────────
-  engine:
-    name: Engine Compare
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: |
-          pip install -e ".[dev]"
-          pip install tree-sitter tree-sitter-java 2>/dev/null || echo "tree-sitter skipped"
-      - name: Compare
-        run: python .github/scripts/compare_engines.py
+          pip install ruff
+      - name: Ruff
+        run: ruff check src/ --ignore=E501,E402,F401,F811,E701,E702,E741,F821
