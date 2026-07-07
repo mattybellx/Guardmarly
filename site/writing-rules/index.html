@@ -1,0 +1,1696 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/writing-rules/">
+      
+      
+        <link rel="prev" href="../BENCHMARKS/">
+      
+      
+        <link rel="next" href="../ROADMAP-TO-WORLD-BEST/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Writing Rules - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#writing-rules-for-ansede-v2" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Writing Rules
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pick-the-right-extension-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick the right extension point
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engine-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Engine rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-rule-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Rule Protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-semanticmodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The SemanticModel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step-writing-an-engine-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step-by-step: writing an engine rule
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step-by-step: writing an engine rule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create a module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-implement-the-rule-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Implement the rule class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-register-the-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Register the module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-write-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Write tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Finding fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confidence-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suppression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suppression
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taint-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint primitives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-sinks-via-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom sinks via ansede.json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-custom-rules-yaml-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community custom rules (YAML / JSON)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Community custom rules (YAML / JSON)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capabilities-and-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities and limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example ansede.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-custom-rules-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example custom rules file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-language-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported language labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-promote-a-custom-rule-into-the-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to promote a custom rule into the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-before-merging-an-engine-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist before merging an engine rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-before-merging-a-community-rule-pack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist before merging a community rule pack
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP-TO-WORLD-BEST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pick-the-right-extension-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pick the right extension point
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#engine-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Engine rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Engine rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-rule-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Rule Protocol
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node Types
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-semanticmodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The SemanticModel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step-writing-an-engine-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step-by-step: writing an engine rule
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step-by-step: writing an engine rule">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-a-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Create a module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-implement-the-rule-class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Implement the rule class
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-register-the-module" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Register the module
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-write-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Write tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding fields
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Finding fields">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#confidence-guidelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Confidence guidelines
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suppression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Suppression
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taint-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint primitives
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-sinks-via-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom sinks via ansede.json
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-custom-rules-yaml-json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community custom rules (YAML / JSON)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Community custom rules (YAML / JSON)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#capabilities-and-limits" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Capabilities and limits
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example ansede.json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-custom-rules-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example custom rules file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#supported-language-labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported language labels
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-promote-a-custom-rule-into-the-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to promote a custom rule into the engine
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naming conventions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-before-merging-an-engine-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist before merging an engine rule
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checklist-before-merging-a-community-rule-pack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Checklist before merging a community rule pack
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="writing-rules-for-ansede-v2">Writing Rules for Ansede v2</h1>
+<p>This guide explains how to extend Ansede in two ways:</p>
+<ol>
+<li><strong>Engine rules</strong> — Python classes registered in the v2 engine for AST and semantic analysis.</li>
+<li><strong>Community custom rules</strong> — YAML or JSON pattern rules loaded at runtime through <code>ansede.json</code>.</li>
+</ol>
+<p>Use engine rules when you need AST context, taint propagation, or framework-aware reasoning.
+Use community custom rules when you need a lightweight repo-local or org-local pattern detector.</p>
+<hr />
+<h2 id="pick-the-right-extension-point">Pick the right extension point</h2>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Best fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Taint-aware sink/source logic</td>
+<td>Engine rule</td>
+</tr>
+<tr>
+<td>AST node context or semantic model access</td>
+<td>Engine rule</td>
+</tr>
+<tr>
+<td>Quick org-specific banned API pattern</td>
+<td>Community custom rule</td>
+</tr>
+<tr>
+<td>Repo-local experiment without code changes</td>
+<td>Community custom rule</td>
+</tr>
+<tr>
+<td>Shipping a detector with curated contracts/tests</td>
+<td>Engine rule</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="engine-rules">Engine rules</h2>
+<p>Engine rules are plain Python classes registered into the v2 rule registry.</p>
+<h3 id="the-rule-protocol">The Rule Protocol</h3>
+<p>Every rule must satisfy the <code>Rule</code> protocol defined in <code>src/ansede_static/v2/rule_protocol.py</code>:</p>
+<pre><code class="language-python">from typing import Protocol, Optional, runtime_checkable
+from ansede_static.v2.nodes import ASTNode
+from ansede_static.v2.model import SemanticModel
+from ansede_static.v2.rule_protocol import Finding
+
+@runtime_checkable
+class Rule(Protocol):
+    rule_id: str
+    cwe: str
+    severity: str
+    title: str
+
+    def evaluate(self, node: ASTNode, model: SemanticModel) -&gt; Optional[Finding]:
+        ...
+</code></pre>
+<h3 id="node-types">Node Types</h3>
+<p>The engine dispatches to rules based on the <strong>node type</strong> registered via <code>@REGISTRY.register(...)</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Node class</th>
+<th>When dispatched</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CALL</code></td>
+<td><code>CallNode</code></td>
+<td>Every function or method call</td>
+</tr>
+<tr>
+<td><code>ASSIGN</code></td>
+<td><code>AssignNode</code></td>
+<td>Every variable assignment</td>
+</tr>
+<tr>
+<td><code>IMPORT</code></td>
+<td><code>ImportNode</code></td>
+<td>Every import statement</td>
+</tr>
+<tr>
+<td><code>FUNC_DEF</code></td>
+<td><code>FuncDefNode</code></td>
+<td>Every function definition</td>
+</tr>
+<tr>
+<td><code>CLASS_DEF</code></td>
+<td><code>ClassDefNode</code></td>
+<td>Every class definition</td>
+</tr>
+<tr>
+<td><code>RETURN</code></td>
+<td><code>ReturnNode</code></td>
+<td>Every return statement</td>
+</tr>
+<tr>
+<td><code>FSTRING</code></td>
+<td><code>FormattedStringNode</code></td>
+<td>Every f-string or template literal</td>
+</tr>
+<tr>
+<td><code>ATTR</code></td>
+<td><code>AttributeAccessNode</code></td>
+<td>Every attribute access</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-semanticmodel">The SemanticModel</h3>
+<p>The <code>SemanticModel</code> passed to <code>evaluate()</code> gives you access to the file's normalized AST:</p>
+<pre><code class="language-python">model.nodes_of_type(&quot;CALL&quot;)
+model.calls_to(&quot;requests.get&quot;)
+model.calls_matching(re.compile(r&quot;execute&quot;))
+model.is_line_suppressed(42, &quot;PY-SEC-012&quot;)
+model.suppressed_lines
+model.imports
+model.functions
+model.parse_error
+</code></pre>
+<hr />
+<h2 id="step-by-step-writing-an-engine-rule">Step-by-step: writing an engine rule</h2>
+<h3 id="1-create-a-module">1. Create a module</h3>
+<p>Place Python rules in <code>src/ansede_static/v2/rules/python/</code>.
+Place JS/TS rules in <code>src/ansede_static/v2/rules/javascript/</code>.
+Place language-agnostic rules in <code>src/ansede_static/v2/rules/shared/</code>.</p>
+<h3 id="2-implement-the-rule-class">2. Implement the rule class</h3>
+<pre><code class="language-python"># src/ansede_static/v2/rules/python/my_rule.py
+from __future__ import annotations
+from typing import Optional
+from ansede_static.v2.nodes import ASTNode, CallNode
+from ansede_static.v2.model import SemanticModel
+from ansede_static.v2.rule_protocol import Finding, REGISTRY
+
+_DANGEROUS_CALLEES = frozenset({&quot;dangerous_func&quot;, &quot;module.dangerous_func&quot;})
+
+@REGISTRY.register(&quot;CALL&quot;)
+class MyDangerousFunctionRule:
+    rule_id = &quot;PY-CUSTOM-001&quot;
+    cwe = &quot;CWE-XXX&quot;
+    severity = &quot;high&quot;
+    title = &quot;Dangerous Function Call&quot;
+
+    def evaluate(self, node: ASTNode, model: SemanticModel) -&gt; Optional[Finding]:
+        if not isinstance(node, CallNode):
+            return None
+        if node.callee not in _DANGEROUS_CALLEES:
+            return None
+
+        return Finding(
+            rule_id=self.rule_id,
+            cwe=self.cwe,
+            severity=self.severity,
+            title=self.title,
+            location=node.location,
+            message=&quot;Calling `dangerous_func()` is unsafe because ...&quot;,
+            confidence=&quot;confirmed&quot;,
+            suggestion=&quot;Use `safe_func()` instead.&quot;,
+        )
+</code></pre>
+<h3 id="3-register-the-module">3. Register the module</h3>
+<p>Add an import to <code>src/ansede_static/v2/rules/__init__.py</code>:</p>
+<pre><code class="language-python">from ansede_static.v2.rules.python import my_rule  # noqa: F401
+</code></pre>
+<h3 id="4-write-tests">4. Write tests</h3>
+<pre><code class="language-python">from ansede_static.v2.rules import load_all_rules
+from ansede_static.v2.engine import Engine
+
+load_all_rules()
+engine = Engine()
+
+
+def test_dangerous_func_detected():
+    src = &quot;dangerous_func(user_input)&quot;
+    findings = engine.scan_source(src, file_path=&quot;test.py&quot;)
+    assert any(f.rule_id == &quot;PY-CUSTOM-001&quot; for f in findings)
+
+
+def test_safe_func_not_flagged():
+    src = &quot;safe_func(user_input)&quot;
+    findings = engine.scan_source(src, file_path=&quot;test.py&quot;)
+    assert not any(f.rule_id == &quot;PY-CUSTOM-001&quot; for f in findings)
+</code></pre>
+<hr />
+<h2 id="finding-fields">Finding fields</h2>
+<pre><code class="language-python">@dataclass
+class Finding:
+    rule_id: str
+    cwe: str
+    severity: str
+    title: str
+    location: SourceLocation | None
+    message: str
+    confidence: str = &quot;possible&quot;
+    suppressed: bool = False
+    suppression_reason: str = &quot;&quot;
+    suggestion: str = &quot;&quot;
+    auto_fix: str = &quot;&quot;
+    explanation: str = &quot;&quot;
+    trace: list = field(default_factory=list)
+    analysis_kind: str = &quot;taint&quot;
+</code></pre>
+<h3 id="confidence-guidelines">Confidence guidelines</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmed</code></td>
+<td>Taint flows directly from a source to a sink with no sanitizer in between</td>
+</tr>
+<tr>
+<td><code>likely</code></td>
+<td>Taint heuristic matches, or callee is a well-known sink with tainted argument</td>
+</tr>
+<tr>
+<td><code>possible</code></td>
+<td>Pattern matches but static analysis cannot confirm flow</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="suppression">Suppression</h2>
+<p>Users suppress findings inline with:</p>
+<pre><code class="language-python">x = eval(user_input)  # ansede: ignore PY-SEC-003 -- reviewed, input is pre-validated
+
+# ansede: ignore
+</code></pre>
+<p>Your rule does <strong>not</strong> need to check suppression — the engine handles this via <code>model.is_line_suppressed()</code>.</p>
+<hr />
+<h2 id="taint-primitives">Taint primitives</h2>
+<p>For rules that need structured taint propagation, use the <code>TaintGraph</code> from <code>ansede_static.v2.taint</code>:</p>
+<pre><code class="language-python">from ansede_static.v2.taint import TaintGraph
+
+graph = TaintGraph()
+flows = graph.analyze(model)
+</code></pre>
+<hr />
+<h2 id="custom-sinks-via-ansedejson">Custom sinks via <code>ansede.json</code></h2>
+<p>Users can extend sink coverage via <code>ansede.json</code> without writing Python:</p>
+<pre><code class="language-json">{
+  &quot;sinks&quot;: [
+    {
+      &quot;rule_id&quot;: &quot;CUSTOM-001&quot;,
+      &quot;cwe&quot;: &quot;CWE-89&quot;,
+      &quot;title&quot;: &quot;SQL Injection via MyORM&quot;,
+      &quot;function&quot;: &quot;MyORM.execute_raw&quot;,
+      &quot;tainted_args&quot;: [0],
+      &quot;severity&quot;: &quot;critical&quot;
+    }
+  ]
+}
+</code></pre>
+<p>See <code>src/ansede_static/schemas/ansede.schema.json</code> for the full schema.</p>
+<hr />
+<h2 id="community-custom-rules-yaml-json">Community custom rules (YAML / JSON)</h2>
+<p>Community custom rules are line-pattern detectors loaded after the built-in analyzers finish.
+They are ideal for banning known-dangerous internal helpers, legacy wrappers, or organization-specific APIs.</p>
+<h3 id="capabilities-and-limits">Capabilities and limits</h3>
+<ul>
+<li>Loaded from <code>ansede.json</code> via <code>custom_rules_file</code></li>
+<li>Accept YAML when PyYAML is installed; JSON always works</li>
+<li>Pattern-only matching against source lines</li>
+<li>Can attach <code>rule_id</code>, <code>cwe</code>, <code>severity</code>, <code>suggestion</code>, and <code>auto_fix</code></li>
+<li>Do <strong>not</strong> get AST or taint-state access</li>
+</ul>
+<h3 id="example-ansedejson">Example <code>ansede.json</code></h3>
+<pre><code class="language-json">{
+  &quot;custom_rules_file&quot;: &quot;rules/community-rules.yml&quot;
+}
+</code></pre>
+<h3 id="example-custom-rules-file">Example custom rules file</h3>
+<pre><code class="language-yaml">version: &quot;1.0&quot;
+rules:
+  - id: &quot;ORG-001&quot;
+    title: &quot;Legacy shell helper&quot;
+    description: &quot;Flags the deprecated helper that shells out with user-controlled input.&quot;
+    severity: &quot;high&quot;
+    cwe: &quot;CWE-78&quot;
+    category: &quot;security&quot;
+    languages: [&quot;python&quot;, &quot;javascript&quot;, &quot;java&quot;, &quot;csharp&quot;, &quot;go&quot;]
+    pattern: &quot;legacy_exec\\s*\\(&quot;
+    suggestion: &quot;Replace legacy_exec() with a parameterized subprocess wrapper.&quot;
+    maturity: &quot;stable&quot;
+    tags: [&quot;custom&quot;, &quot;org-policy&quot;]
+</code></pre>
+<h3 id="supported-language-labels">Supported language labels</h3>
+<ul>
+<li><code>python</code>, <code>py</code></li>
+<li><code>javascript</code>, <code>js</code>, <code>jsx</code>, <code>typescript</code>, <code>ts</code>, <code>tsx</code></li>
+<li><code>go</code>, <code>golang</code></li>
+<li><code>java</code></li>
+<li><code>csharp</code>, <code>cs</code>, <code>c#</code></li>
+</ul>
+<p>JavaScript and TypeScript labels normalize to the JavaScript engine bucket, while C# aliases normalize to <code>csharp</code>.</p>
+<h3 id="when-to-promote-a-custom-rule-into-the-engine">When to promote a custom rule into the engine</h3>
+<p>Promote it when any of the following become true:</p>
+<ul>
+<li>false positives need AST context to avoid noise</li>
+<li>the rule needs taint flow rather than raw text matching</li>
+<li>the rule should participate in curated contracts or <code>--list-rules</code></li>
+<li>the rule needs framework-specific semantics</li>
+</ul>
+<hr />
+<h2 id="naming-conventions">Naming conventions</h2>
+<table>
+<thead>
+<tr>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python rule IDs</td>
+<td><code>PY-SEC-001</code> through <code>PY-SEC-NNN</code></td>
+</tr>
+<tr>
+<td>JavaScript rule IDs</td>
+<td><code>JS-SEC-001</code> through <code>JS-SEC-NNN</code></td>
+</tr>
+<tr>
+<td>Custom rule IDs</td>
+<td><code>CUSTOM-001</code>, <code>ORG-SEC-001</code></td>
+</tr>
+<tr>
+<td>Module names</td>
+<td><code>injection.py</code>, <code>crypto.py</code>, <code>auth.py</code></td>
+</tr>
+<tr>
+<td>Class names</td>
+<td><code>SQLInjectionRule</code>, <code>WeakHashingRule</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="checklist-before-merging-an-engine-rule">Checklist before merging an engine rule</h2>
+<ul>
+<li>[ ] Rule has a unique <code>rule_id</code> not used by any other rule</li>
+<li>[ ] <code>cwe</code> is a valid CWE identifier (format <code>CWE-NNN</code>)</li>
+<li>[ ] <code>severity</code> is one of <code>critical | high | medium | low | info</code></li>
+<li>[ ] <code>message</code> explains <em>why</em> it is a vulnerability</li>
+<li>[ ] <code>suggestion</code> gives actionable remediation code</li>
+<li>[ ] Module is imported in <code>load_all_rules()</code></li>
+<li>[ ] At least one positive test exists</li>
+<li>[ ] At least one negative test exists</li>
+<li>[ ] Rule does not emit a finding when suppression is active</li>
+</ul>
+<h2 id="checklist-before-merging-a-community-rule-pack">Checklist before merging a community rule pack</h2>
+<ul>
+<li>[ ] <code>custom_rules_file</code> is wired in <code>ansede.json</code></li>
+<li>[ ] Each rule has a stable <code>id</code> and human-readable <code>title</code></li>
+<li>[ ] Regex patterns are narrow enough to avoid obvious fixture or vendor noise</li>
+<li>[ ] At least one positive regression test exists for loading or applying the pack</li>
+<li>[ ] Rule metadata (<code>cwe</code>, <code>severity</code>, <code>suggestion</code>) is populated when known</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

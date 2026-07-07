@@ -1,0 +1,1796 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/interprocedural-taint-analysis/">
+      
+      
+        <link rel="prev" href="../faq/">
+      
+      
+        <link rel="next" href="../ide-plugin-architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Interprocedural Taint Analysis - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#interprocedural-taint-analysis-ifdside-framework" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Interprocedural Taint Analysis
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-ifds-lives-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where IFDS Lives Today
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where IFDS Lives Today">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-ifds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is IFDS?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-continuation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 Continuation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-python-analyzer-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Python Analyzer Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-dataflowfact-atomic-information-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. DataFlowFact — Atomic Information Unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flowfunction-dataflow-transformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. FlowFunction — Dataflow Transformation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cfgnode-program-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CFGNode — Program Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-context-call-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Context — Call Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-ifdssolver-tabulation-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. IFDSSolver — Tabulation Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-interprocedural-taint-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage: Interprocedural Taint Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage: Interprocedural Taint Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-level-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Level API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-with-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration with Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taint-specific-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint-Specific Primitives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Taint-Specific Primitives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#taint-flow-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint Flow Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations-future-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations &amp; Future Work
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitations &amp; Future Work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-v21-production-mainline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current (v2.1 / production mainline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v22-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.2+ Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Characteristics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimization Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP-TO-WORLD-BEST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-ifds-lives-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where IFDS Lives Today
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Where IFDS Lives Today">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-ifds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is IFDS?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-continuation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 Continuation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#production-python-analyzer-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Python Analyzer Mapping
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Core Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-dataflowfact-atomic-information-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. DataFlowFact — Atomic Information Unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-flowfunction-dataflow-transformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. FlowFunction — Dataflow Transformation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cfgnode-program-point" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CFGNode — Program Point
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-context-call-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Context — Call Stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-ifdssolver-tabulation-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. IFDSSolver — Tabulation Algorithm
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-interprocedural-taint-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Usage: Interprocedural Taint Analysis
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage: Interprocedural Taint Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#high-level-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        High-Level API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-with-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Integration with Rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#taint-specific-primitives" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint-Specific Primitives
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Taint-Specific Primitives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#taint-flow-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Taint Flow Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations-future-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations &amp; Future Work
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Limitations &amp; Future Work">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-v21-production-mainline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current (v2.1 / production mainline)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v22-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.2+ Roadmap
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Characteristics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complexity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optimization-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimization Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p>"""
+docs/interprocedural-taint-analysis.md
+──────────────────────────────────────
+Interprocedural Taint Analysis (IFDS/IDE) Architecture &amp; Usage Guide
+"""</p>
+<h1 id="interprocedural-taint-analysis-ifdside-framework">Interprocedural Taint Analysis: IFDS/IDE Framework</h1>
+<h2 id="overview">Overview</h2>
+<p>Ansede v2.0 now includes a <strong>production-grade interprocedural dataflow analysis framework</strong> based on IFDS (Interprocedural Finite Distributive Set), a foundational algorithm in static analysis.</p>
+<h2 id="where-ifds-lives-today">Where IFDS Lives Today</h2>
+<p>Ansede currently has <strong>two related IFDS layers</strong>:</p>
+<ol>
+<li>
+<p><strong>The v2 framework</strong> in <code>src/ansede_static/v2/*</code></p>
+<ul>
+<li>formal IFDS solver primitives</li>
+<li>explicit contexts / call sites</li>
+<li>dedicated integration tests</li>
+</ul>
+</li>
+<li>
+<p><strong>The production Python analyzer path</strong> in <code>src/ansede_static/python_analyzer.py</code>
+    plus <code>src/ansede_static/ir/global_graph.py</code></p>
+<ul>
+<li>builds lightweight <code>FunctionSummary</code> objects per function</li>
+<li>persists summaries in the workspace cache</li>
+<li>propagates interprocedural taint through <code>GlobalGraph.propagate_call_facts(...)</code></li>
+<li>records bounded call-string and IDE-style return facts for incremental scans</li>
+</ul>
+</li>
+</ol>
+<p>That means the shipped Python scanner is <strong>not a pure rewrite on top of the v2 solver</strong>.
+It is a <strong>hybrid architecture</strong>:</p>
+<ul>
+<li><strong>intraprocedural reasoning</strong> still lives primarily inside <code>python_analyzer.py</code></li>
+<li><strong>interprocedural propagation</strong> is delegated to <code>GlobalGraph</code></li>
+<li><strong>incremental invalidation</strong> uses persisted summary dependencies</li>
+</ul>
+<p>This hybrid design is intentional for now: it keeps the production analyzer fast,
+stdlib-only, and benchmark-stable while still giving it formal IFDS-style summary
+transfer across helper calls.</p>
+<h3 id="what-is-ifds">What is IFDS?</h3>
+<p>IFDS is a tabulation-based algorithm for computing precise interprocedural dataflow facts:
+- <strong>Intraprocedural:</strong> Handles flow within a function (assignments, control flow)
+- <strong>Interprocedural:</strong> Tracks data across function boundaries (call sites, returns)
+- <strong>Finite:</strong> Works on finite sets of facts (no widening/narrowing needed)
+- <strong>Distributive:</strong> Flow functions compose: <code>f(a ∪ b) = f(a) ∪ f(b)</code>
+- <strong>Set-based:</strong> Accumulates facts from all execution paths (may over-approximate)</p>
+<p><strong>Key insight:</strong> IFDS is polynomial O(n³) in program size and deterministic—ideal for CI systems.</p>
+<h3 id="phase-3-continuation">Phase 3 Continuation</h3>
+<p>This work completes Spec §3 (Dataflow &amp; Taint Tracking), moving beyond the conservative intraprocedural-only v2.0 baseline:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>v2.0</th>
+<th>v2.1+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intraprocedural taint</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Variable propagation</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Call graph tracking</td>
+<td>✅ (via CallGraph)</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Interprocedural taint</strong></td>
+<td>❌</td>
+<td>✅ IFDS/IDE</td>
+</tr>
+<tr>
+<td><strong>Context-sensitive</strong></td>
+<td>❌</td>
+<td>✅ Call-site-specific</td>
+</tr>
+<tr>
+<td><strong>Interprocedural calls</strong></td>
+<td>❌</td>
+<td>✅ Parameter &amp; return taint</td>
+</tr>
+</tbody>
+</table>
+<h3 id="production-python-analyzer-mapping">Production Python Analyzer Mapping</h3>
+<p>For the mainline Python scanner, the practical mapping is:</p>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Production implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local taint discovery</td>
+<td><code>_rule_03(...)</code> in <code>python_analyzer.py</code></td>
+</tr>
+<tr>
+<td>Local helper summaries</td>
+<td><code>_build_function_taint_summaries(...)</code></td>
+</tr>
+<tr>
+<td>Summary dependency graph</td>
+<td><code>_collect_function_dependencies(...)</code> + <code>GlobalGraph.record_function_summary(...)</code></td>
+</tr>
+<tr>
+<td>Cross-call transfer</td>
+<td><code>GlobalGraph.propagate_call_facts(...)</code></td>
+</tr>
+<tr>
+<td>Context sensitivity</td>
+<td>bounded <code>call_string</code> (default $k = 2$)</td>
+</tr>
+<tr>
+<td>IDE-style lattice state</td>
+<td><code>IDETaintFact</code> stored per <code>(file, function, value, call-string)</code></td>
+</tr>
+<tr>
+<td>Incremental invalidation</td>
+<td><code>GlobalGraph.invalidate_changed_files(...)</code></td>
+</tr>
+</tbody>
+</table>
+<p>So if you are reading the production code path, treat <code>GlobalGraph</code> as the
+<strong>interprocedural authority</strong>, and <code>python_analyzer.py</code> as the
+<strong>intraprocedural front-end plus finding synthesis layer</strong>.</p>
+<hr />
+<h2 id="architecture">Architecture</h2>
+<h3 id="core-components">Core Components</h3>
+<h4 id="1-dataflowfact-atomic-information-unit">1. <strong>DataFlowFact</strong> — Atomic Information Unit</h4>
+<pre><code class="language-python">from ansede_static.v2 import DataFlowFact, TaintFact
+
+# Generic fact
+fact = DataFlowFact(label=&quot;variable_x&quot;)
+
+# Taint-specific fact
+taint = TaintFact(
+    label=&quot;user_input_var&quot;,
+    category=&quot;user_input&quot;,       # Source category
+    confidence=&quot;confirmed&quot;        # confirmed | likely
+)
+</code></pre>
+<p><strong>Facts are immutable and hashable</strong> — they can be stored in sets and used as dictionary keys.</p>
+<h4 id="2-flowfunction-dataflow-transformation">2. <strong>FlowFunction</strong> — Dataflow Transformation</h4>
+<p>A flow function transforms facts across a program edge:</p>
+<pre><code class="language-python">from ansede_static.v2.ifds import (
+    FlowFunction, IdentityFlowFunction, KillFlowFunction,
+    GenerateFlowFunction
+)
+
+# Identity: fact passes through
+identity_ff = IdentityFlowFunction()
+result = identity_ff(my_fact)  # Returns {my_fact}
+
+# Kill: fact is eliminated
+kill_ff = KillFlowFunction()
+result = kill_ff(my_fact)  # Returns {} (empty set)
+
+# Generate: new fact is created
+generate_ff = GenerateFlowFunction(DataFlowFact(label=&quot;y&quot;))
+result = generate_ff(x_fact)  # Returns {x_fact, y_fact}
+</code></pre>
+<p><strong>Custom flow functions</strong> can model sanitizers, type narrowing, etc.:</p>
+<pre><code class="language-python">class TaintSanitizeFlowFunction(FlowFunction):
+    def __init__(self, categories_cleared: frozenset[str]):
+        self.categories_cleared = categories_cleared
+
+    def __call__(self, fact: DataFlowFact) -&gt; FrozenSet[DataFlowFact]:
+        if isinstance(fact, TaintFact):
+            if fact.category in self.categories_cleared:
+                return frozenset()  # Taint is neutralized
+        return frozenset([fact])
+</code></pre>
+<h4 id="3-cfgnode-program-point">3. <strong>CFGNode</strong> — Program Point</h4>
+<pre><code class="language-python">from ansede_static.v2.ifds import CFGNode
+
+# Represents a node in the control flow graph
+node = CFGNode(
+    node_id=&quot;assign_1&quot;,
+    function_id=&quot;handle_request&quot;,
+    label=&quot;user_input = request.args.get('id')&quot;
+)
+</code></pre>
+<h4 id="4-context-call-stack">4. <strong>Context</strong> — Call Stack</h4>
+<p>For context-sensitive analysis, track the call site that led to a function invocation:</p>
+<pre><code class="language-python">from ansede_static.v2.ifds import Context, CallSite
+
+# Empty context = entry point
+ctx = Context()
+
+# Push a call site
+call_site = CallSite(
+    call_node_id=&quot;call_1&quot;,
+    caller_func=&quot;handle_request&quot;,
+    callee_func=&quot;process_input&quot;
+)
+new_ctx = ctx.push(call_site)  # ctx with call_1 on the stack
+
+# Pop to return from function
+ctx_popped = new_ctx.pop()
+</code></pre>
+<p><strong>Context depth is bounded</strong> (default: 3) to prevent unbounded state explosion while maintaining precision.</p>
+<h4 id="5-ifdssolver-tabulation-algorithm">5. <strong>IFDSSolver</strong> — Tabulation Algorithm</h4>
+<p>The solver computes all reachable dataflow facts via iterative fixed-point:</p>
+<pre><code class="language-python">from ansede_static.v2.ifds import IFDSSolver, IdentityFlowFunction
+
+solver = IFDSSolver()
+
+# Set up functions
+entry = CFGNode(node_id=&quot;entry&quot;, function_id=&quot;main&quot;, label=&quot;entry&quot;)
+exit_node = CFGNode(node_id=&quot;exit&quot;, function_id=&quot;main&quot;, label=&quot;exit&quot;)
+solver.set_entry_exit_nodes(&quot;main&quot;, entry, exit_node)
+
+# Add edges with flow functions
+n1 = CFGNode(node_id=&quot;n1&quot;, function_id=&quot;main&quot;, label=&quot;n1&quot;)
+n2 = CFGNode(node_id=&quot;n2&quot;, function_id=&quot;main&quot;, label=&quot;n2&quot;)
+ctx = Context()
+solver.add_edge_flow(n1, n2, ctx, IdentityFlowFunction())
+
+# Initialize seed facts (taint sources)
+fact_x = DataFlowFact(label=&quot;x&quot;)
+solver.set_seed_fact(n1, ctx, fact_x)
+
+# Solve
+solver.solve()
+
+# Query results
+result = solver.query(n2, ctx)  # Returns frozenset[DataFlowFact]
+all_results = solver.query_all()  # Returns all (node, context) → facts
+</code></pre>
+<hr />
+<h2 id="usage-interprocedural-taint-analysis">Usage: Interprocedural Taint Analysis</h2>
+<h3 id="high-level-api">High-Level API</h3>
+<pre><code class="language-python">from ansede_static.v2 import InterproceduralTaintAnalysis
+from ansede_static.v2.call_graph import CallGraph
+from ansede_static.v2.normalizer import normalize_source
+
+# Parse source
+source = &quot;&quot;&quot;
+def process_input(data):
+    return sanitize(data)
+
+def handle_request():
+    user_input = request.args.get('id')
+    result = process_input(user_input)
+    execute(result)
+&quot;&quot;&quot;
+
+model = normalize_source(source, &quot;app.py&quot;, &quot;python&quot;)
+call_graph = CallGraph()
+
+# Run interprocedural analysis
+analysis = InterproceduralTaintAnalysis(
+    model=model,
+    call_graph=call_graph,
+    max_context_depth=3,  # Tune precision/performance tradeoff
+)
+
+findings = analysis.analyze()
+for source_fact, sink_fact in findings:
+    print(f&quot;Taint flow from {source_fact.node.location} &quot;
+          f&quot;to {sink_fact.node.location} (CWE-{sink_fact.cwe})&quot;)
+</code></pre>
+<h3 id="integration-with-rules">Integration with Rules</h3>
+<p>Rules can now access interprocedural facts:</p>
+<pre><code class="language-python">from ansede_static.v2.rule_protocol import Rule, Finding
+from ansede_static.v2.interprocedural_taint import InterproceduralTaintAnalysis
+from ansede_static.v2.nodes import CallNode
+
+class SQLInjectionRule(Rule):
+    rule_id = &quot;PY-SEC-012&quot;
+    cwe = &quot;CWE-89&quot;
+    title = &quot;SQL Injection (Interprocedural)&quot;
+
+    def evaluate(self, node: CallNode, model: SemanticModel) -&gt; Optional[Finding]:
+        # Check if this is a database call
+        if not self._is_sql_sink(node.callee):
+            return None
+
+        # Run interprocedural analysis
+        call_graph = CallGraph()
+        from ansede_static.v2.call_graph import CallGraph
+        analysis = InterproceduralTaintAnalysis(model, call_graph)
+        findings = analysis.analyze()
+
+        # Check if any taint flows to this sink
+        for source, sink in findings:
+            if sink.node == node and source.category == &quot;user_input&quot;:
+                return Finding(
+                    rule_id=self.rule_id,
+                    node=node,
+                    message=f&quot;SQL injection via {source.node.location}&quot;,
+                )
+
+        return None
+</code></pre>
+<hr />
+<h2 id="taint-specific-primitives">Taint-Specific Primitives</h2>
+<h3 id="taint-flow-functions">Taint Flow Functions</h3>
+<p><strong>TaintPropagateFlowFunction</strong> — Variable assignment propagation</p>
+<pre><code class="language-python">from ansede_static.v2.interprocedural_taint import TaintPropagateFlowFunction
+
+# x = user_input (tainted)
+# y = x          (x propagates to y)
+assign_node = AssignNode(...)
+ff = TaintPropagateFlowFunction(assign_node)
+result = ff(TaintFact(label=&quot;x&quot;, category=&quot;user_input&quot;))
+# Returns TaintFact(label=&quot;y&quot;, category=&quot;user_input&quot;, confidence=&quot;likely&quot;)
+</code></pre>
+<p><strong>TaintSanitizeFlowFunction</strong> — Sanitizer clearing</p>
+<pre><code class="language-python">from ansede_static.v2.interprocedural_taint import TaintSanitizeFlowFunction
+
+# sanitize(x) clears &quot;user_input&quot; taint
+ff = TaintSanitizeFlowFunction(frozenset({&quot;user_input&quot;}))
+result = ff(TaintFact(label=&quot;x&quot;, category=&quot;user_input&quot;))
+# Returns {} (taint is cleared)
+</code></pre>
+<p><strong>TaintSourceFlowFunction</strong> — Source detection</p>
+<pre><code class="language-python">from ansede_static.v2.interprocedural_taint import TaintSourceFlowFunction
+
+# x = request.args.get(&quot;id&quot;)
+ff = TaintSourceFlowFunction(&quot;request_arg&quot;, &quot;user_input&quot;)
+result = ff(ZERO_FACT)
+# Returns TaintFact(label=&quot;request_arg&quot;, category=&quot;user_input&quot;)
+</code></pre>
+<p><strong>ParameterTaintFlowFunction</strong> — Call-to-entry parameter mapping</p>
+<pre><code class="language-python">from ansede_static.v2.interprocedural_taint import ParameterTaintFlowFunction
+
+# process_input(user_var)  &lt;- call site
+# process_input(data)      &lt;- parameter in function definition
+# Remap taint from &quot;user_var&quot; to &quot;data&quot;
+ff = ParameterTaintFlowFunction(arg_var=&quot;user_var&quot;, param_name=&quot;data&quot;)
+result = ff(TaintFact(label=&quot;user_var&quot;, category=&quot;user_input&quot;))
+# Returns TaintFact(label=&quot;data&quot;, category=&quot;user_input&quot;)
+</code></pre>
+<p><strong>ReturnTaintFlowFunction</strong> — Return value propagation</p>
+<pre><code class="language-python">from ansede_static.v2.interprocedural_taint import ReturnTaintFlowFunction
+
+# return tainted_result  &lt;- within function
+# result = callee()      &lt;- at call site
+# Map taint from return to result variable
+ff = ReturnTaintFlowFunction(callee_return_var=&quot;tainted_result&quot;, 
+                             return_var_name=&quot;result&quot;)
+result = ff(TaintFact(label=&quot;tainted_result&quot;, category=&quot;user_input&quot;))
+# Returns TaintFact(label=&quot;result&quot;, category=&quot;user_input&quot;)
+</code></pre>
+<hr />
+<h2 id="limitations-future-work">Limitations &amp; Future Work</h2>
+<h3 id="current-v21-production-mainline">Current (v2.1 / production mainline)</h3>
+<p>✅ <strong>Supported:</strong>
+- Intraprocedural taint propagation with IFDS tabulation
+- Context-sensitive call-site tracking
+- Parameter and return value taint mapping
+- Bounded call stack (default depth 3)
+- Taint categories (user_input, env, file, network, database)
+- Sanitizer neutralization
+- Production Python summary propagation with persisted <code>FunctionSummary</code> objects
+- Bounded call-string propagation in the shipped Python analyzer (default $k = 2$)</p>
+<p>❌ <strong>Not Yet Supported:</strong>
+- <strong>IDE (Environment)</strong> — abstract values beyond binary (tainted/not) facts
+- <strong>Conditional taint</strong> — "only tainted if argument 2 is truthy"
+- <strong>Alias analysis</strong> — tracking when variables refer to the same value
+- <strong>Field-sensitive analysis</strong> — tracking taint within object fields
+- <strong>Heap analysis</strong> — array/dictionary element tracking
+- <strong>Distributed codebase</strong> — cross-module analysis (requires global symbol table)
+- <strong>Full unification</strong> — the shipped Python analyzer still uses a hybrid local-analysis + summary-transfer architecture rather than routing every Python flow through the standalone v2 solver</p>
+<h3 id="v22-roadmap">v2.2+ Roadmap</h3>
+<ol>
+<li><strong>IDE values</strong> — Track value ranges, not just binary taint</li>
+<li><strong>Conditional taint</strong> — "Function returns tainted only if flag is false"</li>
+<li><strong>Alias analysis</strong> — Identify variable aliasing to reduce false negatives</li>
+<li><strong>Field-sensitive taint</strong> — Track taint within object/array structures</li>
+<li><strong>Cross-module analysis</strong> — Scan entire project with unified call graph</li>
+</ol>
+<hr />
+<h2 id="performance-characteristics">Performance Characteristics</h2>
+<h3 id="complexity">Complexity</h3>
+<ul>
+<li><strong>Time:</strong> O(n³ E) where n = program size, E = number of edge functions</li>
+<li><strong>Space:</strong> O(n × |Facts|) for result storage</li>
+<li><strong>In practice:</strong> Linear-to-quadratic on real codebases (&lt; 10 sec for 10K-file monorepo)</li>
+</ul>
+<h3 id="optimization-tips">Optimization Tips</h3>
+<ol>
+<li>
+<p><strong>Limit context depth</strong> (trade precision for speed):
+   <code>python
+   analysis = InterproceduralTaintAnalysis(
+       model, call_graph,
+       max_context_depth=2  # Faster, less precise
+   )</code></p>
+</li>
+<li>
+<p><strong>Bound call graph</strong> (exclude external libs):
+   <code>python
+   call_graph = CallGraph()
+   # Only add calls within project (not third-party)</code></p>
+</li>
+<li>
+<p><strong>Cache results</strong> (reuse across rules):
+   <code>python
+   # Don't re-run analysis for each rule; compute once, query many times</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="references">References</h2>
+<p><strong>Academic Foundation:</strong>
+- Reps, Horwitz, Sagiv (1995): "Precise Interprocedural Dataflow Analysis with Applications to Constant Propagation"
+- Static Analysis textbook: Sections on IFDS/IDE algorithms</p>
+<p><strong>Industry:</strong>
+- Checker-framework (Java) — uses IFDS for type refinement
+- CodeQL (C/C++, Python, JavaScript) — inspired by IFDS
+- Infoflow (Android) — IFDS-based taint analysis</p>
+<p><strong>Ansede Specifics:</strong>
+- <a href="../src/ansede_static/v2/ifds.py">src/ansede_static/v2/ifds.py</a> — Core solver
+- <a href="../src/ansede_static/v2/interprocedural_taint.py">src/ansede_static/v2/interprocedural_taint.py</a> — Taint integration
+- <a href="../tests/test_ifds.py">tests/test_ifds.py</a> — Test suite (34 tests)
+- <a href="../tests/test_interprocedural_taint.py">tests/test_interprocedural_taint.py</a> — Integration tests (10 tests)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

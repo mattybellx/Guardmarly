@@ -1,0 +1,4388 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/ROADMAP-TO-WORLD-BEST/">
+      
+      
+        <link rel="prev" href="../writing-rules/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Roadmap - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#v30-implementation-guide-the-worlds-best-sast" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Roadmap
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Use This Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-architecture-file-at-a-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Architecture (file-at-a-time)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-architecture-graph-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Architecture (graph-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-structure-unifiedsourcegraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Structure: UnifiedSourceGraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#master-engineering-directive-universal-dominance-finalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master Engineering Directive: Universal Dominance Finalization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Master Engineering Directive: Universal Dominance Finalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-negotiable-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-negotiable constraints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unlock-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unlock gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directive-ordered-execution-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directive-ordered execution plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Directive-ordered execution plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-measurement-foundation-and-noise-collapse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Measurement Foundation and Noise Collapse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 — Measurement Foundation and Noise Collapse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-11-refactor-benchmarks-around-sink-centric-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-1.1: Refactor benchmarks around sink-centric truth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-12-verify-incident-clustering-as-a-first-class-precision-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-1.2: Verify incident clustering as a first-class precision layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-precision-logic-before-breadth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Precision Logic Before Breadth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2 — Precision Logic Before Breadth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-21-verify-symbolic-guard-analysis-in-python-and-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.1: Verify symbolic guard analysis in Python and JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-22-preserve-pure-python-vlq-source-map-fidelity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.2: Preserve pure-Python VLQ source-map fidelity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-23-activate-shadow-detectors-only-after-the-unlock-gate-is-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.3: Activate shadow detectors only after the unlock gate is green
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-breadth-expansion-after-precision-lock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — Breadth Expansion After Precision Lock
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 — Breadth Expansion After Precision Lock">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-31-expand-polyglot-maturity-with-quality-parity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.1: Expand polyglot maturity with quality parity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-32-build-a-semgrep-transpiler-not-just-a-semgrep-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.2: Build a Semgrep transpiler, not just a Semgrep wrapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-33-finish-cross-language-taint-through-irglobal_graphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.3: Finish cross-language taint through ir/global_graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-enterprise-completion-and-delivery-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 — Enterprise Completion and Delivery Surfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 — Enterprise Completion and Delivery Surfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-41-complete-enterprise-grade-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.1: Complete enterprise-grade outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-42-finish-the-full-ide-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.2: Finish the full IDE suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-43-add-an-autonomous-safe-bounty-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.3: Add an autonomous safe-bounty workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-5-hard-gates-and-operating-discipline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 5 — Hard Gates and Operating Discipline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 5 — Hard Gates and Operating Discipline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-51-enforce-the-ratchet-gate-on-every-benchmark-sensitive-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.1: Enforce the ratchet gate on every benchmark-sensitive change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-52-enforce-the-10s-100k-loc-performance-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.2: Enforce the 10s / 100k LOC performance ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-53-add-explicit-dependency-and-binary-size-guardrails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.3: Add explicit dependency and binary-size guardrails
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-reading-of-this-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical reading of this directive
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-0-instrumentation-weeks-1-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 0: Instrumentation (Weeks 1-2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 0: Instrumentation (Weeks 1-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-01-add-benchmark-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.1: Add --benchmark flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-02-add-profile-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.2: Add --profile flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-03-add-timing-to-json-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.3: Add timing to JSON output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-04-create-perf-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.4: Create perf dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-05-add-cross-language-flag-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.5: Add --cross-language flag (gate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-auto-rule-generation-weeks-2-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Auto-Rule Generation (Weeks 2-4)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1: Auto-Rule Generation (Weeks 2-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-11-create-engineauto_rulespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.1: Create engine/auto_rules.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-12-create-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.2: Create tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-13-wire-into-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.3: Wire into CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-speed-optimization-weeks-2-4-parallel-with-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Speed Optimization (Weeks 2-4, parallel with Phase 1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2: Speed Optimization (Weeks 2-4, parallel with Phase 1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-21-lazy-ast-parsing-skip-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.1: Lazy AST Parsing + Skip Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-22-ast-parse-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.2: AST Parse Timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-23-parallel-file-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.3: Parallel File Scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-24-file-level-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.4: File-Level Cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-25-skip-known-clean-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.5: Skip Known-Clean Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-26-incremental-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.6: Incremental Scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-cross-language-taint-tracking-weeks-3-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Cross-Language Taint Tracking (Weeks 3-8)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3: Cross-Language Taint Tracking (Weeks 3-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-31-usg-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.1: USG Data Structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-32-import-graph-resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.2: Import Graph Resolver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-33-python-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.3: Python Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-34-jsts-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.4: JS/TS Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-35-go-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.5: Go Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-36-cross-language-taint-resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.6: Cross-Language Taint Resolver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-37-311-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.7-3.11: Integration &amp; Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-integration-ship-weeks-8-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: Integration &amp; Ship (Weeks 8-10)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4: Integration &amp; Ship (Weeks 8-10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-41-full-benchmark-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.1: Full Benchmark Suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-42-scan-10-full-stack-repos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.2: Scan 10 Full-Stack Repos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-43-head-to-head-vs-codeql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.3: Head-to-Head vs CodeQL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-rollback-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing &amp; Rollback Procedures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing &amp; Rollback Procedures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-starting-any-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before Starting Any Task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-completing-any-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Completing Any Task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback Procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-skip-a-task-and-move-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Skip a Task and Move On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Trees
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decision Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-phase-to-work-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which Phase to Work On?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-add-a-new-heuristic-vs-auto-rule-vs-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Add a New Heuristic vs Auto-Rule vs LLM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimization-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Optimization Priority
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-the-moat-full-self-improvement-9-15-months" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — The Moat: Full Self-Improvement (9 → 15 months)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 — The Moat: Full Self-Improvement (9 → 15 months)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-unfair-advantage-15-24-months" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 — Unfair Advantage (15 → 24 months)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 — Unfair Advantage (15 → 24 months)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-this-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Use This Guide
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-architecture-file-at-a-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Architecture (file-at-a-time)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-architecture-graph-based" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Architecture (graph-based)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-data-structure-unifiedsourcegraph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Data Structure: UnifiedSourceGraph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#master-engineering-directive-universal-dominance-finalization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Master Engineering Directive: Universal Dominance Finalization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Master Engineering Directive: Universal Dominance Finalization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#non-negotiable-constraints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-negotiable constraints
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#unlock-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unlock gate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directive-ordered-execution-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directive-ordered execution plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Directive-ordered execution plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-measurement-foundation-and-noise-collapse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1 — Measurement Foundation and Noise Collapse
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 — Measurement Foundation and Noise Collapse">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-11-refactor-benchmarks-around-sink-centric-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-1.1: Refactor benchmarks around sink-centric truth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-12-verify-incident-clustering-as-a-first-class-precision-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-1.2: Verify incident clustering as a first-class precision layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-precision-logic-before-breadth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2 — Precision Logic Before Breadth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2 — Precision Logic Before Breadth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-21-verify-symbolic-guard-analysis-in-python-and-javascript" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.1: Verify symbolic guard analysis in Python and JavaScript
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-22-preserve-pure-python-vlq-source-map-fidelity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.2: Preserve pure-Python VLQ source-map fidelity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-23-activate-shadow-detectors-only-after-the-unlock-gate-is-green" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-2.3: Activate shadow detectors only after the unlock gate is green
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-breadth-expansion-after-precision-lock" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — Breadth Expansion After Precision Lock
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 — Breadth Expansion After Precision Lock">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-31-expand-polyglot-maturity-with-quality-parity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.1: Expand polyglot maturity with quality parity
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-32-build-a-semgrep-transpiler-not-just-a-semgrep-wrapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.2: Build a Semgrep transpiler, not just a Semgrep wrapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-33-finish-cross-language-taint-through-irglobal_graphpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-3.3: Finish cross-language taint through ir/global_graph.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-enterprise-completion-and-delivery-surfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 — Enterprise Completion and Delivery Surfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 — Enterprise Completion and Delivery Surfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-41-complete-enterprise-grade-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.1: Complete enterprise-grade outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-42-finish-the-full-ide-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.2: Finish the full IDE suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-43-add-an-autonomous-safe-bounty-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-4.3: Add an autonomous safe-bounty workflow
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-5-hard-gates-and-operating-discipline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 5 — Hard Gates and Operating Discipline
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 5 — Hard Gates and Operating Discipline">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dir-51-enforce-the-ratchet-gate-on-every-benchmark-sensitive-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.1: Enforce the ratchet gate on every benchmark-sensitive change
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-52-enforce-the-10s-100k-loc-performance-ceiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.2: Enforce the 10s / 100k LOC performance ceiling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dir-53-add-explicit-dependency-and-binary-size-guardrails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIR-5.3: Add explicit dependency and binary-size guardrails
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#practical-reading-of-this-directive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Practical reading of this directive
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-0-instrumentation-weeks-1-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 0: Instrumentation (Weeks 1-2)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 0: Instrumentation (Weeks 1-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-01-add-benchmark-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.1: Add --benchmark flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-02-add-profile-flag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.2: Add --profile flag
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-03-add-timing-to-json-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.3: Add timing to JSON output
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-04-create-perf-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.4: Create perf dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-05-add-cross-language-flag-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-0.5: Add --cross-language flag (gate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-auto-rule-generation-weeks-2-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Auto-Rule Generation (Weeks 2-4)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1: Auto-Rule Generation (Weeks 2-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-11-create-engineauto_rulespy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.1: Create engine/auto_rules.py
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-12-create-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.2: Create tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-13-wire-into-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-1.3: Wire into CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-speed-optimization-weeks-2-4-parallel-with-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Speed Optimization (Weeks 2-4, parallel with Phase 1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2: Speed Optimization (Weeks 2-4, parallel with Phase 1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-21-lazy-ast-parsing-skip-lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.1: Lazy AST Parsing + Skip Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-22-ast-parse-timeout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.2: AST Parse Timeout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-23-parallel-file-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.3: Parallel File Scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-24-file-level-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.4: File-Level Cache
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-25-skip-known-clean-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.5: Skip Known-Clean Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-26-incremental-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-2.6: Incremental Scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-cross-language-taint-tracking-weeks-3-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Cross-Language Taint Tracking (Weeks 3-8)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3: Cross-Language Taint Tracking (Weeks 3-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-31-usg-data-structures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.1: USG Data Structures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-32-import-graph-resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.2: Import Graph Resolver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-33-python-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.3: Python Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-34-jsts-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.4: JS/TS Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-35-go-call-graph-builder" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.5: Go Call-Graph Builder
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-36-cross-language-taint-resolver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.6: Cross-Language Taint Resolver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-37-311-integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-3.7-3.11: Integration &amp; Tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-integration-ship-weeks-8-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: Integration &amp; Ship (Weeks 8-10)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4: Integration &amp; Ship (Weeks 8-10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#task-41-full-benchmark-suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.1: Full Benchmark Suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-42-scan-10-full-stack-repos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.2: Scan 10 Full-Stack Repos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#task-43-head-to-head-vs-codeql" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TASK-4.3: Head-to-Head vs CodeQL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-rollback-procedures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing &amp; Rollback Procedures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing &amp; Rollback Procedures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#before-starting-any-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before Starting Any Task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#after-completing-any-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        After Completing Any Task
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rollback-procedure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rollback Procedure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-skip-a-task-and-move-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Skip a Task and Move On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-trees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Decision Trees
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decision Trees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-phase-to-work-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which Phase to Work On?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-add-a-new-heuristic-vs-auto-rule-vs-llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to Add a New Heuristic vs Auto-Rule vs LLM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimization-priority" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Optimization Priority
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-the-moat-full-self-improvement-9-15-months" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3 — The Moat: Full Self-Improvement (9 → 15 months)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 — The Moat: Full Self-Improvement (9 → 15 months)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-unfair-advantage-15-24-months" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4 — Unfair Advantage (15 → 24 months)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 — Unfair Advantage (15 → 24 months)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#current-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="v30-implementation-guide-the-worlds-best-sast">v3.0 Implementation Guide — The World's Best SAST</h1>
+<blockquote>
+<p><strong>Mission:</strong> Solve three interlocking challenges — cross-language taint tracking, auto-rule generation from LLM memory, and 10x speed optimization — each accelerating the others.</p>
+<p><strong>Current Baseline:</strong> v2.3.2 · Rust fast-path · 98.8% CVE recall · 96.4% precision · 7 languages · 35 real-world repos validated
+<strong>Target:</strong> v3.0 · Source-map resolution bridging web-wild gap · Symbolic guard precision · Enterprise-grade repo structure</p>
+<p><strong>Overall Progress: ~88% strict / ~92% weighted</strong> — v3.0 nearing completion</p>
+<p><strong>Repo restructured (2026-05-28):</strong> <code>BENCHMARKS.md</code>, <code>CITATION.cff</code> → <code>docs/</code>; <code>NodeGoat/</code>, <code>internet_code_samples/</code> → <code>samples/</code>; <code>gradle-8.7/</code> → <code>intellij-plugin/</code>; <code>AS.png</code> + banners → <code>assets/</code>; <code>final_scorecard.json</code> → <code>reports/</code></p>
+</blockquote>
+<hr />
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#how-to-use-this-guide">How to Use This Guide</a></li>
+<li><a href="#architecture-overview">Architecture Overview</a></li>
+<li><a href="#master-engineering-directive-universal-dominance-finalization">Master Engineering Directive: Universal Dominance Finalization</a></li>
+<li><a href="#phase-0-instrumentation-weeks-1-2">Phase 0: Instrumentation</a></li>
+<li><a href="#phase-1-auto-rule-generation-weeks-2-4">Phase 1: Auto-Rule Generation</a></li>
+<li><a href="#phase-2-speed-optimization-weeks-2-4">Phase 2: Speed Optimization</a></li>
+<li><a href="#phase-3-cross-language-taint-weeks-3-8">Phase 3: Cross-Language Taint</a></li>
+<li><a href="#phase-4-integration--ship-weeks-8-10">Phase 4: Integration &amp; Ship</a></li>
+<li><a href="#testing--rollback-procedures">Testing &amp; Rollback Procedures</a></li>
+<li><a href="#decision-trees">Decision Trees</a></li>
+</ol>
+<hr />
+<h2 id="how-to-use-this-guide">How to Use This Guide</h2>
+<p>Each task is tagged with:</p>
+<pre><code>[TASK-X.Y] Title
+  File: src/ansede_static/path/to/file.py
+  Test:  tests/test_thing.py::test_specific
+  Deps:  TASK-X.A, TASK-X.B  (must be done first)
+  Time:  ~N hours
+  Signal: what &quot;done&quot; looks like
+</code></pre>
+<p><strong>Workflow for each task:</strong>
+1. Read the task spec and code snippet
+2. Create/edit the file
+3. Run the test
+4. Run full test suite: <code>python -m pytest tests/ -x -q --tb=short</code>
+5. If tests pass, commit: <code>git commit -m "[v3.0] TASK-X.Y: description"</code>
+6. If tests fail, roll back and debug</p>
+<hr />
+<h2 id="architecture-overview">Architecture Overview</h2>
+<h3 id="current-architecture-file-at-a-time">Current Architecture (file-at-a-time)</h3>
+<pre><code>raw_source → parse → analyze → findings → audit → [LLM triage] → done
+</code></pre>
+<h3 id="target-architecture-graph-based">Target Architecture (graph-based)</h3>
+<pre><code>repo/
+  └─ Unified Source Graph ──→ Python call graph ──→ cross-language taint
+       │                          │                        │
+       │                   JS/TS call graph           auto-rule gen
+       │                          │                        │
+       │                      Go call graph         LLM Memory (354)
+       │                          │                        │
+       └─ import graph ───── all languages ──── heuristic rules
+</code></pre>
+<h3 id="key-data-structure-unifiedsourcegraph">Key Data Structure: UnifiedSourceGraph</h3>
+<pre><code class="language-python">@dataclass
+class SourceNode:
+    id: str                    # &quot;file:///path/to/file.py#func:get_user&quot;
+    kind: str                  # &quot;file&quot; | &quot;function&quot; | &quot;class&quot; | &quot;variable&quot; | &quot;import&quot;
+    name: str                  # &quot;get_user&quot;
+    file_path: str
+    language: str              # &quot;python&quot; | &quot;javascript&quot; | &quot;go&quot; | &quot;ruby&quot; | &quot;php&quot;
+    start_line: int
+    end_line: int
+
+@dataclass
+class SourceEdge:
+    source_id: str             # caller node id
+    target_id: str             # callee node id
+    kind: str                  # &quot;calls&quot; | &quot;imports&quot; | &quot;data_flow&quot; | &quot;taint&quot; | &quot;implements&quot;
+    confidence: float          # 0.0-1.0 how sure we are this edge exists
+
+class UnifiedSourceGraph:
+    &quot;&quot;&quot;Holds all nodes and edges for a repository scan.&quot;&quot;&quot;
+    nodes: dict[str, SourceNode]
+    edges: list[SourceEdge]
+
+    def add_node(self, node: SourceNode) -&gt; None: ...
+    def add_edge(self, edge: SourceEdge) -&gt; None: ...
+    def get_callers(self, node_id: str) -&gt; list[SourceNode]: ...
+    def get_callees(self, node_id: str) -&gt; list[SourceNode]: ...
+    def find_taint_path(self, source: str, sink: str) -&gt; list[SourceEdge]: ...
+    def to_json(self) -&gt; dict: ...
+    @classmethod
+    def from_json(cls, data: dict) -&gt; UnifiedSourceGraph: ...
+</code></pre>
+<hr />
+<h2 id="master-engineering-directive-universal-dominance-finalization">Master Engineering Directive: Universal Dominance Finalization</h2>
+<blockquote>
+<p><strong>Directive status:</strong> integrated into this roadmap as the controlling execution order for all unfinished v3 work.</p>
+<p><strong>Important:</strong> This overlay does <strong>not</strong> erase completed work. It reorders the remaining implementation and validation so the engine improves precision first, then breadth, then productization.</p>
+</blockquote>
+<h3 id="non-negotiable-constraints">Non-negotiable constraints</h3>
+<ol>
+<li><strong>Phase 1 and Phase 2 below are the priority.</strong></li>
+<li><strong>Do not add new rule packs or broaden rule count until incident clustering and symbolic guards are verified.</strong></li>
+<li><strong>No external dependencies may be added.</strong> All work must remain stdlib-first / existing-repo-only.</li>
+<li><strong>The distributable must remain a single binary under 5 MB.</strong> If a feature threatens size, redesign it.</li>
+<li>
+<p><strong>Every meaningful precision/coverage change must clear the ratchet gate</strong> using:</p>
+<p><code>python tools/benchmark_ratchet_gate.py --profile deep-wild --baseline benchmarks/baselines/expanded_web_wild_hard_20260511.json --regression-tolerance 0.0</code></p>
+</li>
+<li>
+<p><strong>New logic must stay within 10s per 100k LOC</strong> or be backed by cached module-graph / incremental reuse.</p>
+</li>
+</ol>
+<h3 id="unlock-gate">Unlock gate</h3>
+<p>The roadmap now has an explicit unlock condition:</p>
+<ul>
+<li><strong>Before any net-new rule expansion:</strong><ul>
+<li><code>DIR-1.2</code> Incident clustering must be benchmarked and verified.</li>
+<li><code>DIR-2.1</code> Symbolic guard analysis must be benchmarked and verified.</li>
+</ul>
+</li>
+</ul>
+<p>Already-open work on graph fidelity, cache/perf, or validation harnesses may continue if it directly supports those verifications.</p>
+<h3 id="directive-ordered-execution-plan">Directive-ordered execution plan</h3>
+<h4 id="phase-1-measurement-foundation-and-noise-collapse">Phase 1 — Measurement Foundation and Noise Collapse</h4>
+<p><strong>Goal:</strong> make the benchmark and triage layers measure <em>incidents</em> and <em>sink outcomes</em>, not just raw finding counts.</p>
+<h5 id="dir-11-refactor-benchmarks-around-sink-centric-truth">DIR-1.1: Refactor benchmarks around sink-centric truth</h5>
+<pre><code>    File: benchmarks/cve_corpus.py
+                benchmarks/quality_corpus.py
+                benchmarks/web_wild_harness.py
+    Test: benchmarks/perf_regression_check.py
+    Deps: TASK-0.2, TASK-0.3
+    Time: ~4-6 hours
+    Signal: benchmark output can report per-sink-family recall / precision / F1 and cluster-adjusted noise
+</code></pre>
+<p>Status update (2026-05-25): <strong>complete</strong> — sink-family scoreboards now flow through the CVE/web-wild benchmark layer, and raw-vs-clustered incident/noise metrics now emit through the external corpus and roll-up benchmark reports.</p>
+<p>Required outcomes:</p>
+<ul>
+<li>Group benchmark expectations by <strong>sink family</strong> (SQLi, command execution, SSRF, DOM XSS, code execution, auth bypass, etc.).</li>
+<li>Preserve per-CWE reporting, but make sink families the primary scoreboard for regression gating.</li>
+<li>Emit cluster-adjusted metrics so raw duplicate findings stop flattering the engine.</li>
+<li>Ensure the benchmark harness can show whether symbolic guards or clustering improved or degraded the exact sink family they touched.</li>
+</ul>
+<h5 id="dir-12-verify-incident-clustering-as-a-first-class-precision-layer">DIR-1.2: Verify incident clustering as a first-class precision layer</h5>
+<pre><code>    File: src/ansede_static/engine/triage.py
+                src/ansede_static/engine/clustering.py
+    Test: tests/test_engine/test_triage.py
+                tests/test_engine/test_clustering.py
+    Deps: DIR-1.1
+    Time: ~4-6 hours
+    Signal: duplicate same-sink / same-region findings collapse into one high-fidelity incident with no benchmark regressions
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>tests/test_clustering.py</code> and <code>tests/test_triage.py</code> prove same-sink / same-line findings collapse; <code>clustering_summary</code> gate data flows through CVE, web-wild, and external corpus runners; the ratchet gate checks clustering at every run; and <code>final_scorecard.py</code> surfaces <code>verification_gates.incident_clustering</code> with <code>gate_ready</code> across multiple benchmark sources.</p>
+<p>Required outcomes:</p>
+<ul>
+<li>Treat same-sink / same-region multi-rule hits as one incident when they are semantically the same vulnerability.</li>
+<li>Preserve the strongest representative finding and merge supporting evidence into the trace / description.</li>
+<li>Track <strong>Noise Quotient</strong> explicitly in benchmark output.</li>
+<li>Make clustering verification the first half of the rule-expansion unlock gate.</li>
+</ul>
+<h4 id="phase-2-precision-logic-before-breadth">Phase 2 — Precision Logic Before Breadth</h4>
+<p><strong>Goal:</strong> improve path sensitivity and trustworthiness before adding more rule volume.</p>
+<h5 id="dir-21-verify-symbolic-guard-analysis-in-python-and-javascript">DIR-2.1: Verify symbolic guard analysis in Python and JavaScript</h5>
+<pre><code>    File: src/ansede_static/python_analyzer.py
+                src/ansede_static/js_ast_analyzer.py
+                src/ansede_static/engine/symbolic_guards.py
+    Test: tests/test_python_analyzer.py
+                tests/test_js_ast_analyzer.py
+    Deps: DIR-1.1, DIR-1.2
+    Time: ~6-8 hours
+    Signal: guarded routes / handlers / branches are consistently down-scored or suppressed without losing true positives on unguarded paths
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>benchmarks/quality_benchmark.py</code> emits <code>guard_summary</code> / <code>per_guard_family</code> / <code>gate_ready</code> metrics over auth-guard, access-control, and rate-limit guard families; <code>final_scorecard.py</code> surfaces <code>verification_gates.symbolic_guards</code> with <code>gate_ready</code> signal.</p>
+<p>Required outcomes:</p>
+<ul>
+<li>Recognize auth/ownership/permission guards as path-sensitive evidence, not just keyword hints.</li>
+<li>Distinguish authentication from authorization when determining severity and suppression.</li>
+<li>Feed symbolic-guard outcomes back into benchmark reporting by sink family.</li>
+<li>Make symbolic-guard verification the second half of the rule-expansion unlock gate.</li>
+</ul>
+<h5 id="dir-22-preserve-pure-python-vlq-source-map-fidelity">DIR-2.2: Preserve pure-Python VLQ source-map fidelity</h5>
+<pre><code>    File: src/ansede_static/js_engine/source_map_resolver.py
+                src/ansede_static/js_engine/sourcemap_rescanner.py
+    Test: tests/test_js_engine/test_source_map_resolver.py
+    Deps: DIR-1.1
+    Time: ~2-4 hours
+    Signal: minified bundles remap to original sources without external packages and without regressing binary size
+</code></pre>
+<p>Required outcomes:</p>
+<ul>
+<li>Keep all source-map parsing and VLQ decode logic pure Python.</li>
+<li>Verify bundled/minified findings can still be scored accurately in the sink-centric benchmark harness.</li>
+<li>Treat binary-size growth as a failing condition.</li>
+</ul>
+<h5 id="dir-23-activate-shadow-detectors-only-after-the-unlock-gate-is-green">DIR-2.3: Activate shadow detectors only after the unlock gate is green</h5>
+<pre><code>    File: src/ansede_static/python_analyzer.py
+                src/ansede_static/js_engine/pattern_rules.py
+                src/ansede_static/rules.py
+    Test: tests/test_python_analyzer.py
+                tests/test_js_engine/test_pattern_rules.py
+    Deps: DIR-1.2, DIR-2.1
+    Time: ~3-5 hours
+    Signal: existing shadow detectors (for example NoSQL / GraphQL injection and debug-mode exposure) materially improve benchmark recall without reopening clustered noise
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — 5 shadow-detector families (CWE-943, CWE-200/PY-039, CWE-78, CWE-95, CWE-918) have benchmark-visible fixtures in <code>benchmarks/quality_corpus.py</code> surfaced through <code>shadow_detector_summary</code> and <code>verification_gates.shadow_detectors</code>.</p>
+<p>Required outcomes:</p>
+<ul>
+<li>Do <strong>not</strong> use this task to bulk-add net-new rules.</li>
+<li>Instead, verify and fully activate already-present shadow detector families whose logic exists but still needs directive-grade validation.</li>
+<li>Require ratchet-gate proof that recall improved without precision regression.</li>
+</ul>
+<h4 id="phase-3-breadth-expansion-after-precision-lock">Phase 3 — Breadth Expansion After Precision Lock</h4>
+<p><strong>Goal:</strong> once the unlock gate is satisfied, widen the engine carefully into broader languages and transfer paths.</p>
+<h5 id="dir-31-expand-polyglot-maturity-with-quality-parity">DIR-3.1: Expand polyglot maturity with quality parity</h5>
+<pre><code>    File: src/ansede_static/java_analyzer.py
+                src/ansede_static/ir/global_graph.py
+                intellij-plugin/
+                visualstudio-extension/
+    Test: tests/test_java_analyzer.py
+                tests/test_graph/
+    Deps: DIR-1.2, DIR-2.1
+    Time: ~8-12 hours
+    Signal: Java / C# / Kotlin-facing flows and IDE surfaces behave like first-class citizens, not demo passengers
+</code></pre>
+<p>Required outcomes:</p>
+<ul>
+<li>Raise Java and C# parity where the repo already has analyzers and IDE packaging.</li>
+<li>Extend cross-language data contracts so backend/frontend and multi-service flows can share the same incident model.</li>
+<li>Treat Kotlin as part of the JVM expansion path rather than as a separate future promise.</li>
+</ul>
+<h5 id="dir-32-build-a-semgrep-transpiler-not-just-a-semgrep-wrapper">DIR-3.2: Build a Semgrep transpiler, not just a Semgrep wrapper</h5>
+<pre><code>    File: src/ansede_static/engine/semgrep_.py
+                src/ansede_static/engine/semgrep_transpiler.py (NEW)
+    Test: tests/test_engine/test_semgrep_transpiler.py
+    Deps: DIR-1.2, DIR-2.1
+    Time: ~5-7 hours
+    Signal: selected ansede rule shapes can be losslessly lowered into Semgrep-compatible patterns for external validation and comparison
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>src/ansede_static/engine/semgrep_transpiler.py</code> transpiles 18 rules to Semgrep YAML covering SQLi, command injection, XSS, IDOR, path traversal, SSRF, hardcoded secrets, cookie security, deserialization, NoSQL injection, and more.</p>
+<p>Required outcomes:</p>
+<ul>
+<li>Preserve the no-new-dependency rule.</li>
+<li>Treat the transpiler as a validation/export layer, not the primary engine.</li>
+<li>Prefer structurally simple rule families first.</li>
+</ul>
+<h5 id="dir-33-finish-cross-language-taint-through-irglobal_graphpy">DIR-3.3: Finish cross-language taint through <code>ir/global_graph.py</code></h5>
+<pre><code>    File: src/ansede_static/ir/global_graph.py
+                src/ansede_static/graph/cross_language_taint.py
+                src/ansede_static/cli.py
+    Test: tests/test_graph/test_cross_language_taint.py
+                tests/test_cli.py
+    Deps: TASK-3.1, TASK-3.2, TASK-3.3, TASK-3.4, TASK-3.5, DIR-1.2, DIR-2.1
+    Time: ~8-12 hours
+    Signal: repo-scale cross-language taint is driven by the shared global graph / IFDS path model rather than isolated heuristic stitching
+</code></pre>
+<p>Required outcomes:</p>
+<ul>
+<li>Converge the current repository-graph bridge work into the shared <code>GlobalGraph</code> / IFDS story.</li>
+<li>Preserve current bridge gains (shared constants, helper wrappers, <code>axios.create</code>, XHR, sink families) while reducing ad-hoc duplication.</li>
+<li>Use cached graph/module state wherever needed to stay inside the performance budget.</li>
+</ul>
+<h4 id="phase-4-enterprise-completion-and-delivery-surfaces">Phase 4 — Enterprise Completion and Delivery Surfaces</h4>
+<p><strong>Goal:</strong> finish the product surfaces only after the analysis core is credible.</p>
+<h5 id="dir-41-complete-enterprise-grade-outputs">DIR-4.1: Complete enterprise-grade outputs</h5>
+<pre><code>    File: src/ansede_static/cli.py
+                src/ansede_static/sbom.py
+                src/ansede_static/reporters.py
+    Test: tests/test_cli.py
+                tests/test_sbom.py
+    Deps: DIR-3.3
+    Time: ~4-6 hours
+    Signal: SBOM, HTML, SARIF, and related outputs are stable, benchmarked, and aligned with the clustered incident model
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — HTML, SBOM (CycloneDX/SPDX), SARIF, and CISO format functions exist in <code>reporters.py</code> and <code>sbom.py</code> with working CLI integration; SARIF upload pipeline is wired in CI self-scan job.</p>
+<h5 id="dir-42-finish-the-full-ide-suite">DIR-4.2: Finish the full IDE suite</h5>
+<pre><code>    File: intellij-plugin/
+                visualstudio-extension/
+                vscode-extension/
+                src/ansede_static/lsp_server.py
+    Test: plugin build/test lanes
+    Deps: DIR-4.1
+    Time: ~6-10 hours
+    Signal: IntelliJ, Visual Studio, and VS Code all expose coherent diagnostics, remediation hooks, and background scan behavior
+</code></pre>
+<h5 id="dir-43-add-an-autonomous-safe-bounty-workflow">DIR-4.3: Add an autonomous safe-bounty workflow</h5>
+<pre><code>    File: tools/safe_bounty_bot.py (NEW)
+                docs/responsible-disclosure-rubric.md
+    Test: tests/test_tools/test_safe_bounty_bot.py
+    Deps: DIR-1.2, DIR-2.1, DIR-4.1
+    Time: ~5-7 hours
+    Signal: reproducible, non-spammy, evidence-backed disclosure drafts can be generated from high-confidence incidents
+</code></pre>
+<h4 id="phase-5-hard-gates-and-operating-discipline">Phase 5 — Hard Gates and Operating Discipline</h4>
+<p><strong>Goal:</strong> make “world-best” claims mechanically enforceable instead of aspirational.</p>
+<h5 id="dir-51-enforce-the-ratchet-gate-on-every-benchmark-sensitive-change">DIR-5.1: Enforce the ratchet gate on every benchmark-sensitive change</h5>
+<pre><code>    File: tools/benchmark_ratchet_gate.py
+                .github/workflows/
+    Test: ratchet-gate CI run
+    Deps: DIR-1.1
+    Time: ~2-3 hours
+    Signal: regressions in recall / precision / F1 / FP-rate fail fast and visibly
+</code></pre>
+<h5 id="dir-52-enforce-the-10s-100k-loc-performance-ceiling">DIR-5.2: Enforce the 10s / 100k LOC performance ceiling</h5>
+<pre><code>    File: src/ansede_static/cache/sqlite_store.py
+                src/ansede_static/cli.py
+                benchmarks/perf_regression_check.py
+    Test: perf regression lane
+    Deps: TASK-0.2, TASK-2.4, TASK-2.6, DIR-3.3
+    Time: ~4-6 hours
+    Signal: large-repo runs either stay within the ceiling or prove cached module-graph reuse is what keeps them compliant
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>benchmarks/perf_regression_check.py</code> enforces aggregate throughput ≥10,000 LOC/s across all supported languages and is wired into CI via the perf-smoke job; individual language budgets are 2-5s.</p>
+<h5 id="dir-53-add-explicit-dependency-and-binary-size-guardrails">DIR-5.3: Add explicit dependency and binary-size guardrails</h5>
+<pre><code>    File: pyproject.toml
+                build_exe.py
+                .github/workflows/
+    Test: packaging / size-check lane
+    Deps: none
+    Time: ~2-3 hours
+    Signal: CI fails if a new external dependency slips in or the single-binary artifact exceeds 5 MB
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>tools/check_binary_guardrails.py</code> enforces zero production dependencies and checks source tree / dist size against the 5 MB limit; installed wheel is 1.15 MB, source tree (excluding .pyc) is 2.40 MB. Wired into CI as the <code>binary-guardrails</code> job.</p>
+<h3 id="practical-reading-of-this-directive">Practical reading of this directive</h3>
+<ul>
+<li><strong>Right now:</strong> the best next work is benchmark refactoring, clustering verification, and symbolic-guard verification.</li>
+<li><strong>Blocked until unlock gate is green:</strong> net-new rule-volume expansion.</li>
+<li><strong>Allowed in parallel where it supports the gate:</strong> source-map fidelity, cache/perf work, and cleanup of current cross-language graph plumbing.</li>
+</ul>
+<hr />
+<h2 id="phase-0-instrumentation-weeks-1-2">Phase 0: Instrumentation (Weeks 1-2)</h2>
+<p><strong>Goal:</strong> Add profiling and benchmarking infrastructure to measure progress.</p>
+<h3 id="task-01-add-benchmark-flag">TASK-0.1: Add <code>--benchmark</code> flag</h3>
+<pre><code>  File: src/ansede_static/cli.py
+  Time: ~2 hours
+  Signal: `ansede-static --benchmark src/` prints per-file timing table
+</code></pre>
+<p>Add to argument parser:</p>
+<pre><code class="language-python">parser.add_argument(
+    &quot;--benchmark&quot;, action=&quot;store_true&quot;,
+    help=&quot;Print per-file scan timing (parse, analyze, total).&quot;,
+)
+</code></pre>
+<p>In the scan loop, wrap each file scan with timing:</p>
+<pre><code class="language-python">if getattr(args, &quot;benchmark&quot;, False):
+    import time
+    _file_timings = []
+
+    # Inside _scan_file or equivalent:
+    t0 = time.perf_counter()
+    # ... existing scan code ...
+    elapsed = time.perf_counter() - t0
+    _file_timings.append({
+        &quot;file&quot;: str(filepath),
+        &quot;ms&quot;: round(elapsed * 1000, 1),
+        &quot;findings&quot;: len(result.findings),
+    })
+
+    # After scan loop:
+    if _file_timings:
+        _file_timings.sort(key=lambda x: -x[&quot;ms&quot;])
+        print(&quot;\nPer-file scan times (slowest first):&quot;)
+        print(f&quot;{'File':&lt;60} {'Time (ms)':&gt;10} {'Findings':&gt;8}&quot;)
+        print(&quot;-&quot; * 80)
+        for t in _file_timings[:20]:  # Top 20 slowest
+            print(f&quot;{t['file'][:58]:&lt;60} {t['ms']:&gt;10.1f} {t['findings']:&gt;8}&quot;)
+        total_ms = sum(t[&quot;ms&quot;] for t in _file_timings)
+        print(f&quot;\nTotal: {total_ms:.0f}ms  Files: {len(_file_timings)}  &quot;
+              f&quot;Avg: {total_ms/len(_file_timings):.0f}ms/file&quot;)
+</code></pre>
+<p><strong>Test:</strong> <code>ansede-static tests/fixtures/ --benchmark</code></p>
+<h3 id="task-02-add-profile-flag">TASK-0.2: Add <code>--profile</code> flag</h3>
+<pre><code>  File: src/ansede_static/cli.py
+  Time: ~3 hours
+  Signal: `ansede-static --profile src/` dumps JSON with parse/analyze/taint timing breakdown
+</code></pre>
+<p>Create a timing context manager:</p>
+<pre><code class="language-python"># At top of cli.py or a new src/ansede_static/profiler.py
+import time
+from contextlib import contextmanager
+
+class ScanProfiler:
+    def __init__(self):
+        self.phases: dict[str, float] = {}
+        self.file_phases: dict[str, dict[str, float]] = {}
+
+    @contextmanager
+    def phase(self, file_path: str, phase_name: str):
+        t0 = time.perf_counter()
+        try:
+            yield
+        finally:
+            elapsed = time.perf_counter() - t0
+            if file_path not in self.file_phases:
+                self.file_phases[file_path] = {}
+            self.file_phases[file_path][phase_name] = \
+                self.file_phases[file_path].get(phase_name, 0) + elapsed
+            self.phases[phase_name] = self.phases.get(phase_name, 0) + elapsed
+
+    def to_json(self) -&gt; dict:
+        return {
+            &quot;total_ms&quot;: sum(self.phases.values()) * 1000,
+            &quot;phases&quot;: {k: round(v * 1000, 1) for k, v in
+                       sorted(self.phases.items(), key=lambda x: -x[1])},
+            &quot;file_phases&quot;: {
+                k: {pk: round(pv * 1000, 1) for pk, pv in v.items()}
+                for k, v in sorted(self.file_phases.items(),
+                                   key=lambda x: -sum(x[1].values()))[:30]
+            },
+        }
+</code></pre>
+<p>Wire into scan: wrap <code>analyze_python()</code>, <code>analyze_js()</code>, taint analysis with <code>profiler.phase(file, "parse")</code>, <code>profiler.phase(file, "analyze")</code>, etc.</p>
+<h3 id="task-03-add-timing-to-json-output">TASK-0.3: Add timing to JSON output</h3>
+<pre><code>  File: src/ansede_static/cli.py (output section)
+  Time: ~1 hour
+  Signal: `--format json` output includes `scan_time_ms` and `files_per_second`
+</code></pre>
+<pre><code class="language-python"># After scan completes, before writing output
+output_data[&quot;_meta&quot;] = {
+    &quot;scan_time_ms&quot;: total_ms,
+    &quot;files_scanned&quot;: file_count,
+    &quot;files_per_second&quot;: round(file_count / (total_ms / 1000), 1) if total_ms &gt; 0 else 0,
+    &quot;findings_total&quot;: len(all_findings),
+    &quot;engine_version&quot;: get_engine_version(),
+}
+</code></pre>
+<h3 id="task-04-create-perf-dashboard">TASK-0.4: Create perf dashboard</h3>
+<pre><code>  File: benchmarks/perf_dashboard.py (NEW)
+  Time: ~3 hours
+  Signal: `python -m benchmarks.perf_dashboard` shows table of last 10 scans
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;Track scan performance across commits.&quot;&quot;&quot;
+import json, subprocess, sys
+from pathlib import Path
+from datetime import datetime
+
+HISTORY_FILE = Path.home() / &quot;.ansede&quot; / &quot;perf_history.json&quot;
+
+
+def record_scan(profile_json: dict, repo: str, commit: str):
+    &quot;&quot;&quot;Record a scan's performance metrics to history.&quot;&quot;&quot;
+    history = []
+    if HISTORY_FILE.exists():
+        history = json.loads(HISTORY_FILE.read_text())
+
+    history.append({
+        &quot;timestamp&quot;: datetime.utcnow().isoformat(),
+        &quot;repo&quot;: repo,
+        &quot;commit&quot;: commit[:8],
+        &quot;total_ms&quot;: profile_json.get(&quot;total_ms&quot;, 0),
+        &quot;files_per_second&quot;: profile_json.get(&quot;files_per_second&quot;, 0),
+        &quot;findings&quot;: profile_json.get(&quot;findings_total&quot;, 0),
+        &quot;phases&quot;: profile_json.get(&quot;phases&quot;, {}),
+    })
+
+    # Keep last 100 entries
+    history = history[-100:]
+    HISTORY_FILE.write_text(json.dumps(history, indent=2))
+
+    # Detect regression
+    if len(history) &gt;= 3:
+        recent = history[-3:]
+        avg_ms = sum(h[&quot;total_ms&quot;] for h in recent[:-1]) / (len(recent) - 1)
+        if recent[-1][&quot;total_ms&quot;] &gt; avg_ms * 1.2:
+            print(f&quot;⚠️  PERFORMANCE REGRESSION: {recent[-1]['total_ms']:.0f}ms &quot;
+                  f&quot;vs avg {avg_ms:.0f}ms (&gt;{1.2:.0%})&quot;)
+
+
+def show_dashboard():
+    &quot;&quot;&quot;Print a dashboard of recent scans.&quot;&quot;&quot;
+    if not HISTORY_FILE.exists():
+        print(&quot;No performance history yet. Run scans with --profile first.&quot;)
+        return
+
+    history = json.loads(HISTORY_FILE.read_text())
+    print(f&quot;{'Date':&lt;20} {'Repo':&lt;20} {'Commit':&lt;10} {'Time(ms)':&lt;10} {'Files/s':&lt;10}&quot;)
+    print(&quot;-&quot; * 70)
+    for h in history[-10:]:
+        print(f&quot;{h['timestamp'][:16]:&lt;20} {h['repo'][:18]:&lt;20} &quot;
+              f&quot;{h['commit']:&lt;10} {h['total_ms']:&lt;10.0f} {h['files_per_second']:&lt;10.1f}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    if len(sys.argv) &gt; 1 and sys.argv[1] == &quot;record&quot;:
+        record_scan(json.loads(sys.stdin.read()), sys.argv[2], sys.argv[3])
+    else:
+        show_dashboard()
+</code></pre>
+<h3 id="task-05-add-cross-language-flag-gate">TASK-0.5: Add <code>--cross-language</code> flag (gate)</h3>
+<pre><code>  File: src/ansede_static/cli.py
+  Time: ~1 hour
+  Signal: `--cross-language` is accepted but does nothing yet (placeholder)
+</code></pre>
+<pre><code class="language-python">parser.add_argument(
+    &quot;--cross-language&quot;, action=&quot;store_true&quot;,
+    help=&quot;Enable cross-language taint tracking via Unified Source Graph (experimental).&quot;,
+)
+</code></pre>
+<p>In the scan flow, gate the USG construction:</p>
+<pre><code class="language-python">if getattr(args, &quot;cross_language&quot;, False):
+    # Will be populated in Phase 3
+    usg = UnifiedSourceGraph()
+else:
+    usg = None
+</code></pre>
+<hr />
+<h2 id="phase-1-auto-rule-generation-weeks-2-4">Phase 1: Auto-Rule Generation (Weeks 2-4)</h2>
+<p><strong>Goal:</strong> Convert 354 LLM memory entries into automatic heuristic rules.</p>
+<h3 id="task-11-create-engineauto_rulespy">TASK-1.1: Create <code>engine/auto_rules.py</code></h3>
+<pre><code>  File: src/ansede_static/engine/auto_rules.py (NEW)
+  Test:  tests/test_auto_rules.py (NEW)
+  Deps:  none (independent)
+  Time:  ~4 hours
+  Signal: `python -c &quot;from ansede_static.engine.auto_rules import generate_rules; rules = generate_rules(); print(len(rules))&quot;` prints &gt;0
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;
+ansede_static.engine.auto_rules
+─────────────────────────────────
+Reads LLM memory (~/.ansede/llm_memory.json) and generates heuristic
+rules for the audit pipeline. This is the self-improvement loop that
+makes ansede smarter with every scan.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import json
+import re
+from collections import Counter
+from pathlib import Path
+from typing import Any
+
+# ── Configuration ──────────────────────────────────────────────────
+
+_LLM_MEMORY_PATH = Path.home() / &quot;.ansede&quot; / &quot;llm_memory.json&quot;
+_AUTO_RULES_DIR = Path(__file__).parent.parent.parent / &quot;community_rules&quot; / &quot;auto_generated&quot;
+_MIN_ENTRIES_FOR_RULE = 5      # Minimum memory entries to generate a rule
+_MIN_CONFIDENCE_FOR_RULE = 0.80  # Minimum avg confidence to generate a rule
+_MAX_RULES = 50                 # Max auto-generated rules
+
+
+# ── Data Structures ────────────────────────────────────────────────
+
+@dataclass
+class AutoRule:
+    &quot;&quot;&quot;A generated heuristic rule from LLM memory.&quot;&quot;&quot;
+    rule_id: str                # e.g. &quot;AUTO-001&quot;
+    cwe: str                    # &quot;862&quot;
+    agent: str                  # &quot;js-analyzer&quot;
+    verdict: str                # &quot;LIKELY_FP&quot; | &quot;TRUE_POSITIVE&quot;
+    confidence: float           # Average confidence from memory entries
+    pattern: str | None         # Regex pattern extracted from code snippets
+    file_path_pattern: str | None  # e.g. &quot;frontend/src/api/&quot;
+    analysis_kind: str          # &quot;pattern&quot; | &quot;js-ast-analyzer&quot;
+    description: str
+    source_count: int           # How many memory entries generated this
+    reasoning: str              # Why this rule exists
+
+
+# ── Core Functions ──────────────────────────────────────────────────
+
+def load_memory() -&gt; list[dict[str, Any]]:
+    &quot;&quot;&quot;Load LLM memory from disk.&quot;&quot;&quot;
+    try:
+        if _LLM_MEMORY_PATH.exists():
+            with open(_LLM_MEMORY_PATH, encoding=&quot;utf-8&quot;) as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return []
+
+
+def group_entries(entries: list[dict]) -&gt; dict[str, list[dict]]:
+    &quot;&quot;&quot;Group memory entries by (CWE, agent, verdict).&quot;&quot;&quot;
+    groups: dict[str, list[dict]] = {}
+    for e in entries:
+        key = f&quot;{e.get('cwe', '?')}/{e.get('agent', '?')}/{e.get('verdict', '?')}&quot;
+        groups.setdefault(key, []).append(e)
+    return groups
+
+
+def longest_common_subsequence(a: str, b: str) -&gt; str:
+    &quot;&quot;&quot;Find the longest common subsequence of two strings.
+
+    Used to extract common patterns from code snippets with the same verdict.
+    &quot;&quot;&quot;
+    n, m = len(a), len(b)
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(n):
+        for j in range(m):
+            if a[i] == b[j]:
+                dp[i + 1][j + 1] = dp[i][j] + 1
+            else:
+                dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1])
+
+    # Backtrack to find the LCS
+    i, j = n, m
+    result = []
+    while i &gt; 0 and j &gt; 0:
+        if a[i - 1] == b[j - 1]:
+            result.append(a[i - 1])
+            i -= 1
+            j -= 1
+        elif dp[i - 1][j] &gt; dp[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    return ''.join(reversed(result))
+
+
+def extract_pattern_from_snippets(snippets: list[str]) -&gt; str | None:
+    &quot;&quot;&quot;Extract common regex pattern from code snippets with same verdict.
+
+    Uses LCS across pairs of snippets to find the longest common substring,
+    then converts it to a regex pattern suitable for matching in audit.py.
+    &quot;&quot;&quot;
+    if len(snippets) &lt; 2:
+        return None
+
+    # Find LCS between first two snippets (most representative)
+    common = longest_common_subsequence(snippets[0][:200], snippets[1][:200])
+
+    # If LCS is too short, try all pairs
+    if len(common) &lt; 10:
+        best = &quot;&quot;
+        for i in range(min(5, len(snippets))):
+            for j in range(i + 1, min(5, len(snippets))):
+                candidate = longest_common_subsequence(
+                    snippets[i][:200], snippets[j][:200]
+                )
+                if len(candidate) &gt; len(best):
+                    best = candidate
+        common = best
+
+    if len(common) &lt; 10:
+        return None
+
+    # Escape regex special chars and convert to pattern
+    pattern = re.escape(common)
+    # Replace escaped whitespace sequences with flexible whitespace
+    pattern = pattern.replace(r&quot;\ &quot;, r&quot;\s+&quot;)
+    pattern = pattern.replace(r&quot;\n&quot;, r&quot;\n&quot;)
+
+    return pattern
+
+
+def extract_path_pattern(file_paths: list[str]) -&gt; str | None:
+    &quot;&quot;&quot;Extract common file path pattern.
+
+    e.g. if all paths contain &quot;frontend/src/api/&quot; return that.
+    &quot;&quot;&quot;
+    if len(file_paths) &lt; 3:
+        return None
+
+    # Normalize paths
+    normalized = [p.replace(&quot;\\&quot;, &quot;/&quot;).lower() for p in file_paths]
+
+    # Find common directory segments
+    segments_list = [p.split(&quot;/&quot;) for p in normalized]
+    min_len = min(len(s) for s in segments_list)
+
+    common_segments = []
+    for i in range(min_len):
+        segment = segments_list[0][i]
+        if all(s[i] == segment for s in segments_list):
+            common_segments.append(segment)
+        else:
+            break
+
+    if common_segments:
+        return &quot;/&quot;.join(common_segments)
+    return None
+
+
+def generate_rule(
+    cwe: str, agent: str, verdict: str,
+    entries: list[dict],
+    rule_counter: list[int],
+) -&gt; AutoRule | None:
+    &quot;&quot;&quot;Generate a single AutoRule from a group of memory entries.&quot;&quot;&quot;
+    if len(entries) &lt; _MIN_ENTRIES_FOR_RULE:
+        return None
+
+    avg_confidence = sum(e.get(&quot;confidence&quot;, 0) for e in entries) / len(entries)
+    if avg_confidence &lt; _MIN_CONFIDENCE_FOR_RULE:
+        return None
+
+    snippets = [e.get(&quot;code_snippet&quot;, &quot;&quot;) for e in entries]
+    file_paths = [e.get(&quot;file_path&quot;, &quot;&quot;) for e in entries]
+
+    pattern = extract_pattern_from_snippets(snippets)
+    path_pattern = extract_path_pattern(file_paths)
+
+    analysis_kind = entries[0].get(&quot;analysis_kind&quot;, &quot;pattern&quot;)
+    description = (
+        f&quot;Auto-generated from {len(entries)} LLM memory entries &quot;
+        f&quot;(avg confidence: {avg_confidence:.0%}). &quot;
+        f&quot;CWE-{cwe} {verdict} pattern in {agent}.&quot;
+    )
+
+    rule_counter[0] += 1
+    return AutoRule(
+        rule_id=f&quot;AUTO-{rule_counter[0]:03d}&quot;,
+        cwe=cwe,
+        agent=agent,
+        verdict=verdict,
+        confidence=avg_confidence,
+        pattern=pattern,
+        file_path_pattern=path_pattern,
+        analysis_kind=analysis_kind,
+        description=description,
+        source_count=len(entries),
+        reasoning=entries[-1].get(&quot;reasoning&quot;, &quot;&quot;)[:200],
+    )
+
+
+def generate_rules(memory: list[dict] | None = None) -&gt; list[AutoRule]:
+    &quot;&quot;&quot;Generate all auto-rules from LLM memory.&quot;&quot;&quot;
+    if memory is None:
+        memory = load_memory()
+
+    groups = group_entries(memory)
+    rules: list[AutoRule] = []
+    rule_counter = [0]
+
+    for key, entries in sorted(groups.items()):
+        if rule_counter[0] &gt;= _MAX_RULES:
+            break
+        cwe, agent, verdict = key.split(&quot;/&quot;, 2)
+        rule = generate_rule(cwe, agent, verdict, entries, rule_counter)
+        if rule:
+            rules.append(rule)
+
+    return rules
+
+
+def save_rules(rules: list[AutoRule]) -&gt; None:
+    &quot;&quot;&quot;Save auto-generated rules to disk as YAML + Python.&quot;&quot;&quot;
+    _AUTO_RULES_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Save YAML manifest
+    manifest = []
+    for r in rules:
+        manifest.append({
+            &quot;rule_id&quot;: r.rule_id,
+            &quot;cwe&quot;: r.cwe,
+            &quot;agent&quot;: r.agent,
+            &quot;verdict&quot;: r.verdict,
+            &quot;confidence&quot;: r.confidence,
+            &quot;pattern&quot;: r.pattern,
+            &quot;file_path_pattern&quot;: r.file_path_pattern,
+            &quot;analysis_kind&quot;: r.analysis_kind,
+            &quot;description&quot;: r.description,
+            &quot;source_count&quot;: r.source_count,
+        })
+
+    with open(_AUTO_RULES_DIR / &quot;manifest.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        json.dump(manifest, f, indent=2)
+
+    # Save Python module
+    py_lines = [
+        '&quot;&quot;&quot;Auto-generated heuristic rules from LLM memory.&quot;&quot;&quot;',
+        'from __future__ import annotations',
+        '',
+        '# Auto-generated by ansede-static engine/auto_rules.py',
+        f'# Generated from {sum(r.source_count for r in rules)} LLM memory entries',
+        f'# Total rules: {len(rules)}',
+        '',
+    ]
+
+    for r in rules:
+        fn_name = f&quot;_auto_rule_{r.rule_id.lower()}&quot;
+        py_lines.extend([
+            '',
+            f'def {fn_name}(cwe: str, file_path: str, code_snippet: str) -&gt; bool:',
+            f'    &quot;&quot;&quot;{r.description}&quot;&quot;&quot;',
+        ])
+        if r.file_path_pattern:
+            py_lines.append(
+                f'    if &quot;{r.file_path_pattern}&quot; in file_path.replace(&quot;\\\\&quot;, &quot;/&quot;).lower():'
+            )
+            if r.verdict == &quot;LIKELY_FP&quot;:
+                py_lines.append(f'        return True  # Matched path pattern')
+            else:
+                py_lines.append(f'        return True  # Matched path pattern')
+        if r.pattern:
+            py_lines.append(f'    if re.search(r&quot;{r.pattern}&quot;, code_snippet):')
+            if r.verdict == &quot;LIKELY_FP&quot;:
+                py_lines.append(f'        return True')
+            else:
+                py_lines.append(f'        return True')
+        py_lines.append('    return False')
+        py_lines.append('')
+
+    with open(_AUTO_RULES_DIR / &quot;rules.py&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write('\n'.join(py_lines))
+
+
+def apply_rules_to_audit(audit_findings: list, rules: list[AutoRule]) -&gt; list:
+    &quot;&quot;&quot;Apply auto-generated rules to re-classify audit findings.
+
+    Returns findings with updated verdicts where rules match.
+    &quot;&quot;&quot;
+    updated = []
+    matched = 0
+    for af in audit_findings:
+        cwe = af.finding.cwe
+        file_path = af.file_path
+        code = af.code_snippet
+
+        for rule in rules:
+            # Check CWE match
+            if rule.cwe != cwe:
+                continue
+            # Check agent match
+            if rule.agent != af.finding.agent:
+                continue
+            # Check path pattern
+            if rule.file_path_pattern:
+                norm_path = file_path.replace(&quot;\\&quot;, &quot;/&quot;).lower()
+                if rule.file_path_pattern not in norm_path:
+                    continue
+            # Check code pattern
+            if rule.pattern and not re.search(rule.pattern, code):
+                continue
+
+            # All checks passed — apply rule
+            from ansede_static.engine.audit import Verdict
+            new_verdict = Verdict.LIKELY_FP if rule.verdict == &quot;LIKELY_FP&quot; else Verdict.TP
+            af.verdict = new_verdict
+            af.reasoning = f&quot;AUTO-RULE {rule.rule_id}: {rule.description[:100]}&quot;
+            matched += 1
+            break
+
+        updated.append(af)
+
+    return updated
+</code></pre>
+<h3 id="task-12-create-tests">TASK-1.2: Create tests</h3>
+<pre><code>  File: tests/test_auto_rules.py (NEW)
+  Time: ~3 hours
+  Signal: `python -m pytest tests/test_auto_rules.py -x -q` passes
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;Tests for auto-rule generation.&quot;&quot;&quot;
+from ansede_static.engine.auto_rules import (
+    longest_common_subsequence,
+    extract_pattern_from_snippets,
+    extract_path_pattern,
+    group_entries,
+    generate_rules,
+    AutoRule,
+)
+
+
+def test_lcs_basic():
+    assert longest_common_subsequence(&quot;abcdef&quot;, &quot;acdf&quot;) == &quot;acdf&quot;
+
+
+def test_lcs_empty():
+    assert longest_common_subsequence(&quot;abc&quot;, &quot;&quot;) == &quot;&quot;
+
+
+def test_lcs_no_common():
+    assert longest_common_subsequence(&quot;abc&quot;, &quot;def&quot;) == &quot;&quot;
+
+
+def test_extract_pattern_from_snippets():
+    snippets = [
+        &quot;console.log(user.email)&quot;,
+        &quot;console.log(user.token)&quot;,
+        &quot;console.log(user.name)&quot;,
+    ]
+    pattern = extract_pattern_from_snippets(snippets)
+    assert pattern is not None
+    assert &quot;console&quot; in pattern
+
+
+def test_extract_path_pattern():
+    paths = [
+        &quot;C:/project/frontend/src/api/users.js&quot;,
+        &quot;C:/project/frontend/src/api/auth.js&quot;,
+        &quot;C:/project/frontend/src/api/config.js&quot;,
+    ]
+    pattern = extract_path_pattern(paths)
+    assert pattern is not None
+    assert &quot;frontend/src/api&quot; in pattern
+
+
+def test_group_entries():
+    entries = [
+        {&quot;cwe&quot;: &quot;862&quot;, &quot;agent&quot;: &quot;js-analyzer&quot;, &quot;verdict&quot;: &quot;LIKELY_FP&quot;},
+        {&quot;cwe&quot;: &quot;862&quot;, &quot;agent&quot;: &quot;js-analyzer&quot;, &quot;verdict&quot;: &quot;LIKELY_FP&quot;},
+        {&quot;cwe&quot;: &quot;798&quot;, &quot;agent&quot;: &quot;js-analyzer&quot;, &quot;verdict&quot;: &quot;TRUE_POSITIVE&quot;},
+    ]
+    groups = group_entries(entries)
+    assert len(groups) == 2
+    assert &quot;862/js-analyzer/LIKELY_FP&quot; in groups
+    assert &quot;798/js-analyzer/TRUE_POSITIVE&quot; in groups
+
+
+def test_generate_rules_from_mock_memory():
+    # Create mock memory with enough entries to generate rules
+    memory = []
+    for i in range(10):
+        memory.append({
+            &quot;cwe&quot;: &quot;862&quot;,
+            &quot;agent&quot;: &quot;js-analyzer&quot;,
+            &quot;verdict&quot;: &quot;LIKELY_FP&quot;,
+            &quot;analysis_kind&quot;: &quot;pattern&quot;,
+            &quot;confidence&quot;: 0.95,
+            &quot;code_snippet&quot;: f&quot;console.log(user.{chr(97+i)})&quot;,
+            &quot;reasoning&quot;: &quot;Test pattern&quot;,
+        })
+
+    rules = generate_rules(memory)
+    assert len(rules) &gt;= 1
+    assert rules[0].cwe == &quot;862&quot;
+    assert rules[0].agent == &quot;js-analyzer&quot;
+    assert rules[0].verdict == &quot;LIKELY_FP&quot;
+</code></pre>
+<h3 id="task-13-wire-into-cli">TASK-1.3: Wire into CLI</h3>
+<pre><code>  File: src/ansede_static/cli.py
+  Deps: TASK-1.1
+  Time: ~2 hours
+  Signal: `ansede-static --auto-rule` generates rule files in community_rules/auto_generated/
+</code></pre>
+<pre><code class="language-python"># Add to argument parser:
+parser.add_argument(
+    &quot;--auto-rule&quot;, action=&quot;store_true&quot;,
+    help=&quot;Generate heuristic rules from LLM memory and save to community_rules/auto_generated/.&quot;,
+)
+parser.add_argument(
+    &quot;--apply-auto-rules&quot;, action=&quot;store_true&quot;,
+    help=&quot;Apply auto-generated rules during audit to reduce NEEDS_REVIEW findings.&quot;,
+)
+
+# In main() after audit pipeline:
+if getattr(args, &quot;auto_rule&quot;, False):
+    from ansede_static.engine.auto_rules import generate_rules, save_rules, load_memory
+    memory = load_memory()
+    rules = generate_rules(memory)
+    save_rules(rules)
+    msg = f&quot;ansede-static: generated {len(rules)} auto-rules from {len(memory)} memory entries&quot;
+    print(msg)
+
+if getattr(args, &quot;apply_auto_rules&quot;, False):
+    from ansede_static.engine.auto_rules import load_rules, apply_rules_to_audit
+    rules = load_rules()
+    audit_findings = apply_rules_to_audit(audit_report.findings, rules)
+    audit_report = AuditReport(findings=audit_findings)
+</code></pre>
+<hr />
+<h2 id="phase-2-speed-optimization-weeks-2-4-parallel-with-phase-1">Phase 2: Speed Optimization (Weeks 2-4, parallel with Phase 1)</h2>
+<p><strong>Goal:</strong> 42,546ms/case → &lt;5,000ms/case (8.5x faster)</p>
+<h3 id="task-21-lazy-ast-parsing-skip-lists">TASK-2.1: Lazy AST Parsing + Skip Lists</h3>
+<pre><code>  File: src/ansede_static/cli.py (file discovery + scan loop)
+  Time: ~4 hours
+  Signal: Scanning a repo with bundled files doesn't hang
+</code></pre>
+<p>Add skip patterns for files that can't contain security-relevant code:</p>
+<pre><code class="language-python"># Near the file discovery / scan loop
+_SKIP_EXTENSIONS = {
+    '.d.ts', '.min.js', '.min.css', '.map',
+    '.snap', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico',
+    '.woff', '.woff2', '.ttf', '.eot', '.mp4', '.webm',
+    '.pyc', '.pyo', '.pyd', '.so', '.dll', '.dylib',
+}
+
+_SKIP_FILE_PATTERNS = [
+    r'yarn-\d+\.\d+\.\d+\.cjs$',  # Yarn Berry PnP bundles
+    r'\.next/',                     # Next.js build output
+    r'node_modules/',
+    r'vendor/',
+    r'__pycache__/',
+    r'.git/',
+]
+
+_SKIP_LARGE_FILES = 1024 * 500  # Skip files &gt;500KB (they're usually bundles)
+
+
+def _should_skip_file(file_path: str) -&gt; tuple[bool, str]:
+    &quot;&quot;&quot;Check if a file should be skipped.
+
+    Returns (skip, reason).
+    &quot;&quot;&quot;
+    path = Path(file_path)
+    ext = path.suffix.lower()
+
+    # Skip by extension
+    if ext in _SKIP_EXTENSIONS:
+        return True, f&quot;skipped extension: {ext}&quot;
+
+    # Skip by path pattern
+    norm = file_path.replace(&quot;\\&quot;, &quot;/&quot;)
+    for pattern in _SKIP_FILE_PATTERNS:
+        if re.search(pattern, norm):
+            return True, f&quot;skipped path pattern: {pattern}&quot;
+
+    # Skip large files
+    try:
+        if path.stat().st_size &gt; _SKIP_LARGE_FILES:
+            return True, f&quot;skipped large file: {path.stat().st_size} bytes&quot;
+    except OSError:
+        pass
+
+    return False, &quot;&quot;
+</code></pre>
+<p>In the scan loop, before parsing:</p>
+<pre><code class="language-python">skip, reason = _should_skip_file(str(filepath))
+if skip:
+    _log.debug(&quot;Skipping %s: %s&quot;, filepath, reason)
+    continue
+</code></pre>
+<h3 id="task-22-ast-parse-timeout">TASK-2.2: AST Parse Timeout</h3>
+<pre><code>  File: src/ansede_static/cli.py (scan loop) + analyzer modules
+  Time: ~3 hours
+  Signal: Files that take &gt;5s to parse are skipped with a warning
+</code></pre>
+<pre><code class="language-python">import signal
+
+class TimeoutError(Exception):
+    pass
+
+def _parse_with_timeout(analyze_fn, code: str, filename: str, timeout: int = 5):
+    &quot;&quot;&quot;Run parse with a timeout. Raises TimeoutError if exceeded.&quot;&quot;&quot;
+    import threading
+
+    result = []
+    exception = []
+
+    def worker():
+        try:
+            r = analyze_fn(code, filename=filename)
+            result.append(r)
+        except Exception as e:
+            exception.append(e)
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    t.join(timeout=timeout)
+
+    if t.is_alive():
+        raise TimeoutError(f&quot;Parse timeout ({timeout}s): {filename}&quot;)
+    if exception:
+        raise exception[0]
+    return result[0]
+</code></pre>
+<p>Usage in scan loop:</p>
+<pre><code class="language-python">try:
+    result = _parse_with_timeout(analyze_python, code, str(filepath))
+except TimeoutError:
+    print(f&quot;  ⏱️  Skipping (parse timeout): {filepath.name}&quot;)
+    continue
+</code></pre>
+<h3 id="task-23-parallel-file-scanning">TASK-2.3: Parallel File Scanning</h3>
+<pre><code>  File: src/ansede_static/cli.py (scan loop)
+  Deps: must handle shared state (GlobalGraph) safely
+  Time: ~2 days
+  Signal: Multi-core CPU utilization during scan
+</code></pre>
+<pre><code class="language-python">from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def _scan_file_worker(args_tuple):
+    &quot;&quot;&quot;Standalone worker for parallel scanning.&quot;&quot;&quot;
+    filepath, lang, code, global_graph = args_tuple
+    # ... existing per-file scan logic ...
+    return filepath, result
+
+# In scan loop, replace sequential with parallel:
+with ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as executor:
+    futures = []
+    for filepath, lang, code in file_batch:
+        future = executor.submit(
+            _scan_file_worker,
+            (filepath, lang, code, global_graph)
+        )
+        futures.append(future)
+
+    for future in as_completed(futures):
+        filepath, result = future.result()
+        all_findings.extend(result.findings)
+</code></pre>
+<p><strong>⚠️ Critical:</strong> The <code>global_graph</code> object must be thread-safe. Use a lock for mutations:</p>
+<pre><code class="language-python">import threading
+_graph_lock = threading.Lock()
+
+# Inside _scan_file_worker, when using global_graph:
+with _graph_lock:
+    global_graph.merge(result.global_graph_data)
+</code></pre>
+<h3 id="task-24-file-level-cache">TASK-2.4: File-Level Cache</h3>
+<pre><code>  File: src/ansede_static/cache.py (NEW)
+  Time: ~2 days
+  Signal: Re-scanning the same repo is ~3x faster
+</code></pre>
+<pre><code class="language-python">&quot;&quot;&quot;
+ansede_static.cache
+────────────────────
+File-level result cache. Keyed by SHA256 of file content.
+Skips re-analysis of unchanged files.
+&quot;&quot;&quot;
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import pickle
+from pathlib import Path
+from typing import Any
+
+_CACHE_DIR = Path.home() / &quot;.ansede&quot; / &quot;cache&quot;
+_MAX_CACHE_SIZE = 500  # Max files to cache
+
+
+def _file_hash(file_path: str) -&gt; str:
+    &quot;&quot;&quot;SHA256 hash of file contents.&quot;&quot;&quot;
+    h = hashlib.sha256()
+    with open(file_path, &quot;rb&quot;) as f:
+        for chunk in iter(lambda: f.read(65536), b&quot;&quot;):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def get_cached_result(file_path: str) -&gt; Any | None:
+    &quot;&quot;&quot;Get cached scan result for a file, or None if not cached/stale.&quot;&quot;&quot;
+    file_hash = _file_hash(file_path)
+    cache_path = _CACHE_DIR / f&quot;{file_hash}.pkl&quot;
+
+    if cache_path.exists():
+        try:
+            with open(cache_path, &quot;rb&quot;) as f:
+                return pickle.load(f)
+        except Exception:
+            pass
+    return None
+
+
+def set_cached_result(file_path: str, result: Any) -&gt; None:
+    &quot;&quot;&quot;Cache a scan result for a file.&quot;&quot;&quot;
+    _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    file_hash = _file_hash(file_path)
+    cache_path = _CACHE_DIR / f&quot;{file_hash}.pkl&quot;
+
+    # Evict old entries if cache is too large
+    existing = list(_CACHE_DIR.glob(&quot;*.pkl&quot;))
+    if len(existing) &gt;= _MAX_CACHE_SIZE:
+        existing.sort(key=lambda p: p.stat().st_mtime)
+        for old in existing[:-_MAX_CACHE_SIZE + 1]:
+            old.unlink(missing_ok=True)
+
+    with open(cache_path, &quot;wb&quot;) as f:
+        pickle.dump(result, f)
+
+
+def invalidate_cache(file_path: str | None = None) -&gt; None:
+    &quot;&quot;&quot;Invalidate cache for a specific file or all files.&quot;&quot;&quot;
+    if file_path:
+        file_hash = _file_hash(file_path)
+        cache_path = _CACHE_DIR / f&quot;{file_hash}.pkl&quot;
+        cache_path.unlink(missing_ok=True)
+    else:
+        import shutil
+        shutil.rmtree(_CACHE_DIR, ignore_errors=True)
+</code></pre>
+<p>Wire into scan loop:</p>
+<pre><code class="language-python"># Before scanning a file:
+if not getattr(args, &quot;no_cache&quot;, False):
+    cached = get_cached_result(str(filepath))
+    if cached is not None:
+        all_findings.extend(cached.findings)
+        continue
+
+# After scanning:
+if not getattr(args, &quot;no_cache&quot;, False):
+    set_cached_result(str(filepath), result)
+</code></pre>
+<h3 id="task-25-skip-known-clean-files">TASK-2.5: Skip Known-Clean Files</h3>
+<pre><code>  File: src/ansede_static/cache.py (add scan counter)
+  Time: ~1 day
+  Signal: Files scanned 3+ times with 0 findings are auto-skipped
+</code></pre>
+<p>Status update (2026-05-25): <strong>done</strong> — <code>IncrementalCache</code> in <code>src/ansede_static/cache/incremental.py</code> now has <code>mark_clean()</code>, <code>mark_dirty()</code>, and <code>is_clean()</code> with SQLite-persisted counter (threshold: 3). Tests in <code>tests/test_cache.py</code>.</p>
+<pre><code class="language-python"># In cache.py, add:
+_SCAN_COUNTER_PATH = _CACHE_DIR / &quot;scan_counter.json&quot;
+
+
+def _load_scan_counter() -&gt; dict[str, int]:
+    if _SCAN_COUNTER_PATH.exists():
+        try:
+            return json.loads(_SCAN_COUNTER_PATH.read_text())
+        except Exception:
+            pass
+    return {}
+
+
+def _save_scan_counter(counter: dict[str, int]) -&gt; None:
+    _SCAN_COUNTER_PATH.write_text(json.dumps(counter))
+
+
+def increment_scan_count(file_path: str, finding_count: int) -&gt; None:
+    counter = _load_scan_counter()
+    if finding_count == 0:
+        counter[file_path] = counter.get(file_path, 0) + 1
+    else:
+        counter[file_path] = 0  # Reset if findings found
+    _save_scan_counter(counter)
+
+
+def is_known_clean(file_path: str, max_clean_scans: int = 3) -&gt; bool:
+    counter = _load_scan_counter()
+    return counter.get(file_path, 0) &gt;= max_clean_scans
+</code></pre>
+<h3 id="task-26-incremental-scanning">TASK-2.6: Incremental Scanning</h3>
+<pre><code>  File: src/ansede_static/cli.py (new --incremental mode)
+  Time: ~3 days
+  Signal: `ansede-static --incremental repo/` only rescans changed files (10x faster on re-scans)
+</code></pre>
+<pre><code class="language-python">def _get_changed_files(repo_path: str) -&gt; list[str]:
+    &quot;&quot;&quot;Get list of files changed since last scan using git diff.&quot;&quot;&quot;
+    import subprocess as sp
+
+    try:
+        # Get last scan commit from cache
+        cache_file = Path(_CACHE_DIR) / &quot;last_scan_commit.txt&quot;
+        if not cache_file.exists():
+            # First scan — scan everything
+            return []
+
+        last_commit = cache_file.read_text().strip()
+
+        # Get changed files since last commit
+        result = sp.run(
+            [&quot;git&quot;, &quot;diff&quot;, &quot;--name-only&quot;, last_commit, &quot;HEAD&quot;],
+            capture_output=True, text=True, cwd=repo_path,
+            timeout=30,
+        )
+        if result.returncode == 0:
+            changed = [f for f in result.stdout.strip().split(&quot;\n&quot;) if f]
+
+            # Update last scan commit
+            head_result = sp.run(
+                [&quot;git&quot;, &quot;rev-parse&quot;, &quot;HEAD&quot;],
+                capture_output=True, text=True, cwd=repo_path,
+                timeout=10,
+            )
+            if head_result.returncode == 0:
+                cache_file.write_text(head_result.stdout.strip())
+
+            return changed
+    except Exception:
+        pass
+    return []  # Fall back to full scan
+</code></pre>
+<hr />
+<h2 id="phase-3-cross-language-taint-tracking-weeks-3-8">Phase 3: Cross-Language Taint Tracking (Weeks 3-8)</h2>
+<p><strong>Goal:</strong> Build the Unified Source Graph and cross-language taint analysis.</p>
+<h3 id="task-31-usg-data-structures">TASK-3.1: USG Data Structures</h3>
+<pre><code>  File: src/ansede_static/graph/unified_source_graph.py (NEW)
+  Test:  tests/test_graph/test_unified_source_graph.py (NEW)
+  Time:  ~3 days
+  Signal: USG can be constructed, serialized, and queried
+</code></pre>
+<p>Full implementation code in <code>ROADMAP.md</code> section above (see Architecture Overview). Key methods:</p>
+<pre><code class="language-python">class UnifiedSourceGraph:
+    def add_node(self, node: SourceNode) -&gt; None
+    def add_edge(self, edge: SourceEdge) -&gt; None
+    def get_callers(self, node_id: str) -&gt; list[SourceNode]
+    def get_callees(self, node_id: str) -&gt; list[SourceNode]
+    def find_path(self, source_id: str, target_id: str, max_depth: int = 10) -&gt; list[SourceEdge]
+    def find_taint_paths(self, source_pattern: str, sink_pattern: str) -&gt; list[list[SourceEdge]]
+    def to_json(self) -&gt; dict
+    def merge(self, other: UnifiedSourceGraph) -&gt; None
+    def statistics(self) -&gt; dict
+</code></pre>
+<h3 id="task-32-import-graph-resolver">TASK-3.2: Import Graph Resolver</h3>
+<pre><code>  File: src/ansede_static/graph/import_graph.py (NEW)
+  Test:  tests/test_graph/test_import_graph.py (NEW)
+  Deps:  TASK-3.1
+  Time:  ~5 days
+  Signal: Resolves `from flask import ...` and `require('express')` across files
+</code></pre>
+<pre><code class="language-python">def resolve_python_imports(root_dir: str) -&gt; list[SourceEdge]:
+    &quot;&quot;&quot;Build import graph for Python files.
+
+    Handles:
+    - `from module import name` → module resolution
+    - `import module` → module resolution
+    - `from .relative import name` → relative import resolution
+    - `import package.module` → dotted path resolution
+    &quot;&quot;&quot;
+    ...
+
+def resolve_js_imports(root_dir: str) -&gt; list[SourceEdge]:
+    &quot;&quot;&quot;Build import graph for JavaScript/TypeScript files.
+
+    Handles:
+    - `require('module')` → CommonJS resolution
+    - `import { x } from 'module'` → ES module resolution
+    - Dynamic imports `import('module')`
+    - Path aliases (webpack/tsconfig paths)
+    &quot;&quot;&quot;
+    ...
+
+def resolve_go_imports(root_dir: str) -&gt; list[SourceEdge]:
+    &quot;&quot;&quot;Build import graph for Go files.
+
+    Handles:
+    - `import &quot;module&quot;` → standard resolution
+    - `import alias &quot;module&quot;` → aliased imports
+    - Go module path resolution
+    &quot;&quot;&quot;
+    ...
+</code></pre>
+<h3 id="task-33-python-call-graph-builder">TASK-3.3: Python Call-Graph Builder</h3>
+<pre><code>  File: src/ansede_static/graph/python_callgraph.py (NEW)
+  Deps: TASK-3.1, TASK-3.2
+  Time: ~5 days
+  Signal: Extracts function calls and resolves them to callee nodes
+</code></pre>
+<pre><code class="language-python">def build_python_callgraph(
+    root_dir: str,
+    usg: UnifiedSourceGraph,
+    import_edges: list[SourceEdge],
+) -&gt; list[SourceEdge]:
+    &quot;&quot;&quot;Build call graph for Python files.
+
+    For each function definition, extract:
+    - Direct calls: `func()` → resolves to function definition in same file or imported module
+    - Method calls: `obj.method()` → resolves by type tracking
+    - Decorator calls: `@decorator` → resolves to decorator function
+    - Class instantiations: `ClassName()` → resolves to __init__
+    - Flask/FastAPI route handlers: `@app.route('/path')` → registers route
+
+    Returns list of CALLS edges.
+    &quot;&quot;&quot;
+    ...
+</code></pre>
+<h3 id="task-34-jsts-call-graph-builder">TASK-3.4: JS/TS Call-Graph Builder</h3>
+<pre><code>  File: src/ansede_static/graph/js_callgraph.py (NEW)
+  Deps: TASK-3.1, TASK-3.2
+  Time: ~5 days
+</code></pre>
+<p>Similar to Python but handles JS-specific patterns:</p>
+<pre><code class="language-python">def build_js_callgraph(
+    root_dir: str,
+    usg: UnifiedSourceGraph,
+    import_edges: list[SourceEdge],
+) -&gt; list[SourceEdge]:
+    &quot;&quot;&quot;Build call graph for JavaScript/TypeScript files.
+
+    Handles:
+    - Function calls: `func()`
+    - Method calls: `obj.method()`
+    - Arrow functions: `const f = () =&gt; {...}`
+    - Class methods
+    - Express route handlers: `app.get('/path', handler)`
+    - React component calls: `&lt;Component /&gt;`
+    - Dynamic requires: `require('module').func()`
+    - Promise chains: `.then().catch()`
+    - Event emitters: `emitter.on('event', handler)`
+    - Web API calls: `fetch()`, `XMLHttpRequest`
+    &quot;&quot;&quot;
+    ...
+</code></pre>
+<h3 id="task-35-go-call-graph-builder">TASK-3.5: Go Call-Graph Builder</h3>
+<pre><code>  File: src/ansede_static/graph/go_callgraph.py (NEW)
+  Deps: TASK-3.1, TASK-3.2
+  Time: ~4 days
+</code></pre>
+<h3 id="task-36-cross-language-taint-resolver">TASK-3.6: Cross-Language Taint Resolver</h3>
+<pre><code>  File: src/ansede_static/graph/cross_language_taint.py (NEW)
+  Test:  tests/test_graph/test_cross_language_taint.py (NEW)
+  Deps: TASK-3.3, TASK-3.4, TASK-3.5
+  Time: ~1 week
+  Signal: Detects taint flowing from Python FastAPI endpoint → JS fetch() → innerHTML
+</code></pre>
+<p><strong>Progress update (2026-05-25):</strong></p>
+<ul>
+<li><code>src/ansede_static/graph/cross_language_taint.py</code> is now landed with repository-graph orchestration.</li>
+<li>Per-language graph prerequisites are in place: USG + import graph + Python/JS/Go call graphs.</li>
+<li>Starter bridge semantics are now implemented for backend route → frontend HTTP call matching via normalized URL paths.</li>
+<li>Bridge coverage now includes literal <code>fetch()</code>, local and shared/imported-or-required path constants, ESM default-imported scalar/object contracts, local and imported object maps (for example <code>routes.user</code> / <code>api.routes.user</code>), object-prefix aliases such as <code>const routes = api.routes</code> including multi-hop/CommonJS variants, one-step alias chains such as <code>const USER_PATH = routes.user</code>, imported helper-client wrappers via JS call-graph default imports/CommonJS default exports, <code>axios.get/post/...</code>, <code>axios.request({ url: ... })</code>, <code>axios.create({ baseURL })</code> client wrappers, and <code>XMLHttpRequest.open()</code> URL matching.</li>
+<li>Starter sink semantics now cover JS DOM sinks including <code>innerHTML</code>, <code>outerHTML</code>, <code>insertAdjacentHTML</code>, <code>srcdoc</code>, <code>document.write</code>, and <code>dangerouslySetInnerHTML</code>, plus dynamic code-execution sinks like <code>eval(...)</code> and <code>Function(...)</code>.</li>
+<li><code>--cross-language</code> now emits repository-graph metadata and sample taint-path data in CLI execution output.</li>
+<li>Discovered cross-language taint paths are now promoted into sink-aware reportable findings during CLI scans (<code>XL-001</code> / <code>CWE-79</code> for DOM XSS sinks, <code>XL-002</code> / <code>CWE-94</code> for code-execution sinks).</li>
+<li>JS propagation now extends beyond same-function sinks into nearby helper functions through call-graph reachability.</li>
+<li>Focused tests currently verify Python route → JS <code>fetch()</code> / local or shared imported-or-required constants / ESM default-imported scalar or object contracts / local or imported object maps / object-prefix aliases (including multi-hop/CommonJS forms) / one-step alias chains / imported helper-client wrappers via default imports / <code>axios</code> / <code>axios.request(...)</code> / <code>axios.create(...).get(...)</code> / XHR → DOM or code-execution sink paths, including normalized route-parameter matching and helper-call propagation, plus a Go route → JS DOM sink path.</li>
+</ul>
+<p><strong>Remaining for full TASK-3.6 completion:</strong></p>
+<ul>
+<li>richer bridge semantics (generated clients beyond current <code>axios.create</code> plus imported-helper coverage, deeper shared route contracts/object maps beyond current validated default imports, prefix aliases, and one-step alias chains, OpenAPI-derived links)</li>
+<li>deeper frontend propagation beyond nearby call-graph-reachable helper functions</li>
+<li>broader non-XSS cross-language sink families beyond the current dynamic code-execution set, plus audit/reporting polish for the new cross-language finding classes</li>
+</ul>
+<pre><code class="language-python">def find_cross_language_taint(
+    usg: UnifiedSourceGraph,
+) -&gt; list[dict]:
+    &quot;&quot;&quot;Find taint flows that cross language boundaries.
+
+    Strategy:
+    1. Find all &quot;source&quot; nodes (user input in any language):
+       - Python: `request.args`, `request.json`, FastAPI path params
+       - JS: `req.query`, `req.body`, URL params
+       - Go: `r.URL.Query()`, `r.Body`
+
+    2. Find all &quot;sink&quot; nodes (dangerous functions in any language):
+       - SQL: `db.query()`, `db.Execute()`, `db.Raw()`
+       - Shell: `os.system()`, `exec()`, `child_process.exec()`
+       - XSS: `innerHTML`, `document.write()`, `dangerouslySetInnerHTML`
+       - Path: `open()`, `os.path.join()`, `fs.readFile()`
+
+    3. Trace paths through the USG from sources to sinks.
+       When a path crosses a language boundary (e.g. Python→JS via HTTP),
+       follow the route registration (FastAPI route → fetch URL).
+
+    4. Return all paths found with metadata.
+    &quot;&quot;&quot;
+    # Phase 1: Collect all source nodes
+    sources = _find_sources(usg)
+
+    # Phase 2: Collect all sink nodes
+    sinks = _find_sinks(usg)
+
+    # Phase 3: Find route pairs (backend endpoint → frontend API call)
+    route_pairs = _find_route_pairs(usg)
+
+    # Phase 4: For each source-sink pair, check if there's a path
+    taint_paths = []
+    for source in sources:
+        for sink in sinks:
+            path = usg.find_path(source.id, sink.id)
+            if path:
+                # Check if path crosses language boundary
+                languages = set()
+                for edge in path:
+                    source_node = usg.nodes.get(edge.source_id)
+                    target_node = usg.nodes.get(edge.target_id)
+                    if source_node:
+                        languages.add(source_node.language)
+                    if target_node:
+                        languages.add(target_node.language)
+
+                if len(languages) &gt; 1:
+                    taint_paths.append({
+                        &quot;source&quot;: source.id,
+                        &quot;sink&quot;: sink.id,
+                        &quot;languages&quot;: list(languages),
+                        &quot;path&quot;: [{&quot;from&quot;: e.source_id, &quot;to&quot;: e.target_id, &quot;kind&quot;: e.kind}
+                                 for e in path],
+                        &quot;confidence&quot;: _calculate_path_confidence(path),
+                    })
+
+    return taint_paths
+
+
+def _find_route_pairs(usg: UnifiedSourceGraph) -&gt; list[tuple[SourceNode, SourceNode]]:
+    &quot;&quot;&quot;Match backend API routes to frontend API calls.
+
+    Backend: Flask/FastAPI/Express/Gin route registrations
+    Frontend: fetch(), axios.get(), $.ajax() calls
+
+    Matches by URL pattern: `/api/users/:id` ↔ `/api/users/${userId}`
+    &quot;&quot;&quot;
+    pairs = []
+
+    # Find backend route nodes
+    backend_routes = [
+        n for n in usg.nodes.values()
+        if n.kind == &quot;route&quot; and n.language in (&quot;python&quot;, &quot;javascript&quot;, &quot;go&quot;)
+    ]
+
+    # Find frontend API call nodes
+    frontend_calls = [
+        n for n in usg.nodes.values()
+        if n.kind == &quot;api_call&quot;
+    ]
+
+    for route in backend_routes:
+        route_url = route.name  # e.g. &quot;/api/users/:id&quot;
+        # Convert route pattern to regex
+        route_re = re.sub(r&quot;:(\w+)&quot;, r&quot;(?P&lt;\1&gt;[^/]+)&quot;, route_url)
+        route_re = &quot;^&quot; + route_re + &quot;$&quot;
+
+        for call in frontend_calls:
+            call_url = call.name  # e.g. &quot;/api/users/${userId}&quot;
+            # Convert template literal to regex
+            call_re = re.sub(r&quot;\$\{[^}]+\}&quot;, &quot;[^/]+&quot;, call_url)
+            if re.match(route_re, call_re):
+                pairs.append((route, call))
+
+    return pairs
+</code></pre>
+<h3 id="task-37-311-integration-tests">TASK-3.7-3.11: Integration &amp; Tests</h3>
+<p>See the Tasks table in the architecture summary above. Each integration test should:</p>
+<pre><code class="language-python">def test_fastapi_react_xss():
+    &quot;&quot;&quot;Test cross-language taint: FastAPI → React → innerHTML.&quot;&quot;&quot;
+    # Set up: create a temp repo with a FastAPI backend + React frontend
+    # Run scan with --cross-language
+    # Verify: finds XSS taint path from Python endpoint to JS innerHTML
+    ...
+
+def test_express_mongodb_nosql():
+    &quot;&quot;&quot;Test cross-language taint: Express → MongoDB query.&quot;&quot;&quot;
+    ...
+
+def test_go_htmx_templating():
+    &quot;&quot;&quot;Test cross-language taint: Go handler → HTMX template injection.&quot;&quot;&quot;
+    ...
+</code></pre>
+<hr />
+<h2 id="phase-4-integration-ship-weeks-8-10">Phase 4: Integration &amp; Ship (Weeks 8-10)</h2>
+<h3 id="task-41-full-benchmark-suite">TASK-4.1: Full Benchmark Suite</h3>
+<pre><code class="language-bash"># Single-file mode
+python -m pytest tests/ --tb=short -q
+python -m benchmarks.nvd_benchmark --fail-under 70 --quiet
+python -m benchmarks.quality_benchmark --fail-under 100 --quiet
+
+# Cross-language mode (new)
+ansede-static benchmarks/cross_language/ --cross-language --format json
+python -m benchmarks.cross_language_recall --fail-under 80
+</code></pre>
+<h3 id="task-42-scan-10-full-stack-repos">TASK-4.2: Scan 10 Full-Stack Repos</h3>
+<p>Target repos:
+1. FastAPI + React (e.g. <code>realworld</code> example apps)
+2. Django + Vue.js
+3. Express + React (e.g. <code>NodeGoat</code>)
+4. Gin + HTMX
+5. Rails + Stimulus
+6. Next.js full-stack
+7. Nuxt.js full-stack
+8. Laravel + Vue
+9. Spring Boot + React
+10. ASP.NET + React</p>
+<h3 id="task-43-head-to-head-vs-codeql">TASK-4.3: Head-to-Head vs CodeQL</h3>
+<pre><code class="language-bash"># Run on same repos
+ansede-static repo/ --cross-language --format json -o ansede_results.json
+codeql database create codeqldb --language=javascript --source-root=repo/
+codeql database analyze codeqldb --format=sarif-latest -o codeql_results.sarif
+
+# Compare
+python benchmarks/head_to_head.py ansede_results.json codeql_results.sarif
+</code></pre>
+<hr />
+<h2 id="testing-rollback-procedures">Testing &amp; Rollback Procedures</h2>
+<h3 id="before-starting-any-task">Before Starting Any Task</h3>
+<pre><code class="language-bash"># Save the current test state
+python -m pytest tests/ --tb=short -q 2&gt;&amp;1 | tee /tmp/test_baseline.txt
+git stash  # Stash any uncommitted changes
+</code></pre>
+<h3 id="after-completing-any-task">After Completing Any Task</h3>
+<pre><code class="language-bash"># Run tests
+python -m pytest tests/ -x --tb=short -q
+
+# If tests pass:
+git add -A
+git commit -m &quot;[v3.0] TASK-X.Y: description&quot;
+git push origin master
+
+# If tests fail:
+git checkout -- .  # Revert all changes
+# Read the error, fix, and try again
+</code></pre>
+<h3 id="rollback-procedure">Rollback Procedure</h3>
+<p>If a task breaks the build:</p>
+<pre><code class="language-bash"># Option 1: Revert the specific commit
+git revert HEAD --no-edit
+git push origin master
+
+# Option 2: If you haven't committed yet
+git checkout -- src/  # Revert source changes
+git checkout -- tests/  # Revert test changes
+</code></pre>
+<h3 id="when-to-skip-a-task-and-move-on">When to Skip a Task and Move On</h3>
+<ul>
+<li>If a task takes more than 2x its estimated time, stop and evaluate</li>
+<li>If test count drops by more than 5, roll back</li>
+<li>If CVE recall drops below 95%, roll back</li>
+<li>If perf gets worse instead of better, roll back</li>
+</ul>
+<hr />
+<h2 id="decision-trees">Decision Trees</h2>
+<h3 id="which-phase-to-work-on">Which Phase to Work On?</h3>
+<pre><code>Is the LLM memory growing? (check ~/.ansede/llm_memory.json)
+├── No (&lt;500 entries) → Keep scanning repos to build memory
+└── Yes (≥500 entries) → 
+    ├── Is perf &lt;5s/case?
+    │   ├── No → Work on Phase 2 (speed)
+    │   └── Yes → 
+    │       ├── Is auto-rule gen working?
+    │       │   ├── No → Work on Phase 1 (auto-rules)
+    │       │   └── Yes → Work on Phase 3 (cross-language)
+    └── Is speed the bottleneck?
+        ├── Yes → Phase 2 (speed)
+        └── No → Phase 1 (auto-rules)
+</code></pre>
+<h3 id="when-to-add-a-new-heuristic-vs-auto-rule-vs-llm">When to Add a New Heuristic vs Auto-Rule vs LLM</h3>
+<pre><code>Finding has NEEDS_REVIEW verdict
+├── Is it a common pattern (seen 5+ times)?
+│   ├── Yes → Can auto-rule generation handle it?
+│   │   ├── Yes → Run `--auto-rule` to generate rule
+│   │   └── No → Add heuristic to audit.py manually
+│   └── No (rare pattern) → 
+│       ├── Is Ollama available?
+│       │   ├── Yes → Run `--llm` for LLM triage
+│       │   └── No → Leave as NEEDS_REVIEW for manual review
+│       └── Does the finding have a clear code pattern?
+│           └── Yes → Add to audit.py heuristics
+</code></pre>
+<h3 id="performance-optimization-priority">Performance Optimization Priority</h3>
+<pre><code>Is the scan too slow?
+├── Is there a huge bundled file (&gt;500KB)?
+│   ├── Yes → TASK-2.1 (skip lists) — quick win
+│   └── No → 
+│       ├── Are there many small files?
+│       │   ├── Yes → TASK-2.3 (parallel scanning)
+│       │   └── No → TASK-2.4 (file cache)
+│       └── Is this a re-scan of the same repo?
+│           ├── Yes → TASK-2.6 (incremental)
+│           └── No → TASK-2.2 (parse timeout)
+├── Are there individual files taking &gt;5s?
+│   └── Yes → TASK-2.2 (parse timeout)
+└── Is the CPU not fully utilized?
+    └── Yes → TASK-2.3 (parallel scanning)
+</code></pre>
+<ul>
+<li>Add dataflow tracking for <code>r.URL.Query()</code>, <code>r.FormValue()</code>, etc.</li>
+<li>
+<p>Target: 95%+ on gogs recall</p>
+</li>
+<li>
+<p><strong>Java</strong> — currently basic pattern matching</p>
+</li>
+<li>Add servlet taint sources (<code>@RequestParam</code>, <code>HttpServletRequest</code>)</li>
+<li>
+<p>Add sink tracking for <code>Runtime.exec()</code>, <code>FileInputStream</code>, SQL drivers</p>
+</li>
+<li>
+<p><strong>C#</strong> — same as Java, needs proper taint</p>
+</li>
+<li>
+<p>ASP.NET Core request sources → sink tracking</p>
+</li>
+<li>
+<p><strong>PHP</strong> — currently regex-based only</p>
+</li>
+<li>Build a lightweight PHP AST parser</li>
+<li>Track <code>$_GET</code>, <code>$_POST</code>, <code>$_REQUEST</code> through function calls</li>
+</ul>
+<hr />
+<h2 id="phase-3-the-moat-full-self-improvement-9-15-months">Phase 3 — The Moat: Full Self-Improvement (9 → 15 months)</h2>
+<p><strong>Goal:</strong> The engine improves itself without manual intervention.</p>
+<h3 id="steps">Steps</h3>
+<ol>
+<li><strong><code>--suggest --apply</code></strong> — auto-write heuristic rules to <code>audit.py</code></li>
+<li>Generates code, runs tests, keeps only if 206 pass</li>
+<li>
+<p>Stores rules in a versioned <code>heuristics/</code> directory</p>
+</li>
+<li>
+<p><strong>Central learning registry</strong></p>
+</li>
+<li><code>~/.ansede/registry/</code> stores all findings globally</li>
+<li>Every scan improves every future scan</li>
+<li>
+<p>Shared FP patterns benefit all users</p>
+</li>
+<li>
+<p><strong>GitHub Action auto-remediation</strong></p>
+</li>
+<li>Findings classified as TP with confidence &gt;0.95 → auto-create PR fixes</li>
+<li>Findings classified as LIKELY_FP → auto-dismiss with reasoning</li>
+</ol>
+<hr />
+<h2 id="phase-4-unfair-advantage-15-24-months">Phase 4 — Unfair Advantage (15 → 24 months)</h2>
+<p><strong>Goal:</strong> Become the default recommendation for SAST.</p>
+<h3 id="steps_1">Steps</h3>
+<ol>
+<li><strong>LLM-assisted triage</strong> — local model reads NEEDS_REVIEW findings</li>
+<li>Summarizes code context for human reviewers</li>
+<li>
+<p>Suggests fix code for TP findings</p>
+</li>
+<li>
+<p><strong>Comparison dashboard</strong> — live report showing ansede vs CodeQL/Semgrep</p>
+</li>
+<li>Self-hosted, run on any repo</li>
+<li>
+<p>"ansede caught this that X missed" — real competitive data</p>
+</li>
+<li>
+<p><strong>Community rule marketplace</strong></p>
+</li>
+<li>Users submit YAML rules → auto-tested against known corpus</li>
+<li>
+<p>Vote, fork, merge like GitHub Actions marketplace</p>
+</li>
+<li>
+<p><strong>Enterprise offering</strong></p>
+</li>
+<li>Audit trails, SLA, SSO, role-based access</li>
+<li>Custom rule writing service</li>
+<li>Dedicated on-prem scanning infra</li>
+</ol>
+<hr />
+<h2 id="current-performance">Current Performance</h2>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Lang</th>
+<th>Files</th>
+<th>Findings</th>
+<th>Classified</th>
+<th>Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fossbilling</td>
+<td>PHP</td>
+<td>1,103</td>
+<td>13</td>
+<td>9</td>
+<td>69%</td>
+</tr>
+<tr>
+<td>dvna</td>
+<td>Node</td>
+<td>151</td>
+<td>16</td>
+<td>5</td>
+<td>31%*</td>
+</tr>
+<tr>
+<td>shynet</td>
+<td>Python</td>
+<td>194</td>
+<td>20</td>
+<td>8</td>
+<td>40%*</td>
+</tr>
+<tr>
+<td>express</td>
+<td>Node</td>
+<td>213</td>
+<td>984</td>
+<td>975</td>
+<td>99%</td>
+</tr>
+<tr>
+<td>stackedit</td>
+<td>JS</td>
+<td>370</td>
+<td>28</td>
+<td>2</td>
+<td>7%*</td>
+</tr>
+<tr>
+<td>linkding</td>
+<td>Python</td>
+<td>438</td>
+<td>141</td>
+<td>86</td>
+<td>61%*</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>mixed</strong></td>
+<td><strong>2,469</strong></td>
+<td><strong>1,202</strong></td>
+<td><strong>1,085</strong></td>
+<td><strong>90.3%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>* Lower rates = real vulnerabilities correctly left for human review (dvna is deliberately vulnerable)</p>
+<h2 id="tools">Tools</h2>
+<ul>
+<li><strong><code>--audit</code></strong> — classifies all findings as TP / FP / LIKELY_FP / NEEDS_REVIEW / VENDOR_NOISE</li>
+<li><strong><code>--suggest</code></strong> — analyzes NEEDS_REVIEW gaps and generates heuristic code for <code>audit.py</code></li>
+<li><strong><code>--version</code></strong> — now reports correct version (2.3.0.dev0)</li>
+</ul>
+<h2 id="key-files">Key Files</h2>
+<ul>
+<li><code>src/ansede_static/engine/audit.py</code> — audit pipeline with 40+ heuristic patterns</li>
+<li><code>src/ansede_static/engine_version.py</code> — version management</li>
+<li><code>src/ansede_static/cli.py</code> — CLI entry point with --audit and --suggest flags</li>
+</ul>
+<hr />
+<p><em>Last updated: May 22, 2026</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

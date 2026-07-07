@@ -1,0 +1,1284 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/TODO-v4/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>v4.0 — Post-v3 Roadmap: Adoption, Scale & Depth - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#v40-post-v3-roadmap-adoption-scale-depth" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              v4.0 — Post-v3 Roadmap: Adoption, Scale &amp; Depth
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP-TO-WORLD-BEST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tier-1-highest-impact-weeks-1-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 1 — Highest Impact (Weeks 1-4)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tier 1 — Highest Impact (Weeks 1-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-publish-vs-code-extension-to-marketplace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Publish VS Code Extension to Marketplace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-publish-to-github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Publish to GitHub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-publish-to-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 Publish to PyPI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-expand-cve-corpus-82-500-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 Expand CVE Corpus (82 → 500+ cases)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-javac-rule-depth-match-pythonjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Java/C# Rule Depth (match Python/JS)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tier-2-growth-validation-weeks-4-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 2 — Growth &amp; Validation (Weeks 4-8)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tier 2 — Growth &amp; Validation (Weeks 4-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-full-head-to-head-ansede-vs-semgrep-82-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Full Head-to-Head: ansede vs Semgrep (82 cases)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-publish-docker-image-github-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Publish Docker Image + GitHub Action
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-openapiswagger-bridge-auto-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 OpenAPI/Swagger Bridge Auto-Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-run-against-top-1000-github-repos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Run Against Top 1,000 GitHub Repos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tier-3-polish-weeks-8-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tier 3 — Polish (Weeks 8-12)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tier 3 — Polish (Weeks 8-12)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Performance Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-html-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 HTML Dashboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-documentation-site" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Documentation Site
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-run-full-semgrep-public-benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Run Full Semgrep Public Benchmark
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#release-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Release Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-release
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#release-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Release pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-ci-jobs-added" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional CI jobs added
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#post-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-files-to-modify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Files to Modify
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="v40-post-v3-roadmap-adoption-scale-depth">v4.0 — Post-v3 Roadmap: Adoption, Scale &amp; Depth</h1>
+<blockquote>
+<p><strong>v3.0 baseline:</strong> 114 tests · 98.78% CVE recall · 7 languages · 3 IDE plugins · cross-language taint · all formats free
+<strong>Mission:</strong> Turn a technically complete SAST engine into a widely adopted, industry-credible security tool.</p>
+</blockquote>
+<hr />
+<h2 id="tier-1-highest-impact-weeks-1-4">Tier 1 — Highest Impact (Weeks 1-4)</h2>
+<h3 id="11-publish-vs-code-extension-to-marketplace">1.1 Publish VS Code Extension to Marketplace</h3>
+<ul>
+<li>[ ] Create Microsoft Azure DevOps publisher account</li>
+<li>[ ] Generate Personal Access Token (PAT) for marketplace publishing</li>
+<li>[ ] Update <code>vscode-extension/package.json</code> with proper icons, gallery banner, and categories</li>
+<li>[ ] Run <code>vsce package</code> to produce final <code>.vsix</code></li>
+<li>[ ] Run <code>vsce publish</code> to push to VS Code Marketplace</li>
+<li>[ ] Verify extension appears in marketplace search</li>
+<li>[ ] Install from marketplace to confirm end-to-end flow</li>
+<li><strong>Follow-up:</strong> Publish IntelliJ plugin to JetBrains Marketplace</li>
+<li><strong>Follow-up:</strong> Publish VS 2022 extension to Visual Studio Marketplace</li>
+</ul>
+<h3 id="12-publish-to-github">1.2 Publish to GitHub</h3>
+<ul>
+<li>[ ] Create public GitHub repository (if not already public)</li>
+<li>[x] Add <code>README.md</code> with badges (tests, version, license)</li>
+<li>[ ] Set up GitHub Pages or wiki for documentation</li>
+<li>[ ] Configure branch protection rules</li>
+<li>[x] Add <code>CONTRIBUTING.md</code> and <code>CODE_OF_CONDUCT.md</code></li>
+<li>[x] Create GitHub Issues templates (bug report, feature request)</li>
+<li>[x] Add GitHub Discussions for community Q&amp;A (templates created in <code>.github/DISCUSSION_TEMPLATE/</code>)</li>
+<li><strong>Release workflow:</strong></li>
+<li>[x] Create <code>.github/workflows/release.yml</code> that:<ul>
+<li>Runs full test suite</li>
+<li>Builds all 3 IDE plugins</li>
+<li>Creates GitHub Release with artifacts</li>
+<li>Publishes to VS Code Marketplace</li>
+<li>Publishes to PyPI</li>
+</ul>
+</li>
+</ul>
+<h3 id="13-publish-to-pypi">1.3 Publish to PyPI</h3>
+<ul>
+<li>[x] Update <code>pyproject.toml</code> with:</li>
+<li>[x] Project description and long description</li>
+<li>[x] Classifiers (License, Python versions, Topics)</li>
+<li>[x] <code>[project.urls]</code> section (Homepage, Documentation, Issues)</li>
+<li>[x] Proper <code>[tool.setuptools.packages.find]</code> config</li>
+<li>[ ] Test build: <code>python -m build</code></li>
+<li>[ ] Create PyPI API token</li>
+<li>[ ] Add PyPI publish step to CI: <code>twine upload dist/*</code></li>
+<li>[ ] Verify: <code>pip install ansede-static</code> works</li>
+<li><strong>CI automation:</strong></li>
+<li>[x] <code>.github/workflows/publish.yml</code> triggered on tags</li>
+<li>[x] Runs tests, builds wheel, publishes to PyPI</li>
+<li>[ ] Creates GitHub Release with changelog</li>
+</ul>
+<h3 id="14-expand-cve-corpus-82-500-cases">1.4 Expand CVE Corpus (82 → 500+ cases)</h3>
+<ul>
+<li>[x] Research additional NVD CVEs across all 7 languages</li>
+<li>[x] Target: +40 Python, +15 JS/TS, +5 Go, +10 Java, +10 C#</li>
+<li>[x] Add entries to <code>benchmarks/cve_corpus.py</code> using <code>CVEEntry</code> dataclass</li>
+<li>[x] Validate each new entry produces the expected CWE</li>
+<li>[x] Re-run full CVE recall benchmark</li>
+<li>[x] Document precision/recall changes in <code>docs/BENCHMARKS.md</code></li>
+<li><strong>Current corpus:</strong> <strong>164 cases</strong> (68 Python, 42 JS, 15 Go, 20 Java, 19 C#)</li>
+<li><strong>Recall: 87.2%</strong> (143/164) — honest gap-revealing benchmark</li>
+<li><strong>Goal:</strong> Continue toward 500+ cases for statistically significant corpus</li>
+</ul>
+<h3 id="15-javac-rule-depth-match-pythonjs">1.5 Java/C# Rule Depth (match Python/JS)</h3>
+<ul>
+<li><strong>Java (7 rules → ~30 rules):</strong></li>
+<li>[x] CWE-89: SQL injection via JDBC <code>Statement.executeQuery()</code> with string concatenation</li>
+<li>[x] CWE-22: Path traversal via <code>java.nio.file.Paths.get()</code> / <code>FileSystems</code></li>
+<li>[x] CWE-79: XSS via response write without encoding</li>
+<li>[x] CWE-78: Command injection via <code>ProcessBuilder</code> (✅ done — JV-008)</li>
+<li>[x] CWE-502: Deserialization via <code>ObjectInputStream</code> (✅ done — JV-005)</li>
+<li>[x] CWE-918: SSRF via <code>HttpURLConnection</code> / <code>URL.openConnection()</code></li>
+<li>[x] CWE-601: Open redirect via <code>sendRedirect()</code></li>
+<li>[x] CWE-200: Stack trace exposure in error handlers</li>
+<li>[x] CWE-287: Spring Security misconfiguration</li>
+<li>
+<p>[x] CWE-384: Session fixation (no session change on auth)</p>
+</li>
+<li>
+<p><strong>C# (9 rules → ~30 rules):</strong></p>
+</li>
+<li>[x] CWE-89: SQL injection via <code>SqlCommand</code> (✅ done — CS-004)</li>
+<li>[x] CWE-22: Path traversal via <code>File.ReadAllText</code> / <code>Path.Combine</code></li>
+<li>[x] CWE-79: XSS via <code>Response.Write</code> (✅ done — CS-008)</li>
+<li>[x] CWE-78: Command injection via <code>Process.Start</code> (✅ done — CS-010)</li>
+<li>[x] CWE-918: SSRF via <code>HttpClient</code> / <code>WebClient</code></li>
+<li>[x] CWE-601: Open redirect via <code>Redirect()</code></li>
+<li>[x] CWE-200: Stack trace exposure</li>
+<li>[x] CWE-312: Cleartext storage of passwords in config</li>
+<li>[x] CWE-287: ASP.NET Identity misconfiguration</li>
+<li>[x] CWE-384: Session fixation</li>
+</ul>
+<hr />
+<h2 id="tier-2-growth-validation-weeks-4-8">Tier 2 — Growth &amp; Validation (Weeks 4-8)</h2>
+<h3 id="21-full-head-to-head-ansede-vs-semgrep-82-cases">2.1 Full Head-to-Head: ansede vs Semgrep (82 cases)</h3>
+<ul>
+<li>[x] Run <code>benchmarks/head_to_head.py</code> on full 115-case CVE corpus</li>
+<li>[x] Record ansede detection rate vs Semgrep detection rate</li>
+<li>[x] Categorize misses: ansede-only, Semgrep-only, both</li>
+<li>[x] Document findings in <code>docs/BENCHMARKS.md</code></li>
+<li>[ ] Publish results as a blog post or technical report</li>
+<li><strong>Goal:</strong> Independent validation of our 10/10 vs 6/10 sample finding</li>
+</ul>
+<h3 id="22-publish-docker-image-github-action">2.2 Publish Docker Image + GitHub Action</h3>
+<ul>
+<li>[x] Create scanner Dockerfile (<code>docker/static-scanner.Dockerfile</code>):
+  <code>dockerfile
+  FROM python:3.13-slim
+  RUN pip install ansede-static
+  ENTRYPOINT ["ansede-static"]</code></li>
+<li>[x] Set up GitHub Container Registry publish in CI (<code>.github/workflows/scanner-image.yml</code>)</li>
+<li>[ ] Test: <code>docker pull ghcr.io/ansede/static-scanner:latest</code></li>
+<li>[x] Create GitHub Action: <code>.github/actions/ansede-scan/action.yml</code>
+  <code>yaml
+  name: 'Ansede Static Scan'
+  description: 'Run ansede-static SAST scanner'
+  runs:
+    using: 'docker'
+    image: 'docker://ghcr.io/ansede/static-scanner:latest'</code></li>
+<li>[ ] Publish action to GitHub Marketplace</li>
+<li>[ ] Test on a demo repo</li>
+</ul>
+<h3 id="23-openapiswagger-bridge-auto-generation">2.3 OpenAPI/Swagger Bridge Auto-Generation</h3>
+<ul>
+<li>[x] Parse OpenAPI 3.0/3.1 specs to extract route definitions</li>
+<li>[x] Match OpenAPI paths to backend route handlers (Python/Go/Java/C#)</li>
+<li>[x] Generate cross-language bridge edges without needing exact URL matching</li>
+<li>[x] Test on a real project with OpenAPI docs</li>
+<li><strong>Benefit:</strong> Catches cross-language flows in API-first architectures</li>
+<li><strong>CLI:</strong> <code>ansede-static . --openapi-report</code></li>
+</ul>
+<h3 id="24-run-against-top-1000-github-repos">2.4 Run Against Top 1,000 GitHub Repos</h3>
+<ul>
+<li>[x] Use GitHub Search API to find popular Python/JS/Go/Java/C# repos</li>
+<li>[x] Create batch scanning script in <code>tools/batch_scan_repos.py</code></li>
+<li>[x] Add scheduled CI automation for repeatable sample scans (<code>.github/workflows/batch-repo-scan.yml</code>)</li>
+<li>[x] Add markdown report generator (<code>tools/summarize_batch_scan_report.py</code>) for average findings/CWE/estimated FP publication</li>
+<li>[x] Run scans and collect aggregate stats</li>
+<li>[x] Report: average findings per repo, most common CWEs, false positive rate</li>
+<li><strong>Goal:</strong> Scale credibility — show the tool works on real production code</li>
+</ul>
+<hr />
+<h2 id="tier-3-polish-weeks-8-12">Tier 3 — Polish (Weeks 8-12)</h2>
+<h3 id="31-performance-optimization">3.1 Performance Optimization</h3>
+<ul>
+<li>[x] Profile real-repo throughput bottleneck (226 cases/s, 166ms avg)</li>
+<li>[x] Investigate batching: scan all files in a single Python process (avoid per-file import overhead)</li>
+<li>[x] Implement <code>--batch</code> mode that shares GlobalGraph + rules cache across files</li>
+<li>[x] Parallel workers by default via shared thread pool</li>
+<li>[ ] Target: 5,000+ LOC/s for Python, 50,000+ LOC/s for other languages</li>
+<li>[x] Update <code>perf_regression_check.py</code> thresholds</li>
+<li><strong>CLI usage:</strong> <code>ansede-static src/ --batch --workers 8</code></li>
+</ul>
+<h3 id="32-html-dashboard">3.2 HTML Dashboard</h3>
+<ul>
+<li>[x] Enhance <code>src/ansede_static/reporters.py</code> <code>format_html()</code> function</li>
+<li>[x] Add interactive filtering by severity, CWE, file</li>
+<li>[x] Add sorting by line number, severity, confidence</li>
+<li>[x] Add SARIF export from dashboard</li>
+<li>[x] Add summary statistics (total findings, top CWEs, files affected)</li>
+<li>[x] Test on real scan results (136 files, 1.3M LOC self-scanned → .tmp/dashboard.html)</li>
+</ul>
+<h3 id="33-documentation-site">3.3 Documentation Site</h3>
+<ul>
+<li>[x] Choose static site generator (MkDocs / Docusaurus)</li>
+<li>[x] Create <code>docs/</code> site structure:</li>
+<li>Getting Started (installation, first scan)</li>
+<li>Rules Reference (all rules by language, CWE mapping)</li>
+<li>Configuration (ansede.json, .ansedeignore)</li>
+<li>CI Integration (GitHub Actions, GitLab CI, Jenkins)</li>
+<li>IDE Setup (VS Code, IntelliJ, VS 2022)</li>
+<li>Contributing (how to add rules, community guidelines)</li>
+<li>FAQ / Troubleshooting</li>
+<li>[x] Deploy to GitHub Pages (<code>.github/workflows/deploy-docs.yml</code>)</li>
+<li>[x] Add search functionality (MkDocs Material search plugin enabled)</li>
+</ul>
+<h3 id="34-run-full-semgrep-public-benchmark">3.4 Run Full Semgrep Public Benchmark</h3>
+<ul>
+<li>[x] Download Semgrep's public benchmark suite</li>
+<li>[x] Create scaffolding runner (<code>benchmarks/semgrep_public_benchmark.py</code>)</li>
+<li>[ ] Run both tools with identical inputs</li>
+<li>[ ] Compare precision, recall, F1 across all test cases</li>
+<li>[ ] Publish independent comparison report</li>
+<li><strong>Goal:</strong> Defensible, third-party-auditable performance claims</li>
+</ul>
+<hr />
+<h2 id="release-checklist">Release Checklist</h2>
+<h3 id="pre-release">Pre-release</h3>
+<ul>
+<li>[x] All 114+ gate tests passing</li>
+<li>[x] CVE recall benchmark ≥ 95% (99.2% verified)</li>
+<li>[x] Quality benchmark 100%</li>
+<li>[x] Binary guardrails check (0 deps, &lt;5 MB)</li>
+<li>[ ] SARIF output validatable against VS Code SARIF viewer</li>
+</ul>
+<h3 id="release-pipeline">Release pipeline</h3>
+<ul>
+<li>[ ] Tag commit: <code>git tag v4.0.0 &amp;&amp; git push --tags</code></li>
+<li>[ ] CI triggers:</li>
+<li>[x] Full test suite</li>
+<li>[x] Build all 3 IDE plugins</li>
+<li>[x] Build Docker image</li>
+<li>[x] Build Python wheel (tested: <code>python -m build --wheel</code> passes)</li>
+<li>[ ] Publish to PyPI</li>
+<li>[ ] Publish to VS Code Marketplace</li>
+<li>[x] Publish Docker image to GHCR</li>
+<li>[ ] Create GitHub Release with changelog + artifacts</li>
+</ul>
+<h3 id="additional-ci-jobs-added">Additional CI jobs added</h3>
+<ul>
+<li>OpenAPI bridge integration test</li>
+<li>MkDocs build (strict mode)</li>
+<li>Sample batch scan (5 campaign targets)</li>
+<li>Performance micro-benchmark (224 cases/s)</li>
+<li>Quality benchmark gate (100%)</li>
+<li>Binary guardrails check (passed)</li>
+<li>Deploy docs to GitHub Pages workflow</li>
+</ul>
+<h3 id="post-release">Post-release</h3>
+<ul>
+<li>[ ] Announce on Twitter/X, Reddit r/netsec, Hacker News</li>
+<li>[ ] Write blog post: "How we built a 99.2% CVE recall SAST engine with 100% offline operation"</li>
+<li>[x] Changelog written (v4.0.0 in CHANGELOG.md)</li>
+<li>[ ] Monitor GitHub Issues for feedback</li>
+<li>[ ] Track PyPI downloads and VS Code installs</li>
+</ul>
+<hr />
+<h2 id="key-files-to-modify">Key Files to Modify</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.github/workflows/publish.yml</code></td>
+<td>CI/CD release pipeline</td>
+</tr>
+<tr>
+<td><code>.github/workflows/ci.yml</code></td>
+<td>Update with publish steps</td>
+</tr>
+<tr>
+<td><code>pyproject.toml</code></td>
+<td>PyPI metadata</td>
+</tr>
+<tr>
+<td><code>vscode-extension/package.json</code></td>
+<td>Marketplace metadata</td>
+</tr>
+<tr>
+<td><code>benchmarks/cve_corpus.py</code></td>
+<td>Add 400+ CVE entries</td>
+</tr>
+<tr>
+<td><code>src/ansede_static/java_analyzer.py</code></td>
+<td>Add ~20 Java rules</td>
+</tr>
+<tr>
+<td><code>src/ansede_static/csharp_analyzer.py</code></td>
+<td>Add ~20 C# rules</td>
+</tr>
+<tr>
+<td><code>benchmarks/head_to_head.py</code></td>
+<td>Run on full corpus</td>
+</tr>
+<tr>
+<td><code>Dockerfile</code></td>
+<td>New file</td>
+</tr>
+<tr>
+<td><code>.github/actions/ansede-scan/action.yml</code></td>
+<td>New file</td>
+</tr>
+<tr>
+<td><code>tools/batch_scan_repos.py</code></td>
+<td>New file</td>
+</tr>
+<tr>
+<td><code>tools/summarize_batch_scan_report.py</code></td>
+<td>New file</td>
+</tr>
+<tr>
+<td><code>docker/static-scanner.Dockerfile</code></td>
+<td>New file</td>
+</tr>
+<tr>
+<td><code>benchmarks/head_to_head.py</code></td>
+<td>Head-to-head benchmark runner</td>
+</tr>
+<tr>
+<td><code>benchmarks/semgrep_public_benchmark.py</code></td>
+<td>Semgrep benchmark scaffold</td>
+</tr>
+<tr>
+<td><code>.github/workflows/deploy-docs.yml</code></td>
+<td>GitHub Pages deploy workflow</td>
+</tr>
+<tr>
+<td><code>src/ansede_static/graph/openapi_bridge.py</code></td>
+<td>OpenAPI/Swagger bridge</td>
+</tr>
+<tr>
+<td><code>.github/DISCUSSION_TEMPLATE/</code></td>
+<td>GitHub Discussion templates</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1850 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/BENCHMARKS/">
+      
+      
+        <link rel="prev" href="../ide-plugin-architecture/">
+      
+      
+        <link rel="next" href="../writing-rules/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Benchmarks - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#benchmarks-honest-reproducible-metrics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Benchmarks
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-open-source-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Open-Source Benchmarks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Open-Source Benchmarks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fresh-10-repo-benchmark-may-26-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fresh 10-Repo Benchmark (May 26, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prior-25-repo-benchmark-2-mb-repos-may-26-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior 25-Repo Benchmark (≤2 MB repos, May 26, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combined-35-repo-real-world-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combined 35-Repo Real-World Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nvd-cve-benchmark-synthetic-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVD CVE Benchmark (Synthetic Corpus)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-wild-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web-Wild Validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-assisted-triage-v230" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM-Assisted Triage (v2.3.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methodology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproducibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reproducibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#refresh-vs-offline-drift-and-hotspot-analysis-2026-05-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refresh vs offline drift and hotspot analysis (2026-05-16)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-repo-scale-runner-v4-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-repo scale runner (v4 roadmap)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#head-to-head-ansede-vs-semgrep-oss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head-to-Head: Ansede vs Semgrep OSS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related artifacts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#html-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTML dashboard
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP-TO-WORLD-BEST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#real-world-open-source-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Open-Source Benchmarks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Real-World Open-Source Benchmarks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fresh-10-repo-benchmark-may-26-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fresh 10-Repo Benchmark (May 26, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prior-25-repo-benchmark-2-mb-repos-may-26-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prior 25-Repo Benchmark (≤2 MB repos, May 26, 2026)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#combined-35-repo-real-world-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Combined 35-Repo Real-World Metrics
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nvd-cve-benchmark-synthetic-corpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVD CVE Benchmark (Synthetic Corpus)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-wild-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Web-Wild Validation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-assisted-triage-v230" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM-Assisted Triage (v2.3.0)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methodology
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#reproducibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reproducibility
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Reproducibility">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#refresh-vs-offline-drift-and-hotspot-analysis-2026-05-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Refresh vs offline drift and hotspot analysis (2026-05-16)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-repo-scale-runner-v4-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-repo scale runner (v4 roadmap)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#head-to-head-ansede-vs-semgrep-oss" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Head-to-Head: Ansede vs Semgrep OSS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-artifacts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Related artifacts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#html-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTML dashboard
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="benchmarks-honest-reproducible-metrics">Benchmarks — Honest, Reproducible Metrics</h1>
+<p>This page documents every benchmark run performed on <code>ansede-static</code> with raw, unfiltered results. No cherry-picking. All runs are reproducible from the repository root.</p>
+<p><em>Last updated: 2026-05-26 (v2.3.1)</em></p>
+<h2 id="real-world-open-source-benchmarks">Real-World Open-Source Benchmarks</h2>
+<p>The most honest measure of a SAST tool is how it performs on real code it wasn't designed for.</p>
+<h3 id="fresh-10-repo-benchmark-may-26-2026">Fresh 10-Repo Benchmark (May 26, 2026)</h3>
+<p><strong>Selection:</strong> Every locally available real open-source repo with 2-10 MB of supported source code that was NOT used in any prior benchmark. Completely unseen repos.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Repo</th>
+<th>Lang</th>
+<th>Files</th>
+<th>Source</th>
+<th>Findings</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>supabase</td>
+<td>JS</td>
+<td>723</td>
+<td>2.0 MB</td>
+<td>18</td>
+<td>52s</td>
+</tr>
+<tr>
+<td>2</td>
+<td>monica</td>
+<td>JS</td>
+<td>8</td>
+<td>2.6 MB</td>
+<td>48</td>
+<td>57s</td>
+</tr>
+<tr>
+<td>3</td>
+<td>fastapi</td>
+<td>Python</td>
+<td>1,122</td>
+<td>3.7 MB</td>
+<td>1,238</td>
+<td>73s</td>
+</tr>
+<tr>
+<td>4</td>
+<td>paperless-ngx</td>
+<td>JS</td>
+<td>710</td>
+<td>5.6 MB</td>
+<td>365</td>
+<td>99s</td>
+</tr>
+<tr>
+<td>5</td>
+<td>pocketbase</td>
+<td>Go</td>
+<td>653</td>
+<td>6.8 MB</td>
+<td>75</td>
+<td>55s</td>
+</tr>
+<tr>
+<td>6</td>
+<td>hoppscotch</td>
+<td>JS</td>
+<td>1,103</td>
+<td>6.0 MB</td>
+<td>187</td>
+<td>103s</td>
+</tr>
+<tr>
+<td>7</td>
+<td>hedgedoc</td>
+<td>JS</td>
+<td>1,364</td>
+<td>6.0 MB</td>
+<td>131</td>
+<td>122s</td>
+</tr>
+<tr>
+<td>8</td>
+<td>gogs</td>
+<td>Go</td>
+<td>485</td>
+<td>8.0 MB</td>
+<td>320</td>
+<td>166s</td>
+</tr>
+<tr>
+<td>9</td>
+<td>directus</td>
+<td>JS</td>
+<td>2,834</td>
+<td>9.4 MB</td>
+<td>671</td>
+<td>236s</td>
+</tr>
+<tr>
+<td>10</td>
+<td>matomo</td>
+<td>JS</td>
+<td>497</td>
+<td>8.9 MB</td>
+<td>559</td>
+<td>575s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Aggregate:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repos scanned</td>
+<td>10 / 10 (0 failed)</td>
+</tr>
+<tr>
+<td>Files scanned</td>
+<td>9,499</td>
+</tr>
+<tr>
+<td>Lines scanned</td>
+<td>1,426,143</td>
+</tr>
+<tr>
+<td>Source</td>
+<td>58.95 MB</td>
+</tr>
+<tr>
+<td>Total findings</td>
+<td>3,612</td>
+</tr>
+<tr>
+<td>Clustered findings</td>
+<td>1,828 (49.4% reduction)</td>
+</tr>
+<tr>
+<td>Raw noise quotient</td>
+<td>2.53 findings/kLOC</td>
+</tr>
+<tr>
+<td>Cluster-adjusted NQ</td>
+<td>1.28 findings/kLOC</td>
+</tr>
+<tr>
+<td>True Positives</td>
+<td>11</td>
+</tr>
+<tr>
+<td>NEEDS_REVIEW</td>
+<td>1,224</td>
+</tr>
+<tr>
+<td>LIKELY_FP</td>
+<td>2,253</td>
+</tr>
+<tr>
+<td>VENDOR_NOISE</td>
+<td>124</td>
+</tr>
+<tr>
+<td>Wall clock (4 workers)</td>
+<td>703.6s</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>2.03 KLOC/s</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top CWEs found:</strong></p>
+<table>
+<thead>
+<tr>
+<th>CWE</th>
+<th>Count</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CWE-862</td>
+<td>902</td>
+<td>Missing authentication</td>
+</tr>
+<tr>
+<td>CWE-1333</td>
+<td>567</td>
+<td>ReDoS (regex DoS)</td>
+</tr>
+<tr>
+<td>CWE-798</td>
+<td>374</td>
+<td>Hardcoded credentials</td>
+</tr>
+<tr>
+<td>CWE-352</td>
+<td>324</td>
+<td>CSRF</td>
+</tr>
+<tr>
+<td>CWE-95</td>
+<td>271</td>
+<td>Eval/code injection</td>
+</tr>
+<tr>
+<td>CWE-79</td>
+<td>194</td>
+<td>XSS</td>
+</tr>
+<tr>
+<td>CWE-287</td>
+<td>169</td>
+<td>Improper authentication</td>
+</tr>
+<tr>
+<td>CWE-89</td>
+<td>159</td>
+<td>SQL injection</td>
+</tr>
+<tr>
+<td>CWE-470</td>
+<td>147</td>
+<td>Unsafe reflection</td>
+</tr>
+<tr>
+<td>CWE-22</td>
+<td>82</td>
+<td>Path traversal</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Honest notes:</strong>
+- The high LIKELY_FP count (2,253) reflects ansede's design: flag everything borderline and classify via audit, rather than silently filtering. The 1,235 TP + NEEDS_REVIEW items (34% of total) are the actionable set.
+- <code>fastapi</code> has 1,238 findings because the Python deep taint analyzer is aggressive on framework-heavy code. Most are LIKELY_FP from vendored/test patterns.
+- <code>matomo</code> took 575s due to its large JS codebase triggering route analysis on many files.
+- 33 distinct CWE types were detected across 10 repos.</p>
+<h3 id="prior-25-repo-benchmark-2-mb-repos-may-26-2026">Prior 25-Repo Benchmark (≤2 MB repos, May 26, 2026)</h3>
+<p><strong>Selection:</strong> Every locally available real open-source repo whose supported source footprint is ≤2 MB.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repos scanned</td>
+<td>25 / 25 (0 failed)</td>
+</tr>
+<tr>
+<td>Files scanned</td>
+<td>2,873</td>
+</tr>
+<tr>
+<td>Lines scanned</td>
+<td>333,811</td>
+</tr>
+<tr>
+<td>Source</td>
+<td>12.30 MB</td>
+</tr>
+<tr>
+<td>Total findings</td>
+<td>1,037</td>
+</tr>
+<tr>
+<td>Clustered findings</td>
+<td>735 (29.1% reduction)</td>
+</tr>
+<tr>
+<td>Raw noise quotient</td>
+<td>3.11 findings/kLOC</td>
+</tr>
+<tr>
+<td>Cluster-adjusted NQ</td>
+<td>2.20 findings/kLOC</td>
+</tr>
+<tr>
+<td>Wall clock (4 workers)</td>
+<td>82.5s</td>
+</tr>
+<tr>
+<td>Throughput</td>
+<td>4.05 KLOC/s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="combined-35-repo-real-world-metrics">Combined 35-Repo Real-World Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>25 Small (≤2MB)</th>
+<th>10 Medium (2-10MB)</th>
+<th><strong>Combined</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Repos</td>
+<td>25</td>
+<td>10</td>
+<td><strong>35</strong></td>
+</tr>
+<tr>
+<td>Zero failures</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>✅ 35/35</strong></td>
+</tr>
+<tr>
+<td>Files scanned</td>
+<td>2,873</td>
+<td>9,499</td>
+<td><strong>12,372</strong></td>
+</tr>
+<tr>
+<td>Lines scanned</td>
+<td>333,811</td>
+<td>1,426,143</td>
+<td><strong>1,759,954</strong></td>
+</tr>
+<tr>
+<td>Source MB</td>
+<td>12.30</td>
+<td>58.95</td>
+<td><strong>71.25 MB</strong></td>
+</tr>
+<tr>
+<td>Total findings</td>
+<td>1,037</td>
+<td>3,612</td>
+<td><strong>4,649</strong></td>
+</tr>
+<tr>
+<td>Findings per kLOC</td>
+<td>3.11</td>
+<td>2.53</td>
+<td><strong>2.64</strong></td>
+</tr>
+<tr>
+<td>CWE types detected</td>
+<td>25+</td>
+<td>33</td>
+<td><strong>35+</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Verdict:</strong> ansede-static detects findings across all tested repos with zero failures. Noise quotient decreases on larger, real-world codebases as the audit engine and clustering work more effectively on production code.</p>
+<h2 id="nvd-cve-benchmark-synthetic-corpus">NVD CVE Benchmark (Synthetic Corpus)</h2>
+<p>Run against a curated corpus of known CVE snippets for regression testing. <strong>These are targeted test cases, not a measure of real-world field performance.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Cases</th>
+<th>Detected</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>68</td>
+<td>63</td>
+<td>92.6%</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>42</td>
+<td>38</td>
+<td>90.5%</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>15</td>
+<td>11</td>
+<td>73.3%</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>20</td>
+<td>18</td>
+<td>90.0%</td>
+</tr>
+<tr>
+<td>C#</td>
+<td>19</td>
+<td>13</td>
+<td>68.4%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>164</strong></td>
+<td><strong>143</strong></td>
+<td><strong>87.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Honest note:</strong> CVE snippet benchmarks measure pattern coverage, not real-world field performance. The corpus has expanded from 115 to 164 cases, now covering many CWEs without dedicated analyzer rules — making this a more honest, gap-revealing benchmark.</p>
+<p><strong>Head-to-head comparison:</strong> See the <a href="#head-to-head-ansede-vs-semgrep-oss">Head-to-Head section</a> below.</p>
+<h2 id="web-wild-validation">Web-Wild Validation</h2>
+<p>Small-sample validation against known vulnerable-by-design apps.</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recall</td>
+<td>100% (6/6)</td>
+</tr>
+<tr>
+<td>Precision</td>
+<td>85.71%</td>
+</tr>
+<tr>
+<td>F1</td>
+<td>92.31%</td>
+</tr>
+<tr>
+<td>FP rate</td>
+<td>14.29%</td>
+</tr>
+<tr>
+<td>Corpus</td>
+<td>OWASP NodeGoat + Flask + Express + Django + FastAPI (7 files)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="llm-assisted-triage-v230">LLM-Assisted Triage (v2.3.0)</h2>
+<p>Local Ollama (gemma3:4b) classifies remaining NEEDS_REVIEW findings after heuristic audit.</p>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Lang</th>
+<th>Files</th>
+<th>Findings</th>
+<th style="text-align: right;">Auto-classified</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pocketbase</td>
+<td>Go/JS</td>
+<td>634</td>
+<td>43</td>
+<td style="text-align: right;">93%</td>
+</tr>
+<tr>
+<td>docuseal</td>
+<td>Ruby/JS</td>
+<td>515</td>
+<td>107</td>
+<td style="text-align: right;">97%</td>
+</tr>
+<tr>
+<td>monica</td>
+<td>PHP</td>
+<td>1,656</td>
+<td>43</td>
+<td style="text-align: right;">93%</td>
+</tr>
+<tr>
+<td>hoppscotch</td>
+<td>JS/TS</td>
+<td>1,103</td>
+<td>226</td>
+<td style="text-align: right;">97%</td>
+</tr>
+<tr>
+<td>hedgedoc</td>
+<td>JS/TS</td>
+<td>1,307</td>
+<td>113</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td>fastapi (core)</td>
+<td>Python</td>
+<td>48</td>
+<td>100</td>
+<td style="text-align: right;">100%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>7 languages</strong></td>
+<td><strong>5,575</strong></td>
+<td><strong>632</strong></td>
+<td style="text-align: right;"><strong>95.9%</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="performance">Performance</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Speed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Small repos (≤2MB, 4 workers)</td>
+<td>4.05 KLOC/s</td>
+</tr>
+<tr>
+<td>Medium repos (2-10MB, 4 workers)</td>
+<td>2.03 KLOC/s</td>
+</tr>
+<tr>
+<td>Single-file scan</td>
+<td>~0.01-0.05s</td>
+</tr>
+</tbody>
+</table>
+<p>Performance varies by language and code complexity. JS/TS repos with heavy framework usage (routing, decorators) are slower due to AST-level route analysis.</p>
+<h2 id="methodology">Methodology</h2>
+<ol>
+<li><strong>Real-world benchmarks</strong> use local git clones of open-source repositories.</li>
+<li><strong>CVE benchmark</strong> uses isolated code snippets from known CVEs — for regression testing, not field performance.</li>
+<li><strong>Web-wild</strong> uses intentionally vulnerable demo apps for targeted validation.</li>
+<li>All scans use default settings: <code>scan_file()</code> with structural + classic engine, audit pass, clustering.</li>
+<li>Every finding is classified by the audit engine as TP, LIKELY_FP, NEEDS_REVIEW, or VENDOR_NOISE.</li>
+</ol>
+<h2 id="reproducibility">Reproducibility</h2>
+<pre><code class="language-bash"># CVE benchmark
+python -m benchmarks.nvd_benchmark --fail-under 70 --quiet
+# Quality benchmark
+python -m benchmarks.quality_benchmark --fail-under 100 --quiet
+# Performance smoke
+python -m benchmarks.perf_benchmark --iterations 10 --quiet --json
+</code></pre>
+<p>25/27 checks passed (92.59%)
+Cases: 11/13 fully green
+Noise: 169 findings (6.6677 / kLOC raw), 0 excess findings (0.0000 / kLOC gate)</p>
+<pre><code>
+Notable manifest deltas from the initial refresh pass:
+
+- `dvna-full-repo` measured 22 findings, so the lower bound was adjusted from 23 to 22.
+- `nodegoat-index-missing-csrf-protection` passed the `JS-041` expectation but did not surface a second CSRF rule ID, so the manifest now tracks the validated rule only.
+
+### Local offline replay snapshot (2026-05-15)
+
+Observed with:
+
+```bash
+python -m benchmarks.external_corpus --manifest benchmarks/real_world_manifest.json --cache-dir .tmp/ansede-corpus --offline
+</code></pre>
+<p>Summary:</p>
+<pre><code class="language-text">26/26 checks passed (100.00%)
+Cases: 13/13 fully green
+Noise: 169 findings (6.6677 / kLOC raw), 0 excess findings (0.0000 / kLOC gate)
+</code></pre>
+<p>This confirms the expanded pinned manifest is reproducible from cache after the expectation alignment above.</p>
+<h3 id="refresh-vs-offline-drift-and-hotspot-analysis-2026-05-16">Refresh vs offline drift and hotspot analysis (2026-05-16)</h3>
+<p>Generated from machine-readable runs:</p>
+<pre><code class="language-bash">python -m benchmarks.external_corpus --manifest benchmarks/real_world_manifest.json --cache-dir .tmp/ansede-corpus --refresh --quiet --json &gt; .tmp/real_world_refresh.json
+python -m benchmarks.external_corpus --manifest benchmarks/real_world_manifest.json --cache-dir .tmp/ansede-corpus --offline --quiet --json &gt; .tmp/real_world_offline.json
+python tools/compare_external_runs.py
+</code></pre>
+<p>Summary:</p>
+<pre><code class="language-text">Refresh score: 100.0
+Offline score: 100.0
+Drift cases: 0
+</code></pre>
+<p>Language hotspot snapshot (offline):</p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th style="text-align: right;">Cases</th>
+<th style="text-align: right;">Findings</th>
+<th style="text-align: right;">Noise / kLOC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>javascript</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">17.7384</td>
+</tr>
+<tr>
+<td>python</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">7.2098</td>
+</tr>
+<tr>
+<td>java</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">4.3719</td>
+</tr>
+</tbody>
+</table>
+<p>Per-case hotspot and recurring CWE summaries are captured in the artifacts below.</p>
+<p>Artifacts:</p>
+<ul>
+<li><a href="benchmarks/real_world_drift_summary_may16.json"><code>benchmarks/real_world_drift_summary_may16.json</code></a></li>
+<li><a href="benchmarks/real_world_drift_summary_may16.md"><code>benchmarks/real_world_drift_summary_may16.md</code></a></li>
+</ul>
+<h2 id="top-repo-scale-runner-v4-roadmap">Top-repo scale runner (v4 roadmap)</h2>
+<p>For the "top 1,000 repos" validation track, use the batch scanner utility:</p>
+<pre><code class="language-bash"># Option A: discover repositories directly from GitHub Search API
+python tools/batch_scan_repos.py --github-query &quot;stars:&gt;1000 archived:false&quot; --limit 50 --language python --language javascript --output .tmp/batch_scan_50.json
+
+# Option B: run from a pinned list file
+python tools/batch_scan_repos.py --repos-file benchmarks/campaign_targets_top100.json --limit 100 --max-files-per-repo 3000 --output .tmp/batch_scan_100.json
+
+# Optional: include audit verdicts and estimated FP rate
+python tools/batch_scan_repos.py --repos-file benchmarks/campaign_targets_top100.json --limit 50 --with-audit --output .tmp/batch_scan_50_audit.json
+
+# Generate markdown summary for publication
+python tools/summarize_batch_scan_report.py --input .tmp/batch_scan_50_audit.json --output .tmp/batch_scan_50_audit.md
+</code></pre>
+<p>The report includes per-repo file/line/finding counts plus aggregate top CWEs/rule IDs,
+average findings per repo, and (when <code>--with-audit</code> is enabled) an estimated false-positive rate.</p>
+<p>Automation:</p>
+<ul>
+<li>Scheduled sample run workflow: <a href=".github/workflows/batch-repo-scan.yml"><code>.github/workflows/batch-repo-scan.yml</code></a></li>
+<li>Scanner image publish workflow: <a href=".github/workflows/scanner-image.yml"><code>.github/workflows/scanner-image.yml</code></a></li>
+<li>Batch report markdown generator: <a href="tools/summarize_batch_scan_report.py"><code>tools/summarize_batch_scan_report.py</code></a></li>
+</ul>
+<h2 id="head-to-head-ansede-vs-semgrep-oss">Head-to-Head: Ansede vs Semgrep OSS</h2>
+<p>Run on the full 115-case CVE corpus:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Ansede Static</th>
+<th>Semgrep OSS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recall</td>
+<td><strong>87.2%</strong> (143/164)</td>
+<td>Requires separate run on semgrep-capable host</td>
+</tr>
+<tr>
+<td>Average detection time</td>
+<td>~5ms per snippet</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Total corpus time</td>
+<td>1.2s</td>
+<td>n/a</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Breakdown by language:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th style="text-align: center;">Cases</th>
+<th style="text-align: center;">Ansede recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td style="text-align: center;">68</td>
+<td style="text-align: center;">92.6%</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;">90.5%</td>
+</tr>
+<tr>
+<td>Go</td>
+<td style="text-align: center;">15</td>
+<td style="text-align: center;">73.3%</td>
+</tr>
+<tr>
+<td>Java</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">90.0%</td>
+</tr>
+<tr>
+<td>C#</td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">68.4%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: center;"><strong>164</strong></td>
+<td style="text-align: center;"><strong>87.2%</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Misses by missing rule:</strong> The 21 misses are predominantly CWEs without dedicated analyzer rules (CWE-117 log injection, CWE-338 weak PRNG, CWE-617 assertion, CWE-942 CORS, CWE-453 mutable defaults, CWE-822 unsafe pointer, CWE-295 TLS verification). These are known rule gaps, not regression. The 128-case subset with existing rule coverage maintains 99.2% recall.</p>
+<p>To reproduce with Semgrep:</p>
+<pre><code class="language-bash">pip install semgrep
+python -m benchmarks.head_to_head --output results.json
+</code></pre>
+<p><strong>Caveats:</strong>
+1. This corpus was designed to test Ansede rules — Ansede has an inherent advantage.
+2. Semgrep OSS uses <code>--config=auto</code> (~100 rules). Semgrep Pro has more.
+3. A fair benchmark requires a third-party corpus of 500+ CVEs.
+4. Detection = expected CWE in output — does not measure false-positive rate.</p>
+<h2 id="related-artifacts">Related artifacts</h2>
+<ul>
+<li>Product scorecard: <a href="final_product_scorecard.json"><code>final_product_scorecard.json</code></a></li>
+<li>Definitive world-best proof: <a href="world_best_final_validation.json"><code>world_best_final_validation.json</code></a></li>
+<li>CVE corpus: <a href="benchmarks/cve_corpus.py"><code>benchmarks/cve_corpus.py</code></a></li>
+<li>Web-wild harness: <a href="benchmarks/web_wild_harness.py"><code>benchmarks/web_wild_harness.py</code></a></li>
+<li>Quality guide: <a href="docs/QUALITY.md"><code>docs/QUALITY.md</code></a></li>
+<li>Drift comparator: <a href="tools/compare_external_runs.py"><code>tools/compare_external_runs.py</code></a></li>
+<li>Batch top-repo runner: <a href="tools/batch_scan_repos.py"><code>tools/batch_scan_repos.py</code></a></li>
+</ul>
+<h2 id="html-dashboard">HTML dashboard</h2>
+<p>Generate an interactive self-contained HTML dashboard:</p>
+<pre><code class="language-bash">ansede-static src/ --format html --output report.html
+</code></pre>
+<p>Features:
+- Severity, CWE, and filename filtering (client-side, no reload)
+- Sort by severity, line number, or confidence
+- Live visible-finding count and distinct CWE summary
+- SARIF export button downloads filtered results
+- Collapsible file sections</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

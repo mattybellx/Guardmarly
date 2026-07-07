@@ -1,0 +1,1721 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/v1-to-v2-migration-guide/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>V1 to v2 migration guide - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ansede-v1-v2-migration-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              V1 to v2 migration guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ROADMAP-TO-WORLD-BEST/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-improvements-in-v2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key Improvements in v2
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-update-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Update Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 1: Update Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v1x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.x
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0+
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-migrate-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Migrate Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 2: Migrate Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v1x-config-format-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.x Config Format (ansede.json)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20-config-format-ansedejson" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0+ Config Format (ansede.json)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automatic Migration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-update-cli-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Update CLI Usage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3: Update CLI Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v1x-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.x Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0+ Commands
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-update-python-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Update Python API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Update Python API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v1x-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.x API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0+ API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-writing-custom-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Writing Custom Rules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Writing Custom Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#v1x-rule-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v1.x Rule Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#v20-rule-pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2.0+ Rule Pattern
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-understand-v2-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Understand v2 Concepts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 6: Understand v2 Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immutable-ast-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Immutable AST Nodes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#semanticmodel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SemanticModel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-suppression" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Suppression
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-7-baseline-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Baseline Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 7: Baseline Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generate Baseline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-baseline-in-ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use Baseline in CI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-8-performance-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Performance &amp; Memory
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 8: Performance &amp; Memory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#parallel-scanning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parallel Scanning
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streaming-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Streaming API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-9-optional-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Optional Dependencies
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 9: Optional Dependencies">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tree-sitter-jsts-parsing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree-sitter (JS/TS Parsing)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#networkx-call-graph-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NetworkX (Call Graph Analysis)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json-schema-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        JSON Schema Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-10-troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 10: Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 10: Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#module-ansede_staticv2-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Module 'ansede_static.v2' not found"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-not-in-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "Rule not in REGISTRY"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tree-sitter-not-available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        "tree-sitter not available"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-degradation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance degradation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#behavior-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Behavior Changes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-feedback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support &amp; Feedback
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What's Next?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<p>"""
+docs/v1-to-v2-migration-guide.md
+─────────────────────────────────
+Complete guide to migrating from Ansede v1.x to v2.0+
+"""</p>
+<h1 id="ansede-v1-v2-migration-guide">Ansede v1 → v2 Migration Guide</h1>
+<h2 id="overview">Overview</h2>
+<p>Ansede v2.0 is a major architectural upgrade with <strong>breaking changes</strong>. This guide helps you migrate from v1.x to v2.0+ while maintaining your security scanning workflow.</p>
+<h3 id="key-improvements-in-v2">Key Improvements in v2</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>v1</th>
+<th>v2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AST Normalization</strong></td>
+<td>Monolithic analyzers per language</td>
+<td>Unified immutable AST nodes + tree-sitter</td>
+</tr>
+<tr>
+<td><strong>Rule System</strong></td>
+<td>Hardcoded rules in analyzer files</td>
+<td>Extensible Rule Protocol + RuleRegistry</td>
+</tr>
+<tr>
+<td><strong>Taint Analysis</strong></td>
+<td>Heuristic confidence scores</td>
+<td>Conservative intraprocedural + IFDS interprocedural</td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Sequential scanning</td>
+<td>Parallel scanning (ProcessPoolExecutor)</td>
+</tr>
+<tr>
+<td><strong>Memory</strong></td>
+<td>Unbounded on large files</td>
+<td>Streaming API + explicit GC</td>
+</tr>
+<tr>
+<td><strong>Config</strong></td>
+<td>Basic <code>custom_sinks</code> dict</td>
+<td>Structured JSON Schema + v2 sources/sinks</td>
+</tr>
+<tr>
+<td><strong>Baseline</strong></td>
+<td>Not supported</td>
+<td>BLAKE2b-20 fingerprinting + <code>ansede baseline</code> CLI</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="step-1-update-installation">Step 1: Update Installation</h2>
+<h3 id="v1x">v1.x</h3>
+<pre><code class="language-bash">pip install ansede-static
+</code></pre>
+<h3 id="v20">v2.0+</h3>
+<pre><code class="language-bash"># Minimal install (intraprocedural only)
+pip install ansede-static==2.0.0
+
+# With optional dependencies
+pip install ansede-static[v2]  # Full v2 stack (tree-sitter + networkx + jsonschema)
+pip install ansede-static[treesitter]  # JS/TS support
+pip install ansede-static[graph]  # Interprocedural analysis
+pip install ansede-static[schema]  # JSON Schema validation
+</code></pre>
+<hr />
+<h2 id="step-2-migrate-configuration">Step 2: Migrate Configuration</h2>
+<h3 id="v1x-config-format-ansedejson">v1.x Config Format (ansede.json)</h3>
+<pre><code class="language-json">{
+  &quot;exclude_paths&quot;: [&quot;node_modules&quot;, &quot;.venv&quot;],
+  &quot;disable_rules&quot;: [&quot;CWE-798&quot;],
+  &quot;custom_sinks&quot;: {
+    &quot;my_unsafe_func&quot;: [&quot;user_input&quot;]
+  }
+}
+</code></pre>
+<h3 id="v20-config-format-ansedejson">v2.0+ Config Format (ansede.json)</h3>
+<p><strong>Recommended: Use structured schema</strong></p>
+<pre><code class="language-json">{
+  &quot;exclude_paths&quot;: [&quot;node_modules&quot;, &quot;.venv&quot;],
+  &quot;disable_rules&quot;: [&quot;CWE-798&quot;, &quot;PY-SEC-001&quot;],
+
+  &quot;sinks&quot;: [
+    {
+      &quot;function&quot;: &quot;my_unsafe_func&quot;,
+      &quot;rule_id&quot;: &quot;CUSTOM-001&quot;,
+      &quot;cwe&quot;: &quot;CWE-79&quot;,
+      &quot;title&quot;: &quot;Custom XSS vulnerability&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;language&quot;: &quot;python&quot;,
+      &quot;tainted_args&quot;: [0],
+      &quot;safe_args&quot;: []
+    }
+  ],
+
+  &quot;sources&quot;: [
+    {
+      &quot;function&quot;: &quot;my_custom_source&quot;,
+      &quot;category&quot;: &quot;user_input&quot;,
+      &quot;language&quot;: &quot;python&quot;
+    }
+  ],
+
+  &quot;max_workers&quot;: 4,
+  &quot;max_callees_per_node&quot;: 50,
+  &quot;baseline_file&quot;: &quot;baseline.json&quot;
+}
+</code></pre>
+<p><strong>Legacy support: <code>custom_sinks</code> still works</strong></p>
+<pre><code class="language-json">{
+  &quot;custom_sinks&quot;: {
+    &quot;my_unsafe_func&quot;: {
+      &quot;cwe&quot;: &quot;CWE-79&quot;,
+      &quot;severity&quot;: &quot;high&quot;,
+      &quot;title&quot;: &quot;Custom vulnerability&quot;
+    }
+  }
+}
+</code></pre>
+<h3 id="automatic-migration">Automatic Migration</h3>
+<p>Use the new CLI command to convert your v1 config:</p>
+<pre><code class="language-bash">ansede migrate-config \
+  --input ansede.json \
+  --output ansede-v2.json
+</code></pre>
+<p>This generates a v2-compatible config with defaults. Review and customize as needed.</p>
+<hr />
+<h2 id="step-3-update-cli-usage">Step 3: Update CLI Usage</h2>
+<h3 id="v1x-commands">v1.x Commands</h3>
+<pre><code class="language-bash">ansede-static --scan . --output report.json
+ansede-static --list-rules
+ansede-static --init  # Generate starter config
+</code></pre>
+<h3 id="v20-commands">v2.0+ Commands</h3>
+<pre><code class="language-bash"># Same scanning interface
+ansede-static --scan . --output report.json
+ansede scan .
+
+# New commands
+ansede baseline generate --output baseline.json
+ansede migrate-config --input ansede.json --output ansede-v2.json
+ansede list-rules  # Still works
+
+# Alias (optional, no need for -static suffix)
+ansede scan .
+</code></pre>
+<hr />
+<h2 id="step-4-update-python-api">Step 4: Update Python API</h2>
+<h3 id="v1x-api">v1.x API</h3>
+<pre><code class="language-python">from ansede_static import scan_directory, scan_code
+from ansede_static.config import AnsedeConfig
+
+config = AnsedeConfig.from_file(&quot;ansede.json&quot;)
+findings = scan_directory(&quot;src/&quot;, config=config)
+
+for finding in findings:
+    print(f&quot;{finding.rule_id} at {finding.location}&quot;)
+</code></pre>
+<h3 id="v20-api">v2.0+ API</h3>
+<pre><code class="language-python">from ansede_static.v2 import Engine, REGISTRY
+from ansede_static.v2.normalizer import normalize_source
+from ansede_static.v2.config import load_config
+
+# Option 1: High-level engine API (recommended)
+config = load_config(&quot;ansede.json&quot;)
+engine = Engine(REGISTRY)
+findings = engine.scan_directory(&quot;src/&quot;, config=config)
+
+for finding in findings:
+    print(f&quot;{finding.rule_id} at {finding.location}&quot;)
+
+# Option 2: Lower-level pipeline control
+from ansede_static.v2.normalizer import normalize_file
+
+model = normalize_file(&quot;app.py&quot;)  # Parse &amp; normalize
+engine = Engine(REGISTRY)
+findings = engine.scan_model(model)
+
+# Option 3: Custom rules + interprocedural analysis
+from ansede_static.v2 import InterproceduralTaintAnalysis
+from ansede_static.v2.call_graph import CallGraph
+
+call_graph = CallGraph()
+taint_analysis = InterproceduralTaintAnalysis(model, call_graph)
+cross_function_flows = taint_analysis.analyze()
+</code></pre>
+<hr />
+<h2 id="step-5-writing-custom-rules">Step 5: Writing Custom Rules</h2>
+<h3 id="v1x-rule-pattern">v1.x Rule Pattern</h3>
+<pre><code class="language-python"># In src/ansede_static/python_analyzer.py or js_analyzer.py
+def analyze_my_code(tree):
+    findings = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            if hasattr(node.func, 'id') and node.func.id == 'dangerous_func':
+                findings.append({
+                    'rule': 'CUSTOM-001',
+                    'severity': 'high',
+                    'line': node.lineno,
+                    'message': 'Dangerous function call',
+                })
+    return findings
+</code></pre>
+<h3 id="v20-rule-pattern">v2.0+ Rule Pattern</h3>
+<p><strong>Much simpler with the Rule Protocol:</strong></p>
+<pre><code class="language-python">from ansede_static.v2 import Rule, Finding, REGISTRY, CallNode, SemanticModel
+from typing import Optional
+
+@REGISTRY.register(&quot;CALL&quot;)
+class DangerousFuncRule(Rule):
+    rule_id = &quot;CUSTOM-001&quot;
+    cwe = &quot;CWE-95&quot;
+    severity = &quot;high&quot;
+    title = &quot;Dangerous function call&quot;
+    precision = &quot;high&quot;
+
+    def evaluate(self, node: CallNode, model: SemanticModel) -&gt; Optional[Finding]:
+        if node.callee == &quot;dangerous_func&quot;:
+            return Finding(
+                rule_id=self.rule_id,
+                node=node,
+                message=f&quot;Dangerous function called at {node.location}&quot;,
+            )
+        return None
+</code></pre>
+<p><strong>Register in <code>src/ansede_static/v2/rules/custom/my_rules.py</code>:</strong></p>
+<pre><code class="language-python"># src/ansede_static/v2/rules/custom/__init__.py
+# (This triggers @REGISTRY.register on import)
+from . import my_rules
+</code></pre>
+<p><strong>Load in rule discovery:</strong></p>
+<pre><code class="language-python"># src/ansede_static/v2/rules/__init__.py
+from ansede_static.v2.rules.custom import my_rules
+</code></pre>
+<hr />
+<h2 id="step-6-understand-v2-concepts">Step 6: Understand v2 Concepts</h2>
+<h3 id="immutable-ast-nodes">Immutable AST Nodes</h3>
+<p>All v2 AST nodes are immutable (<code>frozen=True</code>, <code>slots=True</code>):</p>
+<pre><code class="language-python">from ansede_static.v2 import CallNode, SourceLocation
+
+node = CallNode(
+    node_type=&quot;CALL&quot;,
+    location=SourceLocation(file_path=&quot;app.py&quot;, line=42),
+    language=&quot;python&quot;,
+    callee=&quot;execute&quot;,
+    args=(),
+)
+
+# ✅ Read
+print(node.callee)  # &quot;execute&quot;
+
+# ❌ Mutation fails
+node.callee = &quot;safe_func&quot;  # AttributeError: frozen dataclass
+</code></pre>
+<h3 id="semanticmodel">SemanticModel</h3>
+<p>Query per-file context:</p>
+<pre><code class="language-python">from ansede_static.v2.model import SemanticModel
+from ansede_static.v2.normalizer import normalize_file
+
+model = normalize_file(&quot;app.py&quot;)
+
+# Query nodes by type
+calls = model.nodes_of_type(&quot;CALL&quot;)
+assignments = model.nodes_of_type(&quot;ASSIGN&quot;)
+imports = model.nodes_of_type(&quot;IMPORT&quot;)
+
+# Get all nodes
+all_nodes = model.all_nodes()
+
+# Check suppression
+is_suppressed = model.is_line_suppressed(42, &quot;CUSTOM-001&quot;)
+</code></pre>
+<h3 id="inline-suppression">Inline Suppression</h3>
+<p>Users can suppress findings with comments:</p>
+<pre><code class="language-python"># Python
+user_id = request.args.get('id')
+cursor.execute(&quot;SELECT * WHERE id=&quot; + user_id)  # ansede: ignore PY-SEC-012
+
+# JavaScript
+const cmd = req.query.cmd;
+exec(cmd);  // ansede: ignore JS-SEC-003 -- TODO: fix in v2.1
+</code></pre>
+<hr />
+<h2 id="step-7-baseline-management">Step 7: Baseline Management</h2>
+<h3 id="generate-baseline">Generate Baseline</h3>
+<pre><code class="language-bash"># Scan current state, save as baseline
+ansede baseline generate \
+  --input ansede.json \
+  --output baseline.json
+</code></pre>
+<h3 id="use-baseline-in-ci">Use Baseline in CI</h3>
+<pre><code class="language-bash"># Only report NEW findings (not in baseline)
+ansede scan . \
+  --baseline baseline.json \
+  --output report.json
+</code></pre>
+<h3 id="python-api">Python API</h3>
+<pre><code class="language-python">from ansede_static.v2 import BaselineStore, Engine, REGISTRY
+
+# Generate
+engine = Engine(REGISTRY)
+findings = engine.scan_directory(&quot;src/&quot;)
+store = BaselineStore()
+store.generate(findings)
+store.save(&quot;baseline.json&quot;)
+
+# Load
+store2 = BaselineStore()
+store2.load(&quot;baseline.json&quot;)
+
+# Check if finding is in baseline
+for finding in new_findings:
+    if store2.is_baseline_match(finding):
+        print(f&quot;Baseline match: {finding.rule_id}&quot;)
+</code></pre>
+<hr />
+<h2 id="step-8-performance-memory">Step 8: Performance &amp; Memory</h2>
+<h3 id="parallel-scanning">Parallel Scanning</h3>
+<p>v2 automatically uses multiprocessing:</p>
+<pre><code class="language-python">from ansede_static.v2 import Engine, REGISTRY
+
+engine = Engine(REGISTRY, max_workers=4)
+findings = engine.scan_directory(&quot;large_codebase/&quot;)  # Parallel
+</code></pre>
+<h3 id="streaming-api">Streaming API</h3>
+<p>For memory-constrained environments:</p>
+<pre><code class="language-python">from ansede_static.v2 import Engine, REGISTRY
+
+engine = Engine(REGISTRY)
+
+# Stream findings (doesn't buffer)
+for finding in engine.scan_files_streaming(file_list):
+    print(finding)
+    # Process immediately, not held in memory
+</code></pre>
+<hr />
+<h2 id="step-9-optional-dependencies">Step 9: Optional Dependencies</h2>
+<h3 id="tree-sitter-jsts-parsing">Tree-sitter (JS/TS Parsing)</h3>
+<pre><code class="language-bash">pip install ansede-static[treesitter]
+</code></pre>
+<p><strong>Without tree-sitter:</strong> Falls back to regex-based parsing (less accurate, but works).</p>
+<pre><code class="language-python">from ansede_static.v2.normalizer import normalize_source
+
+# Automatically uses tree-sitter if installed
+model = normalize_source(js_code, &quot;app.js&quot;, &quot;javascript&quot;)
+</code></pre>
+<h3 id="networkx-call-graph-analysis">NetworkX (Call Graph Analysis)</h3>
+<pre><code class="language-bash">pip install ansede-static[graph]
+</code></pre>
+<p><strong>For interprocedural taint tracking:</strong></p>
+<pre><code class="language-python">from ansede_static.v2 import InterproceduralTaintAnalysis
+from ansede_static.v2.call_graph import CallGraph
+
+call_graph = CallGraph()
+analysis = InterproceduralTaintAnalysis(model, call_graph)
+flows = analysis.analyze()
+</code></pre>
+<h3 id="json-schema-validation">JSON Schema Validation</h3>
+<pre><code class="language-bash">pip install ansede-static[schema]
+</code></pre>
+<p><strong>Validate configs:</strong></p>
+<pre><code class="language-python">from ansede_static.config import validate_config_json
+
+config_data = {&quot;sinks&quot;: [...], &quot;sources&quot;: [...]}
+warnings = []
+validate_config_json(config_data, warnings)
+for w in warnings:
+    print(f&quot;Config warning: {w}&quot;)
+</code></pre>
+<hr />
+<h2 id="step-10-troubleshooting">Step 10: Troubleshooting</h2>
+<h3 id="module-ansede_staticv2-not-found">"Module 'ansede_static.v2' not found"</h3>
+<p><strong>Solution:</strong> Ensure v2.0+ is installed:</p>
+<pre><code class="language-bash">pip install --upgrade ansede-static
+python -c &quot;import ansede_static; print(ansede_static.__version__)&quot;
+</code></pre>
+<h3 id="rule-not-in-registry">"Rule not in REGISTRY"</h3>
+<p><strong>Solution:</strong> Import rule module to trigger <code>@REGISTRY.register</code>:</p>
+<pre><code class="language-python">from ansede_static.v2.rules import load_all_rules
+load_all_rules()
+
+engine = Engine(REGISTRY)
+</code></pre>
+<h3 id="tree-sitter-not-available">"tree-sitter not available"</h3>
+<p><strong>Solution:</strong> Install optional dep or accept regex fallback:</p>
+<pre><code class="language-bash">pip install ansede-static[treesitter]
+</code></pre>
+<p>Or disable warnings:</p>
+<pre><code class="language-python">import warnings
+warnings.filterwarnings(&quot;ignore&quot;, category=UserWarning)
+</code></pre>
+<h3 id="performance-degradation">Performance degradation</h3>
+<p><strong>Solution:</strong> Tune parameters:</p>
+<pre><code class="language-python">engine = Engine(REGISTRY, max_workers=2)  # Reduce parallelism
+</code></pre>
+<p>Or use streaming mode:</p>
+<pre><code class="language-python">for finding in engine.scan_files_streaming(files):
+    # Process incrementally
+    pass
+</code></pre>
+<hr />
+<h2 id="behavior-changes">Behavior Changes</h2>
+<table>
+<thead>
+<tr>
+<th>v1 Behavior</th>
+<th>v2 Behavior</th>
+<th>Migration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heuristic confidence</td>
+<td>Conservative + IFDS</td>
+<td>Expect fewer false positives, more false negatives until IFDS matures</td>
+</tr>
+<tr>
+<td>Rule result dict</td>
+<td>Finding dataclass</td>
+<td>Update code using findings</td>
+</tr>
+<tr>
+<td>CLI outputs JSON</td>
+<td>Same format</td>
+<td>No change needed</td>
+</tr>
+<tr>
+<td>Custom sinks as list</td>
+<td>Custom sinks as object</td>
+<td>Use <code>ansede migrate-config</code></td>
+</tr>
+<tr>
+<td>No parallelism</td>
+<td>Parallel by default</td>
+<td>Disable with <code>max_workers=1</code> if issues</td>
+</tr>
+<tr>
+<td>No streaming</td>
+<td>Streaming API</td>
+<td>Use <code>scan_files_streaming()</code> for memory constraints</td>
+</tr>
+<tr>
+<td>No baselines</td>
+<td>BLAKE2b-based baselines</td>
+<td>Use <code>ansede baseline</code> for CI workflows</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="complete-checklist">Complete Checklist</h2>
+<ul>
+<li>[ ] Update ansede-static installation to v2.0+</li>
+<li>[ ] Migrate <code>ansede.json</code> to v2 format (or use <code>ansede migrate-config</code>)</li>
+<li>[ ] Test scanning: <code>ansede scan . --output report.json</code></li>
+<li>[ ] Update CI/CD pipeline (mostly unchanged, but test first)</li>
+<li>[ ] Review custom rules; port to Rule Protocol if any</li>
+<li>[ ] Set up baseline for CI: <code>ansede baseline generate</code></li>
+<li>[ ] Enable optional deps if needed (tree-sitter, networkx, jsonschema)</li>
+<li>[ ] Update internal documentation/runbooks</li>
+<li>[ ] Train team on inline suppression syntax (<code># ansede: ignore RULE-ID</code>)</li>
+<li>[ ] Run full test suite to validate migration</li>
+</ul>
+<hr />
+<h2 id="support-feedback">Support &amp; Feedback</h2>
+<ul>
+<li><strong>GitHub Issues:</strong> github.com/mattybellx/ansede/issues</li>
+<li><strong>Discussions:</strong> github.com/mattybellx/ansede/discussions</li>
+<li><strong>Documentation:</strong> See <a href="../docs/">docs/</a> for detailed guides</li>
+<li><a href="../writing-rules/">docs/writing-rules.md</a> — Rule authoring</li>
+<li><a href="../interprocedural-taint-analysis/">docs/interprocedural-taint-analysis.md</a> — IFDS/IDE</li>
+<li><a href="../QUALITY/">docs/QUALITY.md</a> — Benchmark methodology</li>
+</ul>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>After migrating to v2.0, consider:</p>
+<ol>
+<li><strong>Enable IFDS</strong> — Use InterproceduralTaintAnalysis for cross-function tracking</li>
+<li><strong>Custom sinks/sources</strong> — Define domain-specific taint rules in ansede.json</li>
+<li><strong>Baseline management</strong> — Use <code>ansede baseline</code> to reduce alert fatigue in CI</li>
+<li><strong>Rule customization</strong> — Port existing rules or write new ones using Rule Protocol</li>
+<li><strong>Performance tuning</strong> — Profile and optimize for your codebase size/structure</li>
+</ol>
+<p>Happy scanning! 🔒</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
