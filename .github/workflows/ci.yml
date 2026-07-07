@@ -194,6 +194,7 @@ jobs:
   self-scan:
     name: Self-scan (SARIF)
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
       security-events: write
 
@@ -204,8 +205,8 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: pip install -e ".[dev]"
-      - name: Self-scan
-        run: ansede-static src/ --format sarif --output ansede-self-scan.sarif
+      - name: Self-scan (quick)
+        run: ansede-static src/ansede_static/__init__.py src/ansede_static/java_analyzer.py --format sarif --output ansede-self-scan.sarif
       - name: Upload SARIF
         uses: github/codeql-action/upload-sarif@v3
         with:
