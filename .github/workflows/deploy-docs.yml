@@ -1,6 +1,13 @@
 name: Deploy documentation site
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - 'site/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'mkdocs.yml'
   workflow_dispatch:
 
 permissions:
