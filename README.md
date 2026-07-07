@@ -184,7 +184,13 @@ pytest tests/ -q          # 952 tests
 PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
-
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/results-mario.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/results-mario.png">
+    <img alt="Ansede Static Results" src="https://github.com/mattybellx/Ansede/blob/master/assets/results-mario.png" width="600">
+  </picture>
+</p>
 ## License
 
 MIT · [Matty Bell](https://github.com/mattybellx)
