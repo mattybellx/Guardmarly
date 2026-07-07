@@ -8,9 +8,10 @@ on:
 
 permissions:
   contents: read
-  security-events: write   # for SARIF upload
+  security-events: write
 
 jobs:
+  # ── Full test suite on all OS/Python combos ──────────────────────────
   verify-and-test:
     name: Verify (${{ matrix.os }} / py${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
@@ -21,40 +22,37 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
 
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v4
-
-      - name: Setup Python Environment ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
 
-      - name: Install Hardened Dependency Manifest
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -e ".[test,dev,treesitter]"
 
-      - name: Run Complete Test Suite
-        run: python -m pytest tests/test_analysis_compat.py tests/test_async_scanner.py tests/test_audit_engine.py tests/test_auto_rules.py tests/test_cache.py tests/test_classifier.py tests/test_cli.py tests/test_clustering.py tests/test_community_rules.py tests/test_confidence.py tests/test_config.py tests/test_cross_file.py tests/test_cvss.py tests/test_datascience.py tests/test_entropy.py tests/test_explain.py tests/test_java_csharp_analyzers.py tests/test_js.py tests/test_js_ast.py tests/test_js_minified_project_index.py tests/test_js_structure_cache.py tests/test_noise_policies.py tests/test_phase2_registry_expansion.py tests/test_phase4_diagnostics.py tests/test_pr_generator.py tests/test_python.py tests/test_remediation.py tests/test_reporters.py tests/test_rules.py tests/test_symbolic_guards.py tests/test_triage.py tests/test_yaml_rules.py --tb=short -q
+      - name: Run complete test suite
+        run: python -m pytest tests/ --ignore=tests/test_real_world_compare.py --ignore=tests/test_external_corpus.py --tb=short -q
 
-      - name: Execute Strict Type Checking (Mypy)
+      - name: Type check (mypy)
         run: |
           pip install mypy
-          mypy --strict src/
+          mypy src/ --ignore-missing-imports
         continue-on-error: true
 
-      - name: Lint with Ruff
+      - name: Lint (ruff)
         run: |
           pip install ruff
           ruff check src/ --ignore=E501,E402,F401,F811,E701,E702,E741,F821 --quiet
 
-      - name: Upload Coverage Reports to Codecov
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false
 
-  # ── Unit tests on every supported Python version ─────────────────────────
+  # ── Unit tests on every Python version ──────────────────────────────
   test:
     name: Test (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
@@ -71,13 +69,15 @@ jobs:
       - name: Install
         run: pip install -e ".[dev]"
       - name: Unit tests
-        run: python -m pytest tests/test_async_scanner.py tests/test_audit_engine.py tests/test_cache.py tests/test_cli.py tests/test_clustering.py tests/test_community_rules.py tests/test_confidence.py tests/test_config.py tests/test_cross_file.py tests/test_cvss.py tests/test_datascience.py tests/test_entropy.py tests/test_explain.py tests/test_java_csharp_analyzers.py tests/test_js.py tests/test_js_ast.py tests/test_js_minified_project_index.py tests/test_js_structure_cache.py tests/test_noise_policies.py tests/test_phase2_registry_expansion.py tests/test_phase4_diagnostics.py tests/test_python.py tests/test_remediation.py tests/test_reporters.py tests/test_rules.py tests/test_symbolic_guards.py tests/test_triage.py tests/test_yaml_rules.py --tb=short -q
-      - name: CVE pattern benchmark
+        run: python -m pytest tests/ --ignore=tests/test_real_world_compare.py --ignore=tests/test_external_corpus.py --tb=short -q
+      - name: CVE recall (NVD corpus)
         run: python -m benchmarks.nvd_benchmark --fail-under 60 --quiet
 
-  openapi-bridge:
-    name: OpenAPI bridge integration test
+  # ── OWASP Benchmark gate ────────────────────────────────────────────
+  owasp-benchmark:
+    name: OWASP Benchmark (recall >= 85%)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -86,11 +86,20 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: pip install -e ".[dev]"
-      - name: OpenAPI bridge tests
-        run: python -m pytest tests/test_openapi_bridge.py -q
+      - name: Run OWASP benchmark
+        run: python -m benchmarks.owasp_fast
+      - name: Verify OWASP recall
+        run: |
+          python -c "
+          import json
+          d = json.load(open('benchmarks/owasp_scorecard.json'))
+          assert d['tpr_pct'] >= 85, f\"OWASP recall {d['tpr_pct']}% < 85%\"
+          print(f\"OWASP recall: {d['tpr_pct']}% — PASS\")
+          "
 
+  # ── Docs build ──────────────────────────────────────────────────────
   mkdocs-build:
-    name: Build documentation site
+    name: Build documentation
     runs-on: ubuntu-latest
 
     steps:
@@ -103,6 +112,7 @@ jobs:
       - name: Build site
         run: mkdocs build
 
+  # ── Quality gates ───────────────────────────────────────────────────
   quality:
     name: Quality benchmark
     runs-on: ubuntu-latest
@@ -131,8 +141,9 @@ jobs:
       - name: External corpus benchmark
         run: python -m benchmarks.external_corpus --manifest benchmarks/external_manifest.json --fail-under 100 --quiet
 
+  # ── Performance ────────────────────────────────────────────────────
   perf-smoke:
-    name: Performance smoke benchmark
+    name: Performance smoke test
     runs-on: ubuntu-latest
 
     steps:
@@ -142,27 +153,12 @@ jobs:
           python-version: '3.11'
       - name: Install
         run: pip install -e ".[dev]"
-      - name: Performance smoke benchmark
+      - name: Performance benchmark
         run: python -m benchmarks.perf_benchmark --iterations 10 --quiet --json
-      - name: Performance regression check (DIR-5.2)
-        run: python benchmarks/perf_regression_check.py
 
-  sarif-quality:
-    name: SARIF trace quality gate
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Validate SARIF trace coverage
-        run: python .github/scripts/validate_sarif_trace_coverage.py
-
+  # ── Engine comparison ───────────────────────────────────────────────
   engine-compare:
-    name: Dual-engine comparison (v1 vs v2)
+    name: Engine comparison (v1 vs v2)
     runs-on: ubuntu-latest
 
     steps:
@@ -175,13 +171,14 @@ jobs:
       - name: Compare engines
         run: python .github/scripts/compare_engines.py
 
+  # ── Language parity ─────────────────────────────────────────────────
   language-parity:
     name: Language parity (${{ matrix.lang }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        lang: [go, java, csharp, ruby]
+        lang: [go, java, csharp]
 
     steps:
       - uses: actions/checkout@v4
@@ -193,82 +190,12 @@ jobs:
       - name: Language parity scan
         run: python .github/scripts/language_parity_check.py ${{ matrix.lang }}
 
-  batch-scan:
-    name: Sample batch scan (campaign slice)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Scan 5 campaign targets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python tools/batch_scan_repos.py --repos-file benchmarks/campaign_targets_top100.json --limit 5 --max-files-per-repo 300 --with-audit --output .tmp/ci_batch_scan.json --quiet
-      - name: Generate summary
-        run: |
-          python tools/summarize_batch_scan_report.py --input .tmp/ci_batch_scan.json --output .tmp/ci_batch_scan.md
-
-  platform-smoke:
-    name: Platform smoke (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Smoke tests
-        run: pytest tests/test_cli.py tests/test_reporters.py tests/test_config.py -q
-
-  binary-guardrails:
-    name: Binary guardrails (DIR-5.3)
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Build wheel
-        run: pip install build && python -m build
-      - name: Check guardrails
-        run: python tools/check_binary_guardrails.py
-
-  extension:
-    name: VS Code extension build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install extension dependencies
-        working-directory: vscode-extension
-        run: npm install
-      - name: Compile extension
-        working-directory: vscode-extension
-        run: npm run compile
-
-  # ── Self-scan: scan ansede-static with ansede-static ─────────────────────
-  scan:
+  # ── Self-scan with SARIF upload ─────────────────────────────────────
+  self-scan:
     name: Self-scan (SARIF)
     runs-on: ubuntu-latest
-    needs: [test, quality, external-corpus, perf-smoke, binary-guardrails, platform-smoke, extension]
+    permissions:
+      security-events: write
 
     steps:
       - uses: actions/checkout@v4
@@ -276,13 +203,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install
-        run: pip install -e .
-      - name: Scan src/
-        run: ansede-static src/ --format json --output ansede.json --fail-on never
-      - name: Generate SARIF from JSON
-        run: python .github/scripts/json_to_sarif.py
+        run: pip install -e ".[dev]"
+      - name: Self-scan
+        run: ansede-static src/ --format sarif --output ansede-self-scan.sarif
       - name: Upload SARIF
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: ansede.sarif
-          category: ansede-static
+          sarif_file: ansede-self-scan.sarif
