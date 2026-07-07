@@ -93,8 +93,8 @@ jobs:
           python -c "
           import json
           d = json.load(open('benchmarks/owasp_scorecard.json'))
-          assert d['tpr_pct'] >= 85, f\"OWASP recall {d['tpr_pct']}% < 85%\"
-          print(f\"OWASP recall: {d['tpr_pct']}% — PASS\")
+          assert d['recall_pct'] >= 85, f"OWASP recall {d['recall_pct']}% < 85%"
+          print(f"OWASP recall: {d['recall_pct']}% — PASS")
           "
 
   # ── Docs build ──────────────────────────────────────────────────────
