@@ -2399,10 +2399,6 @@ def _check_interprocedural_taint_impl(
                 )
 
                 if sink_hit:
-                    # Determine CWE from callee's sink types — only flag if the callee
-                    # actually contains SQL-related operations (not file I/O, logging, etc.)
-                    summary = global_graph.get_function_summary(filename or "<stdin>", call.callee)
-
                     # Find the callee method body to check sink type
                     callee_method = None
                     for m in methods:

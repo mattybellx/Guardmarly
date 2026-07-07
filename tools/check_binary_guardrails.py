@@ -31,7 +31,10 @@ def _check_dependencies(*, quiet: bool = False) -> list[str]:
         failures.append(f"pyproject.toml not found at {PYPROJECT}")
         return failures
 
-    import tomllib  # Python 3.11+ stdlib
+    try:
+        import tomllib  # Python 3.11+ stdlib
+    except ImportError:
+        import tomli as tomllib  # Python <3.11 backport
 
     try:
         data = tomllib.loads(PYPROJECT.read_text(encoding="utf-8"))
