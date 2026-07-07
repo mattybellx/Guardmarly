@@ -1,0 +1,156 @@
+{
+  "kind": "ansede-final-scorecard",
+  "version": 1,
+  "metrics": {
+    "cve": {
+      "recall_pct": 95.73,
+      "precision_pct": 89.2,
+      "f1_pct": 92.35,
+      "fp_rate_pct": 10.8,
+      "tp": 157,
+      "fp": 19,
+      "fn": 7,
+      "passed_cases": 157,
+      "total_cases": 164
+    },
+    "quality": {
+      "score_pct": 100.0,
+      "checks_passed": 63,
+      "checks_total": 63,
+      "guard_summary": {
+        "total_cases": 21,
+        "passed_cases": 21,
+        "score_pct": 100.0,
+        "families_total": 4,
+        "families_passed": 4,
+        "gate_ready": true,
+        "per_guard_family": {
+          "access-control": {
+            "cases": 3,
+            "passed_cases": 3,
+            "gate_ready": true
+          },
+          "auth-guard": {
+            "cases": 2,
+            "passed_cases": 2,
+            "gate_ready": true
+          },
+          "rate-limit": {
+            "cases": 1,
+            "passed_cases": 1,
+            "gate_ready": true
+          },
+          "shadow-detector": {
+            "cases": 15,
+            "passed_cases": 15,
+            "gate_ready": true
+          }
+        }
+      },
+      "shadow_detector_summary": {
+        "total_cases": 15,
+        "passed_cases": 15,
+        "score_pct": 100.0,
+        "gate_ready": true
+      }
+    },
+    "external": {
+      "score_pct": 100.0,
+      "checks_passed": 19,
+      "checks_total": 19,
+      "clustering_summary": {
+        "raw_findings": 4,
+        "clustered_findings": 4,
+        "reduced_findings": 0,
+        "reduction_pct": 0.0,
+        "raw_noise_quotient": 44.9438,
+        "cluster_adjusted_noise_quotient": 44.9438,
+        "noise_improved_or_equal": true,
+        "gate_ready": true
+      }
+    },
+    "noise_quotient": {
+      "unit": "fp_per_1k_loc",
+      "value": 14.074,
+      "baseline": "CVE corpus total LOC",
+      "total_loc": 1350,
+      "cve_corpus_noise_per_1k_loc": 14.074
+    }
+  },
+  "verification_gates": {
+    "incident_clustering": {
+      "passed": true,
+      "details": {
+        "external": {
+          "raw_findings": 4,
+          "clustered_findings": 4,
+          "reduced_findings": 0,
+          "reduction_pct": 0.0,
+          "raw_noise_quotient": 44.9438,
+          "cluster_adjusted_noise_quotient": 44.9438,
+          "noise_improved_or_equal": true,
+          "gate_ready": true
+        },
+        "cve": {
+          "raw_findings": 318,
+          "clustered_findings": 236,
+          "reduced_findings": 82,
+          "reduction_pct": 25.79,
+          "raw_noise_quotient": 235.5556,
+          "cluster_adjusted_noise_quotient": 174.8148,
+          "noise_improved_or_equal": true,
+          "gate_ready": true
+        }
+      }
+    },
+    "symbolic_guards": {
+      "passed": true,
+      "details": {
+        "total_cases": 21,
+        "passed_cases": 21,
+        "score_pct": 100.0,
+        "families_total": 4,
+        "families_passed": 4,
+        "gate_ready": true,
+        "per_guard_family": {
+          "access-control": {
+            "cases": 3,
+            "passed_cases": 3,
+            "gate_ready": true
+          },
+          "auth-guard": {
+            "cases": 2,
+            "passed_cases": 2,
+            "gate_ready": true
+          },
+          "rate-limit": {
+            "cases": 1,
+            "passed_cases": 1,
+            "gate_ready": true
+          },
+          "shadow-detector": {
+            "cases": 15,
+            "passed_cases": 15,
+            "gate_ready": true
+          }
+        }
+      }
+    },
+    "shadow_detectors": {
+      "passed": true,
+      "details": {
+        "total_cases": 15,
+        "passed_cases": 15,
+        "score_pct": 100.0,
+        "gate_ready": true
+      }
+    }
+  },
+  "targets": {
+    "fp_rate_below_10_pct": false,
+    "recall_above_90_pct": true,
+    "noise_quotient_below_2_per_1k_loc": false,
+    "core_cve_pass": false
+  },
+  "all_targets_met": false
+}

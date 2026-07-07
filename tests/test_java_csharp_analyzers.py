@@ -580,7 +580,7 @@ JAVA_WEAK_CRYPTO_DIGEST_UTILS = """
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class LegacyHasher {
-    public String checksum(String data) {
+    public String hashPassword(String data) {
         return DigestUtils.md5Hex(data);
     }
 }

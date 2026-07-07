@@ -345,3 +345,26 @@ def scan_code(
     )
     apply_config_to_results([result], config)
     return result
+
+# -- Noise suppression (Session 12) --------------------------------------
+_TEST_PATH_PATTERNS = [
+    "/test/", "/tests/", "/testing/", "/__tests__/", "/spec/", "/specs/",
+    "/fixtures/", "/fixture/", "/mock/", "/mocks/", "/stubs/", "/fakes/",
+    "/examples/", "/demo/", "/sample/", "/samples/",
+    "test_", "_test.", "Test.java", "Tests.java",
+]
+_LIB_PATH_PATTERNS = [
+    "/node_modules/", "/vendor/", "/bower_components/", "/.venv/",
+    "/dist/", "/build/", "/out/", "/target/", "/__pycache__/",
+    ".min.js", ".min.css", ".bundle.js", ".generated.",
+    "/third_party/", "/thirdparty/", "/external/",
+]
+
+def suppress_noise_findings(result, file_path):
+    """Suppress findings in test/lib/minified files. Call after scan."""
+    pl = file_path.replace("\\", "/").lower()
+    if any(p.lower() in pl for p in _LIB_PATH_PATTERNS):
+        result.findings = [f for f in result.findings if not f.cwe]
+    elif any(p.lower() in pl for p in _TEST_PATH_PATTERNS):
+        result.findings = [f for f in result.findings if f.severity and str(f.severity).upper() == "CRITICAL"]
+    result.findings = list({(f.line, f.rule_id): f for f in result.findings}.values())

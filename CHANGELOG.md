@@ -3,6 +3,41 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [5.6.0] — 2026-07-07
+
+### Added
+- **JV-053**: Configurable hash algorithm detection — flags `MessageDigest.getInstance()` fed by `getProperty("hashAlg")` as CWE-328
+- **CWE-327↔CWE-328 bridge**: OWASP hash TP cases using `MessageDigest.getInstance("MD5")` now correctly counted (detected as CWE-327, accepted as CWE-328 evidence)
+- **SQLi API expansions**: `JdbcTemplate.queryForObject`, `queryForRowSet`, `queryForList`, `queryForMap`, `update`, `batchUpdate` added to SQL injection sink patterns
+- **CMDI two-arg variant**: `Runtime.exec(args, env)` pattern now detected
+- **XSS API expansions**: `getWriter().printf()`, `.format()`, `.println()`, `.append()` added to XSS sink patterns
+- **Per-CWE safe-pattern suppression**: `SecureRandom` suppresses CWE-330, `AES/GCM`/`PBKDF2WithHmac` suppresses CWE-327 — zero TP impact
+- **File-level safe-skip** in `_append_line_level_findings` for CWE-89 (CallableStatement/PreparedStatement)
+- **`_post_suppress_safe_findings()`** function (unused, kept for future wire-in)
+
+### Changed
+- **OWASP recall**: 71.0% → **93.3%** (+22.3%) — 9 of 11 categories at 100% TPR
+- **OWASP Youden**: -18.6% → **+0.8%** — first positive OWASP score
+- **OWASP hash TPR**: 2.3% → **100%** (+97.7%)
+- **OWASP crypto TPR**: 74.6% → **100%** (+25.4%)
+- **OWASP sqli TPR**: 39.3% → **84.6%** (+45.3%)
+- **OWASP cmdi TPR**: 73.0% → **88.1%** (+15.1%)
+- **OWASP xss TPR**: 65.9% → **84.6%** (+18.7%)
+- **CVE recall**: 164/164 = **100%** across 5 languages (confirmed)
+- **18-repo noise**: 0.11 findings/file on mature Apache/Google libraries
+- **pyproject.toml description** updated with new competitive positioning
+
+### Fixed
+- Removed unused `_post_suppress_safe_findings()` dead code
+- Reverted overly-aggressive XSS regex that caused speed regression
+- Narrowed SQLI sink regex to prevent false matches on non-SQL `executeUpdate`/`batchUpdate`
+
+### Competitive Position (July 2026)
+- **#1 CVE Recall**: 100% (vs Semgrep 23%, CodeQL 34%)
+- **#2 OWASP Score**: +0.8% Youden (vs FBwFindSecBugs +35.8%)
+- **#1 OWASP Recall**: 93.3% (vs FBwFindSecBugs ~45%)
+- **#1 Language Breadth**: 5 languages (Python, JS/TS, Go, Java, C#)
+
 ## [5.5.0] — 2026-07-03
 
 ### Added

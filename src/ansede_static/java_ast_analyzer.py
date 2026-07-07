@@ -71,13 +71,30 @@ _TAINT_CARRIER_METHODS: frozenset[str] = frozenset({
 
 # ── Sink patterns by CWE ────────────────────────────────────────────────────
 _SQLI_METHODS: frozenset[str] = frozenset({
+    # Standard JDBC
     "createQuery", "executeQuery", "executeUpdate",
     "createNativeQuery", "prepareCall", "prepareStatement",
     "createStatement",
+    # JdbcTemplate (Spring)
+    "query", "queryForObject", "queryForList", "queryForMap",
+    "queryForRowSet", "update", "batchUpdate", "execute",
+    # JPA EntityManager / Hibernate
+    "createQuery", "createNativeQuery", "createNamedQuery",
+    "find", "persist", "merge", "remove",
+    # JPA @Query / raw
+    "getResultList", "getSingleResult",
 })
 _SQLI_CLASSES: frozenset[str] = frozenset({
-    "JdbcTemplate",
+    "JdbcTemplate", "NamedParameterJdbcTemplate",
+    "EntityManager", "Session", "SessionFactory",
+    "Query", "TypedQuery", "StoredProcedureQuery",
 })
+# SQLI receiver patterns (variable names that indicate a JDBC/JPA object)
+_SQLI_RECEIVER_PATTERNS: tuple[str, ...] = (
+    "jdbcTemplate", "jdbc", "template", "namedJdbcTemplate",
+    "entityManager", "em", "session", "entityMgr",
+    "query", "typedQuery", "storedProcQuery",
+)
 
 _CMD_EXEC_CLASSES: frozenset[str] = frozenset({
     "Runtime",
@@ -117,12 +134,14 @@ _XSS_RESPONSE_RECEIVERS: frozenset[str] = frozenset({
 
 _PATH_TRAVERSAL_CLASSES: frozenset[str] = frozenset({
     "FileInputStream", "FileOutputStream", "FileReader", "FileWriter",
-    "RandomAccessFile", "File", "Files",
+    "RandomAccessFile", "File", "Files", "Path", "Paths",
 })
 _PATH_TRAVERSAL_METHODS: frozenset[str] = frozenset({
-    "Paths.get", "read", "write", "newInputStream", "newOutputStream",
+    "Paths.get", "Path.of", "read", "write", "newInputStream", "newOutputStream",
     "readAllBytes", "readString", "writeString", "copy", "move",
     "createFile", "createDirectory", "newBufferedReader", "newBufferedWriter",
+    "list", "walk", "delete", "deleteIfExists", "resolve", "resolveSibling",
+    "toPath", "toFile",
 })
 
 # ── LDAP injection sinks (CWE-90) ────────────────────────────────────────
@@ -175,7 +194,7 @@ _SSTI_SINK_CLASSES: frozenset[str] = frozenset({
     "ThymeleafTemplate", "MustacheTemplate",
 })
 _SSTI_SINK_METHODS: frozenset[str] = frozenset({
-    "evaluate", "merge", "process", "render",
+    "evaluate", "merge", "process", "render", "eval", "evalScript",
 })
 
 # ── Framework annotation taint (parameter-level) ─────────────────────────
@@ -451,7 +470,7 @@ def _parse_method_declaration(node: Node, source: bytes) -> _JavaMethod:
 
     # Check for route annotations
     for ann in annotations:
-        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0]
+        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0].lstrip("@")
         if ann_short in _ROUTE_ANNOTATIONS:
             # Extract path from annotation value
             path_matches = re.findall(r'"([^"]*)"', ann)
@@ -459,7 +478,7 @@ def _parse_method_declaration(node: Node, source: bytes) -> _JavaMethod:
 
     # Check for auth annotations
     for ann in annotations:
-        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0]
+        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0].lstrip("@")
         if ann_short in _AUTH_ANNOTATIONS:
             has_auth = True
 
@@ -512,7 +531,7 @@ def _collect_methods(source: bytes, tree: Node) -> list[_JavaMethod]:
                             method.param_annotations.setdefault(pname, []).append(ann)
                 # Parse route paths and auth from ALL annotations
                 for ann in method.annotations:
-                    ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0]
+                    ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0].lstrip("@")
                     if ann_short in _ROUTE_ANNOTATIONS:
                         path_matches = re.findall(r'"([^"]*)"', ann)
                         method.route_paths.extend(path_matches)
@@ -521,7 +540,7 @@ def _collect_methods(source: bytes, tree: Node) -> list[_JavaMethod]:
                 # Framework-annotated params are automatically taint sources
                 for pname, panns in method.param_annotations.items():
                     for ann in panns:
-                        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0]
+                        ann_short = ann.rsplit(".", 1)[-1].split("(", 1)[0].lstrip("@")
                         if ann_short in _FRAMEWORK_TAINT_ANNOTATIONS:
                             method.framework_tainted_params.add(pname)
                 methods.append(method)
@@ -806,7 +825,7 @@ _SECURE_RANDOM_CLASSES: frozenset[str] = frozenset({
 })
 
 
-def _check_weak_random(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
+def _check_weak_random(methods: list[_JavaMethod], source: bytes, filename: str = "") -> list[Finding]:
     """CWE-330: Use of insufficiently random values (predictable PRNG).
 
     Detects:
@@ -814,8 +833,13 @@ def _check_weak_random(methods: list[_JavaMethod], source: bytes) -> list[Findin
     - ``Math.random()`` calls
     - Ignores ``new SecureRandom()`` (the correct fix)
     - Flags ThreadLocalRandom for non-security contexts where predictability matters
+    - Suppresses findings in test files and non-security utility classes
     """
     findings: list[Finding] = []
+    # Skip test files entirely — Random in tests is never a security issue
+    _fn_lower = filename.lower().replace("\\", "/")
+    _is_test = any(p in _fn_lower for p in ("/test/", "test/", "tests/", "test.java", "tests.java",
+                                              "_test.java", "_tests.java", "test_", "tests_"))
     for method in methods:
         body_bytes = method.body.encode("utf-8")
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
@@ -825,6 +849,12 @@ def _check_weak_random(methods: list[_JavaMethod], source: bytes) -> list[Findin
         # Pattern 1: new Random() or new java.util.Random()
         for class_name, arguments, line in creations:
             if class_name in _WEAK_RANDOM_CLASSES:
+                # FP guard: skip if Random used for non-security (shuffle, sort, game, UI)
+                _body_lower_r = method.body.lower()
+                if any(kw in _body_lower_r for kw in ("collections.shuffle", "collections.sort",
+                        "arrays.sort", "cardgame", "deck.", "dice", "lottery",
+                        "shuffle(", ".shuffle(", "games", "game.", "gameplay")):
+                    continue
                 # Check context: if used for token/session/crypto, flag it
                 context_lines = method.body.split("\n")
                 line_idx = line - 1
@@ -873,17 +903,24 @@ def _check_weak_random(methods: list[_JavaMethod], source: bytes) -> list[Findin
                         cwe="CWE-330",
                     ))
 
-        # Pattern 2: Math.random() calls
+        # Pattern 2: Math.random() calls — only flag in web handlers or security context
         for call in calls:
             if call.callee == "random" and call.receiver == "Math":
+                # Skip test files
+                if _is_test:
+                    continue
+                # Only flag in web-facing methods (has routes/annotations) or security context
+                is_web_context = bool(method.has_auth or method.route_paths or method.annotations)
+                if not is_web_context:
+                    continue
                 fl = _body_line_to_file(method, call.line)
                 findings.append(_make_finding(
                     line=fl,
-                    title=f"CWE-330: `Math.random()` at line {fl}",
-                    description=f"`Math.random()` at L{fl} is not cryptographically secure. "
+                    title=f"CWE-330: `Math.random()` in web handler at line {fl}",
+                    description=f"`Math.random()` at L{fl} in a web-facing method. "
                                 "Its 48-bit seed can be brute-forced in minutes.",
                     suggestion="Use `java.security.SecureRandom` for security-sensitive values.",
-                    severity=Severity.HIGH,
+                    severity=Severity.MEDIUM,
                     rule_id="JV-025",
                     cwe="CWE-330",
                 ))
@@ -1236,6 +1273,19 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
             if call.callee not in _SQLI_METHODS:
                 continue
 
+            # ── Receiver guard: generic method names (query, update, find, etc.)
+            #     only count as SQLi if called on a known JDBC/JPA receiver ──
+            _GENERIC_SQL_METHODS = frozenset({
+                "query", "queryForObject", "queryForList", "queryForMap",
+                "queryForRowSet", "update", "batchUpdate", "execute",
+                "find", "persist", "merge", "remove",
+                "getResultList", "getSingleResult",
+            })
+            if call.callee in _GENERIC_SQL_METHODS:
+                recv_lower = call.receiver.lower()
+                if not any(p in recv_lower for p in _SQLI_RECEIVER_PATTERNS):
+                    continue  # Not a known SQL receiver — skip to avoid FP
+
             # ── Object-sensitive FPR guard: skip parameterized statements ──
             if is_safe_sql_call(call.raw, stmt_vars):
                 continue
@@ -1437,6 +1487,7 @@ def _check_weak_crypto(methods: list[_JavaMethod], source: bytes) -> list[Findin
     - Guava ``Hashing.md5()`` / ``Hashing.sha1()``
     - Apache Commons ``DigestUtils.md5Hex()`` / ``DigestUtils.sha1Hex()``
     - Variable-based algorithm selection with weak default values
+    - Suppresses findings in non-security contexts (checksums, file IDs, etc.)
     """
     findings: list[Finding] = []
     for method in methods:
@@ -1444,6 +1495,22 @@ def _check_weak_crypto(methods: list[_JavaMethod], source: bytes) -> list[Findin
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
         calls = _collect_method_invocations(body_tree, body_bytes)
         _collect_object_creations(body_tree, body_bytes)
+
+        # Helper: check if method body has security context near a line
+        def _has_security_context(line_num: int, radius: int = 5) -> bool:
+            body_lines = method.body.split("\n")
+            start = max(0, line_num - radius - 1)
+            end = min(len(body_lines), line_num + radius)
+            context = ("\n".join(body_lines[start:end]) + " " + method.name).lower()
+            security_kw = (
+                "password", "token", "auth", "sign", "secret", "credential",
+                "key", "hash", "encrypt", "decrypt", "cipher", "ssl", "tls",
+                "oauth", "jwt", "session", "csrf", "nonce",
+            )
+            # Skip standard hashCode() methods — not security-related
+            if "hashcode" in context and "messagedigest" in context and method.name.lower().strip() == "hashcode":
+                return False
+            return any(kw in context for kw in security_kw)
 
         # Pattern 1: MessageDigest.getInstance() / Cipher.getInstance() with weak algo
         for call in calls:
@@ -1453,6 +1520,9 @@ def _check_weak_crypto(methods: list[_JavaMethod], source: bytes) -> list[Findin
                 arg_clean = arg.strip(" \"'")
                 for algo in _WEAK_CRYPTO_ALGOS:
                     if algo.lower() in arg_clean.lower():
+                        # Only flag in security context (passwords, tokens, auth, encryption)
+                        if not _has_security_context(call.line):
+                            continue
                         fl = _body_line_to_file(method, call.line)
                         findings.append(_make_finding(
                             line=fl,
@@ -1550,8 +1620,13 @@ def _check_ssrf(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
         calls = _collect_method_invocations(body_tree, body_bytes)
+        # FP guard: skip if method has allowlist/validation on the URL
+        _has_ssrf_guard = bool(re.search(
+            r'ALLOWED|allowed|whitelist|WHITELIST|SAFE_URLS|\.contains\s*\(|sendError\s*\(',
+            method.body, re.IGNORECASE))
         for call in calls:
             if call.callee == "openConnection" and has_user_origin(call.arguments, origins, method.params):
+                if _has_ssrf_guard: continue
                 fl = _body_line_to_file(method, call.line)
                 findings.append(_make_finding(
                     line=fl,
@@ -1562,6 +1637,7 @@ def _check_ssrf(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
         creations = _collect_object_creations(body_tree, body_bytes)
         for class_name, args, line in creations:
             if class_name == "URL" and has_user_origin(args, origins, method.params):
+                if _has_ssrf_guard: continue
                 fl = _body_line_to_file(method, line)
                 findings.append(_make_finding(
                     line=fl, title=f"CWE-918: SSRF via URL() at line {fl}",
@@ -1583,6 +1659,12 @@ def _check_open_redirect(methods: list[_JavaMethod], source: bytes) -> list[Find
         calls = _collect_method_invocations(body_tree, body_bytes)
         for call in calls:
             if call.callee == "sendRedirect" and has_user_origin(call.arguments, origins, method.params):
+                # FP guard: skip if method has allowlist/validation before redirect
+                _has_redirect_guard = bool(re.search(
+                    r'ALLOWED|allowed|whitelist|WHITELIST|SAFE_URLS|\.contains\s*\(',
+                    method.body, re.IGNORECASE))
+                if _has_redirect_guard:
+                    continue
                 fl = _body_line_to_file(method, call.line)
                 findings.append(_make_finding(
                     line=fl,
@@ -1605,16 +1687,25 @@ def _check_xss(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
         calls = _collect_method_invocations(body_tree, body_bytes)
+        # Check if this method is in an HTTP servlet context (has HttpServletResponse/getWriter)
+        _body_lower = method.body.lower()
+        _is_http_context = any(kw in _body_lower for kw in (
+            'httpservletresponse', 'getwriter()', 'getoutputstream()',
+            'httpservletrequest', 'doget(', 'dopost(',
+        ))
         for call in calls:
             if call.callee in _XSS_OUTPUT_METHODS and has_user_origin(call.arguments, origins, method.params):
                 rcvr_lower = call.receiver.lower()
                 # FP guard: must have response/writer context — skip FileWriter, StringWriter, etc.
                 if rcvr_lower and rcvr_lower not in _XSS_RESPONSE_RECEIVERS:
-                    if rcvr_lower not in origins and not any(
+                    # If we're in an HTTP servlet context, be more permissive with receiver names
+                    if _is_http_context:
+                        pass  # Allow — this is likely HttpServletResponse.getWriter()
+                    elif rcvr_lower not in origins and not any(
                         w in rcvr_lower for w in ('writer', 'output', 'response', 'printwriter', 'stream')):
                         continue
-                # FP guard: skip if the receiver is a non-HTTP writer (FileWriter, StringWriter, PrintWriter to file)
-                _non_http_writers = ('file', 'string', 'buffer', 'chararray', 'piped', 'bytearray')
+                # FP guard: skip if the receiver is a non-HTTP writer (FileWriter, StringWriter, PrintWriter to file, journal, log, cache)
+                _non_http_writers = ('file', 'string', 'buffer', 'chararray', 'piped', 'bytearray', 'journal', 'logwriter', 'cache')
                 if any(w in rcvr_lower for w in _non_http_writers):
                     continue
                 # FPR guard: check if ESAPI/OWASP encoding is applied nearby
@@ -1665,6 +1756,15 @@ def _check_hardcoded_secrets(methods: list[_JavaMethod], source: bytes) -> list[
 def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
     """CWE-22: Path traversal with origin-aware taint + NIO patterns + variable tracking."""
     from ansede_static.java_taint_origins import collect_taint_origins, has_user_origin
+
+    def _has_path_validation(body: str) -> bool:
+        """Check if method body contains path validation (contains, startsWith, etc.)."""
+        return bool(re.search(
+            r'\.contains\s*\(\s*"\.\."|\.startsWith\s*\(|\.indexOf\s*\(\s*"\.\."|'
+            r'\.endsWith\s*\(|commonpath\s*\(|is_relative_to\s*\('
+            r'|ALLOWED_|allowed_|WHITELIST|whitelist|SAFE_DIR',
+            body, re.IGNORECASE))
+
     findings: list[Finding] = []
     for method in methods:
         body_bytes = method.body.encode("utf-8")
@@ -1686,6 +1786,9 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
             if class_name in _PATH_TRAVERSAL_CLASSES:
                 # Check origin-aware taint
                 if has_user_origin(args, origins, method.params):
+                    # FP guard: skip if path validation is present (contains, startsWith, etc.)
+                    if _has_path_validation(method.body):
+                        continue
                     fl = _body_line_to_file(method, line)
                     findings.append(_make_finding(
                         line=fl, title=f"CWE-22: Path traversal via new {class_name}() at line {fl}",
@@ -1697,6 +1800,8 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
                 for arg_text in args:
                     for t_var in all_tainted:
                         if t_var in arg_text:
+                            if _has_path_validation(method.body):
+                                continue
                             fl = _body_line_to_file(method, line)
                             findings.append(_make_finding(
                                 line=fl,
@@ -1715,6 +1820,8 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
             if not is_path_sink:
                 continue
             if has_user_origin(call.arguments, origins, method.params):
+                if _has_path_validation(method.body):
+                    continue
                 fl = _body_line_to_file(method, call.line)
                 findings.append(_make_finding(
                     line=fl,
@@ -1727,6 +1834,8 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
             for arg_text in call.arguments:
                 for t_var in all_tainted:
                     if t_var in arg_text:
+                        if _has_path_validation(method.body):
+                            continue
                         fl = _body_line_to_file(method, call.line)
                         findings.append(_make_finding(
                             line=fl,
@@ -1738,6 +1847,8 @@ def _check_path_traversal(methods: list[_JavaMethod], source: bytes) -> list[Fin
 
         # Pattern 2: Broader regex fallback for path construction with tainted vars
         # "new File(" + taintedVar + ")" or similar patterns
+        if _has_path_validation(method.body):
+            continue
         for t_var in all_tainted:
             if re.search(r'new\s+(?:File|Path|FileInputStream|FileReader)\s*\([^)]*' + re.escape(t_var), method.body):
                 # Find the line
@@ -1763,7 +1874,7 @@ def _check_auth_bypass(methods: list[_JavaMethod], source: bytes) -> list[Findin
     for method in methods:
         # Check if it's a mutating route without auth
         has_mutating = any(
-            ann.rsplit(".", 1)[-1].split("(", 1)[0] in _MUTATING_ANNOTATIONS
+            ann.rsplit(".", 1)[-1].split("(", 1)[0].lstrip("@") in _MUTATING_ANNOTATIONS
             for ann in method.annotations
         )
         if not has_mutating:
@@ -1864,8 +1975,7 @@ def _check_xpath_injection(methods: list[_JavaMethod], source: bytes) -> list[Fi
     findings: list[Finding] = []
     for method in methods:
         body_bytes = method.body.encode("utf-8")
-        if _method_has_no_request_source(method.body):
-            continue
+        # XPath injection: skip HTTP-source filter — any untrusted string input can be dangerous
         body_tree = _JAVA_PARSER.parse(body_bytes).root_node
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
@@ -1876,7 +1986,12 @@ def _check_xpath_injection(methods: list[_JavaMethod], source: bytes) -> list[Fi
 
         for call in all_calls:
             if call.callee in _XPATH_SINK_METHODS:
-                if has_user_origin(call.arguments, origins, method.params):
+                # Also check if any argument contains string concat (XPath built dynamically)
+                arg_text = " ".join(call.arguments)
+                has_concat = "+" in arg_text
+                if has_user_origin(call.arguments, origins, method.params) or (
+                    has_concat and any(p in method.body for p in method.params if p in arg_text)
+                ):
                     fl = _body_line_to_file(method, call.line)
                     findings.append(_make_finding(
                         line=fl,
@@ -2025,19 +2140,35 @@ def _check_nosql_injection(methods: list[_JavaMethod], calls: list[_JavaCall], s
 
 
 # ── CWE-94 SSTI checker ─────────────────────────────────────────────────
-def _check_ssti_injection(methods: list[_JavaMethod], calls: list[_JavaCall], source: bytes) -> list[Finding]:
+def _check_ssti_injection(methods: list[_JavaMethod], source: bytes, filename: str = "") -> list[Finding]:
     findings: list[Finding] = []
-    for call in calls:
-        if call.callee in _SSTI_SINK_METHODS:
-            findings.append(Finding(
-                category="security", severity=Severity.CRITICAL,
-                title=f"CWE-94: SSTI via {call.callee}() at line {call.line}",
-                description=f"Template evaluation at L{call.line} may process user-controlled input.",
-                line=call.line, rule_id="JV-094", cwe="CWE-94",
-                agent="java-ast-analyzer", confidence=0.85,
-                suggestion="Never pass user input directly to template engines. Use sandboxed rendering.",
-                analysis_kind="pattern",
-            ))
+    for method in methods:
+        body_bytes = method.body.encode("utf-8")
+        body_tree = _JAVA_PARSER.parse(body_bytes).root_node
+        calls = _collect_method_invocations(body_tree, body_bytes)
+        for call in calls:
+            if call.callee in _SSTI_SINK_METHODS:
+                # Skip XPath objects — CWE-643 handles those, not CWE-94
+                _XPATH_RECEIVERS = frozenset({"xpath", "xPath", "xpathExpression",
+                    "xPathExpression", "xpathExpr", "expr", "xpathCompiled"})
+                if call.receiver.lower() in _XPATH_RECEIVERS:
+                    continue
+                # Skip calls with all-hardcoded string literal arguments
+                # e.g., engine.eval("var x = 1;") is safe initialization code
+                if call.arguments and all(
+                    (a.startswith('"') and a.endswith('"')) for a in call.arguments
+                ):
+                    continue
+                fl = _body_line_to_file(method, call.line)
+                findings.append(_make_finding(
+                    line=fl,
+                    title=f"CWE-94: Code injection via {call.callee}() at line {fl}",
+                    description=f"Dynamic code evaluation at L{fl} may process user-controlled input.",
+                    suggestion="Never pass user input to script engines or template evaluators.",
+                    severity=Severity.CRITICAL,
+                    rule_id="JV-094",
+                    cwe="CWE-94",
+                ))
     return findings
 
 
@@ -2268,24 +2399,40 @@ def _check_interprocedural_taint_impl(
                 )
 
                 if sink_hit:
-                    # Determine CWE from callee's sink types
+                    # Determine CWE from callee's sink types — only flag if the callee
+                    # actually contains SQL-related operations (not file I/O, logging, etc.)
                     summary = global_graph.get_function_summary(filename or "<stdin>", call.callee)
-                    cwe = "CWE-89"  # default
-                    if summary and summary.args_to_sink:
-                        cwe = "CWE-89"
 
-                    fl = _body_line_to_file(method, call.line)
-                    findings.append(_make_finding(
-                        line=fl,
-                        title=f"Interprocedural taint: {call.callee}() at line {fl}",
-                        description=f"Tainted argument flows to sink through `{call.callee}()`. Call at L{fl}: `{call.raw[:100]}`.",
-                        suggestion="Review the data flow through helper methods. Ensure input validation at the entry point.",
-                        severity=Severity.HIGH,
-                        rule_id="JV-030",
-                        cwe=cwe,
-                        trace=sink_trace,
-                        confidence=0.80,
-                    ))
+                    # Find the callee method body to check sink type
+                    callee_method = None
+                    for m in methods:
+                        if m.name == call.callee:
+                            callee_method = m
+                            break
+
+                    # Only flag as SQLi if callee body contains SQL keywords
+                    _SQL_SINK_RE = re.compile(
+                        r'(?:executeQuery|executeUpdate|execute\(|prepareStatement|createQuery|'
+                        r'createNativeQuery|jdbcTemplate|JdbcTemplate|@Query|'
+                        r'Statement\.|PreparedStatement)',
+                        re.IGNORECASE,
+                    )
+                    is_sql_sink = bool(callee_method and _SQL_SINK_RE.search(callee_method.body))
+
+                    if is_sql_sink:
+                        cwe = "CWE-89"
+                        fl = _body_line_to_file(method, call.line)
+                        findings.append(_make_finding(
+                            line=fl,
+                            title=f"Interprocedural SQLi taint: {call.callee}() at line {fl}",
+                            description=f"Tainted argument flows to SQL sink through `{call.callee}()`. Call at L{fl}: `{call.raw[:100]}`.",
+                            suggestion="Review the data flow through helper methods. Ensure parameterized queries.",
+                            severity=Severity.HIGH,
+                            rule_id="JV-030",
+                            cwe=cwe,
+                            trace=sink_trace,
+                            confidence=0.85,
+                        ))
 
                 if ret_hit:
                     # The callee returns tainted data - mark it for propagation
@@ -2332,7 +2479,7 @@ def analyze_java_ast(
     # Phase 1: Build per-method summaries and record into GlobalGraph
     _build_method_summaries_for_gg(methods, source_bytes, filename, global_graph)
 
-    # Phase 2: Run pattern checkers
+    # Phase 2: Run pattern checkers (pass filename for context-aware suppression)
     for checker_label, checker_fn in _ALL_CHECKERS:
         try:
             if checker_label == "Interprocedural":
@@ -2340,7 +2487,11 @@ def analyze_java_ast(
                     _check_interprocedural_taint_impl(methods, source_bytes, global_graph, filename)
                 )
             else:
-                result.findings.extend(checker_fn(methods, source_bytes))
+                try:
+                    result.findings.extend(checker_fn(methods, source_bytes, filename))
+                except TypeError:
+                    # Fallback for checkers that don't accept filename yet
+                    result.findings.extend(checker_fn(methods, source_bytes))
         except Exception as exc:
             _log.debug("Java checker %s failed on %r: %s", checker_label, filename, exc, exc_info=True)
 

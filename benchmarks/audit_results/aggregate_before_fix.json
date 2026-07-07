@@ -1,0 +1,24 @@
+{
+  "phase": "before_fixes",
+  "total_repos": 50,
+  "total_files": 5427,
+  "total_loc": 775578,
+  "total_findings": 502,
+  "repos_with_findings": 24,
+  "silent_repos": 26,
+  "by_cwe": {
+    "CWE-117": 247,
+    "CWE-89": 48,
+    "CWE-79": 61,
+    "CWE-330": 34,
+    "CWE-328": 43,
+    "CWE-22": 8,
+    "CWE-327": 28,
+    "CWE-798": 6,
+    "CWE-1188": 2,
+    "CWE-78": 16,
+    "CWE-601": 5,
+    "CWE-501": 2,
+    "CWE-614": 2
+  }
+}
