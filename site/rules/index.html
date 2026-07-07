@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/rules/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>Ansede Rule Database - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#ansede-rule-database" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              Ansede Rule Database
             
           </span>
         </div>
@@ -627,10 +627,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#severity-classification" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        Severity Classification
       
     </span>
   </a>
@@ -638,82 +638,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
+  <a href="#rule-index" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1) AST completeness
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2) Framework auth and routing semantics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3) Ownership/auth flow requirements
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Acceptance Gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Suggested first milestone
+        Rule Index
       
     </span>
   </a>
@@ -740,55 +668,205 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
-<ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
-</ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
-<ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
-</ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
-<ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
-</ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
-</ul>
+<h1 id="ansede-rule-database">Ansede Rule Database</h1>
+<p>Complete reference for every active rule shipped with ansede-static.</p>
+<h2 id="severity-classification">Severity Classification</h2>
+<table>
+<thead>
+<tr>
+<th>Severity</th>
+<th>Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CRITICAL</strong></td>
+<td>Direct unauthenticated Remote Code Execution paths or unconditional global database overrides</td>
+</tr>
+<tr>
+<td><strong>HIGH</strong></td>
+<td>Horizontal/Vertical Broken Object Level Authorization (BOLA) and structural access bypass gaps</td>
+</tr>
+<tr>
+<td><strong>MEDIUM</strong></td>
+<td>Cryptographic vulnerabilities, missing explicit SSL tracking flags, and missing cross-site configurations</td>
+</tr>
+<tr>
+<td><strong>LOW</strong></td>
+<td>General information leaks or unseeded local diagnostic log structures</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rule-index">Rule Index</h2>
+<table>
+<thead>
+<tr>
+<th>Rule ID</th>
+<th>CWE</th>
+<th>Severity</th>
+<th>Title</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PY-001</td>
+<td>CWE-617</td>
+<td>MEDIUM</td>
+<td>Silent exception swallowing</td>
+</tr>
+<tr>
+<td>PY-002</td>
+<td>CWE-89</td>
+<td>CRITICAL</td>
+<td>SQL injection via string formatting</td>
+</tr>
+<tr>
+<td>PY-003</td>
+<td>CWE-78</td>
+<td>CRITICAL</td>
+<td>OS command injection</td>
+</tr>
+<tr>
+<td>PY-004</td>
+<td>CWE-95</td>
+<td>CRITICAL</td>
+<td>Code injection via eval/exec</td>
+</tr>
+<tr>
+<td>PY-005</td>
+<td>CWE-502</td>
+<td>CRITICAL</td>
+<td>Unsafe deserialization</td>
+</tr>
+<tr>
+<td>PY-006</td>
+<td>CWE-22</td>
+<td>HIGH</td>
+<td>Path traversal</td>
+</tr>
+<tr>
+<td>PY-007</td>
+<td>CWE-798</td>
+<td>CRITICAL</td>
+<td>Hardcoded credentials</td>
+</tr>
+<tr>
+<td>PY-008</td>
+<td>CWE-327</td>
+<td>HIGH</td>
+<td>Weak cryptographic algorithm</td>
+</tr>
+<tr>
+<td>PY-009</td>
+<td>CWE-338</td>
+<td>MEDIUM</td>
+<td>Weak PRNG for security</td>
+</tr>
+<tr>
+<td>PY-010</td>
+<td>CWE-918</td>
+<td>HIGH</td>
+<td>SSRF via user-controlled URL</td>
+</tr>
+<tr>
+<td>PY-011</td>
+<td>CWE-1188</td>
+<td>HIGH</td>
+<td>Dangerous default configuration</td>
+</tr>
+<tr>
+<td>PY-012</td>
+<td>CWE-502</td>
+<td>CRITICAL</td>
+<td>Pickle deserialization</td>
+</tr>
+<tr>
+<td>PY-013</td>
+<td>CWE-327</td>
+<td>HIGH</td>
+<td>Legacy hash algorithm</td>
+</tr>
+<tr>
+<td>PY-014</td>
+<td>CWE-117</td>
+<td>MEDIUM</td>
+<td>Log injection</td>
+</tr>
+<tr>
+<td>PY-015</td>
+<td>CWE-639</td>
+<td>HIGH</td>
+<td>IDOR via unowned resource access</td>
+</tr>
+<tr>
+<td>PY-016</td>
+<td>CWE-89</td>
+<td>CRITICAL</td>
+<td>SQL injection in route handler</td>
+</tr>
+<tr>
+<td>PY-017</td>
+<td>CWE-862</td>
+<td>HIGH</td>
+<td>Missing authentication on route</td>
+</tr>
+<tr>
+<td>PY-018</td>
+<td>CWE-285</td>
+<td>HIGH</td>
+<td>Missing ownership verification</td>
+</tr>
+<tr>
+<td>PY-019</td>
+<td>CWE-639</td>
+<td>HIGH</td>
+<td>Resource mutation without ownership check</td>
+</tr>
+<tr>
+<td>PY-020</td>
+<td>CWE-285</td>
+<td>HIGH</td>
+<td>Broken access control</td>
+</tr>
+<tr>
+<td>PY-021</td>
+<td>CWE-287</td>
+<td>HIGH</td>
+<td>Auth bypass via presence-only check</td>
+</tr>
+<tr>
+<td>PY-022</td>
+<td>CWE-918</td>
+<td>HIGH</td>
+<td>SSRF heuristic</td>
+</tr>
+<tr>
+<td>PY-023</td>
+<td>CWE-601</td>
+<td>HIGH</td>
+<td>Open redirect</td>
+</tr>
+<tr>
+<td>PY-024</td>
+<td>CWE-532</td>
+<td>MEDIUM</td>
+<td>Sensitive data in logs</td>
+</tr>
+<tr>
+<td>PY-025</td>
+<td>CWE-915</td>
+<td>HIGH</td>
+<td>Mass assignment</td>
+</tr>
+<tr>
+<td>PY-026</td>
+<td>CWE-345</td>
+<td>CRITICAL</td>
+<td>Security decision without verification</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="../writing-rules/">writing-rules.md</a> for guidance on authoring custom rules.</p>
 
 
 

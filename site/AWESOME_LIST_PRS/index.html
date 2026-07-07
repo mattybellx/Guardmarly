@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/AWESOME_LIST_PRS/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>PR Content for Awesome List Submissions - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#pr-content-for-awesome-list-submissions" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              PR Content for Awesome List Submissions
             
           </span>
         </div>
@@ -627,10 +627,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#awsome-static-analysis-13k-stars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        awsome-static-analysis (13k stars)
       
     </span>
   </a>
@@ -638,60 +638,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
+  <a href="#awsome-security-12k-stars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1) AST completeness
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2) Framework auth and routing semantics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3) Ownership/auth flow requirements
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
+        awsome-security (12k stars)
       
     </span>
   </a>
@@ -699,10 +649,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
+  <a href="#awsome-devsecops-5k-stars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Acceptance Gates
+        awsome-devsecops (5k stars)
       
     </span>
   </a>
@@ -710,10 +660,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
+  <a href="#awsome-python-security-2k-stars" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Suggested first milestone
+        awsome-python-security (2k stars)
       
     </span>
   </a>
@@ -740,55 +690,34 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
-<ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
-</ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
-<ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
-</ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
-<ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
-</ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
-</ul>
+<h1 id="pr-content-for-awesome-list-submissions">PR Content for Awesome List Submissions</h1>
+<h2 id="awsome-static-analysis-13k-stars">awsome-static-analysis (13k stars)</h2>
+<p>Repo: https://github.com/analysis-tools-dev/static-analysis
+File: <code>data/tools/ansede-static.yml</code></p>
+<pre><code class="language-yaml">- name: ansede-static
+  description: Offline SAST engine with 96.3% CVE recall and IFDS taint analysis. Detects IDOR, auth bypass, ownership flaws natively.
+  languages: [python, javascript, go, java, csharp]
+  categories: [security, linter]
+  license: MIT
+  source: https://github.com/mattybellx/Ansede
+  pip: ansede-static
+  homepage: https://ansede.onrender.com
+</code></pre>
+<h2 id="awsome-security-12k-stars">awsome-security (12k stars)</h2>
+<p>Repo: https://github.com/sbilly/awesome-security
+File: <code>README.md</code> — add under "Static Analysis" section</p>
+<pre><code class="language-markdown">- [ansede-static](https://github.com/mattybellx/Ansede) — Offline SAST with 96.3% CVE recall. Detects IDOR, auth bypass, and ownership flaws that Semgrep and Bandit miss. Python/JS/Go/Java/C#.
+</code></pre>
+<h2 id="awsome-devsecops-5k-stars">awsome-devsecops (5k stars)</h2>
+<p>Repo: https://github.com/devsecops/awesome-devsecops
+File: <code>README.md</code> — add under "Static Analysis" section</p>
+<pre><code class="language-markdown">- [ansede-static](https://github.com/mattybellx/Ansede) — Offline-first SAST with 96.3% CVE recall and 7.5x more findings than CodeQL. IFDS taint analysis. SARIF output. 5 languages.
+</code></pre>
+<h2 id="awsome-python-security-2k-stars">awsome-python-security (2k stars)</h2>
+<p>Repo: https://github.com/guibranco/awesome-python-security
+File: <code>README.md</code> — add under "Static Code Analysis"</p>
+<pre><code class="language-markdown">- [ansede-static](https://github.com/mattybellx/Ansede) — Offline SAST with 96.3% CVE recall. Detects IDOR (CWE-639), SQLi, path traversal, and 35+ CWE types. `pip install ansede-static`.
+</code></pre>
 
 
 

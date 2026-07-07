@@ -1,0 +1,929 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Production-grade offline SAST for access-control and taint vulnerabilities">
+      
+      
+      
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/blog/social-posts/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Where to Post — and How Not to Get Removed - Ansede Static</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#where-to-post-and-how-not-to-get-removed" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ansede Static" class="md-header__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ansede Static
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Where to Post — and How Not to Get Removed
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ansede Static" class="md-nav__button md-logo" aria-label="Ansede Static" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Ansede Static
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mattybellx/Ansede" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    mattybellx/Ansede
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ci-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CI Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ide-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rule-database/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rule Database
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAQ / Troubleshooting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../interprocedural-taint-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interprocedural Taint Analysis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ide-plugin-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IDE Plugin Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../BENCHMARKS/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmarks
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../writing-rules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Rules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ROADMAP.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-hacker-news-show-hn-best-place" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Hacker News — "Show HN" ⭐ BEST PLACE
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-reddit-rpython" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Reddit r/Python
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-reddit-rnetsec" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Reddit r/netsec
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-devto-safest-bet-no-ban-risk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dev.to — ⭐ SAFEST BET (no ban risk)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-lobsters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Lobsters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-twitterx-thread-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Twitter/X — Thread Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-linkedin" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. LinkedIn
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="where-to-post-and-how-not-to-get-removed">Where to Post — and How Not to Get Removed</h1>
+<h2 id="1-hacker-news-show-hn-best-place">1. Hacker News — "Show HN" ⭐ BEST PLACE</h2>
+<p><strong>Where:</strong> https://news.ycombinator.com/submit
+<strong>Rules:</strong> Must be something you built that people can actually try. No marketing speak. No "revolutionary" claims. Be genuine — HN sniffs out hype instantly.
+<strong>How not to get removed:</strong> Don't say "7.5x better than CodeQL" in the title. Just describe what it is plainly. Let the numbers speak for themselves in the body.</p>
+<hr />
+<p><strong>Title:</strong> Show HN: Ansede — an offline SAST scanner I built to catch IDOR and auth bypass</p>
+<p><strong>URL:</strong> https://github.com/mattybellx/Ansede</p>
+<p><strong>Text:</strong></p>
+<p>I've been working on this on and off for about a year. It started because I was reviewing a Flask app and Bandit gave it a clean bill of health — but it had an IDOR vulnerability where any logged-in user could access anyone else's invoices. Bandit saw the @login_required decorator and moved on. Semgrep OSS did the same thing.</p>
+<p>So I started writing checks for the stuff they miss — not just "is there an auth decorator" but "does this route verify that the current user owns the resource they're accessing." That turned into a whole scanner.</p>
+<p>What it does:
+- Finds IDOR (CWE-639), missing auth (CWE-862), ownership bypass (CWE-285) — the access control stuff
+- Also the standard injection/XSS/path traversal stuff
+- Works on Python, JavaScript/TypeScript, Go, Java, C#, Ruby, PHP
+- Fully offline, no dependencies beyond Python itself, no telemetry</p>
+<p>Numbers (take with salt, I ran these myself):
+- 100% recall on a corpus of 164 CVEs I put together (Semgrep OSS got ~23%, CodeQL ~34% on the same set)
+- Scanned 33 real GitHub repos — found 1,255 things vs CodeQL's 167 (but I'm the first to admit some of those are probably noise)</p>
+<p>Where I think it's weak and would love help:
+- The corpus I benchmarked against is only 164 CVEs. I need more real-world test cases
+- Java support is structural but doesn't have the deep Spring Security modeling yet
+- I'm sure there are false positives I haven't caught — I've been staring at this code too long to see them
+- The Go and Ruby analyzers are pretty basic</p>
+<p>If anyone wants to try it on their own code and tell me what it gets wrong, I'd genuinely appreciate it. Or if you want to look at the benchmarking methodology and point out flaws, even better.</p>
+<p>pip install ansede-static</p>
+<p>Repo has the full methodology for the CVE recall test and the 3-tool comparison. The comparison scripts are in benchmarks/ if you want to reproduce or critique them.</p>
+<hr />
+<h2 id="2-reddit-rpython">2. Reddit r/Python</h2>
+<p><strong>Where:</strong> https://www.reddit.com/r/Python/submit
+<strong>Rules:</strong> Must be Python-related. Self-promo is okay if you're upfront about it and engage in comments. Don't just drop a link and leave.
+<strong>How not to get removed:</strong> Use the "Discussion" or "Showcase" flair. Write a real post, not just a link. Python community appreciates "I built a tool, here's what I learned."</p>
+<hr />
+<p><strong>Title:</strong> I built a Python SAST scanner and would love feedback — especially on what it gets wrong</p>
+<p><strong>Flair:</strong> Discussion</p>
+<p><strong>Text:</strong></p>
+<p>Been working on a static analysis tool for about a year. It's written in Python (with a Rust core for the JS/TS parser), and I'm looking for people to try it on their code and tell me where it falls down.</p>
+<p>The short version: it's like Bandit or Semgrep but focused on access control vulnerabilities — IDOR, missing authorization, ownership bypass. The kind of stuff where just checking for a decorator isn't enough.</p>
+<p>You can install it with pip:</p>
+<pre><code>pip install ansede-static
+</code></pre>
+<p>Then just point it at your code:</p>
+<pre><code>ansede-static your_project/ --verbose
+</code></pre>
+<p>It supports Python, JS/TS, Go, Java, C#, Ruby, and PHP, but Python and JS are the most mature.</p>
+<p>What I'm looking for:
+- False positives on your real code. I've tested it on 33 repos but that's nothing
+- Languages or frameworks where it's useless — be honest, I need to know where not to spend time
+- The benchmarking methodology: does it hold up? The comparison scripts are all in the repo</p>
+<p>If you try it and it's terrible on your codebase, please tell me. That's more useful than "nice project" comments.</p>
+<p>GitHub: https://github.com/mattybellx/Ansede</p>
+<hr />
+<h2 id="3-reddit-rnetsec">3. Reddit r/netsec</h2>
+<p><strong>Where:</strong> https://www.reddit.com/r/netsec/submit
+<strong>Rules:</strong> Technical security content only. No vendor marketing. Self-posts are preferred over direct links. They're picky — low-effort posts get removed.
+<strong>How not to get removed:</strong> Write a technical self-post explaining the methodology. The comparison data is interesting to this crowd. Don't just link the repo.</p>
+<hr />
+<p><strong>Title:</strong> I benchmarked 3 free SAST tools against 164 CVEs — would appreciate a sanity check on my methodology</p>
+<p><strong>Text:</strong></p>
+<p>I've been building a SAST scanner and wanted to know if it actually works, so I put together a corpus of 164 CVEs across Python, JavaScript, Go, Java, and C# and ran my tool against Semgrep OSS and CodeQL on the same set.</p>
+<p>Results (my tool / Semgrep OSS / CodeQL):
+- Python: 100% / 18.8% / 31.3%
+- JavaScript: 100% / 25.0% / 37.5%
+- Go: 100% / 22.2% / 33.3%
+- Java: 100% / 20.0% / 30.0%
+- C#: 100% / 30.0% / 35.0%</p>
+<p>Before anyone asks: yes, I built the tool being tested. Yes, that's a conflict of interest. The corpus, the comparison scripts, and the full methodology are all in the repo — I'm posting this specifically because I want someone who isn't me to look at the methodology and tell me if it's fair.</p>
+<p>Things I'm worried about:
+- Corpus selection bias: I may have unconsciously picked CVEs my tool handles well
+- The CodeQL setup might not be optimal — I used the default query packs
+- Sample size: 164 CVEs isn't huge</p>
+<p>If anyone wants to audit the methodology or run the comparison themselves, everything is in benchmarks/. The CVE corpus is in benchmarks/fixtures/. I'd genuinely appreciate criticism.</p>
+<p>The tool itself is at https://github.com/mattybellx/Ansede if you want context, but the benchmarking methodology is what I'm hoping for feedback on.</p>
+<hr />
+<h2 id="4-devto-safest-bet-no-ban-risk">4. Dev.to — ⭐ SAFEST BET (no ban risk)</h2>
+<p><strong>Where:</strong> https://dev.to/new
+<strong>Why here:</strong> Dev.to explicitly allows and encourages project posts under the <code>#showdev</code> tag. They have a "this is my project" flair. No ban risk as long as you actually write a post, not just a link. The audience is 100% developers.
+<strong>Tags to use:</strong> #security #python #showdev #javascript #todayilearned</p>
+<hr />
+<p><strong>Title:</strong> I Built an Offline SAST Scanner — Try It on Your Code and Tell Me Where It Fails</p>
+<p><strong>Cover image hint:</strong> A terminal screenshot of ansede finding a vulnerability in under a second (use the demo script output)</p>
+<p><strong>Text:</strong></p>
+<p>I've been working on a side project for about a year and just published v5.2.0. It's a static analysis security scanner called Ansede, and I'm looking for people to break it.</p>
+<p><strong>What problem it solves</strong></p>
+<p>Most free SAST tools (Bandit, Semgrep OSS) work by pattern-matching. They look for <code>cursor.execute("SELECT * FROM users WHERE id = " + user_input)</code> and flag it. That catches SQL injection, yes. But it completely misses access control:</p>
+<pre><code class="language-python">@app.route(&quot;/invoice/&lt;invoice_id&gt;&quot;)
+@login_required          # ← Bandit sees this and says &quot;safe&quot;
+def get_invoice(invoice_id):
+    return db.execute(
+        &quot;SELECT * FROM invoices WHERE id = ?&quot;, (invoice_id,)
+    )
+    # Any user can see anyone's invoice. This is IDOR (CWE-639).
+    # Bandit: silent. Semgrep OSS: silent. Ansede: CRITICAL.
+</code></pre>
+<p>That gap — the decorator is there, but there's no ownership check — is what got me started building this.</p>
+<p><strong>What it catches</strong></p>
+<ul>
+<li>IDOR / broken access control (CWE-639, CWE-862, CWE-285)</li>
+<li>SQL injection, XSS, command injection, path traversal (the usual stuff)</li>
+<li>Hardcoded credentials, dangerous deserialization, ReDoS</li>
+<li>35+ CWE types across 7 languages</li>
+</ul>
+<p><strong>What I actually want from you</strong></p>
+<p>I'm not here to pitch a product. This is a free open-source tool and it'll stay that way. What I want is for people to run it on their own code and tell me:
+- Where it gives false positives (it definitely will on some codebases)
+- Which frameworks it's useless on
+- What blind spots I haven't thought of</p>
+<p>Install:</p>
+<pre><code class="language-bash">pip install ansede-static
+ansede-static your_project/ --verbose
+</code></pre>
+<p><strong>The numbers (take with salt)</strong></p>
+<p>I put together a corpus of 164 CVEs and ran my tool, Semgrep OSS, and CodeQL against the same set. 100% vs ~23% vs ~34% recall respectively. But I built the tool and I built the corpus, so there's absolutely selection bias. The corpus and comparison scripts are in the repo — I'd love someone to audit them.</p>
+<p>Repo: https://github.com/mattybellx/Ansede</p>
+<hr />
+<h2 id="5-lobsters">5. Lobsters</h2>
+<p><strong>Where:</strong> https://lobste.rs/ (invite needed — ask in the HN thread or DM someone on Twitter who's active there)
+<strong>Why here:</strong> Like a smaller, friendlier HN. Very technical. They love security and programming language tools. No ban risk if you're genuine.
+<strong>Tags:</strong> security, python, rust</p>
+<hr />
+<p><strong>Title:</strong> Ansede: an offline SAST scanner focused on access-control vulnerabilities</p>
+<p><strong>URL:</strong> https://github.com/mattybellx/Ansede</p>
+<p><strong>Text:</strong></p>
+<p>Built a SAST scanner that targets the vulnerability classes Bandit/Semgrep OSS don't ship rules for — specifically IDOR, missing authorization, and ownership bypass. The idea is that pattern-matching (is there an auth decorator? yes → safe) doesn't work for access control, which requires understanding the relationship between routes, auth guards, and database queries.</p>
+<p>pip install ansede-static. Zero deps, fully offline. Works on Python, JS/TS, Go, Java, C#, Ruby, PHP.</p>
+<p>I'd appreciate people trying it on their own code and reporting false positives. The CVE benchmark corpus and comparison scripts are in the repo for anyone who wants to audit the methodology.</p>
+<hr />
+<h2 id="6-twitterx-thread-format">6. Twitter/X — Thread Format</h2>
+<p><strong>Why here:</strong> Quickest reach. Tag a few security people with genuine questions and they'll often try it.</p>
+<hr />
+<p>Draft a thread (5 tweets):</p>
+<p>1/ I built a SAST scanner focused on access-control bugs — IDOR, missing auth, ownership bypass. The stuff that every free tool ignores because checking for a decorator isn't enough. pip install ansede-static. Looking for people to try it and tell me what it gets wrong.</p>
+<p>2/ Bandit sees @login_required and says "safe." But that decorator doesn't check if the current user OWNS invoice_id. That's the gap. My tool traces route parameters into DB queries to verify ownership scoping.</p>
+<p>3/ I benchmarked against 164 CVEs across 5 languages. My tool: 100% recall. Semgrep OSS: 23%. CodeQL: 34%. But I built both the tool and the corpus — selection bias is real. The comparison scripts are in the repo. Please audit them.</p>
+<p>4/ It's fully offline — no API keys, no cloud, no telemetry. Just pip install and run. Python, JS/TS, Go, Java, C#, Ruby, PHP. The Python and JS analyzers are mature. The others are... a work in progress.</p>
+<p>5/ If you try it on your code and it's terrible, tell me. That's more useful than "nice project." github.com/mattybellx/Ansede</p>
+<hr />
+<h2 id="7-linkedin">7. LinkedIn</h2>
+<p><strong>Why here:</strong> Professional audience, less likely to ban. Posts with a personal story get good reach.
+<strong>Format:</strong> Write as a personal update, not a product announcement.</p>
+<hr />
+<p><strong>Text:</strong></p>
+<p>Side project update: after about a year of evenings and weekends, I just published v5.2.0 of my offline SAST scanner.</p>
+<p>It started because I found an IDOR vulnerability in a code review that three different security tools had missed. They all saw the @login_required decorator and stopped checking.</p>
+<p>If anyone in my network does AppSec or code review — I'd love for you to try it on a real codebase and tell me honestly where it fails. That's more useful than praise.</p>
+<p>pip install ansede-static
+github.com/mattybellx/Ansede</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["search.highlight", "search.share", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

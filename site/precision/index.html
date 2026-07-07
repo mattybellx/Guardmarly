@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/precision/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>Precision - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#precision" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              Precision
             
           </span>
         </div>
@@ -627,33 +627,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#v550-14-repo-web-app-precision-audit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        v5.5.0 — 14-Repo Web-App Precision Audit
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
+    <nav class="md-nav" aria-label="v5.5.0 — 14-Repo Web-App Precision Audit">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
+  <a href="#per-language-precision" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1) AST completeness
+        Per-Language Precision
       
     </span>
   </a>
@@ -661,10 +650,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
+  <a href="#clean-repos-0-findings-921-43" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2) Framework auth and routing semantics
+        Clean Repos (0 findings): 9/21 (43%)
       
     </span>
   </a>
@@ -672,10 +661,54 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
+  <a href="#cve-recall-963-158164" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3) Ownership/auth flow requirements
+        CVE Recall: 96.3% (158/164)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-tool-comparison-python-javascript-110-cves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3-Tool Comparison (Python + JavaScript, 110 CVEs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fp-reduction-5-clean-repos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FP Reduction — 5 Clean Repos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-drives-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Drives Precision
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#known-limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Limitations
       
     </span>
   </a>
@@ -684,39 +717,6 @@
         
       </ul>
     </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Acceptance Gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Suggested first milestone
-      
-    </span>
-  </a>
   
 </li>
       
@@ -740,54 +740,196 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
-<ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
-</ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
+<h1 id="precision">Precision</h1>
+<h2 id="v550-14-repo-web-app-precision-audit">v5.5.0 — 14-Repo Web-App Precision Audit</h2>
+<h3 id="per-language-precision">Per-Language Precision</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>Repos</th>
+<th>Findings</th>
+<th>FP/1kLOC</th>
+<th>Rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PHP</strong></td>
+<td>3</td>
+<td>0</td>
+<td>0.0</td>
+<td>⭐ Perfect</td>
+</tr>
+<tr>
+<td><strong>C#</strong></td>
+<td>3</td>
+<td>2</td>
+<td>0.0</td>
+<td>⭐ Perfect</td>
+</tr>
+<tr>
+<td><strong>Ruby</strong></td>
+<td>3</td>
+<td>4</td>
+<td>0.1</td>
+<td>⭐ Excellent</td>
+</tr>
+<tr>
+<td><strong>Java</strong></td>
+<td>2</td>
+<td>4</td>
+<td>0.1</td>
+<td>⭐ Excellent</td>
+</tr>
+<tr>
+<td><strong>Go</strong></td>
+<td>3</td>
+<td>3</td>
+<td>0.2</td>
+<td>⭐ Excellent</td>
+</tr>
+<tr>
+<td><strong>JavaScript</strong></td>
+<td>4</td>
+<td>66</td>
+<td>0.5</td>
+<td>✅ Good</td>
+</tr>
+<tr>
+<td><strong>Python</strong></td>
+<td>3</td>
+<td>50</td>
+<td>1.6</td>
+<td>✅ Fair</td>
+</tr>
+</tbody>
+</table>
+<h3 id="clean-repos-0-findings-921-43">Clean Repos (0 findings): 9/21 (43%)</h3>
+<p><code>flask</code>, <code>express</code>, <code>petclinic</code>, <code>automapper</code>, <code>mediatr</code>, <code>carbon</code>, <code>monolog</code>, <code>rake</code>, <code>slim</code></p>
+<h3 id="cve-recall-963-158164">CVE Recall: 96.3% (158/164)</h3>
+<table>
+<thead>
+<tr>
+<th>Language</th>
+<th>CVEs</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>68</td>
+<td>98.5%</td>
+</tr>
+<tr>
+<td>JavaScript</td>
+<td>42</td>
+<td>97.6%</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>20</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>C#</td>
+<td>19</td>
+<td>94.7%</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>15</td>
+<td>80.0%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-tool-comparison-python-javascript-110-cves">3-Tool Comparison (Python + JavaScript, 110 CVEs)</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Recall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ansede Static</strong></td>
+<td><strong>98.2%</strong></td>
+</tr>
+<tr>
+<td>Semgrep</td>
+<td>23.2%</td>
+</tr>
+<tr>
+<td>CodeQL</td>
+<td>33.6%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fp-reduction-5-clean-repos">FP Reduction — 5 Clean Repos</h3>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Before</th>
+<th>After</th>
+<th>Reduction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flask</td>
+<td>428</td>
+<td>0</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Express</td>
+<td>66</td>
+<td>0</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>PetClinic</td>
+<td>38</td>
+<td>0</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Gin</td>
+<td>1</td>
+<td>1</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>CleanArchitecture</td>
+<td>2</td>
+<td>2</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>535</strong></td>
+<td><strong>3</strong></td>
+<td><strong>99.4%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-drives-precision">What Drives Precision</h3>
 <ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
+<li><strong>Callee set calibration</strong> — Removed bare method names (<code>exec</code>, <code>query</code>, <code>execute</code>, <code>raw</code>) that collided with framework APIs (Mongoose, ORM query builders)</li>
+<li><strong>Ambiguous callee guards</strong> — <code>resolve</code>, <code>join</code>, <code>open</code> require filesystem context verification</li>
+<li><strong>Context-aware triage</strong> — Test, mock, example, doc, and framework-internal files are filtered with known-noise CWEs dropped entirely</li>
+<li><strong>Java tree-sitter AST</strong> — Replaced regex heuristics with accurate parsing, eliminating annotation/comment false matches</li>
+<li><strong>Defensive pattern recognition</strong> — <code>__proto__: null</code> and <code>=== '__proto__'</code> recognized as prototype pollution defenses, not attacks</li>
+<li><strong>HTTP receiver check</strong> — Java <code>write()</code> XSS only flagged when receiver is HTTP response, not JSON writer</li>
 </ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
+<h3 id="known-limitations">Known Limitations</h3>
 <ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
-</ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
+<li><strong>Python requests library</strong>: 21 findings are code quality (CWE-1120 complexity) or design patterns (CWE-918 SSRF in HTTP client itself)</li>
+<li><strong>JavaScript axios</strong>: 13 findings in production code (CWE-1321, CWE-862) — partly defensive patterns, partly legitimate concerns</li>
+<li><strong>Tree-sitter Java comment bug</strong>: 4 remaining CWE-79 findings in gson from <code>write</code> in Javadoc being parsed as code</li>
 </ul>
 
 

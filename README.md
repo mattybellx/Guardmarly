@@ -135,8 +135,9 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 
 ---
 
-## GitHub Action
+## GitHub Actions
 
+**Basic scan on push:**
 ```yaml
 - uses: mattybellx/Ansede@v5.6.0
   with:
@@ -144,6 +145,14 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
     fail-on: high
     upload-sarif: true
 ```
+
+**Auto-scan + open PR with findings (try it on any repo):**
+```yaml
+# Copy ansede-scan-pr.yml to .github/workflows/
+# Then trigger from Actions tab → "Ansede Security Scan + PR"
+# Scans your code and opens a PR with the results
+```
+→ [Copy the workflow template](ansede-scan-pr.yml)
 
 ---
 

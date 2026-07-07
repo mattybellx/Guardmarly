@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/performance/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>Performance - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#performance" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              Performance
             
           </span>
         </div>
@@ -627,10 +627,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#v550-performance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        v5.5.0 Performance
       
     </span>
   </a>
@@ -638,60 +638,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
+  <a href="#rust-pattern-engine" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1) AST completeness
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2) Framework auth and routing semantics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3) Ownership/auth flow requirements
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
+        Rust Pattern Engine
       
     </span>
   </a>
@@ -699,10 +649,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
+  <a href="#21-repo-speed-loop" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Acceptance Gates
+        21-Repo Speed Loop
       
     </span>
   </a>
@@ -710,10 +660,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
+  <a href="#profiling-data" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Suggested first milestone
+        Profiling Data
       
     </span>
   </a>
@@ -740,55 +690,282 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
-<ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
-</ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
-<ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
-</ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
-<ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
-</ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
-</ul>
+<h1 id="performance">Performance</h1>
+<h2 id="v550-performance">v5.5.0 Performance</h2>
+<table>
+<thead>
+<tr>
+<th>Optimization</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AST walk cache (49 rules share node lists)</td>
+<td>+11%</td>
+</tr>
+<tr>
+<td><code>_rule_24</code> fix (1 walk instead of 20x)</td>
+<td>+38%</td>
+</tr>
+<tr>
+<td>Lazy symbolic guards</td>
+<td>+17%</td>
+</tr>
+<tr>
+<td>Lazy datascience rules</td>
+<td>+10%</td>
+</tr>
+<tr>
+<td><strong>Total Python improvement</strong></td>
+<td><strong>+96%</strong> (2,600→5,100 LOC/s)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rust-pattern-engine">Rust Pattern Engine</h2>
+<p>JavaScript pattern rules execute 3.6x faster on large files via the native Rust regex engine (<code>ansede_rust_core</code>). The engine gracefully falls back to Python for complex patterns (look-around regexes, context_confirm filters).</p>
+<table>
+<thead>
+<tr>
+<th>File Size</th>
+<th>Python</th>
+<th>Rust+Python</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>283 lines</td>
+<td>14ms</td>
+<td>22ms</td>
+<td>0.6x (overhead)</td>
+</tr>
+<tr>
+<td>60k lines</td>
+<td>1,972ms</td>
+<td><strong>547ms</strong></td>
+<td><strong>3.6x</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-repo-speed-loop">21-Repo Speed Loop</h2>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Lang</th>
+<th>Files</th>
+<th>Lines</th>
+<th>Time</th>
+<th>LOC/s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p_flask</td>
+<td>Python</td>
+<td>83</td>
+<td>18,337</td>
+<td>24s</td>
+<td>764</td>
+</tr>
+<tr>
+<td>s_microblog</td>
+<td>Python</td>
+<td>34</td>
+<td>1,843</td>
+<td>4s</td>
+<td>461</td>
+</tr>
+<tr>
+<td>s3_requests</td>
+<td>Python</td>
+<td>37</td>
+<td>12,032</td>
+<td>16s</td>
+<td>752</td>
+</tr>
+<tr>
+<td>p_express</td>
+<td>JS</td>
+<td>139</td>
+<td>21,424</td>
+<td>12s</td>
+<td>1,785</td>
+</tr>
+<tr>
+<td>s_keystone</td>
+<td>JS</td>
+<td>739</td>
+<td>62,403</td>
+<td>43s</td>
+<td>1,451</td>
+</tr>
+<tr>
+<td>s3_lodash</td>
+<td>JS</td>
+<td>25</td>
+<td>6,479</td>
+<td>25s</td>
+<td>259</td>
+</tr>
+<tr>
+<td>s3_axios</td>
+<td>JS</td>
+<td>227</td>
+<td>35,900</td>
+<td>19s</td>
+<td>1,889</td>
+</tr>
+<tr>
+<td>p_petclinic</td>
+<td>Java</td>
+<td>47</td>
+<td>3,796</td>
+<td>1s</td>
+<td>3,796</td>
+</tr>
+<tr>
+<td>s3_gson</td>
+<td>Java</td>
+<td>262</td>
+<td>55,620</td>
+<td>7s</td>
+<td>7,946</td>
+</tr>
+<tr>
+<td>p_cleanarch</td>
+<td>C#</td>
+<td>364</td>
+<td>11,833</td>
+<td>4s</td>
+<td>2,958</td>
+</tr>
+<tr>
+<td>s3_automapper</td>
+<td>C#</td>
+<td>512</td>
+<td>65,052</td>
+<td>6s</td>
+<td>10,842</td>
+</tr>
+<tr>
+<td>s3_mediatr</td>
+<td>C#</td>
+<td>152</td>
+<td>11,389</td>
+<td>2s</td>
+<td>5,695</td>
+</tr>
+<tr>
+<td>p_gin</td>
+<td>Go</td>
+<td>99</td>
+<td>8,196</td>
+<td>2s</td>
+<td>4,098</td>
+</tr>
+<tr>
+<td>s3_cobra</td>
+<td>Go</td>
+<td>36</td>
+<td>6,955</td>
+<td>1s</td>
+<td>6,955</td>
+</tr>
+<tr>
+<td>s3_viper</td>
+<td>Go</td>
+<td>33</td>
+<td>3,513</td>
+<td>1s</td>
+<td>3,513</td>
+</tr>
+<tr>
+<td>s3_sinatra</td>
+<td>Ruby</td>
+<td>150</td>
+<td>24,038</td>
+<td>3s</td>
+<td>8,013</td>
+</tr>
+<tr>
+<td>s3_rake</td>
+<td>Ruby</td>
+<td>96</td>
+<td>13,156</td>
+<td>1s</td>
+<td>13,156</td>
+</tr>
+<tr>
+<td>s3_faker</td>
+<td>Ruby</td>
+<td>570</td>
+<td>39,019</td>
+<td>6s</td>
+<td>6,503</td>
+</tr>
+<tr>
+<td>s3_slim</td>
+<td>PHP</td>
+<td>124</td>
+<td>16,300</td>
+<td>2s</td>
+<td>8,150</td>
+</tr>
+<tr>
+<td>s3_monolog</td>
+<td>PHP</td>
+<td>217</td>
+<td>28,278</td>
+<td>3s</td>
+<td>9,426</td>
+</tr>
+<tr>
+<td>s3_carbon</td>
+<td>PHP</td>
+<td>2004</td>
+<td>331,925</td>
+<td>27s</td>
+<td>12,293</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total: 5,950 files, 777k lines scanned in ~208 seconds (~3,700 LOC/s average)</strong></p>
+<h2 id="profiling-data">Profiling Data</h2>
+<p>Pre-optimization profile (models.py, 1,184 lines):</p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Time</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ast.walk()</code></td>
+<td>1.2s</td>
+<td>60%</td>
+</tr>
+<tr>
+<td><code>_rule_24</code> (JWT)</td>
+<td>0.73s</td>
+<td>36%</td>
+</tr>
+<tr>
+<td><code>symbolic_guards</code></td>
+<td>0.33s</td>
+<td>16%</td>
+</tr>
+<tr>
+<td><code>_rule_03</code></td>
+<td>0.16s</td>
+<td>8%</td>
+</tr>
+</tbody>
+</table>
+<p>Post-optimization: <code>ast.walk()</code> reduced 45%, <code>_rule_24</code> eliminated as bottleneck, symbolic guards skipped for simple files.</p>
 
 
 

@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/IMPLEMENTATION_START/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>IMPLEMENTATION START - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#immediate-next-steps-pick-one-to-start" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              IMPLEMENTATION START
             
           </span>
         </div>
@@ -617,8 +617,6 @@
   
   
   
-    
-  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -627,10 +625,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#immediate-next-steps-pick-one-to-start" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        Immediate Next Steps (Pick one to start)
       
     </span>
   </a>
@@ -638,60 +636,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
+  <a href="#current-state" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1) AST completeness
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2) Framework auth and routing semantics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3) Ownership/auth flow requirements
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
+        Current state
       
     </span>
   </a>
@@ -699,21 +647,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
+  <a href="#code-locations-for-new-rules" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Acceptance Gates
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Suggested first milestone
+        Code locations for new rules
       
     </span>
   </a>
@@ -740,55 +677,64 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
-<ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
-</ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
+  <h1>IMPLEMENTATION START</h1>
+
+<h2 id="immediate-next-steps-pick-one-to-start">Immediate Next Steps (Pick one to start)</h2>
 <ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
+<li><strong>Add Python CWE-453 rule</strong> (<code>def fn(x=[])</code>) — simplest gap to fix, pure AST check</li>
+<li><strong>Add Python CWE-617 rule</strong> (<code>assert used for security</code>) — also simple</li>
+<li><strong>Add Go CWE-798 rule</strong> (hardcoded secrets regex) — pattern already proven in Python</li>
+<li><strong>Add Go CWE-79 rule</strong> (XSS in templates) — regex-based, medium effort</li>
+<li><strong>Set up CodeQL pack resolution</strong> — <code>codeql pack install</code> + query download</li>
 </ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
+<h2 id="current-state">Current state</h2>
 <ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
+<li><code>docs/FULL_ROADMAP.md</code> — created with all 9 phases, 66 items</li>
+<li>Phase 1 item count: 16 CVE gaps identified, 0 fixed</li>
+<li>Phase 3 (CodeQL): CLI downloaded, queries downloaded but pack structure needs resolution</li>
 </ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
-</ul>
+<h2 id="code-locations-for-new-rules">Code locations for new rules</h2>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>File</th>
+<th>Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python rules</td>
+<td><code>src/ansede_static/python_analyzer.py</code></td>
+<td>Add <code>_rule_XX</code> function + register in dispatch list</td>
+</tr>
+<tr>
+<td>Python contracts</td>
+<td><code>src/ansede_static/rules.py</code></td>
+<td>Add to <code>_PY_RULE_CONTRACTS</code> dict + <code>_KNOWN_RULE_IDS</code></td>
+</tr>
+<tr>
+<td>Go rules</td>
+<td><code>src/ansede_static/go_engine/go_analyzer.py</code></td>
+<td>Add sinks to <code>_GO_DANGEROUS_SINKS</code> or new heuristic method</td>
+</tr>
+<tr>
+<td>Go contracts</td>
+<td><code>src/ansede_static/rules.py</code></td>
+<td>Add to <code>_GO_RULE_CONTRACTS</code></td>
+</tr>
+<tr>
+<td>C# rules</td>
+<td><code>src/ansede_static/csharp_analyzer.py</code></td>
+<td>Add heuristic check method</td>
+</tr>
+<tr>
+<td>C# contracts</td>
+<td><code>src/ansede_static/rules.py</code></td>
+<td>Add to <code>_CSHARP_RULE_CONTRACTS</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

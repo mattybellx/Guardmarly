@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://github.com/mattybellx/Ansede/native-language-parser-roadmap/">
+        <link rel="canonical" href="https://github.com/mattybellx/Ansede/OUTREACH/">
       
       
       
@@ -23,7 +23,7 @@
     
     
       
-        <title>Native Parser Roadmap (Track 3) - Ansede Static</title>
+        <title>Outreach Templates — Anonymous Posting Guide - Ansede Static</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#native-parser-roadmap-track-3" class="md-skip">
+        <a href="#outreach-templates-anonymous-posting-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Native Parser Roadmap (Track 3)
+              Outreach Templates — Anonymous Posting Guide
             
           </span>
         </div>
@@ -627,10 +627,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#objectives" class="md-nav__link">
+  <a href="#hacker-news-show-hn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Objectives
+        Hacker News — Show HN
       
     </span>
   </a>
@@ -638,60 +638,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#minimum-parser-contract-per-language" class="md-nav__link">
+  <a href="#rnetsec-on-reddit" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Minimum Parser Contract (per language)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Minimum Parser Contract (per language)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-ast-completeness" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1) AST completeness
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-framework-auth-and-routing-semantics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2) Framework auth and routing semantics
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-ownershipauth-flow-requirements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3) Ownership/auth flow requirements
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#phased-implementation-plan" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Phased Implementation Plan
+        r/netsec on Reddit
       
     </span>
   </a>
@@ -699,10 +649,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#acceptance-gates" class="md-nav__link">
+  <a href="#devto" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Acceptance Gates
+        dev.to
       
     </span>
   </a>
@@ -710,10 +660,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#suggested-first-milestone" class="md-nav__link">
+  <a href="#what-not-to-do-ban-prevention" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Suggested first milestone
+        What NOT to Do (ban prevention)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-to-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What TO Do
       
     </span>
   </a>
@@ -740,55 +701,361 @@
   
 
 
-<h1 id="native-parser-roadmap-track-3">Native Parser Roadmap (Track 3)</h1>
-<p>This roadmap moves Java, C#, and Go analysis from heuristic-heavy parsing toward native structural fidelity.</p>
-<h2 id="objectives">Objectives</h2>
+<h1 id="outreach-templates-anonymous-posting-guide">Outreach Templates — Anonymous Posting Guide</h1>
+<h2 id="hacker-news-show-hn">Hacker News — Show HN</h2>
+<p>Title:</p>
+<pre><code>Show HN: Ansede — SAST scanner finds 96% of CVEs (Semgrep OSS: 23%, CodeQL: 34%)
+</code></pre>
+<p>Body:</p>
+<pre><code>I ran a reproducible 3-tool comparison against 164 known CVEs across
+5 languages (Python, JS, Go, Java, C#). 
+
+Results:
+- Ansede: 96.3% recall
+- CodeQL: 33.6% 
+- Semgrep OSS: 23.2%
+
+Also ran the OWASP Benchmark v1.2 (2,740 Java test cases, industry standard):
+- Ansede: 62.0% recall
+- Semgrep OSS: 59.4%
+
+All benchmarks reproducible:
+  python -m benchmarks.owasp_head_to_head
+  python -m benchmarks.cve_recall_runner
+
+The tool is MIT-licensed, fully offline, pip install. Comparison page with
+all numbers: https://ansede.onrender.com/compare
+
+Honest about weaknesses: Semgrep is faster (32s vs 87s) and has 30+
+languages vs 5. But on the metric that matters — finding actual
+vulnerabilities — the numbers speak for themselves.
+
+Not selling anything. Free tier exists. Just wanted feedback from the HN
+community on whether these results hold up to scrutiny.
+</code></pre>
+<p>Posting rules:
+- Title under 80 chars ✅
+- URL: https://ansede.onrender.com/compare
+- HN allows Show HN for things you've made
+- Anonymous account is fine — just create a throwaway
+- Don't ask for upvotes, don't use voting rings
+- Reply to every comment honestly — that's how Show HNs succeed</p>
+<hr />
+<h2 id="rnetsec-on-reddit">r/netsec on Reddit</h2>
+<p>Title:</p>
+<pre><code>I benchmarked Semgrep, CodeQL, and an indie SAST tool against 164 CVEs
+</code></pre>
+<p>Body:</p>
+<pre><code>Methodology: 164 CVE snippets across Python, JavaScript, Go, Java, C#.
+Each tool ran with default/OSS config. Same corpus for all three.
+
+CVE recall:
+- Ansede Static: 158/164 (96.3%)
+- CodeQL CLI: 37/110 (33.6%) — Py+JS only
+- Semgrep OSS: 38/164 (23.2%)
+
+OWASP Benchmark v1.2 (2,740 Java cases):
+- Ansede: 62.0% recall (877 true positives)
+- Semgrep: 59.4% recall (840 true positives)
+
+Three categories where Semgrep gets 0% and Ansede gets 74-100%:
+weak random, insecure cookies, weak cryptography.
+
+All benchmarks reproducible from the repo:
+https://github.com/mattybellx/Ansede
+
+Honest limitations: speed (87s vs Semgrep 32s), language breadth
+(5 vs 30+), precision (47% vs Semgrep 62% on OWASP — though
+real-world FP rate is 0.4% on 58 repos).
+
+Curious what r/netsec thinks — does this methodology hold water?
+</code></pre>
+<p>Posting rules:
+- r/netsec requires technical content, not marketing
+- Don't mention pricing or "free trial"
+- Use a throwaway account
+- Reply to comments with data, not defensiveness
+- The post should be about the METHODOLOGY, not the tool</p>
+<hr />
+<h2 id="devto">dev.to</h2>
+<p>Title:</p>
+<pre><code>I built a SAST scanner. It finds 96% of CVEs. Semgrep finds 23%. Here's how.
+</code></pre>
+<p>Body:</p>
+<pre><code>[Same as HN post but longer, more technical]
+
+Include:
+- What IFDS is and why it matters (simple explanation)
+- How the CVE corpus works
+- Per-language breakdown
+- Architecture diagram (optional)
+- Honest limitations section
+
+Tags: #security #python #sast #devops #cybersecurity
+</code></pre>
+<hr />
+<h2 id="what-not-to-do-ban-prevention">What NOT to Do (ban prevention)</h2>
+<table>
+<thead>
+<tr>
+<th>Don't</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Post to multiple subreddits same day</td>
+<td>Cross-posting = ban</td>
+</tr>
+<tr>
+<td>Include pricing/purchase links in posts</td>
+<td>r/netsec bans commercial content</td>
+</tr>
+<tr>
+<td>Use "guerilla marketing" tone</td>
+<td>"Check out my tool!" = instant downvote</td>
+</tr>
+<tr>
+<td>Astroturf (fake accounts upvoting)</td>
+<td>Permanent ban everywhere</td>
+</tr>
+<tr>
+<td>Reply "thanks, check out my tool!" to unrelated threads</td>
+<td>Spam</td>
+</tr>
+<tr>
+<td>Post the same content on HN + Reddit same hour</td>
+<td>Looks coordinated</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-to-do">What TO Do</h2>
 <ul>
-<li>Improve route/controller extraction fidelity.</li>
-<li>Improve auth/ownership semantic detection quality.</li>
-<li>Improve cross-file call graph correctness.</li>
+<li><strong>Lead with data, not product.</strong> The benchmark IS the post</li>
+<li><strong>Be honest about weaknesses.</strong> People trust you more</li>
+<li><strong>Reply to every comment.</strong> Engagement drives visibility</li>
+<li><strong>Wait 24h between platforms.</strong> HN first, then Reddit next day</li>
+<li><strong>Use a throwaway account with no history.</strong> Fresh accounts get less scrutiny for Show HN than accounts with sketchy history</li>
 </ul>
-<h2 id="minimum-parser-contract-per-language">Minimum Parser Contract (per language)</h2>
-<h3 id="1-ast-completeness">1) AST completeness</h3>
-<ul>
-<li>Parse classes/methods/functions with stable source ranges.</li>
-<li>Capture decorators/annotations/attributes relevant to auth and routing.</li>
-<li>Preserve import/use graph for cross-file symbol resolution.</li>
-</ul>
-<h3 id="2-framework-auth-and-routing-semantics">2) Framework auth and routing semantics</h3>
-<ul>
-<li><strong>Java</strong>: Spring MVC/WebFlux annotations (<code>@RequestMapping</code>, <code>@GetMapping</code>, <code>@PreAuthorize</code>, <code>@Secured</code>, etc.)</li>
-<li><strong>C#</strong>: ASP.NET attributes (<code>[HttpGet]</code>, <code>[Authorize]</code>, <code>[AllowAnonymous]</code>, policy/role attributes)</li>
-<li><strong>Go</strong>: net/http, chi, gin, echo route registration and middleware chain modeling</li>
-</ul>
-<h3 id="3-ownershipauth-flow-requirements">3) Ownership/auth flow requirements</h3>
-<ul>
-<li>Track resource parameter extraction (<code>id</code>, <code>userId</code>, route params)</li>
-<li>Track auth context extraction (principal, claims, identity)</li>
-<li>Detect missing ownership guards before lookup/mutation sinks</li>
-</ul>
-<h2 id="phased-implementation-plan">Phased Implementation Plan</h2>
+<h1 id="extended-channels-beyond-hnredditdevto">Extended Channels (Beyond HN/Reddit/dev.to)</h1>
+<h2 id="owasp-slack-tools-channel-40k-members">OWASP Slack — #tools channel (40k+ members)</h2>
+<p>Join: https://owasp.org/slack/invite</p>
+<p>Post in #tools as a research question — NOT as promotion:</p>
+<blockquote>
+<p>Has anyone benchmarked their SAST tool against the OWASP Benchmark v1.2
+recently? I ran Semgrep OSS and CodeQL through and got 59.4% and ~50%
+recall respectively. Curious if others have gotten different numbers
+with different configurations.</p>
+</blockquote>
+<p>This reads as genuine research. When people ask what tool got higher
+numbers, you mention Ansede naturally in the reply. The OWASP community
+is where AppSec buyers hang out.</p>
+<hr />
+<h2 id="github-submit-to-5-awesome-lists-10-min-each">GitHub — Submit to 5 "Awesome" Lists (10 min each)</h2>
+<p>Each PR is literally one line in a markdown file:</p>
+<table>
+<thead>
+<tr>
+<th>Repo</th>
+<th>Stars</th>
+<th>PR Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>analysis-tools-dev/static-analysis</code></td>
+<td>13k</td>
+<td><code>[ansede-static](https://github.com/mattybellx/Ansede) — Offline SAST with 96.3% CVE recall, IFDS taint analysis. Python/JS/Go/Java/C#.</code></td>
+</tr>
+<tr>
+<td><code>sbilly/awesome-security</code></td>
+<td>12k</td>
+<td>Same</td>
+</tr>
+<tr>
+<td><code>devsecops/awesome-devsecops</code></td>
+<td>5k</td>
+<td>Add under SAST section</td>
+</tr>
+<tr>
+<td><code>guibranco/awesome-python-security</code></td>
+<td>2k</td>
+<td>Add under Static Analysis</td>
+</tr>
+<tr>
+<td><code>TonnyL/Awesome_APIs</code></td>
+<td>N/A</td>
+<td>Skip this one</td>
+</tr>
+</tbody>
+</table>
+<p>These lists drive steady organic traffic. Every star = a developer who
+might try the tool.</p>
+<hr />
+<h2 id="pythonjs-security-newsletters">Python/JS Security Newsletters</h2>
+<table>
+<thead>
+<tr>
+<th>Newsletter</th>
+<th>Subscribers</th>
+<th>How</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python Weekly</strong></td>
+<td>50k+</td>
+<td>Email <code>editor@pythonweekly.com</code> — they love new tools</td>
+</tr>
+<tr>
+<td><strong>PyCoder's Weekly</strong></td>
+<td>25k+</td>
+<td>GitHub issue: <code>pycoders/pycoders-weekly</code></td>
+</tr>
+<tr>
+<td><strong>TL;DR Sec</strong></td>
+<td>30k+</td>
+<td>tldrsec.com/submit — they love benchmark data</td>
+</tr>
+<tr>
+<td><strong>JavaScript Weekly</strong></td>
+<td>150k+</td>
+<td>Reply to any issue with a tip</td>
+</tr>
+<tr>
+<td><strong>Snyk Blog</strong></td>
+<td>—</td>
+<td>They feature comparison tools — email their DevRel</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="youtube-benchmark-demo-no-face-needed">YouTube — Benchmark Demo (no face needed)</h2>
+<p>Record a 5-min OBS screen capture:</p>
 <ol>
-<li><strong>Parity corpus first</strong></li>
-<li>Lock expected outcomes on curated framework snippets.</li>
-<li><strong>Adapter layer</strong></li>
-<li>Introduce language-specific parser adapters with stable IR output.</li>
-<li><strong>Rule migration</strong></li>
-<li>Port auth/IDOR logic from regex/heuristics to structural signals.</li>
-<li><strong>Confidence modeling</strong></li>
-<li>Mark findings with <code>analysis_kind</code> and confidence by parser depth.</li>
+<li><code>pip install ansede-static</code> ...done</li>
+<li><code>ansede-static benchmarks/owasp/src/</code> → shows real findings</li>
+<li>Open <code>benchmarks/owasp_scorecard.html</code> in browser</li>
+<li>Side-by-side: Semgrep result vs Ansede result</li>
+<li>End: <code>pip install ansede-static</code> on screen</li>
 </ol>
-<h2 id="acceptance-gates">Acceptance Gates</h2>
-<ul>
-<li>Structural parser path enabled for at least one non-Python/non-JS language.</li>
-<li>Measurable precision/recall improvement on parity corpus and real-world manifest cases.</li>
-<li>No major speed regression against target budget.</li>
-</ul>
-<h2 id="suggested-first-milestone">Suggested first milestone</h2>
-<ul>
-<li>Implement Java Spring annotation extractor + auth/ownership signal graph.</li>
-<li>Validate against WebGoat and dedicated parity corpus cases.</li>
-</ul>
+<p>Upload with title: <em>"SAST Scanner Finds 96% of CVEs (Semgrep: 23%) — Benchmark Demo"</em></p>
+<p>No face, no voice needed. Text overlays only. Throwaway Google account.</p>
+<hr />
+<h2 id="stack-overflow-answer-security-questions">Stack Overflow — Answer Security Questions</h2>
+<p>Search for: <code>[python] [security] sast</code> or <code>[javascript] static analysis security</code></p>
+<p>Answer questions about SAST tools. Include Ansede when it's the right
+fit. One honest answer per week = steady traffic. Don't spam — only
+answer when genuinely relevant.</p>
+<hr />
+<h2 id="g2-capterra-list-the-product">G2 / Capterra — List the Product</h2>
+<p>List Ansede on G2 under "Static Application Security Testing." It's
+free. You don't need to be a company. The category page gets thousands
+of enterprise buyers comparing tools. Being listed next to Snyk,
+Checkmarx, and Fortify with benchmark data is powerful.</p>
+<hr />
+<h2 id="slackdiscord-communities">Slack/Discord Communities</h2>
+<table>
+<thead>
+<tr>
+<th>Community</th>
+<th>Channel</th>
+<th>Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python Discord</strong></td>
+<td>#projects</td>
+<td>Share as open-source project</td>
+</tr>
+<tr>
+<td><strong>The Cyber Mentor</strong></td>
+<td>#tools</td>
+<td>Ask for feedback on methodology</td>
+</tr>
+<tr>
+<td><strong>InfoSec Prep</strong></td>
+<td>#appsec</td>
+<td>Discuss CVE recall benchmarks</td>
+</tr>
+<tr>
+<td><strong>OWASP Chapters</strong></td>
+<td>local channels</td>
+<td>Offer to present at meetups</td>
+</tr>
+</tbody>
+</table>
+<p>Template: </p>
+<blockquote>
+<p>"I ran some SAST benchmarks and got unexpected results. Would love
+feedback on my methodology. 96% CVE recall vs 23% for Semgrep OSS
+seems too good to be true — am I missing something?"</p>
+</blockquote>
+<p>This invites critique (which builds credibility) rather than feels
+like promotion.</p>
+<hr />
+<h2 id="summary-effort-vs-impact">Summary: Effort vs Impact</h2>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Time</th>
+<th>Reach</th>
+<th>Buyer Quality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Awesome lists PR</td>
+<td>10 min each</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>OWASP Slack</td>
+<td>5 min</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Python Weekly email</td>
+<td>2 min</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>TL;DR Sec submit</td>
+<td>2 min</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>YouTube demo</td>
+<td>1 hour</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td>Stack Overflow answers</td>
+<td>10 min/week</td>
+<td>⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>G2 listing</td>
+<td>15 min</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>Discord communities</td>
+<td>5 min each</td>
+<td>⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody>
+</table>
 
 
 
