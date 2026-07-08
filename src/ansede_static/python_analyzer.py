@@ -7422,7 +7422,6 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
         cwe = (f.cwe or "").upper()
         line = f.line or 1
         title = (f.title or "").lower()
-        rule = (f.rule_id or "")
 
         if cwe == "CWE-117" or "log" in title or "Log Injection" in str(f.title or ""):
             # Log injection: only real if user data reaches the log call
