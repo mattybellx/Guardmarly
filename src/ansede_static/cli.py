@@ -2855,6 +2855,48 @@ def _main_impl() -> None:
     except Exception:
         pass
 
+    # ── Taint-aware demotion ────────────────────────────────────────────
+    # Demote HIGH/CRITICAL findings where no taint path evidence exists.
+    # Without a trace from user input to the sink, pattern-only matches
+    # are demoted to MEDIUM at most.  Exception: CWE-798 hardcoded secrets
+    # can be real without a taint path.
+    _HARDCODED_DEMOTE_CWES: frozenset[str] = frozenset({
+        "CWE-617", "CWE-470", "CWE-200", "CWE-532",
+    })
+    _NO_TRACE_DEMOTE_CWES: frozenset[str] = frozenset({
+        "CWE-89", "CWE-78", "CWE-117", "CWE-113", "CWE-601",
+        "CWE-352", "CWE-862", "CWE-639", "CWE-434", "CWE-1188",
+        "CWE-94", "CWE-95", "CWE-502", "CWE-22", "CWE-918", "CWE-285",
+    })
+
+    for r in results:
+        new_findings = []
+        for f in r.findings:
+            sev_val = str(f.severity.value) if hasattr(f.severity, 'value') else str(f.severity)
+            if sev_val not in ("critical", "high"):
+                new_findings.append(f)
+                continue
+
+            cwe = (f.cwe or "").upper()
+            has_trace = bool(f.trace and len(f.trace) > 0)
+
+            # Always-demote rules (code quality, not security)
+            if cwe in _HARDCODED_DEMOTE_CWES:
+                f = Finding(category=f.category, severity=Severity.LOW, title=f.title,
+                    description=f.description, line=f.line, suggestion=f.suggestion,
+                    rule_id=f.rule_id, cwe=f.cwe, agent=f.agent, confidence=0.20,
+                    auto_fix=f.auto_fix, explanation=f.explanation, trace=f.trace,
+                    analysis_kind=f.analysis_kind, triggering_code=f.triggering_code)
+            # No-trace-demote: if no taint path exists, pattern-only -> medium
+            elif cwe in _NO_TRACE_DEMOTE_CWES and not has_trace:
+                f = Finding(category=f.category, severity=Severity.MEDIUM, title=f.title,
+                    description=f.description, line=f.line, suggestion=f.suggestion,
+                    rule_id=f.rule_id, cwe=f.cwe, agent=f.agent, confidence=0.35,
+                    auto_fix=f.auto_fix, explanation=f.explanation, trace=f.trace,
+                    analysis_kind=f.analysis_kind, triggering_code=f.triggering_code)
+            new_findings.append(f)
+        r.findings = new_findings
+
     # ── Confidence filter ───────────────────────────────────────────────
     _all_findings: bool = getattr(args, "all_findings", False)
     min_conf: float = 0.0 if _all_findings else getattr(args, "min_confidence", 0.65)

@@ -7376,6 +7376,121 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
     except Exception:
         pass  # STIR emission is best-effort
 
+    # ── Taint-aware confidence adjustment ────────────────────────────────
+    # Demote HIGH/CRITICAL findings where no user input is visible reaching
+    # the sink.  Pure pattern matches without taint evidence are demoted to
+    # MEDIUM at most.  This is the single biggest precision improvement.
+    _lines_cache = code.splitlines()
+
+    def _has_user_input_nearby(lineno: int, window: int = 5) -> bool:
+        start = max(0, lineno - 1 - window)
+        end = min(len(_lines_cache), lineno + window)
+        ctx = "\n".join(_lines_cache[start:end])
+        return bool(_USER_INPUT_RE.search(ctx))
+
+    _USER_INPUT_RE = re.compile(
+        r'(?:request\.(?:args|form|json|data|values|get_json|get_data)|'
+        r'request\.(?:GET|POST|FILES|COOKIES|headers)|'
+        r'self\.request\.|'
+        r'\.get\s*\(\s*["\']\w+|'
+        r'request_body|body\s*=\s*request|'
+        r'@app\.route|@bp\.route|'
+        r'def\s+\w+\s*\(\s*(?:self,\s*)?(?:request|req)\b|'
+        r'\+.*(?:user|input|param|query|search|data|body|name|id|key)|'
+        r'f["\'].*\{|'
+        r'\.format\s*\(|'
+        r'%\s*[sd]\b|'
+        r'sys\.argv|'
+        r'os\.environ\b|'
+        r'open\s*\([^)]*\+|'
+        r'input\s*\(\s*\)|'
+        r'read\s*\(\s*\))',
+        re.IGNORECASE,
+    )
+
+    _HARDCODED_SQL_RE = re.compile(
+        r'\.execute\s*\(\s*["\'](?:SELECT|INSERT|UPDATE|DELETE|PRAGMA|CREATE|ALTER|DROP|SET)\b',
+        re.IGNORECASE,
+    )
+    _HARDCODED_CMD_RE = re.compile(
+        r'subprocess\.(?:run|call|Popen|check_output)\s*\(\s*\[',
+    )
+
+    adjusted: list[Any] = []
+    for f in findings:
+        sev = str(f.severity.value) if hasattr(f.severity, 'value') else str(f.severity)
+        cwe = (f.cwe or "").upper()
+        line = f.line or 1
+        title = (f.title or "").lower()
+        rule = (f.rule_id or "")
+
+        if cwe == "CWE-117" or "log" in title or "Log Injection" in str(f.title or ""):
+            # Log injection: only real if user data reaches the log call
+            if not _has_user_input_nearby(line):
+                if sev in ("critical", "high"):
+                    f = Finding(
+                        category=f.category, severity=Severity.LOW,
+                        title=f.title, description=f.description, line=f.line,
+                        suggestion=f.suggestion, rule_id=f.rule_id, cwe=f.cwe,
+                        agent=f.agent, confidence=0.25, auto_fix=f.auto_fix,
+                        explanation=f.explanation, trace=f.trace,
+                        analysis_kind=f.analysis_kind, triggering_code=f.triggering_code,
+                    )
+        elif cwe == "CWE-89" or "sql" in title:
+            # SQL injection: only real if user input is concatenated/interpolated
+            ctx_lines = "\n".join(_lines_cache[max(0,line-3):min(len(_lines_cache),line+1)])
+            is_hardcoded = bool(_HARDCODED_SQL_RE.search(ctx_lines))
+            has_format = bool(re.search(r'[+%]|\bf\s*["\']|\bformat\s*\(', ctx_lines))
+            if is_hardcoded and not has_format:
+                if sev in ("critical", "high"):
+                    f = Finding(
+                        category=f.category, severity=Severity.MEDIUM,
+                        title=f.title, description=f.description, line=f.line,
+                        suggestion=f.suggestion, rule_id=f.rule_id, cwe=f.cwe,
+                        agent=f.agent, confidence=0.35, auto_fix=f.auto_fix,
+                        explanation=f.explanation, trace=f.trace,
+                        analysis_kind=f.analysis_kind, triggering_code=f.triggering_code,
+                    )
+        elif cwe == "CWE-78" or "command" in title or "os.system" in title:
+            # Command injection: only real if args are user-controlled
+            ctx_lines = "\n".join(_lines_cache[max(0,line-3):min(len(_lines_cache),line+1)])
+            is_hardcoded_cmd = bool(_HARDCODED_CMD_RE.search(ctx_lines))
+            if is_hardcoded_cmd and not _has_user_input_nearby(line):
+                if sev in ("critical", "high"):
+                    f = Finding(
+                        category=f.category, severity=Severity.MEDIUM,
+                        title=f.title, description=f.description, line=f.line,
+                        suggestion=f.suggestion, rule_id=f.rule_id, cwe=f.cwe,
+                        agent=f.agent, confidence=0.35, auto_fix=f.auto_fix,
+                        explanation=f.explanation, trace=f.trace,
+                        analysis_kind=f.analysis_kind, triggering_code=f.triggering_code,
+                    )
+        elif cwe == "CWE-1188" or "SSTI" in title or "template" in title:
+            # SSTI/template injection: Flask auto-escapes, demote unless |safe used
+            ctx = "\n".join(_lines_cache[max(0,line-2):min(len(_lines_cache),line+2)])
+            if "|safe" not in ctx and "Markup" not in ctx:
+                f = Finding(
+                    category=f.category, severity=Severity.LOW,
+                    title=f.title, description=f.description, line=f.line,
+                    suggestion=f.suggestion, rule_id=f.rule_id, cwe=f.cwe,
+                    agent=f.agent, confidence=0.20, auto_fix=f.auto_fix,
+                    explanation=f.explanation, trace=f.trace,
+                    analysis_kind=f.analysis_kind, triggering_code=f.triggering_code,
+                )
+        elif cwe == "CWE-352" or "CSRF" in title:
+            # CSRF: can't detect middleware, always uncertain
+            f = Finding(
+                category=f.category, severity=Severity.MEDIUM if sev in ("critical","high") else f.severity,
+                title=f.title, description=f.description, line=f.line,
+                suggestion=f.suggestion, rule_id=f.rule_id, cwe=f.cwe,
+                agent=f.agent, confidence=0.30, auto_fix=f.auto_fix,
+                explanation=f.explanation, trace=f.trace,
+                analysis_kind=f.analysis_kind, triggering_code=f.triggering_code,
+            )
+        adjusted.append(f)
+
+    findings = adjusted
+
     result.findings = findings
     return result
 

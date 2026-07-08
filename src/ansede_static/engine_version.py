@@ -11,7 +11,7 @@ ENGINE_NAME = "ansede-static"
 SCHEMA_VERSION = "1.0"
 
 # Hardcoded fallback when importlib.metadata is unavailable (Nuitka, frozen builds)
-_FALLBACK_VERSION = "6.0.0"
+_FALLBACK_VERSION = "6.1.0"
 
 
 def get_engine_version() -> str:
