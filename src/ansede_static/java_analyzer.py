@@ -18,6 +18,42 @@ from ansede_static._types import AnalysisResult, Finding, Severity
 
 _log = logging.getLogger(__name__)
 
+# ── Taint source confirmation helper ─────────────────────────────────────────
+# Recognises Java sources that deliver user-controlled data.
+# Used to reduce false positives: a sink match without a nearby taint source
+# is downgraded to LOW confidence.
+_JAVA_TAINT_SOURCE_RE = re.compile(
+    r'''(?x)
+    \bgetParameter\s*\(          # request.getParameter(...)
+    | \bgetHeader\s*\(           # request.getHeader(...)
+    | \bgetQueryString\s*\(      # request.getQueryString()
+    | \bgetPathInfo\s*\(         # request.getPathInfo()
+    | \bgetInputStream\s*\(      # request.getInputStream()
+    | \breadLine\s*\(            # BufferedReader.readLine()
+    | \bgetAttribute\s*\(        # request.getAttribute(...)
+    | \bgetCookies\s*\(          # request.getCookies()
+    | \@PathVariable             # Spring @PathVariable
+    | \@RequestParam             # Spring @RequestParam
+    | \@RequestBody              # Spring @RequestBody
+    | \@RequestHeader            # Spring @RequestHeader
+    | \bHttpServletRequest\b     # Servlet request param type
+    | \brequest\s*\.\s*\w        # generic request.xxx
+    | \breq\s*\.\s*\w            # generic req.xxx
+    | \bparams\[                 # params array access
+    | \bgetBody\s*\(             # getBody()
+    | \bgetPart\s*\(             # multipart getPart()
+    ''',
+    re.IGNORECASE,
+)
+
+
+def _context_has_taint_source(lines: list[str], lineno: int, window: int = 4) -> bool:
+    """Return True if any line within *window* lines of *lineno* contains a taint source."""
+    start = max(0, lineno - 1 - window)
+    end = min(len(lines), lineno + window)
+    context = "\n".join(lines[start:end])
+    return bool(_JAVA_TAINT_SOURCE_RE.search(context))
+
 # Attempt tree-sitter AST import (optional — falls back to regex)
 _AST_AVAILABLE = False
 try:
@@ -1130,7 +1166,10 @@ def _append_line_level_findings(source: str, findings: list[Finding]) -> None:
     if "preparedstatement" in src_lower:
         _file_safe_skip.add("CWE-89")
 
-    for lineno, line in enumerate(source.splitlines(), start=1):
+    # Pre-split source lines for taint source context checks
+    _all_lines = source.splitlines()
+
+    for lineno, line in enumerate(_all_lines, start=1):
         if _HARDCODED_SECRET_RE.search(line):
             key = (lineno, "JV-006")
             if key not in existing_keys:

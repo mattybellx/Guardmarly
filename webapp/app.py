@@ -1122,6 +1122,95 @@ def autofix_studio_live():
   return render_template("index.html")
 
 
+# ── Live Playground (/scan) ───────────────────────────────────────────
+_PLAYGROUND_RATE_LIMIT: dict[str, list[float]] = {}
+_PLAYGROUND_MAX_PER_MINUTE = 10
+_PLAYGROUND_MAX_CODE_BYTES = 20_000  # 20 KB
+
+# Try to import scanner at startup; warn if unavailable
+try:
+    import sys as _sys
+    import os as _os
+    _src_path = str(Path(__file__).resolve().parent.parent / "src")
+    if _src_path not in _sys.path:
+        _sys.path.insert(0, _src_path)
+    from ansede_static.python_analyzer import analyze_python as _analyze_python
+    from ansede_static.js_analyzer import analyze_js as _analyze_js
+    _SCAN_AVAILABLE = True
+except Exception:
+    _SCAN_AVAILABLE = False
+
+
+@app.route("/scan", methods=["GET"])
+def playground_get():
+    """Interactive live playground — paste code, see findings instantly."""
+    examples = {
+        "idor": {"label": "IDOR", "lang": "python",
+            "code": '@app.route("/invoice/<id>")\n@login_required\ndef get_invoice(id):\n    return Invoice.query.get(id)\n    # Any user can view any invoice'},
+        "sqli": {"label": "SQL Injection", "lang": "python",
+            "code": 'def get_user(username):\n    query = f"SELECT * FROM users WHERE name = \'{username}\'"\n    return db.execute(query)'},
+        "hardcoded": {"label": "Hardcoded Secret", "lang": "python",
+            "code": 'API_KEY = "sk-prod-abc123secretkeyexample"\nSTRIPE_SECRET = "sk_live_realkey_here_example"'},
+        "missing_auth": {"label": "Missing Auth", "lang": "python",
+            "code": '@app.route("/admin/delete-user", methods=["POST"])\ndef delete_user():\n    user_id = request.form["id"]\n    User.query.filter_by(id=user_id).delete()'},
+        "js_xss": {"label": "XSS", "lang": "javascript",
+            "code": 'app.get("/search", (req, res) => {\n  const q = req.query.q;\n  res.send(`<h1>Results for ${q}</h1>`);\n});'},
+    }
+    return render_template("playground.html", examples=examples)
+
+
+@app.route("/scan", methods=["POST"])
+def playground_post():
+    """API endpoint for live playground — accepts JSON {code, lang}."""
+    if not _SCAN_AVAILABLE:
+        return jsonify({"error": "Scanner not available on this server"}), 503
+
+    client_ip = (request.headers.get("X-Forwarded-For") or request.remote_addr or "unknown").split(",")[0].strip()
+    now = time.time()
+    window = [t for t in _PLAYGROUND_RATE_LIMIT.get(client_ip, []) if now - t < 60]
+    if len(window) >= _PLAYGROUND_MAX_PER_MINUTE:
+        return jsonify({"error": "Rate limit: max 10 scans/minute per IP."}), 429
+    window.append(now)
+    _PLAYGROUND_RATE_LIMIT[client_ip] = window
+
+    data = request.get_json(silent=True) or {}
+    code = str(data.get("code", ""))[:_PLAYGROUND_MAX_CODE_BYTES]
+    lang = str(data.get("lang", "python")).lower().strip()
+
+    if not code.strip():
+        return jsonify({"findings": [], "lines_scanned": 0, "total": 0})
+
+    try:
+        if lang in ("python", "py"):
+            result = _analyze_python(code, filename="playground.py")
+        elif lang in ("javascript", "js", "typescript", "ts"):
+            result = _analyze_js(code, filename="playground.js")
+        else:
+            return jsonify({"error": f"Language '{lang}' not supported. Use: python, javascript"}), 400
+    except Exception as exc:
+        return jsonify({"error": f"Scan error: {type(exc).__name__}"}), 500
+
+    findings_out = []
+    for f in result.findings:
+        findings_out.append({
+            "rule_id": f.rule_id or "",
+            "severity": f.severity.value,
+            "title": f.title,
+            "description": getattr(f, "description", "") or "",
+            "line": f.line or 0,
+            "cwe": f.cwe or "",
+            "suggestion": getattr(f, "suggestion", "") or "",
+            "confidence": round(f.confidence, 2) if f.confidence is not None else None,
+        })
+
+    return jsonify({
+        "findings": findings_out,
+        "lines_scanned": result.lines_scanned,
+        "parse_error": result.parse_error,
+        "total": len(findings_out),
+    })
+
+
 @app.route("/api/scan", methods=["POST"])
 def api_scan():
   return _studio_api_response(guarded_fix=False)

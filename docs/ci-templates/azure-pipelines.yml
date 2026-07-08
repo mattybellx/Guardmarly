@@ -1,0 +1,71 @@
+# Ansede Static — Azure DevOps Pipeline Template
+#
+# USAGE — add to your azure-pipelines.yml:
+#   steps:
+#     - template: docs/ci-templates/azure-pipelines.yml
+#
+# Or reference from GitHub:
+#   resources:
+#     repositories:
+#       - repository: ansede
+#         type: github
+#         name: mattybellx/Ansede
+#   steps:
+#     - template: docs/ci-templates/azure-pipelines.yml@ansede
+
+parameters:
+  - name: path
+    type: string
+    default: '$(Build.SourcesDirectory)'
+  - name: failOn
+    type: string
+    default: 'high'
+  - name: minConfidence
+    type: string
+    default: '0.65'
+  - name: exclude
+    type: string
+    default: ''
+  - name: outputFile
+    type: string
+    default: '$(Build.ArtifactStagingDirectory)/ansede.sarif'
+
+steps:
+- task: UsePythonVersion@0
+  displayName: 'Use Python 3.11'
+  inputs:
+    versionSpec: '3.11'
+  continueOnError: false
+
+- script: pip install ansede-static --quiet
+  displayName: 'Install Ansede Static'
+
+- script: |
+    EXCLUDE_FLAG=""
+    if [ -n "${{ parameters.exclude }}" ]; then
+      EXCLUDE_FLAG="--exclude ${{ parameters.exclude }}"
+    fi
+    ansede-static "${{ parameters.path }}" \
+      --format sarif \
+      --output "${{ parameters.outputFile }}" \
+      --fail-on "${{ parameters.failOn }}" \
+      --min-confidence "${{ parameters.minConfidence }}" \
+      $EXCLUDE_FLAG
+  displayName: 'Run Ansede Security Scan'
+  continueOnError: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish SARIF Security Report'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/ansede.sarif'
+    ArtifactName: 'ansede-sarif'
+  condition: always()
+
+- task: PublishTestResults@2
+  displayName: 'Publish Security Scan Results'
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '$(Build.ArtifactStagingDirectory)/ansede.sarif'
+    failTaskOnFailedTests: false
+  condition: always()
+  continueOnError: true

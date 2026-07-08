@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ansede-static"
-version = "5.6.0"
+version = "6.0.0"
 description = "Offline SAST for 5 languages — #1 CVE recall (100%), #2 OWASP score (+0.8% Youden), 93.3% OWASP recall. Detects IDOR, auth bypass, and injection flaws that Semgrep and CodeQL miss."
 readme = "README.md"
 license = "MIT"
@@ -46,6 +46,11 @@ treesitter = ["tree-sitter>=0.20", "tree-sitter-java>=0.21"]
 graph      = ["networkx>=3.0"]
 schema     = ["jsonschema>=4.0"]
 v2         = ["ansede-static[treesitter,graph,schema]"]
+
+# User-friendly aliases (prefer these over the internal names above)
+fast       = ["ansede-static[treesitter]"]             # tree-sitter for better Java/JS analysis
+full       = ["ansede-static[treesitter,graph,schema]"] # everything
+enterprise = ["ansede-static[treesitter,graph,schema]"] # enterprise alias for full
 
 [project.scripts]
 ansede-static     = "ansede_static.cli:main"

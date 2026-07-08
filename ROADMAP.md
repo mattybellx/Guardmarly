@@ -1,6 +1,6 @@
 # Ansede Static — Roadmap to World's Best SAST
 
-**Updated:** 2026-07-03 | **Current version:** v5.5.0 | **Status:** 1,234 tests, 0 failures, OWASP 62.0% recall
+**Updated:** 2026-07-08 | **Current version:** v6.0.0 | **Status:** 1,249 tests, 0 failures, OWASP 93.3% recall, 6 languages
 
 ---
 

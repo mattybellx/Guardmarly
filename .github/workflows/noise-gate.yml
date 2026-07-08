@@ -1,0 +1,37 @@
+name: Noise Gate — Confidence Filter Safety
+
+on:
+  pull_request:
+    branches: [master, main]
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  noise-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ansede-static
+        run: pip install -e ".[dev]" --quiet
+
+      - name: Clone validation repos (parallel)
+        run: |
+          git clone --depth 1 https://github.com/pallets/quart.git /tmp/quart &
+          git clone --depth 1 https://github.com/encode/databases.git /tmp/databases &
+          git clone --depth 1 https://github.com/samuelcolvin/watchfiles.git /tmp/watchfiles &
+          wait
+          echo "All repos cloned"
+
+      - name: Run noise gate (0% HIGH/CRIT loss required)
+        run: python benchmarks/noise_gate.py /tmp/quart /tmp/databases /tmp/watchfiles

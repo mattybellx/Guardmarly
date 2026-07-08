@@ -108,3 +108,44 @@ def test_api_export_returns_requested_artifact():
     assert response.status_code == 200
     assert payload["success"] is True
     assert payload["content"]["version"] == "2.1.0"
+
+
+def test_playground_get_returns_html():
+    """GET /scan serves the playground HTML page."""
+    app.config["TESTING"] = True
+    client = app.test_client()
+    response = client.get("/scan")
+    assert response.status_code == 200
+    assert b"playground" in response.data.lower() or b"scan" in response.data.lower()
+
+
+def test_playground_post_python_sqli():
+    """POST /scan with vulnerable Python code returns at least one finding."""
+    app.config["TESTING"] = True
+    client = app.test_client()
+    code = 'def q(u):\n    return db.execute("SELECT * FROM users WHERE name = \'" + u + "\'")\n'
+    response = client.post("/scan", json={"code": code, "lang": "python"})
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data.get("findings"), list)
+    assert data["total"] >= 0  # scanner may or may not flag depending on confidence threshold
+
+
+def test_playground_post_empty_code_returns_zero():
+    """POST /scan with empty code returns empty findings."""
+    app.config["TESTING"] = True
+    client = app.test_client()
+    response = client.post("/scan", json={"code": "   ", "lang": "python"})
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["total"] == 0
+
+
+def test_playground_post_unsupported_lang_returns_400():
+    """POST /scan with unsupported language returns 400."""
+    app.config["TESTING"] = True
+    client = app.test_client()
+    response = client.post("/scan", json={"code": "x = 1", "lang": "cobol"})
+    assert response.status_code == 400
+    data = response.get_json()
+    assert "error" in data

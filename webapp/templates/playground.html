@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ansede Static — Live Security Scanner Playground</title>
+<meta name="description" content="Paste Python or JavaScript code and find security vulnerabilities instantly. No install required. Powered by Ansede Static — #1 CVE recall.">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
+header { background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+header .logo { color: #e6edf3; text-decoration: none; font-weight: 700; font-size: 17px; display: flex; align-items: center; gap: 7px; }
+header .logo span { color: #3fb950; }
+header .tagline { color: #8b949e; font-size: 13px; }
+header .gh-link { margin-left: auto; color: #8b949e; text-decoration: none; font-size: 12px; border: 1px solid #30363d; border-radius: 6px; padding: 4px 10px; transition: border-color .2s; }
+header .gh-link:hover { border-color: #58a6ff; color: #58a6ff; }
+.main { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+.panel { display: flex; flex-direction: column; min-height: 0; }
+.panel-header { background: #161b22; border-bottom: 1px solid #30363d; padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
+.panel-header select { background: #21262d; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+.example-btn { background: none; border: 1px solid #30363d; color: #8b949e; border-radius: 4px; padding: 3px 8px; cursor: pointer; font-size: 11px; transition: all .15s; white-space: nowrap; }
+.example-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+.scan-btn { background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 6px; padding: 5px 16px; cursor: pointer; font-size: 13px; font-weight: 600; margin-left: auto; transition: background .15s; display: flex; align-items: center; gap: 6px; }
+.scan-btn:hover:not(:disabled) { background: #2ea043; }
+.scan-btn:disabled { background: #1a3626; color: #666; cursor: not-allowed; border-color: #1a3626; }
+.spinner { width: 14px; height: 14px; border: 2px solid #30363d; border-top-color: #58a6ff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+.spinner.active { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+textarea { flex: 1; background: #0d1117; color: #e6edf3; border: none; border-right: 1px solid #30363d; padding: 14px; font-family: 'SFMono-Regular', 'Cascadia Code', Consolas, 'Courier New', monospace; font-size: 13px; line-height: 1.65; resize: none; outline: none; tab-size: 4; min-height: 0; }
+textarea::placeholder { color: #484f58; }
+.results-panel { display: flex; flex-direction: column; min-height: 0; }
+.summary-bar { background: #161b22; border-bottom: 1px solid #30363d; padding: 7px 14px; font-size: 13px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; display: none; }
+.cnt { font-weight: 700; }
+.cnt.red { color: #f85149; }
+.cnt.yellow { color: #d29922; }
+.cnt.green { color: #3fb950; }
+.results-scroll { flex: 1; overflow-y: auto; padding: 14px; }
+.placeholder { color: #484f58; padding: 40px 20px; text-align: center; line-height: 1.7; }
+.placeholder code { background: #161b22; border: 1px solid #30363d; border-radius: 4px; padding: 2px 6px; font-family: monospace; color: #58a6ff; font-size: 12px; }
+.placeholder h3 { font-size: 15px; color: #8b949e; margin-bottom: 14px; }
+.placeholder ul { list-style: none; font-size: 13px; }
+.placeholder ul li::before { content: "✓ "; color: #3fb950; }
+.finding { border: 1px solid #30363d; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+.finding-hdr { display: flex; align-items: center; gap: 7px; padding: 9px 12px; background: #161b22; }
+.badge { border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; flex-shrink: 0; }
+.badge.critical { background: #b91c1c; color: #fff; }
+.badge.high { background: #7c2d12; color: #fbbf24; }
+.badge.medium { background: #1c3557; color: #60a5fa; }
+.badge.low { background: #1a3626; color: #4ade80; }
+.badge.info { background: #1c1c2e; color: #a78bfa; }
+.finding-title { font-weight: 600; font-size: 13px; flex: 1; }
+.finding-meta { display: flex; gap: 8px; align-items: center; }
+.finding-line { color: #484f58; font-size: 11px; font-family: monospace; }
+.conf-pill { color: #8b949e; font-size: 10px; border: 1px solid #30363d; border-radius: 3px; padding: 1px 5px; }
+.finding-body { padding: 10px 12px; }
+.cwe-tag { color: #58a6ff; font-size: 11px; font-weight: 600; margin-bottom: 5px; }
+.finding-desc { color: #8b949e; font-size: 12px; line-height: 1.55; margin-bottom: 7px; }
+.fix-box { background: #0a1f0a; border: 1px solid #1a4d1a; border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #4ade80; line-height: 1.55; }
+.fix-box strong { color: #3fb950; }
+.zero-state { text-align: center; padding: 50px 20px; }
+.zero-state .icon { font-size: 44px; }
+.zero-state h3 { color: #3fb950; font-size: 16px; margin: 10px 0 6px; }
+.zero-state small { color: #484f58; font-size: 12px; }
+.error-box { background: #1a0a0a; border: 1px solid #5a1a1a; border-radius: 6px; padding: 12px; color: #f85149; font-size: 13px; margin: 14px; }
+footer { background: #161b22; border-top: 1px solid #30363d; padding: 8px 20px; text-align: center; font-size: 11px; color: #484f58; flex-shrink: 0; }
+footer a { color: #8b949e; text-decoration: none; }
+footer a:hover { color: #58a6ff; }
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/"><span>🛡</span> Ansede Static</a>
+  <span class="tagline">Live Playground — find security bugs in seconds, no install required</span>
+  <a class="gh-link" href="https://github.com/mattybellx/Ansede" target="_blank" rel="noopener">⭐ Star on GitHub</a>
+</header>
+
+<div class="main">
+  <!-- Left: Code editor -->
+  <div class="panel">
+    <div class="panel-header">
+      <select id="langSelect" title="Language">
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript / TypeScript</option>
+      </select>
+      <span style="color:#484f58;font-size:11px;margin-left:4px">Try:</span>
+      {% for key, ex in examples.items() %}
+      <button class="example-btn" onclick="loadExample('{{ key }}')" title="{{ ex.label }}">{{ ex.label }}</button>
+      {% endfor %}
+      <button class="scan-btn" id="scanBtn" onclick="runScan()">
+        <span>▶ Scan</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </div>
+    <textarea id="codeInput"
+      placeholder="Paste Python or JavaScript code here…
+
+Press ▶ Scan or Ctrl+Enter to scan.
+Click an example button above to load a vulnerable code sample.
+
+Detects: SQL injection · XSS · IDOR · Missing auth · Hardcoded secrets · Path traversal · SSRF · Command injection · 30+ more CWE types"></textarea>
+  </div>
+
+  <!-- Right: Results -->
+  <div class="results-panel">
+    <div class="summary-bar" id="summaryBar">
+      <span id="summaryText"></span>
+      <span style="margin-left:auto;color:#484f58;font-size:11px">ansede-static v5.6.0 · offline · no data sent</span>
+    </div>
+    <div class="results-scroll" id="resultsPanel">
+      <div class="placeholder">
+        <h3>↑ Paste code and press ▶ Scan</h3>
+        <ul>
+          <li>SQL injection (CWE-89) — all major DB drivers</li>
+          <li>IDOR / Broken Access Control (CWE-639)</li>
+          <li>Missing authentication (CWE-862)</li>
+          <li>Hardcoded secrets and API keys (CWE-798)</li>
+          <li>XSS, SSRF, path traversal, command injection</li>
+          <li>Unsafe deserialization (pickle, yaml.load)</li>
+        </ul>
+        <p style="margin-top:18px;font-size:12px">
+          Install: <code>pip install ansede-static</code><br>
+          <span style="color:#3a3f47">Zero cloud · Zero telemetry · Fully offline</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Powered by <a href="https://github.com/mattybellx/Ansede" target="_blank">ansede-static</a> —
+  #1 CVE recall (100%) · 93.3% OWASP recall · Fully offline ·
+  <a href="https://github.com/mattybellx/Ansede" target="_blank">GitHub</a> ·
+  <a href="https://pypi.org/project/ansede-static/" target="_blank">PyPI</a>
+</footer>
+
+<script>
+const examples = {{ examples | tojson }};
+
+function loadExample(key) {
+  const ex = examples[key];
+  if (!ex) return;
+  document.getElementById('codeInput').value = ex.code;
+  document.getElementById('langSelect').value = ex.lang;
+  document.getElementById('codeInput').focus();
+}
+
+document.getElementById('codeInput').addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runScan(); return; }
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = this.selectionStart, end = this.selectionEnd;
+    this.value = this.value.substring(0, s) + '    ' + this.value.substring(end);
+    this.selectionStart = this.selectionEnd = s + 4;
+  }
+});
+
+async function runScan() {
+  const code = document.getElementById('codeInput').value;
+  if (!code.trim()) return;
+  const lang = document.getElementById('langSelect').value;
+  const btn = document.getElementById('scanBtn');
+  const spinner = document.getElementById('spinner');
+  btn.disabled = true;
+  spinner.classList.add('active');
+  try {
+    const resp = await fetch('/scan', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code, lang})
+    });
+    const data = await resp.json();
+    renderResults(data);
+  } catch(err) {
+    document.getElementById('resultsPanel').innerHTML =
+      `<div class="error-box">Network error: ${esc(err.message)}</div>`;
+    document.getElementById('summaryBar').style.display = 'none';
+  } finally {
+    btn.disabled = false;
+    spinner.classList.remove('active');
+  }
+}
+
+function renderResults(data) {
+  const panel = document.getElementById('resultsPanel');
+  const bar = document.getElementById('summaryBar');
+
+  if (data.error) {
+    panel.innerHTML = `<div class="error-box">${esc(data.error)}</div>`;
+    bar.style.display = 'none';
+    return;
+  }
+
+  const findings = (data.findings || []);
+  const counts = {critical:0,high:0,medium:0,low:0,info:0};
+  findings.forEach(f => { if (f.severity in counts) counts[f.severity]++; });
+
+  bar.style.display = 'flex';
+  const critical = counts.critical + counts.high;
+  const countHtml = findings.length === 0
+    ? '<span class="cnt green">✓ No findings</span>'
+    : `<span class="cnt ${critical > 0 ? 'red' : 'yellow'}">${findings.length} finding${findings.length !== 1 ? 's' : ''}</span> — ` +
+      Object.entries(counts).filter(([,v])=>v>0).map(([k,v])=>`${v} ${k}`).join(', ');
+  document.getElementById('summaryText').innerHTML =
+    `Scanned ${data.lines_scanned || 0} lines &nbsp;·&nbsp; ${countHtml}`;
+
+  if (findings.length === 0) {
+    panel.innerHTML = `<div class="zero-state">
+      <div class="icon">✅</div>
+      <h3>No security issues found</h3>
+      <small>${data.lines_scanned || 0} lines scanned · Try an example above to see Ansede in action</small>
+    </div>`;
+    return;
+  }
+
+  const order = {critical:0,high:1,medium:2,low:3,info:4};
+  findings.sort((a,b) => (order[a.severity]||5) - (order[b.severity]||5));
+
+  panel.innerHTML = findings.map(f => `
+    <div class="finding">
+      <div class="finding-hdr">
+        <span class="badge ${esc(f.severity)}">${esc(f.severity)}</span>
+        <span class="finding-title">${esc(f.title)}</span>
+        <span class="finding-meta">
+          ${f.line ? `<span class="finding-line">L${f.line}</span>` : ''}
+          ${f.confidence !== null && f.confidence < 0.80 ? `<span class="conf-pill">${Math.round(f.confidence*100)}%</span>` : ''}
+        </span>
+      </div>
+      <div class="finding-body">
+        ${f.cwe ? `<div class="cwe-tag">${esc(f.cwe)}</div>` : ''}
+        ${f.description ? `<div class="finding-desc">${esc(f.description)}</div>` : ''}
+        ${f.suggestion ? `<div class="fix-box"><strong>💡 Fix:</strong> ${esc(f.suggestion)}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

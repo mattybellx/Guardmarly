@@ -77,11 +77,16 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
             
             cwe_str = f" ({f.cwe})" if f.cwe else ""
             location = f"L{f.line}" if f.line else "?"
-            
+            conf_display = ""
+            if f.confidence is not None and f.confidence < 0.80:
+                conf_display = f" [{f.confidence:.0%}]"
+
             header = Text()
             header.append(f"[{sev_str}]", style=f"reverse {rich_col}")
             header.append(f" {location:<6} ", style="dim")
             header.append(f"{f.title}{cwe_str}", style="bold")
+            if conf_display:
+                header.append(conf_display, style="dim")
             
             body = Text()
             if verbose:

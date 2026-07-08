@@ -37,7 +37,7 @@ from ansede_static.js_engine.backends import (
 from ansede_static.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
 from ansede_static.rules import describe_rule, list_rule_contracts
 from ansede_static.schema import FINGERPRINT_VERSION
-from ansede_static import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS
+from ansede_static import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS
 
 from ansede_static.ir.global_graph import GlobalGraph
 from ansede_static.profiler import ScanProfiler
@@ -82,6 +82,8 @@ def _detect_language(path: Path) -> str | None:
         return "ruby"
     if ext in _PHP_EXTS:
         return "php"
+    if ext in _RUST_EXTS:
+        return "rust"
     return None
 
 
@@ -556,6 +558,9 @@ def _analyze_file(
     elif lang == "php":
         from ansede_static.php_analyzer import analyze_php
         result = analyze_php(code, filename=str(path))
+    elif lang == "rust":
+        from ansede_static.rust_analyzer import analyze_rust
+        result = analyze_rust(code, filename=str(path))
     else:
         result = AnalysisResult(file_path=str(path), language="unknown")
 
@@ -1203,7 +1208,11 @@ def _postprocess_guarded_rescan_results(
 
     if min_conf > 0.0:
         for result in processed:
-            result.findings = [finding for finding in result.findings if finding.confidence >= min_conf]
+            result.findings = [
+                finding for finding in result.findings
+                if finding.confidence >= min_conf
+                or finding.severity.value in ("critical", "high")
+            ]
 
     if baseline_fps:
         processed = _apply_baseline(processed, baseline_fps)
@@ -1457,7 +1466,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Initialize a new ansede.json configuration file in the current directory.",
     )
     parser.add_argument(
-        "--lang", choices=["python", "javascript", "go", "java", "csharp", "ruby", "php"],
+        "--lang", choices=["python", "javascript", "go", "java", "csharp", "ruby", "php", "rust"],
         help="Force language detection (useful with --stdin).",
     )
     parser.add_argument(
@@ -1582,8 +1591,16 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
-        "--min-confidence", type=float, default=0.0, metavar="FLOAT",
-        help="Suppress findings with confidence below this value (0.0–1.0, default: 0.0).",
+        "--min-confidence", type=float, default=0.65, metavar="FLOAT",
+        help=(
+            "Only show findings with confidence >= THRESHOLD (0.0-1.0). "
+            "Default 0.65 filters ~60%% of low-signal noise while keeping all HIGH/CRITICAL findings. "
+            "Use --all-findings or --min-confidence 0.0 to see everything."
+        ),
+    )
+    parser.add_argument(
+        "--all-findings", action="store_true", default=False,
+        help="Show all findings regardless of confidence score (overrides --min-confidence).",
     )
     parser.add_argument(
         "--timeout-per-file", type=float, default=30.0, metavar="SECONDS",
@@ -2839,10 +2856,15 @@ def _main_impl() -> None:
         pass
 
     # ── Confidence filter ───────────────────────────────────────────────
-    min_conf: float = getattr(args, "min_confidence", 0.0)
+    _all_findings: bool = getattr(args, "all_findings", False)
+    min_conf: float = 0.0 if _all_findings else getattr(args, "min_confidence", 0.65)
     if min_conf > 0.0:
         for r in results:
-            r.findings = [f for f in r.findings if f.confidence >= min_conf]
+            r.findings = [
+                f for f in r.findings
+                if f.confidence >= min_conf
+                or f.severity.value in ("critical", "high")
+            ]
 
     # ── Strict mode: HIGH+CRITICAL only, no test/spec files ────────────
     if getattr(args, "strict", False):

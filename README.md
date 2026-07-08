@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Finds the vulnerabilities other SAST tools miss.</strong><br>
-  #1 CVE recall (100%) · #2 OWASP score · 5 languages · Fully offline<br>
+  #1 CVE recall (100%) · 6 languages · 35+ CWE types · Fully offline<br>
   <code>pip install ansede-static</code>
 </p>
 
@@ -16,9 +16,11 @@
   <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-100%25-success" alt="CVE 100%"></a>
   <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Recall-93.3%25-success?logo=owasp" alt="OWASP 93%"></a>
   <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Score-%2B0.8%25%20Youden-success" alt="OWASP Score"></a>
-  <a href=""><img src="https://img.shields.io/badge/Languages-5-blue" alt="5 langs"></a>
+  <a href=""><img src="https://img.shields.io/badge/Languages-6-blue" alt="6 langs"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <a href=""><img src="https://img.shields.io/badge/tests-952%20passed-success" alt="952 tests"></a>
+  <a href=""><img src="https://img.shields.io/badge/tests-1249%20passed-success" alt="1249 tests"></a>
+  <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/dm/ansede-static?label=PyPI%20installs&color=blue" alt="PyPI installs"></a>
 </p>
 
 ---
@@ -31,9 +33,13 @@ ansede-static src/                    # Scan a directory
 ansede-static src/ --format sarif     # GitHub Code Scanning
 ansede-static src/ --fail-on high     # CI gate (non-zero exit on findings)
 ansede-static src/ --format html      # Interactive HTML report
+ansede-static src/ --diff-only        # PR scan: only changed files (< 5s)
+ansede-static src/ --suggest          # Adaptive rules: improve based on your codebase
 ```
 
 No network, no API keys, no compilation. Just Python 3.9+ and `rich`.
+
+**[Try the live playground →](https://ansede.onrender.com/scan)** — no install required.
 
 ---
 
@@ -69,7 +75,7 @@ def get_invoice(id):
 | Tool | Recall | Score (Youden) |
 |---|---|---|
 | FBwFindSecBugs | ~45% | **+35.8%** 🥇 |
-| **Ansede 5.6.0** | **93.3%** 🥇 | **+0.8%** 🥈 |
+| **Ansede 6.0.0** | **93.3%** 🥇 | **+0.8%** 🥈 |
 | CodeQL | ~30% | ~-20% |
 | Semgrep OSS | ~20% | ~-30% |
 
@@ -110,7 +116,7 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 | **CVE Recall** | **100%** 🥇 | 23% | 34% | 40% |
 | **OWASP Recall** | **93%** 🥇 | 20% | 30% | 45% |
 | **OWASP Score** | +0.8% 🥈 | -30% | -20% | **+36%** 🥇 |
-| **Languages** | 5 | 20+ | 5+ | 1 |
+| **Languages** | **6** 🥇 | 20+ | 5+ | 1 |
 | **Auth/IDOR detection** | ✓ | custom | manual | ✗ |
 | **Fully offline** | ✓ | partial | ✗ | ✓ |
 | **Install** | `pip install` | needs binary | needs DB | needs Java |
@@ -124,14 +130,40 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 ## Features
 
 - **35+ CWE types** — SQLi, XSS, IDOR, auth bypass, SSRF, path traversal, command injection, hardcoded secrets, deserialization
-- **5 languages** — Python, JavaScript/TypeScript, Go, Java, C#
+- **6 languages** — Python, JavaScript/TypeScript, Go, Java, C#, **Rust**
 - **Route-aware analysis** — maps HTTP routes → auth guards → data sinks
 - **Framework profiles** — Spring, ASP.NET, Django, Express, Gin, Quarkus
 - **Incident clustering** — groups related findings, cuts noise ~49%
+- **Confidence scoring** — every finding rated 0–100%; low-signal results filtered by default
 - **Guard detection** — recognizes `@login_required`, `if user.is_authenticated`
 - **Output formats** — SARIF (GitHub Code Scanning), CycloneDX SBOM, HTML, JSON
-- **CI/CD ready** — `--incremental` git-diff, `--fail-on` exit codes, `--baseline`
-- **IDE plugins** — inline diagnostics in VS Code, IntelliJ IDEA, Visual Studio 2022
+- **CI/CD ready** — `--diff-only` PR scanning, `--fail-on` exit codes, `--baseline`
+- **IDE plugins** — inline diagnostics + one-click fixes in VS Code, IntelliJ IDEA, Visual Studio 2022
+
+---
+
+## Adaptive Rules
+
+Ansede learns from your codebase to reduce false positives over time:
+
+```bash
+ansede-static src/ --suggest          # Analyze gaps, propose new heuristics
+ansede-static src/ --all-findings     # Override confidence filter — see everything
+ansede-static src/ --min-confidence 0 # Same as --all-findings
+```
+
+After scanning multiple codebases, Ansede generates suppression rules that match your specific framework patterns — **fully offline, no ML API required**.
+
+---
+
+## CI/CD Templates
+
+| Platform | Template |
+|---|---|
+| **GitHub Actions** | Built-in (`uses: mattybellx/Ansede@v6.0.0`) |
+| **GitLab CI** | [docs/ci-templates/gitlab-ci.yml](docs/ci-templates/gitlab-ci.yml) |
+| **Azure DevOps** | [docs/ci-templates/azure-pipelines.yml](docs/ci-templates/azure-pipelines.yml) |
+| **Jenkins** | [docs/ci-templates/Jenkinsfile](docs/ci-templates/Jenkinsfile) |
 
 ---
 
@@ -139,11 +171,12 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 
 **Basic scan on push:**
 ```yaml
-- uses: mattybellx/Ansede@v5.6.0
+- uses: mattybellx/Ansede@v6.0.0
   with:
     path: src/
     fail-on: high
     upload-sarif: true
+    post-pr-comments: true      # Inline review comments on every PR finding
 ```
 
 **Auto-scan + open PR with findings (try it on any repo):**
@@ -178,7 +211,7 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 git clone https://github.com/mattybellx/Ansede.git
 cd Ansede
 pip install -e ".[dev]"
-pytest tests/ -q          # 952 tests
+pytest tests/ -q          # 1249 tests
 ```
 
 PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).

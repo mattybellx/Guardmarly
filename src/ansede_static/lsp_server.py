@@ -187,6 +187,7 @@ class LspServer:
     ) -> None:
         self._transport = transport or _StdioTransport()
         self._docs: dict[str, str] = {}          # uri → current content
+        self._findings_cache: dict[str, list[Any]] = {}  # uri → findings list
         self._debouncer = _Debouncer(delay=debounce_delay)
         self._shutdown = False
 
@@ -235,6 +236,8 @@ class LspServer:
                 findings = result.findings
 
             diagnostics = _findings_to_diagnostics(findings)
+            # Cache findings keyed by URI so codeAction/hover can reference them
+            self._findings_cache[uri] = findings
         except Exception as exc:  # noqa: BLE001
             _logger.exception("LSP analysis error for %s: %s", uri, exc)
         finally:
@@ -261,6 +264,11 @@ class LspServer:
                         "includeText": True,
                     },
                 },
+                "codeActionProvider": {
+                    "codeActionKinds": ["quickfix"],
+                    "resolveProvider": False,
+                },
+                "hoverProvider": True,
             },
             "serverInfo": {
                 "name":    "ansede-static",
@@ -303,6 +311,72 @@ class LspServer:
         self._debouncer.cancel()
         self._respond(msg.get("id"), None)
 
+    def _handle_code_action(self, msg: dict[str, Any]) -> None:
+        """Handle textDocument/codeAction — return quick-fix WorkspaceEdits."""
+        req_id = msg.get("id")
+        params = msg.get("params", {}) or {}
+        uri: str = (params.get("textDocument") or {}).get("uri", "")
+        findings = self._findings_cache.get(uri, [])
+        actions: list[dict[str, Any]] = []
+        for f in findings:
+            suggestion = getattr(f, "suggestion", None) or ""
+            auto_fix = getattr(f, "auto_fix", None) or ""
+            if not suggestion and not auto_fix:
+                continue
+            line_0 = max(0, (f.line or 1) - 1)
+            fix_text = suggestion or auto_fix
+            # Truncate long fix strings to a reasonable length for a quick-fix label
+            label_text = fix_text[:80] + "..." if len(fix_text) > 80 else fix_text
+            action: dict[str, Any] = {
+                "title": f"\U0001f6e1 Fix: {label_text}",
+                "kind": "quickfix",
+                "diagnostics": [],
+                "isPreferred": getattr(f, "severity", None) is not None
+                    and getattr(f.severity, "value", "") in ("critical", "high"),
+                "command": {
+                    "title": "Show fix suggestion",
+                    "command": "ansede.showFix",
+                    "arguments": [
+                        uri,
+                        f.line or 0,
+                        getattr(f, "cwe", "") or "",
+                        fix_text,
+                    ],
+                },
+            }
+            actions.append(action)
+        self._respond(req_id, actions)
+
+    def _handle_hover(self, msg: dict[str, Any]) -> None:
+        """Handle textDocument/hover — show vulnerability details on hover."""
+        req_id = msg.get("id")
+        params = msg.get("params", {}) or {}
+        uri: str = (params.get("textDocument") or {}).get("uri", "")
+        position = (params.get("position") or {})
+        hover_line = int(position.get("line", 0)) + 1  # LSP is 0-based
+        findings = self._findings_cache.get(uri, [])
+        matched = [f for f in findings if (f.line or 0) == hover_line]
+        if not matched:
+            self._respond(req_id, None)
+            return
+        f = matched[0]
+        cwe_link = ""
+        cwe = getattr(f, "cwe", "") or ""
+        if cwe:
+            num = cwe.replace("CWE-", "")
+            cwe_link = f" — [CWE-{num}](https://cwe.mitre.org/data/definitions/{num}.html)"
+        sev = getattr(getattr(f, "severity", None), "value", "").upper()
+        suggestion = getattr(f, "suggestion", "") or ""
+        fix_md = f"\n\n**\U0001f4a1 Fix:** {suggestion}" if suggestion else ""
+        md_value = (
+            f"**\U0001f6e1 [{sev}] {f.title}**{cwe_link}\n\n"
+            f"{getattr(f, 'description', '') or ''}"
+            f"{fix_md}"
+        )
+        self._respond(req_id, {
+            "contents": {"kind": "markdown", "value": md_value}
+        })
+
     # ── Dispatch ──────────────────────────────────────────────────────────────
 
     def _dispatch(self, msg: dict[str, Any]) -> None:
@@ -318,6 +392,10 @@ class LspServer:
             self._handle_did_change(msg)
         elif method == "textDocument/didSave":
             self._handle_did_save(msg)
+        elif method == "textDocument/codeAction":
+            self._handle_code_action(msg)
+        elif method == "textDocument/hover":
+            self._handle_hover(msg)
         elif method == "shutdown":
             self._handle_shutdown(msg)
         elif method == "exit":

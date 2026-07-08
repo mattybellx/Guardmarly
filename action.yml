@@ -42,6 +42,14 @@ inputs:
   post-pr-comments:
     description: 'Post inline review comments on the PR for each finding (requires pull-requests:write permission). Only active on pull_request events.'
     required: false
+    default: 'true'
+  min-confidence:
+    description: 'Only report findings with confidence >= threshold (0.0-1.0). Default 0.65 reduces noise ~60% while keeping all HIGH/CRITICAL.'
+    required: false
+    default: '0.65'
+  all-findings:
+    description: 'Show all findings regardless of confidence score (overrides min-confidence).'
+    required: false
     default: 'false'
   noise-gate:
     description: 'Enforce a strict web-wild noise quotient ceiling (e.g., 2.0). Fails the CI if the false-positive rate exceeds this limit.'
