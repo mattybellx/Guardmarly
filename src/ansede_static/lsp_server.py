@@ -323,7 +323,6 @@ class LspServer:
             auto_fix = getattr(f, "auto_fix", None) or ""
             if not suggestion and not auto_fix:
                 continue
-            line_0 = max(0, (f.line or 1) - 1)
             fix_text = suggestion or auto_fix
             # Truncate long fix strings to a reasonable length for a quick-fix label
             label_text = fix_text[:80] + "..." if len(fix_text) > 80 else fix_text
