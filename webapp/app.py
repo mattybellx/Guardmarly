@@ -79,6 +79,44 @@ def _check_rate_limit(ip: str, max_requests: int = _RATE_LIMIT_MAX_REQUESTS) -> 
     return True
 
 
+# ── Usage Stats (persistent JSON file, survives Render deploys) ─────────
+_STATS_DIR = Path(os.environ.get("RENDER_DATA_DIR", str(Path(__file__).parent / ".data")))
+_STATS_FILE = _STATS_DIR / "usage_stats.json"
+
+def _load_stats() -> dict[str, Any]:
+    try:
+        if _STATS_FILE.exists():
+            return json.loads(_STATS_FILE.read_text())
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {"total_scans": 0, "total_files": 0, "total_lines": 0,
+            "unique_ips_24h": {}, "scans_today": 0, "last_reset_date": ""}
+
+def _save_stats(stats: dict[str, Any]) -> None:
+    try:
+        _STATS_DIR.mkdir(parents=True, exist_ok=True)
+        _STATS_FILE.write_text(json.dumps(stats))
+    except OSError:
+        pass  # silently ignore write failures on read-only filesystems
+
+def _bump_stats(ip: str, files: int = 1, lines: int = 0) -> None:
+    stats = _load_stats()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if stats.get("last_reset_date") != today:
+        stats["scans_today"] = 0
+        stats["unique_ips_24h"] = {}
+        stats["last_reset_date"] = today
+    stats["total_scans"] = stats.get("total_scans", 0) + 1
+    stats["total_files"] = stats.get("total_files", 0) + files
+    stats["total_lines"] = stats.get("total_lines", 0) + lines
+    stats["scans_today"] = stats.get("scans_today", 0) + 1
+    if ip and ip != "127.0.0.1":
+        stats["unique_ips_24h"][ip] = today
+    _save_stats(stats)
+
+STATS = _load_stats()  # cache at startup
+
+
 # ── Email validation ───────────────────────────────────────────────────
 import re as _re
 _EMAIL_RE = _re.compile(r'^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$')
@@ -356,7 +394,10 @@ def _studio_api_response(*, guarded_fix: bool) -> tuple[Any, int]:
     return jsonify({"success": False, "error": error}), 400
 
   try:
-    return jsonify(_run_studio_mode(sources, guarded_fix=guarded_fix)), 200
+    result = _run_studio_mode(sources, guarded_fix=guarded_fix)
+    # ── Usage tracking ──────────────────────────────────────────────
+    _bump_stats(client_ip, files=len(sources), lines=sum(len(s.get("code","")) for s in sources))
+    return jsonify(result), 200
   except subprocess.TimeoutExpired:
     return jsonify({"success": False, "error": "Studio scan timed out. Try a smaller snippet."}), 504
   except Exception as exc:
@@ -1202,6 +1243,9 @@ def playground_post():
         or str(f.severity.value) in ("critical", "high")
     ]
 
+    # ── Usage tracking ──────────────────────────────────────────────
+    _bump_stats(client_ip, files=1, lines=result.lines_scanned)
+
     findings_out = []
     for f in result.findings:
         findings_out.append({
@@ -1252,6 +1296,29 @@ def api_export():
     return jsonify({"success": True, "content": content})
 
   return jsonify({"success": False, "error": f"Unsupported export format: {export_format}"}), 400
+
+
+@app.route("/stats")
+def usage_stats():
+    """Public usage stats page — see how many scans have been run."""
+    stats = _load_stats()
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    if stats.get("last_reset_date") != today:
+        stats["scans_today"] = 0
+        stats["unique_ips_24h"] = {}
+        stats["last_reset_date"] = today
+        _save_stats(stats)
+    
+    unique_today = len(stats.get("unique_ips_24h", {}))
+    
+    return jsonify({
+        "total_scans": stats.get("total_scans", 0),
+        "total_files": stats.get("total_files", 0),
+        "total_lines": stats.get("total_lines", 0),
+        "scans_today": stats.get("scans_today", 0),
+        "unique_ips_today": unique_today,
+        "version": "6.2.2",
+    })
 
 
 @app.route("/lookup")
