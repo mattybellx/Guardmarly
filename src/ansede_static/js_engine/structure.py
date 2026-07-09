@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from ansede_static.js_engine.common import consume_balanced, split_top_level, find_top_level_colon
 
 _CALL_RE = re.compile(r'((?:new\s+)?[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*)\s*\(')
-_PROPERTY_WRITE_RE = re.compile(r'\.(innerHTML|outerHTML)\s*(\+?=)')
+_PROPERTY_WRITE_RE = re.compile(r'\.(innerHTML|outerHTML|href|search|hash|pathname)\s*(\+?=)')
 _KEYWORD_CALLEES = {
     "if",
     "for",

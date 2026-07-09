@@ -23,6 +23,10 @@ DIRECT_TAINT_SOURCE_RE = re.compile(
     r'|location\.(?:href|search|hash)'
     r'|document\.cookie'
     r'|request\.headers\.get\s*\([^)]*\)'
+    r'|event\.queryStringParameters(?:\.[A-Za-z_$][\w$]*)?'
+    r'|event\.body'
+    r'|getQuery\([^)]*\)(?:\.[A-Za-z_$][\w$]*)?'
+    r'|url\.searchParams\.get\s*\([^)]*\)'
     r')\b',
     re.IGNORECASE,
 )

@@ -28,6 +28,8 @@ SHELL_TRUE_CALLEES: frozenset[str] = frozenset({
 })
 SQL_CALLEES: frozenset[str] = frozenset({
     "sequelize.query", "knex.raw",
+    "db.query", "db.execute", "pool.query", "pool.execute",
+    "connection.query", "connection.execute",
 })
 SSRF_CALLEES: frozenset[str] = frozenset({
     "fetch",
@@ -35,7 +37,8 @@ SSRF_CALLEES: frozenset[str] = frozenset({
     "request",
     "got", "got.get", "got.post", "got.stream",
     "needle", "needle.get", "needle.post", "needle.put", "needle.delete", "needle.request",
-    "superagent.get", "superagent.post",
+    "superagent.get", "superagent.post", "superagent.put", "superagent.delete", "superagent.request",
+    "node-fetch",
     "http.get", "https.get",
 })
 

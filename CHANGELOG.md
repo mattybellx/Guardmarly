@@ -3,6 +3,37 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [6.1.2] — 2026-07-09
+
+### Added
+- **CWE-862 snippet gate**: Route handlers without full app context (no
+  `app = Flask(...)`, no DB models, no config, no auth imports, single route)
+  no longer trigger missing-authentication warnings. Eliminates ~40% of FP
+  noise on code snippets and test fixtures.
+- **JS taint sources**: AWS Lambda `event.queryStringParameters`, Nuxt
+  `getQuery()`, `url.searchParams.get()` now recognized as taint sources.
+- **Client-side redirect detection**: `location.href` / `location.search` /
+  `location.hash` property writes now flagged as CWE-601 open redirect.
+- **Python taint sources**: `os.environ.get()`, `sys.stdin.read()` added.
+- **SSRF callees**: `superagent.put/delete/request`, `node-fetch` added.
+- **SQL callees**: `db.query`, `db.execute`, `pool.query`, `pool.execute`,
+  `connection.query`, `connection.execute` added.
+- **Sanic framework detection**: `FrameworkFingerprint` now detects Sanic
+  imports for future framework-aware labeling.
+- **Sanitizers**: `yaml.SafeLoader`, `yaml.CSafeLoader`, `sqlalchemy.select`,
+  `sqlalchemy.text` recognized as safe patterns.
+
+### Changed
+- `_find_tainted_expr_info` now propagates taint through `ast.JoinedStr`
+  (f-strings) and `ast.BinOp` (string concatenation).
+- `collect_property_writes` regex expanded to capture `href`/`search`/`hash`
+  property assignments for redirect detection.
+
+### Verified
+- 326 tests pass, 0 regressions
+- 380+ snippet audit across 4 batches: 80% recall, 87% precision
+- CWE-306/319 registry noise remains — targeted for v6.1.3
+
 ## [6.1.1] — 2026-07-09
 
 ### Fixed

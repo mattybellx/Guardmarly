@@ -703,8 +703,10 @@ def _check_path_traversal(
 def _check_open_redirect(
     calls: list[JsCall],
     taint_traces: dict[str, tuple[TraceFrame, ...]],
+    property_writes: list[JsPropertyWrite] | None = None,
 ) -> list[Finding]:
     findings: list[Finding] = []
+    # Server-side: res.redirect(url)
     for call in calls:
         if call.callee != "res.redirect" or not call.arguments:
             continue
@@ -726,6 +728,31 @@ def _check_open_redirect(
             cwe="CWE-601",
             trace=trace,
         ))
+    # Client-side: window.location / location.href = userInput
+    if property_writes:
+        for write in property_writes:
+            if write.property_name not in ("href", "search", "hash", "pathname"):
+                continue
+            expr = write.expression
+            if _expr_is_static_string(expr):
+                continue
+            trace = _flow_trace(expr, taint_traces, line=write.line, allow_generic_dynamic=True)
+            if not trace:
+                continue
+            trace = append_trace(trace, "sink", f"sink `location.{write.property_name}`", line=write.line)
+            findings.append(_make_finding(
+                line=write.line,
+                title=f"CWE-601: Client-side open redirect via location.{write.property_name} at line {write.line}",
+                description=(
+                    f"`location.{write.property_name}` at L{write.line} is assigned user-influenced content: "
+                    f"`{write.raw[:90]}`. Attackers can redirect victims to phishing pages."
+                ),
+                suggestion="Validate redirect URLs against an allowlist of trusted domains before assigning to location.",
+                severity=Severity.MEDIUM,
+                rule_id="JS-039",
+                cwe="CWE-601",
+                trace=trace,
+            ))
     return findings
 
 
@@ -918,7 +945,7 @@ def _build_checker_list(
         lambda: _check_sql_injection(calls, taint_traces),
         lambda: _check_dynamic_require(calls, project_context=project_ctx),
         lambda: _check_path_traversal(calls, taint_traces, code=code, project_context=project_ctx),
-        lambda: _check_open_redirect(calls, taint_traces),
+        lambda: _check_open_redirect(calls, taint_traces, property_writes=property_writes),
         lambda: _check_ssrf(calls, taint_traces, project_context=project_ctx),
         lambda: _check_csrf_js(code),
         lambda: _check_file_upload_js(code, calls),

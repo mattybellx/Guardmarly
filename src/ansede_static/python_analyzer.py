@@ -169,9 +169,17 @@ TAINT_SOURCES: dict[str, str] = {
     "input":                  "user console input",
     "sys.argv":               "command-line argument",
     "sys.stdin":              "stdin",
+    "sys.stdin.read":         "stdin data",
     # Environment
     "os.environ":             "environment variable",
+    "os.environ.get":         "environment variable",
     "os.getenv":              "environment variable",
+    # Command-line / runtime
+    "argparse.Namespace":     "CLI argument (argparse)",
+    # Messaging / task queues
+    "event":                  "AWS Lambda event",
+    "event.body":             "AWS Lambda/API Gateway HTTP body",
+    "event.queryStringParameters": "AWS Lambda query parameters",
     # File reads that may load attacker-controlled content
     "open":                   "file contents (may be attacker-controlled)",
     "pathlib.Path.read_text": "file contents (may be attacker-controlled)",
@@ -355,6 +363,8 @@ SANITIZERS: dict[str, set[str]] = {
     "ast.literal_eval":               {"CWE-95"},
     "yaml.safe_load":                 {"CWE-502"},
     "yaml.full_load":                 {"CWE-502"},
+    "yaml.SafeLoader":                {"CWE-502"},
+    "yaml.CSafeLoader":               {"CWE-502"},
     # Type-casting sanitizers (narrow the type, removing injection vectors)
     "int":                            {"CWE-89", "CWE-78", "CWE-95", "CWE-22"},
     "float":                          {"CWE-89", "CWE-78", "CWE-95"},
@@ -369,6 +379,11 @@ SANITIZERS: dict[str, set[str]] = {
     "urllib.parse.urlencode":         {"CWE-79"},
     "validators.url":                 {"CWE-918"},
     "ipaddress.ip_address":           {"CWE-918"},
+    # ORM / safe query sanitizers
+    "sqlalchemy.select":              {"CWE-89"},
+    "sqlalchemy.text":                {"CWE-89"},  # used with bind params
+    # Express-validator / validation libs
+    "express_validator.body":         {"CWE-89", "CWE-78"},
     # Regex validation (anchored patterns only — checked at use site)
     "re.match":                       {"CWE-89", "CWE-78", "CWE-22"},
     "re.fullmatch":                   {"CWE-89", "CWE-78", "CWE-22"},
@@ -4066,6 +4081,42 @@ def _rule_12(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     lines = ctx.lines
     func_defs = ctx.func_defs
+
+    # ── Snippet gate: suppress CWE-862 on code fragments without app context ──
+    # A real application has framework initialization, DB models, or config.
+    # Snippets (lone route handlers pasted without context) should not trigger
+    # missing-auth warnings — there's no app to secure.
+    full_source = "\n".join(lines) if lines else ""
+    _has_app_init = bool(re.search(
+        r'(?:app|application)\s*=\s*(?:Flask|FastAPI|Sanic|Starlette|Django|'
+        r'APIRouter|Router|create_app|get_app|make_app)\s*\(',
+        full_source,
+    ))
+    _has_db_models = bool(re.search(
+        r'(?:class\s+\w+\(.*Model.*\)|db\.Model|models\.Model|'
+        r'Column\(|Integer\(|String\(|ForeignKey\()',
+        full_source,
+    ))
+    _has_config = bool(re.search(
+        r'(?:SECRET_KEY|SQLALCHEMY_DATABASE_URI|DATABASES\s*=|'
+        r'DEBUG\s*=\s*(?:True|False)|app\.config\[)',
+        full_source,
+    ))
+    _has_auth_import = bool(re.search(
+        r'(?:login_required|jwt_required|token_required|require_auth|'
+        r'auth_required|HTTPBasicAuth|HTTPTokenAuth|passport|'
+        r'flask_login|LoginManager|JWTManager)',
+        full_source,
+    ))
+    _multi_route = len([f for f in func_defs.values()
+                        if any(isinstance(d, ast.Call) and isinstance(d.func, ast.Attribute)
+                               and d.func.attr in _FLASK_ROUTE_ATTRS
+                               for d in f.decorator_list)]) >= 2
+    _is_snippet = not (_has_app_init or _has_db_models or _has_config
+                       or _has_auth_import or _multi_route)
+    if _is_snippet:
+        return findings  # suppress CWE-862 on snippets
+
     # ── Rule 12: Missing auth on Flask/FastAPI routes (CWE-862) ──────────
     # We only flag routes that are genuinely risky:
     #   CRITICAL — /admin paths without auth
