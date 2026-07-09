@@ -30,10 +30,10 @@ rules:
   - id: registry/hono/auth/no-auth-middleware
     title: "Hono route without authentication middleware"
     cwe: CWE-306
-    severity: high
+    severity: medium
     pattern_type: regex
     regex: "app\\.(?:get|post|put|delete|patch)\\(['\"][^'\"]+['\"]\\s*,\\s*\\(c\\)"
-    confidence: 0.60
+    confidence: 0.55
     context_confirm: "auth|jwt|bearer|middleware|guard"
     negate_context: true
     context_lines: 8

@@ -67,7 +67,8 @@ rules:
   - id: registry/requests/auth/basic-clear-text
     title: "Basic auth credentials in URL"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "https?://[^:\"']+:[^@\"']+@"
     suggestion: "Use requests.auth.HTTPBasicAuth and pass credentials securely"

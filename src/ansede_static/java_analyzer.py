@@ -421,7 +421,7 @@ def _has_tainted_param(method: _JavaMethod) -> bool:
 
 # ── FPR Reduction: Sanitizer patterns per CWE ─────────────────────────
 _SANITIZERS_BY_CWE: dict[str, str] = {
-    "CWE-89": r"PreparedStatement\s+\w+\s*=\s*\w+\.prepareStatement|setString\s*\(\s*\d+\s*,",
+    "CWE-89": r"PreparedStatement\s+\w+\s*=\s*\w+\.prepareStatement|set(?:String|Int|Long|Double|Float|Boolean|Object|Date|Timestamp)\s*\(\s*\d+\s*,",
     "CWE-78": r"ProcessBuilder\s*\(\s*\"[^\"]+\"\s*\)\s*\.start\s*\(\s*\)",
     "CWE-22": r"getCanonicalPath\s*\(\s*\)|FilenameUtils\.getName\s*\(|\.contains\s*\(\s*\"\.\.\"",
     "CWE-90": r"replaceAll\s*\(\s*\"\[\^",
@@ -1508,7 +1508,7 @@ def analyze_java(
                 confidence=0.88, analysis_kind="route_heuristic",
             ))
 
-        if _has_route(method) and _has_id_route(method) and re.search(r"\b(?:findById|findOne|getOne)\s*\(", method.body) and not _has_ownership_guard(method.body):
+        if _has_route(method) and _has_id_route(method) and re.search(r"\b(?:findById|findOne|getOne)\s*\(", method.body) and not _has_ownership_guard(method.body) and not _has_auth(method):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
                 title=f"CWE-639: Route `{method.name}()` loads resource by id without ownership scope",
@@ -1519,7 +1519,7 @@ def analyze_java(
                 confidence=0.9, analysis_kind="route_heuristic",
             ))
 
-        if annotation_names & _MUTATING_ROUTE_ANNOTATIONS and re.search(r"\.(?:save|delete|deleteById)\s*\(", method.body) and not _has_ownership_guard(method.body):
+        if annotation_names & _MUTATING_ROUTE_ANNOTATIONS and re.search(r"\.(?:save|delete|deleteById)\s*\(", method.body) and not _has_ownership_guard(method.body) and not _has_auth(method):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
                 title=f"CWE-285: Mutating route `{method.name}()` missing authorization or ownership check",
@@ -1530,7 +1530,7 @@ def analyze_java(
                 confidence=0.84, analysis_kind="route_heuristic",
             ))
 
-        if _SQLI_RE.search(method.body):
+        if _SQLI_RE.search(method.body) and not _has_sanitizer(method.body, "CWE-89"):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
                 title=f"CWE-89: Dynamic SQL construction in `{method.name}()`",

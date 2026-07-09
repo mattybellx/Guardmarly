@@ -63,7 +63,8 @@ rules:
   - id: registry/python/api/missing-authentication
     title: "API endpoint without authentication decorator"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: taint_sink
     sinks:
       - "@app.route(\"/admin\""
@@ -121,7 +122,8 @@ rules:
   - id: registry/python/api/http-basic-over-http
     title: "HTTP Basic Auth over unencrypted HTTP connection"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: taint_sink
     sinks:
       - "HTTPBasicAuth()"

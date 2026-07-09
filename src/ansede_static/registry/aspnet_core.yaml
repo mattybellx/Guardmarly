@@ -40,7 +40,8 @@ rules:
   - id: registry/aspnet/auth/missing-authorize
     title: "ASP.NET Core controller action without [Authorize]"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "\\[Http(?:Get|Post|Put|Delete|Patch)\\](?!\\s*\\[Authorize)"
     suggestion: "Add [Authorize] attribute; use [AllowAnonymous] explicitly where public access is intended"

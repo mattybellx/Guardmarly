@@ -706,20 +706,23 @@ def _check_open_redirect(
     property_writes: list[JsPropertyWrite] | None = None,
 ) -> list[Finding]:
     findings: list[Finding] = []
-    # Server-side: res.redirect(url)
+    # Server-side: res.redirect(url) or res.redirect(status, url)
     for call in calls:
-        if call.callee != "res.redirect" or not call.arguments:
+        if call.callee not in ("res.redirect", "reply.redirect") or not call.arguments:
             continue
+        # If first arg is a number (status code), the URL is the second arg
         expr = call.arguments[0]
+        if len(call.arguments) >= 2 and call.arguments[0].isdigit():
+            expr = call.arguments[1]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)
         if not trace:
             continue
-        trace = append_trace(trace, "sink", "sink `res.redirect()`", line=call.line)
+        trace = append_trace(trace, "sink", f"sink `{call.callee}()`", line=call.line)
         findings.append(_make_finding(
             line=call.line,
             title=f"CWE-601: Open redirect via tainted variable at line {call.line}",
             description=(
-                f"`res.redirect()` at L{call.line} uses a user-influenced destination: `{call.raw[:90]}`. "
+                f"`{call.callee}()` at L{call.line} uses a user-influenced destination: `{call.raw[:90]}`. "
                 f"Attackers can redirect victims to untrusted sites."
             ),
             suggestion="Validate redirect targets against an allowlist of permitted relative paths or trusted hosts.",

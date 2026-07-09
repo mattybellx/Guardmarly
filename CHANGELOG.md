@@ -3,6 +3,39 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [6.2.0] — 2026-07-09
+
+### Added
+- **Shared taint-aware demotion** (`engine/confidence.py`): `apply_taint_aware_demotion()`
+  now used by both CLI and webapp for consistent severity policy. Injection/auth CWEs
+  require structural evidence (non-empty trace + non-heuristic analysis) to remain
+  HIGH/CRITICAL.
+- **Heuristic demotion**: CWEs in injection/auth class now also demote to MEDIUM when
+  `analysis_kind` is heuristic (`pattern`, `route-heuristic`, `decorator_heuristic`),
+  even when a trace exists. Only structural analysis + trace retains original severity.
+- **CWE-79** added to injection/auth demotion set (was missing from `_NO_TRACE_DEMOTE_CWES`).
+- **Reporter analysis label**: Text/HTML output now shows `analysis: heuristic` or
+  `analysis: structural` for findings with confidence &lt; 0.80 or heuristic kind,
+  using existing `Finding.confidence_label` property.
+- **Phase A precision tests** (`tests/test_taint_demotion.py`): 12 tests covering
+  pattern-only demotion, structural+trace preservation, quality CWE → LOW,
+  CWE-798 exception, heuristic+trace demotion, and full-pipeline `apply_taint_aware_demotion`.
+- **Phase B registry noise reduction**: 22 CWE-306 and CWE-319 rules across 16
+  registry packs lowered from HIGH → MEDIUM or HIGH → LOW, with explicit
+  `confidence` metadata. Includes Flask, FastAPI, Django REST, aiohttp, Celery,
+  NestJS, ASP.NET Core, GraphQL, Mongoose, Next.js, Socket.IO, Hono, Redis, SQLAlchemy,
+  MySQL2, pg, PyMongo, and requests library packs.
+- **Phase B quality corpus**: 3 new forbidden cases: guarded Flask route (no CWE-306/319),
+  bare route snippet (no CWE-306), and missing HSTS (no CWE-319 HIGH).
+
+### Changed
+- CLI demotion block replaced with call to shared `apply_taint_aware_demotion` from
+  `engine/confidence.py`. Behaviour is identical by default for existing users, but
+  now consistently applied regardless of entry point.
+- 22 registry rules reclassified: CWE-306 missing-auth patterns → MEDIUM with
+  confidence 0.50–0.60; CWE-319 cleartext/TLS config → MEDIUM or LOW with
+  confidence 0.40–0.55. HSTS-only findings no longer fail `--fail-on high`.
+
 ## [6.1.2] — 2026-07-09
 
 ### Added

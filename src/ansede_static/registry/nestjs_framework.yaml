@@ -6,7 +6,8 @@ rules:
   - id: registry/nestjs/auth/public-guard-missing
     title: "NestJS endpoint marked @Public() without security review"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.50
     pattern_type: regex
     regex: "@Public\\(\\)\\s*@(?:Get|Post|Put|Patch|Delete)\\("
     suggestion: "Review @Public() endpoints to ensure they don't expose sensitive operations"
@@ -17,7 +18,7 @@ rules:
     severity: high
     pattern_type: regex
     regex: "(?<!@UseGuards\\([^)]*\\)\\s*)@(?:Get|Post|Put|Patch|Delete)\\((?:[^)]*|)\\)\\s*(?:async\\s*)?\\w+"
-    confidence: 0.55
+    confidence: 0.45
     context_confirm: "@UseGuards|@Roles|@Public"
     negate_context: true
     context_lines: 15

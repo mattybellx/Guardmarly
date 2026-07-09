@@ -640,4 +640,412 @@ def generate_token():
         notes="Weak PRNG for security token generation should fire CWE-338.",
         guard_family="shadow-detector",
     ),
+    # ── Phase B: CWE-306 / CWE-319 noise reduction cases ──────────────────────
+    QualityCase(
+        case_id="py-flask-login-required-quiet",
+        language="python",
+        filename="guarded_route.py",
+        snippet="""
+from flask import Flask, g
+from functools import wraps
+
+app = Flask(__name__)
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        return f(*args, **kwargs)
+    return decorated
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    return {'user': g.user}
+""",
+        forbidden_cwes=("CWE-306", "CWE-319"),
+        notes="Flask route with @login_required should not fire missing-auth or TLS noise.",
+        guard_family="access-control",
+    ),
+    QualityCase(
+        case_id="py-snippet-no-app-context-quiet",
+        language="python",
+        filename="bare_route.py",
+        snippet="""
+@app.route('/maybe_admin')
+def maybe_admin():
+    return do_stuff()
+""",
+        forbidden_cwes=("CWE-306",),
+        forbidden_rule_ids=("PY-020",),
+        notes="Bare route without full Flask app context should stay quiet for missing-auth.",
+    ),
+    QualityCase(
+        case_id="py-hsts-missing-not-high",
+        language="python",
+        filename="flask_no_hsts.py",
+        snippet="""
+from flask import Flask
+
+app = Flask(__name__)
+app.config['PREFERRED_URL_SCHEME'] = 'http'
+
+@app.route('/')
+def index():
+    return 'ok'
+""",
+        forbidden_cwes=("CWE-319",),
+        notes="Missing HSTS/PREFERRED_URL_SCHEME=http should not produce HIGH finding after demotion.",
+    ),
+    # ── Phase C: Clean-repo contract cases ─────────────────────────────────────
+    QualityCase(
+        case_id="py-subprocess-list-safe",
+        language="python",
+        filename="safe_subprocess.py",
+        snippet="""
+import subprocess
+
+def run_tool(tool_name):
+    subprocess.run([tool_name, '--version'], shell=False, check=True)
+""",
+        forbidden_cwes=("CWE-78",),
+        notes="subprocess.run with list args and shell=False should stay quiet.",
+    ),
+    QualityCase(
+        case_id="py-yaml-safeload-safe",
+        language="python",
+        filename="safe_yaml.py",
+        snippet="""
+import yaml
+
+def load_config(path):
+    with open(path) as f:
+        return yaml.safe_load(f)
+""",
+        forbidden_cwes=("CWE-502",),
+        notes="yaml.safe_load should not fire deserialization warnings.",
+    ),
+    QualityCase(
+        case_id="py-os-system-unsafe",
+        language="python",
+        filename="unsafe_os_system.py",
+        snippet="""
+from flask import request
+import os
+
+def run():
+    user_cmd = request.args.get('cmd')
+    os.system(user_cmd)
+""",
+        expected_cwes=("CWE-78",),
+        notes="os.system with user input must still fire CWE-78.",
+        guard_family="shadow-detector",
+    ),
+    QualityCase(
+        case_id="js-param-query-safe",
+        language="javascript",
+        filename="safe_param_query.js",
+        js_backend="structural",
+        snippet="""
+const db = require('./db');
+
+async function getUser(req, res) {
+    const id = req.query.id;
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
+    res.json(user);
+}
+""",
+        forbidden_cwes=("CWE-89",),
+        notes="Parameterized query with placeholders should not fire CWE-89.",
+    ),
+    # ── Phase D: Guard modeling — Java / C# / Go auth guard suppression ────────
+    QualityCase(
+        case_id="java-spring-preauth-guarded",
+        language="java",
+        filename="SecureController.java",
+        snippet="""
+package com.example;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@RestController
+@RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ADMIN')")
+public class AdminController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+}
+""",
+        forbidden_cwes=("CWE-862", "CWE-639", "CWE-285"),
+        forbidden_rule_ids=("JV-001", "JV-002", "JV-003"),
+        notes="Spring controller with @PreAuthorize at class level should suppress auth/IDOR findings.",
+        guard_family="access-control",
+    ),
+    QualityCase(
+        case_id="java-spring-unguarded",
+        language="java",
+        filename="OpenController.java",
+        snippet="""
+package com.example;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@RestController
+public class OpenController {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/admin/users/{id}")
+    public User getUser(@PathVariable Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+}
+""",
+        expected_cwes=("CWE-862",),
+        expected_rule_ids=("JV-001",),
+        notes="Spring controller without @PreAuthorize on /admin path should fire missing-auth.",
+    ),
+    QualityCase(
+        case_id="csharp-authorize-guarded",
+        language="csharp",
+        filename="SecureController.cs",
+        snippet="""
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
+[ApiController]
+[Route("api/admin")]
+[Authorize(Roles = "Admin")]
+public class AdminController : ControllerBase
+{
+    [HttpGet("users/{id}")]
+    public async Task<IActionResult> GetUser(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        return Ok(user);
+    }
+}
+""",
+        forbidden_cwes=("CWE-862", "CWE-639"),
+        forbidden_rule_ids=("CS-001", "CS-002"),
+        notes="ASP.NET controller with [Authorize] should suppress auth/IDOR findings.",
+        guard_family="access-control",
+    ),
+    QualityCase(
+        case_id="csharp-unguarded-admin",
+        language="csharp",
+        filename="OpenController.cs",
+        snippet="""
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/admin")]
+public class OpenController : ControllerBase
+{
+    [HttpGet("users/{id}")]
+    public async Task<IActionResult> GetUser(int id)
+    {
+        var user = await _context.Users.FindAsync(id);
+        return Ok(user);
+    }
+}
+""",
+        expected_cwes=("CWE-862",),
+        expected_rule_ids=("CS-001",),
+        notes="ASP.NET admin controller without [Authorize] should fire missing-auth.",
+    ),
+    QualityCase(
+        case_id="go-gin-middleware-guarded",
+        language="go",
+        filename="secure_handler.go",
+        snippet="""
+package main
+
+import (
+    "net/http"
+    "github.com/gin-gonic/gin"
+)
+
+func AuthMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        c.Next()
+    }
+}
+
+func main() {
+    r := gin.Default()
+    r.Use(AuthMiddleware())
+    r.GET("/admin/users", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{"users": []string{}})
+    })
+}
+""",
+        forbidden_cwes=("CWE-862",),
+        notes="Go Gin handler behind AuthMiddleware should not fire missing-auth.",
+        guard_family="access-control",
+    ),
+    # ── P0: Java PreparedStatement safe vs unsafe ────────────────────────────
+    QualityCase(
+        case_id="java-preparedstatement-safe",
+        language="java",
+        filename="SafeJdbc.java",
+        snippet="""
+import java.sql.*;
+
+public class SafeJdbc {
+    public User getUser(Connection conn, int id) throws SQLException {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new User(rs.getInt("id"), rs.getString("name"));
+            }
+            return null;
+        }
+    }
+}
+""",
+        forbidden_cwes=("CWE-89",),
+        forbidden_rule_ids=("JV-004",),
+        notes="PreparedStatement with ? placeholders and setInt must NOT fire CWE-89.",
+    ),
+    QualityCase(
+        case_id="java-statement-concat-unsafe",
+        language="java",
+        filename="UnsafeJdbc.java",
+        snippet="""
+import java.sql.*;
+
+public class UnsafeJdbc {
+    public User getUser(Connection conn, String name) throws SQLException {
+        String sql = "SELECT * FROM users WHERE name = '" + name + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            return new User(rs.getInt("id"), rs.getString("name"));
+        }
+        return null;
+    }
+}
+""",
+        expected_cwes=("CWE-89",),
+        notes="String concatenation into SQL with Statement must still fire CWE-89.",
+    ),
+    # ── P1: Guard FP fixes ──────────────────────────────────────────────────
+    QualityCase(
+        case_id="csharp-antiforgery-no-auth-quiet",
+        language="csharp",
+        filename="AntiforgeryController.cs",
+        snippet="""
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("api/profile")]
+public class ProfileController : ControllerBase
+{
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateProfile(ProfileModel model)
+    {
+        _service.Update(model);
+        return RedirectToAction("Index");
+    }
+}
+""",
+        forbidden_cwes=("CWE-862",),
+        forbidden_rule_ids=("CS-001",),
+        notes="ASP.NET with [ValidateAntiForgeryToken] should not fire missing-auth.",
+        guard_family="access-control",
+    ),
+    # ── P2: Detection gap closures ───────────────────────────────────────────
+    QualityCase(
+        case_id="go-exec-command-shell-unsafe",
+        language="go",
+        filename="cmd_injection.go",
+        snippet="""
+package main
+
+import "os/exec"
+
+func run(userCmd string) {
+    cmd := exec.Command("sh", "-c", userCmd)
+    cmd.Run()
+}
+""",
+        expected_cwes=("CWE-78",),
+        notes="exec.Command with sh -c and user input should fire CWE-78.",
+        guard_family="shadow-detector",
+    ),
+    QualityCase(
+        case_id="csharp-fromsqlraw-interp-unsafe",
+        language="csharp",
+        filename="EfCoreSqlInjection.cs",
+        snippet="""
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+
+public class UserRepository
+{
+    private readonly AppDbContext _context;
+    
+    public async Task<User> GetUser(string username)
+    {
+        return await _context.Users
+            .FromSqlRaw($"SELECT * FROM Users WHERE Username = '{username}'")
+            .FirstOrDefaultAsync();
+    }
+}
+""",
+        expected_cwes=("CWE-89",),
+        notes="FromSqlRaw with interpolated string should fire CWE-89.",
+        guard_family="shadow-detector",
+    ),
+    # ── P2b: JS gap closures ─────────────────────────────────────────────────
+    QualityCase(
+        case_id="js-redirect-status-code-unsafe",
+        language="javascript",
+        filename="redirect_status.js",
+        js_backend="structural",
+        snippet="""
+const express = require('express');
+const app = express();
+
+app.get('/go', (req, res) => {
+    const dest = req.query.url;
+    res.redirect(301, dest);
+});
+""",
+        expected_cwes=("CWE-601",),
+        notes="res.redirect(301, userUrl) with status code should fire CWE-601.",
+        guard_family="shadow-detector",
+    ),
+    QualityCase(
+        case_id="js-download-path-traversal-unsafe",
+        language="javascript",
+        filename="download_unsafe.js",
+        js_backend="structural",
+        snippet="""
+const express = require('express');
+const app = express();
+
+app.get('/file', (req, res) => {
+    const filename = req.query.file;
+    res.download('/var/uploads/' + filename);
+});
+""",
+        expected_cwes=("CWE-22",),
+        notes="res.download with concatenated user path should fire CWE-22.",
+        guard_family="shadow-detector",
+    ),
 )

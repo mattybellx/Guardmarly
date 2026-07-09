@@ -46,7 +46,8 @@ rules:
   - id: registry/drf/auth/basic-auth-clear-text
     title: "BasicAuthentication sends credentials in clear text"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: taint_sink
     sinks:
       - authentication_classes = [BasicAuthentication]

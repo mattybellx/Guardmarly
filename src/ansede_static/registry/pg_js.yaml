@@ -38,7 +38,8 @@ rules:
   - id: registry/pg/tls/ssl-disabled
     title: "PostgreSQL connection with SSL disabled"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "ssl\\s*:\\s*false|rejectUnauthorized\\s*:\\s*false"
     suggestion: "Use ssl: { rejectUnauthorized: true, ca: ... } for PostgreSQL connections"

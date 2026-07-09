@@ -30,7 +30,8 @@ rules:
   - id: registry/celery/broker/no-tls
     title: "Celery broker connection without TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "broker_url\\s*=\\s*['\"]amqp://"
     suggestion: "Use amqps:// for RabbitMQ or rediss:// for Redis with SSL"
@@ -106,7 +107,8 @@ rules:
   - id: registry/celery/broker/redis-no-password
     title: "Redis broker without password authentication"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "broker_url\\s*=\\s*['\"]redis://(?!.*:[^@]+@)"
     suggestion: "Enable Redis AUTH: redis://:password@host:port/db"
@@ -159,7 +161,8 @@ rules:
   - id: registry/celery/broker/redis-no-tls
     title: "Celery Redis broker configured without TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "broker_url\\s*=\\s*['\"]redis://"
     suggestion: "Use rediss:// and configure TLS options for Redis broker connections"

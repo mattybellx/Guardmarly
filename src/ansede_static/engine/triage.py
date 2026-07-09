@@ -151,10 +151,18 @@ class ContextAnalyzer:
         '/e2e/', '\\e2e\\',
         '/spec/', '\\spec\\', '/cypress/', '\\cypress\\',
         '/playwright/', '\\playwright\\',
-        # Perf / benchmark / example directories (non-production code)
+        # Perf / benchmark / example / tutorial directories (non-production code)
         '/perf/', '\\perf\\', '/bench/', '\\bench\\',
         '/benchmarks/', '\\benchmarks\\', '/examples/', '\\examples\\',
-        '/example/', '\\example\\',
+        '/example/', '\\example\\', '/tutorial/', '\\tutorial\\',
+        '/tutorials/', '\\tutorials\\', '/demo/', '\\demo\\',
+        '/samples/', '\\samples\\', '/sample/', '\\sample\\',
+        '/docs_src/', '\\docs_src\\', '/doc_src/', '\\doc_src\\',
+        # Filename patterns that indicate test/example/tutorial code
+        'tutorial', 'example_', 'demo_',
+        # Build tooling
+        '/build-tools/', '/build-scripts/', 'gulpfile.', 'gruntfile.', 'webpack.',
+        '/scripts/', '\\scripts\\',
     ]
 
     MOCK_PATTERNS = [

@@ -84,7 +84,8 @@ rules:
   - id: registry/python/graphql/mutation-no-auth
     title: "GraphQL mutation without authentication check"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: taint_sink
     sinks:
       - "class Mutation(graphene.ObjectType):"
@@ -104,7 +105,8 @@ rules:
   - id: registry/python/graphql/subscription-no-auth
     title: "GraphQL subscription without authentication"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: taint_sink
     sinks:
       - "class Subscription(graphene.ObjectType):"

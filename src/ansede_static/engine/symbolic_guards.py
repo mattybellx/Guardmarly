@@ -38,13 +38,15 @@ class GuardInfo:
 
 _AUTH_GUARD_RE = re.compile(
     r'(?:\.is_authenticated\b|\.is_anonymous\b|@login_required|'
-    r'@permission_required|@user_passes_test|login_required\s*\()',
+    r'@permission_required|@user_passes_test|login_required\s*\('
+    r'|hmac\.compare_digest\s*\(|hmac\.new\s*\(|X-Hub-Signature)',
     re.IGNORECASE,
 )
 
 _CSRF_GUARD_RE = re.compile(
     r'(?:csrf_token|csrf_exempt\s*=\s*False|CsrfViewMiddleware|'
-    r'@csrf_protect|csrf\.get_token|wtforms\.csrf)',
+    r'@csrf_protect|csrf\.get_token|wtforms\.csrf|'
+    r'hmac\.compare_digest|hmac\.new\s*\([^)]*key\b|X-Hub-Signature)',
     re.IGNORECASE,
 )
 
@@ -76,7 +78,9 @@ _EXPLICIT_AUTH_TEST_RE = re.compile(
     r'(?:\buser\.is_authenticated\b|\brequest\.user\.is_authenticated\b|'
     r'\bcurrent_user\.is_authenticated\b|\btoken\s+is\s+not\s+None\b|'
     r'\bauth(?:entication|orized?)?_check\s*\(|\bpermission_check\s*\(|'
-    r'\bhas_permission\s*\(|\brequire_auth\s*\(|\bensure_auth\s*\()',
+    r'\bhas_permission\s*\(|\brequire_auth\s*\(|\bensure_auth\s*\(|'
+    r'\bhmac\.(?:compare_digest|new)\s*\(|X-Hub-Signature|'
+    r'\bwebhook\.verify\s*\(|\bsignature.*verify\b)',
     re.IGNORECASE,
 )
 
@@ -118,6 +122,7 @@ _JS_ROUTE_APPLY_RE = re.compile(
 
 _DENY_ACCESS_RE = re.compile(
     r'(?:abort\s*\(\s*(?:40[13]|403)\s*\)|return\s+(?:40[13]|403)\b|'
+    r'return\s+.*,\s*(?:40[13]|403)\s*\)|return\s+.*,\s*(?:40[13]|403)\b|'
     r'raise\s+PermissionDenied\b|forbidden\s*\(|deny\s*\(|unauthorized\s*\()',
     re.IGNORECASE,
 )
@@ -166,6 +171,11 @@ def _extract_python_guards(tree: ast.AST, source_lines: list[str]) -> list[Guard
                 if _PATH_BOUNDARY_GUARD_RE.search(sub):
                     guards.append(GuardInfo(
                         kind="path_boundary", line=node.lineno,
+                        protects_lines=body_lines,
+                    ))
+                if _CSRF_GUARD_RE.search(sub):
+                    guards.append(GuardInfo(
+                        kind="csrf_check", line=node.lineno,
                         protects_lines=body_lines,
                     ))
             self.generic_visit(node)

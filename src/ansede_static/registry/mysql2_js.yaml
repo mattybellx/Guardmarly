@@ -48,7 +48,8 @@ rules:
   - id: registry/mysql2/tls/ssl-disabled
     title: "MySQL connection without SSL"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "createConnection\\(\\{[^}]*ssl\\s*:\\s*false"
     suggestion: "Enable SSL: { ssl: { ca: fs.readFileSync('ca.pem') } }"

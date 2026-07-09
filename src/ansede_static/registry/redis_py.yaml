@@ -30,7 +30,8 @@ rules:
   - id: registry/redis/auth/no-password
     title: "Redis connection without password authentication"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "Redis\\(host=.*(?!password=)"
     suggestion: "Set password parameter: Redis(host=host, port=6379, password=os.environ['REDIS_PASSWORD'])"
@@ -46,7 +47,8 @@ rules:
   - id: registry/redis/tls/no-ssl
     title: "Redis connection without SSL/TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "Redis\\(.*(?!ssl=True)"
     suggestion: "Enable SSL: Redis(host=host, ssl=True, ssl_certfile=cert, ssl_keyfile=key)"

@@ -107,6 +107,8 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "net/http.Post": ("CWE-918", "SSRF via http.Post", "high"),
     "net/http.Head": ("CWE-918", "SSRF via http.Head", "high"),
     "http.NewRequest": ("CWE-918", "SSRF via http.NewRequest", "high"),
+    "exec.Command": ("CWE-78", "Command Injection via exec.Command", "critical"),
+    "os/exec.Command": ("CWE-78", "Command Injection via os/exec.Command", "critical"),
     "json.Unmarshal": ("CWE-502", "Unsafe Deserialization via json.Unmarshal", "low"),
     "gob.NewDecoder": ("CWE-502", "Unsafe Deserialization via gob.NewDecoder", "critical"),
     "xml.Unmarshal": ("CWE-502", "XXE/Unsafe Deserialization via xml.Unmarshal", "high"),
@@ -154,6 +156,18 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "redis.NewClient": ("CWE-200", "Redis client created without TLS", "low"),
 }
 
+# ── Sensitive log-data patterns ────────────────────────────────────────
+# Only flag log.Printf/etc. when arguments match these — avoids noise
+# on standard HTTP method/path/status logging.
+_SENSITIVE_LOG_RE = re.compile(
+    r'(?:password|secret|token|key|credential|ssn|credit|'
+    r'auth(?:entication|orized?)?|session|private)',
+    re.IGNORECASE,
+)
+
+# ── Log sinks (names that should be checked for sensitive args) ─────────
+_LOG_SINKS: set[str] = {"log.Printf", "log.Println", "log.Fatalf", "log.Print"}
+
 # ── Known-safe unsafe.Pointer patterns ──────────────────────────────────
 # These use unsafe.Pointer for zero-allocation performance in well-audited
 # standard library patterns (e.g., WebSocket masking, hash mixing).
@@ -192,6 +206,9 @@ def _resolve_expr_name(expr: GoExpr) -> Optional[str]:
         return expr.sel.name
     if isinstance(expr, GoLiteral) and isinstance(expr.value, str):
         return expr.value
+    # Resolve function calls: AuthMiddleware() -> AuthMiddleware
+    if isinstance(expr, GoCallExpr):
+        return _resolve_expr_name(expr.func)
     return None
 
 
@@ -610,6 +627,15 @@ class GoSecurityWalker:
         sink_info = _is_dangerous_sink(call.func)
         if sink_info:
             cwe, title, severity = sink_info
+            # ── Log sinks: only flag when args contain sensitive data ────
+            if func_name and func_name in _LOG_SINKS:
+                args_text = " ".join(
+                    _resolve_expr_name(a) or ""
+                    for a in call.args
+                )
+                if not _SENSITIVE_LOG_RE.search(args_text):
+                    return
+            # ───────────────────────────────────────────────────────────────
             for arg in call.args:
                 source = self._check_taint(arg)
                 if source:

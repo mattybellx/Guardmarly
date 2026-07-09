@@ -89,7 +89,8 @@ rules:
   - id: registry/sqlalchemy/connection/pool-no-ssl
     title: "Database connection without SSL/TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "create_engine\\(.*sslmode=['\"]disable['\"]"
     suggestion: "Use sslmode='require' or 'verify-full' for database connections"
@@ -224,7 +225,8 @@ rules:
   - id: registry/sqlalchemy/crypto/connection-no-tls
     title: "MySQL/PostgreSQL connection without requiring TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "create_engine\\(.*connect_args.*ssl.*False"
     suggestion: "Enable SSL: connect_args={'ssl': {'sslmode': 'require'}}"

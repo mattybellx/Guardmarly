@@ -51,6 +51,7 @@ PATH_CALLEE_PARTS: frozenset[str] = frozenset({
     "access", "accessSync",
     "createReadStream", "createWriteStream",
     "resolve", "join",
+    "sendFile", "download", "sendfile",
 })
 
 LOOKUP_CALLEE_PARTS: frozenset[str] = frozenset({

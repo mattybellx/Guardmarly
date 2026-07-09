@@ -64,6 +64,8 @@ def test_apply_auto_fixes_only_applies_safe_inline_replacements(tmp_path):
                 line=1,
                 suggestion="",
                 auto_fix="BEFORE: unsafe_call(x)\nAFTER:  safe_call(x)",
+                analysis_kind="syntax-ast",
+                confidence=0.90,
             ),
             Finding(
                 category="security",
@@ -73,6 +75,8 @@ def test_apply_auto_fixes_only_applies_safe_inline_replacements(tmp_path):
                 line=2,
                 suggestion="",
                 auto_fix="BEFORE: second_unsafe_call(y)\nAFTER:  sanitized = sanitize(y)\n        safe_call(sanitized)",
+                analysis_kind="syntax-ast",
+                confidence=0.90,
             ),
         ],
     )
@@ -421,6 +425,8 @@ def test_guarded_auto_fix_keeps_verified_fix(tmp_path):
                     suggestion="",
                     rule_id="PY-001",
                     auto_fix="BEFORE: unsafe_call(x)\nAFTER:  safe_call(x)",
+                    analysis_kind="syntax-ast",
+                    confidence=0.90,
                 )
             ],
         )
@@ -457,6 +463,8 @@ def test_guarded_auto_fix_reverts_when_rescan_finds_new_issue(tmp_path):
                     suggestion="",
                     rule_id="PY-001",
                     auto_fix="BEFORE: unsafe_call(x)\nAFTER:  safe_call(x)",
+                    analysis_kind="syntax-ast",
+                    confidence=0.90,
                 )
             ],
         )

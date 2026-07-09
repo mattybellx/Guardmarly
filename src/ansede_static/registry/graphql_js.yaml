@@ -70,7 +70,8 @@ rules:
   - id: registry/graphql/subscription/no-auth
     title: "GraphQL subscription without authentication"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "subscribe:\\s*(?:async\\s*)?\\([^)]*\\)\\s*=>"
     suggestion: "Validate JWT or session token in the subscribe function"

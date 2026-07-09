@@ -1014,6 +1014,23 @@ def _apply_auto_fixes_with_backups(
                     continue
                 if not finding.auto_fix or not finding.line:
                     continue
+                # ── Autofix safety gate ──────────────────────────────────
+                # Block autofix for heuristic injection-class CWEs where a
+                # bad rewrite could break functionality. Auth-missing (CWE-862,
+                # CWE-306) autofixes are always safe — they add guard decorators.
+                _heuristic_kinds = {"pattern", "pattern-taint", "route-heuristic",
+                                    "route_heuristic", "decorator_heuristic"}
+                _injection_cwes = {"CWE-89", "CWE-78", "CWE-79", "CWE-94", "CWE-95",
+                                   "CWE-22", "CWE-918", "CWE-502", "CWE-601"}
+                _kind = (finding.analysis_kind or "").lower()
+                _cwe = (finding.cwe or "").upper()
+                if _kind in _heuristic_kinds and _cwe in _injection_cwes:
+                    skipped_count += 1
+                    continue
+                if _kind in _heuristic_kinds and (finding.confidence or 0) < 0.80:
+                    skipped_count += 1
+                    continue
+                # ───────────────────────────────────────────────────────────
                 parsed_fix = _parse_auto_fix_block(finding.auto_fix)
                 if not parsed_fix:
                     skipped_count += 1
@@ -2856,46 +2873,10 @@ def _main_impl() -> None:
         pass
 
     # ── Taint-aware demotion ────────────────────────────────────────────
-    # Demote HIGH/CRITICAL findings where no taint path evidence exists.
-    # Without a trace from user input to the sink, pattern-only matches
-    # are demoted to MEDIUM at most.  Exception: CWE-798 hardcoded secrets
-    # can be real without a taint path.
-    _HARDCODED_DEMOTE_CWES: frozenset[str] = frozenset({
-        "CWE-617", "CWE-470", "CWE-200", "CWE-532",
-    })
-    _NO_TRACE_DEMOTE_CWES: frozenset[str] = frozenset({
-        "CWE-89", "CWE-78", "CWE-117", "CWE-113", "CWE-601",
-        "CWE-352", "CWE-862", "CWE-639", "CWE-434", "CWE-1188",
-        "CWE-94", "CWE-95", "CWE-502", "CWE-22", "CWE-918", "CWE-285",
-    })
-
-    for r in results:
-        new_findings = []
-        for f in r.findings:
-            sev_val = str(f.severity.value) if hasattr(f.severity, 'value') else str(f.severity)
-            if sev_val not in ("critical", "high"):
-                new_findings.append(f)
-                continue
-
-            cwe = (f.cwe or "").upper()
-            has_trace = bool(f.trace and len(f.trace) > 0)
-
-            # Always-demote rules (code quality, not security)
-            if cwe in _HARDCODED_DEMOTE_CWES:
-                f = Finding(category=f.category, severity=Severity.LOW, title=f.title,
-                    description=f.description, line=f.line, suggestion=f.suggestion,
-                    rule_id=f.rule_id, cwe=f.cwe, agent=f.agent, confidence=0.20,
-                    auto_fix=f.auto_fix, explanation=f.explanation, trace=f.trace,
-                    analysis_kind=f.analysis_kind, triggering_code=f.triggering_code)
-            # No-trace-demote: if no taint path exists, pattern-only -> medium
-            elif cwe in _NO_TRACE_DEMOTE_CWES and not has_trace:
-                f = Finding(category=f.category, severity=Severity.MEDIUM, title=f.title,
-                    description=f.description, line=f.line, suggestion=f.suggestion,
-                    rule_id=f.rule_id, cwe=f.cwe, agent=f.agent, confidence=0.35,
-                    auto_fix=f.auto_fix, explanation=f.explanation, trace=f.trace,
-                    analysis_kind=f.analysis_kind, triggering_code=f.triggering_code)
-            new_findings.append(f)
-        r.findings = new_findings
+    # Demote HIGH/CRITICAL findings where no structural taint evidence exists.
+    # Uses shared policy from engine/confidence.py so webapp gets same behavior.
+    from ansede_static.engine.confidence import apply_taint_aware_demotion
+    apply_taint_aware_demotion(results)
 
     # ── Confidence filter ───────────────────────────────────────────────
     _all_findings: bool = getattr(args, "all_findings", False)
@@ -2907,6 +2888,31 @@ def _main_impl() -> None:
                 if f.confidence >= min_conf
                 or f.severity.value in ("critical", "high")
             ]
+
+    # ── Test/benchmark/tutorial context downgrade ──────────────────────
+    # Applies to ALL scan modes. Findings in non-production files get
+    # confidence reduced so they don't surface as HIGH+ without real
+    # structural evidence (trace + non-heuristic analysis_kind).
+    from ansede_static.engine.triage import ContextAnalyzer
+    _test_downgraded = 0
+    for r in results:
+        _is_test, _ = ContextAnalyzer.is_test_context(r.file_path, "")
+        _is_mock, _ = ContextAnalyzer.is_mock_context(r.file_path, "")
+        if not (_is_test or _is_mock):
+            continue
+        for f in r.findings:
+            # Only downgrade heuristic/pattern findings — structural taint
+            # findings with real traces may still be valid in test code
+            # (e.g., hardcoded secrets in test fixtures).
+            is_structural = bool(f.trace and len(f.trace) > 0 and 
+                f.analysis_kind not in ("pattern", "pattern-taint", 
+                    "route-heuristic", "route_heuristic", "decorator_heuristic"))
+            if not is_structural:
+                f.confidence = min(f.confidence, 0.35)
+                _test_downgraded += 1
+    if _test_downgraded > 0:
+        print(f"ansede-static: test/benchmark/tutorial context downgraded {_test_downgraded} findings",
+              file=sys.stderr)
 
     # ── Strict mode: HIGH+CRITICAL only, no test/spec files ────────────
     if getattr(args, "strict", False):

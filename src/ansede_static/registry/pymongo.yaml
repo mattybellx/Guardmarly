@@ -71,7 +71,8 @@ rules:
   - id: registry/pymongo/auth/no-auth-source
     title: "MongoDB connection without authentication"
     cwe: CWE-306
-    severity: critical
+    severity: high
+    confidence: 0.60
     pattern_type: regex
     regex: "MongoClient\\(['\"]mongodb://(?!.*:[^@]+@)"
     suggestion: "Always include credentials in the connection string or use authSource"
@@ -87,7 +88,8 @@ rules:
   - id: registry/pymongo/auth/no-tls
     title: "MongoDB connection without TLS"
     cwe: CWE-319
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "MongoClient\\(.*tls\\s*=\\s*False|ssl\\s*=\\s*False"
     suggestion: "Enable TLS: MongoClient(tls=True, tlsCAFile='ca.pem')"

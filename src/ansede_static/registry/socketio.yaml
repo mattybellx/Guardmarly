@@ -6,7 +6,8 @@ rules:
   - id: registry/socketio/auth/no-namespace-auth
     title: "Socket.IO namespace without authentication middleware"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "@sio\\.event(?:\\(namespace=['\"][^'\"]+['\"]\\))?\\s*\\nasync def connect"
     suggestion: "Validate auth tokens in the connect event handler and return False to reject"

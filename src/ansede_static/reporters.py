@@ -78,8 +78,11 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
             cwe_str = f" ({f.cwe})" if f.cwe else ""
             location = f"L{f.line}" if f.line else "?"
             conf_display = ""
+            analysis_label = ""
             if f.confidence is not None and f.confidence < 0.80:
                 conf_display = f" [{f.confidence:.0%}]"
+            if f.confidence is not None and (f.confidence < 0.80 or f.confidence_label == "heuristic"):
+                analysis_label = f"  analysis: {f.confidence_label}"
 
             header = Text()
             header.append(f"[{sev_str}]", style=f"reverse {rich_col}")
@@ -87,6 +90,8 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
             header.append(f"{f.title}{cwe_str}", style="bold")
             if conf_display:
                 header.append(conf_display, style="dim")
+            if analysis_label:
+                header.append(analysis_label, style="dim")
             
             body = Text()
             if verbose:
@@ -147,6 +152,9 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
         location = f"L{f.line}" if f.line else "?"
         cwe = f" ({f.cwe})" if f.cwe else ""
         lines.append(f"  {sev_label}  {location:<6}  {f.title}{cwe}")
+
+        if f.confidence is not None and (f.confidence < 0.80 or f.confidence_label == "heuristic"):
+            lines.append(f"             analysis: {f.confidence_label}")
 
         if verbose:
             lines.append(f"             -> {f.description[:120]}")

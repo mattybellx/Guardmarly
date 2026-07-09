@@ -62,7 +62,8 @@ rules:
   - id: registry/aiohttp/auth/no-authentication
     title: "aiohttp route handler without authentication check"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: ast_structural
     route_decorator: "@routes.get("
     missing_decorators:

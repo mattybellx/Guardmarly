@@ -1190,6 +1190,18 @@ def playground_post():
     except Exception as exc:
         return jsonify({"error": f"Scan error: {type(exc).__name__}"}), 500
 
+    # Apply shared taint-aware demotion (same policy as CLI)
+    from ansede_static.engine.confidence import apply_taint_aware_demotion
+    apply_taint_aware_demotion([result])
+
+    # Apply confidence filter (default 0.65, keep HIGH/CRITICAL)
+    min_conf = 0.65
+    result.findings = [
+        f for f in result.findings
+        if f.confidence >= min_conf
+        or str(f.severity.value) in ("critical", "high")
+    ]
+
     findings_out = []
     for f in result.findings:
         findings_out.append({

@@ -1,7 +1,7 @@
 """
 ansede_static.engine.confidence
 ────────────────────────────────
-Confidence scoring engine (ROADMAP Section 8).
+Confidence scoring engine (ROADMAP Section 8) and taint-aware demotion policy.
 
 Weights multiple dimensions of analysis quality to produce a normalized
 confidence score (0.0–1.0) for each finding. Higher scores indicate
@@ -16,13 +16,22 @@ Dimensions:
   6. sink_severity     — inherent dangerousness of the sink
 
 Weighted average produces final confidence. Weights are tunable.
+
+Taint-aware demotion (world-best precision policy):
+  Shared function ``apply_taint_aware_demotion`` is used by both CLI
+  and hosted webapp to enforce consistent severity policy:
+  - Injection/auth CWEs without a taint trace → MEDIUM at most
+  - Heuristic analysis + injection/auth CWE → MEDIUM (even with trace)
+  - Structural analysis + trace → unchanged (ground truth)
+  - CWE-798 (hardcoded secrets) may stay HIGH without trace
+  - Quality CWEs (CWE-617, CWE-470, CWE-200, CWE-532) → always LOW
 """
 from __future__ import annotations
 
 import re
-from typing import Optional
+from typing import Optional, List
 
-from ansede_static._types import Finding
+from ansede_static._types import AnalysisResult, Finding, Severity
 
 # ── Weights (sum to 1.0 after normalization) ──────────────────────────────
 
@@ -253,3 +262,118 @@ def rescore_findings(
     for finding in findings:
         finding.confidence = score_confidence(finding, weights=weights)
     return findings
+
+
+# ── Taint-Aware Demotion Policy ─────────────────────────────────────────────
+# Shared between CLI and hosted webapp (playground / studio).
+# Structural analysis + trace = ground truth → not demoted.
+# Heuristic analysis even with trace → demoted for injection/auth CWEs.
+# No trace at all → demoted to MEDIUM for injection/auth CWEs.
+
+_INJECTION_OR_AUTH_CWES: frozenset[str] = frozenset({
+    "CWE-89", "CWE-78", "CWE-79", "CWE-94", "CWE-95", "CWE-22", "CWE-918",
+    "CWE-601", "CWE-502", "CWE-117", "CWE-113", "CWE-352", "CWE-434",
+    "CWE-862", "CWE-639", "CWE-285", "CWE-1188",
+})
+
+_QUALITY_ALWAYS_LOW_CWES: frozenset[str] = frozenset({
+    "CWE-617", "CWE-470", "CWE-200", "CWE-532", "CWE-1120",
+})
+
+_HEURISTIC_KINDS: frozenset[str] = frozenset({
+    "pattern", "pattern-taint", "route-heuristic", "route_heuristic",
+    "decorator_heuristic",
+})
+
+
+def _should_demote(finding: Finding) -> str | None:
+    """Return 'low', 'medium', or None (no demotion).
+
+    Policy:
+    - Quality CWEs (CWE-617, CWE-470, etc.) → always LOW.
+    - CWE-798 (hardcoded secrets) may stay HIGH without trace.
+    - Injection/auth CWEs without a structural trace → MEDIUM at most.
+    - Structural analysis + non-empty trace → never demoted (ground truth).
+    """
+    cwe = (finding.cwe or "").upper()
+    sev = str(finding.severity.value) if hasattr(finding.severity, 'value') else str(finding.severity)
+    if sev not in ("critical", "high"):
+        return None
+
+    # Quality noise → always LOW
+    if cwe in _QUALITY_ALWAYS_LOW_CWES:
+        return "low"
+
+    # Hardcoded secrets are real without taint
+    if cwe == "CWE-798":
+        return None
+
+    # Injection / auth CWEs: require evidence
+    if cwe in _INJECTION_OR_AUTH_CWES:
+        has_trace = bool(finding.trace and len(finding.trace) > 0)
+        kind = (finding.analysis_kind or "").lower()
+
+        if not has_trace:
+            return "medium"
+
+        # Heuristic analysis is less reliable — demote even with trace
+        if kind in _HEURISTIC_KINDS:
+            return "medium"
+
+        # Structural + trace → ground truth, do not demote
+        return None
+
+    return None
+
+
+def apply_taint_aware_demotion(
+    results: List[AnalysisResult],
+) -> List[AnalysisResult]:
+    """Demote HIGH/CRITICAL findings that lack structural evidence.
+
+    Modifies results in-place and returns them for pipeline chaining.
+    Called by CLI post-processing and by the hosted webapp playground/studio.
+    """
+    for r in results:
+        new_findings: list[Finding] = []
+        for f in r.findings:
+            demote_to = _should_demote(f)
+            if demote_to == "low":
+                f = Finding(
+                    category=f.category,
+                    severity=Severity.LOW,
+                    title=f.title,
+                    description=f.description,
+                    line=f.line,
+                    suggestion=f.suggestion,
+                    rule_id=f.rule_id,
+                    cwe=f.cwe,
+                    agent=f.agent,
+                    confidence=0.20,
+                    auto_fix=f.auto_fix,
+                    explanation=f.explanation,
+                    trace=f.trace,
+                    analysis_kind=f.analysis_kind,
+                    triggering_code=f.triggering_code,
+                )
+            elif demote_to == "medium":
+                f = Finding(
+                    category=f.category,
+                    severity=Severity.MEDIUM,
+                    title=f.title,
+                    description=f.description,
+                    line=f.line,
+                    suggestion=f.suggestion,
+                    rule_id=f.rule_id,
+                    cwe=f.cwe,
+                    agent=f.agent,
+                    confidence=0.35,
+                    auto_fix=f.auto_fix,
+                    explanation=f.explanation,
+                    trace=f.trace,
+                    analysis_kind=f.analysis_kind,
+                    triggering_code=f.triggering_code,
+                )
+            new_findings.append(f)
+        r.findings = new_findings
+    return results

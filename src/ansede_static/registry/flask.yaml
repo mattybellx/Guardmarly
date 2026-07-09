@@ -411,7 +411,8 @@ rules:
   - id: registry/flask/misconfiguration/force-https-missing
     title: "HTTP strict transport security not enforced"
     cwe: CWE-319
-    severity: high
+    severity: low
+    confidence: 0.40
     pattern_type: regex
     regex: "PREFERRED_URL_SCHEME\\s*=\\s*['\"]http['\"]"
     suggestion: "Set PREFERRED_URL_SCHEME='https' and use flask-talisman or HSTS header"

@@ -111,7 +111,8 @@ rules:
   - id: registry/fastapi/auth/missing-depends-security
     title: "Missing authentication Depends in route"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: ast_structural
     route_decorator: "@router.get("
     missing_decorators:
@@ -122,7 +123,8 @@ rules:
   - id: registry/fastapi/auth/missing-depends-post
     title: "POST route missing authentication Depends"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: ast_structural
     route_decorator: "@router.post("
     missing_decorators:

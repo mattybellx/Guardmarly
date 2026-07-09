@@ -341,6 +341,21 @@ def _has_allow_anonymous(method: _CSharpMethod) -> bool:
     return _has_attribute(method.attributes, _PUBLIC_ACCESS_ATTRIBUTES) or _has_attribute(method.class_attributes, _PUBLIC_ACCESS_ATTRIBUTES)
 
 
+def _has_antiforgery(method: _CSharpMethod) -> bool:
+    """Check if method or controller has antiforgery protection."""
+    _CSRF_RE = re.compile(
+        r'ValidateAntiForgeryToken|AutoValidateAntiforgeryToken|'
+        r'__RequestVerificationToken|AntiforgeryTokenSet',
+        re.IGNORECASE,
+    )
+    if _CSRF_RE.search(method.body):
+        return True
+    if any('ValidateAntiForgeryToken' in attr or 'AutoValidateAntiforgeryToken' in attr
+           for attr in (*method.attributes, *method.class_attributes)):
+        return True
+    return False
+
+
 def _has_route(method: _CSharpMethod) -> bool:
     return _has_attribute(method.attributes, _ROUTE_ATTRIBUTES)
 
@@ -443,7 +458,7 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
     for method in methods:
         attr_names = {_short_name(raw.strip()[1:-1].split('(', 1)[0].strip()) for raw in method.attributes}
 
-        if _has_route(method) and not is_admin_controller and not _is_public_route(method) and not _has_auth(method) and not _has_allow_anonymous(method):
+        if _has_route(method) and not is_admin_controller and not _is_public_route(method) and not _has_auth(method) and not _has_allow_anonymous(method) and not _has_antiforgery(method):
             findings.append(Finding(
                 category="security",
                 severity=Severity.HIGH,
@@ -458,7 +473,7 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 analysis_kind="route_heuristic",
             ))
 
-        if _has_route(method) and _has_id_route(method) and _FINDASYNC_RE.search(method.body) and not _has_ownership_guard(method.body):
+        if _has_route(method) and _has_id_route(method) and _FINDASYNC_RE.search(method.body) and not _has_ownership_guard(method.body) and not _has_auth(method):
             findings.append(Finding(
                 category="security",
                 severity=Severity.CRITICAL,
@@ -473,7 +488,7 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 analysis_kind="route_heuristic",
             ))
 
-        if attr_names & _MUTATING_ATTRIBUTES and _SAVE_RE.search(method.body) and not _has_ownership_guard(method.body):
+        if attr_names & _MUTATING_ATTRIBUTES and _SAVE_RE.search(method.body) and not _has_ownership_guard(method.body) and not _has_auth(method):
             findings.append(Finding(
                 category="security",
                 severity=Severity.HIGH,
@@ -500,6 +515,20 @@ def analyze_csharp(source: str, filename: str = "<input>") -> AnalysisResult:
                 cwe="CWE-89",
                 agent="csharp-analyzer",
                 confidence=0.95,
+                analysis_kind="taint_flow",
+            ))
+        elif _CS_SQLI_RAW_RE.search(method.body) and re.search(r'\$"|string\.Format|\+', method.body):
+            findings.append(Finding(
+                category="security",
+                severity=Severity.CRITICAL,
+                title=f"CWE-89: EF Core raw SQL with interpolation in `{method.name}()`",
+                description="FromSqlRaw/ExecuteSqlRaw called with string interpolation or concatenation instead of FormattableString parameters.",
+                line=_first_matching_line(method.body, _CS_SQLI_RAW_RE, method.start_line),
+                suggestion="Use FromSqlInterpolated or FromSqlRaw with parameter placeholders like FromSqlRaw(\"SELECT * FROM Users WHERE Id = {0}\", id).",
+                rule_id="CS-004",
+                cwe="CWE-89",
+                agent="csharp-analyzer",
+                confidence=0.90,
                 analysis_kind="taint_flow",
             ))
 

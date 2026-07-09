@@ -16,7 +16,8 @@ rules:
   - id: registry/nextjs/auth/api-route-no-auth
     title: "Next.js API route without authentication check"
     cwe: CWE-306
-    severity: high
+    severity: medium
+    confidence: 0.55
     pattern_type: regex
     regex: "export (?:default )?(?:async )?function handler\\(req, res\\)\\s*\\{"
     suggestion: "Check session or token at the start of every API route handler"
