@@ -902,14 +902,23 @@ _INDEX_BODY = r"""
 <div class="hero">
   <div class="hero-badge">&#9670; World's Best Offline SAST + Guarded Autofix</div>
   <h1>Find the bug.<br><em>Fix it under guard.</em></h1>
-  <p>ansede-static detects what Bandit, Semgrep, and CodeQL miss&mdash;IDOR, auth bypass, ownership flaws&mdash;then <strong>Guarded Autofix</strong> applies safe inline fixes, rescans the scanned scope, and automatically rolls changes back if new issues appear.</p>
+  <p>ansede-static detects what Bandit, Semgrep, and CodeQL miss&mdash;IDOR, auth bypass, ownership flaws&mdash;fully offline, no API keys required.</p>
   <div class="hero-stats">
+    <div class="hero-stat"><div class="num" id="stat-scans">...</div><div class="lbl">Scans Run</div></div>
     <div class="hero-stat"><div class="num">98.8%</div><div class="lbl">CVE Recall</div></div>
     <div class="hero-stat"><div class="num">3.6%</div><div class="lbl">False Positive Rate</div></div>
-    <div class="hero-stat"><div class="num">50</div><div class="lbl">Free Guarded Fixes/Day</div></div>
-    <div class="hero-stat"><div class="num">∞</div><div class="lbl">Pro Guarded Fixes</div></div>
+    <div class="hero-stat"><div class="num">6</div><div class="lbl">Languages</div></div>
+  </div>
+  <div style="margin-top:20px">
+    <a href="/scan" class="btn btn-primary" style="display:inline-block;width:auto;padding:14px 36px;font-size:1.1rem">Try Live Scanner &rarr;</a>
   </div>
 </div>
+
+<script>
+fetch('/stats').then(r=>r.json()).then(s=>{
+  document.getElementById('stat-scans').textContent = (s.total_scans||0).toLocaleString();
+}).catch(()=>{});
+</script>
 
 <div class="sec" style="padding-top:40px;padding-bottom:24px">
   <div class="sec-inner" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px">
@@ -1022,15 +1031,6 @@ _INDEX_BODY = r"""
       </tbody>
     </table>
     </div>
-  </div>
-</div>
-
-<div class="sec" style="background:var(--elevated);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle)">
-  <div class="sec-inner" style="text-align:center;max-width:900px">
-    <h2 style="font-size:1.45rem;font-weight:700;color:var(--text-primary);margin-bottom:10px">Meet Autofix Studio</h2>
-    <p style="color:var(--text-secondary);margin:0 auto 18px;max-width:700px">A focused product surface for scan &rarr; patch &rarr; verify &rarr; rollback. Great for demos, sales conversations, and making security work feel less like archaeology.</p>
-    <a href="/autofix-studio/live" class="btn btn-primary" style="display:inline-block;width:auto;padding:12px 28px">Open Autofix Studio</a>
-    <p style="color:var(--text-secondary);font-size:.82rem;margin-top:14px">Verification guarantees that no <em>newly detected</em> issues were introduced within the scanned scope. It does not claim a mathematical proof over untouched code.</p>
   </div>
 </div>
 
