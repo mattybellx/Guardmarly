@@ -705,6 +705,37 @@ def _append_method_level_regex_findings(source: str, findings: list[Finding]) ->
             if "createstatement()" not in _body_lower:
                 _safe_skip_cwes.add("CWE-89")
         
+        # JV-001: Missing auth on any non-public route (AST path only covers mutating routes)
+        if _has_route(method) and not _is_public_route(method) and not _has_auth(method):
+            key = (method.start_line, "JV-001")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-862: Spring route `{method.name}()` missing authentication guard",
+                    description="Mapped Spring controller method lacks @PreAuthorize/@Secured/@RolesAllowed and no SecurityContext check was found in the body.",
+                    line=method.start_line,
+                    suggestion="Protect the handler with @PreAuthorize/@Secured or verify the authenticated principal before returning sensitive data.",
+                    rule_id="JV-001", cwe="CWE-862", agent="java-analyzer",
+                    confidence=0.88, analysis_kind="route_heuristic",
+                ))
+                existing_keys.add(key)
+
+        # JV-004: SQL injection via string concatenation (pattern-based, no taint source required)
+        if _SQLI_RE.search(method.body) and "CWE-89" not in _safe_skip_cwes and not _has_sanitizer(method.body, "CWE-89"):
+            line = _first_matching_line(method.body, _SQLI_RE, method.start_line)
+            key = (line, "JV-004")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.CRITICAL,
+                    title=f"CWE-89: Dynamic SQL construction in `{method.name}()`",
+                    description="SQL execution appears to use string concatenation or String.format instead of bind parameters.",
+                    line=line,
+                    suggestion="Use prepared statements, named parameters, or ORM bind variables instead of building SQL text dynamically.",
+                    rule_id="JV-004", cwe="CWE-89", agent="java-analyzer",
+                    confidence=0.95, analysis_kind="taint_flow",
+                ))
+                existing_keys.add(key)
+
         # JV-010: Open redirect via sendRedirect (CWE-601) — AST misses local vars
         if _REDIRECT_JAVA_RE.search(method.body):
             # FP guard: skip if allowlist/validation is present
