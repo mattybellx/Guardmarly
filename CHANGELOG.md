@@ -3,6 +3,25 @@
 All notable changes to ansede-static are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [6.1.1] — 2026-07-09
+
+### Fixed
+- **Framework misidentification ("Sanic Bug")**: Flask `request.args` sources
+  were incorrectly labeled "Sanic query parameters" due to duplicate dict keys
+  in `TAINT_SOURCES`. Removed Sanic-specific overrides; added Sanic detection
+  to `FrameworkFingerprint` for future framework-aware labeling.
+- **Missing path-traversal sink**: Taint propagation through Python f-strings
+  (`f"/tmp/{var}"`) was broken because `_find_tainted_expr_info` had no
+  `ast.JoinedStr` handler. Added `JoinedStr` and `BinOp` handlers so taint
+  flows correctly through interpolated and concatenated strings into `open()`.
+- **JS command-injection sink gap**: Bare `exec()` (after destructuring
+  `const { exec } = require('child_process')`) was not in `COMMAND_EXEC_CALLEES`.
+  Added `exec`, `spawn`, `execFile`, and their `Sync` variants.
+
+### Verified
+- All 5 scenarios from the v5.6.0 benchmarking battery now pass
+- 1179 tests pass, 0 regressions from SAST changes
+
 ## [6.1.0] — 2026-07-08
 
 ### Added

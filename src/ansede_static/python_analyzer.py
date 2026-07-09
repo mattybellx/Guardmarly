@@ -128,11 +128,6 @@ TAINT_SOURCES: dict[str, str] = {
     "request.matchdict":      "Pyramid URL path parameters",
     "request.GET":            "Pyramid query parameters",  # noqa: F601
     "request.POST":           "Pyramid form data",  # noqa: F601
-    # Sanic web framework request sources
-    "request.args":           "Sanic query parameters",  # noqa: F601
-    "request.form":           "Sanic form data",  # noqa: F601
-    "request.json":           "Sanic parsed JSON body",  # noqa: F601
-    "request.files":          "Sanic uploaded file",  # noqa: F601
     # Falcon web framework request sources
     "req.params":             "Falcon URL path parameters",
     "req.media":              "Falcon parsed request body",
@@ -1714,6 +1709,56 @@ def _find_tainted_expr_info(
             if info:
                 return info
 
+    # f-string / JoinedStr: f"/tmp/{tainted_var}" → propagate taint through interpolation
+    if isinstance(node, ast.JoinedStr):
+        for val in node.values:
+            if isinstance(val, ast.FormattedValue):
+                info = _find_tainted_expr_info(
+                    val.value,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                    call_string=call_string,
+                    call_string_k=call_string_k,
+                )
+                if info:
+                    return info
+            elif isinstance(val, ast.Constant):
+                # Check constant parts too — they may contain tainted expressions
+                info = _find_tainted_expr_info(
+                    val,
+                    tainted,
+                    func_summaries,
+                    visited,
+                    global_graph=global_graph,
+                    caller_file=caller_file,
+                    caller_name=caller_name,
+                    call_string=call_string,
+                    call_string_k=call_string_k,
+                )
+                if info:
+                    return info
+
+    # BinOp (string concatenation): "/tmp/" + tainted_var → propagate taint
+    if isinstance(node, ast.BinOp):
+        for side in (node.left, node.right):
+            info = _find_tainted_expr_info(
+                side,
+                tainted,
+                func_summaries,
+                visited,
+                global_graph=global_graph,
+                caller_file=caller_file,
+                caller_name=caller_name,
+                call_string=call_string,
+                call_string_k=call_string_k,
+            )
+            if info:
+                return info
+
     if isinstance(node, ast.expr):
         src = _get_taint_source(node)
         if src:
@@ -2066,6 +2111,7 @@ class FrameworkFingerprint:
     aiohttp: bool = False
     tornado: bool = False
     starlette: bool = False
+    sanic: bool = False
 
     # Enhanced fields per Phase 2.3 hardening spec
     detected_framework: str | None = None
@@ -2075,7 +2121,7 @@ class FrameworkFingerprint:
     def is_web_app(self) -> bool:
         """True if any web framework is detected."""
         return any([self.flask, self.fastapi, self.django,
-                    self.aiohttp, self.tornado, self.starlette])
+                    self.aiohttp, self.tornado, self.starlette, self.sanic])
 
     @classmethod
     def from_source(cls, source: str) -> "FrameworkFingerprint":
@@ -2091,6 +2137,7 @@ class FrameworkFingerprint:
             aiohttp="from aiohttp" in head or "import aiohttp" in head,
             tornado="from tornado" in head or "import tornado" in head,
             starlette="from starlette" in head or "import starlette" in head,
+            sanic="from sanic" in head or "import sanic" in head,
         )
 
     def inspect_ast_node(self, node: ast.AST) -> None:
@@ -2106,6 +2153,8 @@ class FrameworkFingerprint:
                 self.detected_framework = "Django"
             elif node.module and "flask" in node.module:
                 self.detected_framework = "Flask"
+            elif node.module and "sanic" in node.module:
+                self.detected_framework = "Sanic"
         elif isinstance(node, ast.Import):
             for alias in node.names:
                 if "fastapi" in alias.name:
@@ -2114,6 +2163,8 @@ class FrameworkFingerprint:
                     self.detected_framework = "Django"
                 elif "flask" in alias.name:
                     self.detected_framework = "Flask"
+                elif "sanic" in alias.name:
+                    self.detected_framework = "Sanic"
 
     def verify_endpoint_protection(self, node: ast.FunctionDef) -> bool:
         """Check if a route handler function has authentication protection.

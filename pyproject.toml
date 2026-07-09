@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ansede-static"
-version = "6.1.0"
+version = "6.1.1"
 description = "Offline SAST for 5 languages — #1 CVE recall (100%), #2 OWASP score (+0.8% Youden), 93.3% OWASP recall. Detects IDOR, auth bypass, and injection flaws that Semgrep and CodeQL miss."
 readme = "README.md"
 license = "MIT"

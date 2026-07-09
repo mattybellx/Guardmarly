@@ -17,7 +17,11 @@ import re
 DOCUMENT_WRITE_CALLEES: frozenset[str] = frozenset({"document.write", "document.writeln"})
 TIMER_CALLEES: frozenset[str] = frozenset({"setTimeout", "setInterval"})
 COMMAND_EXEC_CALLEES: frozenset[str] = frozenset({
-    "execSync", "child_process.exec", "child_process.execSync",
+    "exec", "execSync",
+    "child_process.exec", "child_process.execSync",
+    "child_process.spawn", "child_process.spawnSync",
+    "child_process.execFile", "child_process.execFileSync",
+    "spawn", "spawnSync", "execFile", "execFileSync",
 })
 SHELL_TRUE_CALLEES: frozenset[str] = frozenset({
     "spawn", "execFile", "child_process.spawn", "child_process.execFile",
