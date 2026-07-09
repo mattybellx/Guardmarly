@@ -18,7 +18,7 @@
   <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Score-%2B0.8%25%20Youden-success" alt="OWASP Score"></a>
   <a href=""><img src="https://img.shields.io/badge/Languages-6-blue" alt="6 langs"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <a href=""><img src="https://img.shields.io/badge/tests-1249%20passed-success" alt="1249 tests"></a>
+  <a href=""><img src="https://img.shields.io/badge/tests-1239%20passed-success" alt="1239 tests"></a>
   <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/dm/ansede-static?label=PyPI%20installs&color=blue" alt="PyPI installs"></a>
 </p>
@@ -95,6 +95,16 @@ def get_invoice(id):
 
 Semgrep OSS finds 23% of the same corpus. CodeQL finds ~34%.
 
+### Precision (v6.2.2)
+
+| Metric | Score |
+|---|---|
+| Blind audit (400 snippets, 4 runs) | **~90% recall, ~97% precision** |
+| Real GitHub repos (22 repos, 1,027 files) | **0 crashes** |
+| CRITICAL on safe parameterized SQL | **0** (eliminated) |
+| Test/benchmark/tutorial FP suppression | **96% reduction** |
+| Quality corpus | **56 cases, 96/96 checks (100%)** |
+
 ### Real-World Scale
 
 Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes**. Detects 35+ CWE types. Average findings: ~0.11 per file on mature Apache/Google libraries.
@@ -135,7 +145,8 @@ Scanned **58 open-source repos** (21,871 files, 3.2M lines) with **zero crashes*
 - **Framework profiles** — Spring, ASP.NET, Django, Express, Gin, Quarkus
 - **Incident clustering** — groups related findings, cuts noise ~49%
 - **Confidence scoring** — every finding rated 0–100%; low-signal results filtered by default
-- **Guard detection** — recognizes `@login_required`, `if user.is_authenticated`
+- **Guard detection** — recognizes `@login_required`, `@PreAuthorize`, `[Authorize]`, Go middleware, HMAC webhooks
+- **Test-context awareness** — automatically suppresses findings in test/benchmark/tutorial files (96% FP reduction)
 - **Output formats** — SARIF (GitHub Code Scanning), CycloneDX SBOM, HTML, JSON
 - **CI/CD ready** — `--diff-only` PR scanning, `--fail-on` exit codes, `--baseline`
 - **IDE plugins** — inline diagnostics + one-click fixes in VS Code, IntelliJ IDEA, Visual Studio 2022
@@ -160,7 +171,7 @@ After scanning multiple codebases, Ansede generates suppression rules that match
 
 | Platform | Template |
 |---|---|
-| **GitHub Actions** | Built-in (`uses: mattybellx/Ansede@v6.0.0`) |
+| **GitHub Actions** | Built-in (`uses: mattybellx/Ansede@v6.2.0`) |
 | **GitLab CI** | [docs/ci-templates/gitlab-ci.yml](docs/ci-templates/gitlab-ci.yml) |
 | **Azure DevOps** | [docs/ci-templates/azure-pipelines.yml](docs/ci-templates/azure-pipelines.yml) |
 | **Jenkins** | [docs/ci-templates/Jenkinsfile](docs/ci-templates/Jenkinsfile) |
@@ -171,7 +182,7 @@ After scanning multiple codebases, Ansede generates suppression rules that match
 
 **Basic scan on push:**
 ```yaml
-- uses: mattybellx/Ansede@v6.0.0
+- uses: mattybellx/Ansede@v6.2.0
   with:
     path: src/
     fail-on: high
