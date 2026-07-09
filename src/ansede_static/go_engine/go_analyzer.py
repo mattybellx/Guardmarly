@@ -107,8 +107,6 @@ _GO_DANGEROUS_SINKS: Dict[str, Tuple[str, str, str]] = {
     "net/http.Post": ("CWE-918", "SSRF via http.Post", "high"),
     "net/http.Head": ("CWE-918", "SSRF via http.Head", "high"),
     "http.NewRequest": ("CWE-918", "SSRF via http.NewRequest", "high"),
-    "exec.Command": ("CWE-78", "Command Injection via exec.Command", "critical"),
-    "os/exec.Command": ("CWE-78", "Command Injection via os/exec.Command", "critical"),
     "json.Unmarshal": ("CWE-502", "Unsafe Deserialization via json.Unmarshal", "low"),
     "gob.NewDecoder": ("CWE-502", "Unsafe Deserialization via gob.NewDecoder", "critical"),
     "xml.Unmarshal": ("CWE-502", "XXE/Unsafe Deserialization via xml.Unmarshal", "high"),
