@@ -1,0 +1,459 @@
+[2026-07-12 07:48:10] [javac-output-10224] warning: [processing] No processor claimed any of these annotations: /com.google.gson.annotations.Expose,/com.google.gson.annotations.JsonAdapter,/org.junit.After,/com.google.gson.annotations.Until,/org.junit.Test,/com.google.errorprone.annotations.CanIgnoreReturnValue,/com.google.gson.annotations.SerializedName,/com.google.gson.annotations.Since,/com.google.gson.functional.ExclusionStrategyFunctionalTest.Foo,/org.junit.Ignore,/org.junit.runners.Parameterized.Parameters,/com.google.errorprone.annotations.Keep,/org.junit.Before,/org.junit.runners.Parameterized.Parameter,/org.junit.runner.RunWith
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonBuilderTest.java:233: warning: [deprecation] setLenient() in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]     builder.setLenient();
+[2026-07-12 07:48:12] [javac-output-10224]            ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonBuilderTest.java:405: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]       builder.setDateFormat(style);
+[2026-07-12 07:48:12] [javac-output-10224]              ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonBuilderTest.java:416: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]         assertThrows(IllegalArgumentException.class, () -> builder.setDateFormat(-1));
+[2026-07-12 07:48:12] [javac-output-10224]                                                                   ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonBuilderTest.java:419: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]     e = assertThrows(IllegalArgumentException.class, () -> builder.setDateFormat(4));
+[2026-07-12 07:48:12] [javac-output-10224]                                                                   ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonTest.java:369: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:12] [javac-output-10224]         return (TypeAdapter<T>) adapter;
+[2026-07-12 07:48:12] [javac-output-10224]                                 ^
+[2026-07-12 07:48:12] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:12] [javac-output-10224]   found:    DummyAdapter
+[2026-07-12 07:48:12] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:12] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonTest.java:448: warning: [deprecation] setLenient() in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]             .setLenient()
+[2026-07-12 07:48:12] [javac-output-10224]             ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/GsonTest.java:478: warning: [deprecation] setLenient() in GsonBuilder has been deprecated
+[2026-07-12 07:48:12] [javac-output-10224]         new GsonBuilder().setLenient().create().newJsonReader(new StringReader(json));
+[2026-07-12 07:48:12] [javac-output-10224]                          ^
+[2026-07-12 07:48:12] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JavaSerializationTest.java:76: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:12] [javac-output-10224]     return (T) in.readObject();
+[2026-07-12 07:48:12] [javac-output-10224]                             ^
+[2026-07-12 07:48:12] [javac-output-10224]   required: T
+[2026-07-12 07:48:12] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:12] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:12] [javac-output-10224]     T extends Object declared in method <T>serializedCopy(T)
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonNullTest.java:34: warning: [deprecation] JsonNull() in JsonNull has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     MoreAsserts.assertEqualsAndHashCode(new JsonNull(), new JsonNull());
+[2026-07-12 07:48:13] [javac-output-10224]                                         ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonNullTest.java:34: warning: [deprecation] JsonNull() in JsonNull has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     MoreAsserts.assertEqualsAndHashCode(new JsonNull(), new JsonNull());
+[2026-07-12 07:48:13] [javac-output-10224]                                                         ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonNullTest.java:35: warning: [deprecation] JsonNull() in JsonNull has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     MoreAsserts.assertEqualsAndHashCode(new JsonNull(), JsonNull.INSTANCE);
+[2026-07-12 07:48:13] [javac-output-10224]                                         ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonNullTest.java:42: warning: [deprecation] JsonNull() in JsonNull has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     JsonNull a = new JsonNull();
+[2026-07-12 07:48:13] [javac-output-10224]                  ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonObjectAsMapSuiteTest.java:51: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:13] [javac-output-10224]       return (Entry<String, JsonElement>[]) new Entry<?, ?>[length];
+[2026-07-12 07:48:13] [javac-output-10224]                                             ^
+[2026-07-12 07:48:13] [javac-output-10224]   required: Entry<String,JsonElement>[]
+[2026-07-12 07:48:13] [javac-output-10224]   found:    Entry<?,?>[]
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonObjectTest.java:129: warning: [deprecation] getAsCharacter() in JsonElement has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     char character = jsonElement.getAsCharacter();
+[2026-07-12 07:48:13] [javac-output-10224]                                 ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonPrimitiveTest.java:103: warning: [deprecation] getAsCharacter() in JsonPrimitive has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     assertThat(json.getAsCharacter()).isEqualTo('a');
+[2026-07-12 07:48:13] [javac-output-10224]                    ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonPrimitiveTest.java:108: warning: [deprecation] getAsCharacter() in JsonPrimitive has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     assertThat(json.getAsCharacter()).isEqualTo('z');
+[2026-07-12 07:48:13] [javac-output-10224]                    ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonPrimitiveTest.java:117: warning: [deprecation] getAsCharacter() in JsonPrimitive has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     var e = assertThrows(UnsupportedOperationException.class, () -> emptyString.getAsCharacter());
+[2026-07-12 07:48:13] [javac-output-10224]                                                                                ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/MixedStreamTest.java:90: warning: [deprecation] setLenient(boolean) in JsonReader has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     jsonReader.setLenient(false);
+[2026-07-12 07:48:13] [javac-output-10224]               ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/MixedStreamTest.java:95: warning: [deprecation] setLenient(boolean) in JsonReader has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     jsonReader.setLenient(true);
+[2026-07-12 07:48:13] [javac-output-10224]               ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/MixedStreamTest.java:109: warning: [deprecation] setLenient(boolean) in JsonWriter has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     jsonWriter.setLenient(true);
+[2026-07-12 07:48:13] [javac-output-10224]               ^
+[2026-07-12 07:48:13] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/MixedStreamTest.java:115: warning: [deprecation] setLenient(boolean) in JsonWriter has been deprecated
+[2026-07-12 07:48:13] [javac-output-10224]     jsonWriter.setLenient(false);
+[2026-07-12 07:48:13] [javac-output-10224]               ^
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ObjectTypeAdapterTest.java:80: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]     List<List<?>> current = (List<List<?>>) adapter.read(jsonReader);
+[2026-07-12 07:48:14] [javac-output-10224]                                                         ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: List<List<?>>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ObjectTypeAdapterTest.java:87: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]       current = (List<List<?>>) current.get(0);
+[2026-07-12 07:48:14] [javac-output-10224]                                            ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: List<List<?>>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    List<CAP#1>
+[2026-07-12 07:48:14] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ObjectTypeAdapterTest.java:103: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]     Map<String, Map<?, ?>> current = (Map<String, Map<?, ?>>) adapter.read(jsonReader);
+[2026-07-12 07:48:14] [javac-output-10224]                                                                           ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: Map<String,Map<?,?>>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ObjectTypeAdapterTest.java:107: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]       current = (Map<String, Map<?, ?>>) current.get("a");
+[2026-07-12 07:48:14] [javac-output-10224]                                                     ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: Map<String,Map<?,?>>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Map<CAP#1,CAP#2>
+[2026-07-12 07:48:14] [javac-output-10224]   where CAP#1,CAP#2 are fresh type-variables:
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#2 extends Object from capture of ?
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ParameterizedTypeFixtures.java:112: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]       Class<T> clazz = (Class<T>) obj.value.getClass();
+[2026-07-12 07:48:14] [javac-output-10224]                                                     ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: Class<T>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Class<CAP#1>
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in method <T>getExpectedJson(MyParameterizedType<T>)
+[2026-07-12 07:48:14] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#1 extends Object from capture of ? extends Object
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ParameterizedTypeFixtures.java:148: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         value = (T) Integer.valueOf(jsonElement.getAsInt());
+[2026-07-12 07:48:14] [javac-output-10224]                                    ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Integer
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in class MyParameterizedTypeAdapter
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ParameterizedTypeFixtures.java:150: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         value = (T) jsonElement.getAsString();
+[2026-07-12 07:48:14] [javac-output-10224]                                            ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    String
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in class MyParameterizedTypeAdapter
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ParameterizedTypeFixtures.java:152: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         value = (T) jsonElement;
+[2026-07-12 07:48:14] [javac-output-10224]                     ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    JsonElement
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in class MyParameterizedTypeAdapter
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/ParameterizedTypeFixtures.java:157: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         value = (T) typeAdapter.adaptType(value, rawType);
+[2026-07-12 07:48:14] [javac-output-10224]                                          ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    CAP#1
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in class MyParameterizedTypeAdapter
+[2026-07-12 07:48:14] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/PrimitiveTypeAdapter.java:39: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]           return (T) (Character) from.toString().charAt(0);
+[2026-07-12 07:48:14] [javac-output-10224]                      ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Character
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in method <T>adaptType(Object,Class<T>)
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/PrimitiveTypeAdapter.java:46: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         return (T) constructor.newInstance(from.toString());
+[2026-07-12 07:48:14] [javac-output-10224]                                           ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    CAP#1
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in method <T>adaptType(Object,Class<T>)
+[2026-07-12 07:48:14] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/PrimitiveTypeAdapter.java:55: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]         return (T) valuesMethod.invoke(null, from.toString());
+[2026-07-12 07:48:14] [javac-output-10224]                                       ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: T
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:14] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     T extends Object declared in method <T>adaptType(Object,Class<T>)
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ArrayTest.java:161: warning: [rawtypes] found raw type: ArrayList
+[2026-07-12 07:48:14] [javac-output-10224]     Collection<Integer>[] arrayOfCollection = new ArrayList[arraySize];
+[2026-07-12 07:48:14] [javac-output-10224]                                                   ^
+[2026-07-12 07:48:14] [javac-output-10224]   missing type arguments for generic class ArrayList<E>
+[2026-07-12 07:48:14] [javac-output-10224]   where E is a type-variable:
+[2026-07-12 07:48:14] [javac-output-10224]     E extends Object declared in class ArrayList
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ArrayTest.java:161: warning: [unchecked] unchecked conversion
+[2026-07-12 07:48:14] [javac-output-10224]     Collection<Integer>[] arrayOfCollection = new ArrayList[arraySize];
+[2026-07-12 07:48:14] [javac-output-10224]                                               ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: Collection<Integer>[]
+[2026-07-12 07:48:14] [javac-output-10224]   found:    ArrayList[]
+[2026-07-12 07:48:14] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/CollectionTest.java:350: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:14] [javac-output-10224]       Map<String, Object> map = (Map<String, Object>) bag1;
+[2026-07-12 07:48:14] [javac-output-10224]                                                       ^
+[2026-07-12 07:48:14] [javac-output-10224]   required: Map<String,Object>
+[2026-07-12 07:48:14] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:429: warning: [deprecation] getYear() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getYear()).isEqualTo(year - 1900);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:430: warning: [deprecation] getMonth() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getMonth()).isEqualTo(month);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:431: warning: [deprecation] getDate() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getDate()).isEqualTo(day);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:436: warning: [deprecation] getHours() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getHours()).isEqualTo(hours);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:437: warning: [deprecation] getMinutes() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getMinutes()).isEqualTo(minutes);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:438: warning: [deprecation] getSeconds() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(date.getSeconds()).isEqualTo(seconds);
+[2026-07-12 07:48:15] [javac-output-10224]                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:569: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]       Gson gson = new GsonBuilder().setDateFormat(dateStyle).create();
+[2026-07-12 07:48:15] [javac-output-10224]                                    ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:606: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL).setDateFormat(pattern).create();
+[2026-07-12 07:48:15] [javac-output-10224]                                  ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:617: warning: [deprecation] setDateFormat(int) in GsonBuilder has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     Gson gson = new GsonBuilder().setDateFormat(DateFormat.FULL).setDateFormat(pattern).create();
+[2026-07-12 07:48:15] [javac-output-10224]                                  ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:621: warning: [deprecation] getYear() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getYear()).isEqualTo(now.getYear());
+[2026-07-12 07:48:15] [javac-output-10224]                         ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:621: warning: [deprecation] getYear() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getYear()).isEqualTo(now.getYear());
+[2026-07-12 07:48:15] [javac-output-10224]                                                  ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:622: warning: [deprecation] getMonth() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getMonth()).isEqualTo(now.getMonth());
+[2026-07-12 07:48:15] [javac-output-10224]                         ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:622: warning: [deprecation] getMonth() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getMonth()).isEqualTo(now.getMonth());
+[2026-07-12 07:48:15] [javac-output-10224]                                                   ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:623: warning: [deprecation] getDay() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getDay()).isEqualTo(now.getDay());
+[2026-07-12 07:48:15] [javac-output-10224]                         ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:623: warning: [deprecation] getDay() in Date has been deprecated
+[2026-07-12 07:48:15] [javac-output-10224]     assertThat(extracted.getDay()).isEqualTo(now.getDay());
+[2026-07-12 07:48:15] [javac-output-10224]                                                 ^
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java:1061: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:15] [javac-output-10224]     TypeAdapter<Object> adapter = (TypeAdapter<Object>) adapterFactory.create(gson, typeToken);
+[2026-07-12 07:48:15] [javac-output-10224]                                                                              ^
+[2026-07-12 07:48:15] [javac-output-10224]   required: TypeAdapter<Object>
+[2026-07-12 07:48:15] [javac-output-10224]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:48:15] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:15] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/InstanceCreatorTest.java:107: warning: [unchecked] unchecked conversion
+[2026-07-12 07:48:15] [javac-output-10224]     set = gson.fromJson("[\"b\"]", SortedSet.class);
+[2026-07-12 07:48:15] [javac-output-10224]                        ^
+[2026-07-12 07:48:15] [javac-output-10224]   required: SortedSet<String>
+[2026-07-12 07:48:15] [javac-output-10224]   found:    SortedSet
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest.java:204: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:15] [javac-output-10224]                 new TypeAdapter<WithNullReturningFactory<String>>() {
+[2026-07-12 07:48:15] [javac-output-10224]                 ^
+[2026-07-12 07:48:15] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:15] [javac-output-10224]   found:    <anonymous TypeAdapter<WithNullReturningFactory<String>>>
+[2026-07-12 07:48:15] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:15] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest.java:264: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:15] [javac-output-10224]             return (T) new C("jsonAdapterFactory");
+[2026-07-12 07:48:15] [javac-output-10224]                        ^
+[2026-07-12 07:48:15] [javac-output-10224]   required: T
+[2026-07-12 07:48:15] [javac-output-10224]   found:    C
+[2026-07-12 07:48:15] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:15] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:15] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest.java:386: warning: [unchecked] unchecked conversion
+[2026-07-12 07:48:15] [javac-output-10224]         new Gson().fromJson("{\"custom\":{\"f\":\"de\"}}", WithDelegatingFactory.class);
+[2026-07-12 07:48:15] [javac-output-10224]                            ^
+[2026-07-12 07:48:15] [javac-output-10224]   required: WithDelegatingFactory<String>
+[2026-07-12 07:48:15] [javac-output-10224]   found:    WithDelegatingFactory
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:160: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]           return (T) new Part("GizmoPartTypeAdapterFactory");
+[2026-07-12 07:48:16] [javac-output-10224]                      ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: T
+[2026-07-12 07:48:16] [javac-output-10224]   found:    Part
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:323: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]         return (TypeAdapter<T>) ADAPTER;
+[2026-07-12 07:48:16] [javac-output-10224]                                 ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    TypeAdapter<Long>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:325: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]         return (TypeAdapter<T>) ADAPTER;
+[2026-07-12 07:48:16] [javac-output-10224]                                 ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    TypeAdapter<Long>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:365: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]           return (T) Arrays.asList(new Part("GizmoPartTypeAdapterFactory"));
+[2026-07-12 07:48:16] [javac-output-10224]                                   ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: T
+[2026-07-12 07:48:16] [javac-output-10224]   found:    List<Part>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:550: warning: [unchecked] unchecked conversion
+[2026-07-12 07:48:16] [javac-output-10224]         new Gson().fromJson("{\"f\":\"test\"}", WithDelegatingFactory.class);
+[2026-07-12 07:48:16] [javac-output-10224]                            ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: WithDelegatingFactory<String>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    WithDelegatingFactory
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:572: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]         TypeAdapter<String> delegate = (TypeAdapter<String>) gson.getDelegateAdapter(this, type);
+[2026-07-12 07:48:16] [javac-output-10224]                                                                                     ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<String>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:575: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]             new TypeAdapter<String>() {
+[2026-07-12 07:48:16] [javac-output-10224]             ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    <anonymous TypeAdapter<String>>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:620: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]                 return (TypeAdapter<String>) gson.getDelegateAdapter(Factory.this, type);
+[2026-07-12 07:48:16] [javac-output-10224]                                                                     ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<String>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:618: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]             new TypeAdapter<String>() {
+[2026-07-12 07:48:16] [javac-output-10224]             ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    <anonymous TypeAdapter<String>>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:670: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]         TypeAdapter<String> delegate = (TypeAdapter<String>) gson.getAdapter(type);
+[2026-07-12 07:48:16] [javac-output-10224]                                                                             ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<String>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.java:673: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:16] [javac-output-10224]             new TypeAdapter<String>() {
+[2026-07-12 07:48:16] [javac-output-10224]             ^
+[2026-07-12 07:48:16] [javac-output-10224]   required: TypeAdapter<T>
+[2026-07-12 07:48:16] [javac-output-10224]   found:    <anonymous TypeAdapter<String>>
+[2026-07-12 07:48:16] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:16] [javac-output-10224]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:48:16] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/LeniencyTest.java:36: warning: [deprecation] setLenient() in GsonBuilder has been deprecated
+[2026-07-12 07:48:16] [javac-output-10224]     gson = new GsonBuilder().setLenient().create();
+[2026-07-12 07:48:16] [javac-output-10224]                             ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ParameterizedTypesTest.java:182: warning: [varargs] Varargs method could cause heap pollution from non-reifiable varargs parameter args
+[2026-07-12 07:48:17] [javac-output-10224]     return args;
+[2026-07-12 07:48:17] [javac-output-10224]            ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ParameterizedTypesTest.java:511: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:17] [javac-output-10224]     List<Quantity> list = (List<Quantity>) object;
+[2026-07-12 07:48:17] [javac-output-10224]                                            ^
+[2026-07-12 07:48:17] [javac-output-10224]   required: List<Quantity>
+[2026-07-12 07:48:17] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:65: warning: [removal] SecurityManager in java.lang has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]     SecurityManager original = System.getSecurityManager();
+[2026-07-12 07:48:17] [javac-output-10224]     ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:65: warning: [removal] getSecurityManager() in System has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]     SecurityManager original = System.getSecurityManager();
+[2026-07-12 07:48:17] [javac-output-10224]                                      ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:66: warning: [removal] SecurityManager in java.lang has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]     SecurityManager restrictiveManager =
+[2026-07-12 07:48:17] [javac-output-10224]     ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:67: warning: [removal] SecurityManager in java.lang has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]         new SecurityManager() {
+[2026-07-12 07:48:17] [javac-output-10224]             ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:78: warning: [removal] setSecurityManager(SecurityManager) in System has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]     System.setSecurityManager(restrictiveManager);
+[2026-07-12 07:48:17] [javac-output-10224]           ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/ReflectionAccessTest.java:110: warning: [removal] setSecurityManager(SecurityManager) in System has been deprecated and marked for removal
+[2026-07-12 07:48:17] [javac-output-10224]       System.setSecurityManager(original);
+[2026-07-12 07:48:17] [javac-output-10224]             ^
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest.java:191: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:17] [javac-output-10224]           TypeAdapter<R> delegate = (TypeAdapter<R>) labelToDelegate.get(label);
+[2026-07-12 07:48:17] [javac-output-10224]                                                                         ^
+[2026-07-12 07:48:17] [javac-output-10224]   required: TypeAdapter<R>
+[2026-07-12 07:48:17] [javac-output-10224]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:48:17] [javac-output-10224]   where R is a type-variable:
+[2026-07-12 07:48:17] [javac-output-10224]     R extends Object declared in method <R>create(Gson,TypeToken<R>)
+[2026-07-12 07:48:17] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:17] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:17] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest.java:208: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:17] [javac-output-10224]           TypeAdapter<R> delegate = (TypeAdapter<R>) subtypeToDelegate.get(srcType);
+[2026-07-12 07:48:17] [javac-output-10224]                                                                           ^
+[2026-07-12 07:48:17] [javac-output-10224]   required: TypeAdapter<R>
+[2026-07-12 07:48:17] [javac-output-10224]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:48:17] [javac-output-10224]   where R is a type-variable:
+[2026-07-12 07:48:17] [javac-output-10224]     R extends Object declared in method <R>create(Gson,TypeToken<R>)
+[2026-07-12 07:48:17] [javac-output-10224]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:17] [javac-output-10224]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/TypeVariableTest.java:127: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:18] [javac-output-10224]       Foo<S, T> realFoo = (Foo<S, T>) o;
+[2026-07-12 07:48:18] [javac-output-10224]                                       ^
+[2026-07-12 07:48:18] [javac-output-10224]   required: Foo<S,T>
+[2026-07-12 07:48:18] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:18] [javac-output-10224]   where S,T are type-variables:
+[2026-07-12 07:48:18] [javac-output-10224]     S extends Object declared in class Foo
+[2026-07-12 07:48:18] [javac-output-10224]     T extends Object declared in class Foo
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/LinkedTreeMapTest.java:221: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:18] [javac-output-10224]     Map<String, Integer> deserialized = (Map<String, Integer>) objIn.readObject();
+[2026-07-12 07:48:18] [javac-output-10224]                                                                                ^
+[2026-07-12 07:48:18] [javac-output-10224]   required: Map<String,Integer>
+[2026-07-12 07:48:18] [javac-output-10224]   found:    Object
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/bind/Java17ReflectiveTypeAdapterFactoryTest.java:94: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:18] [javac-output-10224]       T principal = (T) new Java17ReflectionHelperTest.PrincipalImpl(name);
+[2026-07-12 07:48:18] [javac-output-10224]                         ^
+[2026-07-12 07:48:18] [javac-output-10224]   required: T
+[2026-07-12 07:48:18] [javac-output-10224]   found:    PrincipalImpl
+[2026-07-12 07:48:18] [javac-output-10224]   where T is a type-variable:
+[2026-07-12 07:48:18] [javac-output-10224]     T extends Principal declared in class PrincipalTypeAdapter
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/bind/JsonTreeReaderTest.java:119: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:48:18] [javac-output-10224]     class CustomSubclass extends JsonElement {
+[2026-07-12 07:48:18] [javac-output-10224]           ^
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/bind/RecursiveTypesResolveTest.java:51: warning: [rawtypes] found raw type: Foo1
+[2026-07-12 07:48:18] [javac-output-10224]     TypeAdapter<Foo1> adapter = new Gson().getAdapter(Foo1.class);
+[2026-07-12 07:48:18] [javac-output-10224]                 ^
+[2026-07-12 07:48:18] [javac-output-10224]   missing type arguments for generic class Foo1<A>
+[2026-07-12 07:48:18] [javac-output-10224]   where A is a type-variable:
+[2026-07-12 07:48:18] [javac-output-10224]     A extends Object declared in class Foo1
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/bind/RecursiveTypesResolveTest.java:94: warning: [rawtypes] found raw type: TestType
+[2026-07-12 07:48:18] [javac-output-10224]     TypeAdapter<TestType> adapter = new Gson().getAdapter(TestType.class);
+[2026-07-12 07:48:18] [javac-output-10224]                 ^
+[2026-07-12 07:48:18] [javac-output-10224]   missing type arguments for generic class TestType<X>
+[2026-07-12 07:48:18] [javac-output-10224]   where X is a type-variable:
+[2026-07-12 07:48:18] [javac-output-10224]     X extends Object declared in class TestType
+[2026-07-12 07:48:18] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/internal/bind/RecursiveTypesResolveTest.java:101: warning: [rawtypes] found raw type: TestType2
+[2026-07-12 07:48:18] [javac-output-10224]     TypeAdapter<TestType2> adapter = new Gson().getAdapter(TestType2.class);
+[2026-07-12 07:48:18] [javac-output-10224]                 ^
+[2026-07-12 07:48:18] [javac-output-10224]   missing type arguments for generic class TestType2<X,Y>
+[2026-07-12 07:48:18] [javac-output-10224]   where X,Y are type-variables:
+[2026-07-12 07:48:18] [javac-output-10224]     X extends Object declared in class TestType2
+[2026-07-12 07:48:18] [javac-output-10224]     Y extends Object declared in class TestType2
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:55: warning: [deprecation] isAssignableFrom(Class<?>) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(Object.class).isAssignableFrom(String.class)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                           ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:56: warning: [deprecation] isAssignableFrom(Class<?>) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(String.class).isAssignableFrom(Object.class)).isFalse();
+[2026-07-12 07:48:19] [javac-output-10224]                                           ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:57: warning: [deprecation] isAssignableFrom(Class<?>) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(RandomAccess.class).isAssignableFrom(ArrayList.class)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                                 ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:58: warning: [deprecation] isAssignableFrom(Class<?>) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(ArrayList.class).isAssignableFrom(RandomAccess.class)).isFalse();
+[2026-07-12 07:48:19] [javac-output-10224]                                              ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:66: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(a).isAssignableFrom(a)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:67: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(b).isAssignableFrom(b)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:70: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(a).isAssignableFrom(b)).isFalse();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:72: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(b).isAssignableFrom(a)).isFalse();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:80: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(a).isAssignableFrom(a)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:81: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(b).isAssignableFrom(b)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:84: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(a).isAssignableFrom(b)).isFalse();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:92: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]         assertThrows(IllegalArgumentException.class, () -> wildcardTypeToken.isAssignableFrom(b));
+[2026-07-12 07:48:19] [javac-output-10224]                                                                             ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:107: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(a).isAssignableFrom(a)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^
+[2026-07-12 07:48:19] [javac-output-10224] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/reflect/TypeTokenTest.java:108: warning: [deprecation] isAssignableFrom(Type) in TypeToken has been deprecated
+[2026-07-12 07:48:19] [javac-output-10224]     assertThat(TypeToken.get(b).isAssignableFrom(b)).isTrue();
+[2026-07-12 07:48:19] [javac-output-10224]                                ^

@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/Streams$AppendableWriter$CurrentWrite.members/Streams$AppendableWriter$CurrentWrite.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/Streams$AppendableWriter$CurrentWrite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz
+classes/com/google/gson/internal/Streams$AppendableWriter.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

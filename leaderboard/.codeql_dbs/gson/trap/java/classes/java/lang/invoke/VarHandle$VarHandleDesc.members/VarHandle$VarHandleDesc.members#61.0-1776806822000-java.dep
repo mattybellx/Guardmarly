@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/invoke/VarHandle$VarHandleDesc.members/VarHandle$VarHandleDesc.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/invoke/VarHandle$VarHandleDesc.members.trap.gz
+classes/java/lang/invoke/VarHandle.members.trap.gz
+classes/java/lang/constant/DynamicConstantDesc.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/constant/ConstantDesc.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/invoke/MethodHandles$Lookup.members.trap.gz
+classes/java/lang/ReflectiveOperationException.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/constant/DirectMethodHandleDesc.members.trap.gz
+classes/java/lang/constant/ClassDesc.members.trap.gz

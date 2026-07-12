@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/testing/SampleElements.members/SampleElements.members#52.0-1776188796000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/testing/SampleElements.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/Spliterator.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/org/jspecify/annotations/NullMarked.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz

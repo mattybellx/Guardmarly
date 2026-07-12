@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/stream/JsonScope.members/JsonScope.members#0.0-1783842439064-java.trap.gz
+
+TRAPS
+classes/com/google/gson/stream/JsonScope.members.trap.gz
+classes/java/lang/Object.members.trap.gz

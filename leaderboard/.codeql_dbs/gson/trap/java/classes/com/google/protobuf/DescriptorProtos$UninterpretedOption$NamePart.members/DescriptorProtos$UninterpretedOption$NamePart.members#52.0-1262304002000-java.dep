@@ -1,0 +1,27 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption$NamePart.members/DescriptorProtos$UninterpretedOption$NamePart.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption$NamePart.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption$NamePartOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption.members.trap.gz
+classes/com/google/protobuf/Parser.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/AbstractMessage$BuilderParent.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption$NamePart$Builder.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/protobuf/InvalidProtocolBufferException.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$FieldAccessorTable.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz

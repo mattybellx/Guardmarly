@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/PrimitiveFloatArraySubject$FloatArrayAsIterable.members/PrimitiveFloatArraySubject$FloatArrayAsIterable.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/PrimitiveFloatArraySubject$FloatArrayAsIterable.members.trap.gz
+classes/java/lang/Float.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/com/google/common/truth/IterableSubject$UsingCorrespondence.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/IterableSubject.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/common/truth/Ordered.members.trap.gz
+classes/com/google/common/base/Function.members.trap.gz
+classes/java/util/function/Function.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/truth/Correspondence.members.trap.gz
+classes/com/google/common/truth/PrimitiveFloatArraySubject.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz

@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/zip/ZipException.members/ZipException.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/zip/ZipException.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/String.members.trap.gz

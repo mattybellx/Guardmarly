@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/TypeVariableTest$Bar.members/TypeVariableTest$Bar.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/TypeVariableTest$Bar.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/com/google/gson/functional/TypeVariableTest$Foo.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/com/google/gson/functional/TypeVariableTest$Red.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/TypeVariableTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/Map.members.trap.gz

@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/net/URLStreamHandlerFactory.members/URLStreamHandlerFactory.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/net/URLStreamHandlerFactory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/net/URLStreamHandler.members.trap.gz

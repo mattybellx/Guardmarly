@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors$MethodDescriptor.members/Descriptors$MethodDescriptor.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors$MethodDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$GenericDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$MethodOptions.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$ServiceDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$FileDescriptor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$MethodDescriptorProto.members.trap.gz

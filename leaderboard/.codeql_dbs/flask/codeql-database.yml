@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask
+baselineLinesOfCode: 10430
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  sha: 36e4a824f340fdee7ed50937ba8e7f6bc7d17f81
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:03:12.994114656Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

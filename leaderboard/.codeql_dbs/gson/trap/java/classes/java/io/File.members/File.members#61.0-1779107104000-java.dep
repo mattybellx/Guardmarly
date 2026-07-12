@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/File.members/File.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/File.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/nio/file/Path.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/FileFilter.members.trap.gz
+classes/java/io/FilenameFilter.members.trap.gz
+classes/java/net/URI.members.trap.gz
+classes/java/net/URL.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/net/MalformedURLException.members.trap.gz

@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/GsonBuilderTest$CustomClass2.members/GsonBuilderTest$CustomClass2.members#0.0-1783842439065-java.trap.gz
+
+TRAPS
+classes/com/google/gson/GsonBuilderTest$CustomClass2.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/GsonBuilderTest.members.trap.gz

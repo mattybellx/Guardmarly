@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/DeserializationProblemHandler.members/DeserializationProblemHandler.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/DeserializationProblemHandler.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonParser.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsontype/TypeIdResolver.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/ValueInstantiator.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonToken.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonDeserializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/NullValueProvider.members.trap.gz

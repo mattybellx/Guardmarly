@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/module/ModuleReader.members/ModuleReader.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/module/ModuleReader.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/java/util/Optional.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/jdk/internal/ValueBased.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/net/URI.members.trap.gz

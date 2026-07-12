@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/channels/spi/SelectorProvider.members/SelectorProvider.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/channels/spi/SelectorProvider.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/channels/Channel.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/channels/SocketChannel.members.trap.gz
+classes/java/nio/channels/ServerSocketChannel.members.trap.gz
+classes/java/nio/channels/spi/AbstractSelector.members.trap.gz
+classes/java/nio/channels/Pipe.members.trap.gz
+classes/java/net/ProtocolFamily.members.trap.gz
+classes/java/nio/channels/DatagramChannel.members.trap.gz

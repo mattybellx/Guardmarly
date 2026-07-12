@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$ClassWithUrlField.members/DefaultTypeAdaptersTest$ClassWithUrlField.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$ClassWithUrlField.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest.members.trap.gz
+classes/java/net/URL.members.trap.gz

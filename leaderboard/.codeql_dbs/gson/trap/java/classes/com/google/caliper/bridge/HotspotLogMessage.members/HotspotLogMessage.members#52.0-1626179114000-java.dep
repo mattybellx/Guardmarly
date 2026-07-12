@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/bridge/HotspotLogMessage.members/HotspotLogMessage.members#52.0-1626179114000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/bridge/HotspotLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/LogMessage.members.trap.gz
+classes/com/google/caliper/bridge/LogMessageVisitor.members.trap.gz

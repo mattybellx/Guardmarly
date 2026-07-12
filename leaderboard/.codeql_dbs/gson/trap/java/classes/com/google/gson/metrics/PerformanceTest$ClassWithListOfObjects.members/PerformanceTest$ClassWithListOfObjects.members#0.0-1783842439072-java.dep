@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/metrics/PerformanceTest$ClassWithListOfObjects.members/PerformanceTest$ClassWithListOfObjects.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/metrics/PerformanceTest$ClassWithListOfObjects.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/metrics/PerformanceTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/gson/metrics/PerformanceTest$ClassWithExposedField.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/gson/annotations/Expose.members.trap.gz

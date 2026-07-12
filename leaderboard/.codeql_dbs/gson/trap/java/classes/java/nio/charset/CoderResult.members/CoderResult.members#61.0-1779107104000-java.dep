@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/charset/CoderResult.members/CoderResult.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/charset/CoderResult.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/charset/CharacterCodingException.members.trap.gz
+classes/java/lang/String.members.trap.gz

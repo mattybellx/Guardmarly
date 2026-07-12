@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash
+baselineLinesOfCode: 81775
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+creationMetadata:
+  sha: a666ba591064c8011988275790ad7d625279f09c
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:35:27.801396814Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

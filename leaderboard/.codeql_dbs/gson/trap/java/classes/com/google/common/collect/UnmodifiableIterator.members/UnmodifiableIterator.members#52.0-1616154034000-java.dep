@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/UnmodifiableIterator.members/UnmodifiableIterator.members#52.0-1616154034000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/UnmodifiableIterator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotCall.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/base/BaseInterval.members/BaseInterval.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/base/BaseInterval.members.trap.gz
+classes/org/joda/time/base/AbstractInterval.members.trap.gz
+classes/org/joda/time/ReadableInterval.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/org/joda/time/Chronology.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/joda/time/ReadablePeriod.members.trap.gz
+classes/org/joda/time/ReadableInstant.members.trap.gz
+classes/org/joda/time/ReadableDuration.members.trap.gz

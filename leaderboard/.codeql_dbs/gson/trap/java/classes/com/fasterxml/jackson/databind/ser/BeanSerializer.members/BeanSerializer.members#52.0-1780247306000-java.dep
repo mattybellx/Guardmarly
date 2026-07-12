@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ser/BeanSerializer.members/BeanSerializer.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ser/BeanSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/std/BeanSerializerBase.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonGenerator.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitable.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyWriter.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/impl/ObjectIdWriter.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/NameTransformer.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanSerializerBuilder.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

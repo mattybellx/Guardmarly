@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/target/ShutdownHookRegistrar.members/ShutdownHookRegistrar.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/target/ShutdownHookRegistrar.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Thread.members.trap.gz

@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/stream/JsonWriter.members/JsonWriter.members#0.0-1783842439064-java.trap.gz
+
+TRAPS
+classes/com/google/gson/stream/JsonWriter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/java/io/Flushable.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/com/google/gson/Strictness.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/gson/FormattingStyle.members.trap.gz
+classes/java/io/Writer.members.trap.gz

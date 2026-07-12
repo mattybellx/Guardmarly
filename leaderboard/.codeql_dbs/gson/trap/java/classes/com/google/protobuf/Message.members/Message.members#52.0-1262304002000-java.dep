@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Message.members/Message.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Message.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/CheckReturnValue.members.trap.gz
+classes/com/google/protobuf/Message$Builder.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/Parser.members.trap.gz

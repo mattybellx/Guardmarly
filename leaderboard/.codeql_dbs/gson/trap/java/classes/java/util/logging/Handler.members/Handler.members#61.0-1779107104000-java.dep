@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/logging/Handler.members/Handler.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/logging/Handler.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/logging/LogRecord.members.trap.gz
+classes/java/util/logging/Level.members.trap.gz
+classes/java/lang/SecurityException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/java/util/logging/ErrorManager.members.trap.gz
+classes/java/util/logging/Filter.members.trap.gz
+classes/java/io/UnsupportedEncodingException.members.trap.gz
+classes/java/util/logging/Formatter.members.trap.gz

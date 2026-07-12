@@ -1,0 +1,61 @@
+[2026-07-12 07:57:29] [javac-output-15699] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:29] [javac-output-15699] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:29] [javac-output-15699] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:57:30] [javac-output-15699] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.params.provider.ValueSource,org.junit.jupiter.api.BeforeEach,org.junit.jupiter.params.provider.CsvSource,org.apache.logging.log4j.core.test.junit.LoggerContextSource,org.apache.logging.log4j.test.junit.UsingStatusListener,org.junit.jupiter.api.Nested,org.apache.logging.log4j.core.config.plugins.Plugin,org.junitpioneer.jupiter.SetSystemProperty,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.junit.jupiter.api.Test,org.junit.jupiter.api.AfterAll,org.apache.logging.log4j.test.junit.UsingTestProperties,org.junit.jupiter.params.ParameterizedTest,org.junit.jupiter.api.BeforeAll,org.junit.jupiter.api.Tags,org.junit.jupiter.api.parallel.Execution,org.apache.logging.log4j.core.test.junit.Named
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/resolver/StackTraceStringResolverTest.java:52: warning: [dangling-doc-comments] documentation comment is not attached to any declaration
+[2026-07-12 07:57:31] [javac-output-15699]     ////////////////////////////////////////////////////////////////////////////
+[2026-07-12 07:57:31] [javac-output-15699]     ^
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/resolver/StackTraceStringResolverTest.java:151: warning: [dangling-doc-comments] documentation comment is not attached to any declaration
+[2026-07-12 07:57:31] [javac-output-15699]     ////////////////////////////////////////////////////////////////////////////
+[2026-07-12 07:57:31] [javac-output-15699]     ^
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/resolver/StackTraceStringResolverTest.java:328: warning: [dangling-doc-comments] documentation comment is not attached to any declaration
+[2026-07-12 07:57:31] [javac-output-15699]     ////////////////////////////////////////////////////////////////////////////
+[2026-07-12 07:57:31] [javac-output-15699]     ^
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/resolver/StackTraceStringResolverTest.java:393: warning: [dangling-doc-comments] documentation comment is not attached to any declaration
+[2026-07-12 07:57:31] [javac-output-15699]     ////////////////////////////////////////////////////////////////////////////
+[2026-07-12 07:57:31] [javac-output-15699]     ^
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/TestHelpers.java:55: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:31] [javac-output-15699]         return (Map<String, Object>) JsonReader.read(json);
+[2026-07-12 07:57:31] [javac-output-15699]                                                     ^
+[2026-07-12 07:57:31] [javac-output-15699]   required: Map<String,Object>
+[2026-07-12 07:57:31] [javac-output-15699]   found:    Object
+[2026-07-12 07:57:31] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/TestHelpers.java:75: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:31] [javac-output-15699]         final Map<String, Object> deserializedLogEvent = (Map<String, Object>) readJson(serializedLogEventJson);
+[2026-07-12 07:57:31] [javac-output-15699]                                                                                        ^
+[2026-07-12 07:57:31] [javac-output-15699]   required: Map<String,Object>
+[2026-07-12 07:57:31] [javac-output-15699]   found:    Object
+[2026-07-12 07:57:32] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutAdditionalFieldTest.java:81: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:32] [javac-output-15699]         final Map<String, Object> serializedEventMap = (Map<String, Object>) serializedEventObject;
+[2026-07-12 07:57:32] [javac-output-15699]                                                                              ^
+[2026-07-12 07:57:32] [javac-output-15699]   required: Map<String,Object>
+[2026-07-12 07:57:32] [javac-output-15699]   found:    Object
+[2026-07-12 07:57:32] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutTest.java:599: warning: [unchecked] unchecked conversion
+[2026-07-12 07:57:32] [javac-output-15699]                     accessor.getObject(stackTraceFieldName, List.class);
+[2026-07-12 07:57:32] [javac-output-15699]                                       ^
+[2026-07-12 07:57:32] [javac-output-15699]   required: List<Map<String,Object>>
+[2026-07-12 07:57:32] [javac-output-15699]   found:    List
+[2026-07-12 07:57:34] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/LogstashIT.java:493: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:57:34] [javac-output-15699]         SearchResponse<Map> searchResponse = ES_CLIENT.search(
+[2026-07-12 07:57:34] [javac-output-15699]                        ^
+[2026-07-12 07:57:34] [javac-output-15699]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:57:34] [javac-output-15699]   where K,V are type-variables:
+[2026-07-12 07:57:34] [javac-output-15699]     K extends Object declared in interface Map
+[2026-07-12 07:57:34] [javac-output-15699]     V extends Object declared in interface Map
+[2026-07-12 07:57:34] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/LogstashIT.java:500: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:57:34] [javac-output-15699]                 .map(hit -> {
+[2026-07-12 07:57:34] [javac-output-15699]                      ^
+[2026-07-12 07:57:34] [javac-output-15699]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:57:34] [javac-output-15699]   where K,V are type-variables:
+[2026-07-12 07:57:34] [javac-output-15699]     K extends Object declared in interface Map
+[2026-07-12 07:57:34] [javac-output-15699]     V extends Object declared in interface Map
+[2026-07-12 07:57:34] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/LogstashIT.java:502: warning: [unchecked] unchecked conversion
+[2026-07-12 07:57:34] [javac-output-15699]                     final Map<String, Object> source = hit.source();
+[2026-07-12 07:57:34] [javac-output-15699]                                                                  ^
+[2026-07-12 07:57:34] [javac-output-15699]   required: Map<String,Object>
+[2026-07-12 07:57:34] [javac-output-15699]   found:    Map
+[2026-07-12 07:57:45] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/ThreadLocalRecyclerNestedLoggingTest.java:43: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:57:45] [javac-output-15699]         private final Logger logger;
+[2026-07-12 07:57:45] [javac-output-15699]                              ^
+[2026-07-12 07:57:47] [javac-output-15699] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json-test/src/test/java/org/apache/logging/log4j/layout/template/json/util/RecyclerFactoryCustomConverter.java:61: warning: [deprecation] RecyclerFactories in org.apache.logging.log4j.layout.template.json.util has been deprecated
+[2026-07-12 07:57:47] [javac-output-15699]         return NAME.equals(recyclerFactorySpec) ? RECYCLER_FACTORY : RecyclerFactories.ofSpec(recyclerFactorySpec);
+[2026-07-12 07:57:47] [javac-output-15699]                                                                      ^

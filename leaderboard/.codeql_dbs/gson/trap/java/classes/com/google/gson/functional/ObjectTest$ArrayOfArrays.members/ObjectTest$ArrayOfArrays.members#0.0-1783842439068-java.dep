@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/ObjectTest$ArrayOfArrays.members/ObjectTest$ArrayOfArrays.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/ObjectTest$ArrayOfArrays.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/ObjectTest.members.trap.gz
+classes/java/lang/String.members.trap.gz

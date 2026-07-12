@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/FormattingStyle.java.trap.gz
+classes/com/google/gson/stream/JsonWriter.members/JsonWriter.members#0.0-1783842439064-java.trap.gz
+classes/com/google/gson/FormattingStyle.members/FormattingStyle.members#0.0-1783842439059-java.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members/CanIgnoreReturnValue.members#52.0-1775559068000-java.trap.gz
+classes/com/google/gson/Strictness.members/Strictness.members#0.0-1783842439059-java.trap.gz
+classes/java/lang/SuppressWarnings.members/SuppressWarnings.members#61.0-1779107104000-java.trap.gz
+jars/home/runner/.m2/repository/com/google/errorprone/error_prone_annotations/2.49.0/error_prone_annotations-2.49.0.jar.trap.gz

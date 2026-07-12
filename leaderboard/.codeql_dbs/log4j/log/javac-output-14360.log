@@ -1,0 +1,7 @@
+[2026-07-12 07:54:52] [javac-output-14360] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:52] [javac-output-14360] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:52] [javac-output-14360] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:54:53] [javac-output-14360] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.junit.jupiter.api.BeforeEach,org.junit.jupiter.api.AfterEach,org.junit.jupiter.api.BeforeAll,org.apache.logging.log4j.core.test.junit.LoggerContextSource,org.junit.experimental.categories.Category,org.apache.logging.log4j.core.test.junit.Named
+[2026-07-12 07:54:54] [javac-output-14360] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-slf4j-impl/src/test/java/org/apache/logging/slf4j/CustomFlatMarker.java:51: warning: [deprecation] hasChildren() in Marker has been deprecated
+[2026-07-12 07:54:54] [javac-output-14360]     public boolean hasChildren() {
+[2026-07-12 07:54:54] [javac-output-14360]                    ^

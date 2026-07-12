@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/TimeOfDay$Property.members/TimeOfDay$Property.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/TimeOfDay$Property.members.trap.gz
+classes/org/joda/time/field/AbstractPartialFieldProperty.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/org/joda/time/TimeOfDay.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/org/joda/time/ReadablePartial.members.trap.gz
+classes/org/joda/time/DateTimeField.members.trap.gz

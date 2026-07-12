@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/UnknownFieldSchema.members/UnknownFieldSchema.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/UnknownFieldSchema.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/CheckReturnValue.members.trap.gz
+classes/com/google/protobuf/Writer.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/Reader.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz

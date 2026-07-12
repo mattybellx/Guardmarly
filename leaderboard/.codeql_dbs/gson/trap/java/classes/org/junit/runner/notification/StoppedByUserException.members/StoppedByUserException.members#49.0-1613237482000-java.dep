@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/notification/StoppedByUserException.members/StoppedByUserException.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/notification/StoppedByUserException.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz

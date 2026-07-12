@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/ForkJoinPool$ForkJoinWorkerThreadFactory.members/ForkJoinPool$ForkJoinWorkerThreadFactory.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/ForkJoinPool$ForkJoinWorkerThreadFactory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/ForkJoinPool.members.trap.gz
+classes/java/util/concurrent/ForkJoinWorkerThread.members.trap.gz

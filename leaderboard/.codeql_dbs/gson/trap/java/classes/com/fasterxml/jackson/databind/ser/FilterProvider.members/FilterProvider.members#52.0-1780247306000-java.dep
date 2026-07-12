@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ser/FilterProvider.members/FilterProvider.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ser/FilterProvider.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/PropertyFilter.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyFilter.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

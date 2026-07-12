@@ -1,0 +1,46 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson
+baselineLinesOfCode: 37636
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: java
+inProgress:
+  primaryLanguage: java
+  installedExtractors:
+    go:
+     - /home/runner/work/Ansede/Ansede/codeql/go
+    yaml:
+     - /home/runner/work/Ansede/Ansede/codeql/yaml
+    swift:
+     - /home/runner/work/Ansede/Ansede/codeql/swift
+    rust:
+     - /home/runner/work/Ansede/Ansede/codeql/rust
+    properties:
+     - /home/runner/work/Ansede/Ansede/codeql/properties
+    csv:
+     - /home/runner/work/Ansede/Ansede/codeql/csv
+    ruby:
+     - /home/runner/work/Ansede/Ansede/codeql/ruby
+    javascript:
+     - /home/runner/work/Ansede/Ansede/codeql/javascript
+    csharp:
+     - /home/runner/work/Ansede/Ansede/codeql/csharp
+    python:
+     - /home/runner/work/Ansede/Ansede/codeql/python
+    actions:
+     - /home/runner/work/Ansede/Ansede/codeql/actions
+    cpp:
+     - /home/runner/work/Ansede/Ansede/codeql/cpp
+    xml:
+     - /home/runner/work/Ansede/Ansede/codeql/xml
+    html:
+     - /home/runner/work/Ansede/Ansede/codeql/html
+    java:
+     - /home/runner/work/Ansede/Ansede/codeql/java
+creationMetadata:
+  sha: c9f3fd55854a743b66f857ace3c7b268ea3e2ef7
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:47:29.809007358Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: false

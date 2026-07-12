@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/DeserializerCache.members/DeserializerCache.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/DeserializerCache.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/KeyDeserializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonDeserializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/NullValueProvider.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/Annotated.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/Converter.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/DeserializerFactory.members.trap.gz
+classes/com/fasterxml/jackson/databind/BeanDescription.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/LookupCache.members.trap.gz
+classes/java/util/HashMap.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

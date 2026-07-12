@@ -1,0 +1,28 @@
+[T 08:00:37 16980] CodeQL CLI version 2.26.0
+[T 08:00:37 16980] Initializing tracer.
+[T 08:00:37 16980] Initializing tags.
+[T 08:00:37 16980] ID set to 0000000000004254_0000000000000001 (parent root)
+[T 08:00:37 16980] Initializing tracer.
+[T 08:00:37 16980] Initializing tags.
+[T 08:00:37 16980] ID set to 0000000000004254_0000000000000002 (parent root)
+[T 08:00:37 16980] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh (canonical: /home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh) ====
+[T 08:00:37 16980] Executing the following tracer actions:
+[T 08:00:37 16980] Tracer actions:
+[T 08:00:37 16980] pre_invocations(0)
+[T 08:00:37 16980] post_invocations(0)
+[T 08:00:37 16980] trace_languages(1): [go]
+[T 08:00:37 16980] Initializing tracer.
+[T 08:00:37 16980] Initializing tags.
+[T 08:00:37 16980] ID set to 0000000000004254_0000000000000003 (parent 0000000000004254_0000000000000002)
+[T 08:00:37 16984] Initializing tracer.
+[T 08:00:37 16984] Initializing tags.
+[T 08:00:37 16984] ID set to 0000000000004258_0000000000000001 (parent 0000000000004254_0000000000000003)
+[T 08:00:37 16984] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/go/tools/linux64/go-autobuilder (canonical: /home/runner/work/Ansede/Ansede/codeql/go/tools/linux64/go-autobuilder) ====
+[T 08:00:37 16984] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/go/tools/linux64/go-autobuilder ===
+[T 08:00:37 16984] Lua: Disabling tracing for language go.
+[T 08:00:37 16984] Executing the following tracer actions:
+[T 08:00:37 16984] Tracer actions:
+[T 08:00:37 16984] pre_invocations(0)
+[T 08:00:37 16984] post_invocations(0)
+[T 08:00:37 16984] trace_languages(0): []
+[T 08:00:37 16984] Disabling tracing for this command.

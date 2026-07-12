@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/DurationFieldType.members/DurationFieldType.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/DurationFieldType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/Chronology.members.trap.gz
+classes/org/joda/time/DurationField.members.trap.gz

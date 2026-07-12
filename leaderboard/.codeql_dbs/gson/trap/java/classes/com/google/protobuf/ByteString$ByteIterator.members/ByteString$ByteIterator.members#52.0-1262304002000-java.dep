@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/ByteString$ByteIterator.members/ByteString$ByteIterator.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/ByteString$ByteIterator.members.trap.gz
+classes/java/lang/Byte.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz

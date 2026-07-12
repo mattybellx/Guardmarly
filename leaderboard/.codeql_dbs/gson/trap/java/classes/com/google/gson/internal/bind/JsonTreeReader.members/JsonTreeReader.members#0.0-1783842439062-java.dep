@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/bind/JsonTreeReader.members/JsonTreeReader.members#0.0-1783842439062-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/bind/JsonTreeReader.members.trap.gz
+classes/com/google/gson/stream/JsonReader.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/com/google/gson/stream/JsonToken.members.trap.gz

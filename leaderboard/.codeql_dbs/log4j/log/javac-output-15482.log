@@ -1,0 +1,4 @@
+[2026-07-12 07:56:59] [javac-output-15482] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:59] [javac-output-15482] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:59] [javac-output-15482] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:57:01] [javac-output-15482] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.junit.jupiter.api.AfterAll,org.junit.jupiter.api.BeforeEach,org.junit.jupiter.api.AfterEach,org.junit.jupiter.params.ParameterizedTest,org.junit.jupiter.api.TestMethodOrder,org.junit.jupiter.api.BeforeAll,org.apache.logging.log4j.core.test.junit.LoggerContextSource,org.junit.jupiter.api.Tag,org.apache.logging.log4j.core.test.junit.Named,org.junit.jupiter.params.provider.MethodSource

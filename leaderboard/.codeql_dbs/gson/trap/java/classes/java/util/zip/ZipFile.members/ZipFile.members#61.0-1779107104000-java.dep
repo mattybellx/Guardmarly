@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/zip/ZipFile.members/ZipFile.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/zip/ZipFile.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/zip/ZipConstants.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/util/zip/ZipEntry.members.trap.gz
+classes/java/util/Enumeration.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/io/File.members.trap.gz
+classes/java/nio/charset/Charset.members.trap.gz
+classes/java/util/zip/ZipException.members.trap.gz

@@ -1,0 +1,27 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/CollectionTest.java.trap.gz
+classes/java/util/LinkedList.members/LinkedList.members#61.0-1776806822000-java.trap.gz
+classes/java/util/PriorityQueue.members/PriorityQueue.members#61.0-1776806822000-java.trap.gz
+classes/java/util/Stack.members/Stack.members#61.0-1776806822000-java.trap.gz
+classes/java/util/Vector.members/Vector.members#61.0-1776806822000-java.trap.gz
+classes/com/google/gson/functional/CollectionTest.members/CollectionTest.members#0.0-1783842439067-java.trap.gz
+classes/java/util/AbstractSequentialList.members/AbstractSequentialList.members#61.0-1776806822000-java.trap.gz
+classes/java/util/LinkedList$Node.members/LinkedList$Node.members#61.0-1776806822000-java.trap.gz
+classes/java/util/AbstractQueue.members/AbstractQueue.members#61.0-1776806822000-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$CollectionWithoutNoArgsConstructor.members/CollectionTest$CollectionWithoutNoArgsConstructor.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$ObjectWithWildcardCollection.members/CollectionTest$ObjectWithWildcardCollection.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$HasArrayListField.members/CollectionTest$HasArrayListField.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$Entry.members/CollectionTest$Entry.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$SmallClass.members/CollectionTest$SmallClass.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/CollectionTest$BigClass.members/CollectionTest$BigClass.members#0.0-1783842439067-java.trap.gz
+modules/java.base.trap.gz

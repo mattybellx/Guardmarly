@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/cfg/MutableConfigOverride.members/MutableConfigOverride.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/cfg/MutableConfigOverride.members.trap.gz
+classes/com/fasterxml/jackson/databind/cfg/ConfigOverride.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Value.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonSetter$Value.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonIgnoreProperties$Value.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonInclude$Value.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonFormat$Value.members.trap.gz

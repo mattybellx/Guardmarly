@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/util/ShortDuration.members/ShortDuration.members#52.0-1626179098000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/util/ShortDuration.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/math/BigDecimal.members.trap.gz
+classes/java/math/RoundingMode.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/java/lang/String.members.trap.gz

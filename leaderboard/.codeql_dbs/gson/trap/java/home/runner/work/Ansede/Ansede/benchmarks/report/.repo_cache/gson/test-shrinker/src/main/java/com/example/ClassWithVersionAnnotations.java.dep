@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/ClassWithVersionAnnotations.java.trap.gz
+
+TRAPS
+classes/com/google/gson/annotations/Since.members.trap.gz
+classes/com/google/gson/annotations/Until.members.trap.gz
+classes/com/example/ClassWithVersionAnnotations.members.trap.gz
+classes/java/lang/Object.members.trap.gz

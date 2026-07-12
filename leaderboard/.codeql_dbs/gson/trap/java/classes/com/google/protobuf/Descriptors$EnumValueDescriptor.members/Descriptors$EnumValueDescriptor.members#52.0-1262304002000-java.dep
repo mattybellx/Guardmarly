@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors$EnumValueDescriptor.members/Descriptors$EnumValueDescriptor.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors$EnumValueDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$GenericDescriptor.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLite.members.trap.gz
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumValueOptions.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$FileDescriptor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumValueDescriptorProto.members.trap.gz
+classes/java/util/function/ToIntFunction.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/Comparator.members.trap.gz

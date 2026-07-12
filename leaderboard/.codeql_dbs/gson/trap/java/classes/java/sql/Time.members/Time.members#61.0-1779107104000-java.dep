@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/sql/Time.members/Time.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/sql/Time.members.trap.gz
+classes/java/util/Date.members.trap.gz
+classes/java/time/Instant.members.trap.gz
+classes/java/time/LocalTime.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz

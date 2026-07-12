@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/reflect/GenericWithMultiBound.members/GenericWithMultiBound.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/reflect/GenericWithMultiBound.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz

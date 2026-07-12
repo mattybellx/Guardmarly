@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/StreamCorruptedException.members/StreamCorruptedException.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/StreamCorruptedException.members.trap.gz
+classes/java/io/ObjectStreamException.members.trap.gz
+classes/java/lang/String.members.trap.gz

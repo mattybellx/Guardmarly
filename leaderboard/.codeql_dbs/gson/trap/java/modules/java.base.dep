@@ -1,0 +1,6 @@
+TRAP dependencies 1.2
+
+TRAP
+modules/java.base.trap.gz
+
+TRAPS

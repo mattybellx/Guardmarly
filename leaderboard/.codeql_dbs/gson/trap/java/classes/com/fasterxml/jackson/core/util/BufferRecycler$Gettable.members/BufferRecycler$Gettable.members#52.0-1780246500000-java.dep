@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/util/BufferRecycler$Gettable.members/BufferRecycler$Gettable.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/util/BufferRecycler$Gettable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/util/BufferRecycler.members.trap.gz

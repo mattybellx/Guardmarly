@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/JsonParser.members/JsonParser.members#0.0-1783842439059-java.trap.gz
+
+TRAPS
+classes/com/google/gson/JsonParser.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/stream/JsonReader.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/com/google/errorprone/annotations/InlineMe.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/google/gson/JsonIOException.members.trap.gz
+classes/com/google/gson/JsonSyntaxException.members.trap.gz
+classes/java/io/Reader.members.trap.gz

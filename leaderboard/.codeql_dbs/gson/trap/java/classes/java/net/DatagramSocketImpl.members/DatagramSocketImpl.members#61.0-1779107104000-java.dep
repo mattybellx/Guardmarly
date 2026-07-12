@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/net/DatagramSocketImpl.members/DatagramSocketImpl.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/net/DatagramSocketImpl.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/net/SocketOptions.members.trap.gz
+classes/java/io/FileDescriptor.members.trap.gz
+classes/java/net/SocketAddress.members.trap.gz
+classes/java/net/NetworkInterface.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/net/InetAddress.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/net/DatagramPacket.members.trap.gz
+classes/java/net/SocketException.members.trap.gz

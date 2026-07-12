@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/example/NoSerializedNameMain.members/NoSerializedNameMain.members#0.0-1783842439077-java.trap.gz
+
+TRAPS
+classes/com/example/NoSerializedNameMain.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz

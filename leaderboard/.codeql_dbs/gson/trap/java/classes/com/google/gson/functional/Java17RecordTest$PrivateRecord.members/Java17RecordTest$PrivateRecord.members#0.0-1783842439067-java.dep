@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/Java17RecordTest$PrivateRecord.members/Java17RecordTest$PrivateRecord.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/Java17RecordTest$PrivateRecord.members.trap.gz
+classes/java/lang/Record.members.trap.gz
+classes/com/google/gson/functional/Java17RecordTest.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/util/concurrent/ListenableFuture.members/ListenableFuture.members#52.0-1616154038000-java.trap.gz
+
+TRAPS
+classes/com/google/common/util/concurrent/ListenableFuture.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/java/lang/InterruptedException.members.trap.gz
+classes/java/util/concurrent/ExecutionException.members.trap.gz
+classes/java/util/concurrent/TimeoutException.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Runnable.members.trap.gz
+classes/java/util/concurrent/Executor.members.trap.gz

@@ -1,0 +1,6 @@
+TRAP dependencies 1.2
+
+TRAP
+modules/com.google.gson.trap.gz
+
+TRAPS

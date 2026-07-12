@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/rules/MethodRule.members/MethodRule.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/rules/MethodRule.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/junit/runners/model/Statement.members.trap.gz
+classes/org/junit/runners/model/FrameworkMethod.members.trap.gz

@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/cfg/DatatypeFeature.members/DatatypeFeature.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/cfg/DatatypeFeature.members.trap.gz
+classes/com/fasterxml/jackson/core/util/JacksonFeature.members.trap.gz

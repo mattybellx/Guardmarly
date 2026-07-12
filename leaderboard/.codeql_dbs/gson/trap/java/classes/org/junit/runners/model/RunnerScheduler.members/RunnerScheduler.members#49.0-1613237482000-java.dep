@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runners/model/RunnerScheduler.members/RunnerScheduler.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runners/model/RunnerScheduler.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Runnable.members.trap.gz

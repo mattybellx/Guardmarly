@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/ObjectOutputStream.members/ObjectOutputStream.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/ObjectOutputStream.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz
+classes/java/io/ObjectOutput.members.trap.gz
+classes/java/io/ObjectStreamConstants.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/io/ObjectStreamClass.members.trap.gz
+classes/java/lang/SecurityException.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/io/ObjectOutputStream$PutField.members.trap.gz

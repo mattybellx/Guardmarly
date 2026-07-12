@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/metrics/ParseBenchmark$Tweet.members/ParseBenchmark$Tweet.members#0.0-1783842439073-java.trap.gz
+
+TRAPS
+classes/com/google/gson/metrics/ParseBenchmark$Tweet.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonProperty.members.trap.gz
+classes/com/fasterxml/jackson/annotation/OptBoolean.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonProperty$Access.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark$User.members.trap.gz
+classes/java/util/Date.members.trap.gz

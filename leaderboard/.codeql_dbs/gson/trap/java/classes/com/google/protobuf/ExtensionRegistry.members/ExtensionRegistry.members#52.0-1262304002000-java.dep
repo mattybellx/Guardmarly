@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/ExtensionRegistry.members/ExtensionRegistry.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/ExtensionRegistry.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/Extension.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistry$ExtensionInfo.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$GeneratedExtension.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz

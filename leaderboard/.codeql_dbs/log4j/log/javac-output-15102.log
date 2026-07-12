@@ -1,0 +1,13 @@
+[2026-07-12 07:56:17] [javac-output-15102] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:17] [javac-output-15102] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:17] [javac-output-15102] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:56:18] [javac-output-15102] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,aQute.bnd.annotation.spi.ServiceProvider
+[2026-07-12 07:56:18] [javac-output-15102] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jcl/src/main/java/org/apache/logging/log4j/jcl/Log4jLog.java:32: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:56:18] [javac-output-15102]     private final ExtendedLogger logger;
+[2026-07-12 07:56:18] [javac-output-15102]                                  ^
+[2026-07-12 07:56:18] [javac-output-15102] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jcl/src/main/java/org/apache/logging/log4j/jcl/LogFactoryImpl.java:57: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:56:18] [javac-output-15102]     public Log getInstance(@SuppressWarnings("rawtypes") final Class clazz) throws LogConfigurationException {
+[2026-07-12 07:56:18] [javac-output-15102]                                                                ^
+[2026-07-12 07:56:18] [javac-output-15102]   missing type arguments for generic class Class<T>
+[2026-07-12 07:56:18] [javac-output-15102]   where T is a type-variable:
+[2026-07-12 07:56:18] [javac-output-15102]     T extends Object declared in class Class

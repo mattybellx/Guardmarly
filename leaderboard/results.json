@@ -1,0 +1,475 @@
+{
+  "timestamp": "2026-07-12 08:07 UTC",
+  "ansede_version": "6.2.2",
+  "results": [
+    {
+      "name": "flask",
+      "lang": "python",
+      "files": 83,
+      "lines": 18337,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 209,
+          "time_s": 17.2,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 5.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 8,
+          "time_s": 28.0,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "requests",
+      "lang": "python",
+      "files": 37,
+      "lines": 12032,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 9,
+          "time_s": 10.0,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 2,
+          "time_s": 4.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 9,
+          "time_s": 26.9,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "fastapi",
+      "lang": "python",
+      "files": 1129,
+      "lines": 112073,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 177,
+          "time_s": 362.9,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 7,
+          "time_s": 7.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 3,
+          "time_s": 55.8,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "django",
+      "lang": "python",
+      "files": 2926,
+      "lines": 522917,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 0,
+          "time_s": 600.1,
+          "error": "Command '['/opt/hostedtoolcache/Python/3.12.13/x64/bin/ansede-static', '/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/django', '--format', 'json', '--cluster']' timed out after 600 sec"
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 9,
+          "time_s": 29.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 55,
+          "time_s": 350.9,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "scrapy",
+      "lang": "python",
+      "files": 446,
+      "lines": 79974,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 49,
+          "time_s": 185.8,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 10,
+          "time_s": 6.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 6,
+          "time_s": 57.2,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "express",
+      "lang": "javascript",
+      "files": 141,
+      "lines": 21440,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 39,
+          "time_s": 13.5,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 41,
+          "time_s": 3.4,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 5,
+          "time_s": 49.8,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "axios",
+      "lang": "javascript",
+      "files": 228,
+      "lines": 37346,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 63,
+          "time_s": 22.3,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 3.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 22,
+          "time_s": 68.3,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "lodash",
+      "lang": "javascript",
+      "files": 55,
+      "lines": 119100,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 11,
+          "time_s": 30.3,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 12.0,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 16,
+          "time_s": 100.3,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "moment",
+      "lang": "javascript",
+      "files": 766,
+      "lines": 339124,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 53,
+          "time_s": 83.1,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 6.7,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 4,
+          "time_s": 210.5,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "socket.io",
+      "lang": "javascript",
+      "files": 375,
+      "lines": 64218,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 38,
+          "time_s": 35.0,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 18,
+          "time_s": 8.5,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 52,
+          "time_s": 82.3,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "spring-petclinic",
+      "lang": "java",
+      "files": 48,
+      "lines": 3849,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 7,
+          "time_s": 0.8,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 2.7,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 2,
+          "time_s": 180.4,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "gson",
+      "lang": "java",
+      "files": 262,
+      "lines": 55620,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 0,
+          "time_s": 4.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 4.8,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 115.2,
+          "error": "CodeQL DB creation failed: Initializing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/gson.\nRunning build command: [/home/runner/work/Ansede/Ansede/codeql/java/tools/autobu"
+        }
+      }
+    },
+    {
+      "name": "log4j",
+      "lang": "java",
+      "files": 2591,
+      "lines": 350091,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 12,
+          "time_s": 38.4,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 4,
+          "time_s": 26.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 600.0,
+          "error": "Command '['/home/runner/work/Ansede/Ansede/codeql/codeql', 'database', 'create', 'benchmarks/report/.codeql_dbs/log4j', '--language=java', '--source-root=benchmarks/report/.repo_cache/log4j']' timed o"
+        }
+      }
+    },
+    {
+      "name": "gin",
+      "lang": "go",
+      "files": 99,
+      "lines": 24099,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1,
+          "time_s": 1.8,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 2,
+          "time_s": 3.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 2,
+          "time_s": 42.5,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "echo",
+      "lang": "go",
+      "files": 102,
+      "lines": 39889,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 2,
+          "time_s": 1.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 3,
+          "time_s": 3.2,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 1,
+          "time_s": 31.7,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "cobra",
+      "lang": "go",
+      "files": 36,
+      "lines": 16765,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1,
+          "time_s": 0.9,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 3.0,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 28.8,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "CleanArchitecture",
+      "lang": "csharp",
+      "files": 362,
+      "lines": 11397,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 3,
+          "time_s": 3.7,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 0,
+          "time_s": 3.0,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 0,
+          "time_s": 66.6,
+          "error": null
+        }
+      }
+    },
+    {
+      "name": "eShopOnWeb",
+      "lang": "csharp",
+      "files": 254,
+      "lines": 10733,
+      "tools": {
+        "ansede-static": {
+          "tool": "ansede-static",
+          "findings": 1,
+          "time_s": 2.6,
+          "error": null
+        },
+        "semgrep": {
+          "tool": "semgrep",
+          "findings": 1,
+          "time_s": 2.9,
+          "error": null
+        },
+        "codeql": {
+          "tool": "codeql",
+          "findings": 5,
+          "time_s": 210.6,
+          "error": null
+        }
+      }
+    }
+  ],
+  "cve_recall": null
+}

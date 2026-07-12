@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/reflect/TypeCapture.members/TypeCapture.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/reflect/TypeCapture.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz

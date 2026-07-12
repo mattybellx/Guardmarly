@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/ReflectionAccessFilterTest$ClassWithPrivateNoArgsConstructor.members/ReflectionAccessFilterTest$ClassWithPrivateNoArgsConstructor.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/ReflectionAccessFilterTest$ClassWithPrivateNoArgsConstructor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/ReflectionAccessFilterTest.members.trap.gz

@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$CreatedByJdkUnsafe$Serializer.members/JsonAdapterAnnotationOnClassesTest$CreatedByJdkUnsafe$Serializer.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$CreatedByJdkUnsafe$Serializer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$CreatedByJdkUnsafe.members.trap.gz
+classes/com/google/gson/JsonSerializer.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/com/google/gson/JsonSerializationContext.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

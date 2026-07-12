@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/Java17RecordTest.java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest.members/Java17RecordTest.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest$RecordWithCustomNames.members/Java17RecordTest$RecordWithCustomNames.members#0.0-1783842439067-java.trap.gz
+classes/java/lang/Record.members/Record.members#61.0-1776806822000-java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest$RecordWithPrimitives.members/Java17RecordTest$RecordWithPrimitives.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest$RecordWithStaticField.members/Java17RecordTest$RecordWithStaticField.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest$PrivateRecord.members/Java17RecordTest$PrivateRecord.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/Java17RecordTest$PublicRecord.members/Java17RecordTest$PublicRecord.members#0.0-1783842439067-java.trap.gz
+modules/java.base.trap.gz

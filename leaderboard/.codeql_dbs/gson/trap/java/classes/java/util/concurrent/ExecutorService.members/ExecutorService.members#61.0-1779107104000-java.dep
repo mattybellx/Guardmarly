@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/ExecutorService.members/ExecutorService.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/ExecutorService.members.trap.gz
+classes/java/util/concurrent/Executor.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/java/util/concurrent/Callable.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/InterruptedException.members.trap.gz
+classes/java/util/concurrent/ExecutionException.members.trap.gz
+classes/java/util/concurrent/TimeoutException.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/lang/Runnable.members.trap.gz

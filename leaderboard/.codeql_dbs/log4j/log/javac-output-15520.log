@@ -1,0 +1,246 @@
+[2026-07-12 07:57:07] [javac-output-15520] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:07] [javac-output-15520] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:07] [javac-output-15520] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:57:08] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:27: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:08] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:57:08] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:08] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:28: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:08] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:57:08] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:08] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:234: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:08] [javac-output-15520]         private final FastDateFormat formatter;
+[2026-07-12 07:57:08] [javac-output-15520]                       ^
+[2026-07-12 07:57:08] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:276: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:08] [javac-output-15520]         private final FixedDateFormat formatter;
+[2026-07-12 07:57:08] [javac-output-15520]                       ^
+[2026-07-12 07:57:08] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:280: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:08] [javac-output-15520]         private Log4jFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:57:08] [javac-output-15520]                                           ^
+[2026-07-12 07:57:08] [javac-output-15520] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginConfiguration,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.plugins.PluginElement,org.apache.logging.log4j.layout.template.json.internal.annotation.SuppressFBWarnings,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:27: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:28: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:234: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FastDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:276: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FixedDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:280: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private Log4jFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:57:09] [javac-output-15520]                                           ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:27: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:28: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:234: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FastDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:276: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FixedDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:280: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private Log4jFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:57:09] [javac-output-15520]                                           ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:27: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:28: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:234: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FastDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:276: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FixedDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:280: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private Log4jFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:57:09] [javac-output-15520]                                           ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:27: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:28: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:57:09] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:234: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FastDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:276: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private final FixedDateFormat formatter;
+[2026-07-12 07:57:09] [javac-output-15520]                       ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:280: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:09] [javac-output-15520]         private Log4jFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:57:09] [javac-output-15520]                                           ^
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/JsonWriter.java:161: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:09] [javac-output-15520]             final Map<String, Object> map = (Map<String, Object>) value;
+[2026-07-12 07:57:09] [javac-output-15520]                                                                   ^
+[2026-07-12 07:57:09] [javac-output-15520]   required: Map<String,Object>
+[2026-07-12 07:57:09] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/JsonWriter.java:168: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:09] [javac-output-15520]             final List<Object> list = (List<Object>) value;
+[2026-07-12 07:57:09] [javac-output-15520]                                                      ^
+[2026-07-12 07:57:09] [javac-output-15520]   required: List<Object>
+[2026-07-12 07:57:09] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/JsonWriter.java:172: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:09] [javac-output-15520]             final Collection<Object> collection = (Collection<Object>) value;
+[2026-07-12 07:57:09] [javac-output-15520]                                                                        ^
+[2026-07-12 07:57:09] [javac-output-15520]   required: Collection<Object>
+[2026-07-12 07:57:09] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:09] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutDefaults.java:128: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:09] [javac-output-15520]                 TypeConverterRegistry.getInstance().findCompatibleConverter(RecyclerFactory.class);
+[2026-07-12 07:57:09] [javac-output-15520]                                                                            ^
+[2026-07-12 07:57:09] [javac-output-15520]   required: TypeConverter<RecyclerFactory>
+[2026-07-12 07:57:09] [javac-output-15520]   found:    TypeConverter<CAP#1>
+[2026-07-12 07:57:09] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:09] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/MapAccessor.java:102: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]         final List<Object> items = (List<Object>) value;
+[2026-07-12 07:57:10] [javac-output-15520]                                                   ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: List<Object>
+[2026-07-12 07:57:10] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/MapAccessor.java:119: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]         final List<E> typedItems = (List<E>) items;
+[2026-07-12 07:57:10] [javac-output-15520]                                              ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: List<E>
+[2026-07-12 07:57:10] [javac-output-15520]   found:    List<Object>
+[2026-07-12 07:57:10] [javac-output-15520]   where E is a type-variable:
+[2026-07-12 07:57:10] [javac-output-15520]     E extends Object declared in method <E>getList(String[],Class<E>)
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/MapAccessor.java:149: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]             final Map<String, Object> parentMap = (Map<String, Object>) parent;
+[2026-07-12 07:57:10] [javac-output-15520]                                                                         ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: Map<String,Object>
+[2026-07-12 07:57:10] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/MapAccessor.java:162: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]         final T typedValue = (T) parent;
+[2026-07-12 07:57:10] [javac-output-15520]                                  ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: T
+[2026-07-12 07:57:10] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:10] [javac-output-15520]   where T is a type-variable:
+[2026-07-12 07:57:10] [javac-output-15520]     T extends Object declared in method <T>getObject(String[],Class<T>)
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/EventAdditionalFieldInterceptor.java:54: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]             final Map<String, Object> map = (Map<String, Object>) node;
+[2026-07-12 07:57:10] [javac-output-15520]                                                                   ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: Map<String,Object>
+[2026-07-12 07:57:10] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:10] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/MapResolver.java:41: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:10] [javac-output-15520]         final MapMessage<?, Object> mapMessage = (MapMessage<?, Object>) message;
+[2026-07-12 07:57:10] [javac-output-15520]                                                                          ^
+[2026-07-12 07:57:10] [javac-output-15520]   required: MapMessage<?,Object>
+[2026-07-12 07:57:10] [javac-output-15520]   found:    Message
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolverFactories.java:114: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final F typedFactory = (F) factory;
+[2026-07-12 07:57:11] [javac-output-15520]                                        ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: F
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolverFactory<CAP#1,CAP#2>
+[2026-07-12 07:57:11] [javac-output-15520]   where F,V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     F extends TemplateResolverFactory<V,C> declared in method <V,C,F>castFactory(Class<V>,Class<C>,TemplateResolverFactory<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C,F>castFactory(Class<V>,Class<C>,TemplateResolverFactory<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C,F>castFactory(Class<V>,Class<C>,TemplateResolverFactory<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1,CAP#2 are fresh type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#2 extends TemplateResolverContext<CAP#1,CAP#2> from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolverInterceptors.java:115: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final I typedInterceptor = (I) interceptor;
+[2026-07-12 07:57:11] [javac-output-15520]                                            ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: I
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolverInterceptor<CAP#1,CAP#2>
+[2026-07-12 07:57:11] [javac-output-15520]   where I,V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     I extends TemplateResolverInterceptor<V,C> declared in method <V,C,I>castInterceptor(Class<V>,Class<C>,TemplateResolverInterceptor<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C,I>castInterceptor(Class<V>,Class<C>,TemplateResolverInterceptor<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C,I>castInterceptor(Class<V>,Class<C>,TemplateResolverInterceptor<?,?>)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1,CAP#2 are fresh type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#2 extends TemplateResolverContext<CAP#1,CAP#2> from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:114: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final TemplateResolver<V> nullResolver = (TemplateResolver<V>) NULL_RESOLVER;
+[2026-07-12 07:57:11] [javac-output-15520]                                                                            ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: TemplateResolver<V>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolver<CAP#1>
+[2026-07-12 07:57:11] [javac-output-15520]   where V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C>ofObject(C,Object)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C>ofObject(C,Object)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:118: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final List<Object> list = (List<Object>) object;
+[2026-07-12 07:57:11] [javac-output-15520]                                                      ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: List<Object>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:122: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final Map<String, Object> map = (Map<String, Object>) object;
+[2026-07-12 07:57:11] [javac-output-15520]                                                                   ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: Map<String,Object>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:157: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final TemplateResolver<V> emptyArrayResolver = (TemplateResolver<V>) EMPTY_ARRAY_RESOLVER;
+[2026-07-12 07:57:11] [javac-output-15520]                                                                                  ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: TemplateResolver<V>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolver<CAP#1>
+[2026-07-12 07:57:11] [javac-output-15520]   where V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C>ofList(C,List<Object>)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C>ofList(C,List<Object>)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:202: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]             final TemplateResolver<V> emptyObjectResolver = (TemplateResolver<V>) EMPTY_OBJECT_RESOLVER;
+[2026-07-12 07:57:11] [javac-output-15520]                                                                                   ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: TemplateResolver<V>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolver<CAP#1>
+[2026-07-12 07:57:11] [javac-output-15520]   where V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C>ofMap(C,Map<String,Object>)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C>ofMap(C,Map<String,Object>)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/resolver/TemplateResolvers.java:418: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]                     final TemplateResolver<V> resolver = (TemplateResolver<V>) NULL_RESOLVER;
+[2026-07-12 07:57:11] [javac-output-15520]                                                                                ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: TemplateResolver<V>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    TemplateResolver<CAP#1>
+[2026-07-12 07:57:11] [javac-output-15520]   where V,C are type-variables:
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V,C>ofString(C,String)
+[2026-07-12 07:57:11] [javac-output-15520]     C extends TemplateResolverContext<V,C> declared in method <V,C>ofString(C,String)
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:239: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]             this.formatter = FastDateFormat.getInstance(pattern, timeZone, locale);
+[2026-07-12 07:57:11] [javac-output-15520]                              ^
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:245: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]             return FastDateFormat.class;
+[2026-07-12 07:57:11] [javac-output-15520]                    ^
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:264: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]             final FixedDateFormat internalFormatter = FixedDateFormat.createIfSupported(pattern, timeZone.getID());
+[2026-07-12 07:57:11] [javac-output-15520]                   ^
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:264: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]             final FixedDateFormat internalFormatter = FixedDateFormat.createIfSupported(pattern, timeZone.getID());
+[2026-07-12 07:57:11] [javac-output-15520]                                                       ^
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/InstantFormatter.java:288: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]             return FixedDateFormat.class;
+[2026-07-12 07:57:11] [javac-output-15520]                    ^
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/QueueingRecyclerFactory.java:34: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]         final Queue<V> queue = (Queue<V>) queueSupplier.get();
+[2026-07-12 07:57:11] [javac-output-15520]                                                            ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: Queue<V>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    Queue<Object>
+[2026-07-12 07:57:11] [javac-output-15520]   where V is a type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     V extends Object declared in method <V>create(Supplier<V>,Consumer<V>)
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/RecyclerFactories.java:146: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]                         final Queue<Object> typedQueue = (Queue<Object>) supplierCtor.newInstance(capacity);
+[2026-07-12 07:57:11] [javac-output-15520]                                                                                                  ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: Queue<Object>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    CAP#1
+[2026-07-12 07:57:11] [javac-output-15520]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:57:11] [javac-output-15520]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/RecyclerFactories.java:158: warning: [unchecked] unchecked cast
+[2026-07-12 07:57:11] [javac-output-15520]                         final Queue<Object> typedQueue = (Queue<Object>) supplierMethod.invoke(null, capacity);
+[2026-07-12 07:57:11] [javac-output-15520]                                                                                               ^
+[2026-07-12 07:57:11] [javac-output-15520]   required: Queue<Object>
+[2026-07-12 07:57:11] [javac-output-15520]   found:    Object
+[2026-07-12 07:57:11] [javac-output-15520] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-layout-template-json/src/main/java/org/apache/logging/log4j/layout/template/json/util/RecyclerFactoryConverter.java:31: warning: [deprecation] RecyclerFactories in org.apache.logging.log4j.layout.template.json.util has been deprecated
+[2026-07-12 07:57:11] [javac-output-15520]         return RecyclerFactories.ofSpec(recyclerFactorySpec);
+[2026-07-12 07:57:11] [javac-output-15520]                ^

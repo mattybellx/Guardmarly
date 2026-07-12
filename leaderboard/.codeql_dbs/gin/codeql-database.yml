@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gin
+baselineLinesOfCode: 18475
+unicodeNewlines: false
+columnKind: utf8
+primaryLanguage: go
+creationMetadata:
+  sha: 34dac209ffb6ef85cc78c5d217bbb7ad001d68fd
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T08:00:37.358450032Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

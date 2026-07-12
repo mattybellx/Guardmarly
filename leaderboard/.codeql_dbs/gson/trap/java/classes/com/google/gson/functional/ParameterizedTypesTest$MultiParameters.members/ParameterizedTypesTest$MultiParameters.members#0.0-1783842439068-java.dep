@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/ParameterizedTypesTest$MultiParameters.members/ParameterizedTypesTest$MultiParameters.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/ParameterizedTypesTest$MultiParameters.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz

@@ -1,0 +1,506 @@
+[T 07:47:29 10013] CodeQL CLI version 2.26.0
+[T 07:47:29 10013] Initializing tracer.
+[T 07:47:29 10013] Initializing tags.
+[T 07:47:29 10013] ID set to 000000000000271D_0000000000000001 (parent root)
+[T 07:47:29 10013] Initializing tracer.
+[T 07:47:29 10013] Initializing tags.
+[T 07:47:29 10013] ID set to 000000000000271D_0000000000000002 (parent root)
+[T 07:47:29 10013] Warning: SEMMLE_EXEC and SEMMLE_EXECP not set. Falling back to path lookup on argv[0].
+[T 07:47:29 10013] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux) ====
+[T 07:47:29 10013] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux ===
+[T 07:47:29 10013] Executing the following tracer actions:
+[T 07:47:29 10013] Tracer actions:
+[T 07:47:29 10013] pre_invocations(0)
+[T 07:47:29 10013] post_invocations(0)
+[T 07:47:29 10013] trace_languages(1): [java]
+[T 07:47:29 10013] Initializing tracer.
+[T 07:47:29 10013] Initializing tags.
+[T 07:47:29 10013] ID set to 000000000000271D_0000000000000003 (parent 000000000000271D_0000000000000002)
+[T 07:47:29 10013] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/java/tools/autobuild.sh (canonical: /home/runner/work/Ansede/Ansede/codeql/java/tools/autobuild.sh) ====
+[T 07:47:29 10013] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/java/tools/autobuild.sh ===
+[T 07:47:29 10013] Executing the following tracer actions:
+[T 07:47:29 10013] Tracer actions:
+[T 07:47:29 10013] pre_invocations(0)
+[T 07:47:29 10013] post_invocations(0)
+[T 07:47:29 10013] trace_languages(1): [java]
+[T 07:47:29 10016] Initializing tracer.
+[T 07:47:29 10016] Initializing tags.
+[T 07:47:29 10016] ID set to 0000000000002720_0000000000000001 (parent 000000000000271D_0000000000000003)
+[T 07:47:29 10016] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/bin/java (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/bin/java) ====
+[T 07:47:29 10016] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/bin/java ===
+[T 07:47:29 10016] Executing the following tracer actions:
+[T 07:47:29 10016] Tracer actions:
+[T 07:47:29 10016] pre_invocations(0)
+[T 07:47:29 10016] post_invocations(0)
+[T 07:47:29 10016] trace_languages(1): [java]
+[T 07:47:29 10016] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:47:29 10016] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:47:30 10016] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:47:30 10039] Initializing tracer.
+[T 07:47:30 10039] Initializing tags.
+[T 07:47:30 10039] ID set to 0000000000002737_0000000000000001 (parent 0000000000002720_0000000000000001)
+[T 07:47:30 10039] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper) ====
+[T 07:47:30 10039] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper ===
+[T 07:47:30 10039] Executing the following tracer actions:
+[T 07:47:30 10039] Tracer actions:
+[T 07:47:30 10039] pre_invocations(0)
+[T 07:47:30 10039] post_invocations(0)
+[T 07:47:30 10039] trace_languages(1): [java]
+[T 07:47:30 10039] Initializing tracer.
+[T 07:47:30 10039] Initializing tags.
+[T 07:47:30 10039] ID set to 0000000000002737_0000000000000002 (parent 0000000000002737_0000000000000001)
+[T 07:47:30 10039] ==== Candidate to intercept: /usr/bin/mvn (canonical: /usr/share/apache-maven-3.9.16/bin/mvn) ====
+[T 07:47:30 10039] Lua: === Intercepted call to /usr/share/apache-maven-3.9.16/bin/mvn ===
+[T 07:47:30 10039] Executing the following tracer actions:
+[T 07:47:30 10039] Tracer actions:
+[T 07:47:30 10039] pre_invocations(0)
+[T 07:47:30 10039] post_invocations(0)
+[T 07:47:30 10039] trace_languages(1): [java]
+[T 07:47:30 10040] Initializing tracer.
+[T 07:47:30 10040] Initializing tags.
+[T 07:47:30 10040] ID set to 0000000000002738_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10040] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 07:47:30 10040] Lua: === Intercepted call to /usr/bin/uname ===
+[T 07:47:30 10040] Executing the following tracer actions:
+[T 07:47:30 10040] Tracer actions:
+[T 07:47:30 10040] pre_invocations(0)
+[T 07:47:30 10040] post_invocations(0)
+[T 07:47:30 10040] trace_languages(1): [java]
+[T 07:47:30 10041] Initializing tracer.
+[T 07:47:30 10041] Initializing tags.
+[T 07:47:30 10041] ID set to 0000000000002739_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10041] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 07:47:30 10041] Lua: === Intercepted call to /usr/bin/ls ===
+[T 07:47:30 10041] Executing the following tracer actions:
+[T 07:47:30 10041] Tracer actions:
+[T 07:47:30 10041] pre_invocations(0)
+[T 07:47:30 10041] post_invocations(0)
+[T 07:47:30 10041] trace_languages(1): [java]
+[T 07:47:30 10042] Initializing tracer.
+[T 07:47:30 10042] Initializing tags.
+[T 07:47:30 10042] ID set to 000000000000273A_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10042] ==== Candidate to intercept: /usr/bin/expr (canonical: /usr/bin/expr) ====
+[T 07:47:30 10042] Lua: === Intercepted call to /usr/bin/expr ===
+[T 07:47:30 10042] Executing the following tracer actions:
+[T 07:47:30 10042] Tracer actions:
+[T 07:47:30 10042] pre_invocations(0)
+[T 07:47:30 10042] post_invocations(0)
+[T 07:47:30 10042] trace_languages(1): [java]
+[T 07:47:30 10043] Initializing tracer.
+[T 07:47:30 10043] Initializing tags.
+[T 07:47:30 10043] ID set to 000000000000273B_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10043] ==== Candidate to intercept: /usr/bin/expr (canonical: /usr/bin/expr) ====
+[T 07:47:30 10043] Lua: === Intercepted call to /usr/bin/expr ===
+[T 07:47:30 10043] Executing the following tracer actions:
+[T 07:47:30 10043] Tracer actions:
+[T 07:47:30 10043] pre_invocations(0)
+[T 07:47:30 10043] post_invocations(0)
+[T 07:47:30 10043] trace_languages(1): [java]
+[T 07:47:30 10046] Initializing tracer.
+[T 07:47:30 10046] Initializing tags.
+[T 07:47:30 10046] ID set to 000000000000273E_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10046] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 07:47:30 10046] Lua: === Intercepted call to /usr/bin/dirname ===
+[T 07:47:30 10046] Executing the following tracer actions:
+[T 07:47:30 10046] Tracer actions:
+[T 07:47:30 10046] pre_invocations(0)
+[T 07:47:30 10046] post_invocations(0)
+[T 07:47:30 10046] trace_languages(1): [java]
+[T 07:47:30 10059] Initializing tracer.
+[T 07:47:30 10059] Initializing tags.
+[T 07:47:30 10059] ID set to 000000000000274B_0000000000000001 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10059] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:47:30 10059] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:47:30 10059] Executing the following tracer actions:
+[T 07:47:30 10059] Tracer actions:
+[T 07:47:30 10059] pre_invocations(0)
+[T 07:47:30 10059] post_invocations(0)
+[T 07:47:30 10059] trace_languages(1): [java]
+[T 07:47:30 10059] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:47:30 10059] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:47:30 10059] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:47:30 10039] Initializing tracer.
+[T 07:47:30 10039] Initializing tags.
+[T 07:47:30 10039] ID set to 0000000000002737_0000000000000003 (parent 0000000000002737_0000000000000002)
+[T 07:47:30 10039] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:47:30 10039] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:47:30 10039] Executing the following tracer actions:
+[T 07:47:30 10039] Tracer actions:
+[T 07:47:30 10039] pre_invocations(0)
+[T 07:47:30 10039] post_invocations(0)
+[T 07:47:30 10039] trace_languages(1): [java]
+[T 07:47:30 10039] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:47:30 10039] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:47:30 10039] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:47:41 10111] Initializing tracer.
+[T 07:47:41 10111] Initializing tags.
+[T 07:47:41 10111] ID set to 000000000000277F_0000000000000001 (parent 0000000000002720_0000000000000001)
+[T 07:47:41 10111] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper) ====
+[T 07:47:41 10111] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/codeql/tools/linux64/java/lib/jspawnhelper ===
+[T 07:47:41 10111] Executing the following tracer actions:
+[T 07:47:41 10111] Tracer actions:
+[T 07:47:41 10111] pre_invocations(0)
+[T 07:47:41 10111] post_invocations(0)
+[T 07:47:41 10111] trace_languages(1): [java]
+[T 07:47:41 10111] Initializing tracer.
+[T 07:47:41 10111] Initializing tags.
+[T 07:47:41 10111] ID set to 000000000000277F_0000000000000002 (parent 000000000000277F_0000000000000001)
+[T 07:47:41 10111] ==== Candidate to intercept: /tmp/semmleTempDir14319124719034280559/apache-maven-3.8.8/bin/mvn (canonical: /tmp/semmleTempDir14319124719034280559/apache-maven-3.8.8/bin/mvn) ====
+[T 07:47:41 10111] Lua: === Intercepted call to /tmp/semmleTempDir14319124719034280559/apache-maven-3.8.8/bin/mvn ===
+[T 07:47:41 10111] Executing the following tracer actions:
+[T 07:47:41 10111] Tracer actions:
+[T 07:47:41 10111] pre_invocations(0)
+[T 07:47:41 10111] post_invocations(0)
+[T 07:47:41 10111] trace_languages(1): [java]
+[T 07:47:41 10114] Initializing tracer.
+[T 07:47:41 10114] Initializing tags.
+[T 07:47:41 10114] ID set to 0000000000002782_0000000000000001 (parent 000000000000277F_0000000000000002)
+[T 07:47:41 10114] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 07:47:41 10114] Lua: === Intercepted call to /usr/bin/uname ===
+[T 07:47:41 10114] Executing the following tracer actions:
+[T 07:47:41 10114] Tracer actions:
+[T 07:47:41 10114] pre_invocations(0)
+[T 07:47:41 10114] post_invocations(0)
+[T 07:47:41 10114] trace_languages(1): [java]
+[T 07:47:41 10116] Initializing tracer.
+[T 07:47:41 10116] Initializing tags.
+[T 07:47:41 10116] ID set to 0000000000002784_0000000000000001 (parent 000000000000277F_0000000000000002)
+[T 07:47:41 10116] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 07:47:41 10116] Lua: === Intercepted call to /usr/bin/dirname ===
+[T 07:47:41 10116] Executing the following tracer actions:
+[T 07:47:41 10116] Tracer actions:
+[T 07:47:41 10116] pre_invocations(0)
+[T 07:47:41 10116] post_invocations(0)
+[T 07:47:41 10116] trace_languages(1): [java]
+[T 07:47:41 10124] Initializing tracer.
+[T 07:47:41 10124] Initializing tags.
+[T 07:47:41 10124] ID set to 000000000000278C_0000000000000001 (parent 000000000000277F_0000000000000002)
+[T 07:47:41 10124] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 07:47:41 10124] Lua: === Intercepted call to /usr/bin/dirname ===
+[T 07:47:41 10124] Executing the following tracer actions:
+[T 07:47:41 10124] Tracer actions:
+[T 07:47:41 10124] pre_invocations(0)
+[T 07:47:41 10124] post_invocations(0)
+[T 07:47:41 10124] trace_languages(1): [java]
+[T 07:47:41 10127] Initializing tracer.
+[T 07:47:41 10127] Initializing tags.
+[T 07:47:41 10127] ID set to 000000000000278F_0000000000000001 (parent 000000000000277F_0000000000000002)
+[T 07:47:41 10127] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 07:47:41 10127] Lua: === Intercepted call to /usr/bin/tr ===
+[T 07:47:41 10127] Executing the following tracer actions:
+[T 07:47:41 10127] Tracer actions:
+[T 07:47:41 10127] pre_invocations(0)
+[T 07:47:41 10127] post_invocations(0)
+[T 07:47:41 10127] trace_languages(1): [java]
+[T 07:47:41 10111] Initializing tracer.
+[T 07:47:41 10111] Initializing tags.
+[T 07:47:41 10111] ID set to 000000000000277F_0000000000000003 (parent 000000000000277F_0000000000000002)
+[T 07:47:41 10111] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:47:41 10111] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:47:41 10111] Executing the following tracer actions:
+[T 07:47:41 10111] Tracer actions:
+[T 07:47:41 10111] pre_invocations(0)
+[T 07:47:41 10111] post_invocations(0)
+[T 07:47:41 10111] trace_languages(1): [java]
+[T 07:47:41 10111] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:47:41 10111] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:47:41 10111] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:47:53 10186] Initializing tracer.
+[T 07:47:53 10186] Initializing tags.
+[T 07:47:53 10186] ID set to 00000000000027CA_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:47:53 10186] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:47:53 10186] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:47:53 10186] Executing the following tracer actions:
+[T 07:47:53 10186] Tracer actions:
+[T 07:47:53 10186] pre_invocations(0)
+[T 07:47:53 10186] post_invocations(0)
+[T 07:47:53 10186] trace_languages(1): [java]
+[T 07:47:53 10186] Initializing tracer.
+[T 07:47:53 10186] Initializing tags.
+[T 07:47:53 10186] ID set to 00000000000027CA_0000000000000002 (parent 00000000000027CA_0000000000000001)
+[T 07:47:53 10186] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:47:53 10186] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:47:53 10186] Executing the following tracer actions:
+[T 07:47:53 10186] Tracer actions:
+[T 07:47:53 10186] pre_invocations(0)
+[T 07:47:53 10186] post_invocations(0)
+[T 07:47:53 10186] trace_languages(1): [java]
+[T 07:47:53 10186] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:47:53 10186] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:47:53 10186] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:07 10224] Initializing tracer.
+[T 07:48:07 10224] Initializing tags.
+[T 07:48:07 10224] ID set to 00000000000027F0_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:07 10224] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:07 10224] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:07 10224] Executing the following tracer actions:
+[T 07:48:07 10224] Tracer actions:
+[T 07:48:07 10224] pre_invocations(0)
+[T 07:48:07 10224] post_invocations(0)
+[T 07:48:07 10224] trace_languages(1): [java]
+[T 07:48:07 10224] Initializing tracer.
+[T 07:48:07 10224] Initializing tags.
+[T 07:48:07 10224] ID set to 00000000000027F0_0000000000000002 (parent 00000000000027F0_0000000000000001)
+[T 07:48:07 10224] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:07 10224] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:07 10224] Executing the following tracer actions:
+[T 07:48:07 10224] Tracer actions:
+[T 07:48:07 10224] pre_invocations(0)
+[T 07:48:07 10224] post_invocations(0)
+[T 07:48:07 10224] trace_languages(1): [java]
+[T 07:48:07 10224] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:07 10224] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:07 10224] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:23 10260] Initializing tracer.
+[T 07:48:23 10260] Initializing tags.
+[T 07:48:23 10260] ID set to 0000000000002814_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:23 10260] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:23 10260] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:23 10260] Executing the following tracer actions:
+[T 07:48:23 10260] Tracer actions:
+[T 07:48:23 10260] pre_invocations(0)
+[T 07:48:23 10260] post_invocations(0)
+[T 07:48:23 10260] trace_languages(1): [java]
+[T 07:48:23 10260] Initializing tracer.
+[T 07:48:23 10260] Initializing tags.
+[T 07:48:23 10260] ID set to 0000000000002814_0000000000000002 (parent 0000000000002814_0000000000000001)
+[T 07:48:23 10260] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:23 10260] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:23 10260] Executing the following tracer actions:
+[T 07:48:23 10260] Tracer actions:
+[T 07:48:23 10260] pre_invocations(0)
+[T 07:48:23 10260] post_invocations(0)
+[T 07:48:23 10260] trace_languages(1): [java]
+[T 07:48:23 10260] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:23 10260] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:23 10260] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:30 10357] Initializing tracer.
+[T 07:48:30 10357] Initializing tags.
+[T 07:48:30 10357] ID set to 0000000000002875_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:30 10357] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:30 10357] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:30 10357] Executing the following tracer actions:
+[T 07:48:30 10357] Tracer actions:
+[T 07:48:30 10357] pre_invocations(0)
+[T 07:48:30 10357] post_invocations(0)
+[T 07:48:30 10357] trace_languages(1): [java]
+[T 07:48:30 10357] Initializing tracer.
+[T 07:48:30 10357] Initializing tags.
+[T 07:48:30 10357] ID set to 0000000000002875_0000000000000002 (parent 0000000000002875_0000000000000001)
+[T 07:48:30 10357] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:30 10357] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:30 10357] Executing the following tracer actions:
+[T 07:48:30 10357] Tracer actions:
+[T 07:48:30 10357] pre_invocations(0)
+[T 07:48:30 10357] post_invocations(0)
+[T 07:48:30 10357] trace_languages(1): [java]
+[T 07:48:30 10357] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:30 10357] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:30 10357] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:32 10383] Initializing tracer.
+[T 07:48:32 10383] Initializing tags.
+[T 07:48:32 10383] ID set to 000000000000288F_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:32 10383] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:32 10383] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:32 10383] Executing the following tracer actions:
+[T 07:48:32 10383] Tracer actions:
+[T 07:48:32 10383] pre_invocations(0)
+[T 07:48:32 10383] post_invocations(0)
+[T 07:48:32 10383] trace_languages(1): [java]
+[T 07:48:32 10383] Initializing tracer.
+[T 07:48:32 10383] Initializing tags.
+[T 07:48:32 10383] ID set to 000000000000288F_0000000000000002 (parent 000000000000288F_0000000000000001)
+[T 07:48:32 10383] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:32 10383] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:32 10383] Executing the following tracer actions:
+[T 07:48:32 10383] Tracer actions:
+[T 07:48:32 10383] pre_invocations(0)
+[T 07:48:32 10383] post_invocations(0)
+[T 07:48:32 10383] trace_languages(1): [java]
+[T 07:48:32 10383] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:32 10383] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:32 10383] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:35 10420] Initializing tracer.
+[T 07:48:35 10420] Initializing tags.
+[T 07:48:35 10420] ID set to 00000000000028B4_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:35 10420] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:35 10420] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:35 10420] Executing the following tracer actions:
+[T 07:48:35 10420] Tracer actions:
+[T 07:48:35 10420] pre_invocations(0)
+[T 07:48:35 10420] post_invocations(0)
+[T 07:48:35 10420] trace_languages(1): [java]
+[T 07:48:35 10420] Initializing tracer.
+[T 07:48:35 10420] Initializing tags.
+[T 07:48:35 10420] ID set to 00000000000028B4_0000000000000002 (parent 00000000000028B4_0000000000000001)
+[T 07:48:35 10420] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:35 10420] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:35 10420] Executing the following tracer actions:
+[T 07:48:35 10420] Tracer actions:
+[T 07:48:35 10420] pre_invocations(0)
+[T 07:48:35 10420] post_invocations(0)
+[T 07:48:35 10420] trace_languages(1): [java]
+[T 07:48:35 10420] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:35 10420] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:35 10420] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:39 10448] Initializing tracer.
+[T 07:48:39 10448] Initializing tags.
+[T 07:48:39 10448] ID set to 00000000000028D0_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:39 10448] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:39 10448] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:39 10448] Executing the following tracer actions:
+[T 07:48:39 10448] Tracer actions:
+[T 07:48:39 10448] pre_invocations(0)
+[T 07:48:39 10448] post_invocations(0)
+[T 07:48:39 10448] trace_languages(1): [java]
+[T 07:48:39 10448] Initializing tracer.
+[T 07:48:39 10448] Initializing tags.
+[T 07:48:39 10448] ID set to 00000000000028D0_0000000000000002 (parent 00000000000028D0_0000000000000001)
+[T 07:48:39 10448] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:39 10448] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:39 10448] Executing the following tracer actions:
+[T 07:48:39 10448] Tracer actions:
+[T 07:48:39 10448] pre_invocations(0)
+[T 07:48:39 10448] post_invocations(0)
+[T 07:48:39 10448] trace_languages(1): [java]
+[T 07:48:39 10448] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:39 10448] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:39 10448] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:42 10474] Initializing tracer.
+[T 07:48:42 10474] Initializing tags.
+[T 07:48:42 10474] ID set to 00000000000028EA_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:42 10474] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:42 10474] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:42 10474] Executing the following tracer actions:
+[T 07:48:42 10474] Tracer actions:
+[T 07:48:42 10474] pre_invocations(0)
+[T 07:48:42 10474] post_invocations(0)
+[T 07:48:42 10474] trace_languages(1): [java]
+[T 07:48:42 10474] Initializing tracer.
+[T 07:48:42 10474] Initializing tags.
+[T 07:48:42 10474] ID set to 00000000000028EA_0000000000000002 (parent 00000000000028EA_0000000000000001)
+[T 07:48:42 10474] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:42 10474] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:42 10474] Executing the following tracer actions:
+[T 07:48:42 10474] Tracer actions:
+[T 07:48:42 10474] pre_invocations(0)
+[T 07:48:42 10474] post_invocations(0)
+[T 07:48:42 10474] trace_languages(1): [java]
+[T 07:48:42 10474] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:42 10474] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:42 10474] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:48:44 10506] Initializing tracer.
+[T 07:48:44 10506] Initializing tags.
+[T 07:48:44 10506] ID set to 000000000000290A_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:48:44 10506] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:48:44 10506] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:48:44 10506] Executing the following tracer actions:
+[T 07:48:44 10506] Tracer actions:
+[T 07:48:44 10506] pre_invocations(0)
+[T 07:48:44 10506] post_invocations(0)
+[T 07:48:44 10506] trace_languages(1): [java]
+[T 07:48:44 10506] Initializing tracer.
+[T 07:48:44 10506] Initializing tags.
+[T 07:48:44 10506] ID set to 000000000000290A_0000000000000002 (parent 000000000000290A_0000000000000001)
+[T 07:48:44 10506] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:48:44 10506] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:48:44 10506] Executing the following tracer actions:
+[T 07:48:44 10506] Tracer actions:
+[T 07:48:44 10506] pre_invocations(0)
+[T 07:48:44 10506] post_invocations(0)
+[T 07:48:44 10506] trace_languages(1): [java]
+[T 07:48:44 10506] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:48:44 10506] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:48:44 10506] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:49:05 10592] Initializing tracer.
+[T 07:49:05 10592] Initializing tags.
+[T 07:49:05 10592] ID set to 0000000000002960_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:49:05 10592] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:49:05 10592] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:49:05 10592] Executing the following tracer actions:
+[T 07:49:05 10592] Tracer actions:
+[T 07:49:05 10592] pre_invocations(0)
+[T 07:49:05 10592] post_invocations(0)
+[T 07:49:05 10592] trace_languages(1): [java]
+[T 07:49:05 10592] Initializing tracer.
+[T 07:49:05 10592] Initializing tags.
+[T 07:49:05 10592] ID set to 0000000000002960_0000000000000002 (parent 0000000000002960_0000000000000001)
+[T 07:49:05 10592] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:49:05 10592] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:49:05 10592] Executing the following tracer actions:
+[T 07:49:05 10592] Tracer actions:
+[T 07:49:05 10592] pre_invocations(0)
+[T 07:49:05 10592] post_invocations(0)
+[T 07:49:05 10592] trace_languages(1): [java]
+[T 07:49:05 10592] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:49:05 10592] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:49:05 10592] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:49:07 10620] Initializing tracer.
+[T 07:49:07 10620] Initializing tags.
+[T 07:49:07 10620] ID set to 000000000000297C_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:49:07 10620] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:49:07 10620] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:49:07 10620] Executing the following tracer actions:
+[T 07:49:07 10620] Tracer actions:
+[T 07:49:07 10620] pre_invocations(0)
+[T 07:49:07 10620] post_invocations(0)
+[T 07:49:07 10620] trace_languages(1): [java]
+[T 07:49:07 10620] Initializing tracer.
+[T 07:49:07 10620] Initializing tags.
+[T 07:49:07 10620] ID set to 000000000000297C_0000000000000002 (parent 000000000000297C_0000000000000001)
+[T 07:49:07 10620] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:49:07 10620] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:49:07 10620] Executing the following tracer actions:
+[T 07:49:07 10620] Tracer actions:
+[T 07:49:07 10620] pre_invocations(0)
+[T 07:49:07 10620] post_invocations(0)
+[T 07:49:07 10620] trace_languages(1): [java]
+[T 07:49:07 10620] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:49:07 10620] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:49:08 10620] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:49:13 10657] Initializing tracer.
+[T 07:49:13 10657] Initializing tags.
+[T 07:49:13 10657] ID set to 00000000000029A1_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:49:13 10657] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:49:13 10657] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:49:13 10657] Executing the following tracer actions:
+[T 07:49:13 10657] Tracer actions:
+[T 07:49:13 10657] pre_invocations(0)
+[T 07:49:13 10657] post_invocations(0)
+[T 07:49:13 10657] trace_languages(1): [java]
+[T 07:49:13 10657] Initializing tracer.
+[T 07:49:13 10657] Initializing tags.
+[T 07:49:13 10657] ID set to 00000000000029A1_0000000000000002 (parent 00000000000029A1_0000000000000001)
+[T 07:49:13 10657] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:49:13 10657] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:49:13 10657] Executing the following tracer actions:
+[T 07:49:13 10657] Tracer actions:
+[T 07:49:13 10657] pre_invocations(0)
+[T 07:49:13 10657] post_invocations(0)
+[T 07:49:13 10657] trace_languages(1): [java]
+[T 07:49:13 10657] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:49:13 10657] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:49:13 10657] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).
+[T 07:49:19 10697] Initializing tracer.
+[T 07:49:19 10697] Initializing tags.
+[T 07:49:19 10697] ID set to 00000000000029C9_0000000000000001 (parent 000000000000277F_0000000000000003)
+[T 07:49:19 10697] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper) ====
+[T 07:49:19 10697] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/lib/jspawnhelper ===
+[T 07:49:19 10697] Executing the following tracer actions:
+[T 07:49:19 10697] Tracer actions:
+[T 07:49:19 10697] pre_invocations(0)
+[T 07:49:19 10697] post_invocations(0)
+[T 07:49:19 10697] trace_languages(1): [java]
+[T 07:49:19 10697] Initializing tracer.
+[T 07:49:19 10697] Initializing tags.
+[T 07:49:19 10697] ID set to 00000000000029C9_0000000000000002 (parent 00000000000029C9_0000000000000001)
+[T 07:49:19 10697] ==== Candidate to intercept: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java (canonical: /usr/lib/jvm/temurin-17-jdk-amd64/bin/java) ====
+[T 07:49:19 10697] Lua: === Intercepted call to /usr/lib/jvm/temurin-17-jdk-amd64/bin/java ===
+[T 07:49:19 10697] Executing the following tracer actions:
+[T 07:49:19 10697] Tracer actions:
+[T 07:49:19 10697] pre_invocations(0)
+[T 07:49:19 10697] post_invocations(0)
+[T 07:49:19 10697] trace_languages(1): [java]
+[T 07:49:19 10697] Passing through -javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin to underlying JVM.
+[T 07:49:19 10697] Passing through -Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar to underlying JVM.
+[T 07:49:19 10697] Intercepted JVM creation with extra hidden args: ['-javaagent:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar=ignore-project,java,kotlin' '-Xbootclasspath/a:/home/runner/work/Ansede/Ansede/codeql/java/tools/codeql-java-agent.jar' ] (result: 1, 0).

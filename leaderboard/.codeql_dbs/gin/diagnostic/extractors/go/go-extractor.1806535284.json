@@ -1,0 +1,1 @@
+{"timestamp":"2026-07-12T08:00:38.086Z","source":{"id":"go/autobuilder/single-root-go-mod-found","name":"A single `go.mod` file was found in the root","extractorName":"go"},"markdownMessage":"A single `go.mod` file was found.\n\n`go.mod`","severity":"note","visibility":{"statusPage":false,"cliSummaryTable":false,"telemetry":true}}

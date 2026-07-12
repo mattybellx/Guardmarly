@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/server/ServerSocketService.members/ServerSocketService.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/server/ServerSocketService.members.trap.gz
+classes/com/google/common/util/concurrent/AbstractExecutionThreadService.members.trap.gz
+classes/javax/inject/Singleton.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/java/util/UUID.members.trap.gz
+classes/com/google/common/util/concurrent/ListenableFuture.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/com/google/caliper/bridge/OpenedSocket.members.trap.gz
+classes/com/google/caliper/runner/options/CaliperOptions.members.trap.gz
+classes/javax/inject/Inject.members.trap.gz

@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/json/JsonMapper.members/JsonMapper.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/json/JsonMapper.members.trap.gz
+classes/com/fasterxml/jackson/databind/ObjectMapper.members.trap.gz
+classes/com/fasterxml/jackson/core/json/JsonWriteFeature.members.trap.gz
+classes/com/fasterxml/jackson/core/json/JsonReadFeature.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonFactory.members.trap.gz
+classes/com/fasterxml/jackson/core/Version.members.trap.gz
+classes/com/fasterxml/jackson/databind/json/JsonMapper$Builder.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/OptionalSubject.members/OptionalSubject.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/OptionalSubject.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/IgnoreJRERequirement.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Optional.members.trap.gz
+classes/jdk/internal/ValueBased.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz

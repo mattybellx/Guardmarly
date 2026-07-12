@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/LongSubject$LongComparer.members/LongSubject$LongComparer.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/LongSubject$LongComparer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/LongSubject.members.trap.gz

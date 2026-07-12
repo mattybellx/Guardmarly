@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/FileFilter.members/FileFilter.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/FileFilter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/io/File.members.trap.gz

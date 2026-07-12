@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/ValueInstantiator.members/ValueInstantiator.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/ValueInstantiator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedWithParams.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/math/BigDecimal.members.trap.gz
+classes/java/math/BigInteger.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/SettableBeanProperty.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/impl/PropertyValueBuffer.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/fasterxml/jackson/databind/BeanDescription.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz

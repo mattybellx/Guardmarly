@@ -1,0 +1,27 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/ConcurrentHashMap$KeySetView.members/ConcurrentHashMap$KeySetView.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/ConcurrentHashMap$KeySetView.members.trap.gz
+classes/java/util/concurrent/ConcurrentHashMap$CollectionView.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/concurrent/ConcurrentHashMap.members.trap.gz
+classes/java/util/Spliterator.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/util/function/Predicate.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/concurrent/ConcurrentMap.members.trap.gz
+classes/java/util/Set.members.trap.gz

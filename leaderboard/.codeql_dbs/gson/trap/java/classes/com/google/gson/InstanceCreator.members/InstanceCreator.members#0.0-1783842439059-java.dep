@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/InstanceCreator.members/InstanceCreator.members#0.0-1783842439059-java.trap.gz
+
+TRAPS
+classes/com/google/gson/InstanceCreator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz

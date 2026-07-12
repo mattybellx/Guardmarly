@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/UnknownFieldSet$Field.members/UnknownFieldSet$Field.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/UnknownFieldSet$Field.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet.members.trap.gz
+classes/com/google/protobuf/Writer.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet$Field$Builder.members.trap.gz

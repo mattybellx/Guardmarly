@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/ref/Reference.members/Reference.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/lang/ref/Reference.members.trap.gz
+classes/java/lang/Object.members.trap.gz

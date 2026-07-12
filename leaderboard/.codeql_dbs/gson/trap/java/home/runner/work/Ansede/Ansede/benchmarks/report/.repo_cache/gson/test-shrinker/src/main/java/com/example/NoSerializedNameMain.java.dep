@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/NoSerializedNameMain.java.trap.gz
+
+TRAPS
+classes/com/example/TestExecutor.members.trap.gz
+classes/com/google/gson/Gson.members.trap.gz
+classes/com/google/gson/GsonBuilder.members.trap.gz
+classes/com/example/NoSerializedNameMain.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/example/NoSerializedNameMain$TestClassNoArgsConstructor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/example/NoSerializedNameMain$TestClassNotAbstract.members.trap.gz
+classes/com/example/NoSerializedNameMain$TestClassHasArgsConstructor.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz

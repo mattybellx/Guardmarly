@@ -1,0 +1,42 @@
+[2026-07-12 07:56:55] [javac-output-15454] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:55] [javac-output-15454] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:55] [javac-output-15454] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:56:56] [javac-output-15454] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.jul.internal.annotation.SuppressFBWarnings
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/ApiLogger.java:234: warning: [deprecation] logrb(Level,String,String,String,String) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/ApiLogger.java:244: warning: [deprecation] logrb(Level,String,String,String,String,Object) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/ApiLogger.java:255: warning: [deprecation] logrb(Level,String,String,String,String,Object[]) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/ApiLogger.java:266: warning: [deprecation] logrb(Level,String,String,String,String,Throwable) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/WrappedLogger.java:54: warning: [deprecation] entry() in AbstractLogger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void entry() {
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/WrappedLogger.java:59: warning: [deprecation] entry(Object...) in AbstractLogger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void entry(final Object... params) {
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/WrappedLogger.java:64: warning: [deprecation] exit() in AbstractLogger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void exit() {
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/WrappedLogger.java:69: warning: [deprecation] <R>exit(R) in AbstractLogger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public <R> R exit(final R result) {
+[2026-07-12 07:56:57] [javac-output-15454]                  ^
+[2026-07-12 07:56:57] [javac-output-15454]   where R is a type-variable:
+[2026-07-12 07:56:57] [javac-output-15454]     R extends Object declared in method <R>exit(R)
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/NoOpLogger.java:98: warning: [deprecation] logrb(Level,String,String,String,String) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/NoOpLogger.java:106: warning: [deprecation] logrb(Level,String,String,String,String,Object) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/NoOpLogger.java:115: warning: [deprecation] logrb(Level,String,String,String,String,Object[]) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^
+[2026-07-12 07:56:57] [javac-output-15454] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jul/src/main/java/org/apache/logging/log4j/jul/NoOpLogger.java:133: warning: [deprecation] logrb(Level,String,String,String,String,Throwable) in Logger has been deprecated
+[2026-07-12 07:56:57] [javac-output-15454]     public void logrb(
+[2026-07-12 07:56:57] [javac-output-15454]                 ^

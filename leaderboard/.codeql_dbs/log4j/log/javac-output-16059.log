@@ -1,0 +1,9 @@
+[2026-07-12 07:58:25] [javac-output-16059] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:58:25] [javac-output-16059] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:58:25] [javac-output-16059] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:58:26] [javac-output-16059] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy,org.ops4j.pax.exam.Configuration,javax.inject.Inject,org.junit.jupiter.api.BeforeEach,org.apache.logging.log4j.core.config.Order,org.junit.jupiter.api.extension.RegisterExtension,org.junit.runner.RunWith,org.junit.Test,org.junitpioneer.jupiter.Issue,org.apache.logging.log4j.core.config.plugins.Plugin
+[2026-07-12 07:58:26] [javac-output-16059] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-osgi-test/src/test/java/org/apache/logging/log4j/osgi/tests/AbstractLoadBundleTest.java:184: warning: [unchecked] unchecked cast
+[2026-07-12 07:58:26] [javac-output-16059]         final List<Object> services = ((Stream<Object>) obj).collect(Collectors.toList());
+[2026-07-12 07:58:26] [javac-output-16059]                                                         ^
+[2026-07-12 07:58:26] [javac-output-16059]   required: Stream<Object>
+[2026-07-12 07:58:26] [javac-output-16059]   found:    Object

@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/Fact.members/Fact.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/Fact.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/com/google/common/base/Supplier.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz

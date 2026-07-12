@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/CustomDeserializerTest$ClassWithBaseArray.members/CustomDeserializerTest$ClassWithBaseArray.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/CustomDeserializerTest$ClassWithBaseArray.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/CustomDeserializerTest.members.trap.gz
+classes/com/google/gson/common/TestTypes$Base.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

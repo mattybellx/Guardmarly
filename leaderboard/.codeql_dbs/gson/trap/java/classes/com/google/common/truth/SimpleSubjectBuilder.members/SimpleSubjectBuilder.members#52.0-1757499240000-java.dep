@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/SimpleSubjectBuilder.members/SimpleSubjectBuilder.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/SimpleSubjectBuilder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/FailureMetadata.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz

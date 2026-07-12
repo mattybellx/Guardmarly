@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/dagger/Lazy.members/Lazy.members#51.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/dagger/Lazy.members.trap.gz
+classes/java/lang/Object.members.trap.gz

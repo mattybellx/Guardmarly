@@ -1,0 +1,1011 @@
+[2026-07-12 08:02:35] This is codeql database create benchmarks/report/.codeql_dbs/CleanArchitecture --language=csharp --source-root=benchmarks/report/.repo_cache/CleanArchitecture
+[2026-07-12 08:02:35] Log file was started late.
+[2026-07-12 08:02:35] [PROGRESS] database create> Initializing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture.
+[2026-07-12 08:02:35] Running plumbing command: codeql database init --language=csharp --extractor-options-verbosity=1 --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --source-root=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture --allow-missing-source-root=false --allow-already-existing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture
+[2026-07-12 08:02:35] Calling plumbing command: codeql resolve languages --extractor-options-verbosity=1 --format=betterjson
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Scanning for [codeql-extractor.yml] from /home/runner/work/Ansede/Ansede/codeql/.codeqlmanifest.json
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/go/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/yaml/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/swift/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/rust/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/properties/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csv/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/ruby/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/javascript/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csharp/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/python/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/actions/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/cpp/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/xml/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/html/codeql-extractor.yml.
+[2026-07-12 08:02:35] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/java/codeql-extractor.yml.
+[2026-07-12 08:02:36] Plumbing command codeql resolve languages completed:
+                      {
+                        "aliases" : {
+                          "c" : "cpp",
+                          "c++" : "cpp",
+                          "c-c++" : "cpp",
+                          "c-cpp" : "cpp",
+                          "c#" : "csharp",
+                          "java-kotlin" : "java",
+                          "kotlin" : "java",
+                          "javascript-typescript" : "javascript",
+                          "typescript" : "javascript"
+                        },
+                        "extractors" : {
+                          "go" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/go",
+                              "extractor_options" : {
+                                "extract_tests" : {
+                                  "title" : "Whether to include Go test files in the CodeQL database.",
+                                  "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "extract_vendor_dirs" : {
+                                  "title" : "Whether to include Go vendor directories in the CodeQL database.",
+                                  "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "yaml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/yaml"
+                            }
+                          ],
+                          "swift" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/swift"
+                            }
+                          ],
+                          "rust" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/rust",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                },
+                                "cargo_target_dir" : {
+                                  "title" : "Directory to use for cargo output files.",
+                                  "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_target" : {
+                                  "title" : "Target architecture",
+                                  "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_features" : {
+                                  "title" : "Cargo features to turn on",
+                                  "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "cargo_cfg_overrides" : {
+                                  "title" : "Cargo cfg overrides",
+                                  "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    },
+                                    "flamegraph" : {
+                                      "title" : "[Experimental] File path for write flame graph log",
+                                      "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+                                      "type" : "string"
+                                    }
+                                  }
+                                },
+                                "extract_dependencies_as_source" : {
+                                  "title" : "Extract dependencies as source code",
+                                  "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "properties" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/properties"
+                            }
+                          ],
+                          "csv" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csv"
+                            }
+                          ],
+                          "ruby" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/ruby",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ],
+                          "javascript" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/javascript",
+                              "extractor_options" : {
+                                "skip_types" : {
+                                  "title" : "Skip type extraction for TypeScript",
+                                  "description" : "Whether to skip the extraction of types in a TypeScript application",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "csharp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csharp",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|brotli)$"
+                                    }
+                                  }
+                                },
+                                "buildless" : {
+                                  "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+                                  "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "binlog" : {
+                                  "title" : "Binlog",
+                                  "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+                                  "type" : "array"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          ],
+                          "python" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/python",
+                              "extractor_options" : {
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Python extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "python_executable_name" : {
+                                  "title" : "Controls the name of the Python executable used by the Python extractor.",
+                                  "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(py|python|python3)$"
+                                }
+                              }
+                            }
+                          ],
+                          "actions" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/actions",
+                              "extractor_options" : { }
+                            }
+                          ],
+                          "cpp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/cpp",
+                              "extractor_options" : {
+                                "scale_timeouts" : {
+                                  "title" : "Value to scale compiler introspection timeouts with",
+                                  "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-9]+"
+                                },
+                                "log_verbosity" : {
+                                  "title" : "Verbosity of the extractor logging",
+                                  "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-3]"
+                                }
+                              }
+                            }
+                          ],
+                          "xml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/xml"
+                            }
+                          ],
+                          "html" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/html"
+                            }
+                          ],
+                          "java" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/java",
+                              "extractor_options" : {
+                                "exclude" : {
+                                  "title" : "A glob excluding files from analysis.",
+                                  "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",
+                                  "type" : "string"
+                                },
+                                "add_prefer_source" : {
+                                  "title" : "Whether to always prefer source files over class files.",
+                                  "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless" : {
+                                  "title" : "Whether to use buildless (standalone) extraction (experimental).",
+                                  "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                },
+                                "minimize_dependency_jars" : {
+                                  "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+                                  "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+[2026-07-12 08:02:36] [PROGRESS] database init> Calculating baseline information in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture
+[2026-07-12 08:02:36] [SPAMMY] database init> Ignoring the following directories when processing baseline information: .git, .hg, .svn.
+[2026-07-12 08:02:36] [DETAILS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/scc --by-file --exclude-dir .git,.hg,.svn --format json --no-large --no-min .
+[2026-07-12 08:02:36] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh.
+[2026-07-12 08:02:36] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture: [/home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh]
+[2026-07-12 08:02:36] [SPAMMY] database init> Ignored an additional 3 files when processing baseline information for YAML due to paths and paths-ignore configuration.
+[2026-07-12 08:02:36] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/javascript/tools/configure-baseline.sh.
+[2026-07-12 08:02:36] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture: [/home/runner/work/Ansede/Ansede/codeql/javascript/tools/configure-baseline.sh]
+[2026-07-12 08:02:36] [SPAMMY] database init> Found 362 baseline files for csharp.
+[2026-07-12 08:02:36] [SPAMMY] database init> Found 7 baseline files for actions.
+[2026-07-12 08:02:36] [SPAMMY] database init> Found 8 baseline files for javascript.
+[2026-07-12 08:02:36] [PROGRESS] database init> Calculated baseline information for languages: actions, csharp, javascript (123ms).
+[2026-07-12 08:02:36] [SPAMMY] database init> Selected JGit Git client for /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture because the repository uses SHA-1 object format.
+[2026-07-12 08:02:36] [PROGRESS] database init> Resolving extractor csharp.
+[2026-07-12 08:02:36] [DETAILS] database init> Found candidate extractor root for csharp: /home/runner/work/Ansede/Ansede/codeql/csharp.
+[2026-07-12 08:02:36] [PROGRESS] database init> Successfully loaded extractor C# (csharp) from /home/runner/work/Ansede/Ansede/codeql/csharp.
+[2026-07-12 08:02:36] [PROGRESS] database init> Created skeleton CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture. This in-progress database is ready to be populated by an extractor.
+[2026-07-12 08:02:36] Plumbing command codeql database init completed.
+[2026-07-12 08:02:36] Using autobuild script /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh.
+[2026-07-12 08:02:36] [DETAILS] database create> Detected autobuild command for C#: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh.
+[2026-07-12 08:02:36] [PROGRESS] database create> Running build command: [/home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh]
+[2026-07-12 08:02:36] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture --index-traceless-dbs --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh
+[2026-07-12 08:02:36] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture: [/home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh]
+[2026-07-12 08:02:36] [build-stdout] CodeQL C# autobuilder
+[2026-07-12 08:02:36] [build-stdout] Working directory: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture
+[2026-07-12 08:02:36] [build-stdout] Attempting to build using .NET Core
+[2026-07-12 08:02:36] [build-stdout] 8.0.128 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 8.0.206 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 8.0.319 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 8.0.422 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 9.0.118 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 9.0.205 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 9.0.315 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 10.0.109 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 10.0.204 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:36] [build-stdout] 10.0.301 [/usr/share/dotnet/sdk]
+[2026-07-12 08:02:37] [build-stdout] Running chmod u+x /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet-install.sh
+[2026-07-12 08:02:37] [build-stdout] Exit code 0
+[2026-07-12 08:02:37] [build-stdout] Attempting to download .NET 10.0.100
+[2026-07-12 08:02:37] [build-stdout] Running /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet-install.sh --channel release --version 10.0.100 --install-dir /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet
+[2026-07-12 08:02:38] [build-stdout] dotnet-install: Attempting to download using primary link https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.100/dotnet-sdk-10.0.100-linux-x64.tar.gz
+[2026-07-12 08:02:42] [build-stdout] dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.100/dotnet-sdk-10.0.100-linux-x64.tar.gz size is 239125653 bytes.
+[2026-07-12 08:02:42] [build-stdout] dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.100/dotnet-sdk-10.0.100-linux-x64.tar.gz
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: Downloaded file size is 239125653 bytes.
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: The remote and local file sizes are equal.
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: Installed version is 10.0.100
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: Adding to current process PATH: `/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet`. Note: This change will be visible only when sourcing script.
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: Note that the script does not resolve dependencies during installation.
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+[2026-07-12 08:02:47] [build-stdout] dotnet-install: Installation finished successfully.
+[2026-07-12 08:02:47] [build-stdout] Exit code 0
+[2026-07-12 08:02:47] [build-stdout] Running /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet --info
+[2026-07-12 08:02:47] [build-stdout] .NET SDK:
+[2026-07-12 08:02:47] [build-stdout]  Version:           10.0.100
+[2026-07-12 08:02:47] [build-stdout]  Commit:            b0f34d51fc
+[2026-07-12 08:02:47] [build-stdout]  Workload version:  10.0.100-manifests.4c0ca8ba
+[2026-07-12 08:02:47] [build-stdout]  MSBuild version:   18.0.2+b0f34d51f
+[2026-07-12 08:02:47] [build-stdout] Runtime Environment:
+[2026-07-12 08:02:47] [build-stdout]  OS Name:     ubuntu
+[2026-07-12 08:02:47] [build-stdout]  OS Version:  24.04
+[2026-07-12 08:02:47] [build-stdout]  OS Platform: Linux
+[2026-07-12 08:02:47] [build-stdout]  RID:         linux-x64
+[2026-07-12 08:02:47] [build-stdout]  Base Path:   /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/
+[2026-07-12 08:02:47] [build-stdout] .NET workloads installed:
+[2026-07-12 08:02:47] [build-stdout] There are no installed workloads to display.
+[2026-07-12 08:02:47] [build-stdout] Configured to use workload sets when installing new manifests.
+[2026-07-12 08:02:47] [build-stdout] No workload sets are installed. Run "dotnet workload restore" to install a workload set.
+[2026-07-12 08:02:47] [build-stdout] Host:
+[2026-07-12 08:02:47] [build-stdout]   Version:      10.0.0
+[2026-07-12 08:02:47] [build-stdout]   Architecture: x64
+[2026-07-12 08:02:47] [build-stdout]   Commit:       b0f34d51fc
+[2026-07-12 08:02:47] [build-stdout] .NET SDKs installed:
+[2026-07-12 08:02:47] [build-stdout]   10.0.100 [/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk]
+[2026-07-12 08:02:47] [build-stdout] .NET runtimes installed:
+[2026-07-12 08:02:47] [build-stdout]   Microsoft.AspNetCore.App 10.0.0 [/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/shared/Microsoft.AspNetCore.App]
+[2026-07-12 08:02:47] [build-stdout]   Microsoft.NETCore.App 10.0.0 [/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/shared/Microsoft.NETCore.App]
+[2026-07-12 08:02:47] [build-stdout] Other architectures found:
+[2026-07-12 08:02:47] [build-stdout]   None
+[2026-07-12 08:02:47] [build-stdout] Environment variables:
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_CLI_TELEMETRY_OPTOUT              [1]
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_CLI_UI_LANGUAGE                   [en]
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_GENERATE_ASPNET_CERTIFICATE       [false]
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_MULTILEVEL_LOOKUP                 [0]
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_NOLOGO                            [1]
+[2026-07-12 08:02:47] [build-stdout]   DOTNET_SKIP_FIRST_TIME_EXPERIENCE        [true]
+[2026-07-12 08:02:47] [build-stdout] global.json file:
+[2026-07-12 08:02:47] [build-stdout]   /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/global.json
+[2026-07-12 08:02:47] [build-stdout] Learn more:
+[2026-07-12 08:02:47] [build-stdout]   https://aka.ms/dotnet/info
+[2026-07-12 08:02:47] [build-stdout] Download .NET:
+[2026-07-12 08:02:47] [build-stdout]   https://aka.ms/dotnet/download
+[2026-07-12 08:02:47] [build-stdout] Exit code 0
+[2026-07-12 08:02:47] [build-stdout] Running /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet clean /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln
+[2026-07-12 08:02:48] [build-stdout] Build started 07/12/2026 08:02:48.
+[2026-07-12 08:02:48] [build-stdout]      1>Project "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln" on node 1 (Clean target(s)).
+[2026-07-12 08:02:48] [build-stdout]      1>ValidateSolutionConfiguration:
+[2026-07-12 08:02:48] [build-stdout]          Building solution configuration "Debug|Any CPU".
+[2026-07-12 08:02:48] [build-stdout]        X.509 certificate chain validation will use the fallback certificate bundle at '/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/trustedroots/codesignctl.pem'.
+[2026-07-12 08:02:48] [build-stdout]        X.509 certificate chain validation will use the fallback certificate bundle at '/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/trustedroots/timestampctl.pem'.
+[2026-07-12 08:02:48] [build-stdout]        Restoring packages for /tmp/NuGetScratchrunner/0b6e002365f0416d84835ed8e94bd806/75b4d349fe444dc8ac4e582b236ceaa2.proj...
+[2026-07-12 08:02:48] [build-stdout]          GET https://api.nuget.org/v3-flatcontainer/microsoft.build.centralpackageversions/index.json
+[2026-07-12 08:02:48] [build-stdout]          OK https://api.nuget.org/v3-flatcontainer/microsoft.build.centralpackageversions/index.json 37ms
+[2026-07-12 08:02:48] [build-stdout]          GET https://api.nuget.org/v3-flatcontainer/microsoft.build.centralpackageversions/2.1.3/microsoft.build.centralpackageversions.2.1.3.nupkg
+[2026-07-12 08:02:48] [build-stdout]          OK https://api.nuget.org/v3-flatcontainer/microsoft.build.centralpackageversions/2.1.3/microsoft.build.centralpackageversions.2.1.3.nupkg 6ms
+[2026-07-12 08:02:48] [build-stdout]        Installed Microsoft.Build.CentralPackageVersions 2.1.3 from https://api.nuget.org/v3/index.json to /home/runner/.nuget/packages/microsoft.build.centralpackageversions/2.1.3 with content hash UCYSecuKm9w6JsOAzkcRkzYq96oPwc+ZdLLZQaaCD79BLQmnwDQFYOBRu1sccwI7JEvY5Vb3lTXFkP8M/0eLNg==.
+[2026-07-12 08:02:48] [build-stdout]          GET https://api.nuget.org/v3/vulnerabilities/index.json
+[2026-07-12 08:02:48] [build-stdout]          OK https://api.nuget.org/v3/vulnerabilities/index.json 4ms
+[2026-07-12 08:02:48] [build-stdout]          GET https://api.nuget.org/v3-vulnerabilities/2026.07.10.06.21.10/vulnerability.base.json
+[2026-07-12 08:02:48] [build-stdout]          GET https://api.nuget.org/v3-vulnerabilities/2026.07.10.06.21.10/2026.07.12.00.21.17/vulnerability.update.json
+[2026-07-12 08:02:48] [build-stdout]          OK https://api.nuget.org/v3-vulnerabilities/2026.07.10.06.21.10/vulnerability.base.json 4ms
+[2026-07-12 08:02:48] [build-stdout]          OK https://api.nuget.org/v3-vulnerabilities/2026.07.10.06.21.10/2026.07.12.00.21.17/vulnerability.update.json 8ms
+[2026-07-12 08:02:49] [build-stdout]      1>Project "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln" (1) is building "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.csproj" (2) on node 1 (Clean target(s)).
+[2026-07-12 08:02:49] [build-stdout]      2>CoreClean:
+[2026-07-12 08:02:49] [build-stdout]          Creating directory "obj/Debug/net10.0/".
+[2026-07-12 08:02:49] [build-stdout]      2>Done Building Project "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.csproj" (Clean target(s)).
+[2026-07-12 08:02:49] [build-stdout]      1>Done Building Project "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln" (Clean target(s)).
+[2026-07-12 08:02:49] [build-stdout] Build succeeded.
+[2026-07-12 08:02:49] [build-stdout]     0 Warning(s)
+[2026-07-12 08:02:49] [build-stdout]     0 Error(s)
+[2026-07-12 08:02:49] [build-stdout] Time Elapsed 00:00:01.13
+[2026-07-12 08:02:49] [build-stdout] Exit code 0
+[2026-07-12 08:02:49] [build-stdout] Running /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet restore /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln
+[2026-07-12 08:02:49] [build-stdout]   Determining projects to restore...
+[2026-07-12 08:02:51] [build-stdout]   Restored /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.csproj (in 937 ms).
+[2026-07-12 08:02:51] [build-stdout] Exit code 0
+[2026-07-12 08:02:51] [build-stdout] Running /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet build --no-incremental /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln
+[2026-07-12 08:02:51] [build-stdout]   Determining projects to restore...
+[2026-07-12 08:02:52] [build-stdout]   All projects are up-to-date for restore.
+[2026-07-12 08:03:04] [build-stdout]   Clean.Architecture.Core -> /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/bin/Debug/net10.0/Clean.Architecture.Core.dll
+[2026-07-12 08:03:04] [build-stdout] Build succeeded.
+[2026-07-12 08:03:04] [build-stdout]     0 Warning(s)
+[2026-07-12 08:03:04] [build-stdout]     0 Error(s)
+[2026-07-12 08:03:04] [build-stdout] Time Elapsed 00:00:12.95
+[2026-07-12 08:03:04] [build-stdout] Exit code 0
+[2026-07-12 08:03:04] Plumbing command codeql database trace-command completed.
+[2026-07-12 08:03:04] [PROGRESS] database create> Finalizing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture.
+[2026-07-12 08:03:04] Running plumbing command: codeql database finalize --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture
+[2026-07-12 08:03:04] Using pre-finalize script /home/runner/work/Ansede/Ansede/codeql/csharp/tools/pre-finalize.sh.
+[2026-07-12 08:03:04] [PROGRESS] database finalize> Running pre-finalize script /home/runner/work/Ansede/Ansede/codeql/csharp/tools/pre-finalize.sh in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture.
+[2026-07-12 08:03:04] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture --no-tracing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture /home/runner/work/Ansede/Ansede/codeql/csharp/tools/pre-finalize.sh
+[2026-07-12 08:03:04] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture: [/home/runner/work/Ansede/Ansede/codeql/csharp/tools/pre-finalize.sh]
+[2026-07-12 08:03:06] Plumbing command codeql database trace-command completed.
+[2026-07-12 08:03:06] [PROGRESS] database finalize> Pre-finalize script /home/runner/work/Ansede/Ansede/codeql/csharp/tools/pre-finalize.sh completed in 1654 ms.
+[2026-07-12 08:03:06] [PROGRESS] database finalize> Running TRAP import for CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture...
+[2026-07-12 08:03:06] Running plumbing command: codeql dataset import --dbscheme=/home/runner/work/Ansede/Ansede/codeql/csharp/semmlecode.csharp.dbscheme -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/trap/csharp
+[2026-07-12 08:03:06] Clearing disk cache since the version file /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp/default/cache/version does not exist
+[2026-07-12 08:03:06] Tuple pool not found. Clearing relations with cached strings
+[2026-07-12 08:03:06] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp/default/cache in mode clear.
+[2026-07-12 08:03:06] Sequence stamp origin is -5892336989235409092
+[2026-07-12 08:03:06] Pausing evaluation to hard-clear memory at sequence stamp o+0
+[2026-07-12 08:03:06] Unpausing evaluation
+[2026-07-12 08:03:06] Pausing evaluation to quickly trim disk at sequence stamp o+1
+[2026-07-12 08:03:06] Unpausing evaluation
+[2026-07-12 08:03:06] Pausing evaluation to zealously trim disk at sequence stamp o+2
+[2026-07-12 08:03:06] Unpausing evaluation
+[2026-07-12 08:03:06] Trimming completed (8ms): Purged everything.
+[2026-07-12 08:03:06] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/trap/csharp
+[2026-07-12 08:03:06] Found 230 TRAP files (9.41 MiB)
+[2026-07-12 08:03:06] [PROGRESS] dataset import> Importing TRAP files
+[2026-07-12 08:03:06] Importing Ardalis.GuardClauses.dll.trap.br (1 of 230)
+[2026-07-12 08:03:06] Importing Ardalis.Result.dll.trap.br (2 of 230)
+[2026-07-12 08:03:06] Importing Ardalis.SharedKernel.dll.trap.br (3 of 230)
+[2026-07-12 08:03:06] Importing Ardalis.SmartEnum.dll.trap.br (4 of 230)
+[2026-07-12 08:03:06] Importing Ardalis.Specification.dll.trap.br (5 of 230)
+[2026-07-12 08:03:06] Importing Mediator.dll.trap.br (6 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.Extensions.DependencyInjection.Abstractions.dll.trap.br (7 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.Extensions.Logging.Abstractions.dll.trap.br (8 of 230)
+[2026-07-12 08:03:06] Importing Vogen.SharedTypes.dll.trap.br (9 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.CSharp.dll.trap.br (10 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.VisualBasic.Core.dll.trap.br (11 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.VisualBasic.dll.trap.br (12 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.Win32.Primitives.dll.trap.br (13 of 230)
+[2026-07-12 08:03:06] Importing Microsoft.Win32.Registry.dll.trap.br (14 of 230)
+[2026-07-12 08:03:06] Importing System.AppContext.dll.trap.br (15 of 230)
+[2026-07-12 08:03:06] Importing System.Buffers.dll.trap.br (16 of 230)
+[2026-07-12 08:03:06] Importing System.Collections.Concurrent.dll.trap.br (17 of 230)
+[2026-07-12 08:03:06] Importing System.Collections.Immutable.dll.trap.br (18 of 230)
+[2026-07-12 08:03:06] Importing System.Collections.NonGeneric.dll.trap.br (19 of 230)
+[2026-07-12 08:03:06] Importing System.Collections.Specialized.dll.trap.br (20 of 230)
+[2026-07-12 08:03:07] Importing System.Collections.dll.trap.br (21 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.Annotations.dll.trap.br (22 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.DataAnnotations.dll.trap.br (23 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.EventBasedAsync.dll.trap.br (24 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.Primitives.dll.trap.br (25 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.TypeConverter.dll.trap.br (26 of 230)
+[2026-07-12 08:03:07] Importing System.ComponentModel.dll.trap.br (27 of 230)
+[2026-07-12 08:03:07] Importing System.Configuration.dll.trap.br (28 of 230)
+[2026-07-12 08:03:07] Importing System.Console.dll.trap.br (29 of 230)
+[2026-07-12 08:03:07] Importing System.Core.dll.trap.br (30 of 230)
+[2026-07-12 08:03:07] Importing System.Data.Common.dll.trap.br (31 of 230)
+[2026-07-12 08:03:07] Importing System.Data.DataSetExtensions.dll.trap.br (32 of 230)
+[2026-07-12 08:03:07] Importing System.Data.dll.trap.br (33 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.Contracts.dll.trap.br (34 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.Debug.dll.trap.br (35 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.DiagnosticSource.dll.trap.br (36 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.FileVersionInfo.dll.trap.br (37 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.Process.dll.trap.br (38 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.StackTrace.dll.trap.br (39 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.TextWriterTraceListener.dll.trap.br (40 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.Tools.dll.trap.br (41 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.TraceSource.dll.trap.br (42 of 230)
+[2026-07-12 08:03:07] Importing System.Diagnostics.Tracing.dll.trap.br (43 of 230)
+[2026-07-12 08:03:07] Importing System.Drawing.Primitives.dll.trap.br (44 of 230)
+[2026-07-12 08:03:07] Importing System.Drawing.dll.trap.br (45 of 230)
+[2026-07-12 08:03:07] Importing System.Dynamic.Runtime.dll.trap.br (46 of 230)
+[2026-07-12 08:03:07] Importing System.Formats.Asn1.dll.trap.br (47 of 230)
+[2026-07-12 08:03:07] Importing System.Formats.Tar.dll.trap.br (48 of 230)
+[2026-07-12 08:03:07] Importing System.Globalization.Calendars.dll.trap.br (49 of 230)
+[2026-07-12 08:03:07] Importing System.Globalization.Extensions.dll.trap.br (50 of 230)
+[2026-07-12 08:03:07] Importing System.Globalization.dll.trap.br (51 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Compression.Brotli.dll.trap.br (52 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Compression.FileSystem.dll.trap.br (53 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Compression.ZipFile.dll.trap.br (54 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Compression.dll.trap.br (55 of 230)
+[2026-07-12 08:03:07] Importing System.IO.FileSystem.AccessControl.dll.trap.br (56 of 230)
+[2026-07-12 08:03:07] Importing System.IO.FileSystem.DriveInfo.dll.trap.br (57 of 230)
+[2026-07-12 08:03:07] Importing System.IO.FileSystem.Primitives.dll.trap.br (58 of 230)
+[2026-07-12 08:03:07] Importing System.IO.FileSystem.Watcher.dll.trap.br (59 of 230)
+[2026-07-12 08:03:07] Importing System.IO.FileSystem.dll.trap.br (60 of 230)
+[2026-07-12 08:03:07] Importing System.IO.IsolatedStorage.dll.trap.br (61 of 230)
+[2026-07-12 08:03:07] Importing System.IO.MemoryMappedFiles.dll.trap.br (62 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Pipelines.dll.trap.br (63 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Pipes.AccessControl.dll.trap.br (64 of 230)
+[2026-07-12 08:03:07] Importing System.IO.Pipes.dll.trap.br (65 of 230)
+[2026-07-12 08:03:07] Importing System.IO.UnmanagedMemoryStream.dll.trap.br (66 of 230)
+[2026-07-12 08:03:07] Importing System.IO.dll.trap.br (67 of 230)
+[2026-07-12 08:03:07] Importing System.Linq.AsyncEnumerable.dll.trap.br (68 of 230)
+[2026-07-12 08:03:07] Importing System.Linq.Expressions.dll.trap.br (69 of 230)
+[2026-07-12 08:03:07] Importing System.Linq.Parallel.dll.trap.br (70 of 230)
+[2026-07-12 08:03:07] Importing System.Linq.Queryable.dll.trap.br (71 of 230)
+[2026-07-12 08:03:07] Importing System.Linq.dll.trap.br (72 of 230)
+[2026-07-12 08:03:07] Importing System.Memory.dll.trap.br (73 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Http.Json.dll.trap.br (74 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Http.dll.trap.br (75 of 230)
+[2026-07-12 08:03:07] Importing System.Net.HttpListener.dll.trap.br (76 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Mail.dll.trap.br (77 of 230)
+[2026-07-12 08:03:07] Importing System.Net.NameResolution.dll.trap.br (78 of 230)
+[2026-07-12 08:03:07] Importing System.Net.NetworkInformation.dll.trap.br (79 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Ping.dll.trap.br (80 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Primitives.dll.trap.br (81 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Quic.dll.trap.br (82 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Requests.dll.trap.br (83 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Security.dll.trap.br (84 of 230)
+[2026-07-12 08:03:07] Importing System.Net.ServerSentEvents.dll.trap.br (85 of 230)
+[2026-07-12 08:03:07] Importing System.Net.ServicePoint.dll.trap.br (86 of 230)
+[2026-07-12 08:03:07] Importing System.Net.Sockets.dll.trap.br (87 of 230)
+[2026-07-12 08:03:07] Importing System.Net.WebClient.dll.trap.br (88 of 230)
+[2026-07-12 08:03:07] Importing System.Net.WebHeaderCollection.dll.trap.br (89 of 230)
+[2026-07-12 08:03:07] Importing System.Net.WebProxy.dll.trap.br (90 of 230)
+[2026-07-12 08:03:07] Importing System.Net.WebSockets.Client.dll.trap.br (91 of 230)
+[2026-07-12 08:03:07] Importing System.Net.WebSockets.dll.trap.br (92 of 230)
+[2026-07-12 08:03:07] Importing System.Net.dll.trap.br (93 of 230)
+[2026-07-12 08:03:07] Importing System.Numerics.Vectors.dll.trap.br (94 of 230)
+[2026-07-12 08:03:07] Importing System.Numerics.dll.trap.br (95 of 230)
+[2026-07-12 08:03:07] Importing System.ObjectModel.dll.trap.br (96 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.DispatchProxy.dll.trap.br (97 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Emit.ILGeneration.dll.trap.br (98 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Emit.Lightweight.dll.trap.br (99 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Emit.dll.trap.br (100 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Extensions.dll.trap.br (101 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Metadata.dll.trap.br (102 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.Primitives.dll.trap.br (103 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.TypeExtensions.dll.trap.br (104 of 230)
+[2026-07-12 08:03:07] Importing System.Reflection.dll.trap.br (105 of 230)
+[2026-07-12 08:03:07] Importing System.Resources.Reader.dll.trap.br (106 of 230)
+[2026-07-12 08:03:07] Importing System.Resources.ResourceManager.dll.trap.br (107 of 230)
+[2026-07-12 08:03:07] Importing System.Resources.Writer.dll.trap.br (108 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.CompilerServices.Unsafe.dll.trap.br (109 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.CompilerServices.VisualC.dll.trap.br (110 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.Extensions.dll.trap.br (111 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.Handles.dll.trap.br (112 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.InteropServices.JavaScript.dll.trap.br (113 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.InteropServices.RuntimeInformation.dll.trap.br (114 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.InteropServices.dll.trap.br (115 of 230)
+[2026-07-12 08:03:07] Importing System.Runtime.Intrinsics.dll.trap.br (116 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Loader.dll.trap.br (117 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Numerics.dll.trap.br (118 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Serialization.Formatters.dll.trap.br (119 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Serialization.Json.dll.trap.br (120 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Serialization.Primitives.dll.trap.br (121 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Serialization.Xml.dll.trap.br (122 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.Serialization.dll.trap.br (123 of 230)
+[2026-07-12 08:03:08] Importing System.Runtime.dll.trap.br (124 of 230)
+[2026-07-12 08:03:08] Importing System.Security.AccessControl.dll.trap.br (125 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Claims.dll.trap.br (126 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.Algorithms.dll.trap.br (127 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.Cng.dll.trap.br (128 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.Csp.dll.trap.br (129 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.Encoding.dll.trap.br (130 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.OpenSsl.dll.trap.br (131 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.Primitives.dll.trap.br (132 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.X509Certificates.dll.trap.br (133 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Cryptography.dll.trap.br (134 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Principal.Windows.dll.trap.br (135 of 230)
+[2026-07-12 08:03:08] Importing System.Security.Principal.dll.trap.br (136 of 230)
+[2026-07-12 08:03:08] Importing System.Security.SecureString.dll.trap.br (137 of 230)
+[2026-07-12 08:03:08] Importing System.Security.dll.trap.br (138 of 230)
+[2026-07-12 08:03:08] Importing System.ServiceModel.Web.dll.trap.br (139 of 230)
+[2026-07-12 08:03:08] Importing System.ServiceProcess.dll.trap.br (140 of 230)
+[2026-07-12 08:03:08] Importing System.Text.Encoding.CodePages.dll.trap.br (141 of 230)
+[2026-07-12 08:03:08] Importing System.Text.Encoding.Extensions.dll.trap.br (142 of 230)
+[2026-07-12 08:03:08] Importing System.Text.Encoding.dll.trap.br (143 of 230)
+[2026-07-12 08:03:08] Importing System.Text.Encodings.Web.dll.trap.br (144 of 230)
+[2026-07-12 08:03:08] Importing System.Text.Json.dll.trap.br (145 of 230)
+[2026-07-12 08:03:08] Importing System.Text.RegularExpressions.dll.trap.br (146 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.AccessControl.dll.trap.br (147 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Channels.dll.trap.br (148 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Overlapped.dll.trap.br (149 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Tasks.Dataflow.dll.trap.br (150 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Tasks.Extensions.dll.trap.br (151 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Tasks.Parallel.dll.trap.br (152 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Tasks.dll.trap.br (153 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Thread.dll.trap.br (154 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.ThreadPool.dll.trap.br (155 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.Timer.dll.trap.br (156 of 230)
+[2026-07-12 08:03:08] Importing System.Threading.dll.trap.br (157 of 230)
+[2026-07-12 08:03:08] Importing System.Transactions.Local.dll.trap.br (158 of 230)
+[2026-07-12 08:03:08] Importing System.Transactions.dll.trap.br (159 of 230)
+[2026-07-12 08:03:08] Importing System.ValueTuple.dll.trap.br (160 of 230)
+[2026-07-12 08:03:08] Importing System.Web.HttpUtility.dll.trap.br (161 of 230)
+[2026-07-12 08:03:08] Importing System.Web.dll.trap.br (162 of 230)
+[2026-07-12 08:03:08] Importing System.Windows.dll.trap.br (163 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.Linq.dll.trap.br (164 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.ReaderWriter.dll.trap.br (165 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.Serialization.dll.trap.br (166 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.XDocument.dll.trap.br (167 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.XPath.XDocument.dll.trap.br (168 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.XPath.dll.trap.br (169 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.XmlDocument.dll.trap.br (170 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.XmlSerializer.dll.trap.br (171 of 230)
+[2026-07-12 08:03:08] Importing System.Xml.dll.trap.br (172 of 230)
+[2026-07-12 08:03:08] Importing System.dll.trap.br (173 of 230)
+[2026-07-12 08:03:08] Importing WindowsBase.dll.trap.br (174 of 230)
+[2026-07-12 08:03:08] Importing mscorlib.dll.trap.br (175 of 230)
+[2026-07-12 08:03:08] Importing netstandard.dll.trap.br (176 of 230)
+[2026-07-12 08:03:08] Importing Directory.Build.props.trap.gz (177 of 230)
+[2026-07-12 08:03:08] Importing Directory.Packages.props.trap.gz (178 of 230)
+[2026-07-12 08:03:08] Importing Directory.Build.props.trap.gz (179 of 230)
+[2026-07-12 08:03:08] Importing Directory.Packages.props.trap.gz (180 of 230)
+[2026-07-12 08:03:08] Importing nuget.config.trap.gz (181 of 230)
+[2026-07-12 08:03:08] Importing MinimalClean.Architecture.AspireHost.csproj.trap.gz (182 of 230)
+[2026-07-12 08:03:08] Importing MinimalClean.Architecture.ServiceDefaults.csproj.trap.gz (183 of 230)
+[2026-07-12 08:03:08] Importing MinimalClean.Architecture.Web.csproj.trap.gz (184 of 230)
+[2026-07-12 08:03:08] Importing nuget.config.trap.gz (185 of 230)
+[2026-07-12 08:03:08] Importing Directory.Build.props.trap.gz (186 of 230)
+[2026-07-12 08:03:08] Importing Directory.Packages.props.trap.gz (187 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.AspireHost.csproj.trap.gz (188 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.Core.csproj.trap.gz (189 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.Infrastructure.csproj.trap.gz (190 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.ServiceDefaults.csproj.trap.gz (191 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.UseCases.csproj.trap.gz (192 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.Web.csproj.trap.gz (193 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.FunctionalTests.csproj.trap.gz (194 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.IntegrationTests.csproj.trap.gz (195 of 230)
+[2026-07-12 08:03:08] Importing NimblePros.SampleToDo.UnitTests.csproj.trap.gz (196 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.AspireHost.csproj.trap.gz (197 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Core.csproj.trap.gz (198 of 230)
+[2026-07-12 08:03:08] Importing Contributor.cs.trap.br (199 of 230)
+[2026-07-12 08:03:08] Importing ContributorId.cs.trap.br (200 of 230)
+[2026-07-12 08:03:08] Importing ContributorName.cs.trap.br (201 of 230)
+[2026-07-12 08:03:08] Importing ContributorStatus.cs.trap.br (202 of 230)
+[2026-07-12 08:03:08] Importing ContributorDeletedEvent.cs.trap.br (203 of 230)
+[2026-07-12 08:03:08] Importing ContributorNameUpdatedEvent.cs.trap.br (204 of 230)
+[2026-07-12 08:03:08] Importing ContributorDeletedHandler.cs.trap.br (205 of 230)
+[2026-07-12 08:03:08] Importing ContributorNameUpdatedEmailNotificationHandler.cs.trap.br (206 of 230)
+[2026-07-12 08:03:08] Importing PhoneNumber.cs.trap.br (207 of 230)
+[2026-07-12 08:03:08] Importing ContributorByIdSpec.cs.trap.br (208 of 230)
+[2026-07-12 08:03:08] Importing GlobalUsings.cs.trap.br (209 of 230)
+[2026-07-12 08:03:08] Importing IDeleteContributorService.cs.trap.br (210 of 230)
+[2026-07-12 08:03:08] Importing IEmailSender.cs.trap.br (211 of 230)
+[2026-07-12 08:03:08] Importing DeleteContributorService.cs.trap.br (212 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Core.csproj.nuget.g.props.trap.gz (213 of 230)
+[2026-07-12 08:03:08] Importing .NETCoreApp,Version=v10.0.AssemblyAttributes.cs.trap.br (214 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Core.AssemblyInfo.cs.trap.br (215 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Core.GlobalUsings.g.cs.trap.br (216 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Core.dll.trap.br (217 of 230)
+[2026-07-12 08:03:08] Importing SystemTextJsonConverterFactory_g.cs.trap.br (218 of 230)
+[2026-07-12 08:03:08] Importing VogenInterfaces_g.cs.trap.br (219 of 230)
+[2026-07-12 08:03:08] Importing global__Clean.Architecture.Core.ContributorAggregate_ContributorId.g.cs.trap.br (220 of 230)
+[2026-07-12 08:03:08] Importing global__Clean.Architecture.Core.ContributorAggregate_ContributorName.g.cs.trap.br (221 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Infrastructure.csproj.trap.gz (222 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.ServiceDefaults.csproj.trap.gz (223 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.UseCases.csproj.trap.gz (224 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.Web.csproj.trap.gz (225 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.AspireTests.csproj.trap.gz (226 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.FunctionalTests.csproj.trap.gz (227 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.IntegrationTests.csproj.trap.gz (228 of 230)
+[2026-07-12 08:03:08] Importing Clean.Architecture.UnitTests.csproj.trap.gz (229 of 230)
+[2026-07-12 08:03:08] Importing metadata.trap.gz (230 of 230)
+[2026-07-12 08:03:08] [PROGRESS] dataset import> Merging relations
+[2026-07-12 08:03:09] Merging 1 fragment for 'typerefs'.
+[2026-07-12 08:03:09] Merged 9572 bytes (9.35 KiB) for 'typerefs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'typeref_type'.
+[2026-07-12 08:03:09] Merged 9505 bytes (9.28 KiB) for 'typeref_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'attributes'.
+[2026-07-12 08:03:09] Merged 129393 bytes (126.36 KiB) for 'attributes'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'files'.
+[2026-07-12 08:03:09] Merged 669 bytes for 'files'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'folders'.
+[2026-07-12 08:03:09] Merged 245 bytes for 'folders'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'containerparent'.
+[2026-07-12 08:03:09] Merged 666 bytes for 'containerparent'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'file_extraction_mode'.
+[2026-07-12 08:03:09] Merged 332 bytes for 'file_extraction_mode'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'assemblies'.
+[2026-07-12 08:03:09] Merged 1234 bytes (1.21 KiB) for 'assemblies'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'attribute_location'.
+[2026-07-12 08:03:09] Merged 37331 bytes (36.46 KiB) for 'attribute_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expressions'.
+[2026-07-12 08:03:09] Merged 211350 bytes (206.40 KiB) for 'expressions'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_parent_top_level'.
+[2026-07-12 08:03:09] Merged 91139 bytes (89.00 KiB) for 'expr_parent_top_level'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_location'.
+[2026-07-12 08:03:09] Merged 72921 bytes (71.21 KiB) for 'expr_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compiler_generated'.
+[2026-07-12 08:03:09] Merged 69605 bytes (67.97 KiB) for 'compiler_generated'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_value'.
+[2026-07-12 08:03:09] Merged 128140 bytes (125.14 KiB) for 'expr_value'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'types'.
+[2026-07-12 08:03:09] Merged 93414 bytes (91.22 KiB) for 'types'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'parent_namespace'.
+[2026-07-12 08:03:09] Merged 62527 bytes (61.06 KiB) for 'parent_namespace'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'modifiers'.
+[2026-07-12 08:03:09] Merged 64 bytes for 'modifiers'.
+[2026-07-12 08:03:09] Merging 2 fragments for 'has_modifiers'.
+[2026-07-12 08:03:09] Merged 435507 bytes (425.30 KiB) for 'has_modifiers'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_location'.
+[2026-07-12 08:03:09] Merged 12499 bytes (12.21 KiB) for 'type_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'nullability'.
+[2026-07-12 08:03:09] Merged 191 bytes for 'nullability'.
+[2026-07-12 08:03:09] Merging 2 fragments for 'type_nullability'.
+[2026-07-12 08:03:09] Merged 232863 bytes (227.41 KiB) for 'type_nullability'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'params'.
+[2026-07-12 08:03:09] Merged 728237 bytes (711.17 KiB) for 'params'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'param_location'.
+[2026-07-12 08:03:09] Merged 79118 bytes (77.26 KiB) for 'param_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'constructors'.
+[2026-07-12 08:03:09] Merged 27990 bytes (27.33 KiB) for 'constructors'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'constructor_location'.
+[2026-07-12 08:03:09] Merged 6246 bytes (6.10 KiB) for 'constructor_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'properties'.
+[2026-07-12 08:03:09] Merged 67283 bytes (65.71 KiB) for 'properties'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'property_location'.
+[2026-07-12 08:03:09] Merged 9918 bytes (9.69 KiB) for 'property_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'accessors'.
+[2026-07-12 08:03:09] Merged 72238 bytes (70.54 KiB) for 'accessors'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'accessor_location'.
+[2026-07-12 08:03:09] Merged 13167 bytes (12.86 KiB) for 'accessor_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'array_element_type'.
+[2026-07-12 08:03:09] Merged 1282 bytes (1.25 KiB) for 'array_element_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'nullability_parent'.
+[2026-07-12 08:03:09] Merged 498 bytes for 'nullability_parent'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_parent'.
+[2026-07-12 08:03:09] Merged 100763 bytes (98.40 KiB) for 'expr_parent'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'methods'.
+[2026-07-12 08:03:09] Merged 219601 bytes (214.45 KiB) for 'methods'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'method_location'.
+[2026-07-12 08:03:09] Merged 39828 bytes (38.89 KiB) for 'method_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_parameter_constraints'.
+[2026-07-12 08:03:09] Merged 12186 bytes (11.90 KiB) for 'type_parameter_constraints'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'general_type_parameter_constraints'.
+[2026-07-12 08:03:09] Merged 1325 bytes (1.29 KiB) for 'general_type_parameter_constraints'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'delegate_return_type'.
+[2026-07-12 08:03:09] Merged 3705 bytes (3.62 KiB) for 'delegate_return_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_parameters'.
+[2026-07-12 08:03:09] Merged 15354 bytes (14.99 KiB) for 'type_parameters'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'nested_types'.
+[2026-07-12 08:03:09] Merged 1571 bytes (1.53 KiB) for 'nested_types'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'constructed_generic'.
+[2026-07-12 08:03:09] Merged 51866 bytes (50.65 KiB) for 'constructed_generic'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_arguments'.
+[2026-07-12 08:03:09] Merged 69409 bytes (67.78 KiB) for 'type_arguments'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'namespaces'.
+[2026-07-12 08:03:09] Merged 562 bytes for 'namespaces'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_argument_name'.
+[2026-07-12 08:03:09] Merged 6448 bytes (6.30 KiB) for 'expr_argument_name'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'specific_type_parameter_constraints'.
+[2026-07-12 08:03:09] Merged 2333 bytes (2.28 KiB) for 'specific_type_parameter_constraints'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'specific_type_parameter_nullability'.
+[2026-07-12 08:03:09] Merged 1456 bytes (1.42 KiB) for 'specific_type_parameter_nullability'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'extend'.
+[2026-07-12 08:03:09] Merged 15823 bytes (15.45 KiB) for 'extend'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'implement'.
+[2026-07-12 08:03:09] Merged 77887 bytes (76.06 KiB) for 'implement'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'fields'.
+[2026-07-12 08:03:09] Merged 38999 bytes (38.08 KiB) for 'fields'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'field_location'.
+[2026-07-12 08:03:09] Merged 7527 bytes (7.35 KiB) for 'field_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'numlines'.
+[2026-07-12 08:03:09] Merged 3975 bytes (3.88 KiB) for 'numlines'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'explicitly_implements'.
+[2026-07-12 08:03:09] Merged 14809 bytes (14.46 KiB) for 'explicitly_implements'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'nullable_underlying_type'.
+[2026-07-12 08:03:09] Merged 198 bytes for 'nullable_underlying_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'indexers'.
+[2026-07-12 08:03:09] Merged 3749 bytes (3.66 KiB) for 'indexers'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'init_only_accessors'.
+[2026-07-12 08:03:09] Merged 90 bytes for 'init_only_accessors'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'operators'.
+[2026-07-12 08:03:09] Merged 20344 bytes (19.87 KiB) for 'operators'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'operator_location'.
+[2026-07-12 08:03:09] Merged 2464 bytes (2.41 KiB) for 'operator_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'overrides'.
+[2026-07-12 08:03:09] Merged 13156 bytes (12.85 KiB) for 'overrides'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_annotation'.
+[2026-07-12 08:03:09] Merged 4238 bytes (4.14 KiB) for 'type_annotation'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'scoped_annotation'.
+[2026-07-12 08:03:09] Merged 3251 bytes (3.17 KiB) for 'scoped_annotation'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'constant_value'.
+[2026-07-12 08:03:09] Merged 14091 bytes (13.76 KiB) for 'constant_value'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'enum_underlying_type'.
+[2026-07-12 08:03:09] Merged 948 bytes for 'enum_underlying_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'indexer_location'.
+[2026-07-12 08:03:09] Merged 587 bytes for 'indexer_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'destructors'.
+[2026-07-12 08:03:09] Merged 326 bytes for 'destructors'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'destructor_location'.
+[2026-07-12 08:03:09] Merged 144 bytes for 'destructor_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'tuple_underlying_type'.
+[2026-07-12 08:03:09] Merged 665 bytes for 'tuple_underlying_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'locations_default'.
+[2026-07-12 08:03:09] Merged 24387 bytes (23.82 KiB) for 'locations_default'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'tuple_element'.
+[2026-07-12 08:03:09] Merged 3214 bytes (3.14 KiB) for 'tuple_element'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'events'.
+[2026-07-12 08:03:09] Merged 1119 bytes (1.09 KiB) for 'events'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'event_accessors'.
+[2026-07-12 08:03:09] Merged 1855 bytes (1.81 KiB) for 'event_accessors'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'event_accessor_location'.
+[2026-07-12 08:03:09] Merged 464 bytes for 'event_accessor_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'event_location'.
+[2026-07-12 08:03:09] Merged 309 bytes for 'event_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'pointer_referent_type'.
+[2026-07-12 08:03:09] Merged 221 bytes for 'pointer_referent_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'function_pointer_calling_conventions'.
+[2026-07-12 08:03:09] Merged 34 bytes for 'function_pointer_calling_conventions'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'function_pointer_return_type'.
+[2026-07-12 08:03:09] Merged 39 bytes for 'function_pointer_return_type'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmllocations'.
+[2026-07-12 08:03:09] Merged 3221 bytes (3.15 KiB) for 'xmllocations'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlElements'.
+[2026-07-12 08:03:09] Merged 2750 bytes (2.69 KiB) for 'xmlElements'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlChars'.
+[2026-07-12 08:03:09] Merged 564 bytes for 'xmlChars'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlComments'.
+[2026-07-12 08:03:09] Merged 107 bytes for 'xmlComments'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlEncoding'.
+[2026-07-12 08:03:09] Merged 64 bytes for 'xmlEncoding'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlAttrs'.
+[2026-07-12 08:03:09] Merged 4209 bytes (4.11 KiB) for 'xmlAttrs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'using_directive_location'.
+[2026-07-12 08:03:09] Merged 97 bytes for 'using_directive_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_mention'.
+[2026-07-12 08:03:09] Merged 5085 bytes (4.97 KiB) for 'type_mention'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'type_mention_location'.
+[2026-07-12 08:03:09] Merged 2180 bytes (2.13 KiB) for 'type_mention_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'statements'.
+[2026-07-12 08:03:09] Merged 999 bytes for 'statements'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'stmt_parent_top_level'.
+[2026-07-12 08:03:09] Merged 347 bytes for 'stmt_parent_top_level'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'stmt_location'.
+[2026-07-12 08:03:09] Merged 1006 bytes for 'stmt_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_call'.
+[2026-07-12 08:03:09] Merged 1292 bytes (1.26 KiB) for 'expr_call'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_access'.
+[2026-07-12 08:03:09] Merged 1979 bytes (1.93 KiB) for 'expr_access'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_flowstate'.
+[2026-07-12 08:03:09] Merged 1277 bytes (1.25 KiB) for 'expr_flowstate'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'stmt_parent'.
+[2026-07-12 08:03:09] Merged 1168 bytes (1.14 KiB) for 'stmt_parent'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'expr_argument'.
+[2026-07-12 08:03:09] Merged 381 bytes for 'expr_argument'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'using_namespace_directives'.
+[2026-07-12 08:03:09] Merged 124 bytes for 'using_namespace_directives'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'namespace_declarations'.
+[2026-07-12 08:03:09] Merged 79 bytes for 'namespace_declarations'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'parent_namespace_declaration'.
+[2026-07-12 08:03:09] Merged 80 bytes for 'parent_namespace_declaration'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'namespace_declaration_location'.
+[2026-07-12 08:03:09] Merged 79 bytes for 'namespace_declaration_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'implicitly_typed_object_creation'.
+[2026-07-12 08:03:09] Merged 23 bytes for 'implicitly_typed_object_creation'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentline'.
+[2026-07-12 08:03:09] Merged 1167 bytes (1.14 KiB) for 'commentline'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentline_location'.
+[2026-07-12 08:03:09] Merged 655 bytes for 'commentline_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentblock'.
+[2026-07-12 08:03:09] Merged 129 bytes for 'commentblock'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentblock_child'.
+[2026-07-12 08:03:09] Merged 1199 bytes (1.17 KiB) for 'commentblock_child'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentblock_location'.
+[2026-07-12 08:03:09] Merged 259 bytes for 'commentblock_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'commentblock_binding'.
+[2026-07-12 08:03:09] Merged 1481 bytes (1.45 KiB) for 'commentblock_binding'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'using_global'.
+[2026-07-12 08:03:09] Merged 35 bytes for 'using_global'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'localvars'.
+[2026-07-12 08:03:09] Merged 375 bytes for 'localvars'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'localvar_location'.
+[2026-07-12 08:03:09] Merged 147 bytes for 'localvar_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlNs'.
+[2026-07-12 08:03:09] Merged 51 bytes for 'xmlNs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'xmlHasNs'.
+[2026-07-12 08:03:09] Merged 65 bytes for 'xmlHasNs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilations'.
+[2026-07-12 08:03:09] Merged 30 bytes for 'compilations'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_assembly'.
+[2026-07-12 08:03:09] Merged 30 bytes for 'compilation_assembly'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_args'.
+[2026-07-12 08:03:09] Merged 44 bytes for 'compilation_args'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_expanded_args'.
+[2026-07-12 08:03:09] Merged 519 bytes for 'compilation_expanded_args'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_compiling_files'.
+[2026-07-12 08:03:09] Merged 94 bytes for 'compilation_compiling_files'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_referencing_files'.
+[2026-07-12 08:03:09] Merged 546 bytes for 'compilation_referencing_files'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'diagnostics'.
+[2026-07-12 08:03:09] Merged 83 bytes for 'diagnostics'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'diagnostic_for'.
+[2026-07-12 08:03:09] Merged 56 bytes for 'diagnostic_for'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_info'.
+[2026-07-12 08:03:09] Merged 39 bytes for 'compilation_info'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_time'.
+[2026-07-12 08:03:09] Merged 127 bytes for 'compilation_time'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'compilation_finished'.
+[2026-07-12 08:03:09] Merged 70 bytes for 'compilation_finished'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'pragma_warnings'.
+[2026-07-12 08:03:09] Merged 68 bytes for 'pragma_warnings'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'pragma_warning_error_codes'.
+[2026-07-12 08:03:09] Merged 135 bytes for 'pragma_warning_error_codes'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'preprocessor_directive_active'.
+[2026-07-12 08:03:09] Merged 210 bytes for 'preprocessor_directive_active'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'preprocessor_directive_compilation'.
+[2026-07-12 08:03:09] Merged 201 bytes for 'preprocessor_directive_compilation'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'preprocessor_directive_location'.
+[2026-07-12 08:03:09] Merged 366 bytes for 'preprocessor_directive_location'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'directive_nullables'.
+[2026-07-12 08:03:09] Merged 88 bytes for 'directive_nullables'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'directive_define_symbols'.
+[2026-07-12 08:03:09] Merged 164 bytes for 'directive_define_symbols'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'directive_ifs'.
+[2026-07-12 08:03:09] Merged 108 bytes for 'directive_ifs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'directive_endifs'.
+[2026-07-12 08:03:09] Merged 132 bytes for 'directive_endifs'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'directive_elses'.
+[2026-07-12 08:03:09] Merged 68 bytes for 'directive_elses'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'foreach_stmt_info'.
+[2026-07-12 08:03:09] Merged 34 bytes for 'foreach_stmt_info'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'foreach_stmt_desugar'.
+[2026-07-12 08:03:09] Merged 74 bytes for 'foreach_stmt_desugar'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'conditional_access'.
+[2026-07-12 08:03:09] Merged 23 bytes for 'conditional_access'.
+[2026-07-12 08:03:09] Merging 1 fragment for 'sourceLocationPrefix'.
+[2026-07-12 08:03:09] Merged 19 bytes for 'sourceLocationPrefix'.
+[2026-07-12 08:03:09] Saving string and id pools to disk.
+[2026-07-12 08:03:09] Finished importing TRAP files.
+[2026-07-12 08:03:09] Read 52.80 MiB of uncompressed TRAP data.
+[2026-07-12 08:03:09] Uncompressed relation data size: 13.86 MiB
+[2026-07-12 08:03:09] Relation data size: 3.26 MiB (merge rate: 11.00 MiB/s)
+[2026-07-12 08:03:09] String pool size: 2.78 MiB
+[2026-07-12 08:03:09] ID pool size: 21.00 MiB
+[2026-07-12 08:03:09] [PROGRESS] dataset import> Finished writing database (relations: 3.26 MiB; string pool: 2.78 MiB).
+[2026-07-12 08:03:09] Pausing evaluation to close the cache at sequence stamp o+271
+[2026-07-12 08:03:09] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 08:03:09] Unpausing evaluation
+[2026-07-12 08:03:09] Plumbing command codeql dataset import completed.
+[2026-07-12 08:03:09] [PROGRESS] database finalize> TRAP import complete (3.4s).
+[2026-07-12 08:03:09] Running plumbing command: codeql database cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture
+[2026-07-12 08:03:09] [PROGRESS] database cleanup> Cleaning up existing TRAP files after import...
+[2026-07-12 08:03:09] [PROGRESS] database cleanup> TRAP files cleaned up (14ms).
+[2026-07-12 08:03:09] [PROGRESS] database cleanup> Cleaning up scratch directory...
+[2026-07-12 08:03:09] [PROGRESS] database cleanup> Scratch directory cleaned up (228ms).
+[2026-07-12 08:03:09] Running plumbing command: codeql dataset cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp
+[2026-07-12 08:03:09] [PROGRESS] dataset cleanup> Cleaning up dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp.
+[2026-07-12 08:03:09] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp/default/cache in mode trim.
+[2026-07-12 08:03:09] Sequence stamp origin is -5892336973734285154
+[2026-07-12 08:03:09] Pausing evaluation to quickly trim memory at sequence stamp o+0
+[2026-07-12 08:03:09] Unpausing evaluation
+[2026-07-12 08:03:09] Pausing evaluation to zealously trim disk at sequence stamp o+1
+[2026-07-12 08:03:09] Unpausing evaluation
+[2026-07-12 08:03:09] Trimming completed (1ms): Trimmed disposable data from cache.
+[2026-07-12 08:03:09] Pausing evaluation to close the cache at sequence stamp o+2
+[2026-07-12 08:03:09] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 08:03:09] Unpausing evaluation
+[2026-07-12 08:03:09] [PROGRESS] dataset cleanup> Trimmed disposable data from cache.
+[2026-07-12 08:03:09] [PROGRESS] dataset cleanup> Finalizing dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp
+[2026-07-12 08:03:09] [DETAILS] dataset cleanup> Finished deleting ID pool from /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/db-csharp (2ms).
+[2026-07-12 08:03:09] Plumbing command codeql dataset cleanup completed.
+[2026-07-12 08:03:09] Plumbing command codeql database cleanup completed with status 0.
+[2026-07-12 08:03:09] [PROGRESS] database finalize> Finished zipping source archive (47.56 KiB).
+[2026-07-12 08:03:09] Plumbing command codeql database finalize completed.
+[2026-07-12 08:03:09] [PROGRESS] database create> Successfully created database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture.
+[2026-07-12 08:03:09] Terminating normally.

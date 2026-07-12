@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/security/cert/Certificate.members/Certificate.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/security/cert/Certificate.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/io/ObjectStreamException.members.trap.gz
+classes/java/security/PublicKey.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/security/Provider.members.trap.gz
+classes/java/security/cert/CertificateException.members.trap.gz
+classes/java/security/NoSuchAlgorithmException.members.trap.gz
+classes/java/security/InvalidKeyException.members.trap.gz
+classes/java/security/SignatureException.members.trap.gz
+classes/java/security/NoSuchProviderException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/security/cert/CertificateEncodingException.members.trap.gz

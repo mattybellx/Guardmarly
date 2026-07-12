@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/bridge/OpenedSocket$Writer.members/OpenedSocket$Writer.members#52.0-1626179114000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/bridge/OpenedSocket$Writer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/com/google/caliper/bridge/OpenedSocket.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/ObjectOutputStream.members.trap.gz

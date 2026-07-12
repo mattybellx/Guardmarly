@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/PrettyPrintingTest$ClassWithMap.members/PrettyPrintingTest$ClassWithMap.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/PrettyPrintingTest$ClassWithMap.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/PrettyPrintingTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/util/Map.members.trap.gz

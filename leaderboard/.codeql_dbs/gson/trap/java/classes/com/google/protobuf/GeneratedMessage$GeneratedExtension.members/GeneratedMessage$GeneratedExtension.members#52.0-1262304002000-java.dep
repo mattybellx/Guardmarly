@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/GeneratedMessage$GeneratedExtension.members/GeneratedMessage$GeneratedExtension.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/GeneratedMessage$GeneratedExtension.members.trap.gz
+classes/com/google/protobuf/Extension.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz
+classes/com/google/protobuf/Extension$MessageType.members.trap.gz
+classes/com/google/protobuf/Extension$ExtensionType.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$ExtensionDescriptorRetriever.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz

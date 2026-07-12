@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/MapSubject.members/MapSubject.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/MapSubject.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/com/google/common/truth/Correspondence$DiffFormatter.members.trap.gz
+classes/com/google/common/truth/Correspondence.members.trap.gz
+classes/com/google/common/truth/MapSubject$UsingCorrespondence.members.trap.gz
+classes/com/google/common/truth/Ordered.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/truth/FailureMetadata.members.trap.gz

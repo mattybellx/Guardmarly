@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/manipulation/Sortable.members/Sortable.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/manipulation/Sortable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/junit/runner/manipulation/Sorter.members.trap.gz

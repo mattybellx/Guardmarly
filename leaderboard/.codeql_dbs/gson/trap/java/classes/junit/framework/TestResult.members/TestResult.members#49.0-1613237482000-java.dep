@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/junit/framework/TestResult.members/TestResult.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/junit/framework/TestResult.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/junit/framework/Test.members.trap.gz
+classes/junit/framework/Protectable.members.trap.gz
+classes/junit/framework/TestCase.members.trap.gz
+classes/java/util/Enumeration.members.trap.gz
+classes/junit/framework/TestFailure.members.trap.gz
+classes/junit/framework/TestListener.members.trap.gz
+classes/junit/framework/AssertionFailedError.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz

@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/integration/OSGiManifestIT$ManifestData.members/OSGiManifestIT$ManifestData.members#0.0-1783842439070-java.trap.gz
+
+TRAPS
+classes/com/google/gson/integration/OSGiManifestIT$ManifestData.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/integration/OSGiManifestIT.members.trap.gz
+classes/java/net/URL.members.trap.gz
+classes/java/util/jar/Manifest.members.trap.gz

@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/model/Scenario.members/Scenario.members#52.0-1626179106000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/model/Scenario.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/model/BenchmarkSpec.members.trap.gz
+classes/com/google/caliper/model/VmSpec.members.trap.gz
+classes/com/google/caliper/model/Host.members.trap.gz

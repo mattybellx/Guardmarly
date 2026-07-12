@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/format/PeriodFormatter.members/PeriodFormatter.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/format/PeriodFormatter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/MutablePeriod.members.trap.gz
+classes/org/joda/time/Period.members.trap.gz
+classes/org/joda/time/ReadWritablePeriod.members.trap.gz
+classes/org/joda/time/ReadablePeriod.members.trap.gz
+classes/java/io/Writer.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/StringBuffer.members.trap.gz
+classes/org/joda/time/PeriodType.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/org/joda/time/format/PeriodParser.members.trap.gz
+classes/org/joda/time/format/PeriodPrinter.members.trap.gz

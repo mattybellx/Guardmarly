@@ -1,0 +1,4 @@
+[2026-07-12 07:54:36] [javac-output-14241] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:36] [javac-output-14241] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:36] [javac-output-14241] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:54:37] [javac-output-14241] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,aQute.bnd.annotation.spi.ServiceProvider,org.apache.logging.log4j.appserver.internal.annotation.SuppressFBWarnings,aQute.bnd.annotation.jpms.Open

@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/io/OutputDecorator.members/OutputDecorator.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/io/OutputDecorator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/core/io/IOContext.members.trap.gz
+classes/java/io/Writer.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz

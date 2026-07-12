@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/GsonTypeAdapterTest$Concrete.members/GsonTypeAdapterTest$Concrete.members#0.0-1783842439065-java.trap.gz
+
+TRAPS
+classes/com/google/gson/GsonTypeAdapterTest$Concrete.members.trap.gz
+classes/com/google/gson/GsonTypeAdapterTest$Abstract.members.trap.gz
+classes/com/google/gson/GsonTypeAdapterTest.members.trap.gz
+classes/java/lang/String.members.trap.gz

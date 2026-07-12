@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/ParameterizedTypesTest$Amount.members/ParameterizedTypesTest$Amount.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/ParameterizedTypesTest$Amount.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest$Measurable.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest$Field.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest$Immutable.members.trap.gz
+classes/com/google/gson/functional/ParameterizedTypesTest$Quantity.members.trap.gz

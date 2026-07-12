@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/Test$None.members/Test$None.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/Test$None.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/org/junit/Test.members.trap.gz

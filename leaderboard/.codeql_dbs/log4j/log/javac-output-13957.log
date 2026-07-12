@@ -1,0 +1,142 @@
+[2026-07-12 07:52:51] [javac-output-13957] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:52:51] [javac-output-13957] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:52:51] [javac-output-13957] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:52:53] [javac-output-13957] /home/runner/.m2/repository/uk/org/webcompere/system-stubs-core/2.0.3/system-stubs-core-2.0.3.jar(/uk/org/webcompere/systemstubs/SystemStubs.class): warning: [classfile] Cannot find annotation method 'value()' in type 'SuppressFBWarnings'
+[2026-07-12 07:52:53] [javac-output-13957] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:52:53] [javac-output-13957] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.BeforeEach,org.apache.logging.log4j.test.junit.SetTestProperty.SetTestProperties,org.junit.jupiter.params.provider.CsvSource,org.junitpioneer.jupiter.SetSystemProperty.SetSystemProperties,org.junitpioneer.jupiter.ReadsSystemProperty,org.junit.BeforeClass,org.apache.logging.log4j.test.junit.StatusLoggerLevel,org.junit.runner.RunWith,org.junit.runners.Parameterized.Parameters,org.apache.logging.log4j.test.junit.UsingStatusListener,org.junitpioneer.jupiter.SetSystemProperty,org.apache.logging.log4j.test.junit.UsingThreadContextMap,org.apache.logging.log4j.test.junit.SetTestProperty,org.junit.jupiter.api.AfterAll,org.apache.logging.log4j.test.junit.UsingTestProperties,org.junit.jupiter.api.extension.ExtendWith,org.junit.jupiter.api.BeforeAll,org.junit.jupiter.api.extension.RegisterExtension,org.junit.jupiter.api.condition.EnabledIfSystemProperty,org.junit.jupiter.api.Tag,org.junit.jupiter.params.provider.MethodSource,org.junit.jupiter.params.provider.ValueSource,org.junit.jupiter.api.parallel.ResourceLocks,org.junit.Test,org.junit.jupiter.api.parallel.ResourceLock,org.junitpioneer.jupiter.Issue,org.apache.logging.log4j.test.junit.TempLoggingDir,org.junit.jupiter.api.Test,org.junit.jupiter.api.AfterEach,org.apache.logging.log4j.test.junit.UsingThreadContextStack,org.junit.jupiter.params.ParameterizedTest,org.junit.Rule,org.apache.logging.log4j.test.junit.UsingAnyThreadContext,org.junit.jupiter.api.parallel.Execution,org.junit.jupiter.api.condition.EnabledOnJre
+[2026-07-12 07:52:53] [javac-output-13957] /home/runner/.m2/repository/uk/org/webcompere/system-stubs-core/2.0.3/system-stubs-core-2.0.3.jar(/uk/org/webcompere/systemstubs/SystemStubs.class): warning: [classfile] Cannot find annotation method 'value()' in type 'SuppressFBWarnings'
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/.m2/repository/uk/org/webcompere/system-stubs-core/2.0.3/system-stubs-core-2.0.3.jar(/uk/org/webcompere/systemstubs/SystemStubs.class): warning: [classfile] Cannot find annotation method 'value()' in type 'SuppressFBWarnings'
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/.m2/repository/uk/org/webcompere/system-stubs-core/2.0.3/system-stubs-core-2.0.3.jar(/uk/org/webcompere/systemstubs/SystemStubs.class): warning: [classfile] Cannot find annotation method 'value()' in type 'SuppressFBWarnings'
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/.m2/repository/uk/org/webcompere/system-stubs-core/2.0.3/system-stubs-core-2.0.3.jar(/uk/org/webcompere/systemstubs/SystemStubs.class): warning: [classfile] Cannot find annotation method 'value()' in type 'SuppressFBWarnings'
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:901: warning: [deprecation] getStatusData() in StatusLogger has been deprecated
+[2026-07-12 07:52:54] [javac-output-13957]         final List<StatusData> statusDatalist = StatusLogger.getLogger().getStatusData();
+[2026-07-12 07:52:54] [javac-output-13957]                                                                         ^
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:919: warning: [deprecation] getStatusData() in StatusLogger has been deprecated
+[2026-07-12 07:52:54] [javac-output-13957]         final List<StatusData> statusDatalist = StatusLogger.getLogger().getStatusData();
+[2026-07-12 07:52:54] [javac-output-13957]                                                                         ^
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:943: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:52:54] [javac-output-13957]         public String getFormat() {
+[2026-07-12 07:52:54] [javac-output-13957]                       ^
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:928: warning: [serial] serializable class TestMessage has no definition of serialVersionUID
+[2026-07-12 07:52:54] [javac-output-13957]     private static final class TestMessage implements Message {
+[2026-07-12 07:52:54] [javac-output-13957]                                ^
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:929: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:52:54] [javac-output-13957]         private final FormattedMessageSupplier formattedMessageSupplier;
+[2026-07-12 07:52:54] [javac-output-13957]                                                ^
+[2026-07-12 07:52:54] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/AbstractLoggerTest.java:966: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:52:54] [javac-output-13957]         private LogEvent currentEvent;
+[2026-07-12 07:52:54] [javac-output-13957]                          ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:261: warning: [try] auto-closeable resource ctc3 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]                 try (final CloseableThreadContext.Instance ctc3 = CloseableThreadContext.put("inner", "one")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                            ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:258: warning: [try] auto-closeable resource ctc2 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]             try (final CloseableThreadContext.Instance ctc2 = CloseableThreadContext.put("outer", "two")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                        ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:257: warning: [try] auto-closeable resource ctc1 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]         try (final CloseableThreadContext.Instance ctc1 = CloseableThreadContext.put("outer", "one")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                    ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:293: warning: [try] auto-closeable resource ctc3 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]                 try (final CloseableThreadContext.Instance ctc3 = CloseableThreadContext.put("inner", "one")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                            ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:290: warning: [try] auto-closeable resource ctc2 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]             try (final CloseableThreadContext.Instance ctc2 = CloseableThreadContext.put("outer", "two")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                        ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/CloseableThreadContextTest.java:289: warning: [try] auto-closeable resource ctc1 is never referenced in body of corresponding try statement
+[2026-07-12 07:52:55] [javac-output-13957]         try (final CloseableThreadContext.Instance ctc1 = CloseableThreadContext.put("outer", "one")) {
+[2026-07-12 07:52:55] [javac-output-13957]                                                    ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/EventLoggerTest.java:49: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:52:55] [javac-output-13957]         EventLogger.logEvent(msg);
+[2026-07-12 07:52:55] [javac-output-13957]         ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LambdaLoggerTest.java:62: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:52:55] [javac-output-13957]         final List<LambdaLoggerTest.LogEvent> list = new ArrayList<>();
+[2026-07-12 07:52:55] [javac-output-13957]                                               ^
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LambdaLoggerTest.java:274: warning: [rawtypes] found raw type: Supplier
+[2026-07-12 07:52:55] [javac-output-13957]     final Supplier[] supplierArray1 = new Supplier[] {supplier};
+[2026-07-12 07:52:55] [javac-output-13957]           ^
+[2026-07-12 07:52:55] [javac-output-13957]   missing type arguments for generic class Supplier<T>
+[2026-07-12 07:52:55] [javac-output-13957]   where T is a type-variable:
+[2026-07-12 07:52:55] [javac-output-13957]     T extends Object declared in interface Supplier
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LambdaLoggerTest.java:274: warning: [rawtypes] found raw type: Supplier
+[2026-07-12 07:52:55] [javac-output-13957]     final Supplier[] supplierArray1 = new Supplier[] {supplier};
+[2026-07-12 07:52:55] [javac-output-13957]                                           ^
+[2026-07-12 07:52:55] [javac-output-13957]   missing type arguments for generic class Supplier<T>
+[2026-07-12 07:52:55] [javac-output-13957]   where T is a type-variable:
+[2026-07-12 07:52:55] [javac-output-13957]     T extends Object declared in interface Supplier
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LambdaLoggerTest.java:275: warning: [rawtypes] found raw type: Supplier
+[2026-07-12 07:52:55] [javac-output-13957]     final Supplier[] supplierArray2 = new Supplier[] {supplier, supplier2};
+[2026-07-12 07:52:55] [javac-output-13957]           ^
+[2026-07-12 07:52:55] [javac-output-13957]   missing type arguments for generic class Supplier<T>
+[2026-07-12 07:52:55] [javac-output-13957]   where T is a type-variable:
+[2026-07-12 07:52:55] [javac-output-13957]     T extends Object declared in interface Supplier
+[2026-07-12 07:52:55] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LambdaLoggerTest.java:275: warning: [rawtypes] found raw type: Supplier
+[2026-07-12 07:52:55] [javac-output-13957]     final Supplier[] supplierArray2 = new Supplier[] {supplier, supplier2};
+[2026-07-12 07:52:55] [javac-output-13957]                                           ^
+[2026-07-12 07:52:55] [javac-output-13957]   missing type arguments for generic class Supplier<T>
+[2026-07-12 07:52:55] [javac-output-13957]   where T is a type-variable:
+[2026-07-12 07:52:55] [javac-output-13957]     T extends Object declared in interface Supplier
+[2026-07-12 07:52:56] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LoggerTest.java:93: warning: [deprecation] entry() in AbstractLogger has been deprecated
+[2026-07-12 07:52:56] [javac-output-13957]         logger.entry();
+[2026-07-12 07:52:56] [javac-output-13957]               ^
+[2026-07-12 07:52:56] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/LoggerTest.java:94: warning: [deprecation] exit() in AbstractLogger has been deprecated
+[2026-07-12 07:52:56] [javac-output-13957]         logger.exit();
+[2026-07-12 07:52:56] [javac-output-13957]               ^
+[2026-07-12 07:52:57] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/TraceLoggingTest.java:57: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:52:57] [javac-output-13957]     private LogEvent currentEvent;
+[2026-07-12 07:52:57] [javac-output-13957]                      ^
+[2026-07-12 07:52:57] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/message/JsonMessage.java:52: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:52:57] [javac-output-13957]     public String getFormat() {
+[2026-07-12 07:52:57] [javac-output-13957]                   ^
+[2026-07-12 07:52:57] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/message/JsonMessage.java:30: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:52:57] [javac-output-13957]     private final Object object;
+[2026-07-12 07:52:57] [javac-output-13957]                          ^
+[2026-07-12 07:52:57] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/message/MapMessageTest.java:347: warning: [deprecation] Time(int,int,int) in Time has been deprecated
+[2026-07-12 07:52:57] [javac-output-13957]         final Time time = new Time(12, 5, 5);
+[2026-07-12 07:52:57] [javac-output-13957]                           ^
+[2026-07-12 07:52:57] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/message/ObjectMessageTest.java:89: warning: [overrides] Class NonSerializable overrides equals, but neither it nor any superclass overrides hashCode method
+[2026-07-12 07:52:57] [javac-output-13957]         class NonSerializable {
+[2026-07-12 07:52:57] [javac-output-13957]               ^
+[2026-07-12 07:52:58] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/message/ParameterizedMessageTest.java:164: warning: [overrides] Class NonSerializable overrides equals, but neither it nor any superclass overrides hashCode method
+[2026-07-12 07:52:58] [javac-output-13957]         class NonSerializable {
+[2026-07-12 07:52:58] [javac-output-13957]               ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:67: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(false);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:74: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:102: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(false);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:114: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:125: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:158: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:219: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/spi/DefaultThreadContextStackTest.java:330: warning: [deprecation] DefaultThreadContextStack(boolean) in DefaultThreadContextStack has been deprecated
+[2026-07-12 07:52:59] [javac-output-13957]         final DefaultThreadContextStack stack = new DefaultThreadContextStack(true);
+[2026-07-12 07:52:59] [javac-output-13957]                                                 ^
+[2026-07-12 07:52:59] [javac-output-13957] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:53:01] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/util/SortedArrayStringMapTest.java:71: warning: [unchecked] unchecked method invocation: constructor <init> in class SortedArrayStringMap is applied to given types
+[2026-07-12 07:53:01] [javac-output-13957]         final SortedArrayStringMap sMap = new SortedArrayStringMap((Map) map);
+[2026-07-12 07:53:01] [javac-output-13957]                                           ^
+[2026-07-12 07:53:01] [javac-output-13957]   required: Map<String,?>
+[2026-07-12 07:53:01] [javac-output-13957]   found:    Map
+[2026-07-12 07:53:01] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/util/SortedArrayStringMapTest.java:71: warning: [unchecked] unchecked conversion
+[2026-07-12 07:53:01] [javac-output-13957]         final SortedArrayStringMap sMap = new SortedArrayStringMap((Map) map);
+[2026-07-12 07:53:01] [javac-output-13957]                                                                    ^
+[2026-07-12 07:53:01] [javac-output-13957]   required: Map<String,?>
+[2026-07-12 07:53:01] [javac-output-13957]   found:    Map
+[2026-07-12 07:53:01] [javac-output-13957] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api-test/src/test/java/org/apache/logging/log4j/util/SystemPropertiesMain.java:38: warning: [unchecked] unchecked cast
+[2026-07-12 07:53:01] [javac-output-13957]                 (Enumeration<String>) System.getProperties().propertyNames();
+[2026-07-12 07:53:01] [javac-output-13957]                                                                           ^
+[2026-07-12 07:53:01] [javac-output-13957]   required: Enumeration<String>
+[2026-07-12 07:53:01] [javac-output-13957]   found:    Enumeration<CAP#1>
+[2026-07-12 07:53:01] [javac-output-13957]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:53:01] [javac-output-13957]     CAP#1 extends Object from capture of ?

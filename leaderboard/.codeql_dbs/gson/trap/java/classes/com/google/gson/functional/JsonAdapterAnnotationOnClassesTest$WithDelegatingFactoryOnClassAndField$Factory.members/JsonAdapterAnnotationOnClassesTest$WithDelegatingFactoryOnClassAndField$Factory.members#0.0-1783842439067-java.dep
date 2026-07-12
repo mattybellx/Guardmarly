@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$WithDelegatingFactoryOnClassAndField$Factory.members/JsonAdapterAnnotationOnClassesTest$WithDelegatingFactoryOnClassAndField$Factory.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$WithDelegatingFactoryOnClassAndField$Factory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/TypeAdapterFactory.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$WithDelegatingFactoryOnClassAndField.members.trap.gz
+classes/com/google/gson/Gson.members.trap.gz
+classes/com/google/gson/reflect/TypeToken.members.trap.gz
+classes/com/google/gson/TypeAdapter.members.trap.gz
+classes/java/lang/Override.members.trap.gz

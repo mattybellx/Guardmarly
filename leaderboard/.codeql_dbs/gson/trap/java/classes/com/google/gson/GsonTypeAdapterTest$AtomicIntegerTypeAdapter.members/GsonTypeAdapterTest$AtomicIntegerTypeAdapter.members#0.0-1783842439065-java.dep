@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/GsonTypeAdapterTest$AtomicIntegerTypeAdapter.members/GsonTypeAdapterTest$AtomicIntegerTypeAdapter.members#0.0-1783842439065-java.trap.gz
+
+TRAPS
+classes/com/google/gson/GsonTypeAdapterTest$AtomicIntegerTypeAdapter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/atomic/AtomicInteger.members.trap.gz
+classes/com/google/gson/JsonSerializer.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/com/google/gson/JsonSerializationContext.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/com/google/gson/JsonDeserializer.members.trap.gz
+classes/com/google/gson/JsonDeserializationContext.members.trap.gz
+classes/com/google/gson/JsonParseException.members.trap.gz
+classes/com/google/gson/GsonTypeAdapterTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz

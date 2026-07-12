@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMember.members/AnnotatedMember.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMember.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/Annotated.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/UnsupportedOperationException.members.trap.gz
+classes/java/lang/IllegalArgumentException.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotationMap.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/TypeResolutionContext.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/reflect/Member.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/module/ModuleDescriptor$Exports.members/ModuleDescriptor$Exports.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/lang/module/ModuleDescriptor$Exports.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/lang/module/ModuleDescriptor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/module/ModuleDescriptor$Exports$Modifier.members.trap.gz

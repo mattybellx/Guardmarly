@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest$UserClassAnnotationAdapter.members/JsonAdapterAnnotationOnFieldsTest$UserClassAnnotationAdapter.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest$UserClassAnnotationAdapter.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest$User.members.trap.gz
+classes/com/google/gson/TypeAdapter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/Reader.members.trap.gz
+classes/com/google/gson/stream/JsonReader.members.trap.gz
+classes/java/io/Writer.members.trap.gz
+classes/com/google/gson/stream/JsonWriter.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnFieldsTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz

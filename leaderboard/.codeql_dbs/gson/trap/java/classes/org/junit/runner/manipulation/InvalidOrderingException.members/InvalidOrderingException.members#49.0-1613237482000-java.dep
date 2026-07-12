@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/manipulation/InvalidOrderingException.members/InvalidOrderingException.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/manipulation/InvalidOrderingException.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz

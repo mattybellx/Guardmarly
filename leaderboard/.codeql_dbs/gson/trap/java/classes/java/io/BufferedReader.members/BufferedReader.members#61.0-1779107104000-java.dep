@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/BufferedReader.members/BufferedReader.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/BufferedReader.members.trap.gz
+classes/java/io/Reader.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

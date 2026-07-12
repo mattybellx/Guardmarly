@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/ClassWithNamedFields.java.trap.gz
+
+TRAPS
+classes/com/example/ClassWithNamedFields.members.trap.gz
+classes/java/lang/Object.members.trap.gz

@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders.members/ArrayBuilders.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/HashSet.members.trap.gz
+classes/java/util/AbstractSet.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$DoubleBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$FloatBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$LongBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$IntBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$ShortBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$ByteBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/ArrayBuilders$BooleanBuilder.members.trap.gz

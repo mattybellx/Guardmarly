@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage$FieldEntry.members/GeneratedMessage$ExtendableMessage$FieldEntry.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage$FieldEntry.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz

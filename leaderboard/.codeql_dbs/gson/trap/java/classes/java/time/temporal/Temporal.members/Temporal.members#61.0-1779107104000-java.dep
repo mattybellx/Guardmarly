@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/temporal/Temporal.members/Temporal.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/temporal/Temporal.members.trap.gz
+classes/java/time/temporal/TemporalAccessor.members.trap.gz
+classes/java/time/temporal/TemporalUnit.members.trap.gz
+classes/java/time/temporal/TemporalAmount.members.trap.gz
+classes/java/time/temporal/TemporalField.members.trap.gz
+classes/java/time/temporal/TemporalAdjuster.members.trap.gz

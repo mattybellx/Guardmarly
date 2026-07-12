@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/UnsafeAllocator.members/UnsafeAllocator.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/UnsafeAllocator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/Exception.members.trap.gz

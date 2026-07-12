@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/fastapi
+baselineLinesOfCode: 89501
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  sha: 7cb06f360dd44efac059848df1a9beee7643b018
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:10:34.072987520Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

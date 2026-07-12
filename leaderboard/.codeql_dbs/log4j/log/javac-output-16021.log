@@ -1,0 +1,5 @@
+[2026-07-12 07:58:20] [javac-output-16021] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:58:20] [javac-output-16021] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:58:20] [javac-output-16021] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:58:21] [javac-output-16021] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.junit.jupiter.api.BeforeEach,org.junit.jupiter.api.AfterEach
+[2026-07-12 07:58:21] [javac-output-16021] warning: unknown enum constant ElementType.MODULE

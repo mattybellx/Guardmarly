@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/WorkerException.members/WorkerException.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/WorkerException.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/javax/annotation/Nullable.members.trap.gz

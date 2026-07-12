@@ -1,0 +1,9 @@
+[2026-07-12 07:48:36] [javac-output-10420] warning: [path] bad path element "/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-graal-native-image/target/classes": no such file or directory
+[2026-07-12 07:48:37] [javac-output-10420] warning: [processing] No processor claimed any of these annotations: /com.google.gson.annotations.SerializedName,/com.google.gson.annotations.JsonAdapter,/org.junit.jupiter.api.Test
+[2026-07-12 07:48:38] [javac-output-10420] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-graal-native-image/src/test/java/com/google/gson/native_test/ReflectionTest.java:267: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:38] [javac-output-10420]             gson.fromJson(
+[2026-07-12 07:48:38] [javac-output-10420]                          ^
+[2026-07-12 07:48:38] [javac-output-10420]   required: List<ClassWithDefaultConstructor>
+[2026-07-12 07:48:38] [javac-output-10420]   found:    CAP#1
+[2026-07-12 07:48:38] [javac-output-10420]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:48:38] [javac-output-10420]     CAP#1 extends Object from capture of ?

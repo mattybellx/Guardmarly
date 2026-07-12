@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/BigDecimalSubject.members/BigDecimalSubject.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/BigDecimalSubject.members.trap.gz
+classes/java/math/BigDecimal.members.trap.gz
+classes/com/google/common/truth/ComparableSubject.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/com/google/common/collect/Range.members.trap.gz
+classes/com/google/common/base/Predicate.members.trap.gz
+classes/java/util/function/Predicate.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/errorprone/annotations/Immutable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/com/google/common/truth/FailureMetadata.members.trap.gz

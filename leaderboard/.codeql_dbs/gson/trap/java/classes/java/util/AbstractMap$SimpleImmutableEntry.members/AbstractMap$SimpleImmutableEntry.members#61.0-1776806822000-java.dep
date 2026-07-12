@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/AbstractMap$SimpleImmutableEntry.members/AbstractMap$SimpleImmutableEntry.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/AbstractMap$SimpleImmutableEntry.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/Comparator.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/Clock.members/Clock.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/Clock.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/time/Instant.members.trap.gz
+classes/java/time/ZoneId.members.trap.gz
+classes/java/time/Duration.members.trap.gz

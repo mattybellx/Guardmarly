@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/metrics/ParseBenchmark$Feed.members/ParseBenchmark$Feed.members#0.0-1783842439073-java.trap.gz
+
+TRAPS
+classes/com/google/gson/metrics/ParseBenchmark$Feed.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark$Item.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonProperty.members.trap.gz
+classes/com/fasterxml/jackson/annotation/OptBoolean.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonProperty$Access.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark$Link.members.trap.gz
+classes/com/google/gson/annotations/SerializedName.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

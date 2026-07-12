@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/PropertyNamingStrategy.members/PropertyNamingStrategy.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/PropertyNamingStrategy.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/cfg/MapperConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/ClassIntrospector$MixInResolver.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedParameter.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMethod.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedField.members.trap.gz

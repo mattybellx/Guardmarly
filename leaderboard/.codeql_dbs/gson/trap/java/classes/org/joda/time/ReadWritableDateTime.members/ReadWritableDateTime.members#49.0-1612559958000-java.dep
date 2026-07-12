@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/ReadWritableDateTime.members/ReadWritableDateTime.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/ReadWritableDateTime.members.trap.gz
+classes/org/joda/time/ReadableDateTime.members.trap.gz
+classes/org/joda/time/ReadWritableInstant.members.trap.gz

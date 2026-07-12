@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/BitSet.members/BitSet.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/BitSet.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/stream/IntStream.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/java/nio/LongBuffer.members.trap.gz

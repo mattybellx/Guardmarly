@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/example/ClassWithExposeAnnotation.members/ClassWithExposeAnnotation.members#0.0-1783842439077-java.trap.gz
+
+TRAPS
+classes/com/example/ClassWithExposeAnnotation.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/annotations/Expose.members.trap.gz

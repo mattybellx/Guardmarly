@@ -1,0 +1,402 @@
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:105: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat formatter;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:133: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FastDateFormat fastDateFormat;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:57: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FastDateFormat fastDateFormat = FastDateFormat.getInstance("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:58: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FixedDateFormat fixedDateFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:100: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat customFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:172: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fastFormatter(final Blackhole blackhole, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:191: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fixedFormatter(final Blackhole blackhole, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                  ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:107: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FastDatePrinter fastFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:109: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FixedDateFormat fixedFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:91: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:118: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:04] [javac-output-16138] warning: [processing] No processor claimed any of these annotations: /javax.persistence.GeneratedValue,/org.openjdk.jmh.annotations.Group,/org.openjdk.jmh.annotations.OutputTimeUnit,/org.openjdk.jmh.annotations.Threads,/javax.persistence.Id,/javax.persistence.Convert,/javax.persistence.Table,/javax.persistence.Column,/org.openjdk.jmh.annotations.Warmup,/org.apache.logging.log4j.perf.internal.annotation.SuppressFBWarnings,/org.openjdk.jmh.annotations.State,/org.openjdk.jmh.annotations.Benchmark,/org.openjdk.jmh.annotations.Fork,/javax.persistence.Entity,/org.openjdk.jmh.annotations.Measurement,/org.openjdk.jmh.annotations.TearDown,/org.openjdk.jmh.annotations.Setup,/org.openjdk.jmh.annotations.Param,/org.openjdk.jmh.annotations.BenchmarkMode
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:105: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat formatter;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:133: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FastDateFormat fastDateFormat;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:57: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FastDateFormat fastDateFormat = FastDateFormat.getInstance("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:58: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FixedDateFormat fixedDateFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:100: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat customFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:172: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fastFormatter(final Blackhole blackhole, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:191: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fixedFormatter(final Blackhole blackhole, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                  ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:107: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FastDatePrinter fastFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:109: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FixedDateFormat fixedFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:91: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:118: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:105: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat formatter;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:133: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FastDateFormat fastDateFormat;
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:57: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FastDateFormat fastDateFormat = FastDateFormat.getInstance("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:58: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private final FixedDateFormat fixedDateFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                   ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:100: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         private final FixedDateFormat customFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:04] [javac-output-16138]                       ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:172: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fastFormatter(final Blackhole blackhole, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:191: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]     private void fixedFormatter(final Blackhole blackhole, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                  ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:107: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FastDatePrinter fastFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:109: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]         final FixedDateFormat fixedFormatter;
+[2026-07-12 07:59:04] [javac-output-16138]               ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:91: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FastDatePrinter formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:04] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:118: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:04] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FixedDateFormat formatter) {
+[2026-07-12 07:59:04] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:105: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FixedDateFormat formatter;
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:133: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FastDateFormat fastDateFormat;
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:57: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private final FastDateFormat fastDateFormat = FastDateFormat.getInstance("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                   ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:58: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private final FixedDateFormat fixedDateFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                   ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:100: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FixedDateFormat customFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:172: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private void fastFormatter(final Blackhole blackhole, final FastDatePrinter formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:191: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private void fixedFormatter(final Blackhole blackhole, final FixedDateFormat formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                  ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:107: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         final FastDatePrinter fastFormatter;
+[2026-07-12 07:59:05] [javac-output-16138]               ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:109: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         final FixedDateFormat fixedFormatter;
+[2026-07-12 07:59:05] [javac-output-16138]               ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:91: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FastDatePrinter formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:118: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FixedDateFormat formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:105: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FixedDateFormat formatter;
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:133: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FastDateFormat fastDateFormat;
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:57: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private final FastDateFormat fastDateFormat = FastDateFormat.getInstance("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                   ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:58: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private final FixedDateFormat fixedDateFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                   ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/ThreadsafeDateFormatBenchmark.java:100: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         private final FixedDateFormat customFormat = FixedDateFormat.createIfSupported("HH:mm:ss.SSS");
+[2026-07-12 07:59:05] [javac-output-16138]                       ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:172: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private void fastFormatter(final Blackhole blackhole, final FastDatePrinter formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:191: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]     private void fixedFormatter(final Blackhole blackhole, final FixedDateFormat formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                  ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:107: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         final FastDatePrinter fastFormatter;
+[2026-07-12 07:59:05] [javac-output-16138]               ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterBenchmark.java:109: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         final FixedDateFormat fixedFormatter;
+[2026-07-12 07:59:05] [javac-output-16138]               ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:91: warning: [deprecation] FastDatePrinter in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FastDatePrinter formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/instant/InstantPatternFormatterImpactBenchmark.java:118: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]             final Blackhole blackhole, final List<LogEvent> logEvents, final FixedDateFormat formatter) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                                              ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutBenchmarkReport.java:224: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:05] [javac-output-16138]         final V object = (V) JsonReader.read(json);
+[2026-07-12 07:59:05] [javac-output-16138]                                             ^
+[2026-07-12 07:59:05] [javac-output-16138]   required: V
+[2026-07-12 07:59:05] [javac-output-16138]   found:    Object
+[2026-07-12 07:59:05] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:05] [javac-output-16138]     V extends Object declared in method <V>readObject(File)
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutBenchmarkReport.java:232: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:05] [javac-output-16138]             final Map<String, Object> lastMap = (Map<String, Object>) lastObject;
+[2026-07-12 07:59:05] [javac-output-16138]                                                                       ^
+[2026-07-12 07:59:05] [javac-output-16138]   required: Map<String,Object>
+[2026-07-12 07:59:05] [javac-output-16138]   found:    Object
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutBenchmarkReport.java:236: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:05] [javac-output-16138]         final V typedLastObject = (V) lastObject;
+[2026-07-12 07:59:05] [javac-output-16138]                                       ^
+[2026-07-12 07:59:05] [javac-output-16138]   required: V
+[2026-07-12 07:59:05] [javac-output-16138]   found:    Object
+[2026-07-12 07:59:05] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:05] [javac-output-16138]     V extends Object declared in method <V>readObjectAtPath(Object,String...)
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/layout/template/json/JsonTemplateLayoutBenchmarkReport.java:156: warning: [serial] serialization-related method readObject is not effective in an enum class
+[2026-07-12 07:59:05] [javac-output-16138]             final List<Object> jmhResult = readObject(jmhResultFile);
+[2026-07-12 07:59:05] [javac-output-16138]                                            ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/appender/StringAppender.java:40: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         if (layout != null && !(layout instanceof SerializedLayout)) {
+[2026-07-12 07:59:05] [javac-output-16138]                                                   ^
+[2026-07-12 07:59:05] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/appender/StringAppender.java:51: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:59:05] [javac-output-16138]         if (layout instanceof SerializedLayout) {
+[2026-07-12 07:59:05] [javac-output-16138]                               ^
+[2026-07-12 07:59:06] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:116: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:06] [javac-output-16138]             this.formatter = Objects.requireNonNull(FixedDateFormat.createIfSupported(pattern, TIME_ZONE.getID()));
+[2026-07-12 07:59:06] [javac-output-16138]                                                     ^
+[2026-07-12 07:59:06] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/InstantFormatBenchmark.java:143: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:59:06] [javac-output-16138]             this.fastDateFormat = FastDateFormat.getInstance(pattern, TIME_ZONE, LOCALE);
+[2026-07-12 07:59:06] [javac-output-16138]                                   ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/NamePatternConverterBenchmark.java:82: warning: [serial] serializable class BenchmarkLogEvent has no definition of serialVersionUID
+[2026-07-12 07:59:07] [javac-output-16138]     private static class BenchmarkLogEvent extends AbstractLogEvent {
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:52: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:54: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout(" ", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:56: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%c %m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:58: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d %c %m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:60: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d %m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:62: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%c%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:64: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:66: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d%m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:68: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%c%m%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:70: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%m %ex%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:72: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d %m%ex%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutBenchmark.java:74: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout("%d %c %m%ex%n", null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/PatternLayoutComparisonBenchmark.java:52: warning: [deprecation] createLayout(String,PatternSelector,Configuration,RegexReplacement,Charset,boolean,boolean,String,String) in PatternLayout has been deprecated
+[2026-07-12 07:59:07] [javac-output-16138]             PatternLayout.createLayout(LOG4JPATTERN, null, null, null, CHARSET_DEFAULT, false, true, null, null);
+[2026-07-12 07:59:07] [javac-output-16138]                          ^
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/SortedArrayVsHashMapBenchmark.java:113: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:59:07] [javac-output-16138]     public Map putAllMap() {
+[2026-07-12 07:59:07] [javac-output-16138]            ^
+[2026-07-12 07:59:07] [javac-output-16138]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:59:07] [javac-output-16138]   where K,V are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in interface Map
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in interface Map
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/SortedArrayVsHashMapBenchmark.java:130: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:59:07] [javac-output-16138]     public Map cloneMap() {
+[2026-07-12 07:59:07] [javac-output-16138]            ^
+[2026-07-12 07:59:07] [javac-output-16138]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:59:07] [javac-output-16138]   where K,V are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in interface Map
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in interface Map
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/SortedArrayVsHashMapBenchmark.java:131: warning: [rawtypes] found raw type: HashMap
+[2026-07-12 07:59:07] [javac-output-16138]         return new HashMap(populatedMap);
+[2026-07-12 07:59:07] [javac-output-16138]                    ^
+[2026-07-12 07:59:07] [javac-output-16138]   missing type arguments for generic class HashMap<K,V>
+[2026-07-12 07:59:07] [javac-output-16138]   where K,V are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class HashMap
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class HashMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/jmh/SortedArrayVsHashMapBenchmark.java:131: warning: [unchecked] unchecked call to HashMap(Map<? extends K,? extends V>) as a member of the raw type HashMap
+[2026-07-12 07:59:07] [javac-output-16138]         return new HashMap(populatedMap);
+[2026-07-12 07:59:07] [javac-output-16138]                ^
+[2026-07-12 07:59:07] [javac-output-16138]   where K,V are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class HashMap
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class HashMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:136: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         keys = (K[]) new Object[arraySize + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                      ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:137: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         values = (V[]) new Object[arraySize + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                        ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:205: warning: [rawtypes] found raw type: OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     private void initFrom0(final OpenHashStringMap other) {
+[2026-07-12 07:59:07] [javac-output-16138]                                  ^
+[2026-07-12 07:59:07] [javac-output-16138]   missing type arguments for generic class OpenHashStringMap<K,V>
+[2026-07-12 07:59:07] [javac-output-16138]   where K,V are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:212: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         keys = (K[]) Arrays.copyOf(other.keys, arraySize + 1);
+[2026-07-12 07:59:07] [javac-output-16138]                                   ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:213: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         values = (V[]) Arrays.copyOf(other.values, arraySize + 1);
+[2026-07-12 07:59:07] [javac-output-16138]                                     ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:324: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]                 action.accept((String) myKeys[pos], (VAL) values[pos]);
+[2026-07-12 07:59:07] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: VAL
+[2026-07-12 07:59:07] [javac-output-16138]   found:    V
+[2026-07-12 07:59:07] [javac-output-16138]   where V,VAL are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     VAL extends Object declared in method <VAL>forEach(BiConsumer<String,? super VAL>)
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:332: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]                     action.accept((String) myKeys[pos], (VAL) values[pos]);
+[2026-07-12 07:59:07] [javac-output-16138]                                                                     ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: VAL
+[2026-07-12 07:59:07] [javac-output-16138]   found:    V
+[2026-07-12 07:59:07] [javac-output-16138]   where V,VAL are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     VAL extends Object declared in method <VAL>forEach(BiConsumer<String,? super VAL>)
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:353: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]                 action.accept((String) myKeys[pos], (VAL) values[pos], state);
+[2026-07-12 07:59:07] [javac-output-16138]                                                                 ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: VAL
+[2026-07-12 07:59:07] [javac-output-16138]   found:    V
+[2026-07-12 07:59:07] [javac-output-16138]   where V,VAL,STATE are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     VAL extends Object declared in method <VAL,STATE>forEach(TriConsumer<String,? super VAL,STATE>,STATE)
+[2026-07-12 07:59:07] [javac-output-16138]     STATE extends Object declared in method <VAL,STATE>forEach(TriConsumer<String,? super VAL,STATE>,STATE)
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:361: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]                     action.accept((String) myKeys[pos], (VAL) values[pos], state);
+[2026-07-12 07:59:07] [javac-output-16138]                                                                     ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: VAL
+[2026-07-12 07:59:07] [javac-output-16138]   found:    V
+[2026-07-12 07:59:07] [javac-output-16138]   where V,VAL,STATE are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     VAL extends Object declared in method <VAL,STATE>forEach(TriConsumer<String,? super VAL,STATE>,STATE)
+[2026-07-12 07:59:07] [javac-output-16138]     STATE extends Object declared in method <VAL,STATE>forEach(TriConsumer<String,? super VAL,STATE>,STATE)
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:415: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         return (VAL) getObjectValue(key);
+[2026-07-12 07:59:07] [javac-output-16138]                                    ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: VAL
+[2026-07-12 07:59:07] [javac-output-16138]   found:    V
+[2026-07-12 07:59:07] [javac-output-16138]   where V,VAL are type-variables:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138]     VAL extends Object declared in method <VAL>getValue(String)
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:426: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         putObjectValue((K) key, (V) value);
+[2026-07-12 07:59:07] [javac-output-16138]                            ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K
+[2026-07-12 07:59:07] [javac-output-16138]   found:    String
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:426: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         putObjectValue((K) key, (V) value);
+[2026-07-12 07:59:07] [javac-output-16138]                                     ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V
+[2026-07-12 07:59:07] [javac-output-16138]   found:    String
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:502: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         putObjectValue((K) key, (V) value);
+[2026-07-12 07:59:07] [javac-output-16138]                            ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K
+[2026-07-12 07:59:07] [javac-output-16138]   found:    String
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:502: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         putObjectValue((K) key, (V) value);
+[2026-07-12 07:59:07] [javac-output-16138]                                     ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:659: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         final K newKey[] = (K[]) new Object[newN + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                                  ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:660: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         final V newValue[] = (V[]) new Object[newN + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                                    ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:699: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         final K key[] = this.keys = (K[]) new Object[arraySize + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                                           ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: K[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where K is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     K extends Object declared in class OpenHashStringMap
+[2026-07-12 07:59:07] [javac-output-16138] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-perf-test/src/main/java/org/apache/logging/log4j/perf/nogc/OpenHashStringMap.java:700: warning: [unchecked] unchecked cast
+[2026-07-12 07:59:07] [javac-output-16138]         final V value[] = this.values = (V[]) new Object[arraySize + 1];
+[2026-07-12 07:59:07] [javac-output-16138]                                               ^
+[2026-07-12 07:59:07] [javac-output-16138]   required: V[]
+[2026-07-12 07:59:07] [javac-output-16138]   found:    Object[]
+[2026-07-12 07:59:07] [javac-output-16138]   where V is a type-variable:
+[2026-07-12 07:59:07] [javac-output-16138]     V extends Object declared in class OpenHashStringMap

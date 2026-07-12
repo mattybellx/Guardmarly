@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonStringFormatVisitor.members/JsonStringFormatVisitor.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonStringFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonValueFormatVisitor.members.trap.gz

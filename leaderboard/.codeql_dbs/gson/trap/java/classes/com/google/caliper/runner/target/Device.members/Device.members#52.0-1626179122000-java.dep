@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/target/Device.members/Device.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/target/Device.members.trap.gz
+classes/com/google/common/util/concurrent/AbstractIdleService.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/runner/target/VmProcess$Spec.members.trap.gz
+classes/com/google/caliper/runner/target/VmProcess$Logger.members.trap.gz
+classes/com/google/caliper/runner/target/VmProcess.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/com/google/caliper/runner/config/VmConfig.members.trap.gz
+classes/com/google/caliper/runner/config/VmType.members.trap.gz
+classes/com/google/common/base/Optional.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/com/google/caliper/runner/target/Vm.members.trap.gz
+classes/com/google/caliper/runner/target/Target.members.trap.gz
+classes/com/google/caliper/runner/config/DeviceConfig.members.trap.gz
+classes/com/google/caliper/runner/target/ShutdownHookRegistrar.members.trap.gz

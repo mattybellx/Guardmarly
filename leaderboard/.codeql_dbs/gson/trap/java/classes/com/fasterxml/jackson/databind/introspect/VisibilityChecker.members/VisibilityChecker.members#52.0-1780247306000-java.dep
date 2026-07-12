@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/introspect/VisibilityChecker.members/VisibilityChecker.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/introspect/VisibilityChecker.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedField.members.trap.gz
+classes/java/lang/reflect/Field.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMember.members.trap.gz
+classes/java/lang/reflect/Member.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMethod.members.trap.gz
+classes/java/lang/reflect/Method.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Visibility.members.trap.gz
+classes/com/fasterxml/jackson/annotation/PropertyAccessor.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Value.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/UninitializedMessageException.members/UninitializedMessageException.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/UninitializedMessageException.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz
+classes/com/google/protobuf/InvalidProtocolBufferException.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz

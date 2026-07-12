@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/MoreSpecificTypeSerializationTest.java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest.members/MoreSpecificTypeSerializationTest.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithBaseFields.members/MoreSpecificTypeSerializationTest$ClassWithBaseFields.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$Sub.members/MoreSpecificTypeSerializationTest$Sub.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$Base.members/MoreSpecificTypeSerializationTest$Base.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithContainersOfBaseFields.members/MoreSpecificTypeSerializationTest$ClassWithContainersOfBaseFields.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithParameterizedBaseFields.members/MoreSpecificTypeSerializationTest$ClassWithParameterizedBaseFields.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ParameterizedSub.members/MoreSpecificTypeSerializationTest$ParameterizedSub.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ParameterizedBase.members/MoreSpecificTypeSerializationTest$ParameterizedBase.members#0.0-1783842439068-java.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithContainersOfParameterizedBaseFields.members/MoreSpecificTypeSerializationTest$ClassWithContainersOfParameterizedBaseFields.members#0.0-1783842439068-java.trap.gz
+modules/java.base.trap.gz

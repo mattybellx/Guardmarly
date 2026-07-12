@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/reflect/generics/tree/ClassTypeSignature.members/ClassTypeSignature.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/reflect/generics/tree/ClassTypeSignature.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/sun/reflect/generics/tree/FieldTypeSignature.members.trap.gz
+classes/sun/reflect/generics/visitor/TypeTreeVisitor.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/sun/reflect/generics/tree/SimpleClassTypeSignature.members.trap.gz

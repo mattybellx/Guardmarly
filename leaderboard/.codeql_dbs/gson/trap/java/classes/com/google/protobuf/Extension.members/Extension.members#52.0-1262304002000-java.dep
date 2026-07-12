@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Extension.members/Extension.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Extension.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz
+classes/com/google/protobuf/Extension$MessageType.members.trap.gz
+classes/com/google/protobuf/Extension$ExtensionType.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz

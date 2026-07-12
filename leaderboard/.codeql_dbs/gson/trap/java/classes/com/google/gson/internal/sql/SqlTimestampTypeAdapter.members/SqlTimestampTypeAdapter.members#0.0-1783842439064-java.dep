@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/sql/SqlTimestampTypeAdapter.members/SqlTimestampTypeAdapter.members#0.0-1783842439064-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/sql/SqlTimestampTypeAdapter.members.trap.gz
+classes/java/sql/Timestamp.members.trap.gz
+classes/com/google/gson/TypeAdapter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/Reader.members.trap.gz
+classes/com/google/gson/stream/JsonReader.members.trap.gz
+classes/java/io/Writer.members.trap.gz
+classes/com/google/gson/stream/JsonWriter.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/com/google/gson/TypeAdapterFactory.members.trap.gz

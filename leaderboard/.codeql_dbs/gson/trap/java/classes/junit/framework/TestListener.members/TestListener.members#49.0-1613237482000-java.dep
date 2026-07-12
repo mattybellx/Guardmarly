@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/junit/framework/TestListener.members/TestListener.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/junit/framework/TestListener.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/junit/framework/Test.members.trap.gz
+classes/junit/framework/AssertionFailedError.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz

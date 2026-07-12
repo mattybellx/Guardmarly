@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/security/auth/Subject.members/Subject.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/javax/security/auth/Subject.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/security/Principal.members.trap.gz
+classes/java/security/PrivilegedExceptionAction.members.trap.gz
+classes/java/security/AccessControlContext.members.trap.gz
+classes/java/security/PrivilegedActionException.members.trap.gz
+classes/java/security/PrivilegedAction.members.trap.gz

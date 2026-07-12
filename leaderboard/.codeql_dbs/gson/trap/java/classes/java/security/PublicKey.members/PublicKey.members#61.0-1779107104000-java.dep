@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/security/PublicKey.members/PublicKey.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/security/PublicKey.members.trap.gz
+classes/java/security/Key.members.trap.gz

@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/base/Objects.members/Objects.members#52.0-1616154040000-java.trap.gz
+
+TRAPS
+classes/com/google/common/base/Objects.members.trap.gz
+classes/com/google/common/base/ExtraObjectsMethodsForWeb.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

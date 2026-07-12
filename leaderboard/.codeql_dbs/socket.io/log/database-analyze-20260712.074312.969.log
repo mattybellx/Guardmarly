@@ -1,0 +1,13 @@
+[2026-07-12 07:43:12] This is codeql database analyze benchmarks/report/.codeql_dbs/socket.io --format=sarif-latest --output=benchmarks/report/.codeql_dbs/socket.io/results.sarif codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:43:12] Log file was started late.
+[2026-07-12 07:43:12] [PROGRESS] database analyze> Running queries.
+[2026-07-12 07:43:13] Running plumbing command: codeql database run-queries --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io,codeql/javascript-queries:codeql-suites/javascript-security-extended.qls -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:43:13] Calling plumbing command: codeql resolve ram --dataset=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/db-javascript --format=json
+[2026-07-12 07:43:13] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx1800M",
+                        "--off-heap-ram=1455"
+                      ]
+[2026-07-12 07:43:13] Chaining via /tmp/codeql.DBq3g8tF to plumbing: execute queries -J-Xmx1800M --off-heap-ram=1455 --verbosity=progress --logdir=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/log --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io,codeql/javascript-queries:codeql-suites/javascript-security-extended.qls --output=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/results -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/socket.io/db-javascript codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:43:13] Plumbing command codeql database run-queries completed with status 70.
+[2026-07-12 07:43:13] Exiting with code 70

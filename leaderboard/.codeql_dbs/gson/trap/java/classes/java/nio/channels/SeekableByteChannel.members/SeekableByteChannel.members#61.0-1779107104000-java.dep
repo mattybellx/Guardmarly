@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/channels/SeekableByteChannel.members/SeekableByteChannel.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/channels/SeekableByteChannel.members.trap.gz
+classes/java/nio/channels/ByteChannel.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz

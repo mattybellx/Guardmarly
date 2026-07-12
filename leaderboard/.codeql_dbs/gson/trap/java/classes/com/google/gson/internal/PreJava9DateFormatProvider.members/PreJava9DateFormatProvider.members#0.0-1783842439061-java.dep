@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/PreJava9DateFormatProvider.members/PreJava9DateFormatProvider.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/PreJava9DateFormatProvider.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/text/DateFormat.members.trap.gz

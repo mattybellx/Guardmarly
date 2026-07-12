@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/atomic/AtomicLongArray.members/AtomicLongArray.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/atomic/AtomicLongArray.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/function/LongBinaryOperator.members.trap.gz
+classes/java/util/function/LongUnaryOperator.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

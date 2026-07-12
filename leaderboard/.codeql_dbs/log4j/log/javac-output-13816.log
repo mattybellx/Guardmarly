@@ -1,0 +1,61 @@
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:26: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816] import sun.misc.Unsafe;
+[2026-07-12 07:51:41] [javac-output-13816]                ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:34: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static final Unsafe unsafe = findUnsafe();
+[2026-07-12 07:51:41] [javac-output-13816]                          ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:36: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static Unsafe findUnsafe() {
+[2026-07-12 07:51:41] [javac-output-13816]                    ^
+[2026-07-12 07:51:41] [javac-output-13816] warning: [processing] No processor claimed any of these annotations: /com.fasterxml.jackson.annotation.JsonIgnore,/com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty,/com.fasterxml.jackson.annotation.JsonCreator,/com.fasterxml.jackson.annotation.JsonPropertyOrder,/com.fasterxml.jackson.annotation.JsonProperty,/com.fasterxml.jackson.annotation.JsonIgnoreProperties
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:26: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816] import sun.misc.Unsafe;
+[2026-07-12 07:51:41] [javac-output-13816]                ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:34: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static final Unsafe unsafe = findUnsafe();
+[2026-07-12 07:51:41] [javac-output-13816]                          ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:36: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static Unsafe findUnsafe() {
+[2026-07-12 07:51:41] [javac-output-13816]                    ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:26: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816] import sun.misc.Unsafe;
+[2026-07-12 07:51:41] [javac-output-13816]                ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:34: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static final Unsafe unsafe = findUnsafe();
+[2026-07-12 07:51:41] [javac-output-13816]                          ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:36: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static Unsafe findUnsafe() {
+[2026-07-12 07:51:41] [javac-output-13816]                    ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:26: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816] import sun.misc.Unsafe;
+[2026-07-12 07:51:41] [javac-output-13816]                ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:34: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static final Unsafe unsafe = findUnsafe();
+[2026-07-12 07:51:41] [javac-output-13816]                          ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:36: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static Unsafe findUnsafe() {
+[2026-07-12 07:51:41] [javac-output-13816]                    ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:26: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816] import sun.misc.Unsafe;
+[2026-07-12 07:51:41] [javac-output-13816]                ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:34: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static final Unsafe unsafe = findUnsafe();
+[2026-07-12 07:51:41] [javac-output-13816]                          ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:36: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:41] [javac-output-13816]     private static Unsafe findUnsafe() {
+[2026-07-12 07:51:41] [javac-output-13816]                    ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/impl/ExtendedClassInfo.java:26: warning: [serial] serializable class ExtendedClassInfo has no definition of serialVersionUID
+[2026-07-12 07:51:41] [javac-output-13816] public class ExtendedClassInfo implements Serializable {
+[2026-07-12 07:51:41] [javac-output-13816]              ^
+[2026-07-12 07:51:41] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/jackson/Log4jStackTraceElementDeserializer.java:59: warning: [deprecation] getCurrentName() in JsonParser has been deprecated
+[2026-07-12 07:51:41] [javac-output-13816]                 final String propName = jp.getCurrentName();
+[2026-07-12 07:51:41] [javac-output-13816]                                           ^
+[2026-07-12 07:51:43] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:38: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:43] [javac-output-13816]             return AccessController.doPrivileged(new PrivilegedExceptionAction<Unsafe>() {
+[2026-07-12 07:51:43] [javac-output-13816]                                                                                ^
+[2026-07-12 07:51:43] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:41: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:43] [javac-output-13816]                 public Unsafe run() throws ReflectiveOperationException, SecurityException {
+[2026-07-12 07:51:43] [javac-output-13816]                        ^
+[2026-07-12 07:51:43] [javac-output-13816] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-java9/src/main/java/org/apache/logging/log4j/core/util/internal/UnsafeUtil.java:44: warning: Unsafe is internal proprietary API and may be removed in a future release
+[2026-07-12 07:51:43] [javac-output-13816]                     return (Unsafe) unsafeField.get(null);
+[2026-07-12 07:51:43] [javac-output-13816]                             ^

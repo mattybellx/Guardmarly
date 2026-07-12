@@ -1,0 +1,320 @@
+[2026-07-12 07:51:28] [javac-output-13775] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:51:28] [javac-output-13775] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:51:28] [javac-output-13775] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:51:30] [javac-output-13775] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:51:30] [javac-output-13775] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:51:30] [javac-output-13775] warning: [processing] No processor claimed any of these annotations: com.google.errorprone.annotations.InlineMe,org.apache.logging.log4j.message.AsynchronouslyFormattable,org.osgi.annotation.bundle.Export,aQute.bnd.annotation.jpms.ExportTo,org.jspecify.annotations.NullMarked,org.apache.logging.log4j.util.PerformanceSensitive,org.osgi.annotation.bundle.Headers,org.osgi.annotation.versioning.Version,org.apache.logging.log4j.util.InternalApi,aQute.bnd.annotation.spi.ServiceConsumer,aQute.bnd.annotation.spi.ServiceProvider,org.apache.logging.log4j.internal.annotation.SuppressFBWarnings
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:157: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:32] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:32] [javac-output-13775]                   ^
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:170: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]             result.put(data.getKeyAt(i), (V) data.getValueAt(i));
+[2026-07-12 07:51:32] [javac-output-13775]                                                             ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: V
+[2026-07-12 07:51:32] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:32] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:463: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) new MapMessage<>(map);
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M#2
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M#1,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M#1,V,M#2 are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M#1 extends MapMessage<M#1,V>
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     M#2 extends MapMessage<M#2,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:623: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:638: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:653: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:668: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:683: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:698: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:713: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:728: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:743: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessage.java:757: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:32] [javac-output-13775]         return (M) this;
+[2026-07-12 07:51:32] [javac-output-13775]                    ^
+[2026-07-12 07:51:32] [javac-output-13775]   required: M
+[2026-07-12 07:51:32] [javac-output-13775]   found:    MapMessage<M,V>
+[2026-07-12 07:51:32] [javac-output-13775]   where M,V are type-variables:
+[2026-07-12 07:51:32] [javac-output-13775]     M extends MapMessage<M,V> declared in class MapMessage
+[2026-07-12 07:51:32] [javac-output-13775]     V extends Object declared in class MapMessage
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/ThreadContext.java:153: warning: [serial] serializable class NoOpThreadContextStack has no definition of serialVersionUID
+[2026-07-12 07:51:33] [javac-output-13775]     private static final class NoOpThreadContextStack extends EmptyThreadContextStack {
+[2026-07-12 07:51:33] [javac-output-13775]                                ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/internal/map/UnmodifiableArrayBackedMap.java:432: warning: [overloads] <V>forEach(org.apache.logging.log4j.util.BiConsumer<String,? super V>) in UnmodifiableArrayBackedMap is potentially ambiguous with forEach(java.util.function.BiConsumer<? super String,? super String>) in UnmodifiableArrayBackedMap
+[2026-07-12 07:51:33] [javac-output-13775]     public <V> void forEach(final org.apache.logging.log4j.util.BiConsumer<String, ? super V> action) {
+[2026-07-12 07:51:33] [javac-output-13775]                     ^
+[2026-07-12 07:51:33] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:33] [javac-output-13775]     V extends Object declared in method <V>forEach(org.apache.logging.log4j.util.BiConsumer<String,? super V>)
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/internal/map/UnmodifiableArrayBackedMap.java:436: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:33] [javac-output-13775]             final V value = (V) backingArray[getArrayIndexForValue(i)];
+[2026-07-12 07:51:33] [javac-output-13775]                                             ^
+[2026-07-12 07:51:33] [javac-output-13775]   required: V
+[2026-07-12 07:51:33] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:33] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:33] [javac-output-13775]     V extends Object declared in method <V>forEach(BiConsumer<String,? super V>)
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/internal/map/UnmodifiableArrayBackedMap.java:446: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:33] [javac-output-13775]             final V value = (V) backingArray[getArrayIndexForValue(i)];
+[2026-07-12 07:51:33] [javac-output-13775]                                             ^
+[2026-07-12 07:51:33] [javac-output-13775]   required: V
+[2026-07-12 07:51:33] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:33] [javac-output-13775]   where V,S are type-variables:
+[2026-07-12 07:51:33] [javac-output-13775]     V extends Object declared in method <V,S>forEach(TriConsumer<String,? super V,S>,S)
+[2026-07-12 07:51:33] [javac-output-13775]     S extends Object declared in method <V,S>forEach(TriConsumer<String,? super V,S>,S)
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/internal/map/UnmodifiableArrayBackedMap.java:474: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:33] [javac-output-13775]                 return (V) backingArray[getArrayIndexForValue(i)];
+[2026-07-12 07:51:33] [javac-output-13775]                                        ^
+[2026-07-12 07:51:33] [javac-output-13775]   required: V
+[2026-07-12 07:51:33] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:33] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:33] [javac-output-13775]     V extends Object declared in method <V>getValue(String)
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/internal/map/UnmodifiableArrayBackedMap.java:79: warning: [serial] non-transient instance field of a serializable class declared with an array having a non-serializable base component type Object
+[2026-07-12 07:51:33] [javac-output-13775]             return (String) backingArray[getArrayIndexForKey(index)];
+[2026-07-12 07:51:33] [javac-output-13775]                             ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/DefaultFlowMessageFactory.java:80: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:33] [javac-output-13775]         public String getFormat() {
+[2026-07-12 07:51:33] [javac-output-13775]                       ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/DefaultFlowMessageFactory.java:82: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:33] [javac-output-13775]                 return text + " " + message.getFormat();
+[2026-07-12 07:51:33] [javac-output-13775]                                            ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/DefaultFlowMessageFactory.java:136: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:33] [javac-output-13775]         private final Object result;
+[2026-07-12 07:51:33] [javac-output-13775]                              ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/FormattedMessage.java:158: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:33] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:33] [javac-output-13775]                   ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/LocalizedMessage.java:202: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:33] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:33] [javac-output-13775]                   ^
+[2026-07-12 07:51:33] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/AbstractLogger.java:1500: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:33] [javac-output-13775]         return (MF) messageFactory;
+[2026-07-12 07:51:33] [javac-output-13775]                     ^
+[2026-07-12 07:51:33] [javac-output-13775]   required: MF
+[2026-07-12 07:51:33] [javac-output-13775]   found:    MessageFactory2
+[2026-07-12 07:51:33] [javac-output-13775]   where MF is a type-variable:
+[2026-07-12 07:51:33] [javac-output-13775]     MF extends MessageFactory declared in method <MF>getMessageFactory()
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/AbstractLogger.java:2996: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]                         message.getFormat(),
+[2026-07-12 07:51:34] [javac-output-13775]                                ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/AbstractLogger.java:104: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final MessageFactory2 messageFactory;
+[2026-07-12 07:51:34] [javac-output-13775]                                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/AbstractLogger.java:105: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final FlowMessageFactory flowMessageFactory;
+[2026-07-12 07:51:34] [javac-output-13775]                                      ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/status/StatusLogger.java:509: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final Config config;
+[2026-07-12 07:51:34] [javac-output-13775]                          ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/status/StatusLogger.java:511: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final StatusConsoleListener fallbackListener;
+[2026-07-12 07:51:34] [javac-output-13775]                                         ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/status/StatusLogger.java:513: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final List<StatusListener> listeners;
+[2026-07-12 07:51:34] [javac-output-13775]                                        ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/status/StatusLogger.java:521: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final Queue<StatusData> buffer = new ConcurrentLinkedQueue<>();
+[2026-07-12 07:51:34] [javac-output-13775]                                     ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/status/StatusData.java:41: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private final DateTimeFormatter instantFormatter;
+[2026-07-12 07:51:34] [javac-output-13775]                                     ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessageJsonFormatter.java:96: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:34] [javac-output-13775]             final Map<Object, Object> map = (Map<Object, Object>) object;
+[2026-07-12 07:51:34] [javac-output-13775]                                                                   ^
+[2026-07-12 07:51:34] [javac-output-13775]   required: Map<Object,Object>
+[2026-07-12 07:51:34] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessageJsonFormatter.java:103: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:34] [javac-output-13775]             final List<Object> list = (List<Object>) object;
+[2026-07-12 07:51:34] [javac-output-13775]                                                      ^
+[2026-07-12 07:51:34] [javac-output-13775]   required: List<Object>
+[2026-07-12 07:51:34] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MapMessageJsonFormatter.java:107: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:34] [javac-output-13775]             final Collection<Object> collection = (Collection<Object>) object;
+[2026-07-12 07:51:34] [javac-output-13775]                                                                        ^
+[2026-07-12 07:51:34] [javac-output-13775]   required: Collection<Object>
+[2026-07-12 07:51:34] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/MessageFormatMessage.java:97: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ObjectArrayMessage.java:77: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ObjectMessage.java:75: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ParameterizedMessage.java:210: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ParameterizedNoReferenceMessageFactory.java:67: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]         public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                       ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ReusableParameterizedMessage.java:344: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ReusableSimpleMessage.java:45: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ReusableSimpleMessage.java:29: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:34] [javac-output-13775]     private CharSequence charSequence;
+[2026-07-12 07:51:34] [javac-output-13775]                          ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ReusableObjectMessage.java:57: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:34] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/SimpleMessage.java:79: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:34] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:34] [javac-output-13775]                   ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/StringFormattedMessage.java:100: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:35] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:35] [javac-output-13775]                   ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/StructuredDataCollectionMessage.java:51: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:35] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:35] [javac-output-13775]                   ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/StructuredDataCollectionMessage.java:32: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     private final List<StructuredDataMessage> structuredDataMessageList;
+[2026-07-12 07:51:35] [javac-output-13775]                                               ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ThreadDumpMessage.java:112: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:51:35] [javac-output-13775]     public String getFormat() {
+[2026-07-12 07:51:35] [javac-output-13775]                   ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/message/ThreadDumpMessage.java:47: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     private volatile Map<ThreadInformation, StackTraceElement[]> threads;
+[2026-07-12 07:51:35] [javac-output-13775]                                                                  ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/simple/SimpleLogger.java:57: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     private PrintStream stream;
+[2026-07-12 07:51:35] [javac-output-13775]                         ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/DefaultThreadContextMap.java:147: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:35] [javac-output-13775]         return (V) get(key);
+[2026-07-12 07:51:35] [javac-output-13775]                       ^
+[2026-07-12 07:51:35] [javac-output-13775]   required: V
+[2026-07-12 07:51:35] [javac-output-13775]   found:    String
+[2026-07-12 07:51:35] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:35] [javac-output-13775]     V extends Object declared in method <V>getValue(String)
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/DefaultThreadContextMap.java:50: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     private ThreadLocal<Object[]> localState;
+[2026-07-12 07:51:35] [javac-output-13775]                                   ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/MutableThreadContextStack.java:37: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     private final List<String> list;
+[2026-07-12 07:51:35] [javac-output-13775]                                ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/spi/ExtendedLoggerWrapper.java:35: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:35] [javac-output-13775]     protected final ExtendedLogger logger;
+[2026-07-12 07:51:35] [javac-output-13775]                                    ^
+[2026-07-12 07:51:35] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/Cast.java:38: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:35] [javac-output-13775]         final T t = (T) o;
+[2026-07-12 07:51:35] [javac-output-13775]                         ^
+[2026-07-12 07:51:35] [javac-output-13775]   required: T
+[2026-07-12 07:51:35] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:35] [javac-output-13775]   where T is a type-variable:
+[2026-07-12 07:51:35] [javac-output-13775]     T extends Object declared in method <T>cast(Object)
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:104: warning: [deprecation] Provider(Properties,URL,ClassLoader) in Provider has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]             addProvider(new Provider(props, url, cl));
+[2026-07-12 07:51:36] [javac-output-13775]                         ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:198: warning: [deprecation] FACTORY_PROPERTY_NAME in LogManager has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]         final String factoryClassName = properties.getStringProperty(LogManager.FACTORY_PROPERTY_NAME);
+[2026-07-12 07:51:36] [javac-output-13775]                                                                                ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:203: warning: [deprecation] FACTORY_PROPERTY_NAME in LogManager has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]                         LogManager.FACTORY_PROPERTY_NAME,
+[2026-07-12 07:51:36] [javac-output-13775]                                   ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:209: warning: [deprecation] FACTORY_PROPERTY_NAME in LogManager has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]                         LogManager.FACTORY_PROPERTY_NAME,
+[2026-07-12 07:51:36] [javac-output-13775]                                   ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:231: warning: [deprecation] FACTORY_PROPERTY_NAME in LogManager has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]                                 LogManager.FACTORY_PROPERTY_NAME,
+[2026-07-12 07:51:36] [javac-output-13775]                                           ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/ProviderUtil.java:238: warning: [deprecation] FACTORY_PROPERTY_NAME in LogManager has been deprecated
+[2026-07-12 07:51:36] [javac-output-13775]                             LogManager.FACTORY_PROPERTY_NAME,
+[2026-07-12 07:51:36] [javac-output-13775]                                       ^
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/SortedArrayStringMap.java:180: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:36] [javac-output-13775]         return (V) values[index];
+[2026-07-12 07:51:36] [javac-output-13775]                          ^
+[2026-07-12 07:51:36] [javac-output-13775]   required: V
+[2026-07-12 07:51:36] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:36] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:36] [javac-output-13775]     V extends Object declared in method <V>getValue(String)
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/SortedArrayStringMap.java:372: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:36] [javac-output-13775]         return (V) values[index];
+[2026-07-12 07:51:36] [javac-output-13775]                          ^
+[2026-07-12 07:51:36] [javac-output-13775]   required: V
+[2026-07-12 07:51:36] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:36] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:36] [javac-output-13775]     V extends Object declared in method <V>getValueAt(int)
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/SortedArrayStringMap.java:386: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:36] [javac-output-13775]                 action.accept(keys[i], (V) values[i]);
+[2026-07-12 07:51:36] [javac-output-13775]                                                  ^
+[2026-07-12 07:51:36] [javac-output-13775]   required: V
+[2026-07-12 07:51:36] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:36] [javac-output-13775]   where V is a type-variable:
+[2026-07-12 07:51:36] [javac-output-13775]     V extends Object declared in method <V>forEach(BiConsumer<String,? super V>)
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/SortedArrayStringMap.java:399: warning: [unchecked] unchecked cast
+[2026-07-12 07:51:36] [javac-output-13775]                 action.accept(keys[i], (V) values[i], state);
+[2026-07-12 07:51:36] [javac-output-13775]                                                  ^
+[2026-07-12 07:51:36] [javac-output-13775]   required: V
+[2026-07-12 07:51:36] [javac-output-13775]   found:    Object
+[2026-07-12 07:51:36] [javac-output-13775]   where V,T are type-variables:
+[2026-07-12 07:51:36] [javac-output-13775]     V extends Object declared in method <V,T>forEach(TriConsumer<String,? super V,T>,T)
+[2026-07-12 07:51:36] [javac-output-13775]     T extends Object declared in method <V,T>forEach(TriConsumer<String,? super V,T>,T)
+[2026-07-12 07:51:36] [javac-output-13775] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-api/src/main/java/org/apache/logging/log4j/util/Timer.java:49: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:51:36] [javac-output-13775]     private ThreadLocal<Long> startTime = new ThreadLocal<Long>() {
+[2026-07-12 07:51:36] [javac-output-13775]                               ^

@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/logging/Logger.members/Logger.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/logging/Logger.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/ResourceBundle.members.trap.gz
+classes/java/util/logging/Handler.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/SecurityException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/logging/Level.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/util/logging/LogRecord.members.trap.gz
+classes/java/util/logging/Filter.members.trap.gz

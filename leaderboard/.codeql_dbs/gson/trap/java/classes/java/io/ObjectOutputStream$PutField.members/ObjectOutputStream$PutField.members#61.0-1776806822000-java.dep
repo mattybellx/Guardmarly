@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/ObjectOutputStream$PutField.members/ObjectOutputStream$PutField.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/io/ObjectOutputStream$PutField.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/ObjectOutputStream.members.trap.gz
+classes/java/io/ObjectOutput.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz

@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/GeneratedMessage$ExtensionDescriptorRetriever.members/GeneratedMessage$ExtensionDescriptorRetriever.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/GeneratedMessage$ExtensionDescriptorRetriever.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz

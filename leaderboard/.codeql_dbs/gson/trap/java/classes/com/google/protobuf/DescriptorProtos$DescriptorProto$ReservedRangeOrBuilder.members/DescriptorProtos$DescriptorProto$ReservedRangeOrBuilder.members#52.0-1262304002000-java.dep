@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$DescriptorProto$ReservedRangeOrBuilder.members/DescriptorProtos$DescriptorProto$ReservedRangeOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$DescriptorProto$ReservedRangeOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$DescriptorProto.members.trap.gz

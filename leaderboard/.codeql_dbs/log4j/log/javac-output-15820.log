@@ -1,0 +1,39 @@
+[2026-07-12 07:57:58] [javac-output-15820] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:58] [javac-output-15820] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:58] [javac-output-15820] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:27: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820] import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+[2026-07-12 07:57:59] [javac-output-15820]                                                              ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:49: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820]     private static final class MongoClientHolder implements CloseableResource, Supplier<MongoClient> {
+[2026-07-12 07:57:59] [javac-output-15820]                                                             ^
+[2026-07-12 07:57:59] [javac-output-15820] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.junit.jupiter.api.extension.Extensions,org.apache.logging.log4j.core.test.junit.LoggerContextSource,org.apache.logging.log4j.test.junit.UsingStatusListener,org.apache.logging.log4j.mongodb4.UsingMongoDb4
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:27: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820] import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+[2026-07-12 07:57:59] [javac-output-15820]                                                              ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:49: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820]     private static final class MongoClientHolder implements CloseableResource, Supplier<MongoClient> {
+[2026-07-12 07:57:59] [javac-output-15820]                                                             ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:27: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820] import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+[2026-07-12 07:57:59] [javac-output-15820]                                                              ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:49: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820]     private static final class MongoClientHolder implements CloseableResource, Supplier<MongoClient> {
+[2026-07-12 07:57:59] [javac-output-15820]                                                             ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:27: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820] import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+[2026-07-12 07:57:59] [javac-output-15820]                                                              ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:49: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820]     private static final class MongoClientHolder implements CloseableResource, Supplier<MongoClient> {
+[2026-07-12 07:57:59] [javac-output-15820]                                                             ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:27: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820] import org.junit.jupiter.api.extension.ExtensionContext.Store.CloseableResource;
+[2026-07-12 07:57:59] [javac-output-15820]                                                              ^
+[2026-07-12 07:57:59] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4Resolver.java:49: warning: [deprecation] CloseableResource in Store has been deprecated
+[2026-07-12 07:57:59] [javac-output-15820]     private static final class MongoClientHolder implements CloseableResource, Supplier<MongoClient> {
+[2026-07-12 07:57:59] [javac-output-15820]                                                             ^
+[2026-07-12 07:58:00] [javac-output-15820] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-mongodb4/src/test/java/org/apache/logging/log4j/mongodb4/MongoDb4ProviderTest.java:110: warning: [unchecked] unchecked cast
+[2026-07-12 07:58:00] [javac-output-15820]             MongoCollection<Document> collection = (MongoCollection<Document>) collectionField.get(connection);
+[2026-07-12 07:58:00] [javac-output-15820]                                                                                                   ^
+[2026-07-12 07:58:00] [javac-output-15820]   required: MongoCollection<Document>
+[2026-07-12 07:58:00] [javac-output-15820]   found:    Object

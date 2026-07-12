@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/model/Value.members/Value.members#52.0-1626179106000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/model/Value.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz

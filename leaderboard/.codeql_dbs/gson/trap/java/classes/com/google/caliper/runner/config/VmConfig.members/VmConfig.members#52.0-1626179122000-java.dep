@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/config/VmConfig.members/VmConfig.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/config/VmConfig.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/auto/value/AutoValue.members.trap.gz
+classes/com/google/common/collect/ImmutableList.members.trap.gz
+classes/com/google/common/collect/ImmutableCollection.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/RandomAccess.members.trap.gz
+classes/com/google/common/base/Optional.members.trap.gz
+classes/com/google/caliper/runner/config/VmType.members.trap.gz
+classes/com/google/caliper/runner/config/VmConfig$Builder.members.trap.gz

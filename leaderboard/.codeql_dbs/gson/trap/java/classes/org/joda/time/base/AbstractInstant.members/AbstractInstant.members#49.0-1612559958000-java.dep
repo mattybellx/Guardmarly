@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/base/AbstractInstant.members/AbstractInstant.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/base/AbstractInstant.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/joda/time/ReadableInstant.members.trap.gz
+classes/org/joda/time/format/DateTimeFormatter.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Date.members.trap.gz
+classes/org/joda/time/Chronology.members.trap.gz
+classes/org/joda/time/MutableDateTime.members.trap.gz
+classes/org/joda/time/DateTimeZone.members.trap.gz
+classes/org/joda/time/DateTime.members.trap.gz
+classes/org/joda/time/Instant.members.trap.gz
+classes/org/joda/time/DateTimeField.members.trap.gz
+classes/org/joda/time/DateTimeFieldType.members.trap.gz

@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ser/AnyGetterWriter.members/AnyGetterWriter.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ser/AnyGetterWriter.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyWriter.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonGenerator.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/PropertyFilter.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonObjectFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializationConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/BeanProperty.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMember.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/std/MapSerializer.members.trap.gz

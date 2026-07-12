@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/core/InvalidBenchmarkException.members/InvalidBenchmarkException.members#52.0-1626179114000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/core/InvalidBenchmarkException.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz
+classes/java/io/PrintWriter.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

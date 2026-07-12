@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/Result.members/Result.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/Result.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/org/junit/runner/notification/RunListener.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/org/junit/runner/notification/Failure.members.trap.gz

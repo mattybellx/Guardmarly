@@ -1,0 +1,1437 @@
+[T 08:02:36 18969] CodeQL CLI version 2.26.0
+[T 08:02:36 18969] Initializing tracer.
+[T 08:02:36 18969] Initializing tags.
+[T 08:02:36 18969] ID set to 0000000000004A19_0000000000000001 (parent root)
+[T 08:02:36 18969] Initializing tracer.
+[T 08:02:36 18969] Initializing tags.
+[T 08:02:36 18969] ID set to 0000000000004A19_0000000000000002 (parent root)
+[T 08:02:36 18969] Warning: SEMMLE_EXEC and SEMMLE_EXECP not set. Falling back to path lookup on argv[0].
+[T 08:02:36 18969] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux) ====
+[T 08:02:36 18969] Executing the following tracer actions:
+[T 08:02:36 18969] Tracer actions:
+[T 08:02:36 18969] pre_invocations(0)
+[T 08:02:36 18969] post_invocations(0)
+[T 08:02:36 18969] trace_languages(1): [csharp]
+[T 08:02:36 18969] Initializing tracer.
+[T 08:02:36 18969] Initializing tags.
+[T 08:02:36 18969] ID set to 0000000000004A19_0000000000000003 (parent 0000000000004A19_0000000000000002)
+[T 08:02:36 18969] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh (canonical: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh) ====
+[T 08:02:36 18969] Executing the following tracer actions:
+[T 08:02:36 18969] Tracer actions:
+[T 08:02:36 18969] pre_invocations(0)
+[T 08:02:36 18969] post_invocations(0)
+[T 08:02:36 18969] trace_languages(1): [csharp]
+[T 08:02:36 18972] Initializing tracer.
+[T 08:02:36 18972] Initializing tags.
+[T 08:02:36 18972] ID set to 0000000000004A1C_0000000000000001 (parent 0000000000004A19_0000000000000003)
+[T 08:02:36 18972] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp (canonical: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp) ====
+[T 08:02:36 18972] Executing the following tracer actions:
+[T 08:02:36 18972] Tracer actions:
+[T 08:02:36 18972] pre_invocations(0)
+[T 08:02:36 18972] post_invocations(0)
+[T 08:02:36 18972] trace_languages(1): [csharp]
+[T 08:02:36 18980] Initializing tracer.
+[T 08:02:36 18980] Initializing tags.
+[T 08:02:36 18980] ID set to 0000000000004A24_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:36 18980] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:02:36 18980] Executing the following tracer actions:
+[T 08:02:36 18980] Tracer actions:
+[T 08:02:36 18980] pre_invocations(0)
+[T 08:02:36 18980] post_invocations(0)
+[T 08:02:36 18980] trace_languages(1): [csharp]
+[T 08:02:37 18988] Initializing tracer.
+[T 08:02:37 18988] Initializing tags.
+[T 08:02:37 18988] ID set to 0000000000004A2C_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:37 18988] ==== Candidate to intercept: /usr/bin/chmod (canonical: /usr/bin/chmod) ====
+[T 08:02:37 18988] Executing the following tracer actions:
+[T 08:02:37 18988] Tracer actions:
+[T 08:02:37 18988] pre_invocations(0)
+[T 08:02:37 18988] post_invocations(0)
+[T 08:02:37 18988] trace_languages(1): [csharp]
+[T 08:02:37 18989] Initializing tracer.
+[T 08:02:37 18989] Initializing tags.
+[T 08:02:37 18989] ID set to 0000000000004A2D_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:37 18989] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet-install.sh (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet-install.sh) ====
+[T 08:02:37 18989] Executing the following tracer actions:
+[T 08:02:37 18989] Tracer actions:
+[T 08:02:37 18989] pre_invocations(0)
+[T 08:02:37 18989] post_invocations(0)
+[T 08:02:37 18989] trace_languages(1): [csharp]
+[T 08:02:37 18989] Initializing tracer.
+[T 08:02:37 18989] Initializing tags.
+[T 08:02:37 18989] ID set to 0000000000004A2D_0000000000000002 (parent 0000000000004A2D_0000000000000001)
+[T 08:02:37 18989] ==== Candidate to intercept: bash (canonical: /usr/bin/bash) ====
+[T 08:02:37 18989] Executing the following tracer actions:
+[T 08:02:37 18989] Tracer actions:
+[T 08:02:37 18989] pre_invocations(0)
+[T 08:02:37 18989] post_invocations(0)
+[T 08:02:37 18989] trace_languages(1): [csharp]
+[T 08:02:37 18990] Initializing tracer.
+[T 08:02:37 18990] Initializing tags.
+[T 08:02:37 18990] ID set to 0000000000004A2E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 18990] ==== Candidate to intercept: /usr/bin/basename (canonical: /usr/bin/basename) ====
+[T 08:02:37 18990] Executing the following tracer actions:
+[T 08:02:37 18990] Tracer actions:
+[T 08:02:37 18990] pre_invocations(0)
+[T 08:02:37 18990] post_invocations(0)
+[T 08:02:37 18990] trace_languages(1): [csharp]
+[T 08:02:37 18994] Initializing tracer.
+[T 08:02:37 18994] Initializing tags.
+[T 08:02:37 18994] ID set to 0000000000004A32_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 18994] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 18994] Executing the following tracer actions:
+[T 08:02:37 18994] Tracer actions:
+[T 08:02:37 18994] pre_invocations(0)
+[T 08:02:37 18994] post_invocations(0)
+[T 08:02:37 18994] trace_languages(1): [csharp]
+[T 08:02:37 18996] Initializing tracer.
+[T 08:02:37 18996] Initializing tags.
+[T 08:02:37 18996] ID set to 0000000000004A34_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 18996] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:02:37 18996] Executing the following tracer actions:
+[T 08:02:37 18996] Tracer actions:
+[T 08:02:37 18996] pre_invocations(0)
+[T 08:02:37 18996] post_invocations(0)
+[T 08:02:37 18996] trace_languages(1): [csharp]
+[T 08:02:37 19000] Initializing tracer.
+[T 08:02:37 19000] Initializing tags.
+[T 08:02:37 19000] ID set to 0000000000004A38_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19000] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19000] Executing the following tracer actions:
+[T 08:02:37 19000] Tracer actions:
+[T 08:02:37 19000] pre_invocations(0)
+[T 08:02:37 19000] post_invocations(0)
+[T 08:02:37 19000] trace_languages(1): [csharp]
+[T 08:02:37 19002] Initializing tracer.
+[T 08:02:37 19002] Initializing tags.
+[T 08:02:37 19002] ID set to 0000000000004A3A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19002] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:02:37 19002] Executing the following tracer actions:
+[T 08:02:37 19002] Tracer actions:
+[T 08:02:37 19002] pre_invocations(0)
+[T 08:02:37 19002] post_invocations(0)
+[T 08:02:37 19002] trace_languages(1): [csharp]
+[T 08:02:37 19005] Initializing tracer.
+[T 08:02:37 19005] Initializing tags.
+[T 08:02:37 19005] ID set to 0000000000004A3D_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19005] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:37 19006] Initializing tracer.
+[T 08:02:37 19006] Initializing tags.
+[T 08:02:37 19006] ID set to 0000000000004A3E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19006] ==== Candidate to intercept: /usr/bin/ldd (canonical: /usr/bin/ldd) ====
+[T 08:02:37 19005] Executing the following tracer actions:
+[T 08:02:37 19005] Tracer actions:
+[T 08:02:37 19005] pre_invocations(0)
+[T 08:02:37 19005] post_invocations(0)
+[T 08:02:37 19005] trace_languages(1): [csharp]
+[T 08:02:37 19006] Executing the following tracer actions:
+[T 08:02:37 19006] Tracer actions:
+[T 08:02:37 19006] pre_invocations(0)
+[T 08:02:37 19006] post_invocations(0)
+[T 08:02:37 19006] trace_languages(1): [csharp]
+[T 08:02:37 19010] Initializing tracer.
+[T 08:02:37 19010] Initializing tags.
+[T 08:02:37 19010] ID set to 0000000000004A42_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19010] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19010] Executing the following tracer actions:
+[T 08:02:37 19010] Tracer actions:
+[T 08:02:37 19010] pre_invocations(0)
+[T 08:02:37 19010] post_invocations(0)
+[T 08:02:37 19010] trace_languages(1): [csharp]
+[T 08:02:37 19014] Initializing tracer.
+[T 08:02:37 19014] Initializing tags.
+[T 08:02:37 19014] ID set to 0000000000004A46_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19014] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19014] Executing the following tracer actions:
+[T 08:02:37 19014] Tracer actions:
+[T 08:02:37 19014] pre_invocations(0)
+[T 08:02:37 19014] post_invocations(0)
+[T 08:02:37 19014] trace_languages(1): [csharp]
+[T 08:02:37 19018] Initializing tracer.
+[T 08:02:37 19018] Initializing tags.
+[T 08:02:37 19018] ID set to 0000000000004A4A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19018] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19018] Executing the following tracer actions:
+[T 08:02:37 19018] Tracer actions:
+[T 08:02:37 19018] pre_invocations(0)
+[T 08:02:37 19018] post_invocations(0)
+[T 08:02:37 19018] trace_languages(1): [csharp]
+[T 08:02:37 19024] Initializing tracer.
+[T 08:02:37 19024] Initializing tags.
+[T 08:02:37 19024] ID set to 0000000000004A50_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19024] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:02:37 19024] Executing the following tracer actions:
+[T 08:02:37 19024] Tracer actions:
+[T 08:02:37 19024] pre_invocations(0)
+[T 08:02:37 19024] post_invocations(0)
+[T 08:02:37 19024] trace_languages(1): [csharp]
+[T 08:02:37 19027] Initializing tracer.
+[T 08:02:37 19027] Initializing tags.
+[T 08:02:37 19027] ID set to 0000000000004A53_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19027] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:37 19028] Initializing tracer.
+[T 08:02:37 19028] Initializing tags.
+[T 08:02:37 19028] ID set to 0000000000004A54_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19028] ==== Candidate to intercept: /usr/bin/ldd (canonical: /usr/bin/ldd) ====
+[T 08:02:37 19027] Executing the following tracer actions:
+[T 08:02:37 19027] Tracer actions:
+[T 08:02:37 19027] pre_invocations(0)
+[T 08:02:37 19027] post_invocations(0)
+[T 08:02:37 19027] trace_languages(1): [csharp]
+[T 08:02:37 19028] Executing the following tracer actions:
+[T 08:02:37 19028] Tracer actions:
+[T 08:02:37 19028] pre_invocations(0)
+[T 08:02:37 19028] post_invocations(0)
+[T 08:02:37 19028] trace_languages(1): [csharp]
+[T 08:02:37 19031] Initializing tracer.
+[T 08:02:37 19031] Initializing tags.
+[T 08:02:37 19031] ID set to 0000000000004A57_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19031] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19031] Executing the following tracer actions:
+[T 08:02:37 19031] Tracer actions:
+[T 08:02:37 19031] pre_invocations(0)
+[T 08:02:37 19031] post_invocations(0)
+[T 08:02:37 19031] trace_languages(1): [csharp]
+[T 08:02:37 19035] Initializing tracer.
+[T 08:02:37 19035] Initializing tags.
+[T 08:02:37 19035] ID set to 0000000000004A5B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19035] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19035] Executing the following tracer actions:
+[T 08:02:37 19035] Tracer actions:
+[T 08:02:37 19035] pre_invocations(0)
+[T 08:02:37 19035] post_invocations(0)
+[T 08:02:37 19035] trace_languages(1): [csharp]
+[T 08:02:37 19040] Initializing tracer.
+[T 08:02:37 19040] Initializing tags.
+[T 08:02:37 19040] ID set to 0000000000004A60_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19040] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:37 19040] Executing the following tracer actions:
+[T 08:02:37 19040] Tracer actions:
+[T 08:02:37 19040] pre_invocations(0)
+[T 08:02:37 19040] post_invocations(0)
+[T 08:02:37 19040] trace_languages(1): [csharp]
+[T 08:02:37 19047] Initializing tracer.
+[T 08:02:37 19047] Initializing tags.
+[T 08:02:37 19047] ID set to 0000000000004A67_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19047] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:37 19047] Executing the following tracer actions:
+[T 08:02:37 19047] Tracer actions:
+[T 08:02:37 19047] pre_invocations(0)
+[T 08:02:37 19047] post_invocations(0)
+[T 08:02:37 19047] trace_languages(1): [csharp]
+[T 08:02:37 19051] Initializing tracer.
+[T 08:02:37 19051] Initializing tags.
+[T 08:02:37 19051] ID set to 0000000000004A6B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19051] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:02:37 19051] Executing the following tracer actions:
+[T 08:02:37 19051] Tracer actions:
+[T 08:02:37 19051] pre_invocations(0)
+[T 08:02:37 19051] post_invocations(0)
+[T 08:02:37 19051] trace_languages(1): [csharp]
+[T 08:02:37 19062] Initializing tracer.
+[T 08:02:37 19062] Initializing tags.
+[T 08:02:37 19062] ID set to 0000000000004A76_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19062] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:02:37 19062] Executing the following tracer actions:
+[T 08:02:37 19062] Tracer actions:
+[T 08:02:37 19062] pre_invocations(0)
+[T 08:02:37 19062] post_invocations(0)
+[T 08:02:37 19062] trace_languages(1): [csharp]
+[T 08:02:37 19067] Initializing tracer.
+[T 08:02:37 19067] Initializing tags.
+[T 08:02:37 19067] ID set to 0000000000004A7B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19067] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:37 19067] Executing the following tracer actions:
+[T 08:02:37 19067] Tracer actions:
+[T 08:02:37 19067] pre_invocations(0)
+[T 08:02:37 19067] post_invocations(0)
+[T 08:02:37 19067] trace_languages(1): [csharp]
+[T 08:02:37 19070] Initializing tracer.
+[T 08:02:37 19070] Initializing tags.
+[T 08:02:37 19070] ID set to 0000000000004A7E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19070] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:37 19070] Executing the following tracer actions:
+[T 08:02:37 19070] Tracer actions:
+[T 08:02:37 19070] pre_invocations(0)
+[T 08:02:37 19070] post_invocations(0)
+[T 08:02:37 19070] trace_languages(1): [csharp]
+[T 08:02:37 19078] Initializing tracer.
+[T 08:02:37 19078] Initializing tags.
+[T 08:02:37 19078] ID set to 0000000000004A86_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:37 19078] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:37 19078] Executing the following tracer actions:
+[T 08:02:37 19078] Tracer actions:
+[T 08:02:37 19078] pre_invocations(0)
+[T 08:02:37 19078] post_invocations(0)
+[T 08:02:37 19078] trace_languages(1): [csharp]
+[T 08:02:38 19081] Initializing tracer.
+[T 08:02:38 19081] Initializing tags.
+[T 08:02:38 19081] ID set to 0000000000004A89_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:38 19081] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:38 19081] Executing the following tracer actions:
+[T 08:02:38 19081] Tracer actions:
+[T 08:02:38 19081] pre_invocations(0)
+[T 08:02:38 19081] post_invocations(0)
+[T 08:02:38 19081] trace_languages(1): [csharp]
+[T 08:02:38 19086] Initializing tracer.
+[T 08:02:38 19086] Initializing tags.
+[T 08:02:38 19086] ID set to 0000000000004A8E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:38 19086] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:02:38 19086] Executing the following tracer actions:
+[T 08:02:38 19086] Tracer actions:
+[T 08:02:38 19086] pre_invocations(0)
+[T 08:02:38 19086] post_invocations(0)
+[T 08:02:38 19086] trace_languages(1): [csharp]
+[T 08:02:38 19094] Initializing tracer.
+[T 08:02:38 19094] Initializing tags.
+[T 08:02:38 19094] ID set to 0000000000004A96_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:38 19094] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:38 19094] Executing the following tracer actions:
+[T 08:02:38 19094] Tracer actions:
+[T 08:02:38 19094] pre_invocations(0)
+[T 08:02:38 19094] post_invocations(0)
+[T 08:02:38 19094] trace_languages(1): [csharp]
+[T 08:02:38 19095] Initializing tracer.
+[T 08:02:38 19095] Initializing tags.
+[T 08:02:38 19095] ID set to 0000000000004A97_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:38 19095] ==== Candidate to intercept: /usr/bin/mktemp (canonical: /usr/bin/mktemp) ====
+[T 08:02:38 19095] Executing the following tracer actions:
+[T 08:02:38 19095] Tracer actions:
+[T 08:02:38 19095] pre_invocations(0)
+[T 08:02:38 19095] post_invocations(0)
+[T 08:02:38 19095] trace_languages(1): [csharp]
+[T 08:02:38 19097] Initializing tracer.
+[T 08:02:38 19097] Initializing tags.
+[T 08:02:38 19097] ID set to 0000000000004A99_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:38 19097] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:38 19097] Executing the following tracer actions:
+[T 08:02:38 19097] Tracer actions:
+[T 08:02:38 19097] pre_invocations(0)
+[T 08:02:38 19097] post_invocations(0)
+[T 08:02:38 19097] trace_languages(1): [csharp]
+[T 08:02:42 19101] Initializing tracer.
+[T 08:02:42 19101] Initializing tags.
+[T 08:02:42 19101] ID set to 0000000000004A9D_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19101] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:42 19101] Executing the following tracer actions:
+[T 08:02:42 19101] Tracer actions:
+[T 08:02:42 19101] pre_invocations(0)
+[T 08:02:42 19101] post_invocations(0)
+[T 08:02:42 19101] trace_languages(1): [csharp]
+[T 08:02:42 19105] Initializing tracer.
+[T 08:02:42 19105] Initializing tags.
+[T 08:02:42 19105] ID set to 0000000000004AA1_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19105] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:42 19105] Executing the following tracer actions:
+[T 08:02:42 19105] Tracer actions:
+[T 08:02:42 19105] pre_invocations(0)
+[T 08:02:42 19105] post_invocations(0)
+[T 08:02:42 19106] Initializing tracer.
+[T 08:02:42 19105] trace_languages(1): [csharp]
+[T 08:02:42 19106] Initializing tags.
+[T 08:02:42 19106] ID set to 0000000000004AA2_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19106] ==== Candidate to intercept: /usr/bin/awk (canonical: /usr/bin/gawk) ====
+[T 08:02:42 19106] Executing the following tracer actions:
+[T 08:02:42 19106] Tracer actions:
+[T 08:02:42 19106] pre_invocations(0)
+[T 08:02:42 19106] post_invocations(0)
+[T 08:02:42 19106] trace_languages(1): [csharp]
+[T 08:02:42 19104] Initializing tracer.
+[T 08:02:42 19104] Initializing tags.
+[T 08:02:42 19104] ID set to 0000000000004AA0_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19104] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:02:42 19104] Executing the following tracer actions:
+[T 08:02:42 19104] Tracer actions:
+[T 08:02:42 19104] pre_invocations(0)
+[T 08:02:42 19104] post_invocations(0)
+[T 08:02:42 19104] trace_languages(1): [csharp]
+[T 08:02:42 19108] Initializing tracer.
+[T 08:02:42 19108] Initializing tags.
+[T 08:02:42 19108] ID set to 0000000000004AA4_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19108] ==== Candidate to intercept: /usr/bin/mktemp (canonical: /usr/bin/mktemp) ====
+[T 08:02:42 19108] Executing the following tracer actions:
+[T 08:02:42 19108] Tracer actions:
+[T 08:02:42 19108] pre_invocations(0)
+[T 08:02:42 19108] post_invocations(0)
+[T 08:02:42 19108] trace_languages(1): [csharp]
+[T 08:02:42 19109] Initializing tracer.
+[T 08:02:42 19109] Initializing tags.
+[T 08:02:42 19109] ID set to 0000000000004AA5_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:42 19109] ==== Candidate to intercept: /usr/bin/tar (canonical: /usr/bin/tar) ====
+[T 08:02:42 19109] Executing the following tracer actions:
+[T 08:02:42 19109] Tracer actions:
+[T 08:02:42 19109] pre_invocations(0)
+[T 08:02:42 19109] post_invocations(0)
+[T 08:02:42 19109] trace_languages(1): [csharp]
+[T 08:02:42 19110] Initializing tracer.
+[T 08:02:42 19110] Initializing tags.
+[T 08:02:42 19110] ID set to 0000000000004AA6_0000000000000001 (parent 0000000000004AA5_0000000000000001)
+[T 08:02:42 19110] ==== Candidate to intercept: gzip (canonical: /usr/bin/gzip) ====
+[T 08:02:42 19110] Executing the following tracer actions:
+[T 08:02:42 19110] Tracer actions:
+[T 08:02:42 19110] pre_invocations(0)
+[T 08:02:42 19110] post_invocations(0)
+[T 08:02:42 19110] trace_languages(1): [csharp]
+[T 08:02:46 19112] Initializing tracer.
+[T 08:02:46 19112] Initializing tags.
+[T 08:02:46 19111] Initializing tracer.
+[T 08:02:46 19111] Initializing tags.
+[T 08:02:46 19112] ID set to 0000000000004AA8_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19112] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:46 19111] ID set to 0000000000004AA7_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19111] ==== Candidate to intercept: /usr/bin/find (canonical: /usr/bin/find) ====
+[T 08:02:46 19113] Initializing tracer.
+[T 08:02:46 19113] Initializing tags.
+[T 08:02:46 19113] ID set to 0000000000004AA9_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19113] ==== Candidate to intercept: /usr/bin/sort (canonical: /usr/bin/sort) ====
+[T 08:02:46 19112] Executing the following tracer actions:
+[T 08:02:46 19112] Tracer actions:
+[T 08:02:46 19112] pre_invocations(0)
+[T 08:02:46 19112] post_invocations(0)
+[T 08:02:46 19112] trace_languages(1): [csharp]
+[T 08:02:46 19111] Executing the following tracer actions:
+[T 08:02:46 19111] Tracer actions:
+[T 08:02:46 19111] pre_invocations(0)
+[T 08:02:46 19111] post_invocations(0)
+[T 08:02:46 19111] trace_languages(1): [csharp]
+[T 08:02:46 19113] Executing the following tracer actions:
+[T 08:02:46 19113] Tracer actions:
+[T 08:02:46 19113] pre_invocations(0)
+[T 08:02:46 19113] post_invocations(0)
+[T 08:02:46 19113] trace_languages(1): [csharp]
+[T 08:02:46 19118] Initializing tracer.
+[T 08:02:46 19118] Initializing tags.
+[T 08:02:46 19118] ID set to 0000000000004AAE_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19118] ==== Candidate to intercept: /usr/bin/mktemp (canonical: /usr/bin/mktemp) ====
+[T 08:02:46 19118] Executing the following tracer actions:
+[T 08:02:46 19118] Tracer actions:
+[T 08:02:46 19118] pre_invocations(0)
+[T 08:02:46 19118] post_invocations(0)
+[T 08:02:46 19118] trace_languages(1): [csharp]
+[T 08:02:46 19119] Initializing tracer.
+[T 08:02:46 19119] Initializing tags.
+[T 08:02:46 19119] ID set to 0000000000004AAF_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19119] ==== Candidate to intercept: /usr/bin/touch (canonical: /usr/bin/touch) ====
+[T 08:02:46 19119] Executing the following tracer actions:
+[T 08:02:46 19119] Tracer actions:
+[T 08:02:46 19119] pre_invocations(0)
+[T 08:02:46 19119] post_invocations(0)
+[T 08:02:46 19119] trace_languages(1): [csharp]
+[T 08:02:46 19120] Initializing tracer.
+[T 08:02:46 19120] Initializing tags.
+[T 08:02:46 19120] ID set to 0000000000004AB0_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19120] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19120] Executing the following tracer actions:
+[T 08:02:46 19120] Tracer actions:
+[T 08:02:46 19120] pre_invocations(0)
+[T 08:02:46 19120] post_invocations(0)
+[T 08:02:46 19120] trace_languages(1): [csharp]
+[T 08:02:46 19121] Initializing tracer.
+[T 08:02:46 19121] Initializing tags.
+[T 08:02:46 19121] ID set to 0000000000004AB1_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19121] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:02:46 19121] Executing the following tracer actions:
+[T 08:02:46 19121] Tracer actions:
+[T 08:02:46 19121] pre_invocations(0)
+[T 08:02:46 19121] post_invocations(0)
+[T 08:02:46 19121] trace_languages(1): [csharp]
+[T 08:02:46 19122] Initializing tracer.
+[T 08:02:46 19122] Initializing tags.
+[T 08:02:46 19122] ID set to 0000000000004AB2_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19122] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:02:46 19122] Executing the following tracer actions:
+[T 08:02:46 19122] Tracer actions:
+[T 08:02:46 19122] pre_invocations(0)
+[T 08:02:46 19122] post_invocations(0)
+[T 08:02:46 19122] trace_languages(1): [csharp]
+[T 08:02:46 19123] Initializing tracer.
+[T 08:02:46 19123] Initializing tags.
+[T 08:02:46 19123] ID set to 0000000000004AB3_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19123] ==== Candidate to intercept: /usr/bin/cat (canonical: /usr/bin/cat) ====
+[T 08:02:46 19123] Executing the following tracer actions:
+[T 08:02:46 19123] Tracer actions:
+[T 08:02:46 19123] pre_invocations(0)
+[T 08:02:46 19123] post_invocations(0)
+[T 08:02:46 19123] trace_languages(1): [csharp]
+[T 08:02:46 19124] Initializing tracer.
+[T 08:02:46 19124] Initializing tags.
+[T 08:02:46 19124] ID set to 0000000000004AB4_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19124] ==== Candidate to intercept: /usr/bin/uniq (canonical: /usr/bin/uniq) ====
+[T 08:02:46 19124] Executing the following tracer actions:
+[T 08:02:46 19124] Tracer actions:
+[T 08:02:46 19124] pre_invocations(0)
+[T 08:02:46 19124] post_invocations(0)
+[T 08:02:46 19124] trace_languages(1): [csharp]
+[T 08:02:46 19129] Initializing tracer.
+[T 08:02:46 19129] Initializing tags.
+[T 08:02:46 19129] ID set to 0000000000004AB9_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19129] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19129] Executing the following tracer actions:
+[T 08:02:46 19129] Tracer actions:
+[T 08:02:46 19129] pre_invocations(0)
+[T 08:02:46 19129] post_invocations(0)
+[T 08:02:46 19129] trace_languages(1): [csharp]
+[T 08:02:46 19130] Initializing tracer.
+[T 08:02:46 19130] Initializing tags.
+[T 08:02:46 19130] ID set to 0000000000004ABA_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19130] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19130] Executing the following tracer actions:
+[T 08:02:46 19130] Tracer actions:
+[T 08:02:46 19130] pre_invocations(0)
+[T 08:02:46 19130] post_invocations(0)
+[T 08:02:46 19130] trace_languages(1): [csharp]
+[T 08:02:46 19131] Initializing tracer.
+[T 08:02:46 19131] Initializing tags.
+[T 08:02:46 19131] ID set to 0000000000004ABB_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19131] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19131] Executing the following tracer actions:
+[T 08:02:46 19131] Tracer actions:
+[T 08:02:46 19131] pre_invocations(0)
+[T 08:02:46 19131] post_invocations(0)
+[T 08:02:46 19131] trace_languages(1): [csharp]
+[T 08:02:46 19135] Initializing tracer.
+[T 08:02:46 19135] Initializing tags.
+[T 08:02:46 19135] ID set to 0000000000004ABF_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19135] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19135] Executing the following tracer actions:
+[T 08:02:46 19135] Tracer actions:
+[T 08:02:46 19135] pre_invocations(0)
+[T 08:02:46 19135] post_invocations(0)
+[T 08:02:46 19135] trace_languages(1): [csharp]
+[T 08:02:46 19136] Initializing tracer.
+[T 08:02:46 19136] Initializing tags.
+[T 08:02:46 19136] ID set to 0000000000004AC0_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19136] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19136] Executing the following tracer actions:
+[T 08:02:46 19136] Tracer actions:
+[T 08:02:46 19136] pre_invocations(0)
+[T 08:02:46 19136] post_invocations(0)
+[T 08:02:46 19136] trace_languages(1): [csharp]
+[T 08:02:46 19137] Initializing tracer.
+[T 08:02:46 19137] Initializing tags.
+[T 08:02:46 19137] ID set to 0000000000004AC1_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19137] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19137] Executing the following tracer actions:
+[T 08:02:46 19137] Tracer actions:
+[T 08:02:46 19137] pre_invocations(0)
+[T 08:02:46 19137] post_invocations(0)
+[T 08:02:46 19137] trace_languages(1): [csharp]
+[T 08:02:46 19142] Initializing tracer.
+[T 08:02:46 19142] Initializing tags.
+[T 08:02:46 19142] ID set to 0000000000004AC6_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19142] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19142] Executing the following tracer actions:
+[T 08:02:46 19142] Tracer actions:
+[T 08:02:46 19142] pre_invocations(0)
+[T 08:02:46 19142] post_invocations(0)
+[T 08:02:46 19142] trace_languages(1): [csharp]
+[T 08:02:46 19143] Initializing tracer.
+[T 08:02:46 19143] Initializing tags.
+[T 08:02:46 19143] ID set to 0000000000004AC7_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19143] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19143] Executing the following tracer actions:
+[T 08:02:46 19143] Tracer actions:
+[T 08:02:46 19143] pre_invocations(0)
+[T 08:02:46 19143] post_invocations(0)
+[T 08:02:46 19143] trace_languages(1): [csharp]
+[T 08:02:46 19144] Initializing tracer.
+[T 08:02:46 19144] Initializing tags.
+[T 08:02:46 19144] ID set to 0000000000004AC8_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19144] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19144] Executing the following tracer actions:
+[T 08:02:46 19144] Tracer actions:
+[T 08:02:46 19144] pre_invocations(0)
+[T 08:02:46 19144] post_invocations(0)
+[T 08:02:46 19144] trace_languages(1): [csharp]
+[T 08:02:46 19148] Initializing tracer.
+[T 08:02:46 19148] Initializing tags.
+[T 08:02:46 19148] ID set to 0000000000004ACC_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19148] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19148] Executing the following tracer actions:
+[T 08:02:46 19148] Tracer actions:
+[T 08:02:46 19148] pre_invocations(0)
+[T 08:02:46 19148] post_invocations(0)
+[T 08:02:46 19148] trace_languages(1): [csharp]
+[T 08:02:46 19149] Initializing tracer.
+[T 08:02:46 19149] Initializing tags.
+[T 08:02:46 19149] ID set to 0000000000004ACD_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19149] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19149] Executing the following tracer actions:
+[T 08:02:46 19149] Tracer actions:
+[T 08:02:46 19149] pre_invocations(0)
+[T 08:02:46 19149] post_invocations(0)
+[T 08:02:46 19149] trace_languages(1): [csharp]
+[T 08:02:46 19150] Initializing tracer.
+[T 08:02:46 19150] Initializing tags.
+[T 08:02:46 19150] ID set to 0000000000004ACE_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19150] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19150] Executing the following tracer actions:
+[T 08:02:46 19150] Tracer actions:
+[T 08:02:46 19150] pre_invocations(0)
+[T 08:02:46 19150] post_invocations(0)
+[T 08:02:46 19150] trace_languages(1): [csharp]
+[T 08:02:46 19154] Initializing tracer.
+[T 08:02:46 19154] Initializing tags.
+[T 08:02:46 19154] ID set to 0000000000004AD2_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19154] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19154] Executing the following tracer actions:
+[T 08:02:46 19154] Tracer actions:
+[T 08:02:46 19154] pre_invocations(0)
+[T 08:02:46 19154] post_invocations(0)
+[T 08:02:46 19154] trace_languages(1): [csharp]
+[T 08:02:46 19155] Initializing tracer.
+[T 08:02:46 19155] Initializing tags.
+[T 08:02:46 19155] ID set to 0000000000004AD3_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19155] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19155] Executing the following tracer actions:
+[T 08:02:46 19155] Tracer actions:
+[T 08:02:46 19155] pre_invocations(0)
+[T 08:02:46 19155] post_invocations(0)
+[T 08:02:46 19155] trace_languages(1): [csharp]
+[T 08:02:46 19156] Initializing tracer.
+[T 08:02:46 19156] Initializing tags.
+[T 08:02:46 19156] ID set to 0000000000004AD4_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19156] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19156] Executing the following tracer actions:
+[T 08:02:46 19156] Tracer actions:
+[T 08:02:46 19156] pre_invocations(0)
+[T 08:02:46 19156] post_invocations(0)
+[T 08:02:46 19156] trace_languages(1): [csharp]
+[T 08:02:46 19160] Initializing tracer.
+[T 08:02:46 19160] Initializing tags.
+[T 08:02:46 19160] ID set to 0000000000004AD8_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19160] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19160] Executing the following tracer actions:
+[T 08:02:46 19160] Tracer actions:
+[T 08:02:46 19160] pre_invocations(0)
+[T 08:02:46 19160] post_invocations(0)
+[T 08:02:46 19160] trace_languages(1): [csharp]
+[T 08:02:46 19161] Initializing tracer.
+[T 08:02:46 19161] Initializing tags.
+[T 08:02:46 19161] ID set to 0000000000004AD9_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19161] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19161] Executing the following tracer actions:
+[T 08:02:46 19161] Tracer actions:
+[T 08:02:46 19161] pre_invocations(0)
+[T 08:02:46 19161] post_invocations(0)
+[T 08:02:46 19161] trace_languages(1): [csharp]
+[T 08:02:46 19162] Initializing tracer.
+[T 08:02:46 19162] Initializing tags.
+[T 08:02:46 19162] ID set to 0000000000004ADA_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19162] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19162] Executing the following tracer actions:
+[T 08:02:46 19162] Tracer actions:
+[T 08:02:46 19162] pre_invocations(0)
+[T 08:02:46 19162] post_invocations(0)
+[T 08:02:46 19162] trace_languages(1): [csharp]
+[T 08:02:46 19166] Initializing tracer.
+[T 08:02:46 19166] Initializing tags.
+[T 08:02:46 19166] ID set to 0000000000004ADE_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19166] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19166] Executing the following tracer actions:
+[T 08:02:46 19166] Tracer actions:
+[T 08:02:46 19166] pre_invocations(0)
+[T 08:02:46 19166] post_invocations(0)
+[T 08:02:46 19166] trace_languages(1): [csharp]
+[T 08:02:46 19167] Initializing tracer.
+[T 08:02:46 19167] Initializing tags.
+[T 08:02:46 19167] ID set to 0000000000004ADF_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19167] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19167] Executing the following tracer actions:
+[T 08:02:46 19167] Tracer actions:
+[T 08:02:46 19167] pre_invocations(0)
+[T 08:02:46 19167] post_invocations(0)
+[T 08:02:46 19167] trace_languages(1): [csharp]
+[T 08:02:46 19168] Initializing tracer.
+[T 08:02:46 19168] Initializing tags.
+[T 08:02:46 19168] ID set to 0000000000004AE0_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19168] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19168] Executing the following tracer actions:
+[T 08:02:46 19168] Tracer actions:
+[T 08:02:46 19168] pre_invocations(0)
+[T 08:02:46 19168] post_invocations(0)
+[T 08:02:46 19168] trace_languages(1): [csharp]
+[T 08:02:46 19172] Initializing tracer.
+[T 08:02:46 19172] Initializing tags.
+[T 08:02:46 19172] ID set to 0000000000004AE4_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19172] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19172] Executing the following tracer actions:
+[T 08:02:46 19172] Tracer actions:
+[T 08:02:46 19172] pre_invocations(0)
+[T 08:02:46 19172] post_invocations(0)
+[T 08:02:46 19172] trace_languages(1): [csharp]
+[T 08:02:46 19173] Initializing tracer.
+[T 08:02:46 19173] Initializing tags.
+[T 08:02:46 19173] ID set to 0000000000004AE5_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19173] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19173] Executing the following tracer actions:
+[T 08:02:46 19173] Tracer actions:
+[T 08:02:46 19173] pre_invocations(0)
+[T 08:02:46 19173] post_invocations(0)
+[T 08:02:46 19173] trace_languages(1): [csharp]
+[T 08:02:46 19174] Initializing tracer.
+[T 08:02:46 19174] Initializing tags.
+[T 08:02:46 19174] ID set to 0000000000004AE6_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19174] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19174] Executing the following tracer actions:
+[T 08:02:46 19174] Tracer actions:
+[T 08:02:46 19174] pre_invocations(0)
+[T 08:02:46 19174] post_invocations(0)
+[T 08:02:46 19174] trace_languages(1): [csharp]
+[T 08:02:46 19178] Initializing tracer.
+[T 08:02:46 19178] Initializing tags.
+[T 08:02:46 19178] ID set to 0000000000004AEA_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19178] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19178] Executing the following tracer actions:
+[T 08:02:46 19178] Tracer actions:
+[T 08:02:46 19178] pre_invocations(0)
+[T 08:02:46 19178] post_invocations(0)
+[T 08:02:46 19178] trace_languages(1): [csharp]
+[T 08:02:46 19179] Initializing tracer.
+[T 08:02:46 19179] Initializing tags.
+[T 08:02:46 19179] ID set to 0000000000004AEB_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19179] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19179] Executing the following tracer actions:
+[T 08:02:46 19179] Tracer actions:
+[T 08:02:46 19179] pre_invocations(0)
+[T 08:02:46 19179] post_invocations(0)
+[T 08:02:46 19179] trace_languages(1): [csharp]
+[T 08:02:46 19180] Initializing tracer.
+[T 08:02:46 19180] Initializing tags.
+[T 08:02:46 19180] ID set to 0000000000004AEC_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19180] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19180] Executing the following tracer actions:
+[T 08:02:46 19180] Tracer actions:
+[T 08:02:46 19180] pre_invocations(0)
+[T 08:02:46 19180] post_invocations(0)
+[T 08:02:46 19180] trace_languages(1): [csharp]
+[T 08:02:46 19184] Initializing tracer.
+[T 08:02:46 19184] Initializing tags.
+[T 08:02:46 19184] ID set to 0000000000004AF0_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19184] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19184] Executing the following tracer actions:
+[T 08:02:46 19184] Tracer actions:
+[T 08:02:46 19184] pre_invocations(0)
+[T 08:02:46 19184] post_invocations(0)
+[T 08:02:46 19184] trace_languages(1): [csharp]
+[T 08:02:46 19185] Initializing tracer.
+[T 08:02:46 19185] Initializing tags.
+[T 08:02:46 19185] ID set to 0000000000004AF1_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19185] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19185] Executing the following tracer actions:
+[T 08:02:46 19185] Tracer actions:
+[T 08:02:46 19185] pre_invocations(0)
+[T 08:02:46 19185] post_invocations(0)
+[T 08:02:46 19185] trace_languages(1): [csharp]
+[T 08:02:46 19186] Initializing tracer.
+[T 08:02:46 19186] Initializing tags.
+[T 08:02:46 19186] ID set to 0000000000004AF2_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19186] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19186] Executing the following tracer actions:
+[T 08:02:46 19186] Tracer actions:
+[T 08:02:46 19186] pre_invocations(0)
+[T 08:02:46 19186] post_invocations(0)
+[T 08:02:46 19186] trace_languages(1): [csharp]
+[T 08:02:46 19190] Initializing tracer.
+[T 08:02:46 19190] Initializing tags.
+[T 08:02:46 19190] ID set to 0000000000004AF6_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19190] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19190] Executing the following tracer actions:
+[T 08:02:46 19190] Tracer actions:
+[T 08:02:46 19190] pre_invocations(0)
+[T 08:02:46 19190] post_invocations(0)
+[T 08:02:46 19190] trace_languages(1): [csharp]
+[T 08:02:46 19191] Initializing tracer.
+[T 08:02:46 19191] Initializing tags.
+[T 08:02:46 19191] ID set to 0000000000004AF7_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19191] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19191] Executing the following tracer actions:
+[T 08:02:46 19191] Tracer actions:
+[T 08:02:46 19191] pre_invocations(0)
+[T 08:02:46 19191] post_invocations(0)
+[T 08:02:46 19191] trace_languages(1): [csharp]
+[T 08:02:46 19192] Initializing tracer.
+[T 08:02:46 19192] Initializing tags.
+[T 08:02:46 19192] ID set to 0000000000004AF8_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19192] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19192] Executing the following tracer actions:
+[T 08:02:46 19192] Tracer actions:
+[T 08:02:46 19192] pre_invocations(0)
+[T 08:02:46 19192] post_invocations(0)
+[T 08:02:46 19192] trace_languages(1): [csharp]
+[T 08:02:46 19196] Initializing tracer.
+[T 08:02:46 19196] Initializing tags.
+[T 08:02:46 19196] ID set to 0000000000004AFC_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19196] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19196] Executing the following tracer actions:
+[T 08:02:46 19196] Tracer actions:
+[T 08:02:46 19196] pre_invocations(0)
+[T 08:02:46 19196] post_invocations(0)
+[T 08:02:46 19196] trace_languages(1): [csharp]
+[T 08:02:46 19197] Initializing tracer.
+[T 08:02:46 19197] Initializing tags.
+[T 08:02:46 19197] ID set to 0000000000004AFD_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19197] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19197] Executing the following tracer actions:
+[T 08:02:46 19197] Tracer actions:
+[T 08:02:46 19197] pre_invocations(0)
+[T 08:02:46 19197] post_invocations(0)
+[T 08:02:46 19197] trace_languages(1): [csharp]
+[T 08:02:46 19198] Initializing tracer.
+[T 08:02:46 19198] Initializing tags.
+[T 08:02:46 19198] ID set to 0000000000004AFE_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19198] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19198] Executing the following tracer actions:
+[T 08:02:46 19198] Tracer actions:
+[T 08:02:46 19198] pre_invocations(0)
+[T 08:02:46 19198] post_invocations(0)
+[T 08:02:46 19198] trace_languages(1): [csharp]
+[T 08:02:46 19202] Initializing tracer.
+[T 08:02:46 19202] Initializing tags.
+[T 08:02:46 19202] ID set to 0000000000004B02_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19202] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19202] Executing the following tracer actions:
+[T 08:02:46 19202] Tracer actions:
+[T 08:02:46 19202] pre_invocations(0)
+[T 08:02:46 19202] post_invocations(0)
+[T 08:02:46 19202] trace_languages(1): [csharp]
+[T 08:02:46 19203] Initializing tracer.
+[T 08:02:46 19203] Initializing tags.
+[T 08:02:46 19203] ID set to 0000000000004B03_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19203] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19203] Executing the following tracer actions:
+[T 08:02:46 19203] Tracer actions:
+[T 08:02:46 19203] pre_invocations(0)
+[T 08:02:46 19203] post_invocations(0)
+[T 08:02:46 19203] trace_languages(1): [csharp]
+[T 08:02:46 19204] Initializing tracer.
+[T 08:02:46 19204] Initializing tags.
+[T 08:02:46 19204] ID set to 0000000000004B04_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19204] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19204] Executing the following tracer actions:
+[T 08:02:46 19204] Tracer actions:
+[T 08:02:46 19204] pre_invocations(0)
+[T 08:02:46 19204] post_invocations(0)
+[T 08:02:46 19204] trace_languages(1): [csharp]
+[T 08:02:46 19208] Initializing tracer.
+[T 08:02:46 19208] Initializing tags.
+[T 08:02:46 19208] ID set to 0000000000004B08_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19208] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19208] Executing the following tracer actions:
+[T 08:02:46 19208] Tracer actions:
+[T 08:02:46 19208] pre_invocations(0)
+[T 08:02:46 19208] post_invocations(0)
+[T 08:02:46 19208] trace_languages(1): [csharp]
+[T 08:02:46 19209] Initializing tracer.
+[T 08:02:46 19209] Initializing tags.
+[T 08:02:46 19209] ID set to 0000000000004B09_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19209] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19209] Executing the following tracer actions:
+[T 08:02:46 19209] Tracer actions:
+[T 08:02:46 19209] pre_invocations(0)
+[T 08:02:46 19209] post_invocations(0)
+[T 08:02:46 19209] trace_languages(1): [csharp]
+[T 08:02:46 19210] Initializing tracer.
+[T 08:02:46 19210] Initializing tags.
+[T 08:02:46 19210] ID set to 0000000000004B0A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19210] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19210] Executing the following tracer actions:
+[T 08:02:46 19210] Tracer actions:
+[T 08:02:46 19210] pre_invocations(0)
+[T 08:02:46 19210] post_invocations(0)
+[T 08:02:46 19210] trace_languages(1): [csharp]
+[T 08:02:46 19214] Initializing tracer.
+[T 08:02:46 19214] Initializing tags.
+[T 08:02:46 19214] ID set to 0000000000004B0E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19214] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19214] Executing the following tracer actions:
+[T 08:02:46 19214] Tracer actions:
+[T 08:02:46 19214] pre_invocations(0)
+[T 08:02:46 19214] post_invocations(0)
+[T 08:02:46 19214] trace_languages(1): [csharp]
+[T 08:02:46 19215] Initializing tracer.
+[T 08:02:46 19215] Initializing tags.
+[T 08:02:46 19215] ID set to 0000000000004B0F_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19215] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19215] Executing the following tracer actions:
+[T 08:02:46 19215] Tracer actions:
+[T 08:02:46 19215] pre_invocations(0)
+[T 08:02:46 19215] post_invocations(0)
+[T 08:02:46 19215] trace_languages(1): [csharp]
+[T 08:02:46 19216] Initializing tracer.
+[T 08:02:46 19216] Initializing tags.
+[T 08:02:46 19216] ID set to 0000000000004B10_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19216] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19216] Executing the following tracer actions:
+[T 08:02:46 19216] Tracer actions:
+[T 08:02:46 19216] pre_invocations(0)
+[T 08:02:46 19216] post_invocations(0)
+[T 08:02:46 19216] trace_languages(1): [csharp]
+[T 08:02:46 19220] Initializing tracer.
+[T 08:02:46 19220] Initializing tags.
+[T 08:02:46 19220] ID set to 0000000000004B14_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19220] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19220] Executing the following tracer actions:
+[T 08:02:46 19220] Tracer actions:
+[T 08:02:46 19220] pre_invocations(0)
+[T 08:02:46 19220] post_invocations(0)
+[T 08:02:46 19220] trace_languages(1): [csharp]
+[T 08:02:46 19221] Initializing tracer.
+[T 08:02:46 19221] Initializing tags.
+[T 08:02:46 19221] ID set to 0000000000004B15_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19221] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19221] Executing the following tracer actions:
+[T 08:02:46 19221] Tracer actions:
+[T 08:02:46 19221] pre_invocations(0)
+[T 08:02:46 19221] post_invocations(0)
+[T 08:02:46 19221] trace_languages(1): [csharp]
+[T 08:02:46 19222] Initializing tracer.
+[T 08:02:46 19222] Initializing tags.
+[T 08:02:46 19222] ID set to 0000000000004B16_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19222] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19222] Executing the following tracer actions:
+[T 08:02:46 19222] Tracer actions:
+[T 08:02:46 19222] pre_invocations(0)
+[T 08:02:46 19222] post_invocations(0)
+[T 08:02:46 19222] trace_languages(1): [csharp]
+[T 08:02:46 19226] Initializing tracer.
+[T 08:02:46 19226] Initializing tags.
+[T 08:02:46 19226] ID set to 0000000000004B1A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19226] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19226] Executing the following tracer actions:
+[T 08:02:46 19226] Tracer actions:
+[T 08:02:46 19226] pre_invocations(0)
+[T 08:02:46 19226] post_invocations(0)
+[T 08:02:46 19226] trace_languages(1): [csharp]
+[T 08:02:46 19227] Initializing tracer.
+[T 08:02:46 19227] Initializing tags.
+[T 08:02:46 19227] ID set to 0000000000004B1B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19227] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19227] Executing the following tracer actions:
+[T 08:02:46 19227] Tracer actions:
+[T 08:02:46 19227] pre_invocations(0)
+[T 08:02:46 19227] post_invocations(0)
+[T 08:02:46 19227] trace_languages(1): [csharp]
+[T 08:02:46 19228] Initializing tracer.
+[T 08:02:46 19228] Initializing tags.
+[T 08:02:46 19228] ID set to 0000000000004B1C_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19228] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19228] Executing the following tracer actions:
+[T 08:02:46 19228] Tracer actions:
+[T 08:02:46 19228] pre_invocations(0)
+[T 08:02:46 19228] post_invocations(0)
+[T 08:02:46 19228] trace_languages(1): [csharp]
+[T 08:02:46 19232] Initializing tracer.
+[T 08:02:46 19232] Initializing tags.
+[T 08:02:46 19232] ID set to 0000000000004B20_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19232] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19232] Executing the following tracer actions:
+[T 08:02:46 19232] Tracer actions:
+[T 08:02:46 19232] pre_invocations(0)
+[T 08:02:46 19232] post_invocations(0)
+[T 08:02:46 19232] trace_languages(1): [csharp]
+[T 08:02:46 19233] Initializing tracer.
+[T 08:02:46 19233] Initializing tags.
+[T 08:02:46 19233] ID set to 0000000000004B21_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19233] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19233] Executing the following tracer actions:
+[T 08:02:46 19233] Tracer actions:
+[T 08:02:46 19233] pre_invocations(0)
+[T 08:02:46 19233] post_invocations(0)
+[T 08:02:46 19233] trace_languages(1): [csharp]
+[T 08:02:46 19234] Initializing tracer.
+[T 08:02:46 19234] Initializing tags.
+[T 08:02:46 19234] ID set to 0000000000004B22_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19234] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19234] Executing the following tracer actions:
+[T 08:02:46 19234] Tracer actions:
+[T 08:02:46 19234] pre_invocations(0)
+[T 08:02:46 19234] post_invocations(0)
+[T 08:02:46 19234] trace_languages(1): [csharp]
+[T 08:02:46 19238] Initializing tracer.
+[T 08:02:46 19238] Initializing tags.
+[T 08:02:46 19238] ID set to 0000000000004B26_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19238] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19238] Executing the following tracer actions:
+[T 08:02:46 19238] Tracer actions:
+[T 08:02:46 19238] pre_invocations(0)
+[T 08:02:46 19238] post_invocations(0)
+[T 08:02:46 19238] trace_languages(1): [csharp]
+[T 08:02:46 19239] Initializing tracer.
+[T 08:02:46 19239] Initializing tags.
+[T 08:02:46 19239] ID set to 0000000000004B27_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19239] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19239] Executing the following tracer actions:
+[T 08:02:46 19239] Tracer actions:
+[T 08:02:46 19239] pre_invocations(0)
+[T 08:02:46 19239] post_invocations(0)
+[T 08:02:46 19239] trace_languages(1): [csharp]
+[T 08:02:46 19240] Initializing tracer.
+[T 08:02:46 19240] Initializing tags.
+[T 08:02:46 19240] ID set to 0000000000004B28_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19240] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19240] Executing the following tracer actions:
+[T 08:02:46 19240] Tracer actions:
+[T 08:02:46 19240] pre_invocations(0)
+[T 08:02:46 19240] post_invocations(0)
+[T 08:02:46 19240] trace_languages(1): [csharp]
+[T 08:02:46 19244] Initializing tracer.
+[T 08:02:46 19244] Initializing tags.
+[T 08:02:46 19244] ID set to 0000000000004B2C_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19244] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19244] Executing the following tracer actions:
+[T 08:02:46 19244] Tracer actions:
+[T 08:02:46 19244] pre_invocations(0)
+[T 08:02:46 19244] post_invocations(0)
+[T 08:02:46 19244] trace_languages(1): [csharp]
+[T 08:02:46 19245] Initializing tracer.
+[T 08:02:46 19245] Initializing tags.
+[T 08:02:46 19245] ID set to 0000000000004B2D_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19245] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19245] Executing the following tracer actions:
+[T 08:02:46 19245] Tracer actions:
+[T 08:02:46 19245] pre_invocations(0)
+[T 08:02:46 19245] post_invocations(0)
+[T 08:02:46 19245] trace_languages(1): [csharp]
+[T 08:02:46 19246] Initializing tracer.
+[T 08:02:46 19246] Initializing tags.
+[T 08:02:46 19246] ID set to 0000000000004B2E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19246] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19246] Executing the following tracer actions:
+[T 08:02:46 19246] Tracer actions:
+[T 08:02:46 19246] pre_invocations(0)
+[T 08:02:46 19246] post_invocations(0)
+[T 08:02:46 19246] trace_languages(1): [csharp]
+[T 08:02:46 19250] Initializing tracer.
+[T 08:02:46 19250] Initializing tags.
+[T 08:02:46 19250] ID set to 0000000000004B32_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19250] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:46 19250] Executing the following tracer actions:
+[T 08:02:46 19250] Tracer actions:
+[T 08:02:46 19250] pre_invocations(0)
+[T 08:02:46 19250] post_invocations(0)
+[T 08:02:46 19250] trace_languages(1): [csharp]
+[T 08:02:46 19251] Initializing tracer.
+[T 08:02:46 19251] Initializing tags.
+[T 08:02:46 19251] ID set to 0000000000004B33_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19251] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:46 19251] Executing the following tracer actions:
+[T 08:02:46 19251] Tracer actions:
+[T 08:02:46 19251] pre_invocations(0)
+[T 08:02:46 19251] post_invocations(0)
+[T 08:02:46 19251] trace_languages(1): [csharp]
+[T 08:02:46 19252] Initializing tracer.
+[T 08:02:46 19252] Initializing tags.
+[T 08:02:46 19252] ID set to 0000000000004B34_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:46 19252] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:46 19252] Executing the following tracer actions:
+[T 08:02:46 19252] Tracer actions:
+[T 08:02:46 19252] pre_invocations(0)
+[T 08:02:46 19252] post_invocations(0)
+[T 08:02:46 19252] trace_languages(1): [csharp]
+[T 08:02:47 19268] Initializing tracer.
+[T 08:02:47 19268] Initializing tags.
+[T 08:02:47 19268] ID set to 0000000000004B44_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19268] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19268] Executing the following tracer actions:
+[T 08:02:47 19268] Tracer actions:
+[T 08:02:47 19268] pre_invocations(0)
+[T 08:02:47 19268] post_invocations(0)
+[T 08:02:47 19268] trace_languages(1): [csharp]
+[T 08:02:47 19269] Initializing tracer.
+[T 08:02:47 19269] Initializing tags.
+[T 08:02:47 19269] ID set to 0000000000004B45_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19269] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19269] Executing the following tracer actions:
+[T 08:02:47 19269] Tracer actions:
+[T 08:02:47 19269] pre_invocations(0)
+[T 08:02:47 19269] post_invocations(0)
+[T 08:02:47 19269] trace_languages(1): [csharp]
+[T 08:02:47 19270] Initializing tracer.
+[T 08:02:47 19270] Initializing tags.
+[T 08:02:47 19270] ID set to 0000000000004B46_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19270] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19270] Executing the following tracer actions:
+[T 08:02:47 19270] Tracer actions:
+[T 08:02:47 19270] pre_invocations(0)
+[T 08:02:47 19270] post_invocations(0)
+[T 08:02:47 19270] trace_languages(1): [csharp]
+[T 08:02:47 19274] Initializing tracer.
+[T 08:02:47 19274] Initializing tags.
+[T 08:02:47 19274] ID set to 0000000000004B4A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19274] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19274] Executing the following tracer actions:
+[T 08:02:47 19274] Tracer actions:
+[T 08:02:47 19274] pre_invocations(0)
+[T 08:02:47 19274] post_invocations(0)
+[T 08:02:47 19274] trace_languages(1): [csharp]
+[T 08:02:47 19275] Initializing tracer.
+[T 08:02:47 19275] Initializing tags.
+[T 08:02:47 19275] ID set to 0000000000004B4B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19275] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19275] Executing the following tracer actions:
+[T 08:02:47 19275] Tracer actions:
+[T 08:02:47 19275] pre_invocations(0)
+[T 08:02:47 19275] post_invocations(0)
+[T 08:02:47 19275] trace_languages(1): [csharp]
+[T 08:02:47 19276] Initializing tracer.
+[T 08:02:47 19276] Initializing tags.
+[T 08:02:47 19276] ID set to 0000000000004B4C_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19276] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19276] Executing the following tracer actions:
+[T 08:02:47 19276] Tracer actions:
+[T 08:02:47 19276] pre_invocations(0)
+[T 08:02:47 19276] post_invocations(0)
+[T 08:02:47 19276] trace_languages(1): [csharp]
+[T 08:02:47 19280] Initializing tracer.
+[T 08:02:47 19280] Initializing tags.
+[T 08:02:47 19280] ID set to 0000000000004B50_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19280] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19280] Executing the following tracer actions:
+[T 08:02:47 19280] Tracer actions:
+[T 08:02:47 19280] pre_invocations(0)
+[T 08:02:47 19280] post_invocations(0)
+[T 08:02:47 19280] trace_languages(1): [csharp]
+[T 08:02:47 19281] Initializing tracer.
+[T 08:02:47 19281] Initializing tags.
+[T 08:02:47 19281] ID set to 0000000000004B51_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19281] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19281] Executing the following tracer actions:
+[T 08:02:47 19281] Tracer actions:
+[T 08:02:47 19281] pre_invocations(0)
+[T 08:02:47 19281] post_invocations(0)
+[T 08:02:47 19281] trace_languages(1): [csharp]
+[T 08:02:47 19282] Initializing tracer.
+[T 08:02:47 19282] Initializing tags.
+[T 08:02:47 19282] ID set to 0000000000004B52_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19282] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19282] Executing the following tracer actions:
+[T 08:02:47 19282] Tracer actions:
+[T 08:02:47 19282] pre_invocations(0)
+[T 08:02:47 19282] post_invocations(0)
+[T 08:02:47 19282] trace_languages(1): [csharp]
+[T 08:02:47 19284] Initializing tracer.
+[T 08:02:47 19284] Initializing tags.
+[T 08:02:47 19283] Initializing tracer.
+[T 08:02:47 19283] Initializing tags.
+[T 08:02:47 19284] ID set to 0000000000004B54_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19284] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:02:47 19283] ID set to 0000000000004B53_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19283] ==== Candidate to intercept: /usr/bin/find (canonical: /usr/bin/find) ====
+[T 08:02:47 19284] Executing the following tracer actions:
+[T 08:02:47 19284] Tracer actions:
+[T 08:02:47 19284] pre_invocations(0)
+[T 08:02:47 19284] post_invocations(0)
+[T 08:02:47 19284] trace_languages(1): [csharp]
+[T 08:02:47 19283] Executing the following tracer actions:
+[T 08:02:47 19283] Tracer actions:
+[T 08:02:47 19283] pre_invocations(0)
+[T 08:02:47 19283] post_invocations(0)
+[T 08:02:47 19283] trace_languages(1): [csharp]
+[T 08:02:47 19289] Initializing tracer.
+[T 08:02:47 19289] Initializing tags.
+[T 08:02:47 19289] ID set to 0000000000004B59_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19289] ==== Candidate to intercept: /usr/bin/cat (canonical: /usr/bin/cat) ====
+[T 08:02:47 19290] Initializing tracer.
+[T 08:02:47 19290] Initializing tags.
+[T 08:02:47 19290] ID set to 0000000000004B5A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19290] ==== Candidate to intercept: /usr/bin/uniq (canonical: /usr/bin/uniq) ====
+[T 08:02:47 19289] Executing the following tracer actions:
+[T 08:02:47 19289] Tracer actions:
+[T 08:02:47 19289] pre_invocations(0)
+[T 08:02:47 19289] post_invocations(0)
+[T 08:02:47 19289] trace_languages(1): [csharp]
+[T 08:02:47 19290] Executing the following tracer actions:
+[T 08:02:47 19290] Tracer actions:
+[T 08:02:47 19290] pre_invocations(0)
+[T 08:02:47 19290] post_invocations(0)
+[T 08:02:47 19290] trace_languages(1): [csharp]
+[T 08:02:47 19293] Initializing tracer.
+[T 08:02:47 19293] Initializing tags.
+[T 08:02:47 19293] ID set to 0000000000004B5D_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19293] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19293] Executing the following tracer actions:
+[T 08:02:47 19293] Tracer actions:
+[T 08:02:47 19293] pre_invocations(0)
+[T 08:02:47 19293] post_invocations(0)
+[T 08:02:47 19293] trace_languages(1): [csharp]
+[T 08:02:47 19294] Initializing tracer.
+[T 08:02:47 19294] Initializing tags.
+[T 08:02:47 19294] ID set to 0000000000004B5E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19294] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19294] Executing the following tracer actions:
+[T 08:02:47 19294] Tracer actions:
+[T 08:02:47 19294] pre_invocations(0)
+[T 08:02:47 19294] post_invocations(0)
+[T 08:02:47 19294] trace_languages(1): [csharp]
+[T 08:02:47 19295] Initializing tracer.
+[T 08:02:47 19295] Initializing tags.
+[T 08:02:47 19295] ID set to 0000000000004B5F_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19295] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19295] Executing the following tracer actions:
+[T 08:02:47 19295] Tracer actions:
+[T 08:02:47 19295] pre_invocations(0)
+[T 08:02:47 19295] post_invocations(0)
+[T 08:02:47 19295] trace_languages(1): [csharp]
+[T 08:02:47 19297] Initializing tracer.
+[T 08:02:47 19297] Initializing tags.
+[T 08:02:47 19297] ID set to 0000000000004B61_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19297] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19297] Executing the following tracer actions:
+[T 08:02:47 19297] Tracer actions:
+[T 08:02:47 19297] pre_invocations(0)
+[T 08:02:47 19297] post_invocations(0)
+[T 08:02:47 19297] trace_languages(1): [csharp]
+[T 08:02:47 19298] Initializing tracer.
+[T 08:02:47 19298] Initializing tags.
+[T 08:02:47 19298] ID set to 0000000000004B62_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19298] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19298] Executing the following tracer actions:
+[T 08:02:47 19298] Tracer actions:
+[T 08:02:47 19298] pre_invocations(0)
+[T 08:02:47 19298] post_invocations(0)
+[T 08:02:47 19298] trace_languages(1): [csharp]
+[T 08:02:47 19299] Initializing tracer.
+[T 08:02:47 19299] Initializing tags.
+[T 08:02:47 19299] ID set to 0000000000004B63_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19299] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19299] Executing the following tracer actions:
+[T 08:02:47 19299] Tracer actions:
+[T 08:02:47 19299] pre_invocations(0)
+[T 08:02:47 19299] post_invocations(0)
+[T 08:02:47 19299] trace_languages(1): [csharp]
+[T 08:02:47 19301] Initializing tracer.
+[T 08:02:47 19301] Initializing tags.
+[T 08:02:47 19301] ID set to 0000000000004B65_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19301] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19301] Executing the following tracer actions:
+[T 08:02:47 19301] Tracer actions:
+[T 08:02:47 19301] pre_invocations(0)
+[T 08:02:47 19301] post_invocations(0)
+[T 08:02:47 19301] trace_languages(1): [csharp]
+[T 08:02:47 19302] Initializing tracer.
+[T 08:02:47 19302] Initializing tags.
+[T 08:02:47 19302] ID set to 0000000000004B66_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19302] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19302] Executing the following tracer actions:
+[T 08:02:47 19302] Tracer actions:
+[T 08:02:47 19302] pre_invocations(0)
+[T 08:02:47 19302] post_invocations(0)
+[T 08:02:47 19302] trace_languages(1): [csharp]
+[T 08:02:47 19303] Initializing tracer.
+[T 08:02:47 19303] Initializing tags.
+[T 08:02:47 19303] ID set to 0000000000004B67_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19303] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19303] Executing the following tracer actions:
+[T 08:02:47 19303] Tracer actions:
+[T 08:02:47 19303] pre_invocations(0)
+[T 08:02:47 19303] post_invocations(0)
+[T 08:02:47 19303] trace_languages(1): [csharp]
+[T 08:02:47 19305] Initializing tracer.
+[T 08:02:47 19305] Initializing tags.
+[T 08:02:47 19305] ID set to 0000000000004B69_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19305] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19305] Executing the following tracer actions:
+[T 08:02:47 19305] Tracer actions:
+[T 08:02:47 19305] pre_invocations(0)
+[T 08:02:47 19305] post_invocations(0)
+[T 08:02:47 19305] trace_languages(1): [csharp]
+[T 08:02:47 19306] Initializing tracer.
+[T 08:02:47 19306] Initializing tags.
+[T 08:02:47 19306] ID set to 0000000000004B6A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19306] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:02:47 19306] Executing the following tracer actions:
+[T 08:02:47 19306] Tracer actions:
+[T 08:02:47 19306] pre_invocations(0)
+[T 08:02:47 19306] post_invocations(0)
+[T 08:02:47 19306] trace_languages(1): [csharp]
+[T 08:02:47 19307] Initializing tracer.
+[T 08:02:47 19307] Initializing tags.
+[T 08:02:47 19307] ID set to 0000000000004B6B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19307] ==== Candidate to intercept: /usr/bin/cp (canonical: /usr/bin/cp) ====
+[T 08:02:47 19307] Executing the following tracer actions:
+[T 08:02:47 19307] Tracer actions:
+[T 08:02:47 19307] pre_invocations(0)
+[T 08:02:47 19307] post_invocations(0)
+[T 08:02:47 19307] trace_languages(1): [csharp]
+[T 08:02:47 19308] Initializing tracer.
+[T 08:02:47 19308] Initializing tags.
+[T 08:02:47 19308] ID set to 0000000000004B6C_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19308] ==== Candidate to intercept: /usr/bin/stat (canonical: /usr/bin/stat) ====
+[T 08:02:47 19308] Executing the following tracer actions:
+[T 08:02:47 19308] Tracer actions:
+[T 08:02:47 19308] pre_invocations(0)
+[T 08:02:47 19308] post_invocations(0)
+[T 08:02:47 19308] trace_languages(1): [csharp]
+[T 08:02:47 19309] Initializing tracer.
+[T 08:02:47 19309] Initializing tags.
+[T 08:02:47 19309] ID set to 0000000000004B6D_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19309] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:02:47 19309] Executing the following tracer actions:
+[T 08:02:47 19309] Tracer actions:
+[T 08:02:47 19309] pre_invocations(0)
+[T 08:02:47 19309] post_invocations(0)
+[T 08:02:47 19309] trace_languages(1): [csharp]
+[T 08:02:47 19310] Initializing tracer.
+[T 08:02:47 19310] Initializing tags.
+[T 08:02:47 19310] ID set to 0000000000004B6E_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19310] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:02:47 19310] Executing the following tracer actions:
+[T 08:02:47 19310] Tracer actions:
+[T 08:02:47 19310] pre_invocations(0)
+[T 08:02:47 19310] post_invocations(0)
+[T 08:02:47 19310] trace_languages(1): [csharp]
+[T 08:02:47 19322] Initializing tracer.
+[T 08:02:47 19322] Initializing tags.
+[T 08:02:47 19322] ID set to 0000000000004B7A_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19322] ==== Candidate to intercept: /usr/bin/dirname (canonical: /usr/bin/dirname) ====
+[T 08:02:47 19322] Executing the following tracer actions:
+[T 08:02:47 19322] Tracer actions:
+[T 08:02:47 19322] pre_invocations(0)
+[T 08:02:47 19322] post_invocations(0)
+[T 08:02:47 19322] trace_languages(1): [csharp]
+[T 08:02:47 19323] Initializing tracer.
+[T 08:02:47 19323] Initializing tags.
+[T 08:02:47 19323] ID set to 0000000000004B7B_0000000000000001 (parent 0000000000004A2D_0000000000000002)
+[T 08:02:47 19323] ==== Candidate to intercept: /usr/bin/basename (canonical: /usr/bin/basename) ====
+[T 08:02:47 19323] Executing the following tracer actions:
+[T 08:02:47 19323] Tracer actions:
+[T 08:02:47 19323] pre_invocations(0)
+[T 08:02:47 19323] post_invocations(0)
+[T 08:02:47 19323] trace_languages(1): [csharp]
+[T 08:02:47 19324] Initializing tracer.
+[T 08:02:47 19324] Initializing tags.
+[T 08:02:47 19324] ID set to 0000000000004B7C_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:47 19324] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet) ====
+[T 08:02:47 19324] Executing the following tracer actions:
+[T 08:02:47 19324] Tracer actions:
+[T 08:02:47 19324] pre_invocations(0)
+[T 08:02:47 19324] post_invocations(0)
+[T 08:02:47 19324] trace_languages(1): [csharp]
+[T 08:02:47 19332] Initializing tracer.
+[T 08:02:47 19332] Initializing tags.
+[T 08:02:47 19332] ID set to 0000000000004B84_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:47 19332] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet) ====
+[T 08:02:47 19332] Lua: Execute a .NET SDK command usage detected
+[T 08:02:47 19332] Lua: Dotnet subcommand detected: clean
+[T 08:02:47 19332] Executing the following tracer actions:
+[T 08:02:47 19332] Tracer actions:
+[T 08:02:47 19332] pre_invocations(0)
+[T 08:02:47 19332] post_invocations(0)
+[T 08:02:47 19332] trace_languages(1): [csharp]
+[T 08:02:48 19340] Initializing tracer.
+[T 08:02:48 19340] Initializing tags.
+[T 08:02:48 19340] ID set to 0000000000004B8C_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19340] ==== Candidate to intercept: /usr/bin/sh (canonical: /usr/bin/dash) ====
+[T 08:02:48 19340] Executing the following tracer actions:
+[T 08:02:48 19340] Tracer actions:
+[T 08:02:48 19340] pre_invocations(0)
+[T 08:02:48 19340] post_invocations(0)
+[T 08:02:48 19340] trace_languages(1): [csharp]
+[T 08:02:48 19342] Initializing tracer.
+[T 08:02:48 19342] Initializing tags.
+[T 08:02:48 19342] ID set to 0000000000004B8E_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19342] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19342] Executing the following tracer actions:
+[T 08:02:48 19342] Tracer actions:
+[T 08:02:48 19342] pre_invocations(0)
+[T 08:02:48 19342] post_invocations(0)
+[T 08:02:48 19342] trace_languages(1): [csharp]
+[T 08:02:48 19343] Initializing tracer.
+[T 08:02:48 19343] Initializing tags.
+[T 08:02:48 19343] ID set to 0000000000004B8F_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19343] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19343] Executing the following tracer actions:
+[T 08:02:48 19343] Tracer actions:
+[T 08:02:48 19343] pre_invocations(0)
+[T 08:02:48 19343] post_invocations(0)
+[T 08:02:48 19343] trace_languages(1): [csharp]
+[T 08:02:48 19344] Initializing tracer.
+[T 08:02:48 19344] Initializing tags.
+[T 08:02:48 19344] ID set to 0000000000004B90_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19344] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19344] Executing the following tracer actions:
+[T 08:02:48 19344] Tracer actions:
+[T 08:02:48 19344] pre_invocations(0)
+[T 08:02:48 19344] post_invocations(0)
+[T 08:02:48 19344] trace_languages(1): [csharp]
+[T 08:02:48 19345] Initializing tracer.
+[T 08:02:48 19345] Initializing tags.
+[T 08:02:48 19345] ID set to 0000000000004B91_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19345] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19345] Executing the following tracer actions:
+[T 08:02:48 19345] Tracer actions:
+[T 08:02:48 19345] pre_invocations(0)
+[T 08:02:48 19345] post_invocations(0)
+[T 08:02:48 19345] trace_languages(1): [csharp]
+[T 08:02:48 19346] Initializing tracer.
+[T 08:02:48 19346] Initializing tags.
+[T 08:02:48 19346] ID set to 0000000000004B92_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19346] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19346] Executing the following tracer actions:
+[T 08:02:48 19346] Tracer actions:
+[T 08:02:48 19346] pre_invocations(0)
+[T 08:02:48 19346] post_invocations(0)
+[T 08:02:48 19346] trace_languages(1): [csharp]
+[T 08:02:48 19347] Initializing tracer.
+[T 08:02:48 19347] Initializing tags.
+[T 08:02:48 19347] ID set to 0000000000004B93_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19347] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19347] Executing the following tracer actions:
+[T 08:02:48 19347] Tracer actions:
+[T 08:02:48 19347] pre_invocations(0)
+[T 08:02:48 19347] post_invocations(0)
+[T 08:02:48 19347] trace_languages(1): [csharp]
+[T 08:02:48 19348] Initializing tracer.
+[T 08:02:48 19348] Initializing tags.
+[T 08:02:48 19348] ID set to 0000000000004B94_0000000000000001 (parent 0000000000004B84_0000000000000001)
+[T 08:02:48 19348] ==== Candidate to intercept: /usr/bin/ls (canonical: /usr/bin/ls) ====
+[T 08:02:48 19348] Executing the following tracer actions:
+[T 08:02:48 19348] Tracer actions:
+[T 08:02:48 19348] pre_invocations(0)
+[T 08:02:48 19348] post_invocations(0)
+[T 08:02:48 19348] trace_languages(1): [csharp]
+[T 08:02:49 19363] Initializing tracer.
+[T 08:02:49 19363] Initializing tags.
+[T 08:02:49 19363] ID set to 0000000000004BA3_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:49 19363] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet) ====
+[T 08:02:49 19363] Lua: Execute a .NET SDK command usage detected
+[T 08:02:49 19363] Lua: Dotnet subcommand detected: restore
+[T 08:02:49 19363] Executing the following tracer actions:
+[T 08:02:49 19363] Tracer actions:
+[T 08:02:49 19363] pre_invocations(0)
+[T 08:02:49 19363] post_invocations(0)
+[T 08:02:49 19363] trace_languages(1): [csharp]
+[T 08:02:51 19394] Initializing tracer.
+[T 08:02:51 19394] Initializing tags.
+[T 08:02:51 19394] ID set to 0000000000004BC2_0000000000000001 (parent 0000000000004A1C_0000000000000001)
+[T 08:02:51 19394] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet) ====
+[T 08:02:51 19394] Lua: Execute a .NET SDK command usage detected
+[T 08:02:51 19394] Lua: Dotnet subcommand detected: build
+[T 08:02:51 19394] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet ===
+[T 08:02:51 19394] Executing the following tracer actions:
+[T 08:02:51 19394] Tracer actions:
+[T 08:02:51 19394] pre_invocations(0)
+[T 08:02:51 19394] replacing compiler with:
+[T 08:02:51 19394] invocation: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/dotnet, args: [build, --no-incremental, /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture/src/Clean.Architecture.Core/Clean.Architecture.Core.sln, -p:UseSharedCompilation=false, -p:EmitCompilerGeneratedFiles=true]
+[T 08:02:51 19394] post_invocations(0)
+[T 08:02:51 19394] trace_languages(1): [csharp]
+[T 08:02:51 19394] Initializing tracer.
+[T 08:02:51 19394] Initializing tags.
+[T 08:02:51 19394] ID set to 0000000000004BC2_0000000000000002 (parent 0000000000004BC2_0000000000000001)
+[T 08:02:52 19420] Initializing tracer.
+[T 08:02:52 19420] Initializing tags.
+[T 08:02:52 19420] ID set to 0000000000004BDC_0000000000000001 (parent 0000000000004BC2_0000000000000002)
+[T 08:02:52 19420] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/Roslyn/bincore/csc (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/Roslyn/bincore/csc) ====
+[T 08:02:52 19420] Lua: === Intercepted call to /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/Roslyn/bincore/csc ===
+[T 08:02:52 19420] Executing the following tracer actions:
+[T 08:02:52 19420] Tracer actions:
+[T 08:02:52 19420] pre_invocations(0)
+[T 08:02:52 19420] post_invocations(1)
+[T 08:02:52 19420] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/CleanArchitecture/working/.dotnet/sdk/10.0.100/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempWI7z2h/tmpc42052557e3b4ba9a5d8c3e7e0901a40.rsp]
+[T 08:02:52 19420] trace_languages(1): [csharp]
+[T 08:02:55 19439] Attempting to switch stdout/stderr to 4...
+[T 08:02:55 19439] Initializing tracer.
+[T 08:02:55 19439] Initializing tags.
+[T 08:02:55 19439] ID set to 0000000000004BEF_0000000000000001 (parent 0000000000004BDC_0000000000000001)
+[T 08:03:04 19420] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.

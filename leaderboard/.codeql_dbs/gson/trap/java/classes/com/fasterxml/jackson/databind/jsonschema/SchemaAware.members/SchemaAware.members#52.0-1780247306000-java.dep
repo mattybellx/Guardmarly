@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/jsonschema/SchemaAware.members/SchemaAware.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/jsonschema/SchemaAware.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonNode.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz

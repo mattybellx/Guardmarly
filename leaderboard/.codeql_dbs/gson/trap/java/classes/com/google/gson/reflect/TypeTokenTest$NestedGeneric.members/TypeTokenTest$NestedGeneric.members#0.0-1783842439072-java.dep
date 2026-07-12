@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/reflect/TypeTokenTest$NestedGeneric.members/TypeTokenTest$NestedGeneric.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/reflect/TypeTokenTest$NestedGeneric.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/reflect/TypeTokenTest.members.trap.gz

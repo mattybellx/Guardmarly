@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/jdk/internal/module/ServicesCatalog$ServiceProvider.members/ServicesCatalog$ServiceProvider.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/jdk/internal/module/ServicesCatalog$ServiceProvider.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/jdk/internal/module/ServicesCatalog.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Module.members.trap.gz

@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/ObjectOutput.members/ObjectOutput.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/ObjectOutput.members.trap.gz
+classes/java/io/DataOutput.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

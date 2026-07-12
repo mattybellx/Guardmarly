@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/model/Measurement.members/Measurement.members#52.0-1626179106000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/model/Measurement.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/model/Value.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/common/collect/ImmutableListMultimap.members.trap.gz
+classes/com/google/common/collect/ImmutableMultimap.members.trap.gz
+classes/com/google/common/collect/BaseImmutableMultimap.members.trap.gz
+classes/com/google/common/collect/AbstractMultimap.members.trap.gz
+classes/com/google/common/collect/Multimap.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/com/google/common/collect/ListMultimap.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/ClassWithAdapter.java.trap.gz
+classes/com/example/ClassWithAdapter.members/ClassWithAdapter.members#0.0-1783842439077-java.trap.gz
+classes/com/example/ClassWithAdapter$Adapter.members/ClassWithAdapter$Adapter.members#0.0-1783842439077-java.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

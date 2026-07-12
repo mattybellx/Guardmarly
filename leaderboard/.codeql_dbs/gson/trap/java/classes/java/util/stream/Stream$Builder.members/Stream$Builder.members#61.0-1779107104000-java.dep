@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/stream/Stream$Builder.members/Stream$Builder.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/stream/Stream$Builder.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz

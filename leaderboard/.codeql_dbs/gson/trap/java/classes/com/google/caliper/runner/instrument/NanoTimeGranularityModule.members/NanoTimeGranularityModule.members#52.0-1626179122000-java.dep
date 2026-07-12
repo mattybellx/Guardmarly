@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/instrument/NanoTimeGranularityModule.members/NanoTimeGranularityModule.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/instrument/NanoTimeGranularityModule.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/dagger/Module.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/google/caliper/util/ShortDuration.members.trap.gz
+classes/com/google/caliper/runner/RunScoped.members.trap.gz
+classes/com/google/caliper/runner/instrument/NanoTimeGranularity.members.trap.gz
+classes/dagger/Provides.members.trap.gz

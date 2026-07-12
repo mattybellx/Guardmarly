@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto$EnumReservedRangeOrBuilder.members/DescriptorProtos$EnumDescriptorProto$EnumReservedRangeOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto$EnumReservedRangeOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto.members.trap.gz

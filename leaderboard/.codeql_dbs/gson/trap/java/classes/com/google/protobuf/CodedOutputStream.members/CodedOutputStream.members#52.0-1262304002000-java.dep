@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/CodedOutputStream.members/CodedOutputStream.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/com/google/protobuf/ByteOutput.members.trap.gz
+classes/com/google/protobuf/InlineMe.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/LazyFieldLite.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz

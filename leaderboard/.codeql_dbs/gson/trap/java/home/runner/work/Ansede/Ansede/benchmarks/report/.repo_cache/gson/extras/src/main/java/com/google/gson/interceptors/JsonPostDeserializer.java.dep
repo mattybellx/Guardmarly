@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/extras/src/main/java/com/google/gson/interceptors/JsonPostDeserializer.java.trap.gz
+
+TRAPS
+classes/com/google/gson/InstanceCreator.members.trap.gz
+classes/com/google/gson/interceptors/JsonPostDeserializer.members.trap.gz

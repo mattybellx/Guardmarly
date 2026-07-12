@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/example/EnumClass.members/EnumClass.members#0.0-1783842439077-java.trap.gz
+
+TRAPS
+classes/com/example/EnumClass.members.trap.gz
+classes/java/lang/Enum.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

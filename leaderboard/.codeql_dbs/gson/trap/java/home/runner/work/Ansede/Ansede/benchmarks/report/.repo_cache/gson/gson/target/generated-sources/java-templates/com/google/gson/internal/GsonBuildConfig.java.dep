@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/generated-sources/java-templates/com/google/gson/internal/GsonBuildConfig.java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/GsonBuildConfig.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz

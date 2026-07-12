@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/Worker$StreamItem.members/Worker$StreamItem.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/Worker$StreamItem.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/worker/Worker.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/runner/worker/Worker$StreamItem$Kind.members.trap.gz
+classes/com/google/caliper/bridge/LogMessage.members.trap.gz

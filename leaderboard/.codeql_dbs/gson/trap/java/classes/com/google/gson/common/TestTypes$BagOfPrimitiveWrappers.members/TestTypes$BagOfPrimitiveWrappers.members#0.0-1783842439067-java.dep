@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/common/TestTypes$BagOfPrimitiveWrappers.members/TestTypes$BagOfPrimitiveWrappers.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/common/TestTypes$BagOfPrimitiveWrappers.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/common/TestTypes.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/DataOutputStream.members/DataOutputStream.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/io/DataOutputStream.members.trap.gz
+classes/java/io/FilterOutputStream.members.trap.gz
+classes/java/io/DataOutput.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz

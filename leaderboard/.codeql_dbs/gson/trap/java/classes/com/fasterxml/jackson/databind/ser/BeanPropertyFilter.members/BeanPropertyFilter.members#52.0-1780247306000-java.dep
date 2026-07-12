@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyFilter.members/BeanPropertyFilter.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyFilter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanPropertyWriter.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonObjectFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/com/fasterxml/jackson/databind/node/ObjectNode.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonGenerator.members.trap.gz
+classes/java/lang/Exception.members.trap.gz

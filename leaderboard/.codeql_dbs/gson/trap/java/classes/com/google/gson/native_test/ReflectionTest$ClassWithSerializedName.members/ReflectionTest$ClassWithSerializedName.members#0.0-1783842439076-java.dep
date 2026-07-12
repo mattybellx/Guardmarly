@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/native_test/ReflectionTest$ClassWithSerializedName.members/ReflectionTest$ClassWithSerializedName.members#0.0-1783842439076-java.trap.gz
+
+TRAPS
+classes/com/google/gson/native_test/ReflectionTest$ClassWithSerializedName.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/native_test/ReflectionTest.members.trap.gz

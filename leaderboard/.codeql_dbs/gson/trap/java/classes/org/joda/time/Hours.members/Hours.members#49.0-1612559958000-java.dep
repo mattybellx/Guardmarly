@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/Hours.members/Hours.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/Hours.members.trap.gz
+classes/org/joda/time/base/BaseSingleFieldPeriod.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/Duration.members.trap.gz
+classes/org/joda/time/Seconds.members.trap.gz
+classes/org/joda/time/Minutes.members.trap.gz
+classes/org/joda/time/Days.members.trap.gz
+classes/org/joda/time/Weeks.members.trap.gz
+classes/org/joda/time/PeriodType.members.trap.gz
+classes/org/joda/time/DurationFieldType.members.trap.gz
+classes/org/joda/time/ReadablePeriod.members.trap.gz
+classes/org/joda/time/ReadableInterval.members.trap.gz
+classes/org/joda/time/ReadablePartial.members.trap.gz
+classes/org/joda/time/ReadableInstant.members.trap.gz

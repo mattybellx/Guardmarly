@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/CaliperRunComponent$Builder.members/CaliperRunComponent$Builder.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/CaliperRunComponent$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/CaliperRunComponent.members.trap.gz
+classes/dagger/Subcomponent$Builder.members.trap.gz
+classes/com/google/caliper/runner/worker/targetinfo/TargetInfo.members.trap.gz
+classes/dagger/BindsInstance.members.trap.gz

@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/impl/ReadableObjectId.members/ReadableObjectId.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/impl/ReadableObjectId.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/annotation/ObjectIdResolver.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/impl/ReadableObjectId$Referring.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/fasterxml/jackson/annotation/ObjectIdGenerator$IdKey.members.trap.gz
+classes/java/util/LinkedList.members.trap.gz
+classes/java/util/AbstractSequentialList.members.trap.gz
+classes/java/util/AbstractList.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Deque.members.trap.gz
+classes/java/util/Queue.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

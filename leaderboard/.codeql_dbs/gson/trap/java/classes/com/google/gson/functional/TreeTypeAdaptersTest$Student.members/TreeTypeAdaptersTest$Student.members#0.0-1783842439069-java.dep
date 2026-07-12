@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Student.members/TreeTypeAdaptersTest$Student.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Student.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Id.members.trap.gz

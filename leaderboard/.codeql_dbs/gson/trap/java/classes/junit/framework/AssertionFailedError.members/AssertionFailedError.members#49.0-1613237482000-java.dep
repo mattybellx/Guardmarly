@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/junit/framework/AssertionFailedError.members/AssertionFailedError.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/junit/framework/AssertionFailedError.members.trap.gz
+classes/java/lang/AssertionError.members.trap.gz
+classes/java/lang/String.members.trap.gz

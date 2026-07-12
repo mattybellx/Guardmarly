@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/reflect/generics/tree/Wildcard.members/Wildcard.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/reflect/generics/tree/Wildcard.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/sun/reflect/generics/tree/TypeArgument.members.trap.gz
+classes/sun/reflect/generics/visitor/TypeTreeVisitor.members.trap.gz
+classes/sun/reflect/generics/tree/FieldTypeSignature.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

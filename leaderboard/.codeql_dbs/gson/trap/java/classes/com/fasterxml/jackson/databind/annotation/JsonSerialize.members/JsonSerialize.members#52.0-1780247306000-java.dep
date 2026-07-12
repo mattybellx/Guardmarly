@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/annotation/JsonSerialize.members/JsonSerialize.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/annotation/JsonSerialize.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JacksonAnnotation.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/annotation/JsonSerialize$Inclusion.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/Converter.members.trap.gz
+classes/com/fasterxml/jackson/databind/annotation/JsonSerialize$Typing.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitable.members.trap.gz

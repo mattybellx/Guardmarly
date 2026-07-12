@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/junit/framework/Assert.members/Assert.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/junit/framework/Assert.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz

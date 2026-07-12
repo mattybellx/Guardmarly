@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/ref/ReferenceQueue.members/ReferenceQueue.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/ref/ReferenceQueue.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/ref/Reference.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/InterruptedException.members.trap.gz
+classes/java/lang/IllegalArgumentException.members.trap.gz

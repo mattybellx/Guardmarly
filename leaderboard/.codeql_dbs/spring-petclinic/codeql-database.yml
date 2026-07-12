@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/spring-petclinic
+baselineLinesOfCode: 2183
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: java
+creationMetadata:
+  sha: 51045d1648dad955df586150c1a1a6e22ef400c2
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:44:19.645670673Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

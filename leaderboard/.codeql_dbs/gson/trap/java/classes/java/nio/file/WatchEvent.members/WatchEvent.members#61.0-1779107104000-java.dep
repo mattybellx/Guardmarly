@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/file/WatchEvent.members/WatchEvent.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/file/WatchEvent.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/file/WatchEvent$Kind.members.trap.gz

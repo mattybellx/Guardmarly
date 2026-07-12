@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/file/attribute/UserPrincipalLookupService.members/UserPrincipalLookupService.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/file/attribute/UserPrincipalLookupService.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/nio/file/attribute/GroupPrincipal.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/file/attribute/UserPrincipal.members.trap.gz

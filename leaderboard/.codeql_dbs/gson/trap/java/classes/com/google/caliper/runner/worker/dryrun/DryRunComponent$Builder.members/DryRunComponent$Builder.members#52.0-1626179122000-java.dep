@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/dryrun/DryRunComponent$Builder.members/DryRunComponent$Builder.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/dryrun/DryRunComponent$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/worker/dryrun/DryRunComponent.members.trap.gz
+classes/dagger/Subcomponent$Builder.members.trap.gz
+classes/com/google/caliper/runner/experiment/Experiment.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/dagger/BindsInstance.members.trap.gz

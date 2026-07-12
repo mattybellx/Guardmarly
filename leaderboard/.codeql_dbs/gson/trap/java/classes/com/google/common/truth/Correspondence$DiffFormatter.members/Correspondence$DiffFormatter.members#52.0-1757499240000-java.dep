@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/Correspondence$DiffFormatter.members/Correspondence$DiffFormatter.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/Correspondence$DiffFormatter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/Correspondence.members.trap.gz
+classes/java/lang/String.members.trap.gz

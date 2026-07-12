@@ -1,0 +1,528 @@
+[2026-07-12 07:54:11] [javac-output-14116] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:11] [javac-output-14116] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:11] [javac-output-14116] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116] warning: [processing] No processor claimed any of these annotations: org.apache.logging.log4j.core.config.plugins.PluginAttribute,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginAliases,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute,org.apache.logging.log4j.core.tools.picocli.CommandLine.Command,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.Order,org.apache.logging.log4j.core.config.plugins.PluginElement,org.apache.logging.log4j.core.tools.picocli.CommandLine.Option,org.apache.log4j.internal.annotation.SuppressFBWarnings,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open,org.apache.logging.log4j.core.pattern.ConverterKeys
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:54:13] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/LoggingEvent.java:78: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:54:13] [javac-output-14116]             final Map properties) {
+[2026-07-12 07:54:13] [javac-output-14116]                   ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:54:13] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:13] [javac-output-14116]     K extends Object declared in interface Map
+[2026-07-12 07:54:13] [javac-output-14116]     V extends Object declared in interface Map
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/LoggingEvent.java:194: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:54:13] [javac-output-14116]     public Map getProperties() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:54:13] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:13] [javac-output-14116]     K extends Object declared in interface Map
+[2026-07-12 07:54:13] [javac-output-14116]     V extends Object declared in interface Map
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/LoggingEvent.java:202: warning: [rawtypes] found raw type: Set
+[2026-07-12 07:54:13] [javac-output-14116]     public Set getPropertyKeySet() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Set<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in interface Set
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:356: warning: [unchecked] getAllAppenders() in Category implements getAllAppenders() in AppenderAttachable
+[2026-07-12 07:54:13] [javac-output-14116]     public Enumeration getAllAppenders() {
+[2026-07-12 07:54:13] [javac-output-14116]                        ^
+[2026-07-12 07:54:13] [javac-output-14116]   return type requires unchecked conversion from Enumeration to Enumeration<Appender>
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:83: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:13] [javac-output-14116]     public static Enumeration getCurrentCategories() {
+[2026-07-12 07:54:13] [javac-output-14116]                   ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:99: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:13] [javac-output-14116]     public static Category getInstance(@SuppressWarnings("rawtypes") final Class clazz) {
+[2026-07-12 07:54:13] [javac-output-14116]                                                                            ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:13] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:267: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:13] [javac-output-14116]         final Enumeration enumeration = this.getAllAppenders();
+[2026-07-12 07:54:13] [javac-output-14116]               ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:326: warning: [unchecked] unchecked cast
+[2026-07-12 07:54:13] [javac-output-14116]             return new MapMessage<>((Map<String, ?>) message);
+[2026-07-12 07:54:13] [javac-output-14116]                                                      ^
+[2026-07-12 07:54:13] [javac-output-14116]   required: Map<String,?>
+[2026-07-12 07:54:13] [javac-output-14116]   found:    Object
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:356: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:13] [javac-output-14116]     public Enumeration getAllAppenders() {
+[2026-07-12 07:54:13] [javac-output-14116]            ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:576: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:13] [javac-output-14116]             final Vector appenders = new Vector();
+[2026-07-12 07:54:13] [javac-output-14116]                   ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:576: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:13] [javac-output-14116]             final Vector appenders = new Vector();
+[2026-07-12 07:54:13] [javac-output-14116]                                          ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:577: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:13] [javac-output-14116]             for (final Enumeration iter = aai.getAllAppenders(); iter != null && iter.hasMoreElements(); ) {
+[2026-07-12 07:54:13] [javac-output-14116]                        ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Category.java:578: warning: [unchecked] unchecked call to add(E) as a member of the raw type Vector
+[2026-07-12 07:54:13] [javac-output-14116]                 appenders.add(iter.nextElement());
+[2026-07-12 07:54:13] [javac-output-14116]                              ^
+[2026-07-12 07:54:13] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Logger.java:33: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:13] [javac-output-14116]     public static Logger getLogger(@SuppressWarnings("rawtypes") final Class clazz) {
+[2026-07-12 07:54:13] [javac-output-14116]                                                                        ^
+[2026-07-12 07:54:13] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:13] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:13] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:13] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Logger.java:26: warning: [unchecked] getAllAppenders() in Category implements getAllAppenders() in AppenderAttachable
+[2026-07-12 07:54:13] [javac-output-14116] public class Logger extends Category {
+[2026-07-12 07:54:13] [javac-output-14116]              ^
+[2026-07-12 07:54:13] [javac-output-14116]   return type requires unchecked conversion from Enumeration to Enumeration<Appender>
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/LoggerRepository.java:95: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     Enumeration getCurrentLoggers();
+[2026-07-12 07:54:14] [javac-output-14116]     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/LoggerRepository.java:103: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     Enumeration getCurrentCategories();
+[2026-07-12 07:54:14] [javac-output-14116]     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/helpers/AppenderAttachableImpl.java:37: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]     protected Vector appenderList;
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/ThrowableInformation.java:86: warning: [unchecked] unchecked cast
+[2026-07-12 07:54:14] [javac-output-14116]                 final List<String> elements = (List<String>) TO_STRING_LIST.invoke(null, throwable);
+[2026-07-12 07:54:14] [javac-output-14116]                                                                                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   required: List<String>
+[2026-07-12 07:54:14] [javac-output-14116]   found:    Object
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:133: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]     private final Vector listeners;
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:134: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     Hashtable ht;
+[2026-07-12 07:54:14] [javac-output-14116]     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:152: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         ht = new Hashtable();
+[2026-07-12 07:54:14] [javac-output-14116]                  ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:153: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]         listeners = new Vector(1);
+[2026-07-12 07:54:14] [javac-output-14116]                         ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:167: warning: [unchecked] unchecked call to addElement(E) as a member of the raw type Vector
+[2026-07-12 07:54:14] [javac-output-14116]             listeners.addElement(listener);
+[2026-07-12 07:54:14] [javac-output-14116]                                 ^
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:174: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     public void addRenderer(final Class classToRender, final ObjectRenderer or) {
+[2026-07-12 07:54:14] [javac-output-14116]                                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:259: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     public Enumeration getCurrentCategories() {
+[2026-07-12 07:54:14] [javac-output-14116]            ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:271: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     public Enumeration getCurrentLoggers() {
+[2026-07-12 07:54:14] [javac-output-14116]            ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:424: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]             final Enumeration cats = getCurrentLoggers();
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/Hierarchy.java:450: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     public void setRenderer(final Class renderedClass, final ObjectRenderer renderer) {
+[2026-07-12 07:54:14] [javac-output-14116]                                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/spi/RendererSupport.java:26: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     public void setRenderer(Class renderedClass, ObjectRenderer renderer);
+[2026-07-12 07:54:14] [javac-output-14116]                             ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:33: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     Hashtable map;
+[2026-07-12 07:54:14] [javac-output-14116]     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:38: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         map = new Hashtable();
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:55: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]             final Class renderedClass = Loader.loadClass(renderedClassName);
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:130: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     public ObjectRenderer get(final Class clazz) {
+[2026-07-12 07:54:14] [javac-output-14116]                                     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:133: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]         for (Class c = clazz; c != null; c = c.getSuperclass()) {
+[2026-07-12 07:54:14] [javac-output-14116]              ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:145: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     ObjectRenderer searchInterfaces(Class c) {
+[2026-07-12 07:54:14] [javac-output-14116]                                     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:152: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]         final Class[] ia = c.getInterfaces();
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:171: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:54:14] [javac-output-14116]     public void put(final Class clazz, final ObjectRenderer or) {
+[2026-07-12 07:54:14] [javac-output-14116]                           ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Class<T>
+[2026-07-12 07:54:14] [javac-output-14116]   where T is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     T extends Object declared in class Class
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/or/RendererMap.java:172: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         map.put(clazz, or);
+[2026-07-12 07:54:14] [javac-output-14116]                ^
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/LogManager.java:113: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     public static Enumeration getCurrentLoggers() {
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/LogManager.java:118: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     static Enumeration getCurrentLoggers(final ClassLoader classLoader) {
+[2026-07-12 07:54:14] [javac-output-14116]            ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/NDC.java:56: warning: [rawtypes] found raw type: Stack
+[2026-07-12 07:54:14] [javac-output-14116]     public static Stack cloneStack() {
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Stack<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Stack
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/NDC.java:87: warning: [rawtypes] found raw type: Stack
+[2026-07-12 07:54:14] [javac-output-14116]     public static void inherit(final Stack stack) {
+[2026-07-12 07:54:14] [javac-output-14116]                                      ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Stack<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Stack
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/NDC.java:88: warning: [unchecked] unchecked method invocation: method setStack in class ThreadContext is applied to given types
+[2026-07-12 07:54:14] [javac-output-14116]         org.apache.logging.log4j.ThreadContext.setStack(stack);
+[2026-07-12 07:54:14] [javac-output-14116]                                                        ^
+[2026-07-12 07:54:14] [javac-output-14116]   required: Collection<String>
+[2026-07-12 07:54:14] [javac-output-14116]   found:    Stack
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/NDC.java:88: warning: [unchecked] unchecked conversion
+[2026-07-12 07:54:14] [javac-output-14116]         org.apache.logging.log4j.ThreadContext.setStack(stack);
+[2026-07-12 07:54:14] [javac-output-14116]                                                         ^
+[2026-07-12 07:54:14] [javac-output-14116]   required: Collection<String>
+[2026-07-12 07:54:14] [javac-output-14116]   found:    Stack
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/helpers/PatternParser.java:417: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:54:14] [javac-output-14116]                 final Map properties = event.getProperties();
+[2026-07-12 07:54:14] [javac-output-14116]                       ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in interface Map
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in interface Map
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:92: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]     class SortedKeyEnumeration implements Enumeration {
+[2026-07-12 07:54:14] [javac-output-14116]                                           ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:94: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]         private final Enumeration e;
+[2026-07-12 07:54:14] [javac-output-14116]                       ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:96: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         public SortedKeyEnumeration(final Hashtable ht) {
+[2026-07-12 07:54:14] [javac-output-14116]                                           ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:97: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]             final Enumeration f = ht.keys();
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:98: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]             final Vector keys = new Vector(ht.size());
+[2026-07-12 07:54:14] [javac-output-14116]                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:98: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]             final Vector keys = new Vector(ht.size());
+[2026-07-12 07:54:14] [javac-output-14116]                                     ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:107: warning: [unchecked] unchecked call to add(int,E) as a member of the raw type Vector
+[2026-07-12 07:54:14] [javac-output-14116]                 keys.add(i, key);
+[2026-07-12 07:54:14] [javac-output-14116]                         ^
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:237: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     protected Hashtable registry = new Hashtable(11);
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:237: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     protected Hashtable registry = new Hashtable(11);
+[2026-07-12 07:54:14] [javac-output-14116]                                        ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:456: warning: [rawtypes] found raw type: Entry
+[2026-07-12 07:54:14] [javac-output-14116]                         final Map.Entry entry = (Map.Entry) element;
+[2026-07-12 07:54:14] [javac-output-14116]                                  ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Entry<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in interface Entry
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in interface Entry
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:476: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         registry.put(appender.getName(), appender);
+[2026-07-12 07:54:14] [javac-output-14116]                     ^
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:486: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         final Hashtable filters = new Hashtable();
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:486: warning: [rawtypes] found raw type: Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]         final Hashtable filters = new Hashtable();
+[2026-07-12 07:54:14] [javac-output-14116]                                       ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Hashtable<K,V>
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:487: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]         final Enumeration e = properties.keys();
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:498: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]                 Vector filterOpts = (Vector) filters.get(filterKey);
+[2026-07-12 07:54:14] [javac-output-14116]                 ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:500: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]                     filterOpts = new Vector();
+[2026-07-12 07:54:14] [javac-output-14116]                                      ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:501: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]                     filters.put(filterKey, filterOpts);
+[2026-07-12 07:54:14] [javac-output-14116]                                ^
+[2026-07-12 07:54:14] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:14] [javac-output-14116]     K extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116]     V extends Object declared in class Hashtable
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:505: warning: [unchecked] unchecked call to add(E) as a member of the raw type Vector
+[2026-07-12 07:54:14] [javac-output-14116]                     filterOpts.add(new NameValue(name, value));
+[2026-07-12 07:54:14] [javac-output-14116]                                   ^
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:512: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]         final Enumeration g = new SortedKeyEnumeration(filters);
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:523: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:14] [javac-output-14116]                     final Vector v = (Vector) filters.get(key);
+[2026-07-12 07:54:14] [javac-output-14116]                           ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:524: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]                     final Enumeration filterProps = v.elements();
+[2026-07-12 07:54:14] [javac-output-14116]                           ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:14] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/PropertyConfigurator.java:609: warning: [rawtypes] found raw type: Enumeration
+[2026-07-12 07:54:14] [javac-output-14116]         final Enumeration enumeration = properties.propertyNames();
+[2026-07-12 07:54:14] [javac-output-14116]               ^
+[2026-07-12 07:54:14] [javac-output-14116]   missing type arguments for generic class Enumeration<E>
+[2026-07-12 07:54:14] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:14] [javac-output-14116]     E extends Object declared in interface Enumeration
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/ProvisionNode.java:21: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:15] [javac-output-14116] class ProvisionNode extends Vector {
+[2026-07-12 07:54:15] [javac-output-14116]                             ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/ProvisionNode.java:26: warning: [unchecked] unchecked call to addElement(E) as a member of the raw type Vector
+[2026-07-12 07:54:15] [javac-output-14116]         this.addElement(logger);
+[2026-07-12 07:54:15] [javac-output-14116]                        ^
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/RenderedMessage.java:46: warning: [deprecation] getFormat() in Message has been deprecated
+[2026-07-12 07:54:15] [javac-output-14116]     public String getFormat() {
+[2026-07-12 07:54:15] [javac-output-14116]                   ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/RenderedMessage.java:27: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:54:15] [javac-output-14116]     private final ObjectRenderer renderer;
+[2026-07-12 07:54:15] [javac-output-14116]                                  ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/RenderedMessage.java:28: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:54:15] [javac-output-14116]     private final Object object;
+[2026-07-12 07:54:15] [javac-output-14116]                          ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/RenderedMessage.java:25: warning: [serial] serializable class RenderedMessage has no definition of serialVersionUID
+[2026-07-12 07:54:15] [javac-output-14116] public class RenderedMessage implements Message {
+[2026-07-12 07:54:15] [javac-output-14116]              ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/VectorAppender.java:27: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:15] [javac-output-14116]     public Vector vector;
+[2026-07-12 07:54:15] [javac-output-14116]            ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/VectorAppender.java:30: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:15] [javac-output-14116]         vector = new Vector();
+[2026-07-12 07:54:15] [javac-output-14116]                      ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/VectorAppender.java:54: warning: [unchecked] unchecked call to addElement(E) as a member of the raw type Vector
+[2026-07-12 07:54:15] [javac-output-14116]         vector.addElement(event);
+[2026-07-12 07:54:15] [javac-output-14116]                          ^
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/VectorAppender.java:65: warning: [rawtypes] found raw type: Vector
+[2026-07-12 07:54:15] [javac-output-14116]     public Vector getVector() {
+[2026-07-12 07:54:15] [javac-output-14116]            ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Vector<E>
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in class Vector
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventAdapter.java:208: warning: [rawtypes] found raw type: Set
+[2026-07-12 07:54:15] [javac-output-14116]     public Set getPropertyKeySet() {
+[2026-07-12 07:54:15] [javac-output-14116]            ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Set<E>
+[2026-07-12 07:54:15] [javac-output-14116]   where E is a type-variable:
+[2026-07-12 07:54:15] [javac-output-14116]     E extends Object declared in interface Set
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventAdapter.java:213: warning: [rawtypes] found raw type: Map
+[2026-07-12 07:54:15] [javac-output-14116]     public Map getProperties() {
+[2026-07-12 07:54:15] [javac-output-14116]            ^
+[2026-07-12 07:54:15] [javac-output-14116]   missing type arguments for generic class Map<K,V>
+[2026-07-12 07:54:15] [javac-output-14116]   where K,V are type-variables:
+[2026-07-12 07:54:15] [javac-output-14116]     K extends Object declared in interface Map
+[2026-07-12 07:54:15] [javac-output-14116]     V extends Object declared in interface Map
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:159: warning: [deprecation] getThrownProxy() in LogEvent has been deprecated
+[2026-07-12 07:54:15] [javac-output-14116]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:54:15] [javac-output-14116]                           ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:65: warning: [deprecation] getContextMap() in LogEvent has been deprecated
+[2026-07-12 07:54:15] [javac-output-14116]     public Map<String, String> getContextMap() {
+[2026-07-12 07:54:15] [javac-output-14116]                                ^
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:53: warning: [unchecked] unchecked method invocation: constructor <init> in class ContextDataMap is applied to given types
+[2026-07-12 07:54:15] [javac-output-14116]         this.contextData = new ContextDataMap(event.getProperties());
+[2026-07-12 07:54:15] [javac-output-14116]                            ^
+[2026-07-12 07:54:15] [javac-output-14116]   required: Map<String,String>
+[2026-07-12 07:54:15] [javac-output-14116]   found:    Map
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:53: warning: [unchecked] unchecked conversion
+[2026-07-12 07:54:15] [javac-output-14116]         this.contextData = new ContextDataMap(event.getProperties());
+[2026-07-12 07:54:15] [javac-output-14116]                                                                  ^
+[2026-07-12 07:54:15] [javac-output-14116]   required: Map<String,String>
+[2026-07-12 07:54:15] [javac-output-14116]   found:    Map
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:54: warning: [unchecked] unchecked method invocation: constructor <init> in class MutableThreadContextStack is applied to given types
+[2026-07-12 07:54:15] [javac-output-14116]         this.contextStack = new MutableThreadContextStack(NDC.cloneStack());
+[2026-07-12 07:54:15] [javac-output-14116]                             ^
+[2026-07-12 07:54:15] [javac-output-14116]   required: List<String>
+[2026-07-12 07:54:15] [javac-output-14116]   found:    Stack
+[2026-07-12 07:54:15] [javac-output-14116] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-1.2-api/src/main/java/org/apache/log4j/bridge/LogEventWrapper.java:54: warning: [unchecked] unchecked conversion
+[2026-07-12 07:54:15] [javac-output-14116]         this.contextStack = new MutableThreadContextStack(NDC.cloneStack());
+[2026-07-12 07:54:15] [javac-output-14116]                                                                         ^
+[2026-07-12 07:54:15] [javac-output-14116]   required: List<String>
+[2026-07-12 07:54:15] [javac-output-14116]   found:    Stack

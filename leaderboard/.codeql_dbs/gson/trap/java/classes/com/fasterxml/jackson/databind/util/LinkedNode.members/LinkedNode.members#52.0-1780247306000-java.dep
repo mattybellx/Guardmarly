@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/util/LinkedNode.members/LinkedNode.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/util/LinkedNode.members.trap.gz
+classes/java/lang/Object.members.trap.gz

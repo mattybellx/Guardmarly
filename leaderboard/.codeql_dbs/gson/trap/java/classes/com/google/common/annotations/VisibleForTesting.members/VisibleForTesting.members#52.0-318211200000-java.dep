@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/annotations/VisibleForTesting.members/VisibleForTesting.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/annotations/VisibleForTesting.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz

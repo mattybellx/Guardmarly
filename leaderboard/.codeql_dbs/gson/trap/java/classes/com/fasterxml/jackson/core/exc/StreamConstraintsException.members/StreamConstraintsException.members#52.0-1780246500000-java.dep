@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/exc/StreamConstraintsException.members/StreamConstraintsException.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/exc/StreamConstraintsException.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonProcessingException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonLocation.members.trap.gz

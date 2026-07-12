@@ -1,0 +1,13 @@
+[2026-07-12 07:59:13] [javac-output-16179] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:13] [javac-output-16179] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:13] [javac-output-16179] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:59:14] [javac-output-16179] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,aQute.bnd.annotation.spi.ServiceProvider,org.osgi.annotation.bundle.Header
+[2026-07-12 07:59:14] [javac-output-16179] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-slf4j2-impl/src/main/java/org/apache/logging/slf4j/Log4jEventBuilder.java:117: warning: [try] auto-closeable resource c is never referenced in body of corresponding try statement
+[2026-07-12 07:59:14] [javac-output-16179]             try (final Instance c = CloseableThreadContext.putAll(keyValuePairs)) {
+[2026-07-12 07:59:14] [javac-output-16179]                                 ^
+[2026-07-12 07:59:15] [javac-output-16179] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-slf4j2-impl/src/main/java/org/apache/logging/slf4j/Log4jMarker.java:95: warning: [deprecation] hasChildren() in Marker has been deprecated
+[2026-07-12 07:59:15] [javac-output-16179]     public boolean hasChildren() {
+[2026-07-12 07:59:15] [javac-output-16179]                    ^
+[2026-07-12 07:59:15] [javac-output-16179] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-slf4j2-impl/src/main/java/org/apache/logging/slf4j/Log4jMarker.java:35: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:59:15] [javac-output-16179]     private final IMarkerFactory factory;
+[2026-07-12 07:59:15] [javac-output-16179]                                  ^

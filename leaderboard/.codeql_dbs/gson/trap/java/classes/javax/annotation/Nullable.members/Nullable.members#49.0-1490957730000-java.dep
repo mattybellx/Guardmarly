@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/annotation/Nullable.members/Nullable.members#49.0-1490957730000-java.trap.gz
+
+TRAPS
+classes/javax/annotation/Nullable.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Documented.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/javax/annotation/Nonnull.members.trap.gz
+classes/javax/annotation/meta/When.members.trap.gz
+classes/javax/annotation/meta/TypeQualifierNickname.members.trap.gz

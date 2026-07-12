@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/channels/Pipe$SourceChannel.members/Pipe$SourceChannel.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/channels/Pipe$SourceChannel.members.trap.gz
+classes/java/nio/channels/spi/AbstractSelectableChannel.members.trap.gz
+classes/java/nio/channels/ReadableByteChannel.members.trap.gz
+classes/java/nio/channels/ScatteringByteChannel.members.trap.gz
+classes/java/nio/channels/Pipe.members.trap.gz
+classes/java/nio/channels/spi/SelectorProvider.members.trap.gz

@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/jdk/internal/reflect/ConstructorAccessor.members/ConstructorAccessor.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/jdk/internal/reflect/ConstructorAccessor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/InstantiationException.members.trap.gz
+classes/java/lang/IllegalArgumentException.members.trap.gz
+classes/java/lang/reflect/InvocationTargetException.members.trap.gz

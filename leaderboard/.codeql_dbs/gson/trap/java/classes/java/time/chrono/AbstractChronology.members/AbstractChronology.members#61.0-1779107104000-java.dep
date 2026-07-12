@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/chrono/AbstractChronology.members/AbstractChronology.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/chrono/AbstractChronology.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/time/chrono/Chronology.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/time/temporal/TemporalField.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/time/format/ResolverStyle.members.trap.gz
+classes/java/time/chrono/ChronoLocalDate.members.trap.gz

@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/util/concurrent/AbstractIdleService.members/AbstractIdleService.members#52.0-1616154040000-java.trap.gz
+
+TRAPS
+classes/com/google/common/util/concurrent/AbstractIdleService.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/util/concurrent/Service.members.trap.gz
+classes/com/google/common/annotations/GwtIncompatible.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/java/util/concurrent/TimeoutException.members.trap.gz
+classes/java/time/Duration.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/com/google/common/util/concurrent/Service$Listener.members.trap.gz
+classes/java/util/concurrent/Executor.members.trap.gz
+classes/com/google/common/util/concurrent/Service$State.members.trap.gz
+classes/java/lang/Exception.members.trap.gz

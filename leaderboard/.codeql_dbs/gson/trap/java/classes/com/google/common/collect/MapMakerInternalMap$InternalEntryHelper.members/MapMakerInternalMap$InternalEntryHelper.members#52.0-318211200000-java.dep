@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/MapMakerInternalMap$InternalEntryHelper.members/MapMakerInternalMap$InternalEntryHelper.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/MapMakerInternalMap$InternalEntryHelper.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$InternalEntry.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$Segment.members.trap.gz
+classes/java/util/concurrent/locks/ReentrantLock.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/concurrent/ConcurrentMap.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtIncompatible.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/annotations/J2ktIncompatible.members.trap.gz
+classes/org/jspecify/annotations/NullUnmarked.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$Strength.members.trap.gz

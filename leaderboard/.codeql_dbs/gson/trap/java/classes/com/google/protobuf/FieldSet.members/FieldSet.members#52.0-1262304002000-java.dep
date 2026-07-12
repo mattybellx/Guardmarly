@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/FieldSet.members/FieldSet.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/FieldSet.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/FieldSet$FieldDescriptorLite.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/com/google/protobuf/FieldSet$Builder.members.trap.gz

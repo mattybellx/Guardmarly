@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$B.members/JsonAdapterAnnotationOnClassesTest$B.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$B.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest$A.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterAnnotationOnClassesTest.members.trap.gz
+classes/java/lang/String.members.trap.gz

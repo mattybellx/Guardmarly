@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/extras/src/main/java/com/google/gson/typeadapters/PostConstructAdapterFactory.java.trap.gz
+classes/javax/annotation/PostConstruct.members/PostConstruct.members#61.0-1779107104000-java.trap.gz
+classes/com/google/gson/typeadapters/PostConstructAdapterFactory.members/PostConstructAdapterFactory.members#0.0-1783842439057-java.trap.gz
+classes/com/google/gson/typeadapters/PostConstructAdapterFactory$PostConstructAdapter.members/PostConstructAdapterFactory$PostConstructAdapter.members#0.0-1783842439057-java.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

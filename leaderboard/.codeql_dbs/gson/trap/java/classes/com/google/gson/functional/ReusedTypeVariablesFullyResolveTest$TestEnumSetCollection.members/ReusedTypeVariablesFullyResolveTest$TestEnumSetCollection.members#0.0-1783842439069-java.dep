@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest$TestEnumSetCollection.members/ReusedTypeVariablesFullyResolveTest$TestEnumSetCollection.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest$TestEnumSetCollection.members.trap.gz
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest$TestEnum.members.trap.gz
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest$SetCollection.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest$BaseCollection.members.trap.gz
+classes/com/google/gson/functional/ReusedTypeVariablesFullyResolveTest.members.trap.gz

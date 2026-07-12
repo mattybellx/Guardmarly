@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/base/ExtraObjectsMethodsForWeb.members/ExtraObjectsMethodsForWeb.members#52.0-1616154040000-java.trap.gz
+
+TRAPS
+classes/com/google/common/base/ExtraObjectsMethodsForWeb.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz

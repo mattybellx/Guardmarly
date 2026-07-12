@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/express
+baselineLinesOfCode: 15878
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+creationMetadata:
+  sha: ba006766fb964571723138708eacaba0f55759cd
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:32:20.461527223Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/Dictionary.members/Dictionary.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/Dictionary.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Enumeration.members.trap.gz

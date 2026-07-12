@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/django
+baselineLinesOfCode: 395973
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  sha: 65a9f14196c338d70889bd54753370606b3fb4eb
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:22:02.370479098Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

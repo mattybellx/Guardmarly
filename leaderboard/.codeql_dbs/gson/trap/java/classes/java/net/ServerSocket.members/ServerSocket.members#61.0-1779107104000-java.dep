@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/net/ServerSocket.members/ServerSocket.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/net/ServerSocket.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/java/net/SocketException.members.trap.gz
+classes/java/net/SocketImplFactory.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/nio/channels/ServerSocketChannel.members.trap.gz
+classes/java/net/Socket.members.trap.gz
+classes/java/net/SocketAddress.members.trap.gz
+classes/java/net/InetAddress.members.trap.gz

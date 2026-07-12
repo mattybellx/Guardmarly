@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos.members/DescriptorProtos.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos.members.trap.gz
+classes/com/google/protobuf/GeneratedFile.members.trap.gz
+classes/com/google/protobuf/Descriptors$FileDescriptor.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistry.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz

@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/extras/src/test/java/com/google/gson/interceptors/InterceptorTest.java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest.members/InterceptorTest.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$User.members/InterceptorTest$User.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$Address.members/InterceptorTest$Address.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$UserGroup.members/InterceptorTest$UserGroup.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$UserValidator.members/InterceptorTest$UserValidator.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$AddressValidator.members/InterceptorTest$AddressValidator.members#0.0-1783842439058-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

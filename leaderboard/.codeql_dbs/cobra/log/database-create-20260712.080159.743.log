@@ -1,0 +1,1040 @@
+[2026-07-12 08:01:59] This is codeql database create benchmarks/report/.codeql_dbs/cobra --language=go --source-root=benchmarks/report/.repo_cache/cobra
+[2026-07-12 08:01:59] Log file was started late.
+[2026-07-12 08:01:59] [PROGRESS] database create> Initializing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra.
+[2026-07-12 08:01:59] Running plumbing command: codeql database init --language=go --extractor-options-verbosity=1 --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --source-root=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra --allow-missing-source-root=false --allow-already-existing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra
+[2026-07-12 08:01:59] Calling plumbing command: codeql resolve languages --extractor-options-verbosity=1 --format=betterjson
+[2026-07-12 08:01:59] [DETAILS] resolve languages> Scanning for [codeql-extractor.yml] from /home/runner/work/Ansede/Ansede/codeql/.codeqlmanifest.json
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/go/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/yaml/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/swift/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/rust/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/properties/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csv/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/ruby/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/javascript/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csharp/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/python/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/actions/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/cpp/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/xml/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/html/codeql-extractor.yml.
+[2026-07-12 08:02:00] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/java/codeql-extractor.yml.
+[2026-07-12 08:02:00] Plumbing command codeql resolve languages completed:
+                      {
+                        "aliases" : {
+                          "c" : "cpp",
+                          "c++" : "cpp",
+                          "c-c++" : "cpp",
+                          "c-cpp" : "cpp",
+                          "c#" : "csharp",
+                          "java-kotlin" : "java",
+                          "kotlin" : "java",
+                          "javascript-typescript" : "javascript",
+                          "typescript" : "javascript"
+                        },
+                        "extractors" : {
+                          "go" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/go",
+                              "extractor_options" : {
+                                "extract_tests" : {
+                                  "title" : "Whether to include Go test files in the CodeQL database.",
+                                  "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "extract_vendor_dirs" : {
+                                  "title" : "Whether to include Go vendor directories in the CodeQL database.",
+                                  "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "yaml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/yaml"
+                            }
+                          ],
+                          "swift" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/swift"
+                            }
+                          ],
+                          "rust" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/rust",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                },
+                                "cargo_target_dir" : {
+                                  "title" : "Directory to use for cargo output files.",
+                                  "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_target" : {
+                                  "title" : "Target architecture",
+                                  "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_features" : {
+                                  "title" : "Cargo features to turn on",
+                                  "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "cargo_cfg_overrides" : {
+                                  "title" : "Cargo cfg overrides",
+                                  "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    },
+                                    "flamegraph" : {
+                                      "title" : "[Experimental] File path for write flame graph log",
+                                      "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+                                      "type" : "string"
+                                    }
+                                  }
+                                },
+                                "extract_dependencies_as_source" : {
+                                  "title" : "Extract dependencies as source code",
+                                  "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "properties" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/properties"
+                            }
+                          ],
+                          "csv" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csv"
+                            }
+                          ],
+                          "ruby" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/ruby",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ],
+                          "javascript" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/javascript",
+                              "extractor_options" : {
+                                "skip_types" : {
+                                  "title" : "Skip type extraction for TypeScript",
+                                  "description" : "Whether to skip the extraction of types in a TypeScript application",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "csharp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csharp",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|brotli)$"
+                                    }
+                                  }
+                                },
+                                "buildless" : {
+                                  "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+                                  "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "binlog" : {
+                                  "title" : "Binlog",
+                                  "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+                                  "type" : "array"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          ],
+                          "python" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/python",
+                              "extractor_options" : {
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Python extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "python_executable_name" : {
+                                  "title" : "Controls the name of the Python executable used by the Python extractor.",
+                                  "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(py|python|python3)$"
+                                }
+                              }
+                            }
+                          ],
+                          "actions" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/actions",
+                              "extractor_options" : { }
+                            }
+                          ],
+                          "cpp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/cpp",
+                              "extractor_options" : {
+                                "scale_timeouts" : {
+                                  "title" : "Value to scale compiler introspection timeouts with",
+                                  "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-9]+"
+                                },
+                                "log_verbosity" : {
+                                  "title" : "Verbosity of the extractor logging",
+                                  "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-3]"
+                                }
+                              }
+                            }
+                          ],
+                          "xml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/xml"
+                            }
+                          ],
+                          "html" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/html"
+                            }
+                          ],
+                          "java" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/java",
+                              "extractor_options" : {
+                                "exclude" : {
+                                  "title" : "A glob excluding files from analysis.",
+                                  "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",
+                                  "type" : "string"
+                                },
+                                "add_prefer_source" : {
+                                  "title" : "Whether to always prefer source files over class files.",
+                                  "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless" : {
+                                  "title" : "Whether to use buildless (standalone) extraction (experimental).",
+                                  "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                },
+                                "minimize_dependency_jars" : {
+                                  "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+                                  "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+[2026-07-12 08:02:00] [PROGRESS] database init> Calculating baseline information in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra
+[2026-07-12 08:02:00] [SPAMMY] database init> Ignoring the following directories when processing baseline information: .git, .hg, .svn.
+[2026-07-12 08:02:00] [DETAILS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/scc --by-file --exclude-dir .git,.hg,.svn --format json --no-large --no-min .
+[2026-07-12 08:02:00] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/go/tools/configure-baseline.sh.
+[2026-07-12 08:02:00] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra: [/home/runner/work/Ansede/Ansede/codeql/go/tools/configure-baseline.sh]
+[2026-07-12 08:02:00] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh.
+[2026-07-12 08:02:00] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra: [/home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh]
+[2026-07-12 08:02:00] [SPAMMY] database init> Ignored an additional 3 files when processing baseline information for YAML due to paths and paths-ignore configuration.
+[2026-07-12 08:02:00] [SPAMMY] database init> Found 36 baseline files for go.
+[2026-07-12 08:02:00] [SPAMMY] database init> Found 2 baseline files for actions.
+[2026-07-12 08:02:00] [PROGRESS] database init> Calculated baseline information for languages: actions, go (71ms).
+[2026-07-12 08:02:00] [SPAMMY] database init> Selected JGit Git client for /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra because the repository uses SHA-1 object format.
+[2026-07-12 08:02:00] [PROGRESS] database init> Resolving extractor go.
+[2026-07-12 08:02:00] [DETAILS] database init> Found candidate extractor root for go: /home/runner/work/Ansede/Ansede/codeql/go.
+[2026-07-12 08:02:00] [PROGRESS] database init> Successfully loaded extractor Go (go) from /home/runner/work/Ansede/Ansede/codeql/go.
+[2026-07-12 08:02:00] [PROGRESS] database init> Created skeleton CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra. This in-progress database is ready to be populated by an extractor.
+[2026-07-12 08:02:00] Plumbing command codeql database init completed.
+[2026-07-12 08:02:00] Using autobuild script /home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh.
+[2026-07-12 08:02:00] [DETAILS] database create> Detected autobuild command for Go: /home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh.
+[2026-07-12 08:02:00] [PROGRESS] database create> Running build command: [/home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh]
+[2026-07-12 08:02:00] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra --index-traceless-dbs --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra /home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh
+[2026-07-12 08:02:00] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra: [/home/runner/work/Ansede/Ansede/codeql/go/tools/autobuild.sh]
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 Autobuilder was built with go1.26.4, environment has go1.24.13
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 LGTM_SRC is /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 Found no go.work files in the workspace; looking for go.mod files...
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 Found 1 go.mod files in: go.mod.
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 Found 1 go.mod file(s).
+[2026-07-12 08:02:00] [build-stderr] 2026/07/12 08:02:00 Import path is 'github.com/mattybellx/Ansede'
+[2026-07-12 08:02:00] [build-stderr] go: downloading github.com/cpuguy83/go-md2man/v2 v2.0.6
+[2026-07-12 08:02:00] [build-stderr] go: downloading github.com/spf13/pflag v1.0.9
+[2026-07-12 08:02:00] [build-stderr] go: downloading go.yaml.in/yaml/v3 v3.0.4
+[2026-07-12 08:02:00] [build-stderr] go: downloading github.com/inconshreveable/mousetrap v1.1.0
+[2026-07-12 08:02:01] [build-stderr] go: downloading github.com/russross/blackfriday/v2 v2.1.0
+[2026-07-12 08:02:03] [build-stderr] 2026/07/12 08:02:03 Makefile found.
+[2026-07-12 08:02:03] [build-stderr] 2026/07/12 08:02:03 Trying build command make []
+[2026-07-12 08:02:03] [build-stderr] Makefile:5: "could not find golangci-lint in /home/runner/work/Ansede/Ansede/codeql:/opt/hostedtoolcache/Python/3.12.13/x64/bin:/opt/hostedtoolcache/Python/3.12.13/x64:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin, run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh"
+[2026-07-12 08:02:03] [build-stdout] ******************** checking formatting ********************
+[2026-07-12 08:02:04] [build-stdout] ******************** downloading dependencies ********************
+[2026-07-12 08:02:04] [build-stderr] make: go: Permission denied
+[2026-07-12 08:02:04] [build-stderr] make: *** [Makefile:32: install_deps] Error 127
+[2026-07-12 08:02:04] [build-stdout] go get -v ./...
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Running /usr/bin/make [make] failed, continuing anyway: exit status 2
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Unsuccessfully ran 1 build scripts(s), continuing to install dependencies in the normal way.
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Installing dependencies using `go get -v ./...` in `.`.
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Running extractor command '/home/runner/work/Ansede/Ansede/codeql/go/tools/linux64/go-extractor [./...]' from directory '.'.
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Build flags: ''; patterns: './...'
+[2026-07-12 08:02:04] [build-stderr] 2026/07/12 08:02:04 Running packages.Load.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done running packages.Load.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting universe scope.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting universe scope.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Running go list to resolve package and module directories.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done running go list deps: resolved 88 packages.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/goarch.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/goarch.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/goarch.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package unsafe.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package unsafe.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package unsafe.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/abi.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/abi.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/abi.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/unsafeheader.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/unsafeheader.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/unsafeheader.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/cpu.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/cpu.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/cpu.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/bytealg.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/bytealg.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/bytealg.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/byteorder.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/byteorder.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/byteorder.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/chacha8rand.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/chacha8rand.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/chacha8rand.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/coverage/rtcov.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/coverage/rtcov.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/coverage/rtcov.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/godebugs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/godebugs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/godebugs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/goexperiment.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/goexperiment.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/goexperiment.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/goos.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/goos.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/goos.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/profilerecord.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/profilerecord.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/profilerecord.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/exithook.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/exithook.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/exithook.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/asan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/asan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/asan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/msan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/msan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/msan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/race.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/race.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/race.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/sys.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/sys.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/sys.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/runtime/syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/runtime/syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/runtime/syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/stringslite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/stringslite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/stringslite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package runtime.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package runtime.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package runtime.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/reflectlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/reflectlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/reflectlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package errors.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package errors.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package errors.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package sync/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package sync/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package sync/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package io.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package io.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package io.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package iter.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package iter.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package iter.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package math/bits.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package math/bits.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package math/bits.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package unicode.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package unicode.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package unicode.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package unicode/utf8.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package unicode/utf8.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package unicode/utf8.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package bytes.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package bytes.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package bytes.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/bisect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/bisect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/bisect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/godebug.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/godebug.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/godebug.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/itoa.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/itoa.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/itoa.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/oserror.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/oserror.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/oserror.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package time.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package time.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package time.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package context.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package context.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package context.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package cmp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package cmp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package cmp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package strconv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package strconv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package strconv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package reflect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package reflect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package reflect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package slices.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package slices.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package slices.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/fmtsort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/fmtsort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/fmtsort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package path.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package path.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package path.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package io/fs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package io/fs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package io/fs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/filepathlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/filepathlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/filepathlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/syscall/unix.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/syscall/unix.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/syscall/unix.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/poll.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/poll.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/poll.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/syscall/execenv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/syscall/execenv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/syscall/execenv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/testlog.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/testlog.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/testlog.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package os.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package os.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package os.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package fmt.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package fmt.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package fmt.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package encoding.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package encoding.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package encoding.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package encoding/binary.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package encoding/binary.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package encoding/binary.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package encoding/base64.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package encoding/base64.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package encoding/base64.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package strings.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package strings.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package strings.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package bufio.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package bufio.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package bufio.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package encoding/csv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package encoding/csv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package encoding/csv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package encoding/hex.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package encoding/hex.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package encoding/hex.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package flag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package flag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package flag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package vendor/golang.org/x/net/dns/dnsmessage.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package vendor/golang.org/x/net/dns/dnsmessage.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package vendor/golang.org/x/net/dns/dnsmessage.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/nettrace.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/nettrace.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/nettrace.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package internal/singleflight.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package internal/singleflight.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package internal/singleflight.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package weak.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package weak.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package weak.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package unique.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package unique.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package unique.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package net/netip.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package net/netip.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package net/netip.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package runtime/cgo.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package runtime/cgo.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package runtime/cgo.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package net.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package net.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package net.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package sort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package sort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package sort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package github.com/spf13/pflag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package github.com/spf13/pflag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package github.com/spf13/pflag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package path/filepath.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package path/filepath.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package path/filepath.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package regexp/syntax.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package regexp/syntax.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package regexp/syntax.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package regexp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package regexp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package regexp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package net/url.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package net/url.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package net/url.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package text/template/parse.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package text/template/parse.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package text/template/parse.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package text/template.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package text/template.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package text/template.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package github.com/spf13/cobra.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package github.com/spf13/cobra.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package github.com/spf13/cobra.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package html.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package html.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package html.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package github.com/russross/blackfriday/v2.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package github.com/russross/blackfriday/v2.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package github.com/russross/blackfriday/v2.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package github.com/cpuguy83/go-md2man/v2/md2man.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package github.com/cpuguy83/go-md2man/v2/md2man.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package github.com/cpuguy83/go-md2man/v2/md2man.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package go.yaml.in/yaml/v3.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package go.yaml.in/yaml/v3.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package go.yaml.in/yaml/v3.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Processing package github.com/spf13/cobra/doc.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting types for package github.com/spf13/cobra/doc.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting types for package github.com/spf13/cobra/doc.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done processing dependencies.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Starting to extract packages.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/goarch.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package unsafe.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/abi.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/unsafeheader.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/cpu.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/bytealg.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/byteorder.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/chacha8rand.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/coverage/rtcov.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/godebugs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/goexperiment.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/goos.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/profilerecord.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/exithook.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/asan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/msan.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/race.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/sys.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/runtime/syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/stringslite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package runtime.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/reflectlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package errors.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package sync/atomic.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package sync.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package io.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package iter.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package math/bits.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package unicode.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package unicode/utf8.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package bytes.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/bisect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/godebug.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/itoa.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/oserror.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package syscall.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package time.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package context.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package cmp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package math.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package strconv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package reflect.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package slices.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/fmtsort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package path.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package io/fs.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/filepathlite.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/syscall/unix.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/poll.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/syscall/execenv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/testlog.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package os.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package fmt.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package encoding.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package encoding/binary.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package encoding/base64.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package strings.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package bufio.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package encoding/csv.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package encoding/hex.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package flag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package vendor/golang.org/x/net/dns/dnsmessage.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/nettrace.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package internal/singleflight.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package weak.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package unique.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package net/netip.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package runtime/cgo.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package net.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package sort.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package github.com/spf13/pflag.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package path/filepath.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package regexp/syntax.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package regexp.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package maps.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package net/url.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package text/template/parse.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package text/template.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/go.mod
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/command.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/bash_completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/go.mod (1ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package html.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package github.com/russross/blackfriday/v2.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package github.com/cpuguy83/go-md2man/v2/md2man.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Skipping dependency package go.yaml.in/yaml/v3.
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/go.mod
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/go.mod (0ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/yaml_docs.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/shell_completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/zsh_completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/active_help.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/man_docs.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/bash_completionsV2.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/command_notwin.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/cobra.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/zsh_completions.go (88ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/fish_completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/yaml_docs.go (98ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/shell_completions.go (99ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/flag_groups.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/command_notwin.go (81ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/bash_completions.go (128ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/powershell_completions.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/bash_completionsV2.go (103ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/md_docs.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/man_docs.go (119ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/rest_docs.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/util.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/args.go
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/active_help.go (46ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/powershell_completions.go (122ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/fish_completions.go (157ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/rest_docs.go (113ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/util.go (120ms)
+[2026-07-12 08:02:08] [build-stderr] 2026/07/12 08:02:08 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/flag_groups.go (175ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/doc/md_docs.go (180ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/args.go (150ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/cobra.go (239ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/completions.go (297ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra/command.go (425ms)
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Done extracting packages.
+[2026-07-12 08:02:09] [build-stderr] 2026/07/12 08:02:09 Success: extraction succeeded for all 1 discovered project(s).
+[2026-07-12 08:02:09] Plumbing command codeql database trace-command completed.
+[2026-07-12 08:02:09] [PROGRESS] database create> Finalizing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra.
+[2026-07-12 08:02:09] Running plumbing command: codeql database finalize --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra
+[2026-07-12 08:02:09] Using pre-finalize script /home/runner/work/Ansede/Ansede/codeql/go/tools/pre-finalize.sh.
+[2026-07-12 08:02:09] [PROGRESS] database finalize> Running pre-finalize script /home/runner/work/Ansede/Ansede/codeql/go/tools/pre-finalize.sh in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra.
+[2026-07-12 08:02:09] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra --no-tracing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra /home/runner/work/Ansede/Ansede/codeql/go/tools/pre-finalize.sh
+[2026-07-12 08:02:09] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra: [/home/runner/work/Ansede/Ansede/codeql/go/tools/pre-finalize.sh]
+[2026-07-12 08:02:09] [build-stderr] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/cobra...
+[2026-07-12 08:02:10] Plumbing command codeql database trace-command completed.
+[2026-07-12 08:02:10] [PROGRESS] database finalize> Pre-finalize script /home/runner/work/Ansede/Ansede/codeql/go/tools/pre-finalize.sh completed in 874 ms.
+[2026-07-12 08:02:10] [PROGRESS] database finalize> Running TRAP import for CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra...
+[2026-07-12 08:02:10] Running plumbing command: codeql dataset import --dbscheme=/home/runner/work/Ansede/Ansede/codeql/go/go.dbscheme -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/trap/go
+[2026-07-12 08:02:10] Clearing disk cache since the version file /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go/default/cache/version does not exist
+[2026-07-12 08:02:10] Tuple pool not found. Clearing relations with cached strings
+[2026-07-12 08:02:10] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go/default/cache in mode clear.
+[2026-07-12 08:02:10] Sequence stamp origin is -5892337229939686354
+[2026-07-12 08:02:10] Pausing evaluation to hard-clear memory at sequence stamp o+0
+[2026-07-12 08:02:10] Unpausing evaluation
+[2026-07-12 08:02:10] Pausing evaluation to quickly trim disk at sequence stamp o+1
+[2026-07-12 08:02:10] Unpausing evaluation
+[2026-07-12 08:02:10] Pausing evaluation to zealously trim disk at sequence stamp o+2
+[2026-07-12 08:02:10] Unpausing evaluation
+[2026-07-12 08:02:10] Trimming completed (7ms): Purged everything.
+[2026-07-12 08:02:10] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/trap/go
+[2026-07-12 08:02:10] Found 110 TRAP files (3.59 MiB)
+[2026-07-12 08:02:10] [PROGRESS] dataset import> Importing TRAP files
+[2026-07-12 08:02:10] Importing bufio.trap.gz (1 of 110)
+[2026-07-12 08:02:10] Importing bytes.trap.gz (2 of 110)
+[2026-07-12 08:02:10] Importing cmp.trap.gz (3 of 110)
+[2026-07-12 08:02:10] Importing 28f530e9e525976ed00ea880e495de_0.trap.gz (4 of 110)
+[2026-07-12 08:02:10] Importing context.trap.gz (5 of 110)
+[2026-07-12 08:02:10] Importing base64.trap.gz (6 of 110)
+[2026-07-12 08:02:10] Importing binary.trap.gz (7 of 110)
+[2026-07-12 08:02:10] Importing csv.trap.gz (8 of 110)
+[2026-07-12 08:02:10] Importing hex.trap.gz (9 of 110)
+[2026-07-12 08:02:10] Importing encoding.trap.gz (10 of 110)
+[2026-07-12 08:02:10] Importing errors.trap.gz (11 of 110)
+[2026-07-12 08:02:10] Importing flag.trap.gz (12 of 110)
+[2026-07-12 08:02:10] Importing fmt.trap.gz (13 of 110)
+[2026-07-12 08:02:10] Importing md2man.trap.gz (14 of 110)
+[2026-07-12 08:02:10] Importing v2.trap.gz (15 of 110)
+[2026-07-12 08:02:10] Importing doc.trap.gz (16 of 110)
+[2026-07-12 08:02:10] Importing cobra.trap.gz (17 of 110)
+[2026-07-12 08:02:10] Importing pflag.trap.gz (18 of 110)
+[2026-07-12 08:02:10] Importing v3.trap.gz (19 of 110)
+[2026-07-12 08:02:10] Importing active_help.go.trap.gz (20 of 110)
+[2026-07-12 08:02:10] Importing args.go.trap.gz (21 of 110)
+[2026-07-12 08:02:10] Importing bash_completions.go.trap.gz (22 of 110)
+[2026-07-12 08:02:10] Importing bash_completionsV2.go.trap.gz (23 of 110)
+[2026-07-12 08:02:10] Importing cobra.go.trap.gz (24 of 110)
+[2026-07-12 08:02:10] Importing command.go.trap.gz (25 of 110)
+[2026-07-12 08:02:11] Importing command_notwin.go.trap.gz (26 of 110)
+[2026-07-12 08:02:11] Importing completions.go.trap.gz (27 of 110)
+[2026-07-12 08:02:11] Importing man_docs.go.trap.gz (28 of 110)
+[2026-07-12 08:02:11] Importing md_docs.go.trap.gz (29 of 110)
+[2026-07-12 08:02:11] Importing rest_docs.go.trap.gz (30 of 110)
+[2026-07-12 08:02:11] Importing util.go.trap.gz (31 of 110)
+[2026-07-12 08:02:11] Importing yaml_docs.go.trap.gz (32 of 110)
+[2026-07-12 08:02:11] Importing fish_completions.go.trap.gz (33 of 110)
+[2026-07-12 08:02:11] Importing flag_groups.go.trap.gz (34 of 110)
+[2026-07-12 08:02:11] Importing go.mod.trap.gz (35 of 110)
+[2026-07-12 08:02:11] Importing powershell_completions.go.trap.gz (36 of 110)
+[2026-07-12 08:02:11] Importing shell_completions.go.trap.gz (37 of 110)
+[2026-07-12 08:02:11] Importing zsh_completions.go.trap.gz (38 of 110)
+[2026-07-12 08:02:11] Importing html.trap.gz (39 of 110)
+[2026-07-12 08:02:11] Importing abi.trap.gz (40 of 110)
+[2026-07-12 08:02:11] Importing asan.trap.gz (41 of 110)
+[2026-07-12 08:02:11] Importing bisect.trap.gz (42 of 110)
+[2026-07-12 08:02:11] Importing bytealg.trap.gz (43 of 110)
+[2026-07-12 08:02:11] Importing byteorder.trap.gz (44 of 110)
+[2026-07-12 08:02:11] Importing chacha8rand.trap.gz (45 of 110)
+[2026-07-12 08:02:11] Importing rtcov.trap.gz (46 of 110)
+[2026-07-12 08:02:11] Importing cpu.trap.gz (47 of 110)
+[2026-07-12 08:02:11] Importing filepathlite.trap.gz (48 of 110)
+[2026-07-12 08:02:11] Importing fmtsort.trap.gz (49 of 110)
+[2026-07-12 08:02:11] Importing goarch.trap.gz (50 of 110)
+[2026-07-12 08:02:11] Importing godebug.trap.gz (51 of 110)
+[2026-07-12 08:02:11] Importing godebugs.trap.gz (52 of 110)
+[2026-07-12 08:02:11] Importing goexperiment.trap.gz (53 of 110)
+[2026-07-12 08:02:11] Importing goos.trap.gz (54 of 110)
+[2026-07-12 08:02:11] Importing itoa.trap.gz (55 of 110)
+[2026-07-12 08:02:11] Importing msan.trap.gz (56 of 110)
+[2026-07-12 08:02:11] Importing nettrace.trap.gz (57 of 110)
+[2026-07-12 08:02:11] Importing oserror.trap.gz (58 of 110)
+[2026-07-12 08:02:11] Importing poll.trap.gz (59 of 110)
+[2026-07-12 08:02:11] Importing profilerecord.trap.gz (60 of 110)
+[2026-07-12 08:02:11] Importing race.trap.gz (61 of 110)
+[2026-07-12 08:02:11] Importing reflectlite.trap.gz (62 of 110)
+[2026-07-12 08:02:11] Importing atomic.trap.gz (63 of 110)
+[2026-07-12 08:02:11] Importing exithook.trap.gz (64 of 110)
+[2026-07-12 08:02:11] Importing maps.trap.gz (65 of 110)
+[2026-07-12 08:02:11] Importing math.trap.gz (66 of 110)
+[2026-07-12 08:02:11] Importing sys.trap.gz (67 of 110)
+[2026-07-12 08:02:11] Importing syscall.trap.gz (68 of 110)
+[2026-07-12 08:02:11] Importing singleflight.trap.gz (69 of 110)
+[2026-07-12 08:02:11] Importing stringslite.trap.gz (70 of 110)
+[2026-07-12 08:02:11] Importing sync.trap.gz (71 of 110)
+[2026-07-12 08:02:11] Importing execenv.trap.gz (72 of 110)
+[2026-07-12 08:02:11] Importing unix.trap.gz (73 of 110)
+[2026-07-12 08:02:11] Importing testlog.trap.gz (74 of 110)
+[2026-07-12 08:02:11] Importing unsafeheader.trap.gz (75 of 110)
+[2026-07-12 08:02:11] Importing fs.trap.gz (76 of 110)
+[2026-07-12 08:02:11] Importing io.trap.gz (77 of 110)
+[2026-07-12 08:02:11] Importing iter.trap.gz (78 of 110)
+[2026-07-12 08:02:11] Importing maps.trap.gz (79 of 110)
+[2026-07-12 08:02:11] Importing bits.trap.gz (80 of 110)
+[2026-07-12 08:02:11] Importing math.trap.gz (81 of 110)
+[2026-07-12 08:02:11] Importing metadata.trap.gz (82 of 110)
+[2026-07-12 08:02:11] Importing netip.trap.gz (83 of 110)
+[2026-07-12 08:02:11] Importing url.trap.gz (84 of 110)
+[2026-07-12 08:02:11] Importing net.trap.gz (85 of 110)
+[2026-07-12 08:02:11] Importing os.trap.gz (86 of 110)
+[2026-07-12 08:02:11] Importing filepath.trap.gz (87 of 110)
+[2026-07-12 08:02:11] Importing path.trap.gz (88 of 110)
+[2026-07-12 08:02:11] Importing reflect.trap.gz (89 of 110)
+[2026-07-12 08:02:11] Importing syntax.trap.gz (90 of 110)
+[2026-07-12 08:02:11] Importing regexp.trap.gz (91 of 110)
+[2026-07-12 08:02:11] Importing cgo.trap.gz (92 of 110)
+[2026-07-12 08:02:11] Importing runtime.trap.gz (93 of 110)
+[2026-07-12 08:02:11] Importing slices.trap.gz (94 of 110)
+[2026-07-12 08:02:11] Importing sort.trap.gz (95 of 110)
+[2026-07-12 08:02:11] Importing strconv.trap.gz (96 of 110)
+[2026-07-12 08:02:11] Importing strings.trap.gz (97 of 110)
+[2026-07-12 08:02:11] Importing atomic.trap.gz (98 of 110)
+[2026-07-12 08:02:11] Importing sync.trap.gz (99 of 110)
+[2026-07-12 08:02:11] Importing syscall.trap.gz (100 of 110)
+[2026-07-12 08:02:11] Importing parse.trap.gz (101 of 110)
+[2026-07-12 08:02:11] Importing template.trap.gz (102 of 110)
+[2026-07-12 08:02:11] Importing time.trap.gz (103 of 110)
+[2026-07-12 08:02:11] Importing utf8.trap.gz (104 of 110)
+[2026-07-12 08:02:11] Importing unicode.trap.gz (105 of 110)
+[2026-07-12 08:02:11] Importing unique.trap.gz (106 of 110)
+[2026-07-12 08:02:11] Importing universe.trap.gz (107 of 110)
+[2026-07-12 08:02:11] Importing unsafe.trap.gz (108 of 110)
+[2026-07-12 08:02:11] Importing dnsmessage.trap.gz (109 of 110)
+[2026-07-12 08:02:11] Importing weak.trap.gz (110 of 110)
+[2026-07-12 08:02:11] [PROGRESS] dataset import> Merging relations
+[2026-07-12 08:02:11] Merging 1 fragment for 'scopes'.
+[2026-07-12 08:02:11] Merged 1701 bytes (1.66 KiB) for 'scopes'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'scopenesting'.
+[2026-07-12 08:02:11] Merged 3488 bytes (3.41 KiB) for 'scopenesting'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'objects'.
+[2026-07-12 08:02:11] Merged 79735 bytes (77.87 KiB) for 'objects'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'objectscopes'.
+[2026-07-12 08:02:11] Merged 15460 bytes (15.10 KiB) for 'objectscopes'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'types'.
+[2026-07-12 08:02:11] Merged 14567 bytes (14.23 KiB) for 'types'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'typename'.
+[2026-07-12 08:02:11] Merged 3253 bytes (3.18 KiB) for 'typename'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'component_types'.
+[2026-07-12 08:02:11] Merged 69251 bytes (67.63 KiB) for 'component_types'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'methodreceivers'.
+[2026-07-12 08:02:11] Merged 8316 bytes (8.12 KiB) for 'methodreceivers'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'underlying_type'.
+[2026-07-12 08:02:11] Merged 3399 bytes (3.32 KiB) for 'underlying_type'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'type_objects'.
+[2026-07-12 08:02:11] Merged 3112 bytes (3.04 KiB) for 'type_objects'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'methodhosts'.
+[2026-07-12 08:02:11] Merged 589 bytes for 'methodhosts'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'element_type'.
+[2026-07-12 08:02:11] Merged 1643 bytes (1.60 KiB) for 'element_type'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'fieldstructs'.
+[2026-07-12 08:02:11] Merged 6426 bytes (6.28 KiB) for 'fieldstructs'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'base_type'.
+[2026-07-12 08:02:11] Merged 2725 bytes (2.66 KiB) for 'base_type'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'objecttypes'.
+[2026-07-12 08:02:11] Merged 70966 bytes (69.30 KiB) for 'objecttypes'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'packages'.
+[2026-07-12 08:02:11] Merged 637 bytes for 'packages'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'array_length'.
+[2026-07-12 08:02:11] Merged 697 bytes for 'array_length'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'typeparam'.
+[2026-07-12 08:02:11] Merged 1782 bytes (1.74 KiB) for 'typeparam'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'variadic'.
+[2026-07-12 08:02:11] Merged 120 bytes for 'variadic'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'compilations'.
+[2026-07-12 08:02:11] Merged 28 bytes for 'compilations'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'compilation_args'.
+[2026-07-12 08:02:11] Merged 44 bytes for 'compilation_args'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'compilation_compiling_files'.
+[2026-07-12 08:02:11] Merged 76 bytes for 'compilation_compiling_files'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'compilation_finished'.
+[2026-07-12 08:02:11] Merged 67 bytes for 'compilation_finished'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'interface_private_method_ids'.
+[2026-07-12 08:02:11] Merged 112 bytes for 'interface_private_method_ids'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'key_type'.
+[2026-07-12 08:02:11] Merged 223 bytes for 'key_type'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'struct_tags'.
+[2026-07-12 08:02:11] Merged 58 bytes for 'struct_tags'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'folders'.
+[2026-07-12 08:02:11] Merged 52 bytes for 'folders'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'containerparent'.
+[2026-07-12 08:02:11] Merged 79 bytes for 'containerparent'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'files'.
+[2026-07-12 08:02:11] Merged 77 bytes for 'files'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'locations_default'.
+[2026-07-12 08:02:11] Merged 86634 bytes (84.60 KiB) for 'locations_default'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'has_location'.
+[2026-07-12 08:02:11] Merged 48434 bytes (47.30 KiB) for 'has_location'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'literals'.
+[2026-07-12 08:02:11] Merged 45219 bytes (44.16 KiB) for 'literals'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'exprs'.
+[2026-07-12 08:02:11] Merged 64542 bytes (63.03 KiB) for 'exprs'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'specs'.
+[2026-07-12 08:02:11] Merged 725 bytes for 'specs'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'decls'.
+[2026-07-12 08:02:11] Merged 1216 bytes (1.19 KiB) for 'decls'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'type_of'.
+[2026-07-12 08:02:11] Merged 41369 bytes (40.40 KiB) for 'type_of'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'defs'.
+[2026-07-12 08:02:11] Merged 4622 bytes (4.51 KiB) for 'defs'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'constvalues'.
+[2026-07-12 08:02:11] Merged 5069 bytes (4.95 KiB) for 'constvalues'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'doc_comments'.
+[2026-07-12 08:02:11] Merged 762 bytes for 'doc_comments'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'uses'.
+[2026-07-12 08:02:11] Merged 22599 bytes (22.07 KiB) for 'uses'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'fields'.
+[2026-07-12 08:02:11] Merged 3150 bytes (3.08 KiB) for 'fields'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'scopenodes'.
+[2026-07-12 08:02:11] Merged 3112 bytes (3.04 KiB) for 'scopenodes'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'stmts'.
+[2026-07-12 08:02:11] Merged 12272 bytes (11.98 KiB) for 'stmts'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'comment_groups'.
+[2026-07-12 08:02:11] Merged 1123 bytes (1.10 KiB) for 'comment_groups'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'comments'.
+[2026-07-12 08:02:11] Merged 4681 bytes (4.57 KiB) for 'comments'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'numlines'.
+[2026-07-12 08:02:11] Merged 148 bytes for 'numlines'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'has_ellipsis'.
+[2026-07-12 08:02:11] Merged 55 bytes for 'has_ellipsis'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'modtokens'.
+[2026-07-12 08:02:11] Merged 81 bytes for 'modtokens'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'modexprs'.
+[2026-07-12 08:02:11] Merged 82 bytes for 'modexprs'.
+[2026-07-12 08:02:11] Merging 1 fragment for 'sourceLocationPrefix'.
+[2026-07-12 08:02:11] Merged 18 bytes for 'sourceLocationPrefix'.
+[2026-07-12 08:02:11] Saving string and id pools to disk.
+[2026-07-12 08:02:11] Finished importing TRAP files.
+[2026-07-12 08:02:11] Read 21.56 MiB of uncompressed TRAP data.
+[2026-07-12 08:02:11] Uncompressed relation data size: 2.26 MiB
+[2026-07-12 08:02:11] Relation data size: 619.72 KiB (merge rate: 6.81 MiB/s)
+[2026-07-12 08:02:11] String pool size: 2.41 MiB
+[2026-07-12 08:02:11] ID pool size: 4.50 MiB
+[2026-07-12 08:02:11] [PROGRESS] dataset import> Finished writing database (relations: 619.72 KiB; string pool: 2.41 MiB).
+[2026-07-12 08:02:11] Pausing evaluation to close the cache at sequence stamp o+103
+[2026-07-12 08:02:11] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 08:02:11] Unpausing evaluation
+[2026-07-12 08:02:11] Plumbing command codeql dataset import completed.
+[2026-07-12 08:02:11] [PROGRESS] database finalize> TRAP import complete (1.8s).
+[2026-07-12 08:02:11] Running plumbing command: codeql database cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra
+[2026-07-12 08:02:11] [PROGRESS] database cleanup> Cleaning up existing TRAP files after import...
+[2026-07-12 08:02:11] [PROGRESS] database cleanup> TRAP files cleaned up (7ms).
+[2026-07-12 08:02:11] [PROGRESS] database cleanup> Cleaning up scratch directory...
+[2026-07-12 08:02:11] [PROGRESS] database cleanup> Scratch directory cleaned up (1ms).
+[2026-07-12 08:02:11] Running plumbing command: codeql dataset cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go
+[2026-07-12 08:02:11] [PROGRESS] dataset cleanup> Cleaning up dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go.
+[2026-07-12 08:02:11] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go/default/cache in mode trim.
+[2026-07-12 08:02:11] Sequence stamp origin is -5892337222262758103
+[2026-07-12 08:02:11] Pausing evaluation to quickly trim memory at sequence stamp o+0
+[2026-07-12 08:02:11] Unpausing evaluation
+[2026-07-12 08:02:11] Pausing evaluation to zealously trim disk at sequence stamp o+1
+[2026-07-12 08:02:11] Unpausing evaluation
+[2026-07-12 08:02:11] Trimming completed (2ms): Trimmed disposable data from cache.
+[2026-07-12 08:02:11] Pausing evaluation to close the cache at sequence stamp o+2
+[2026-07-12 08:02:11] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 08:02:11] Unpausing evaluation
+[2026-07-12 08:02:11] [PROGRESS] dataset cleanup> Trimmed disposable data from cache.
+[2026-07-12 08:02:11] [PROGRESS] dataset cleanup> Finalizing dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go
+[2026-07-12 08:02:11] [DETAILS] dataset cleanup> Finished deleting ID pool from /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go (1ms).
+[2026-07-12 08:02:11] Plumbing command codeql dataset cleanup completed.
+[2026-07-12 08:02:11] Plumbing command codeql database cleanup completed with status 0.
+[2026-07-12 08:02:11] [PROGRESS] database finalize> Finished zipping source archive (70.49 KiB).
+[2026-07-12 08:02:11] Plumbing command codeql database finalize completed.
+[2026-07-12 08:02:11] [PROGRESS] database create> Successfully created database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra.
+[2026-07-12 08:02:11] Terminating normally.

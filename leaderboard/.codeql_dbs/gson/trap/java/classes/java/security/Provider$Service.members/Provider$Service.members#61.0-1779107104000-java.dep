@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/security/Provider$Service.members/Provider$Service.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/security/Provider$Service.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/security/Provider.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/security/NoSuchAlgorithmException.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/Map.members.trap.gz

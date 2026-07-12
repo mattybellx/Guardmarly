@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors$Descriptor.members/Descriptors$Descriptor.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$GenericDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/Descriptors$DescriptorValidationException.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/Descriptors$OneofDescriptor.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$MessageOptions.members.trap.gz
+classes/com/google/protobuf/Descriptors$FileDescriptor.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$DescriptorProto.members.trap.gz

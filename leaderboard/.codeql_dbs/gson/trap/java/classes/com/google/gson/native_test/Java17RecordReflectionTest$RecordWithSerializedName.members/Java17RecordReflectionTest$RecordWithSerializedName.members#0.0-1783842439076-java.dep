@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/native_test/Java17RecordReflectionTest$RecordWithSerializedName.members/Java17RecordReflectionTest$RecordWithSerializedName.members#0.0-1783842439076-java.trap.gz
+
+TRAPS
+classes/com/google/gson/native_test/Java17RecordReflectionTest$RecordWithSerializedName.members.trap.gz
+classes/java/lang/Record.members.trap.gz
+classes/com/google/gson/native_test/Java17RecordReflectionTest.members.trap.gz
+classes/com/google/gson/annotations/SerializedName.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/FieldExclusionTest$Outer.members/FieldExclusionTest$Outer.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/FieldExclusionTest$Outer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/FieldExclusionTest.members.trap.gz

@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/TypeAdapterRuntimeTypeWrapperTest$Deserializer.members/TypeAdapterRuntimeTypeWrapperTest$Deserializer.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/TypeAdapterRuntimeTypeWrapperTest$Deserializer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/TypeAdapterRuntimeTypeWrapperTest$Base.members.trap.gz
+classes/com/google/gson/JsonDeserializer.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/com/google/gson/JsonDeserializationContext.members.trap.gz
+classes/com/google/gson/JsonParseException.members.trap.gz
+classes/com/google/gson/functional/TypeAdapterRuntimeTypeWrapperTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz

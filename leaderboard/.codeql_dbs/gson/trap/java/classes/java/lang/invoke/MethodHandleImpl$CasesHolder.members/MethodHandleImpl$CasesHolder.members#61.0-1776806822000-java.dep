@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/invoke/MethodHandleImpl$CasesHolder.members/MethodHandleImpl$CasesHolder.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/invoke/MethodHandleImpl$CasesHolder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/invoke/MethodHandleImpl.members.trap.gz
+classes/java/lang/invoke/MethodHandle.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/jdk/internal/vm/annotation/Stable.members.trap.gz

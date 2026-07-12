@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage$ExtensionWriter.members/GeneratedMessage$ExtendableMessage$ExtensionWriter.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage$ExtensionWriter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage$ExtensionSerializer.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessage.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz

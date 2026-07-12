@@ -1,0 +1,27 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/dryrun/DryRunProcessor.members/DryRunProcessor.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/dryrun/DryRunProcessor.members.trap.gz
+classes/com/google/caliper/runner/experiment/Experiment.members.trap.gz
+classes/com/google/common/collect/ImmutableSet.members.trap.gz
+classes/com/google/common/collect/ImmutableCollection.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerProcessor.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerException.members.trap.gz
+classes/com/google/caliper/runner/worker/Worker.members.trap.gz
+classes/com/google/caliper/bridge/LogMessage.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/caliper/util/ShortDuration.members.trap.gz
+classes/javax/inject/Inject.members.trap.gz

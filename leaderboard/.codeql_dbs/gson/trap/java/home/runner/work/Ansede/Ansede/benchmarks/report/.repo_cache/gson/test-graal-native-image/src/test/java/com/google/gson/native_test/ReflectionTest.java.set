@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-graal-native-image/src/test/java/com/google/gson/native_test/ReflectionTest.java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest.members/ReflectionTest.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithDefaultConstructor.members/ReflectionTest$ClassWithDefaultConstructor.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithCustomDefaultConstructor.members/ReflectionTest$ClassWithCustomDefaultConstructor.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithoutDefaultConstructor.members/ReflectionTest$ClassWithoutDefaultConstructor.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithFinalField.members/ReflectionTest$ClassWithFinalField.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithSerializedName.members/ReflectionTest$ClassWithSerializedName.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithCustomClassAdapter.members/ReflectionTest$ClassWithCustomClassAdapter.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithCustomClassAdapter$CustomAdapter.members/ReflectionTest$ClassWithCustomClassAdapter$CustomAdapter.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithCustomFieldAdapter.members/ReflectionTest$ClassWithCustomFieldAdapter.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithCustomFieldAdapter$CustomAdapter.members/ReflectionTest$ClassWithCustomFieldAdapter$CustomAdapter.members#0.0-1783842439076-java.trap.gz
+classes/com/google/gson/native_test/ReflectionTest$ClassWithRegisteredAdapter.members/ReflectionTest$ClassWithRegisteredAdapter.members#0.0-1783842439076-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

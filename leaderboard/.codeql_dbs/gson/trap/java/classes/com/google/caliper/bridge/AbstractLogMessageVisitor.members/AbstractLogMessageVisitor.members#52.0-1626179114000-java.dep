@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/bridge/AbstractLogMessageVisitor.members/AbstractLogMessageVisitor.members#52.0-1626179114000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/bridge/AbstractLogMessageVisitor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/bridge/LogMessageVisitor.members.trap.gz
+classes/com/google/caliper/bridge/DryRunSuccessLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/TargetInfoLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/VmPropertiesLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/VmOptionLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/StopMeasurementLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/StartMeasurementLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/HotspotLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/FailureLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/GcLogMessage.members.trap.gz

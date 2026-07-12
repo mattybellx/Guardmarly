@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/base/Splitter.members/Splitter.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/base/Splitter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/common/base/Splitter$MapSplitter.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/common/base/CharMatcher.members.trap.gz
+classes/com/google/common/annotations/GwtIncompatible.members.trap.gz
+classes/com/google/common/base/CommonPattern.members.trap.gz
+classes/java/util/regex/Pattern.members.trap.gz

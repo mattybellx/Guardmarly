@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/InterfaceTest$TestObject.members/InterfaceTest$TestObject.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/InterfaceTest$TestObject.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/InterfaceTest$TestObjectInterface.members.trap.gz
+classes/com/google/gson/functional/InterfaceTest.members.trap.gz

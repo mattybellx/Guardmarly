@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/DateMidnight.members/DateMidnight.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/DateMidnight.members.trap.gz
+classes/org/joda/time/base/BaseDateTime.members.trap.gz
+classes/org/joda/time/ReadableDateTime.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/org/joda/time/DateMidnight$Property.members.trap.gz
+classes/org/joda/time/Interval.members.trap.gz
+classes/org/joda/time/LocalDate.members.trap.gz
+classes/org/joda/time/YearMonthDay.members.trap.gz
+classes/org/joda/time/DateTimeFieldType.members.trap.gz
+classes/org/joda/time/ReadablePeriod.members.trap.gz
+classes/org/joda/time/ReadableDuration.members.trap.gz
+classes/org/joda/time/DurationFieldType.members.trap.gz
+classes/org/joda/time/ReadablePartial.members.trap.gz
+classes/org/joda/time/DateTimeZone.members.trap.gz
+classes/org/joda/time/Chronology.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/format/DateTimeFormatter.members.trap.gz

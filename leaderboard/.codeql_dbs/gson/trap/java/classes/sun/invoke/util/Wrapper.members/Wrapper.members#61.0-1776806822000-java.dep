@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/invoke/util/Wrapper.members/Wrapper.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/invoke/util/Wrapper.members.trap.gz
+classes/java/lang/Enum.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/constant/Constable.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor$OfField.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Optional.members.trap.gz
+classes/jdk/internal/ValueBased.members.trap.gz
+classes/java/lang/Enum$EnumDesc.members.trap.gz
+classes/java/lang/constant/DynamicConstantDesc.members.trap.gz
+classes/java/lang/constant/ConstantDesc.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

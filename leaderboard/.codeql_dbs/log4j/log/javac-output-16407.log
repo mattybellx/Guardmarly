@@ -1,0 +1,6 @@
+[2026-07-12 07:59:40] [javac-output-16407] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:40] [javac-output-16407] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:40] [javac-output-16407] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:59:41] [javac-output-16407] warning: [processing] No processor claimed any of these annotations: org.springframework.context.annotation.Configuration,org.junit.Rule,org.springframework.boot.test.context.SpringBootTest,org.junit.runner.RunWith,org.springframework.beans.factory.annotation.Autowired,org.junit.Test
+[2026-07-12 07:59:42] [javac-output-16407] /home/runner/.m2/repository/org/springframework/spring-core/5.3.39/spring-core-5.3.39.jar(/org/springframework/lang/Nullable.class): warning: [classfile] Cannot find annotation method 'when()' in type 'Nonnull'
+[2026-07-12 07:59:42] [javac-output-16407] warning: unknown enum constant When.MAYBE

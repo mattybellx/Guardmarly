@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/constant/ConstantDesc.members/ConstantDesc.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/constant/ConstantDesc.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/constant/ClassDesc.members.trap.gz
+classes/java/lang/constant/MethodHandleDesc.members.trap.gz
+classes/java/lang/constant/MethodTypeDesc.members.trap.gz
+classes/java/lang/Double.members.trap.gz
+classes/java/lang/constant/DynamicConstantDesc.members.trap.gz
+classes/java/lang/Float.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/invoke/MethodHandles$Lookup.members.trap.gz
+classes/java/lang/ReflectiveOperationException.members.trap.gz

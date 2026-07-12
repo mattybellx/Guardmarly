@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/GregorianCalendar.members/GregorianCalendar.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/GregorianCalendar.members.trap.gz
+classes/java/util/Calendar.members.trap.gz
+classes/java/time/ZonedDateTime.members.trap.gz
+classes/java/util/TimeZone.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Date.members.trap.gz
+classes/java/util/Locale.members.trap.gz

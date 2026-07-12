@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ObjectWriter$GeneratorSettings.members/ObjectWriter$GeneratorSettings.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ObjectWriter$GeneratorSettings.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/ObjectWriter.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonGenerator.members.trap.gz
+classes/com/fasterxml/jackson/core/SerializableString.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/core/io/CharacterEscapes.members.trap.gz
+classes/com/fasterxml/jackson/core/FormatSchema.members.trap.gz
+classes/com/fasterxml/jackson/core/PrettyPrinter.members.trap.gz

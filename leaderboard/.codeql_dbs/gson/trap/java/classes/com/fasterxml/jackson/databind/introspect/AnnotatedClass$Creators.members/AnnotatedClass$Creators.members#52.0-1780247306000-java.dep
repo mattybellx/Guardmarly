@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedClass$Creators.members/AnnotatedClass$Creators.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedClass$Creators.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedClass.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedConstructor.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMethod.members.trap.gz

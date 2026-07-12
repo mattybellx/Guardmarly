@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/TableSubject.members/TableSubject.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/TableSubject.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/collect/Table.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/collect/Table$Cell.members.trap.gz

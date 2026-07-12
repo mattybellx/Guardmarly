@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/Test.members/Test.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/Test.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor$OfField.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor.members.trap.gz
+classes/java/lang/constant/Constable.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz

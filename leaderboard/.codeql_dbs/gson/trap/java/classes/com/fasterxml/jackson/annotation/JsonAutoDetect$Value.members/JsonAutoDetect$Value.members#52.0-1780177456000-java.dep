@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Value.members/JsonAutoDetect$Value.members#52.0-1780177456000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Value.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JacksonAnnotationValue.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonAutoDetect$Visibility.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/annotation/PropertyAccessor.members.trap.gz

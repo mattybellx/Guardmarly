@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/node/TextNode.members/TextNode.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/node/TextNode.members.trap.gz
+classes/com/fasterxml/jackson/databind/node/ValueNode.members.trap.gz
+classes/java/lang/StringBuilder.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonGenerator.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/core/Base64Variant.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonToken.members.trap.gz
+classes/com/fasterxml/jackson/databind/node/JsonNodeType.members.trap.gz

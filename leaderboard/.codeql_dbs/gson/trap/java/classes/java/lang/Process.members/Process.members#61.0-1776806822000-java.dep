@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/Process.members/Process.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/Process.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/lang/ProcessHandle.members.trap.gz
+classes/java/lang/ProcessHandle$Info.members.trap.gz
+classes/java/util/concurrent/CompletableFuture.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/util/concurrent/CompletionStage.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/java/lang/InterruptedException.members.trap.gz
+classes/java/nio/charset/Charset.members.trap.gz
+classes/java/io/BufferedWriter.members.trap.gz
+classes/java/io/BufferedReader.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz

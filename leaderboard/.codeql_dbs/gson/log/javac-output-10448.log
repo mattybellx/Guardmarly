@@ -1,0 +1,8 @@
+[2026-07-12 07:48:41] [javac-output-10448] warning: [processing] No processor claimed any of these annotations: com.google.gson.annotations.JsonAdapter,com.google.gson.annotations.Since,com.google.gson.annotations.SerializedName,com.google.gson.annotations.Until,com.google.gson.annotations.Expose
+[2026-07-12 07:48:41] [javac-output-10448] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/ClassWithJsonAdapterAnnotation.java:90: warning: [unchecked] unchecked cast
+[2026-07-12 07:48:41] [javac-output-10448]               new TypeAdapter<DummyClass>() {
+[2026-07-12 07:48:41] [javac-output-10448]               ^
+[2026-07-12 07:48:41] [javac-output-10448]   required: TypeAdapter<T>
+[2026-07-12 07:48:41] [javac-output-10448]   found:    <anonymous TypeAdapter<DummyClass>>
+[2026-07-12 07:48:41] [javac-output-10448]   where T is a type-variable:
+[2026-07-12 07:48:41] [javac-output-10448]     T extends Object declared in method <T>create(Gson,TypeToken<T>)

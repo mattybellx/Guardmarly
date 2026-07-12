@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors$DescriptorValidationException.members/Descriptors$DescriptorValidationException.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors$DescriptorValidationException.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz

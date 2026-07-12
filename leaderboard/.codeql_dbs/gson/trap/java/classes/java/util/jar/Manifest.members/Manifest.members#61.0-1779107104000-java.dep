@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/jar/Manifest.members/Manifest.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/jar/Manifest.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/jar/Attributes.members.trap.gz
+classes/java/util/Map.members.trap.gz

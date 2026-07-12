@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/ser/SerializerFactory.members/SerializerFactory.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/ser/SerializerFactory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializationConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/com/fasterxml/jackson/databind/SerializerProvider.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsontype/TypeSerializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/BeanSerializerModifier.members.trap.gz
+classes/com/fasterxml/jackson/databind/ser/Serializers.members.trap.gz

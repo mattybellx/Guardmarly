@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/ConcurrentSkipListMap$KeySpliterator.members/ConcurrentSkipListMap$KeySpliterator.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/ConcurrentSkipListMap$KeySpliterator.members.trap.gz
+classes/java/util/concurrent/ConcurrentSkipListMap$CSLMSpliterator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/ConcurrentSkipListMap.members.trap.gz
+classes/java/util/Comparator.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/concurrent/ConcurrentSkipListMap$Index.members.trap.gz
+classes/java/util/concurrent/ConcurrentSkipListMap$Node.members.trap.gz
+classes/java/util/Spliterator.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz

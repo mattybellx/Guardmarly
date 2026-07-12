@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/reflect/Java17ReflectionHelperTest$PrincipalImpl.members/Java17ReflectionHelperTest$PrincipalImpl.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/reflect/Java17ReflectionHelperTest$PrincipalImpl.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/file/attribute/UserPrincipal.members.trap.gz
+classes/java/nio/file/attribute/GroupPrincipal.members.trap.gz
+classes/com/google/gson/internal/reflect/Java17ReflectionHelperTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/lang/String.members.trap.gz

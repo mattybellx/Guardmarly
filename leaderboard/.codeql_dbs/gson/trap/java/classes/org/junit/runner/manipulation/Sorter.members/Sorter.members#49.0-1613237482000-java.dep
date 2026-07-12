@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/manipulation/Sorter.members/Sorter.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/manipulation/Sorter.members.trap.gz
+classes/org/junit/runner/manipulation/Ordering.members.trap.gz
+classes/org/junit/runner/Description.members.trap.gz
+classes/java/util/Comparator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/function/ToDoubleFunction.members.trap.gz
+classes/java/util/function/ToLongFunction.members.trap.gz
+classes/java/util/function/ToIntFunction.members.trap.gz
+classes/java/util/function/Function.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/List.members.trap.gz

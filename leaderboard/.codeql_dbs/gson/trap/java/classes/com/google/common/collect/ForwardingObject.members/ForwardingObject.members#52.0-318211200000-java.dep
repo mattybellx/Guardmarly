@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/ForwardingObject.members/ForwardingObject.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/ForwardingObject.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/java/lang/String.members.trap.gz

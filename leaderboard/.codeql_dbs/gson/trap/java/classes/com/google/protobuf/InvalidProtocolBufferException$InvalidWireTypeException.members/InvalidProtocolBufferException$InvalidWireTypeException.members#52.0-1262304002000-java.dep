@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/InvalidProtocolBufferException$InvalidWireTypeException.members/InvalidProtocolBufferException$InvalidWireTypeException.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/InvalidProtocolBufferException$InvalidWireTypeException.members.trap.gz
+classes/com/google/protobuf/InvalidProtocolBufferException.members.trap.gz
+classes/java/lang/String.members.trap.gz

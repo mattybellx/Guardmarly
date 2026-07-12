@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/file/FileSystem.members/FileSystem.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/file/FileSystem.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/java/nio/file/WatchService.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/file/attribute/UserPrincipalLookupService.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/nio/file/PathMatcher.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/nio/file/Path.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/nio/file/FileStore.members.trap.gz
+classes/java/nio/file/spi/FileSystemProvider.members.trap.gz

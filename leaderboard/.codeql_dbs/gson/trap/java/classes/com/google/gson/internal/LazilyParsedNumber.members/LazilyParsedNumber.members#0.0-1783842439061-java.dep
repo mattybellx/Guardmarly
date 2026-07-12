@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/LazilyParsedNumber.members/LazilyParsedNumber.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/LazilyParsedNumber.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Override.members.trap.gz

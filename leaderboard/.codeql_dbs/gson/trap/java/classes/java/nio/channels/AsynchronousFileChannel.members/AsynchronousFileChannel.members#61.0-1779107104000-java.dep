@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/channels/AsynchronousFileChannel.members/AsynchronousFileChannel.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/channels/AsynchronousFileChannel.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/channels/AsynchronousChannel.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/nio/channels/CompletionHandler.members.trap.gz
+classes/java/nio/channels/FileLock.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/file/Path.members.trap.gz
+classes/java/nio/file/OpenOption.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/concurrent/ExecutorService.members.trap.gz
+classes/java/nio/file/attribute/FileAttribute.members.trap.gz

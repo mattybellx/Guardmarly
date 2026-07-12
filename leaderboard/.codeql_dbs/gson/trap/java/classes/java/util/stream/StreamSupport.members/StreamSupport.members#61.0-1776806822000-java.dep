@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/stream/StreamSupport.members/StreamSupport.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/stream/StreamSupport.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Spliterator$OfDouble.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/stream/DoubleStream.members.trap.gz
+classes/java/util/Spliterator$OfLong.members.trap.gz
+classes/java/util/stream/LongStream.members.trap.gz
+classes/java/util/Spliterator$OfInt.members.trap.gz
+classes/java/util/stream/IntStream.members.trap.gz
+classes/java/util/stream/Stream.members.trap.gz
+classes/java/util/stream/BaseStream.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/util/Spliterator.members.trap.gz

@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/introspect/AccessorNamingStrategy.members/AccessorNamingStrategy.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/introspect/AccessorNamingStrategy.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedField.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMethod.members.trap.gz

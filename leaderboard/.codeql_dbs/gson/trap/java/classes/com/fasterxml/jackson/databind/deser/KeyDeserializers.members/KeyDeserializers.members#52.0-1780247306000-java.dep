@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/KeyDeserializers.members/KeyDeserializers.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/KeyDeserializers.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/BeanDescription.members.trap.gz
+classes/com/fasterxml/jackson/databind/KeyDeserializer.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz

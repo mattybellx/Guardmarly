@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/cfg/ContextAttributes.members/ContextAttributes.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/cfg/ContextAttributes.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map.members.trap.gz

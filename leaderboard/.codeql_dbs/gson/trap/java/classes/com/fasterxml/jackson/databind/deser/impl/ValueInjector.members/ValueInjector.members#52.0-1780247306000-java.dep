@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/impl/ValueInjector.members/ValueInjector.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/impl/ValueInjector.members.trap.gz
+classes/com/fasterxml/jackson/databind/BeanProperty$Std.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/com/fasterxml/jackson/databind/PropertyName.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AnnotatedMember.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz

@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/hamcrest/SelfDescribing.members/SelfDescribing.members#49.0-1341866982000-java.trap.gz
+
+TRAPS
+classes/org/hamcrest/SelfDescribing.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/hamcrest/Description.members.trap.gz

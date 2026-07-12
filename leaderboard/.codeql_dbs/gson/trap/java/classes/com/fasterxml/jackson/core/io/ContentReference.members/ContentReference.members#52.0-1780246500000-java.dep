@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/io/ContentReference.members/ContentReference.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/io/ContentReference.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/StringBuilder.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz
+classes/com/fasterxml/jackson/core/ErrorReportConfiguration.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

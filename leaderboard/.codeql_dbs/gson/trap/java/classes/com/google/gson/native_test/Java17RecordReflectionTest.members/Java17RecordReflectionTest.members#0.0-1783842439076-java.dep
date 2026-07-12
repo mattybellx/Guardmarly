@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/native_test/Java17RecordReflectionTest.members/Java17RecordReflectionTest.members#0.0-1783842439076-java.trap.gz
+
+TRAPS
+classes/com/google/gson/native_test/Java17RecordReflectionTest.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/junit/jupiter/api/Test.members.trap.gz

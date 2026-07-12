@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/base/Equivalence$Wrapper.members/Equivalence$Wrapper.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/base/Equivalence$Wrapper.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/base/Equivalence.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/base/ParametricNullness.members.trap.gz

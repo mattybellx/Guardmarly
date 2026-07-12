@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/ByteString$Output.members/ByteString$Output.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/ByteString$Output.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

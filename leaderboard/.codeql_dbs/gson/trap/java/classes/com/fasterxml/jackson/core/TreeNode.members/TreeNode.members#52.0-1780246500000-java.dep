@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/TreeNode.members/TreeNode.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/TreeNode.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/ObjectCodec.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonParser.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/IllegalArgumentException.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonPointer.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonParser$NumberType.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonToken.members.trap.gz

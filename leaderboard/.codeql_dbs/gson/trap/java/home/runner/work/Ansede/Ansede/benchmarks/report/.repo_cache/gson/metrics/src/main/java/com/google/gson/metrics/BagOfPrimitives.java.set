@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/metrics/src/main/java/com/google/gson/metrics/BagOfPrimitives.java.trap.gz
+classes/com/google/common/base/Objects.members/Objects.members#52.0-1616154040000-java.trap.gz
+classes/com/google/gson/metrics/BagOfPrimitives.members/BagOfPrimitives.members#0.0-1783842439073-java.trap.gz
+classes/com/google/common/base/ExtraObjectsMethodsForWeb.members/ExtraObjectsMethodsForWeb.members#52.0-1616154040000-java.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members/GwtCompatible.members#52.0-1616154034000-java.trap.gz
+jars/home/runner/.m2/repository/com/google/guava/guava/30.1.1-jre/guava-30.1.1-jre.jar.trap.gz

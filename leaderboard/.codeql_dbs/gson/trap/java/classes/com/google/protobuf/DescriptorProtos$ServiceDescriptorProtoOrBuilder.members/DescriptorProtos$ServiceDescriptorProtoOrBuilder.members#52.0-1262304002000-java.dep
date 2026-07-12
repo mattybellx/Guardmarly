@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$ServiceDescriptorProtoOrBuilder.members/DescriptorProtos$ServiceDescriptorProtoOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$ServiceDescriptorProtoOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$ServiceOptionsOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$ServiceOptions.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$MethodDescriptorProtoOrBuilder.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$MethodDescriptorProto.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/lang/String.members.trap.gz

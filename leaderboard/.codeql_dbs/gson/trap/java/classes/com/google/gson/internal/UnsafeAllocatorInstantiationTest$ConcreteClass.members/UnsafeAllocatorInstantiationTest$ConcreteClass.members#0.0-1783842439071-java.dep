@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/UnsafeAllocatorInstantiationTest$ConcreteClass.members/UnsafeAllocatorInstantiationTest$ConcreteClass.members#0.0-1783842439071-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/UnsafeAllocatorInstantiationTest$ConcreteClass.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/internal/UnsafeAllocatorInstantiationTest.members.trap.gz

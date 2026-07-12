@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/TypeHierarchyAdapterTest$Manager.members/TypeHierarchyAdapterTest$Manager.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/TypeHierarchyAdapterTest$Manager.members.trap.gz
+classes/com/google/gson/functional/TypeHierarchyAdapterTest$Employee.members.trap.gz
+classes/com/google/gson/functional/TypeHierarchyAdapterTest.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

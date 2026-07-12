@@ -1,0 +1,902 @@
+[2026-07-12 07:03:12] This is codeql database create benchmarks/report/.codeql_dbs/flask --language=python --source-root=benchmarks/report/.repo_cache/flask
+[2026-07-12 07:03:12] Log file was started late.
+[2026-07-12 07:03:12] [PROGRESS] database create> Initializing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask.
+[2026-07-12 07:03:12] Running plumbing command: codeql database init --language=python --extractor-options-verbosity=1 --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --source-root=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask --allow-missing-source-root=false --allow-already-existing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask
+[2026-07-12 07:03:12] Calling plumbing command: codeql resolve languages --extractor-options-verbosity=1 --format=betterjson
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Scanning for [codeql-extractor.yml] from /home/runner/work/Ansede/Ansede/codeql/.codeqlmanifest.json
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/go/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/yaml/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/swift/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/rust/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/properties/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csv/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/ruby/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/javascript/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csharp/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/python/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/actions/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/cpp/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/xml/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/html/codeql-extractor.yml.
+[2026-07-12 07:03:12] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/java/codeql-extractor.yml.
+[2026-07-12 07:03:12] Plumbing command codeql resolve languages completed:
+                      {
+                        "aliases" : {
+                          "c" : "cpp",
+                          "c++" : "cpp",
+                          "c-c++" : "cpp",
+                          "c-cpp" : "cpp",
+                          "c#" : "csharp",
+                          "java-kotlin" : "java",
+                          "kotlin" : "java",
+                          "javascript-typescript" : "javascript",
+                          "typescript" : "javascript"
+                        },
+                        "extractors" : {
+                          "go" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/go",
+                              "extractor_options" : {
+                                "extract_tests" : {
+                                  "title" : "Whether to include Go test files in the CodeQL database.",
+                                  "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "extract_vendor_dirs" : {
+                                  "title" : "Whether to include Go vendor directories in the CodeQL database.",
+                                  "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "yaml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/yaml"
+                            }
+                          ],
+                          "swift" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/swift"
+                            }
+                          ],
+                          "rust" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/rust",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                },
+                                "cargo_target_dir" : {
+                                  "title" : "Directory to use for cargo output files.",
+                                  "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_target" : {
+                                  "title" : "Target architecture",
+                                  "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_features" : {
+                                  "title" : "Cargo features to turn on",
+                                  "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "cargo_cfg_overrides" : {
+                                  "title" : "Cargo cfg overrides",
+                                  "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    },
+                                    "flamegraph" : {
+                                      "title" : "[Experimental] File path for write flame graph log",
+                                      "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+                                      "type" : "string"
+                                    }
+                                  }
+                                },
+                                "extract_dependencies_as_source" : {
+                                  "title" : "Extract dependencies as source code",
+                                  "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "properties" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/properties"
+                            }
+                          ],
+                          "csv" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csv"
+                            }
+                          ],
+                          "ruby" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/ruby",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ],
+                          "javascript" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/javascript",
+                              "extractor_options" : {
+                                "skip_types" : {
+                                  "title" : "Skip type extraction for TypeScript",
+                                  "description" : "Whether to skip the extraction of types in a TypeScript application",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "csharp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csharp",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|brotli)$"
+                                    }
+                                  }
+                                },
+                                "buildless" : {
+                                  "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+                                  "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "binlog" : {
+                                  "title" : "Binlog",
+                                  "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+                                  "type" : "array"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          ],
+                          "python" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/python",
+                              "extractor_options" : {
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Python extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "python_executable_name" : {
+                                  "title" : "Controls the name of the Python executable used by the Python extractor.",
+                                  "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(py|python|python3)$"
+                                }
+                              }
+                            }
+                          ],
+                          "actions" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/actions",
+                              "extractor_options" : { }
+                            }
+                          ],
+                          "cpp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/cpp",
+                              "extractor_options" : {
+                                "scale_timeouts" : {
+                                  "title" : "Value to scale compiler introspection timeouts with",
+                                  "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-9]+"
+                                },
+                                "log_verbosity" : {
+                                  "title" : "Verbosity of the extractor logging",
+                                  "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-3]"
+                                }
+                              }
+                            }
+                          ],
+                          "xml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/xml"
+                            }
+                          ],
+                          "html" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/html"
+                            }
+                          ],
+                          "java" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/java",
+                              "extractor_options" : {
+                                "exclude" : {
+                                  "title" : "A glob excluding files from analysis.",
+                                  "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",
+                                  "type" : "string"
+                                },
+                                "add_prefer_source" : {
+                                  "title" : "Whether to always prefer source files over class files.",
+                                  "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless" : {
+                                  "title" : "Whether to use buildless (standalone) extraction (experimental).",
+                                  "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                },
+                                "minimize_dependency_jars" : {
+                                  "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+                                  "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+[2026-07-12 07:03:12] [PROGRESS] database init> Calculating baseline information in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask
+[2026-07-12 07:03:12] [SPAMMY] database init> Ignoring the following directories when processing baseline information: .git, .hg, .svn.
+[2026-07-12 07:03:12] [DETAILS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/scc --by-file --exclude-dir .git,.hg,.svn --format json --no-large --no-min .
+[2026-07-12 07:03:12] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh.
+[2026-07-12 07:03:12] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask: [/home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh]
+[2026-07-12 07:03:12] [SPAMMY] database init> Ignored an additional 3 files when processing baseline information for YAML due to paths and paths-ignore configuration.
+[2026-07-12 07:03:12] [SPAMMY] database init> Found 83 baseline files for python.
+[2026-07-12 07:03:12] [SPAMMY] database init> Found 5 baseline files for actions.
+[2026-07-12 07:03:12] [PROGRESS] database init> Calculated baseline information for languages: actions, python (79ms).
+[2026-07-12 07:03:12] [SPAMMY] database init> Selected JGit Git client for /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask because the repository uses SHA-1 object format.
+[2026-07-12 07:03:12] [PROGRESS] database init> Resolving extractor python.
+[2026-07-12 07:03:12] [DETAILS] database init> Found candidate extractor root for python: /home/runner/work/Ansede/Ansede/codeql/python.
+[2026-07-12 07:03:12] [PROGRESS] database init> Successfully loaded extractor Python (python) from /home/runner/work/Ansede/Ansede/codeql/python.
+[2026-07-12 07:03:13] [PROGRESS] database init> Created skeleton CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask. This in-progress database is ready to be populated by an extractor.
+[2026-07-12 07:03:13] Plumbing command codeql database init completed.
+[2026-07-12 07:03:13] [PROGRESS] database create> Running build command: []
+[2026-07-12 07:03:13] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask --index-traceless-dbs --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask
+[2026-07-12 07:03:13] Using autobuild script /home/runner/work/Ansede/Ansede/codeql/python/tools/autobuild.sh.
+[2026-07-12 07:03:13] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask: [/home/runner/work/Ansede/Ansede/codeql/python/tools/autobuild.sh]
+[2026-07-12 07:03:13] [build-stderr] /bin/sh: 1: python2: not found
+[2026-07-12 07:03:13] [build-stdout] No directories containing root identifiers were found. Returning working directory as root.
+[2026-07-12 07:03:13] [build-stdout] Will try to guess Python version, as it was not specified in `lgtm.yml`
+[2026-07-12 07:03:13] [build-stdout] Trying to guess Python version based on Trove classifiers in setup.py
+[2026-07-12 07:03:13] [build-stdout] Did not find setup.py (expected it to be at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/setup.py)
+[2026-07-12 07:03:13] [build-stdout] Trying to guess Python version based on travis file
+[2026-07-12 07:03:13] [build-stdout] Did not find any travis files (expected them at either ['/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/.travis.yml', '/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/travis.yml'])
+[2026-07-12 07:03:13] [build-stdout] Trying to guess Python version based on installed versions
+[2026-07-12 07:03:13] [build-stdout] Wanted to run Python 2, but it is not available. Using Python 3 instead
+[2026-07-12 07:03:13] [build-stdout] This script is running Python 3, but Python 2 is also available (as 'python3')
+[2026-07-12 07:03:13] [build-stdout] Could not guess Python version, will use default: Python 3
+[2026-07-12 07:03:13] [build-stdout] Calling python3 -S /home/runner/work/Ansede/Ansede/codeql/python/tools/python_tracer.py --verbosity 3 -z all -c /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/working/trap_cache -R /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask
+[2026-07-12 07:03:13] [build-stdout] INFO: The Python extractor has recently stopped extracting the standard library by default. If you encounter problems, please let us know by submitting an issue to https://github.com/github/codeql. It is possible to re-enable extraction of the standard library by setting the environment variable CODEQL_EXTRACTOR_PYTHON_EXTRACT_STDLIB.
+[2026-07-12 07:03:13] [build-stdout] [INFO] Extraction will use the Python 3 standard library.
+[2026-07-12 07:03:13] [build-stdout] [INFO] sys_path is: ['/home/runner/work/Ansede/Ansede/codeql/python/tools', '/opt/hostedtoolcache/Python/3.12.13/x64/lib/python312.zip', '/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12', '/opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/lib-dynload']
+[2026-07-12 07:03:13] [build-stdout] [INFO] Python version 3.12.13
+[2026-07-12 07:03:13] [build-stdout] [INFO] Python extractor version 7.1.8
+[2026-07-12 07:03:13] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/docs in 2ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/docs/conf.py in 82ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/__init__.py in 41ms
+[2026-07-12 07:03:14] [build-stdout] [WARN] [2] Failed to find .sansio, Package at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask has no module sansio
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/ctx.py in 248ms
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find .sansio, Package at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask has no module sansio
+[2026-07-12 07:03:14] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/helpers.py in 234ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/subdomaintestmodule in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/config.py in 225ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/importerrorapp.py in 8ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/flaskr/db.py in 36ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/logging.py in 45ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps/__init__.py in 3ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/src/task_app in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/src in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/templating.py in 157ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/flaskr/blog.py in 73ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/inner1/inner2/__init__.py in 3ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/__main__.py in 3ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_converters.py in 50ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/src/task_app/__init__.py in 32ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/os.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/testing.py in 372ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/functools.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests/test_auth.py in 51ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/helloworld in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps/frontend in 5ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps/frontend/__init__.py in 12ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/types.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/src/task_app/views.py in 52ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib/util.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/blueprints.py in 135ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/helloworld/hello.py in 16ms
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find .., no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..config, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..ctx, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..helpers, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..json, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..logging, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..templating, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find .scaffold, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find ..testing, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [WARN] [3] Failed to find .blueprints, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_reqctx.py in 306ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/warnings.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial in 1ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/urllib in 2ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/json/__init__.py
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/app.py in 460ms
+[2026-07-12 07:03:14] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/typing.py in 61ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/copy.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/json in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/conftest.py in 165ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/js_example/__init__.py in 7ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_request.py in 67ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/js_example/views.py in 24ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/cli.py in 749ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/flaskr/auth.py in 73ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/__init__.py in 9ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted module sys in 0ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted module itertools in 11ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted module errno in 7ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_testing.py in 300ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests/test_blog.py in 78ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/urllib/parse.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/tests/conftest.py in 12ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/multiapp.py in 6ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib/__init__.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/concurrent/futures in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/traceback.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/subdomaintestmodule/__init__.py in 8ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib in 0ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/collections in 0ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/factory.py in 12ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/logging in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/inner1/inner2 in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/contextlib.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/datetime.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sessions.py in 254ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/globals.py in 42ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests/test_factory.py in 14ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/type_check/typing_route.py in 96ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/type_check in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_session_interface.py in 25ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_instance_config.py in 87ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps/admin in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests/test_db.py in 24ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/sqlite3/__init__.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/re in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/code.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/type_check/typing_error_handler.py in 32ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/app.py in 1042ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/collections/abc.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/contextvars.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/tests in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/re/__init__.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src in 3ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_user_error_handler.py in 375ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/json/tag.py in 232ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/inner1 in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/operator.py
+[2026-07-12 07:03:15] [build-stdout] [WARN] [1] Failed to find .., no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/scaffold.py
+[2026-07-12 07:03:15] [build-stdout] [WARN] [1] Failed to find ..helpers, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/scaffold.py
+[2026-07-12 07:03:15] [build-stdout] [WARN] [1] Failed to find ..templating, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/scaffold.py
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_config.py in 289ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/helloworld/wsgi.py in 8ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/src/task_app/tasks.py in 21ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples in 1ms
+[2026-07-12 07:03:15] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps/admin/__init__.py in 13ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_json_tag.py in 71ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/signals.py in 16ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/blueprintapp/apps in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/ssl.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_regression.py in 29ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/scaffold.py in 344ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/platform.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/sqlite3 in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/collections/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/type_check/typing_app_decorators.py in 21ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/typing.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/json in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/app.py in 5ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/http in 0ms
+[2026-07-12 07:03:16] [build-stdout] [WARN] [2] Failed to find ..sansio, Package at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask has no module sansio
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_logging.py in 75ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/__future__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/concurrent in 0ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/base64.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/http/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/json/provider.py in 112ms
+[2026-07-12 07:03:16] [build-stdout] [WARN] [1] Failed to find .scaffold, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/blueprints.py
+[2026-07-12 07:03:16] [build-stdout] [WARN] [1] Failed to find .app, no parent package of Python module at /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/blueprints.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/inner1/__init__.py in 6ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted module readline in 9ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_cli.py in 602ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/ast.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/js_example in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/inner1/inner2/flask.py in 5ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib/metadata in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/views.py in 80ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/concurrent/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/weakref.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests in 1ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/dataclasses.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_appctx.py in 199ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/io.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/sansio/blueprints.py in 424ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_apps/cliapp/__init__.py in 3ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_views.py in 269ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/decimal.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/concurrent/futures/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/inspect.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/pathlib.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_subclassing.py in 20ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/uuid.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/urllib/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/celery/make_celery.py in 5ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_async.py in 103ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/logging/__init__.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/flaskr/__init__.py in 25ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_templating.py in 449ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/rlcompleter.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_helpers.py in 322ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/hashlib.py
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/wrappers.py in 98ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/tests/conftest.py in 42ms
+[2026-07-12 07:03:16] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_signals.py in 151ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/javascript/tests/test_js_example.py in 29ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/json/__init__.py in 42ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_json.py in 269ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/asyncio/__init__.py
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/importlib/metadata/__init__.py
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Extracted module time in 6ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Extracted folder /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/asyncio in 0ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/tempfile.py
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Extracted folder /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/examples/tutorial/flaskr in 1ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Skipped built-in file /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12/codecs.py
+[2026-07-12 07:03:17] [build-stdout] [INFO] [3] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/src/flask/debughelpers.py in 138ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [4] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_basic.py in 1698ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [1] Extracted module gc in 3ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] [2] Extracted file /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask/tests/test_blueprints.py in 645ms
+[2026-07-12 07:03:17] [build-stdout] [INFO] Processed 171 modules in 3.81s
+[2026-07-12 07:03:17] Plumbing command codeql database trace-command completed.
+[2026-07-12 07:03:17] [PROGRESS] database create> Finalizing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask.
+[2026-07-12 07:03:17] Running plumbing command: codeql database finalize --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask
+[2026-07-12 07:03:17] Using pre-finalize script /home/runner/work/Ansede/Ansede/codeql/python/tools/pre-finalize.sh.
+[2026-07-12 07:03:17] [PROGRESS] database finalize> Running pre-finalize script /home/runner/work/Ansede/Ansede/codeql/python/tools/pre-finalize.sh in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask.
+[2026-07-12 07:03:17] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask --no-tracing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask /home/runner/work/Ansede/Ansede/codeql/python/tools/pre-finalize.sh
+[2026-07-12 07:03:17] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask: [/home/runner/work/Ansede/Ansede/codeql/python/tools/pre-finalize.sh]
+[2026-07-12 07:03:18] [build-stderr] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask...
+[2026-07-12 07:03:18] [build-stderr] /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask: Indexing files in in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask...
+[2026-07-12 07:03:18] [build-stderr] Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/flask: [/home/runner/work/Ansede/Ansede/codeql/yaml/tools/index-files.sh, /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/working/files-to-index7598823572755330381.list]
+[2026-07-12 07:03:19] Plumbing command codeql database trace-command completed.
+[2026-07-12 07:03:19] [PROGRESS] database finalize> Pre-finalize script /home/runner/work/Ansede/Ansede/codeql/python/tools/pre-finalize.sh completed in 1267 ms.
+[2026-07-12 07:03:19] [PROGRESS] database finalize> Running TRAP import for CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask...
+[2026-07-12 07:03:19] Running plumbing command: codeql dataset import --dbscheme=/home/runner/work/Ansede/Ansede/codeql/python/semmlecode.python.dbscheme -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/trap/python
+[2026-07-12 07:03:19] Clearing disk cache since the version file /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python/default/cache/version does not exist
+[2026-07-12 07:03:19] Tuple pool not found. Clearing relations with cached strings
+[2026-07-12 07:03:19] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python/default/cache in mode clear.
+[2026-07-12 07:03:19] Sequence stamp origin is -5892352395363173926
+[2026-07-12 07:03:19] Pausing evaluation to hard-clear memory at sequence stamp o+0
+[2026-07-12 07:03:19] Unpausing evaluation
+[2026-07-12 07:03:19] Pausing evaluation to quickly trim disk at sequence stamp o+1
+[2026-07-12 07:03:19] Unpausing evaluation
+[2026-07-12 07:03:19] Pausing evaluation to zealously trim disk at sequence stamp o+2
+[2026-07-12 07:03:19] Unpausing evaluation
+[2026-07-12 07:03:19] Trimming completed (14ms): Purged everything.
+[2026-07-12 07:03:19] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/trap/python
+[2026-07-12 07:03:19] Found 144 TRAP files (4.39 MiB)
+[2026-07-12 07:03:19] [PROGRESS] dataset import> Importing TRAP files
+[2026-07-12 07:03:19] Importing $files.7wANP13YF3TVaAt7E4JKJfUXbX8=.trap.gz (1 of 144)
+[2026-07-12 07:03:19] Importing $files.Zj8BfHQsWGhc6RAzUJVubphUzag=.trap.gz (2 of 144)
+[2026-07-12 07:03:19] Importing $files.iSUtJcpC5s-7hHOSYeyT4L1-KIQ=.trap.gz (3 of 144)
+[2026-07-12 07:03:19] Importing $files.zoDRmAal9ZCE2DXm7BFSkJLhubc=.trap.gz (4 of 144)
+[2026-07-12 07:03:19] Importing $flags.O_rXyFrkGsk7qWgEo1PtCjyJdvk=.trap.gz (5 of 144)
+[2026-07-12 07:03:19] Importing $interpreter3.gbvRoDw6Xh1Y77H24dNZPSFti1s=.trap.gz (6 of 144)
+[2026-07-12 07:03:19] Importing $stdlib_33.gZwxvivtTIWeyksFAzhVi4UBX-Q=.trap (7 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.0LDwAOe2PIQYCgj7quXB_1b34Jk=.trap.gz (8 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.7GoatxspZlf5Glip5OPIyZ5SJpo=.trap.gz (9 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.8zP-JRcxEzKMib56w1e0-UiQROk=.trap.gz (10 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.Ba0O_SJAlM_zVDmvJP5gas5v2wk=.trap.gz (11 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.ETKAJ2vzBCQTAezq1QirxNtYMl0=.trap.gz (12 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.P3t3wW_ld8yvvgUDVd5UUKDltD4=.trap.gz (13 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.TI4FUr0LWwmxqexzya8rPsIXWtU=.trap.gz (14 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.V0BHiVRwHgcTo3gvjI0Or6c4TMY=.trap.gz (15 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.ZiTY_jejODzhyJAhgVGziQKj3pY=.trap.gz (16 of 144)
+[2026-07-12 07:03:19] Importing __init__.py._MzVzda0XjaOxejSq518iua_jYw=.trap.gz (17 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.fOBWn0Umquc5M1Tb5eLH1VgHnmk=.trap.gz (18 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.gmVO4jFnvnS6fzozZzxjaSZiCi8=.trap.gz (19 of 144)
+[2026-07-12 07:03:19] Importing __init__.py.kjLq-jObZum8o0n7lUwYBdDHJDQ=.trap.gz (20 of 144)
+[2026-07-12 07:03:19] Importing __main__.py.wf8c2IXTlh_SDfAcml4cLG0UyeU=.trap.gz (21 of 144)
+[2026-07-12 07:03:19] Importing admin.mfCaI1VbyvIfgrPwh7M2fe1oNRc=.trap.gz (22 of 144)
+[2026-07-12 07:03:19] Importing app.py.LPd46taPFKNvnb0xJC8GzoY2630=.trap.gz (23 of 144)
+[2026-07-12 07:03:19] Importing app.py.S8NUmFWrLe1Gc51bGEqbgDmyd8Q=.trap.gz (24 of 144)
+[2026-07-12 07:03:19] Importing app.py.WnicscVIQOyraq4Z3p2eVTl2HsQ=.trap.gz (25 of 144)
+[2026-07-12 07:03:19] Importing apps.quZ0onEoNIbGECbMVSaxlhaWfpo=.trap.gz (26 of 144)
+[2026-07-12 07:03:19] Importing asyncio.__D3RbxDapJ04Ig9raN8keuC1qc=.trap.gz (27 of 144)
+[2026-07-12 07:03:19] Importing auth.py.XkJ5x5T5CNz3ZXyMnaaamMgOak4=.trap.gz (28 of 144)
+[2026-07-12 07:03:19] Importing blog.py.OtNMJQctNODpPxirFK7aq_VMagI=.trap.gz (29 of 144)
+[2026-07-12 07:03:19] Importing blueprintapp.kexxka7WDsKa3_9u1KE2PEVUnhI=.trap.gz (30 of 144)
+[2026-07-12 07:03:19] Importing blueprints.py.-S1n58dx2CHUxMJV4sBr7YbfK0E=.trap.gz (31 of 144)
+[2026-07-12 07:03:19] Importing blueprints.py.RO10pjFh6plFgHeSztrh0mDxIfc=.trap.gz (32 of 144)
+[2026-07-12 07:03:19] Importing celery.trb1CoOd8o38kA6QvFysvllrHgI=.trap.gz (33 of 144)
+[2026-07-12 07:03:19] Importing cli.py.wj9gL9gz3M9XKYxmjainvkBWE7I=.trap.gz (34 of 144)
+[2026-07-12 07:03:19] Importing cliapp.qw5cb5COUrqTdJ98c7I4aIR3Esc=.trap.gz (35 of 144)
+[2026-07-12 07:03:19] Importing collections.kNka6jkeW3L-vWn3b0ya6ZkKMyU=.trap.gz (36 of 144)
+[2026-07-12 07:03:19] Importing concurrent.DsuWmh1Y1o-f5AP8i5csypxdBJU=.trap.gz (37 of 144)
+[2026-07-12 07:03:19] Importing conf.py.KYuEiYlFuesDWgJ4bnqrSkBG1EY=.trap.gz (38 of 144)
+[2026-07-12 07:03:19] Importing config.py.C1vqgNEqqUDGBzMzHrpZ1BDejvU=.trap.gz (39 of 144)
+[2026-07-12 07:03:19] Importing conftest.py.2jYCivAm6J4aWESq_eLnw2Pa4jE=.trap.gz (40 of 144)
+[2026-07-12 07:03:19] Importing conftest.py.7r_psw3KvfkQHrGPJHQGzhFjdDQ=.trap.gz (41 of 144)
+[2026-07-12 07:03:19] Importing conftest.py.zGH3e0qZ9J7IegLcnQkKeVpLxUo=.trap.gz (42 of 144)
+[2026-07-12 07:03:19] Importing ctx.py.eCEobjgEiAuZuTAv396nk-kjBXA=.trap.gz (43 of 144)
+[2026-07-12 07:03:19] Importing db.py.0b_cF5Clcadh2AGGjUyU3nwa1ug=.trap.gz (44 of 144)
+[2026-07-12 07:03:19] Importing debughelpers.py.mDAhEf1-azHYMYKJv0Z7h8R2Kx8=.trap.gz (45 of 144)
+[2026-07-12 07:03:19] Importing docs.5zUuuE7TSsj1flv6J00qM6CfwFE=.trap.gz (46 of 144)
+[2026-07-12 07:03:19] Importing errno.3rhJkAxApvDhcqwcwyPD4bo4Yvo=.trap.gz (47 of 144)
+[2026-07-12 07:03:19] Importing examples.TvpPrNbJ1QIkGW5LfV0LBTo8zPI=.trap.gz (48 of 144)
+[2026-07-12 07:03:19] Importing factory.py.SH5fWuKsN6GNGT2A9dKyitWbZO4=.trap.gz (49 of 144)
+[2026-07-12 07:03:19] Importing flask._z_dKttVf5KZ9RSoZgsOWsZOAXQ=.trap.gz (50 of 144)
+[2026-07-12 07:03:19] Importing flask.py.rd3gU1P5Du159xEk6CEvhDpjy0I=.trap.gz (51 of 144)
+[2026-07-12 07:03:19] Importing flaskr.R1RRV2HdZ_KTGtWLlDO6ZdXmpuk=.trap.gz (52 of 144)
+[2026-07-12 07:03:19] Importing frontend.B93nerfUIf4XH6xJF9NQDWbZSRk=.trap.gz (53 of 144)
+[2026-07-12 07:03:19] Importing futures.esyLRsVWHlzXxaulndyTHb5H8Js=.trap.gz (54 of 144)
+[2026-07-12 07:03:19] Importing gc.hN1hyTQMPXRT5vuDhpX-hohZEe0=.trap.gz (55 of 144)
+[2026-07-12 07:03:19] Importing globals.py.L7_r_mMFT1VPqXxOCG1tTeWoCTs=.trap.gz (56 of 144)
+[2026-07-12 07:03:19] Importing hello.py.nzU9ahhJB9c3gDzz4ahaVN7v-L8=.trap.gz (57 of 144)
+[2026-07-12 07:03:19] Importing helloworld.1AOAfc-yFvY13jd-Q6915yudyeE=.trap.gz (58 of 144)
+[2026-07-12 07:03:19] Importing helpers.py.XzfIXzrry9gmw4cNlD1fyZZZQh4=.trap.gz (59 of 144)
+[2026-07-12 07:03:19] Importing config.yml.trap.gz (60 of 144)
+[2026-07-12 07:03:19] Importing lock.yaml.trap.gz (61 of 144)
+[2026-07-12 07:03:19] Importing pre-commit.yaml.trap.gz (62 of 144)
+[2026-07-12 07:03:19] Importing publish.yaml.trap.gz (63 of 144)
+[2026-07-12 07:03:19] Importing tests.yaml.trap.gz (64 of 144)
+[2026-07-12 07:03:19] Importing zizmor.yaml.trap.gz (65 of 144)
+[2026-07-12 07:03:19] Importing .pre-commit-config.yaml.trap.gz (66 of 144)
+[2026-07-12 07:03:19] Importing .readthedocs.yaml.trap.gz (67 of 144)
+[2026-07-12 07:03:19] Importing http.x-K2YDlTWjm__EQINXNslyVUbtQ=.trap.gz (68 of 144)
+[2026-07-12 07:03:19] Importing importerrorapp.py.bLD6lYa-1vLOUllAVACFata5xtk=.trap.gz (69 of 144)
+[2026-07-12 07:03:19] Importing importlib.XNQpLyjqJotT0_XcjiTXasv9Chg=.trap.gz (70 of 144)
+[2026-07-12 07:03:19] Importing inner1.hoUG_l5uzcFKj4T5PLUrzb9aOS4=.trap.gz (71 of 144)
+[2026-07-12 07:03:19] Importing inner2.gu5bdI6YnrXepuuNGMWw-VSfBhI=.trap.gz (72 of 144)
+[2026-07-12 07:03:19] Importing itertools.JsQJoYkQvSCr1PfaFX3Hl-WE3Rw=.trap.gz (73 of 144)
+[2026-07-12 07:03:19] Importing javascript.e5IlKAHoLJLScdH5vIJ1ixSJcbU=.trap.gz (74 of 144)
+[2026-07-12 07:03:19] Importing js_example.VxT6a8NXdsD3xH4RqywQM3XF3jY=.trap.gz (75 of 144)
+[2026-07-12 07:03:19] Importing json.NqXajxyTHCeaqV0-rO9c4iBJMFM=.trap.gz (76 of 144)
+[2026-07-12 07:03:19] Importing json._bUZxb71Ki16R_ipa1M6_jiDQyU=.trap.gz (77 of 144)
+[2026-07-12 07:03:19] Importing logging.3Id2v-1ovRZ56miX_Bh0ivngFJw=.trap.gz (78 of 144)
+[2026-07-12 07:03:19] Importing logging.py.QeA-bvEbyEDuPm2AwQjs4VJVI2Q=.trap.gz (79 of 144)
+[2026-07-12 07:03:19] Importing make_celery.py.DRTiY50QQKKcD9eUvQnn5Ry3Whk=.trap.gz (80 of 144)
+[2026-07-12 07:03:19] Importing metadata.iBKYO9IiQb1eZLz0BXHV43ppXlY=.trap.gz (81 of 144)
+[2026-07-12 07:03:19] Importing metadata.trap.gz (82 of 144)
+[2026-07-12 07:03:19] Importing multiapp.py.y9hZs1YnkuHiRI6w-XqAEWq13RU=.trap.gz (83 of 144)
+[2026-07-12 07:03:19] Importing provider.py.pr8bs_b0XGsqYZUpmLbY_jXmSbQ=.trap.gz (84 of 144)
+[2026-07-12 07:03:19] Importing re.WdfkefRTQgLU19EDA5WtTFKjXDI=.trap.gz (85 of 144)
+[2026-07-12 07:03:19] Importing readline.WstKMvX_WJPnI78intGqAkY53Lc=.trap.gz (86 of 144)
+[2026-07-12 07:03:19] Importing sansio.boZPJ7_ATIH7YC0hyKU1XkwzJko=.trap.gz (87 of 144)
+[2026-07-12 07:03:19] Importing scaffold.py.-F-bTqryNy8JuQK2YZfyoCX3ZX0=.trap.gz (88 of 144)
+[2026-07-12 07:03:19] Importing sessions.py.u4tgf-LDFyanMlazkHp4Vo-R3gw=.trap.gz (89 of 144)
+[2026-07-12 07:03:19] Importing signals.py.i-3a2xdBfpCEANsG6cU91lTfMSU=.trap.gz (90 of 144)
+[2026-07-12 07:03:19] Importing sqlite3.C2tOYKEuNfqJxMzyoh8l_0z7ups=.trap.gz (91 of 144)
+[2026-07-12 07:03:19] Importing src.Xsb-9-B27PERJRaUPGVDb6sGygs=.trap.gz (92 of 144)
+[2026-07-12 07:03:19] Importing src._tnZgrBDWsvmE1EOTCHzporegHk=.trap.gz (93 of 144)
+[2026-07-12 07:03:19] Importing subdomaintestmodule.6_K6Zc_7e9rSnZyf_0LAJyf9TPQ=.trap.gz (94 of 144)
+[2026-07-12 07:03:19] Importing sys.otbGJJMVz9H1nJ8N_q2UbN_-8Jg=.trap.gz (95 of 144)
+[2026-07-12 07:03:19] Importing tag.py.7xbeCPA1EOnW559YdhoCOlgWOi8=.trap.gz (96 of 144)
+[2026-07-12 07:03:19] Importing task_app.f926XlToJbh1KCQ7vjXH2i-9OeE=.trap.gz (97 of 144)
+[2026-07-12 07:03:19] Importing tasks.py.z5UgjgmfTi-0O_Lia3IPrAqssWE=.trap.gz (98 of 144)
+[2026-07-12 07:03:19] Importing templating.py.rYxi7lJ9Fb8Gos3yG0_KiY1L10o=.trap.gz (99 of 144)
+[2026-07-12 07:03:19] Importing test_appctx.py.-x6pR6PI3bAyTNEZ8l-w4GXDnYs=.trap.gz (100 of 144)
+[2026-07-12 07:03:19] Importing test_apps.LGMgrbuYF7d2xNdTrYAHbehyH64=.trap.gz (101 of 144)
+[2026-07-12 07:03:19] Importing test_async.py.28vZ-4428ROYoivJYT4RxzNXOwg=.trap.gz (102 of 144)
+[2026-07-12 07:03:19] Importing test_auth.py.hTIJQG78TwCdVa1gBScKCmY1gBQ=.trap.gz (103 of 144)
+[2026-07-12 07:03:19] Importing test_basic.py.-CoHnRBmerBZEIzWlYq5Zq5DKmU=.trap.gz (104 of 144)
+[2026-07-12 07:03:19] Importing test_blog.py.fsWhGu6JxMQo_x25jg2iMkkPS0I=.trap.gz (105 of 144)
+[2026-07-12 07:03:19] Importing test_blueprints.py.0hgpi2mp7SUdcCZ1OffvR73G2W8=.trap.gz (106 of 144)
+[2026-07-12 07:03:19] Importing test_cli.py.X-hCHKY8kH_CRNWBShOyoe2hApw=.trap.gz (107 of 144)
+[2026-07-12 07:03:19] Importing test_config.py.oKxmOImSQbdbhjb71gyrKeOw_0w=.trap.gz (108 of 144)
+[2026-07-12 07:03:19] Importing test_converters.py.K5RalefRMmlokVp79Tg9grswZII=.trap.gz (109 of 144)
+[2026-07-12 07:03:19] Importing test_db.py.0zAgeDJFXnetd-FbPq-RG8LI6og=.trap.gz (110 of 144)
+[2026-07-12 07:03:19] Importing test_factory.py.pgcxfoqXrFS1WKIuzzJmFMW_npY=.trap.gz (111 of 144)
+[2026-07-12 07:03:19] Importing test_helpers.py.gyK6pqnVLa60XZsa0uh8x_BKCs8=.trap.gz (112 of 144)
+[2026-07-12 07:03:19] Importing test_instance_config.py.NQoYz2vsMRtgIoPvZboOZ93g_QQ=.trap.gz (113 of 144)
+[2026-07-12 07:03:19] Importing test_js_example.py.MbnX_hPQ5I5GS9RYuP2RBZJ09iM=.trap.gz (114 of 144)
+[2026-07-12 07:03:19] Importing test_json.py.jb2iu5YRblKm-OUBT7qUTZeRpLU=.trap.gz (115 of 144)
+[2026-07-12 07:03:19] Importing test_json_tag.py.cvtM6SjLB1QhVqmn71scVs9r_Gg=.trap.gz (116 of 144)
+[2026-07-12 07:03:19] Importing test_logging.py.JH-J-voZgOzh0Em3zlFN9LEUDPA=.trap.gz (117 of 144)
+[2026-07-12 07:03:19] Importing test_regression.py.xQCuVIb2oha3B84uiMYSgUx381c=.trap.gz (118 of 144)
+[2026-07-12 07:03:19] Importing test_reqctx.py.1dv-vzsfKCAz24dXh8PBlCZ2jXI=.trap.gz (119 of 144)
+[2026-07-12 07:03:19] Importing test_request.py.-jmqmireLPWTITvCOb1nNrJnVgI=.trap.gz (120 of 144)
+[2026-07-12 07:03:19] Importing test_session_interface.py.OOXlMZnVfy6fQuPrYkNOZ8HRTO8=.trap.gz (121 of 144)
+[2026-07-12 07:03:19] Importing test_signals.py.cXwQ4Xkc6JMVmVR_urU-ZrQjgoc=.trap.gz (122 of 144)
+[2026-07-12 07:03:19] Importing test_subclassing.py.qQ-MinwQfQ5F4Vkej5iF1ID0L1o=.trap.gz (123 of 144)
+[2026-07-12 07:03:19] Importing test_templating.py.qgk4aLnyi7LVWg-5EksOMivJrCE=.trap.gz (124 of 144)
+[2026-07-12 07:03:19] Importing test_testing.py.z23OOR9tpW8Ox8ksNW2iuV2IM9Y=.trap.gz (125 of 144)
+[2026-07-12 07:03:19] Importing test_user_error_handler.py.wEda5a71lPhL1jqQtyVcc7jXtkQ=.trap.gz (126 of 144)
+[2026-07-12 07:03:19] Importing test_views.py.sYdvUwstKTkX_CQrU4gmk58BQsc=.trap.gz (127 of 144)
+[2026-07-12 07:03:19] Importing testing.py.F5grbL2SlPMqkauabAk_oACteXA=.trap.gz (128 of 144)
+[2026-07-12 07:03:19] Importing tests.6lsaDu23FWVXNN2Pu4oUFmrfzyw=.trap.gz (129 of 144)
+[2026-07-12 07:03:19] Importing tests.py4E66Dfj4I-rrXnP2ZaORTOzuE=.trap.gz (130 of 144)
+[2026-07-12 07:03:19] Importing tests.wWwfWPxUeWTxHyrcTtFXRsf4RZU=.trap.gz (131 of 144)
+[2026-07-12 07:03:19] Importing time.gJw960_SmbS1YlYcm62IR5nTA1Q=.trap.gz (132 of 144)
+[2026-07-12 07:03:19] Importing tutorial.Abh6nVutE9TMMpJ139_PsviUWhQ=.trap.gz (133 of 144)
+[2026-07-12 07:03:19] Importing type_check.hYUAJzDUNbrzMQobd9CvpCLWs6I=.trap.gz (134 of 144)
+[2026-07-12 07:03:19] Importing typing.py.5ULtg2bBJZVDZT32yYcek_9OfnI=.trap.gz (135 of 144)
+[2026-07-12 07:03:19] Importing typing_app_decorators.py.lRpleHrR9H6n5uh2dS8i6IH1UGw=.trap.gz (136 of 144)
+[2026-07-12 07:03:19] Importing typing_error_handler.py.h-y3HT-STpQ6FFnGteqMEVyl31g=.trap.gz (137 of 144)
+[2026-07-12 07:03:19] Importing typing_route.py.j9HEGmSMOrfvrvYaRBZe_Jb-HQg=.trap.gz (138 of 144)
+[2026-07-12 07:03:20] Importing urllib.9PrCDo8OISZicIaJ2A3jQKUezVc=.trap.gz (139 of 144)
+[2026-07-12 07:03:20] Importing views.py.50VAhK09gv0bcsy7sGjLgZkb_gw=.trap.gz (140 of 144)
+[2026-07-12 07:03:20] Importing views.py.79YSBIIiXrc_LMr9Xg6WqQzsZrQ=.trap.gz (141 of 144)
+[2026-07-12 07:03:20] Importing views.py.asgOQKpp-Lc9l5eFPgR_KCoQf4w=.trap.gz (142 of 144)
+[2026-07-12 07:03:20] Importing wrappers.py.gwC7AxN0rit4D8Hyu63wv4r3r6c=.trap.gz (143 of 144)
+[2026-07-12 07:03:20] Importing wsgi.py.eeZHZL-hxhhEetCH0vXDkvrjmoA=.trap.gz (144 of 144)
+[2026-07-12 07:03:20] [PROGRESS] dataset import> Merging relations
+[2026-07-12 07:03:20] Merging 1 fragment for 'files'.
+[2026-07-12 07:03:20] Merged 214 bytes for 'files'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'folders'.
+[2026-07-12 07:03:20] Merged 160 bytes for 'folders'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'containerparent'.
+[2026-07-12 07:03:20] Merged 306 bytes for 'containerparent'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_flags_versioned'.
+[2026-07-12 07:03:20] Merged 184 bytes for 'py_flags_versioned'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cobjects'.
+[2026-07-12 07:03:20] Merged 8778 bytes (8.57 KiB) for 'py_cobjects'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cobjecttypes'.
+[2026-07-12 07:03:20] Merged 16522 bytes (16.13 KiB) for 'py_cobjecttypes'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cobject_sources'.
+[2026-07-12 07:03:20] Merged 11039 bytes (10.78 KiB) for 'py_cobject_sources'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cobjectnames'.
+[2026-07-12 07:03:20] Merged 14602 bytes (14.26 KiB) for 'py_cobjectnames'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cmembers_versioned'.
+[2026-07-12 07:03:20] Merged 7851 bytes (7.67 KiB) for 'py_cmembers_versioned'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_special_objects'.
+[2026-07-12 07:03:20] Merged 135 bytes for 'py_special_objects'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_citems'.
+[2026-07-12 07:03:20] Merged 476 bytes for 'py_citems'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'ext_rettype'.
+[2026-07-12 07:03:20] Merged 4039 bytes (3.94 KiB) for 'ext_rettype'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'ext_argtype'.
+[2026-07-12 07:03:20] Merged 6821 bytes (6.66 KiB) for 'ext_argtype'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'ext_argreturn'.
+[2026-07-12 07:03:20] Merged 41 bytes for 'ext_argreturn'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'ext_proptype'.
+[2026-07-12 07:03:20] Merged 344 bytes for 'ext_proptype'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_Modules'.
+[2026-07-12 07:03:20] Merged 150 bytes for 'py_Modules'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_module_path'.
+[2026-07-12 07:03:20] Merged 322 bytes for 'py_module_path'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'variable'.
+[2026-07-12 07:03:20] Merged 29472 bytes (28.78 KiB) for 'variable'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_extracted_version'.
+[2026-07-12 07:03:20] Merged 125 bytes for 'py_extracted_version'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_stmt_lists'.
+[2026-07-12 07:03:20] Merged 9095 bytes (8.88 KiB) for 'py_stmt_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_stmts'.
+[2026-07-12 07:03:20] Merged 35968 bytes (35.12 KiB) for 'py_stmts'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_scopes'.
+[2026-07-12 07:03:20] Merged 64105 bytes (62.60 KiB) for 'py_scopes'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_alias_lists'.
+[2026-07-12 07:03:20] Merged 1605 bytes (1.57 KiB) for 'py_alias_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_aliases'.
+[2026-07-12 07:03:20] Merged 1616 bytes (1.58 KiB) for 'py_aliases'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_exprs'.
+[2026-07-12 07:03:20] Merged 174757 bytes (170.66 KiB) for 'py_exprs'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_ints'.
+[2026-07-12 07:03:20] Merged 871 bytes for 'py_ints'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_strs'.
+[2026-07-12 07:03:20] Merged 50596 bytes (49.41 KiB) for 'py_strs'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_variables'.
+[2026-07-12 07:03:20] Merged 37113 bytes (36.24 KiB) for 'py_variables'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_expr_contexts'.
+[2026-07-12 07:03:20] Merged 69354 bytes (67.73 KiB) for 'py_expr_contexts'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_arguments'.
+[2026-07-12 07:03:20] Merged 3766 bytes (3.68 KiB) for 'py_arguments'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_Functions'.
+[2026-07-12 07:03:20] Merged 3828 bytes (3.74 KiB) for 'py_Functions'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_expr_lists'.
+[2026-07-12 07:03:20] Merged 37633 bytes (36.75 KiB) for 'py_expr_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_dict_item_lists'.
+[2026-07-12 07:03:20] Merged 2185 bytes (2.13 KiB) for 'py_dict_item_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_dict_items'.
+[2026-07-12 07:03:20] Merged 3898 bytes (3.81 KiB) for 'py_dict_items'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_parameter_lists'.
+[2026-07-12 07:03:20] Merged 2977 bytes (2.91 KiB) for 'py_parameter_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_Classes'.
+[2026-07-12 07:03:20] Merged 558 bytes for 'py_Classes'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_exports'.
+[2026-07-12 07:03:20] Merged 1059 bytes (1.03 KiB) for 'py_exports'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_flow_bb_node'.
+[2026-07-12 07:03:20] Merged 169861 bytes (165.88 KiB) for 'py_flow_bb_node'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_scope_flow'.
+[2026-07-12 07:03:20] Merged 25191 bytes (24.60 KiB) for 'py_scope_flow'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_successors'.
+[2026-07-12 07:03:20] Merged 99519 bytes (97.19 KiB) for 'py_successors'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_idoms'.
+[2026-07-12 07:03:20] Merged 96923 bytes (94.65 KiB) for 'py_idoms'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_ssa_var'.
+[2026-07-12 07:03:20] Merged 12281 bytes (11.99 KiB) for 'py_ssa_var'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_ssa_defn'.
+[2026-07-12 07:03:20] Merged 10656 bytes (10.41 KiB) for 'py_ssa_defn'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_ssa_use'.
+[2026-07-12 07:03:20] Merged 17333 bytes (16.93 KiB) for 'py_ssa_use'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'locations_ast'.
+[2026-07-12 07:03:20] Merged 239063 bytes (233.46 KiB) for 'locations_ast'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_scope_location'.
+[2026-07-12 07:03:20] Merged 4531 bytes (4.42 KiB) for 'py_scope_location'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_codelines'.
+[2026-07-12 07:03:20] Merged 3875 bytes (3.78 KiB) for 'py_codelines'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_commentlines'.
+[2026-07-12 07:03:20] Merged 2653 bytes (2.59 KiB) for 'py_commentlines'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_docstringlines'.
+[2026-07-12 07:03:20] Merged 2587 bytes (2.53 KiB) for 'py_docstringlines'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_alllines'.
+[2026-07-12 07:03:20] Merged 3924 bytes (3.83 KiB) for 'py_alllines'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'numlines'.
+[2026-07-12 07:03:20] Merged 479 bytes for 'numlines'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_locations'.
+[2026-07-12 07:03:20] Merged 101584 bytes (99.20 KiB) for 'py_locations'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_comments'.
+[2026-07-12 07:03:20] Merged 3147 bytes (3.07 KiB) for 'py_comments'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_bools'.
+[2026-07-12 07:03:20] Merged 865 bytes for 'py_bools'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cmpop_lists'.
+[2026-07-12 07:03:20] Merged 3204 bytes (3.13 KiB) for 'py_cmpop_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_cmpops'.
+[2026-07-12 07:03:20] Merged 4011 bytes (3.92 KiB) for 'py_cmpops'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_true_successors'.
+[2026-07-12 07:03:20] Merged 3715 bytes (3.63 KiB) for 'py_true_successors'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_false_successors'.
+[2026-07-12 07:03:20] Merged 3759 bytes (3.67 KiB) for 'py_false_successors'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_operators'.
+[2026-07-12 07:03:20] Merged 1171 bytes (1.14 KiB) for 'py_operators'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_ssa_phi'.
+[2026-07-12 07:03:20] Merged 889 bytes for 'py_ssa_phi'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_boolops'.
+[2026-07-12 07:03:20] Merged 460 bytes for 'py_boolops'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_unaryops'.
+[2026-07-12 07:03:20] Merged 515 bytes for 'py_unaryops'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_StringPart_lists'.
+[2026-07-12 07:03:20] Merged 255 bytes for 'py_StringPart_lists'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_StringParts'.
+[2026-07-12 07:03:20] Merged 697 bytes for 'py_StringParts'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_numbers'.
+[2026-07-12 07:03:20] Merged 3704 bytes (3.62 KiB) for 'py_numbers'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_exception_successors'.
+[2026-07-12 07:03:20] Merged 647 bytes for 'py_exception_successors'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'yaml_scalars'.
+[2026-07-12 07:03:20] Merged 1233 bytes (1.20 KiB) for 'yaml_scalars'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'yaml'.
+[2026-07-12 07:03:20] Merged 3782 bytes (3.69 KiB) for 'yaml'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'locations_default'.
+[2026-07-12 07:03:20] Merged 3252 bytes (3.18 KiB) for 'locations_default'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'yaml_locations'.
+[2026-07-12 07:03:20] Merged 1254 bytes (1.22 KiB) for 'yaml_locations'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'yaml_comments'.
+[2026-07-12 07:03:20] Merged 131 bytes for 'yaml_comments'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'sourceLocationPrefix'.
+[2026-07-12 07:03:20] Merged 17 bytes for 'sourceLocationPrefix'.
+[2026-07-12 07:03:20] Merging 1 fragment for 'py_str_lists'.
+[2026-07-12 07:03:20] Merged 66 bytes for 'py_str_lists'.
+[2026-07-12 07:03:20] Saving string and id pools to disk.
+[2026-07-12 07:03:20] Finished importing TRAP files.
+[2026-07-12 07:03:20] Read 21.70 MiB of uncompressed TRAP data.
+[2026-07-12 07:03:20] Uncompressed relation data size: 6.01 MiB
+[2026-07-12 07:03:20] Relation data size: 1.36 MiB (merge rate: 9.95 MiB/s)
+[2026-07-12 07:03:20] String pool size: 2.22 MiB
+[2026-07-12 07:03:20] ID pool size: 1.19 MiB
+[2026-07-12 07:03:20] [PROGRESS] dataset import> Finished writing database (relations: 1.36 MiB; string pool: 2.22 MiB).
+[2026-07-12 07:03:20] Pausing evaluation to close the cache at sequence stamp o+149
+[2026-07-12 07:03:20] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 07:03:20] Unpausing evaluation
+[2026-07-12 07:03:20] Plumbing command codeql dataset import completed.
+[2026-07-12 07:03:20] [PROGRESS] database finalize> TRAP import complete (1.4s).
+[2026-07-12 07:03:20] Running plumbing command: codeql database cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask
+[2026-07-12 07:03:20] [PROGRESS] database cleanup> Cleaning up existing TRAP files after import...
+[2026-07-12 07:03:20] [PROGRESS] database cleanup> TRAP files cleaned up (6ms).
+[2026-07-12 07:03:20] [PROGRESS] database cleanup> Cleaning up scratch directory...
+[2026-07-12 07:03:20] [PROGRESS] database cleanup> Scratch directory cleaned up (5ms).
+[2026-07-12 07:03:20] Running plumbing command: codeql dataset cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python
+[2026-07-12 07:03:20] [PROGRESS] dataset cleanup> Cleaning up dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python.
+[2026-07-12 07:03:20] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python/default/cache in mode trim.
+[2026-07-12 07:03:20] Sequence stamp origin is -5892352389563955611
+[2026-07-12 07:03:20] Pausing evaluation to quickly trim memory at sequence stamp o+0
+[2026-07-12 07:03:20] Unpausing evaluation
+[2026-07-12 07:03:20] Pausing evaluation to zealously trim disk at sequence stamp o+1
+[2026-07-12 07:03:20] Unpausing evaluation
+[2026-07-12 07:03:20] Trimming completed (2ms): Trimmed disposable data from cache.
+[2026-07-12 07:03:20] Pausing evaluation to close the cache at sequence stamp o+2
+[2026-07-12 07:03:20] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 07:03:20] Unpausing evaluation
+[2026-07-12 07:03:20] [PROGRESS] dataset cleanup> Trimmed disposable data from cache.
+[2026-07-12 07:03:20] [PROGRESS] dataset cleanup> Finalizing dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python
+[2026-07-12 07:03:20] [DETAILS] dataset cleanup> Finished deleting ID pool from /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask/db-python (1ms).
+[2026-07-12 07:03:20] Plumbing command codeql dataset cleanup completed.
+[2026-07-12 07:03:20] Plumbing command codeql database cleanup completed with status 0.
+[2026-07-12 07:03:20] [PROGRESS] database finalize> Finished zipping source archive (180.51 KiB).
+[2026-07-12 07:03:20] Plumbing command codeql database finalize completed.
+[2026-07-12 07:03:20] [PROGRESS] database create> Successfully created database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/flask.
+[2026-07-12 07:03:20] Terminating normally.

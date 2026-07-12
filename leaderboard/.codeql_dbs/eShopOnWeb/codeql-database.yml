@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/eShopOnWeb
+baselineLinesOfCode: 8656
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: csharp
+creationMetadata:
+  sha: 4da8212117e87d808d4bbc7da6286fd2147ce606
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T08:03:48.780586118Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

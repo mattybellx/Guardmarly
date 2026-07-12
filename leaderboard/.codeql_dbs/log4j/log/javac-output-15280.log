@@ -1,0 +1,1 @@
+[2026-07-12 07:56:39] [javac-output-15280] warning: [processing] No processor claimed any of these annotations: /org.osgi.annotation.bundle.Export,/aQute.bnd.annotation.spi.ServiceProvider,/org.osgi.annotation.versioning.Version

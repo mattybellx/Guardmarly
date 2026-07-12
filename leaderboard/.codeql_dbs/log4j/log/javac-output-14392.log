@@ -1,0 +1,10 @@
+[2026-07-12 07:54:58] [javac-output-14392] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:58] [javac-output-14392] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:58] [javac-output-14392] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:54:59] [javac-output-14392] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.plugins.PluginElement,org.apache.logging.log4j.core.config.plugins.validation.constraints.Required,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute
+[2026-07-12 07:55:00] [javac-output-14392] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-cassandra/src/main/java/org/apache/logging/log4j/cassandra/CassandraManager.java:67: warning: [deprecation] AbstractDatabaseManager(String,int) in AbstractDatabaseManager has been deprecated
+[2026-07-12 07:55:00] [javac-output-14392]         super(name, bufferSize);
+[2026-07-12 07:55:00] [javac-output-14392]         ^
+[2026-07-12 07:55:00] [javac-output-14392] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-cassandra/src/main/java/org/apache/logging/log4j/cassandra/CassandraManager.java:236: warning: [deprecation] AbstractFactoryData(int,Layout<? extends Serializable>) in AbstractFactoryData has been deprecated
+[2026-07-12 07:55:00] [javac-output-14392]             super(bufferSize, null);
+[2026-07-12 07:55:00] [javac-output-14392]             ^

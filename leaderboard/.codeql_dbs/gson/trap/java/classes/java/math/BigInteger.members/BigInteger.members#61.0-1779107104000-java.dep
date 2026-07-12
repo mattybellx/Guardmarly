@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/math/BigInteger.members/BigInteger.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/math/BigInteger.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Random.members.trap.gz

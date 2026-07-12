@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/ExtensionRegistryLite.members/ExtensionRegistryLite.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite$GeneratedExtension.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/annotation/JsonFormat$Value.members/JsonFormat$Value.members#52.0-1780177456000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/annotation/JsonFormat$Value.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonFormat.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JacksonAnnotationValue.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonFormat$Features.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonFormat$Feature.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/java/util/TimeZone.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonFormat$Shape.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

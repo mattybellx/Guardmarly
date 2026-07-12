@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/api/ResultProcessor.members/ResultProcessor.members#52.0-1626179106000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/api/ResultProcessor.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/com/google/caliper/model/Trial.members.trap.gz

@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/extras/src/test/java/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest.java.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest.members/RuntimeTypeAdapterFactoryTest.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BillingInstrument.members/RuntimeTypeAdapterFactoryTest$BillingInstrument.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$CreditCard.members/RuntimeTypeAdapterFactoryTest$CreditCard.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BankTransfer.members/RuntimeTypeAdapterFactoryTest$BankTransfer.members#0.0-1783842439058-java.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BillingInstrumentWrapper.members/RuntimeTypeAdapterFactoryTest$BillingInstrumentWrapper.members#0.0-1783842439058-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/file/Watchable.members/Watchable.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/file/Watchable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/file/WatchService.members.trap.gz
+classes/java/nio/file/WatchEvent$Kind.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/nio/file/WatchEvent.members.trap.gz
+classes/java/nio/file/WatchKey.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/file/WatchEvent$Modifier.members.trap.gz

@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/node/NumericNode.members/NumericNode.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/node/NumericNode.members.trap.gz
+classes/com/fasterxml/jackson/databind/node/ValueNode.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/math/BigInteger.members.trap.gz
+classes/java/math/BigDecimal.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonParser$NumberType.members.trap.gz
+classes/com/fasterxml/jackson/databind/node/JsonNodeType.members.trap.gz

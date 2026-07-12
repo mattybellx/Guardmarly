@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/TreeTypeAdaptersTest.java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$HistoryCourse.members/TreeTypeAdaptersTest$HistoryCourse.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Course.members/TreeTypeAdaptersTest$Course.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest.members/TreeTypeAdaptersTest.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Id.members/TreeTypeAdaptersTest$Id.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Student.members/TreeTypeAdaptersTest$Student.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$IdTreeTypeAdapter.members/TreeTypeAdaptersTest$IdTreeTypeAdapter.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/TreeTypeAdaptersTest$Assignment.members/TreeTypeAdaptersTest$Assignment.members#0.0-1783842439069-java.trap.gz
+modules/java.base.trap.gz

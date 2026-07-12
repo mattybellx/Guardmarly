@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/ClassWithNoArgsConstructor.java.trap.gz
+
+TRAPS
+classes/com/google/gson/annotations/SerializedName.members.trap.gz
+classes/com/example/ClassWithNoArgsConstructor.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

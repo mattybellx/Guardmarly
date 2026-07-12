@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Message$Builder.members/Message$Builder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Message$Builder.members.trap.gz
+classes/com/google/protobuf/MessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet.members.trap.gz
+classes/com/google/protobuf/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/Descriptors$OneofDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/protobuf/InvalidProtocolBufferException.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz

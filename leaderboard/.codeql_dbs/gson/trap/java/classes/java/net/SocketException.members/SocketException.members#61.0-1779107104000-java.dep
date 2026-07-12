@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/net/SocketException.members/SocketException.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/net/SocketException.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/String.members.trap.gz

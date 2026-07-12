@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$FeatureSetDefaultsOrBuilder.members/DescriptorProtos$FeatureSetDefaultsOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$FeatureSetDefaultsOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$Edition.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSetDefaults$FeatureSetEditionDefaultOrBuilder.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSetDefaults$FeatureSetEditionDefault.members.trap.gz

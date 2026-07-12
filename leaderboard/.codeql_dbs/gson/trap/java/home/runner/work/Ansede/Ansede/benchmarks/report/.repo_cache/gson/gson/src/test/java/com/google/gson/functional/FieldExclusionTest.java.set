@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/FieldExclusionTest.java.trap.gz
+classes/com/google/gson/functional/FieldExclusionTest$Outer.members/FieldExclusionTest$Outer.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/FieldExclusionTest.members/FieldExclusionTest.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/FieldExclusionTest$Outer$Inner.members/FieldExclusionTest$Outer$Inner.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/FieldExclusionTest$NestedClass.members/FieldExclusionTest$NestedClass.members#0.0-1783842439067-java.trap.gz
+modules/java.base.trap.gz

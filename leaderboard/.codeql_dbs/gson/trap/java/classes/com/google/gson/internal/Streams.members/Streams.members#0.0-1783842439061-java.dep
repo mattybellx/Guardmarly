@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/Streams.members/Streams.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/Streams.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Appendable.members.trap.gz
+classes/java/io/Writer.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/com/google/gson/stream/JsonWriter.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/gson/stream/JsonReader.members.trap.gz
+classes/com/google/gson/JsonParseException.members.trap.gz

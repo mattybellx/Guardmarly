@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/protobuf/ProtoTypeAdapter$Builder.members/ProtoTypeAdapter$Builder.members#0.0-1783842439074-java.trap.gz
+
+TRAPS
+classes/com/google/gson/protobuf/ProtoTypeAdapter$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/protobuf/ProtoTypeAdapter.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumValueOptions.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/Extension.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FieldOptions.members.trap.gz
+classes/com/google/common/base/CaseFormat.members.trap.gz
+classes/com/google/gson/protobuf/ProtoTypeAdapter$EnumSerialization.members.trap.gz

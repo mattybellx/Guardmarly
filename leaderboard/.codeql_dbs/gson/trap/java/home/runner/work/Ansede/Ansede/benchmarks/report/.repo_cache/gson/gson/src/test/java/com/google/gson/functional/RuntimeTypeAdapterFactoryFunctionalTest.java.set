@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest.java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest.members/RuntimeTypeAdapterFactoryFunctionalTest.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$Shape.members/RuntimeTypeAdapterFactoryFunctionalTest$Shape.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$Circle.members/RuntimeTypeAdapterFactoryFunctionalTest$Circle.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$Square.members/RuntimeTypeAdapterFactoryFunctionalTest$Square.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$ShapeType.members/RuntimeTypeAdapterFactoryFunctionalTest$ShapeType.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$Shape$JsonAdapterFactory.members/RuntimeTypeAdapterFactoryFunctionalTest$Shape$JsonAdapterFactory.members#0.0-1783842439069-java.trap.gz
+classes/com/google/gson/functional/RuntimeTypeAdapterFactoryFunctionalTest$RuntimeTypeAdapterFactory.members/RuntimeTypeAdapterFactoryFunctionalTest$RuntimeTypeAdapterFactory.members#0.0-1783842439069-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/.m2/repository/com/google/truth/truth/1.4.5/truth-1.4.5.jar.trap.gz

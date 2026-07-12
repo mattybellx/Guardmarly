@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors.members/Descriptors.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/CheckReturnValue.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$Edition.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSet.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSetDefaults.members.trap.gz

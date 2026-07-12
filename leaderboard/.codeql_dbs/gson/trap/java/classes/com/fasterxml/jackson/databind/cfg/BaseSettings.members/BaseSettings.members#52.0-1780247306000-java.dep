@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/cfg/BaseSettings.members/BaseSettings.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/cfg/BaseSettings.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/cfg/CacheProvider.members.trap.gz
+classes/com/fasterxml/jackson/core/Base64Variant.members.trap.gz
+classes/java/util/TimeZone.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/com/fasterxml/jackson/databind/cfg/HandlerInstantiator.members.trap.gz
+classes/java/text/DateFormat.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsontype/PolymorphicTypeValidator.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsontype/TypeResolverBuilder.members.trap.gz
+classes/com/fasterxml/jackson/databind/type/TypeFactory.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/AccessorNamingStrategy$Provider.members.trap.gz
+classes/com/fasterxml/jackson/databind/EnumNamingStrategy.members.trap.gz
+classes/com/fasterxml/jackson/databind/PropertyNamingStrategy.members.trap.gz
+classes/com/fasterxml/jackson/databind/AnnotationIntrospector.members.trap.gz
+classes/com/fasterxml/jackson/databind/introspect/ClassIntrospector.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

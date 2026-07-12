@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/ByteArrayInputStream.members/ByteArrayInputStream.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/io/ByteArrayInputStream.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

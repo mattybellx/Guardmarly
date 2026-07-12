@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/ConstructorConstructorTest$Interface.members/ConstructorConstructorTest$Interface.members#0.0-1783842439070-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/ConstructorConstructorTest$Interface.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/internal/ConstructorConstructorTest.members.trap.gz

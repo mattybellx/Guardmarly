@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/VersionExclusionStrategyTest$MockClassSince.members/VersionExclusionStrategyTest$MockClassSince.members#0.0-1783842439065-java.trap.gz
+
+TRAPS
+classes/com/google/gson/VersionExclusionStrategyTest$MockClassSince.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/VersionExclusionStrategyTest.members.trap.gz
+classes/com/google/gson/annotations/Since.members.trap.gz
+classes/com/google/errorprone/annotations/Keep.members.trap.gz

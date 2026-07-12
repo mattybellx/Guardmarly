@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/Cut.members/Cut.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/Cut.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/common/collect/DiscreteDomain.members.trap.gz
+classes/java/lang/StringBuilder.members.trap.gz
+classes/com/google/common/collect/BoundType.members.trap.gz

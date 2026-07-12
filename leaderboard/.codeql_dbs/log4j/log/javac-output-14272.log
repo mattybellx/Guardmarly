@@ -1,0 +1,12 @@
+[2026-07-12 07:54:39] [javac-output-14272] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:39] [javac-output-14272] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:54:39] [javac-output-14272] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:54:40] [javac-output-14272] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:54:40] [javac-output-14272] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:54:40] [javac-output-14272] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,aQute.bnd.annotation.spi.ServiceProvider,org.osgi.annotation.bundle.Headers,org.jspecify.annotations.NullMarked
+[2026-07-12 07:54:41] [javac-output-14272] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-to-slf4j/src/main/java/org/apache/logging/slf4j/SLF4JLogger.java:43: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:54:41] [javac-output-14272]     private final org.slf4j.Logger logger;
+[2026-07-12 07:54:41] [javac-output-14272]                                    ^
+[2026-07-12 07:54:41] [javac-output-14272] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-to-slf4j/src/main/java/org/apache/logging/slf4j/SLF4JLogger.java:44: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:54:41] [javac-output-14272]     private final LocationAwareLogger locationAwareLogger;
+[2026-07-12 07:54:41] [javac-output-14272]                                       ^

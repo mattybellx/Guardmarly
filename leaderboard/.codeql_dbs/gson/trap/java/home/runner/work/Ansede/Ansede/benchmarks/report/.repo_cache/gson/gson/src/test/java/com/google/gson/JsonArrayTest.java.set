@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/JsonArrayTest.java.trap.gz
+classes/com/google/common/testing/EqualsTester.members/EqualsTester.members#52.0-1776188796000-java.trap.gz
+classes/com/google/gson/JsonArrayTest.members/JsonArrayTest.members#0.0-1783842439065-java.trap.gz
+classes/com/google/common/testing/RelationshipTester$ItemReporter.members/RelationshipTester$ItemReporter.members#52.0-1776188796000-java.trap.gz
+classes/com/google/common/testing/RelationshipTester.members/RelationshipTester.members#52.0-1776188796000-java.trap.gz
+classes/com/google/common/testing/RelationshipTester$Item.members/RelationshipTester$Item.members#52.0-1776188796000-java.trap.gz
+classes/com/google/common/base/Equivalence.members/Equivalence.members#52.0-318211200000-java.trap.gz
+classes/java/util/function/BiPredicate.members/BiPredicate.members#61.0-1776806822000-java.trap.gz
+classes/com/google/common/base/Equivalence$Wrapper.members/Equivalence$Wrapper.members#52.0-318211200000-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/.m2/repository/com/google/guava/guava-testlib/33.6.0-jre/guava-testlib-33.6.0-jre.jar.trap.gz
+jars/home/runner/.m2/repository/com/google/guava/guava/33.6.0-jre/guava-33.6.0-jre.jar.trap.gz

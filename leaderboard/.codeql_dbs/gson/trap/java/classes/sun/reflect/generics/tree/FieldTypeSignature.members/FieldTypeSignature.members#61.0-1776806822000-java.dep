@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/reflect/generics/tree/FieldTypeSignature.members/FieldTypeSignature.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/reflect/generics/tree/FieldTypeSignature.members.trap.gz
+classes/sun/reflect/generics/tree/BaseType.members.trap.gz
+classes/sun/reflect/generics/tree/TypeSignature.members.trap.gz
+classes/sun/reflect/generics/tree/TypeArgument.members.trap.gz

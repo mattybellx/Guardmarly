@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/bridge/TargetInfoLogMessage.members/TargetInfoLogMessage.members#52.0-1626179114000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/bridge/TargetInfoLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/LogMessage.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/auto/value/AutoValue.members.trap.gz
+classes/com/google/caliper/bridge/LogMessageVisitor.members.trap.gz
+classes/com/google/common/collect/ImmutableMap.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/core/BenchmarkClassModel.members.trap.gz

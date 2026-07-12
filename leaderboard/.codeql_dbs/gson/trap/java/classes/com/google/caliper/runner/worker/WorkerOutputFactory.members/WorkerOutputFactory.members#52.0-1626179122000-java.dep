@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/WorkerOutputFactory.members/WorkerOutputFactory.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/WorkerOutputFactory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/File.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerOutputFactory$FileAndWriter.members.trap.gz
+classes/java/io/FileNotFoundException.members.trap.gz

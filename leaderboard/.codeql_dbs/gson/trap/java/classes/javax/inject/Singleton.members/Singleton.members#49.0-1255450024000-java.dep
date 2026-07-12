@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/inject/Singleton.members/Singleton.members#49.0-1255450024000-java.trap.gz
+
+TRAPS
+classes/javax/inject/Singleton.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Documented.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/javax/inject/Scope.members.trap.gz

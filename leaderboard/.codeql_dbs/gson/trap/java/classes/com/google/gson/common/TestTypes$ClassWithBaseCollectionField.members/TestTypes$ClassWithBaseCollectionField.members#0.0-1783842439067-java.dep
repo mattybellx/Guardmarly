@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/common/TestTypes$ClassWithBaseCollectionField.members/TestTypes$ClassWithBaseCollectionField.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/common/TestTypes$ClassWithBaseCollectionField.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/common/TestTypes.members.trap.gz
+classes/com/google/gson/common/TestTypes$Base.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/Buffer.members/Buffer.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/Buffer.members.trap.gz
+classes/java/lang/Object.members.trap.gz

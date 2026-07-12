@@ -1,0 +1,4 @@
+[2026-07-12 07:55:51] [javac-output-14870] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:51] [javac-output-14870] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:51] [javac-output-14870] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:55:52] [javac-output-14870] warning: [processing] No processor claimed any of these annotations: org.junit.AfterClass,org.junit.Test,org.junit.Rule,org.junit.experimental.categories.Category,org.junit.BeforeClass,org.junit.Before

@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/annotation/JsonProperty.members/JsonProperty.members#52.0-1780177456000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/annotation/JsonProperty.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JacksonAnnotation.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/annotation/JsonProperty$Access.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/annotation/OptBoolean.members.trap.gz

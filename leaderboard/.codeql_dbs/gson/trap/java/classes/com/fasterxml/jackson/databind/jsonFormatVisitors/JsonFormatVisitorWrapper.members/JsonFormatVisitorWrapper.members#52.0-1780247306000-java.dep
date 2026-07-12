@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitorWrapper.members/JsonFormatVisitorWrapper.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitorWrapper.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitorWithSerializerProvider.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonMapFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonAnyFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonNullFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonBooleanFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonIntegerFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonNumberFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonStringFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonArrayFormatVisitor.members.trap.gz
+classes/com/fasterxml/jackson/databind/jsonFormatVisitors/JsonObjectFormatVisitor.members.trap.gz

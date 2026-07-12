@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/impl/PropertyValueBuffer.members/PropertyValueBuffer.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/impl/PropertyValueBuffer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/SettableBeanProperty.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/TokenBuffer.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/SettableAnyProperty.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/impl/PropertyValue.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationContext.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/fasterxml/jackson/databind/JsonMappingException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonParser.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/impl/ObjectIdReader.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/util/BitSet.members.trap.gz

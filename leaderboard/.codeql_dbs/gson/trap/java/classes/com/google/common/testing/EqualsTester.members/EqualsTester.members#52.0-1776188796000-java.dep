@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/testing/EqualsTester.members/EqualsTester.members#52.0-1776188796000-java.trap.gz
+
+TRAPS
+classes/com/google/common/testing/EqualsTester.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/org/jspecify/annotations/NullMarked.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/testing/RelationshipTester$ItemReporter.members.trap.gz

@@ -1,0 +1,93 @@
+[2026-07-12 07:53:06] [javac-output-13991] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:53:06] [javac-output-13991] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:53:06] [javac-output-13991] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:25: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:38: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:25: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+[2026-07-12 07:53:07] [javac-output-13991]                                     ^
+[2026-07-12 07:53:07] [javac-output-13991] warning: [processing] No processor claimed any of these annotations: org.apache.logging.log4j.core.config.plugins.PluginAttribute,org.apache.logging.log4j.core.config.plugins.validation.constraints.Required,org.osgi.annotation.bundle.Export,org.junit.Test,org.junit.experimental.categories.Category,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.plugins.PluginElement,org.junit.Rule,org.junit.jupiter.api.extension.ExtendWith,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.baseline.BaselineIgnore,org.junit.jupiter.api.Tag,org.apache.logging.log4j.core.test.internal.annotation.SuppressFBWarnings
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:25: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:38: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:25: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+[2026-07-12 07:53:07] [javac-output-13991]                                     ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:25: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:38: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:25: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+[2026-07-12 07:53:07] [javac-output-13991]                                     ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:25: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:38: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:25: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+[2026-07-12 07:53:07] [javac-output-13991]                                     ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:25: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:38: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:53:07] [javac-output-13991]                                            ^
+[2026-07-12 07:53:07] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:25: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:07] [javac-output-13991] import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+[2026-07-12 07:53:07] [javac-output-13991]                                     ^
+[2026-07-12 07:53:08] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:101: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:08] [javac-output-13991]         if (layout != null && !(layout instanceof SerializedLayout)) {
+[2026-07-12 07:53:08] [javac-output-13991]                                                   ^
+[2026-07-12 07:53:08] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/ListAppender.java:114: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:08] [javac-output-13991]         } else if (layout instanceof SerializedLayout) {
+[2026-07-12 07:53:08] [javac-output-13991]                                      ^
+[2026-07-12 07:53:08] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/EncodingListAppender.java:78: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:53:08] [javac-output-13991]         } else if (layout instanceof SerializedLayout) {
+[2026-07-12 07:53:08] [javac-output-13991]                                      ^
+[2026-07-12 07:53:08] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/appender/FailOnceAppender.java:111: warning: [deprecation] stop() in Thread has been deprecated
+[2026-07-12 07:53:08] [javac-output-13991]         Thread.currentThread().stop();
+[2026-07-12 07:53:08] [javac-output-13991]                               ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:49: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:09] [javac-output-13991]                 final SimpleNamingContextBuilder builder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
+[2026-07-12 07:53:09] [javac-output-13991]                       ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/JndiRule.java:49: warning: [deprecation] SimpleNamingContextBuilder in org.springframework.mock.jndi has been deprecated
+[2026-07-12 07:53:09] [javac-output-13991]                 final SimpleNamingContextBuilder builder = SimpleNamingContextBuilder.emptyActivatedContextBuilder();
+[2026-07-12 07:53:09] [javac-output-13991]                                                            ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/.m2/repository/org/springframework/spring-core/5.3.39/spring-core-5.3.39.jar(/org/springframework/lang/Nullable.class): warning: [classfile] Cannot find annotation method 'when()' in type 'Nonnull'
+[2026-07-12 07:53:09] [javac-output-13991] warning: unknown enum constant When.MAYBE
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/LoggerContextRule.java:118: warning: [deprecation] setLevel(Level) in StatusLogger has been deprecated
+[2026-07-12 07:53:09] [javac-output-13991]             StatusLogger.getLogger().setLevel(Level.DEBUG);
+[2026-07-12 07:53:09] [javac-output-13991]                                     ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/LoggerContextRule.java:166: warning: [unchecked] unchecked cast
+[2026-07-12 07:53:09] [javac-output-13991]         return (T) getConfiguration().getAppenders().get(name);
+[2026-07-12 07:53:09] [javac-output-13991]                                                         ^
+[2026-07-12 07:53:09] [javac-output-13991]   required: T
+[2026-07-12 07:53:09] [javac-output-13991]   found:    Appender
+[2026-07-12 07:53:09] [javac-output-13991]   where T is a type-variable:
+[2026-07-12 07:53:09] [javac-output-13991]     T extends Appender declared in method <T>getAppender(String)
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/junit/URLStreamHandlerFactoryRule.java:59: warning: [unchecked] unchecked cast
+[2026-07-12 07:53:09] [javac-output-13991]                     (Hashtable<String, URLStreamHandler>) handlersFields.get(null);
+[2026-07-12 07:53:09] [javac-output-13991]                                                                             ^
+[2026-07-12 07:53:09] [javac-output-13991]   required: Hashtable<String,URLStreamHandler>
+[2026-07-12 07:53:09] [javac-output-13991]   found:    Object
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/layout/Log4j2_1482_Test.java:72: warning: [try] auto-closeable resource loggerContext is never referenced in body of corresponding try statement
+[2026-07-12 07:53:09] [javac-output-13991]             try (final LoggerContext loggerContext =
+[2026-07-12 07:53:09] [javac-output-13991]                                      ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/net/mock/MockTcpSyslogServer.java:40: warning: [deprecation] MockSyslogServer(int,int) in MockSyslogServer has been deprecated
+[2026-07-12 07:53:09] [javac-output-13991]         super(0, port);
+[2026-07-12 07:53:09] [javac-output-13991]         ^
+[2026-07-12 07:53:09] [javac-output-13991] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/main/java/org/apache/logging/log4j/core/test/net/mock/MockUdpSyslogServer.java:38: warning: [deprecation] MockSyslogServer(int,int) in MockSyslogServer has been deprecated
+[2026-07-12 07:53:09] [javac-output-13991]         super(0, port);
+[2026-07-12 07:53:09] [javac-output-13991]         ^

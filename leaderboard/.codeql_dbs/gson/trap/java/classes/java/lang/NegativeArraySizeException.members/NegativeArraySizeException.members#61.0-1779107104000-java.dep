@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/NegativeArraySizeException.members/NegativeArraySizeException.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/lang/NegativeArraySizeException.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz
+classes/java/lang/String.members.trap.gz

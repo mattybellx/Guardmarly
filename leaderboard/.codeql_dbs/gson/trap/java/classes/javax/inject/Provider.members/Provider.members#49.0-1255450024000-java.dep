@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/inject/Provider.members/Provider.members#49.0-1255450024000-java.trap.gz
+
+TRAPS
+classes/javax/inject/Provider.members.trap.gz
+classes/java/lang/Object.members.trap.gz

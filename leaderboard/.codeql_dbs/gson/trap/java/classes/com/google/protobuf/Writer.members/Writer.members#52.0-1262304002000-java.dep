@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Writer.members/Writer.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Writer.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/CheckReturnValue.members.trap.gz
+classes/com/google/protobuf/MapEntryLite$Metadata.members.trap.gz
+classes/com/google/protobuf/MapEntryLite.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/protobuf/Schema.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/java/lang/Double.members.trap.gz
+classes/java/lang/Float.members.trap.gz
+classes/com/google/protobuf/Writer$FieldOrder.members.trap.gz

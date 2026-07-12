@@ -1,0 +1,16 @@
+[2026-07-12 07:56:45] [javac-output-15339] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:45] [javac-output-15339] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:45] [javac-output-15339] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:56:45] [javac-output-15339] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.plugins.PluginElement,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute
+[2026-07-12 07:56:46] [javac-output-15339] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jdbc-dbcp2/src/main/java/org/apache/logging/log4j/core/appender/db/jdbc/PoolableConnectionFactoryConfig.java:66: warning: [deprecation] getDefaultQueryTimeout() in PoolableConnectionFactory has been deprecated
+[2026-07-12 07:56:46] [javac-output-15339]         private Integer defaultQueryTimeoutSeconds = DEFAULT.getDefaultQueryTimeout();
+[2026-07-12 07:56:46] [javac-output-15339]                                                             ^
+[2026-07-12 07:56:46] [javac-output-15339] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jdbc-dbcp2/src/main/java/org/apache/logging/log4j/core/appender/db/jdbc/PoolableConnectionFactoryConfig.java:279: warning: [deprecation] setDefaultQueryTimeout(Integer) in PoolableConnectionFactory has been deprecated
+[2026-07-12 07:56:46] [javac-output-15339]             poolableConnectionFactory.setDefaultQueryTimeout(defaultQueryTimeoutSeconds);
+[2026-07-12 07:56:46] [javac-output-15339]                                      ^
+[2026-07-12 07:56:46] [javac-output-15339] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jdbc-dbcp2/src/main/java/org/apache/logging/log4j/core/appender/db/jdbc/PoolableConnectionFactoryConfig.java:285: warning: [deprecation] setMaxConnLifetimeMillis(long) in PoolableConnectionFactory has been deprecated
+[2026-07-12 07:56:46] [javac-output-15339]             poolableConnectionFactory.setMaxConnLifetimeMillis(maxConnLifetimeMillis);
+[2026-07-12 07:56:46] [javac-output-15339]                                      ^
+[2026-07-12 07:56:46] [javac-output-15339] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jdbc-dbcp2/src/main/java/org/apache/logging/log4j/core/appender/db/jdbc/PoolableConnectionFactoryConfig.java:290: warning: [deprecation] setValidationQueryTimeout(int) in PoolableConnectionFactory has been deprecated
+[2026-07-12 07:56:46] [javac-output-15339]             poolableConnectionFactory.setValidationQueryTimeout(validationQueryTimeoutSeconds);
+[2026-07-12 07:56:46] [javac-output-15339]                                      ^

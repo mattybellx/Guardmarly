@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/base/AbstractDuration.members/AbstractDuration.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/base/AbstractDuration.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/joda/time/ReadableDuration.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/Period.members.trap.gz
+classes/org/joda/time/Duration.members.trap.gz

@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$ExtensionRangeOptions$VerificationState.members/DescriptorProtos$ExtensionRangeOptions$VerificationState.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$ExtensionRangeOptions$VerificationState.members.trap.gz
+classes/java/lang/Enum.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/com/google/protobuf/ProtocolMessageEnum.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$ExtensionRangeOptions.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumValueDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLiteMap.members.trap.gz
+classes/com/google/protobuf/Internal.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

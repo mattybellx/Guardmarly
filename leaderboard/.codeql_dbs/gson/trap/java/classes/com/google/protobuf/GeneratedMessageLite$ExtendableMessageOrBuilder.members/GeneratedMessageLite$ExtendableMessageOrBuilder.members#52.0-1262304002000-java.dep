@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/GeneratedMessageLite$ExtendableMessageOrBuilder.members/GeneratedMessageLite$ExtendableMessageOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/GeneratedMessageLite$ExtendableMessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageLiteOrBuilder.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite$ExtendableMessage.members.trap.gz
+classes/com/google/protobuf/AbstractMessageLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite$ExtendableBuilder.members.trap.gz
+classes/com/google/protobuf/GeneratedMessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/AbstractMessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/MessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz

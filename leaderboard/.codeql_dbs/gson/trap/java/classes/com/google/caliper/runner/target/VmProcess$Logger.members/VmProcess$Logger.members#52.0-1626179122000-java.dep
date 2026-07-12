@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/target/VmProcess$Logger.members/VmProcess$Logger.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/target/VmProcess$Logger.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/target/VmProcess.members.trap.gz
+classes/java/lang/String.members.trap.gz

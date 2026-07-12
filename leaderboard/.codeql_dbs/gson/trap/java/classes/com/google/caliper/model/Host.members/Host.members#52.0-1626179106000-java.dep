@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/model/Host.members/Host.members#52.0-1626179106000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/model/Host.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/collect/ImmutableSortedMap.members.trap.gz
+classes/com/google/common/collect/ImmutableSortedMapFauxverideShim.members.trap.gz
+classes/com/google/common/collect/ImmutableMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/com/google/common/annotations/GwtIncompatible.members.trap.gz
+classes/java/util/NavigableMap.members.trap.gz
+classes/java/util/SortedMap.members.trap.gz

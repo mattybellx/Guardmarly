@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/reflect/IgnoreJRERequirement.members/IgnoreJRERequirement.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/reflect/IgnoreJRERequirement.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

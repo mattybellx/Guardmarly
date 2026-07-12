@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/requests
+baselineLinesOfCode: 7564
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  sha: f361ead047be5cb873174218582f7d8b9fcd9f49
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:03:55.338883003Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

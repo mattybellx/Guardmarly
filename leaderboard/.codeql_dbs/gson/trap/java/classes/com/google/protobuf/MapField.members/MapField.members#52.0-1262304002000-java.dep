@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/MapField.members/MapField.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/MapField.members.trap.gz
+classes/com/google/protobuf/MapFieldReflectionAccessor.members.trap.gz
+classes/com/google/protobuf/MutabilityOracle.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/com/google/protobuf/MapEntry.members.trap.gz
+classes/com/google/protobuf/AbstractMessage.members.trap.gz

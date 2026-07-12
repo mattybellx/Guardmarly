@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/jar/Attributes$Name.members/Attributes$Name.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/jar/Attributes$Name.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/jar/Attributes.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

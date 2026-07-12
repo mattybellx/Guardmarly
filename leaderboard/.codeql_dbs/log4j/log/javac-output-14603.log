@@ -1,0 +1,241 @@
+[2026-07-12 07:55:21] [javac-output-14603] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:21] [javac-output-14603] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:21] [javac-output-14603] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:49: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:53: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:25: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runThroughputTest(int lines, Histogram histogram);
+[2026-07-12 07:55:22] [javac-output-14603]                                       ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runLatencyTest(int samples, Histogram histogram, long nanoTimeCost, int threadCount);
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:60: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static Histogram createHistogram() {
+[2026-07-12 07:55:22] [javac-output-14603]            ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:161: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static void reportResult(final String file, final String name, final Histogram histogram) throws IOException {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:185: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static String createSamplingReport(final String name, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                 ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:204: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final Histogram histogram,
+[2026-07-12 07:55:22] [javac-output-14603]                   ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.AfterAll,org.junit.jupiter.api.Test,org.junit.jupiter.api.AfterEach,org.junit.Ignore,org.junit.jupiter.api.BeforeAll,org.junit.Test,org.junit.jupiter.api.Tag,org.junit.experimental.categories.Category,org.junit.ClassRule
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:49: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:53: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:25: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runThroughputTest(int lines, Histogram histogram);
+[2026-07-12 07:55:22] [javac-output-14603]                                       ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runLatencyTest(int samples, Histogram histogram, long nanoTimeCost, int threadCount);
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:60: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static Histogram createHistogram() {
+[2026-07-12 07:55:22] [javac-output-14603]            ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:161: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static void reportResult(final String file, final String name, final Histogram histogram) throws IOException {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:185: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static String createSamplingReport(final String name, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                 ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:204: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final Histogram histogram,
+[2026-07-12 07:55:22] [javac-output-14603]                   ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:49: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:53: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:25: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runThroughputTest(int lines, Histogram histogram);
+[2026-07-12 07:55:22] [javac-output-14603]                                       ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runLatencyTest(int samples, Histogram histogram, long nanoTimeCost, int threadCount);
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:60: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static Histogram createHistogram() {
+[2026-07-12 07:55:22] [javac-output-14603]            ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:161: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static void reportResult(final String file, final String name, final Histogram histogram) throws IOException {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:185: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static String createSamplingReport(final String name, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                 ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:204: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final Histogram histogram,
+[2026-07-12 07:55:22] [javac-output-14603]                   ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:49: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:53: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:25: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runThroughputTest(int lines, Histogram histogram);
+[2026-07-12 07:55:22] [javac-output-14603]                                       ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runLatencyTest(int samples, Histogram histogram, long nanoTimeCost, int threadCount);
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:60: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static Histogram createHistogram() {
+[2026-07-12 07:55:22] [javac-output-14603]            ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:161: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static void reportResult(final String file, final String name, final Histogram histogram) throws IOException {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:185: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static String createSamplingReport(final String name, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                 ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:204: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final Histogram histogram,
+[2026-07-12 07:55:22] [javac-output-14603]                   ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:49: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/AbstractRunQueue.java:53: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {}
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:25: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runThroughputTest(int lines, Histogram histogram);
+[2026-07-12 07:55:22] [javac-output-14603]                                       ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/IPerfTestRunner.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     void runLatencyTest(int samples, Histogram histogram, long nanoTimeCost, int threadCount);
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:60: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static Histogram createHistogram() {
+[2026-07-12 07:55:22] [javac-output-14603]            ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:161: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static void reportResult(final String file, final String name, final Histogram histogram) throws IOException {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:185: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     static String createSamplingReport(final String name, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                                 ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:204: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final Histogram histogram,
+[2026-07-12 07:55:22] [javac-output-14603]                   ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j1.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLog4j2.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:27: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]     public void runThroughputTest(final int lines, final Histogram histogram) {
+[2026-07-12 07:55:22] [javac-output-14603]                                                          ^
+[2026-07-12 07:55:22] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/RunLogback.java:40: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:22] [javac-output-14603]             final int samples, final Histogram histogram, final long nanoTimeCost, final int threadCount) {
+[2026-07-12 07:55:22] [javac-output-14603]                                      ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:69: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         return new Histogram(intervals);
+[2026-07-12 07:55:23] [javac-output-14603]                    ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:102: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram warmupHist = createHistogram();
+[2026-07-12 07:55:23] [javac-output-14603]               ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:155: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram latency = createHistogram();
+[2026-07-12 07:55:23] [javac-output-14603]               ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/PerfTest.java:186: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram data = histogram;
+[2026-07-12 07:55:23] [javac-output-14603]               ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/MultiThreadPerfTest.java:38: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram warmupHist = PerfTest.createHistogram();
+[2026-07-12 07:55:23] [javac-output-14603]               ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/MultiThreadPerfTest.java:75: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram[] histograms = new Histogram[threadCount];
+[2026-07-12 07:55:23] [javac-output-14603]               ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/MultiThreadPerfTest.java:75: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         final Histogram[] histograms = new Histogram[threadCount];
+[2026-07-12 07:55:23] [javac-output-14603]                                            ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/MultiThreadPerfTest.java:83: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]             final Histogram histogram = histograms[i];
+[2026-07-12 07:55:23] [javac-output-14603]                   ^
+[2026-07-12 07:55:23] [javac-output-14603] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-its/src/test/java/org/apache/logging/log4j/core/async/perftest/MultiThreadPerfTest.java:101: warning: [deprecation] Histogram in org.apache.logging.log4j.core.async.perftest has been deprecated
+[2026-07-12 07:55:23] [javac-output-14603]         for (final Histogram histogram : histograms) {
+[2026-07-12 07:55:23] [javac-output-14603]                    ^

@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/testing/TestContainerGenerator.members/TestContainerGenerator.members#52.0-1776188796000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/testing/TestContainerGenerator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/org/jspecify/annotations/NullMarked.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/collect/testing/SampleElements.members.trap.gz

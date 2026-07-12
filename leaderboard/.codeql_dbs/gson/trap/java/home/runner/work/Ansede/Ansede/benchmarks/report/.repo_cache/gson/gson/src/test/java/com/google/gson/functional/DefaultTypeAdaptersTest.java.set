@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/functional/DefaultTypeAdaptersTest.java.trap.gz
+classes/java/lang/reflect/InaccessibleObjectException.members/InaccessibleObjectException.members#61.0-1776806822000-java.trap.gz
+classes/org/junit/After.members/After.members#49.0-1613237482000-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest.members/DefaultTypeAdaptersTest.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$MyClassTypeAdapter.members/DefaultTypeAdaptersTest$MyClassTypeAdapter.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$ClassWithUrlField.members/DefaultTypeAdaptersTest$ClassWithUrlField.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$ClassWithBigDecimal.members/DefaultTypeAdaptersTest$ClassWithBigDecimal.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$ClassWithBigInteger.members/DefaultTypeAdaptersTest$ClassWithBigInteger.members#0.0-1783842439067-java.trap.gz
+classes/com/google/gson/functional/DefaultTypeAdaptersTest$NumberAsStringAdapter.members/DefaultTypeAdaptersTest$NumberAsStringAdapter.members#0.0-1783842439067-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/.m2/repository/com/google/truth/truth/1.4.5/truth-1.4.5.jar.trap.gz
+jars/home/runner/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar.trap.gz

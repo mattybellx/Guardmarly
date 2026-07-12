@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Internal.members/Internal.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Internal.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/java/nio/ByteBuffer.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLite.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/java/nio/charset/Charset.members.trap.gz

@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/jar/JarVerifier.members/JarVerifier.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/jar/JarVerifier.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/net/URL.members.trap.gz
+classes/java/security/CodeSource.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/jar/JarFile.members.trap.gz
+classes/java/util/jar/JarEntry.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/Enumeration.members.trap.gz
+classes/java/security/CodeSigner.members.trap.gz
+classes/java/security/cert/Certificate.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/sun/security/util/ManifestEntryVerifier.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/sun/security/util/Debug.members.trap.gz

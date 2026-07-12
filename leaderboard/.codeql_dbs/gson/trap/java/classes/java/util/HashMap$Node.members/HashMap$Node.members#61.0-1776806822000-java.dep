@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/HashMap$Node.members/HashMap$Node.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/HashMap$Node.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/Comparator.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/util/HashMap.members.trap.gz
+classes/java/lang/String.members.trap.gz

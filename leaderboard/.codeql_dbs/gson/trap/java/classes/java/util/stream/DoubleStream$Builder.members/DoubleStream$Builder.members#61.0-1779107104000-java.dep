@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/stream/DoubleStream$Builder.members/DoubleStream$Builder.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/stream/DoubleStream$Builder.members.trap.gz
+classes/java/util/function/DoubleConsumer.members.trap.gz
+classes/java/util/stream/DoubleStream.members.trap.gz

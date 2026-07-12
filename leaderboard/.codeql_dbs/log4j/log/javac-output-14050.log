@@ -1,0 +1,292 @@
+[2026-07-12 07:53:30] [javac-output-14050] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:53:30] [javac-output-14050] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:53:30] [javac-output-14050] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/XmlEvents.java:20: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:43: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextStackRule;
+[2026-07-12 07:53:34] [javac-output-14050]                                           ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:70: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     public final ThreadContextStackRule threadContextRule = new ThreadContextStackRule();
+[2026-07-12 07:53:34] [javac-output-14050]                  ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rewrite/RewriteAppenderTest.java:31: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:38: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:49: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     private static final FastDateFormat formatter = FastDateFormat.getInstance("MM-dd-yyyy");
+[2026-07-12 07:53:34] [javac-output-14050]                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:35: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:26: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:27: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:27: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:35: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderOnStartup2Test.java:37: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderOnStartup2Test.java:49: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     private static final FastDateFormat formatter = FastDateFormat.getInstance("MM-dd-yy-HH-mm-ss");
+[2026-07-12 07:53:34] [javac-output-14050]                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderRestartTest.java:19: warning: [deprecation] Assert in junit.framework has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import static junit.framework.Assert.fail;
+[2026-07-12 07:53:34] [javac-output-14050]                              ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/JsonRoutingAppender2Test.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/JsonRoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/PropertiesRoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppender2767Test.java:26: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderWithJndiTest.java:29: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderWithPurgingTest.java:28: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingDefaultAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:34] [javac-output-14050]                                ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/async/RingBufferLogEventTest.java:37: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:53:34] [javac-output-14050]                                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/plugins/convert/TypeConvertersTest.java:38: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.appender.rolling.action.Duration;
+[2026-07-12 07:53:34] [javac-output-14050]                                                             ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvLogEventLayoutTest.java:33: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:34] [javac-output-14050]                                           ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvLogEventLayoutTest.java:51: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:34] [javac-output-14050]                  ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvParameterLayoutTest.java:37: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:34] [javac-output-14050]                                           ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvParameterLayoutTest.java:69: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:34] [javac-output-14050]                  ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/HtmlLayoutTest.java:19: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import static org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/LogEventFixtures.java:32: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:53:34] [javac-output-14050]                                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/SerializedLayoutTest.java:42: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:34] [javac-output-14050]                                           ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/SerializedLayoutTest.java:59: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:34] [javac-output-14050]                  ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/XmlLayoutTest.java:49: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:34] [javac-output-14050]                                           ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/XmlLayoutTest.java:67: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:34] [javac-output-14050]                  ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:19: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import static org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat.DEFAULT;
+[2026-07-12 07:53:34] [javac-output-14050]                                                          ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:37: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:37: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:34] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/xml/XmlConfigurationPropsTest.java:76: warning: [deprecation] LOG4J_DEFAULT_STATUS_LEVEL in Constants has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     @SetTestProperty(key = Constants.LOG4J_DEFAULT_STATUS_LEVEL, value = "WARN")
+[2026-07-12 07:53:34] [javac-output-14050]                                     ^
+[2026-07-12 07:53:34] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/xml/XmlConfigurationPropsTest.java:83: warning: [deprecation] LOG4J_DEFAULT_STATUS_LEVEL in Constants has been deprecated
+[2026-07-12 07:53:34] [javac-output-14050]     @SetTestProperty(key = Constants.LOG4J_DEFAULT_STATUS_LEVEL, value = "WARN")
+[2026-07-12 07:53:34] [javac-output-14050]                                     ^
+[2026-07-12 07:53:34] [javac-output-14050] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.BeforeEach,com.fasterxml.jackson.annotation.JsonProperty,org.junit.jupiter.api.RepeatedTest,org.junitpioneer.jupiter.SetSystemProperty.SetSystemProperties,org.apache.logging.log4j.core.config.plugins.validation.Constraint,org.apache.logging.log4j.core.config.plugins.validation.constraints.ValidHost,org.apache.logging.log4j.test.junit.CleanUpFiles,org.junit.jupiter.api.Disabled,org.junitpioneer.jupiter.SetSystemProperty,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.apache.logging.log4j.test.junit.UsingThreadContextMap,org.junit.jupiter.api.AfterAll,org.apache.logging.log4j.test.junit.SetTestProperty,org.apache.logging.log4j.core.config.plugins.PluginElement,org.apache.logging.log4j.test.junit.UsingTestProperties,org.junit.jupiter.api.extension.ExtendWith,org.junit.jupiter.api.BeforeAll,org.junit.After,org.apache.logging.log4j.core.config.plugins.PluginValue,org.junit.jupiter.api.condition.EnabledOnOs,org.junit.jupiter.api.condition.EnabledIfSystemProperty,org.junit.jupiter.api.Tag,org.junit.ClassRule,org.apache.logging.log4j.core.test.junit.Named,org.junit.jupiter.params.provider.MethodSource,org.junitpioneer.jupiter.RetryingTest,org.junit.AfterClass,org.apache.logging.log4j.core.config.plugins.PluginAttribute,org.apache.logging.log4j.core.config.plugins.PluginConfiguration,org.apache.logging.log4j.core.config.plugins.PluginAliases,org.junit.jupiter.api.parallel.ResourceLock,org.junit.experimental.categories.Category,org.apache.logging.log4j.test.junit.TempLoggingDir,org.junit.jupiter.api.Test,org.apache.logging.log4j.core.config.plugins.PluginLoggerContext,org.junit.jupiter.api.io.TempDir,org.junit.jupiter.api.Tags,com.fasterxml.jackson.databind.annotation.JsonDeserialize,org.junit.jupiter.params.provider.CsvSource,org.apache.logging.log4j.test.junit.SetTestProperty.SetTestProperties,org.junitpioneer.jupiter.SetEnvironmentVariable,org.apache.logging.log4j.core.config.plugins.validation.constraints.Required,org.junit.BeforeClass,org.mockito.Mock,org.apache.logging.log4j.test.junit.StatusLoggerLevel,org.junit.runner.RunWith,org.junit.runners.Parameterized.Parameters,org.apache.logging.log4j.test.junit.UsingStatusListener,org.junit.jupiter.params.provider.EnumSource,org.junit.jupiter.api.condition.DisabledOnOs,org.mockito.Captor,org.junit.jupiter.api.Nested,org.apache.logging.log4j.test.junit.UsingStatusLoggerMock,org.junit.jupiter.api.extension.RegisterExtension,org.junit.Before,org.junit.jupiter.params.provider.ValueSource,org.apache.logging.log4j.message.AsynchronouslyFormattable,org.apache.logging.log4j.core.config.plugins.PluginVisitorStrategy,org.apache.logging.log4j.core.config.plugins.validation.constraints.ValidPort,org.junitpioneer.jupiter.DefaultLocale,org.junit.runners.Parameterized.Parameter,org.apache.logging.log4j.core.test.junit.LoggerContextSource,org.junit.Test,org.junit.jupiter.api.parallel.ResourceLocks,org.junitpioneer.jupiter.Issue,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.test.junit.CleanUpDirectories,org.apache.logging.log4j.core.config.plugins.PluginNode,org.junit.jupiter.api.AfterEach,org.junit.jupiter.params.ParameterizedTest,org.apache.logging.log4j.test.junit.UsingThreadContextStack,org.junit.Rule,org.junit.Ignore,com.github.tomakehurst.wiremock.junit5.WireMockTest,org.apache.logging.log4j.test.junit.UsingAnyThreadContext,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,org.junit.jupiter.params.provider.NullSource,org.junit.jupiter.api.parallel.Execution,org.junit.jupiter.api.Timeout,org.apache.logging.log4j.core.pattern.ConverterKeys
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/XmlEvents.java:20: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:43: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextStackRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:70: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextStackRule threadContextRule = new ThreadContextStackRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rewrite/RewriteAppenderTest.java:31: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:38: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:49: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     private static final FastDateFormat formatter = FastDateFormat.getInstance("MM-dd-yyyy");
+[2026-07-12 07:53:35] [javac-output-14050]                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:35: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:26: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:27: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:27: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:35: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteNestedTest.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderOnStartup2Test.java:37: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderOnStartup2Test.java:49: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     private static final FastDateFormat formatter = FastDateFormat.getInstance("MM-dd-yy-HH-mm-ss");
+[2026-07-12 07:53:35] [javac-output-14050]                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderRestartTest.java:19: warning: [deprecation] Assert in junit.framework has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import static junit.framework.Assert.fail;
+[2026-07-12 07:53:35] [javac-output-14050]                              ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/JsonRoutingAppender2Test.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/JsonRoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/PropertiesRoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppender2767Test.java:26: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderWithJndiTest.java:29: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingAppenderWithPurgingTest.java:28: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/routing/RoutingDefaultAppenderTest.java:25: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/async/RingBufferLogEventTest.java:37: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:53:35] [javac-output-14050]                                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/plugins/convert/TypeConvertersTest.java:38: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.appender.rolling.action.Duration;
+[2026-07-12 07:53:35] [javac-output-14050]                                                             ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvLogEventLayoutTest.java:33: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvLogEventLayoutTest.java:51: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvParameterLayoutTest.java:37: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/CsvParameterLayoutTest.java:69: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/HtmlLayoutTest.java:19: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import static org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/LogEventFixtures.java:32: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:53:35] [javac-output-14050]                                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/SerializedLayoutTest.java:42: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/SerializedLayoutTest.java:59: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/XmlLayoutTest.java:49: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/layout/XmlLayoutTest.java:67: warning: [deprecation] ThreadContextRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextRule threadContextRule = new ThreadContextRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:19: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import static org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat.DEFAULT;
+[2026-07-12 07:53:35] [javac-output-14050]                                                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:37: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormatTest.java:37: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/xml/XmlConfigurationPropsTest.java:76: warning: [deprecation] LOG4J_DEFAULT_STATUS_LEVEL in Constants has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     @SetTestProperty(key = Constants.LOG4J_DEFAULT_STATUS_LEVEL, value = "WARN")
+[2026-07-12 07:53:35] [javac-output-14050]                                     ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/config/xml/XmlConfigurationPropsTest.java:83: warning: [deprecation] LOG4J_DEFAULT_STATUS_LEVEL in Constants has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     @SetTestProperty(key = Constants.LOG4J_DEFAULT_STATUS_LEVEL, value = "WARN")
+[2026-07-12 07:53:35] [javac-output-14050]                                     ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/XmlEvents.java:20: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:43: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.test.junit.ThreadContextStackRule;
+[2026-07-12 07:53:35] [javac-output-14050]                                           ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/nosql/NoSqlDatabaseManagerTest.java:70: warning: [deprecation] ThreadContextStackRule in org.apache.logging.log4j.test.junit has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     public final ThreadContextStackRule threadContextRule = new ThreadContextStackRule();
+[2026-07-12 07:53:35] [javac-output-14050]                  ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rewrite/RewriteAppenderTest.java:31: warning: [deprecation] EventLogger in org.apache.logging.log4j has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.EventLogger;
+[2026-07-12 07:53:35] [javac-output-14050]                                ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:38: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/OnStartupTriggeringPolicyTest.java:49: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050]     private static final FastDateFormat formatter = FastDateFormat.getInstance("MM-dd-yyyy");
+[2026-07-12 07:53:35] [javac-output-14050]                          ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:35: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedCount2Test.java:36: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat.FixedFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^
+[2026-07-12 07:53:35] [javac-output-14050] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core-test/src/test/java/org/apache/logging/log4j/core/appender/rolling/RollingAppenderDeleteAccumulatedSizeTest.java:26: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:53:35] [javac-output-14050] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:53:35] [javac-output-14050]                                                   ^

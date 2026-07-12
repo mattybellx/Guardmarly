@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/reflect/generics/repository/AbstractRepository.members/AbstractRepository.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/reflect/generics/repository/AbstractRepository.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/sun/reflect/generics/tree/Tree.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/sun/reflect/generics/factory/GenericsFactory.members.trap.gz
+classes/sun/reflect/generics/visitor/Reifier.members.trap.gz

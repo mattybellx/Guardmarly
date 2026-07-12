@@ -1,0 +1,13 @@
+[2026-07-12 07:56:07] [javac-extractor-15016] Starting extraction for:
+                                              sun.java.command=com.semmle.extractor.java.JavaExtractor --jdk-version 17 --javac-args @@@/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/log4j/log/ext/javac-42.args
+                                              user.dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j
+[2026-07-12 07:56:07] [javac-extractor-15016] Compilation name /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/log4j/trap/java/diagnostics/diagnostic-42.trap.gz
+[2026-07-12 07:56:07] [javac-extractor-15016] [WARN] Appending source destination directory /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-jakarta-web/target/generated-sources/annotations to sourcepath
+[2026-07-12 07:56:08] [javac-extractor-15016] Annotation processor class 'lombok.launch.AnnotationProcessorHider$AnnotationProcessor' initialized.
+[2026-07-12 07:56:08] [javac-extractor-15016] Annotation processor class 'lombok.launch.AnnotationProcessorHider$ClaimingProcessor' initialized.
+[2026-07-12 07:56:08] [javac-extractor-15016] 0 files will be passed to the attrib/flow phase
+[2026-07-12 07:56:08] [javac-extractor-15016] Javac init time: 1.3s
+[2026-07-12 07:56:08] [javac-extractor-15016] Javac attr time: 0.0s
+[2026-07-12 07:56:08] [javac-extractor-15016] Extractor time: 0.0s
+[2026-07-12 07:56:08] [javac-extractor-15016] Other time: 0.2s
+[2026-07-12 07:56:08] [javac-extractor-15016] Total time: 1.5s

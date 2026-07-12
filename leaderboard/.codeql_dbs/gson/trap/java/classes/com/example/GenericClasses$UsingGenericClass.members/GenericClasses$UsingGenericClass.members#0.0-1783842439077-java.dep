@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/example/GenericClasses$UsingGenericClass.members/GenericClasses$UsingGenericClass.members#0.0-1783842439077-java.trap.gz
+
+TRAPS
+classes/com/example/GenericClasses$UsingGenericClass.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/example/GenericClasses.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/com/example/GenericClasses$DummyClass.members.trap.gz
+classes/com/example/GenericClasses$GenericClass.members.trap.gz
+classes/com/google/gson/annotations/SerializedName.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

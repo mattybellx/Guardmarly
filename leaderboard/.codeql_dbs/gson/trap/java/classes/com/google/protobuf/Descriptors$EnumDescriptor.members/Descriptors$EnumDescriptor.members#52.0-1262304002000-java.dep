@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members/Descriptors$EnumDescriptor.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$GenericDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumValueDescriptor.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLiteMap.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/Internal.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLite.members.trap.gz
+classes/com/google/protobuf/Descriptors.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumOptions.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$FileDescriptor.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto.members.trap.gz

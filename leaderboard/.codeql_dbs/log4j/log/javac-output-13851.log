@@ -1,0 +1,288 @@
+[2026-07-12 07:52:02] [javac-output-13851] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:52:02] [javac-output-13851] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:52:02] [javac-output-13851] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/AbstractLogEvent.java:117: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxy.java:142: warning: [deprecation] ThrowableProxyHelper in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final Map<String, ThrowableProxyHelper.CacheEntry> map,
+[2026-07-12 07:52:07] [javac-output-13851]                               ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxy.java:337: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ExtendedStackTraceElement[] getExtendedStackTrace() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:49: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private final ExtendedClassInfo element;
+[2026-07-12 07:52:07] [javac-output-13851]                       ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:52: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private CacheEntry(final ExtendedClassInfo element, final ClassLoader loader) {
+[2026-07-12 07:52:07] [javac-output-13851]                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:69: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:68: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     static ExtendedStackTraceElement[] toExtendedStackTrace(
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:126: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     static ThrowableProxy[] toSuppressedProxies(final Throwable thrown, Set<Throwable> suppressedVisited) {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ExtendedStackTraceElement.java:47: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final StackTraceElement stackTraceElement, final ExtendedClassInfo extraClassInfo) {
+[2026-07-12 07:52:07] [javac-output-13851]                                                              ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ExtendedStackTraceElement.java:97: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ExtendedClassInfo getExtraClassInfo() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/async/RingBufferLogEvent.java:32: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/async/RingBufferLogEvent.java:389: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:96: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     private ThrowableProxy thrownProxy;
+[2026-07-12 07:52:07] [javac-output-13851]             ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:916: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:29: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.appender.mom.JmsManager.JmsManagerConfiguration;
+[2026-07-12 07:52:07] [javac-output-13851]                                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:29: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.appender.mom.JmsManager.JmsManagerConfiguration;
+[2026-07-12 07:52:07] [javac-output-13851]                                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:242: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final JmsManager manager)
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:271: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public JmsManager getManager() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:92: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private JmsManager jmsManager;
+[2026-07-12 07:52:07] [javac-output-13851]                 ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:152: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public Builder setJmsManager(final JmsManager jmsManager) {
+[2026-07-12 07:52:07] [javac-output-13851]                                            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/kafka/KafkaAppender.java:37: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:52:07] [javac-output-13851]                                            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/rolling/action/IfLastModified.java:120: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private org.apache.logging.log4j.core.appender.rolling.action.Duration age;
+[2026-07-12 07:52:07] [javac-output-13851]                                                                      ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/MutableLogEvent.java:397: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/config/plugins/convert/TypeConverters.java:235: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public org.apache.logging.log4j.core.appender.rolling.action.Duration convert(final String s) {
+[2026-07-12 07:52:07] [javac-output-13851]                                                                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ContextDataInjectorFactory.java:22: warning: [deprecation] CopyOnWrite in org.apache.logging.log4j.spi has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.spi.CopyOnWrite;
+[2026-07-12 07:52:07] [javac-output-13851]                                    ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:1254: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private final ThrowableProxy thrownProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                       ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:42: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy cause,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:72: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy cause,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:84: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy throwableProxy,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:121: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy[] suppressedProxies,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:140: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ExtendedStackTraceElement[] extStackTrace,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:203: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ExtendedStackTraceElement extStackTraceElement,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:239: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:277: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:305: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src, final StringBuilder output, final TextRenderer textRenderer) {
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ExtendedStackTraceElementMixIn.java:25: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedClassInfo;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ExtendedStackTraceElementMixIn.java:26: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ExtendedStackTraceElementMixIn.java:81: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public abstract ExtendedClassInfo getExtraClassInfo();
+[2026-07-12 07:52:07] [javac-output-13851]                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/Initializers.java:30: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/Initializers.java:31: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/LogEventMixIn.java:47: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/LogEventMixIn.java:143: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public abstract ThrowableProxy getThrownProxy();
+[2026-07-12 07:52:07] [javac-output-13851]                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyMixIn.java:23: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyMixIn.java:24: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyMixIn.java:72: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public abstract ThrowableProxy[] getSuppressedProxies();
+[2026-07-12 07:52:07] [javac-output-13851]                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithStacktraceAsStringMixIn.java:23: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithStacktraceAsStringMixIn.java:24: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithStacktraceAsStringMixIn.java:71: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public abstract ThrowableProxy[] getSuppressedProxies();
+[2026-07-12 07:52:07] [javac-output-13851]                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithoutStacktraceMixIn.java:23: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ExtendedStackTraceElement;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithoutStacktraceMixIn.java:24: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/jackson/ThrowableProxyWithoutStacktraceMixIn.java:70: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public abstract ThrowableProxy[] getSuppressedProxies();
+[2026-07-12 07:52:07] [javac-output-13851]                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/layout/AbstractJacksonLayout.java:39: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/layout/AbstractJacksonLayout.java:518: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]                ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/pattern/DatePatternConverter.java:32: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:52:07] [javac-output-13851]                                                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormat.java:295: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public FastDateFormat getFastDateFormat() {
+[2026-07-12 07:52:07] [javac-output-13851]                ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/util/datetime/FixedDateFormat.java:306: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public FastDateFormat getFastDateFormat(final TimeZone tz) {
+[2026-07-12 07:52:07] [javac-output-13851]                ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/util/internal/instant/InstantPatternLegacyFormatter.java:28: warning: [deprecation] FastDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.util.datetime.FastDateFormat;
+[2026-07-12 07:52:07] [javac-output-13851]                                                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/util/internal/instant/InstantPatternLegacyFormatter.java:29: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.util.datetime.FixedDateFormat;
+[2026-07-12 07:52:07] [javac-output-13851]                                                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/util/internal/instant/InstantPatternLegacyFormatter.java:64: warning: [deprecation] FixedDateFormat in org.apache.logging.log4j.core.util.datetime has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     private static BiConsumer<StringBuilder, Instant> adaptFixedFormatter(final FixedDateFormat formatter) {
+[2026-07-12 07:52:07] [javac-output-13851]                                                                                 ^
+[2026-07-12 07:52:07] [javac-output-13851] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:52:07] [javac-output-13851] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:52:07] [javac-output-13851] warning: [processing] No processor claimed any of these annotations: com.fasterxml.jackson.annotation.JsonProperty,org.apache.logging.log4j.core.config.plugins.validation.Constraint,org.osgi.annotation.bundle.Export,javax.annotation.processing.SupportedOptions,com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty,aQute.bnd.annotation.jpms.ExportTo,org.jspecify.annotations.NullMarked,org.apache.logging.log4j.core.config.plugins.validation.constraints.ValidHost,com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement,org.apache.logging.log4j.util.PerformanceSensitive,com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper,javax.annotation.processing.SupportedAnnotationTypes,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute,org.apache.logging.log4j.core.config.plugins.PluginFactory,org.apache.logging.log4j.core.config.plugins.PluginElement,org.apache.logging.log4j.core.config.Scheduled,aQute.bnd.annotation.spi.ServiceConsumer,aQute.bnd.annotation.spi.ServiceProvider,com.fasterxml.jackson.annotation.JsonValue,org.apache.logging.log4j.core.config.plugins.PluginValue,com.fasterxml.jackson.annotation.JsonAnyGetter,com.fasterxml.jackson.annotation.JsonRootName,org.apache.logging.log4j.core.config.plugins.PluginAttribute,org.apache.logging.log4j.core.config.plugins.PluginConfiguration,org.apache.logging.log4j.core.config.plugins.PluginAliases,org.osgi.annotation.versioning.ProviderType,com.fasterxml.jackson.annotation.JsonUnwrapped,com.fasterxml.jackson.databind.annotation.JsonDeserialize,com.fasterxml.jackson.annotation.JsonIgnoreProperties,com.fasterxml.jackson.annotation.JsonPropertyOrder,org.apache.logging.log4j.core.config.plugins.validation.constraints.Required,org.jspecify.annotations.NullUnmarked,org.osgi.annotation.bundle.Headers,org.apache.logging.log4j.core.config.Order,com.fasterxml.jackson.annotation.JsonIgnore,org.apache.logging.log4j.core.config.plugins.validation.constraints.ValidPort,org.apache.logging.log4j.core.config.plugins.PluginVisitorStrategy,org.apache.logging.log4j.core.internal.annotation.SuppressFBWarnings,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginNode,org.osgi.annotation.versioning.Version,com.fasterxml.jackson.annotation.JsonFilter,org.apache.logging.log4j.core.tools.picocli.CommandLine.Option,com.fasterxml.jackson.annotation.JsonCreator,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.baseline.BaselineIgnore,org.apache.logging.log4j.core.pattern.ConverterKeys
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/AbstractLogEvent.java:117: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxy.java:142: warning: [deprecation] ThrowableProxyHelper in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final Map<String, ThrowableProxyHelper.CacheEntry> map,
+[2026-07-12 07:52:07] [javac-output-13851]                               ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxy.java:337: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ExtendedStackTraceElement[] getExtendedStackTrace() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:49: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private final ExtendedClassInfo element;
+[2026-07-12 07:52:07] [javac-output-13851]                       ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:52: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private CacheEntry(final ExtendedClassInfo element, final ClassLoader loader) {
+[2026-07-12 07:52:07] [javac-output-13851]                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:69: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:68: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     static ExtendedStackTraceElement[] toExtendedStackTrace(
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyHelper.java:126: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     static ThrowableProxy[] toSuppressedProxies(final Throwable thrown, Set<Throwable> suppressedVisited) {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ExtendedStackTraceElement.java:47: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final StackTraceElement stackTraceElement, final ExtendedClassInfo extraClassInfo) {
+[2026-07-12 07:52:07] [javac-output-13851]                                                              ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ExtendedStackTraceElement.java:97: warning: [deprecation] ExtendedClassInfo in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ExtendedClassInfo getExtraClassInfo() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/async/RingBufferLogEvent.java:32: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.impl.ThrowableProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                                          ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/async/RingBufferLogEvent.java:389: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:96: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     private ThrowableProxy thrownProxy;
+[2026-07-12 07:52:07] [javac-output-13851]             ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:916: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:29: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.appender.mom.JmsManager.JmsManagerConfiguration;
+[2026-07-12 07:52:07] [javac-output-13851]                                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:29: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.appender.mom.JmsManager.JmsManagerConfiguration;
+[2026-07-12 07:52:07] [javac-output-13851]                                                  ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:242: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final JmsManager manager)
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:271: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public JmsManager getManager() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:92: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private JmsManager jmsManager;
+[2026-07-12 07:52:07] [javac-output-13851]                 ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/JmsAppender.java:152: warning: [deprecation] JmsManager in org.apache.logging.log4j.core.appender.mom has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public Builder setJmsManager(final JmsManager jmsManager) {
+[2026-07-12 07:52:07] [javac-output-13851]                                            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/mom/kafka/KafkaAppender.java:37: warning: [deprecation] SerializedLayout in org.apache.logging.log4j.core.layout has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.core.layout.SerializedLayout;
+[2026-07-12 07:52:07] [javac-output-13851]                                            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/appender/rolling/action/IfLastModified.java:120: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private org.apache.logging.log4j.core.appender.rolling.action.Duration age;
+[2026-07-12 07:52:07] [javac-output-13851]                                                                      ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/MutableLogEvent.java:397: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]     public ThrowableProxy getThrownProxy() {
+[2026-07-12 07:52:07] [javac-output-13851]            ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/config/plugins/convert/TypeConverters.java:235: warning: [deprecation] Duration in org.apache.logging.log4j.core.appender.rolling.action has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         public org.apache.logging.log4j.core.appender.rolling.action.Duration convert(final String s) {
+[2026-07-12 07:52:07] [javac-output-13851]                                                                     ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ContextDataInjectorFactory.java:22: warning: [deprecation] CopyOnWrite in org.apache.logging.log4j.spi has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851] import org.apache.logging.log4j.spi.CopyOnWrite;
+[2026-07-12 07:52:07] [javac-output-13851]                                    ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/Log4jLogEvent.java:1254: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]         private final ThrowableProxy thrownProxy;
+[2026-07-12 07:52:07] [javac-output-13851]                       ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:42: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy cause,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:72: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy cause,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:84: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy throwableProxy,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:121: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy[] suppressedProxies,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:140: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ExtendedStackTraceElement[] extStackTrace,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:203: warning: [deprecation] ExtendedStackTraceElement in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ExtendedStackTraceElement extStackTraceElement,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:239: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:277: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src,
+[2026-07-12 07:52:07] [javac-output-13851]                   ^
+[2026-07-12 07:52:07] [javac-output-13851] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-core/src/main/java/org/apache/logging/log4j/core/impl/ThrowableProxyRenderer.java:305: warning: [deprecation] ThrowableProxy in org.apache.logging.log4j.core.impl has been deprecated
+[2026-07-12 07:52:07] [javac-output-13851]             final ThrowableProxy src, final StringBuilder output, final TextRenderer textRenderer) {
+[2026-07-12 07:52:07] [javac-output-13851]                   ^

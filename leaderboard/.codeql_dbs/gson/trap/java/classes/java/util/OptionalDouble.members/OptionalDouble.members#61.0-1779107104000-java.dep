@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/OptionalDouble.members/OptionalDouble.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/OptionalDouble.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/util/function/DoubleSupplier.members.trap.gz
+classes/java/util/function/DoubleConsumer.members.trap.gz

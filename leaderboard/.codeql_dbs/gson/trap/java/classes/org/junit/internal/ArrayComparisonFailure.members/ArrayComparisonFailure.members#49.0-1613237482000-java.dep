@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/internal/ArrayComparisonFailure.members/ArrayComparisonFailure.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/internal/ArrayComparisonFailure.members.trap.gz
+classes/java/lang/AssertionError.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz

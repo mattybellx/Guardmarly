@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j
+baselineLinesOfCode: 214197
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: java
+creationMetadata:
+  sha: b6ba7d0af60783e98fbe52aee4f9ea3e70deed25
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:50:31.407900365Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

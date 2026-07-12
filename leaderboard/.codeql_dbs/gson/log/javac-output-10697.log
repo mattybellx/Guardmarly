@@ -1,0 +1,60 @@
+[2026-07-12 07:49:21] [javac-output-10697] warning: [processing] No processor claimed any of these annotations: com.google.errorprone.annotations.CanIgnoreReturnValue
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:87: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]       TypeAdapter<T> dynamicAdapter = (TypeAdapter<T>) new DynamicAdapter(gson).nullSafe();
+[2026-07-12 07:49:21] [javac-output-10697]                                                                                         ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: TypeAdapter<T>
+[2026-07-12 07:49:21] [javac-output-10697]   found:    TypeAdapter<Message>
+[2026-07-12 07:49:21] [javac-output-10697]   where T is a type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:91: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]     TypeAdapter<T> adapter = (TypeAdapter<T>) new Adapter<>(gson, type).nullSafe();
+[2026-07-12 07:49:21] [javac-output-10697]                                                                                 ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: TypeAdapter<T>
+[2026-07-12 07:49:21] [javac-output-10697]   found:    TypeAdapter<Message>
+[2026-07-12 07:49:21] [javac-output-10697]   where T is a type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:160: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]       Class<T> messageClass = (Class<T>) type.getRawType().asSubclass(Message.class);
+[2026-07-12 07:49:21] [javac-output-10697]                                                                      ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: Class<T>
+[2026-07-12 07:49:21] [javac-output-10697]   found:    Class<CAP#1>
+[2026-07-12 07:49:21] [javac-output-10697]   where T is a type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     T extends Message declared in class Adapter
+[2026-07-12 07:49:21] [javac-output-10697]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     CAP#1 extends Message from capture of ? extends Message
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:275: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]       T result = (T) builder.build();
+[2026-07-12 07:49:21] [javac-output-10697]                                   ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: T
+[2026-07-12 07:49:21] [javac-output-10697]   found:    Message
+[2026-07-12 07:49:21] [javac-output-10697]   where T is a type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     T extends Message declared in class Adapter
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:543: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]       TypeAdapter<Message> nestedAdapter = (TypeAdapter<Message>) gson.getAdapter(value.getClass());
+[2026-07-12 07:49:21] [javac-output-10697]                                                                                  ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: TypeAdapter<Message>
+[2026-07-12 07:49:21] [javac-output-10697]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:49:21] [javac-output-10697]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:49:21] [javac-output-10697]     CAP#1 extends Message from capture of ? extends Message
+[2026-07-12 07:49:21] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/LegacyProtoTypeAdapterFactory.java:556: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:21] [javac-output-10697]       List<? extends Message> mapEntries = (List<? extends Message>) value;
+[2026-07-12 07:49:21] [javac-output-10697]                                                                      ^
+[2026-07-12 07:49:21] [javac-output-10697]   required: List<? extends Message>
+[2026-07-12 07:49:21] [javac-output-10697]   found:    Object
+[2026-07-12 07:49:23] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/ProtoTypeAdapter.java:270: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:23] [javac-output-10697]               (Collection<EnumValueDescriptor>) fieldPair.getValue();
+[2026-07-12 07:49:23] [javac-output-10697]                                                                   ^
+[2026-07-12 07:49:23] [javac-output-10697]   required: Collection<EnumValueDescriptor>
+[2026-07-12 07:49:23] [javac-output-10697]   found:    Object
+[2026-07-12 07:49:23] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/ProtoTypeAdapter.java:292: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:23] [javac-output-10697]       Class<? extends Message> protoClass = (Class<? extends Message>) typeOfT;
+[2026-07-12 07:49:23] [javac-output-10697]                                                                        ^
+[2026-07-12 07:49:23] [javac-output-10697]   required: Class<? extends Message>
+[2026-07-12 07:49:23] [javac-output-10697]   found:    Type
+[2026-07-12 07:49:23] [javac-output-10697] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/proto/src/main/java/com/google/gson/protobuf/ProtoTypeAdapter.java:339: warning: [unchecked] unchecked cast
+[2026-07-12 07:49:23] [javac-output-10697]                 (TypeToken<? extends List<?>>) TypeToken.of(protoArrayField.getGenericType());
+[2026-07-12 07:49:23] [javac-output-10697]                                                            ^
+[2026-07-12 07:49:23] [javac-output-10697]   required: TypeToken<? extends List<?>>
+[2026-07-12 07:49:23] [javac-output-10697]   found:    TypeToken<CAP#1>
+[2026-07-12 07:49:23] [javac-output-10697]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:49:23] [javac-output-10697]     CAP#1 extends Object from capture of ?

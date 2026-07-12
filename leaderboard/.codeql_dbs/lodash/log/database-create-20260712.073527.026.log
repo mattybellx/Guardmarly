@@ -1,0 +1,1070 @@
+[2026-07-12 07:35:27] This is codeql database create benchmarks/report/.codeql_dbs/lodash --language=javascript --source-root=benchmarks/report/.repo_cache/lodash
+[2026-07-12 07:35:27] Log file was started late.
+[2026-07-12 07:35:27] [PROGRESS] database create> Initializing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash.
+[2026-07-12 07:35:27] Running plumbing command: codeql database init --language=javascript --extractor-options-verbosity=1 --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --source-root=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash --allow-missing-source-root=false --allow-already-existing -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash
+[2026-07-12 07:35:27] Calling plumbing command: codeql resolve languages --extractor-options-verbosity=1 --format=betterjson
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Scanning for [codeql-extractor.yml] from /home/runner/work/Ansede/Ansede/codeql/.codeqlmanifest.json
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/go/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/yaml/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/swift/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/rust/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/properties/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csv/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/ruby/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/javascript/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/csharp/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/python/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/actions/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/cpp/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/xml/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/html/codeql-extractor.yml.
+[2026-07-12 07:35:27] [DETAILS] resolve languages> Parsing /home/runner/work/Ansede/Ansede/codeql/java/codeql-extractor.yml.
+[2026-07-12 07:35:27] Plumbing command codeql resolve languages completed:
+                      {
+                        "aliases" : {
+                          "c" : "cpp",
+                          "c++" : "cpp",
+                          "c-c++" : "cpp",
+                          "c-cpp" : "cpp",
+                          "c#" : "csharp",
+                          "java-kotlin" : "java",
+                          "kotlin" : "java",
+                          "javascript-typescript" : "javascript",
+                          "typescript" : "javascript"
+                        },
+                        "extractors" : {
+                          "go" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/go",
+                              "extractor_options" : {
+                                "extract_tests" : {
+                                  "title" : "Whether to include Go test files in the CodeQL database.",
+                                  "description" : "A value indicating whether Go test files should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "extract_vendor_dirs" : {
+                                  "title" : "Whether to include Go vendor directories in the CodeQL database.",
+                                  "description" : "A value indicating whether Go vendor directories should be included in the CodeQL database. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "yaml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/yaml"
+                            }
+                          ],
+                          "swift" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/swift"
+                            }
+                          ],
+                          "rust" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/rust",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (the default, to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                },
+                                "cargo_target_dir" : {
+                                  "title" : "Directory to use for cargo output files.",
+                                  "description" : "This value is an optional path to use as `CARGO_TARGET_DIR` for the internal cargo commands the extractor uses. Pointing it to a persistent directory may reduce execution time of consecutive extractor runs. By default, a new scratch directory is used for each run.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_target" : {
+                                  "title" : "Target architecture",
+                                  "description" : "Target architecture to use for analysis, analogous to `cargo --target`. By default the host architecture is used.\n",
+                                  "type" : "string"
+                                },
+                                "cargo_features" : {
+                                  "title" : "Cargo features to turn on",
+                                  "description" : "Comma-separated list of features to turn on. By default all features are enabled. If any features are specified, then only those features are enabled. The `default` feature must be explicitly specified if only default features are desired. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "cargo_cfg_overrides" : {
+                                  "title" : "Cargo cfg overrides",
+                                  "description" : "Comma-separated list of cfg settings to enable, or disable if prefixed with `-`. Can be repeated.\n",
+                                  "type" : "array"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    },
+                                    "flamegraph" : {
+                                      "title" : "[Experimental] File path for write flame graph log",
+                                      "description" : "Collect flame graph data using the `tracing-flame` crate. To render a flame graph or chart, run the `inferno-flamegraph` command. See also: https://crates.io/crates/tracing-flame\n",
+                                      "type" : "string"
+                                    }
+                                  }
+                                },
+                                "extract_dependencies_as_source" : {
+                                  "title" : "Extract dependencies as source code",
+                                  "description" : "Extract the full source code of dependencies instead of only extracting signatures.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "properties" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/properties"
+                            }
+                          ],
+                          "csv" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csv"
+                            }
+                          ],
+                          "ruby" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/ruby",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'gzip' (the default, to write gzip-compressed TRAP) 'zstd' (to write Zstandard-compressed TRAP) and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|zstd)$"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          ],
+                          "javascript" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/javascript",
+                              "extractor_options" : {
+                                "skip_types" : {
+                                  "title" : "Skip type extraction for TypeScript",
+                                  "description" : "Whether to skip the extraction of types in a TypeScript application",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ],
+                          "csharp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/csharp",
+                              "extractor_options" : {
+                                "trap" : {
+                                  "title" : "Options pertaining to TRAP.",
+                                  "description" : "Options pertaining to TRAP.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "compression" : {
+                                      "title" : "Controls compression for the TRAP files written by the extractor.",
+                                      "description" : "This option is only intended for use in debugging the extractor. Accepted values are 'brotli' (the default, to write brotli-compressed TRAP), 'gzip', and 'none' (to write uncompressed TRAP).\n",
+                                      "type" : "string",
+                                      "pattern" : "^(none|gzip|brotli)$"
+                                    }
+                                  }
+                                },
+                                "buildless" : {
+                                  "title" : "DEPRECATED - Whether to use buildless (standalone) extraction.",
+                                  "description" : "DEPRECATED: Use `--build-mode none` instead.\nA value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the extractor. The supported levels are (in order of increasing verbosity):\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "binlog" : {
+                                  "title" : "Binlog",
+                                  "description" : "[EXPERIMENTAL] The value is a path to the MsBuild binary log file that should be extracted. This option only works when `--build-mode none` is also specified.\n",
+                                  "type" : "array"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                }
+                              }
+                            }
+                          ],
+                          "python" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/python",
+                              "extractor_options" : {
+                                "logging" : {
+                                  "title" : "Options pertaining to logging.",
+                                  "description" : "Options pertaining to logging.",
+                                  "type" : "object",
+                                  "properties" : {
+                                    "verbosity" : {
+                                      "title" : "Python extractor logging verbosity level.",
+                                      "description" : "Controls the level of verbosity of the CodeQL Python extractor.\nThe supported levels are (in order of increasing verbosity):\n\n  - off\n  - errors\n  - warnings\n  - info or progress\n  - debug or progress+\n  - trace or progress++\n  - progress+++\n",
+                                      "type" : "string",
+                                      "pattern" : "^(off|errors|warnings|(info|progress)|(debug|progress\\+)|(trace|progress\\+\\+)|progress\\+\\+\\+)$"
+                                    }
+                                  }
+                                },
+                                "python_executable_name" : {
+                                  "title" : "Controls the name of the Python executable used by the Python extractor.",
+                                  "description" : "The Python extractor uses platform-dependent heuristics to determine the name of the Python executable to use. Specifying a value for this option overrides the name of the Python executable used by the extractor. Accepted values are py, python and python3. Use this setting with caution, the Python extractor requires Python 3 to run.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(py|python|python3)$"
+                                }
+                              }
+                            }
+                          ],
+                          "actions" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/actions",
+                              "extractor_options" : { }
+                            }
+                          ],
+                          "cpp" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/cpp",
+                              "extractor_options" : {
+                                "scale_timeouts" : {
+                                  "title" : "Value to scale compiler introspection timeouts with",
+                                  "description" : "The extractor attempts to determine what compiler the source code being extracted is compiled with. To this end the extractor makes additional calls to the compiler, some of which are expected to return within a certain fixed time (either 10s or 15s). On some systems that are under high load this time might be too short, and can be scaled up using this option.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-9]+"
+                                },
+                                "log_verbosity" : {
+                                  "title" : "Verbosity of the extractor logging",
+                                  "description" : "Set the verbosity of the extractor logging to 'quiet' (0), 'normal' (1), 'chatty' (2), or 'noisy' (3). The default is 'normal'.\n",
+                                  "type" : "string",
+                                  "pattern" : "[0-3]"
+                                }
+                              }
+                            }
+                          ],
+                          "xml" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/xml"
+                            }
+                          ],
+                          "html" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/html"
+                            }
+                          ],
+                          "java" : [
+                            {
+                              "extractor_root" : "/home/runner/work/Ansede/Ansede/codeql/java",
+                              "extractor_options" : {
+                                "exclude" : {
+                                  "title" : "A glob excluding files from analysis.",
+                                  "description" : "A glob indicating what files to exclude from the analysis. This accepts glob patterns that are supported by Java's 'getPathMatcher' implementation.\n",
+                                  "type" : "string"
+                                },
+                                "add_prefer_source" : {
+                                  "title" : "Whether to always prefer source files over class files.",
+                                  "description" : "A value indicating whether source files should be preferred over class files. If set to 'true', the extraction adds '-Xprefer:source' to the javac command line. If set to 'false', the extraction uses the default javac behavior ('-Xprefer:newer'). The default is 'true'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless" : {
+                                  "title" : "Whether to use buildless (standalone) extraction (experimental).",
+                                  "description" : "A value indicating, which type of extraction the autobuilder should perform. If 'true', then the standalone extractor will be used, otherwise tracing extraction will be performed. The default is 'false'. Note that buildless extraction will generally yield less accurate analysis results, and should only be used in cases where it is not possible to build the code (for example if it uses inaccessible dependencies).\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                },
+                                "buildless_dependency_dir" : {
+                                  "title" : "The path where buildless (standalone) extraction should keep dependencies.",
+                                  "description" : "If set, the buildless (standalone) extractor will store dependencies in this directory.\n",
+                                  "type" : "string"
+                                },
+                                "minimize_dependency_jars" : {
+                                  "title" : "Whether to rewrite and minimize downloaded JAR dependencies (experimental).",
+                                  "description" : "If 'true', JAR dependencies downloaded during extraction will be rewritten to remove unneeded data, such as method bodies. The default is 'false'.\n",
+                                  "type" : "string",
+                                  "pattern" : "^(false|true)$"
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+[2026-07-12 07:35:27] [PROGRESS] database init> Calculating baseline information in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash
+[2026-07-12 07:35:27] [SPAMMY] database init> Ignoring the following directories when processing baseline information: .git, .hg, .svn.
+[2026-07-12 07:35:27] [DETAILS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/scc --by-file --exclude-dir .git,.hg,.svn --format json --no-large --no-min .
+[2026-07-12 07:35:27] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/javascript/tools/configure-baseline.sh.
+[2026-07-12 07:35:27] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash: [/home/runner/work/Ansede/Ansede/codeql/javascript/tools/configure-baseline.sh]
+[2026-07-12 07:35:27] Using configure-baseline script /home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh.
+[2026-07-12 07:35:27] [PROGRESS] database init> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash: [/home/runner/work/Ansede/Ansede/codeql/actions/tools/configure-baseline.sh]
+[2026-07-12 07:35:27] [SPAMMY] database init> Found 51 baseline files for javascript.
+[2026-07-12 07:35:27] [SPAMMY] database init> Found 8 baseline files for actions.
+[2026-07-12 07:35:27] [PROGRESS] database init> Calculated baseline information for languages: actions, javascript (87ms).
+[2026-07-12 07:35:27] [SPAMMY] database init> Selected JGit Git client for /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash because the repository uses SHA-1 object format.
+[2026-07-12 07:35:27] [PROGRESS] database init> Resolving extractor javascript.
+[2026-07-12 07:35:27] [DETAILS] database init> Found candidate extractor root for javascript: /home/runner/work/Ansede/Ansede/codeql/javascript.
+[2026-07-12 07:35:27] [PROGRESS] database init> Successfully loaded extractor JavaScript/TypeScript (javascript) from /home/runner/work/Ansede/Ansede/codeql/javascript.
+[2026-07-12 07:35:27] [PROGRESS] database init> Created skeleton CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash. This in-progress database is ready to be populated by an extractor.
+[2026-07-12 07:35:27] Plumbing command codeql database init completed.
+[2026-07-12 07:35:27] [PROGRESS] database create> Running build command: []
+[2026-07-12 07:35:27] Running plumbing command: codeql database trace-command --working-dir=/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash --index-traceless-dbs --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash
+[2026-07-12 07:35:27] Using autobuild script /home/runner/work/Ansede/Ansede/codeql/javascript/tools/autobuild.sh.
+[2026-07-12 07:35:27] [PROGRESS] database trace-command> Running command in /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash: [/home/runner/work/Ansede/Ansede/codeql/javascript/tools/autobuild.sh]
+[2026-07-12 07:35:28] [build-stdout] Single-threaded extraction.
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/firebug-lite/skin/xp/firebug.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/firebug-lite/skin/xp/firebug.html (87 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/index.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/index.html (89 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/backbone.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/backbone.html (54 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/fp.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/fp.html (9 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/index.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/index.html (87 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/underscore.html
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/underscore.html (72 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/setup/dom-setup.js
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/setup/dom-setup.js (32 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/setup/environment.js
+[2026-07-12 07:35:28] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/setup/environment.js (9 ms)
+[2026-07-12 07:35:28] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/collection.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/collection.js (484 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/events.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/events.js (136 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/model.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/model.js (261 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/noconflict.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/noconflict.js (4 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/router.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/router.js (192 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/sync.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/sync.js (40 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/view.js
+[2026-07-12 07:35:29] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/test/view.js (71 ms)
+[2026-07-12 07:35:29] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/firebug-lite/src/firebug-lite-debug.js
+[2026-07-12 07:35:32] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/firebug-lite/src/firebug-lite-debug.js (2883 ms)
+[2026-07-12 07:35:32] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/arrays.js
+[2026-07-12 07:35:32] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/arrays.js (149 ms)
+[2026-07-12 07:35:32] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/chaining.js
+[2026-07-12 07:35:32] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/chaining.js (18 ms)
+[2026-07-12 07:35:32] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/collections.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/collections.js (211 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/cross-document.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/cross-document.js (19 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/functions.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/functions.js (125 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/objects.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/objects.js (234 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/utility.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/test/utility.js (69 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/browser-testing.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/browser-testing.yml (24 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-bun.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-bun.yml (4 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-dist-sync.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-dist-sync.yml (3 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-docs.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-docs.yml (3 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-node.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/ci-node.yml (6 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/codeql.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/codeql.yml (6 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/renovate.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/renovate.yml (2 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/scorecards.yml
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.github/workflows/scorecards.yml (5 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/file.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/file.js (10 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/mapping.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/mapping.js (2 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/minify.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/minify.js (5 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/uglify.options.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/uglify.options.js (2 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/util.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/common/util.js (4 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-dist.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-dist.js (7 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-doc.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-doc.js (12 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-modules.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/fp/build-modules.js (17 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-dist.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-dist.js (3 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-doc.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-doc.js (10 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-modules.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-modules.js (5 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-site.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lib/main/build-site.js (25 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/asset/perf-ui.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/asset/perf-ui.js (16 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/asset/test-ui.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/asset/test-ui.js (23 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/asset/worker.js
+[2026-07-12 07:35:33] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/asset/worker.js (3 ms)
+[2026-07-12 07:35:33] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/backbone.js
+[2026-07-12 07:35:34] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/backbone/backbone.js (233 ms)
+[2026-07-12 07:35:34] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/json-js/json2.js
+[2026-07-12 07:35:34] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/json-js/json2.js (39 ms)
+[2026-07-12 07:35:34] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/underscore.js
+[2026-07-12 07:35:34] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/vendor/underscore/underscore.js (206 ms)
+[2026-07-12 07:35:34] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.core.js
+[2026-07-12 07:35:34] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.core.js (222 ms)
+[2026-07-12 07:35:34] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.fp.js
+[2026-07-12 07:35:34] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.fp.js (93 ms)
+[2026-07-12 07:35:34] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/lodash.js (1114 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/mapping.fp.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/dist/mapping.fp.js (40 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_baseConvert.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_baseConvert.js (47 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_convertBrowser.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_convertBrowser.js (2 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_mapping.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/_mapping.js (33 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/placeholder.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/fp/placeholder.js (1 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/perf.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/perf/perf.js (108 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/playwright-runner.spec.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/playwright-runner.spec.js (5 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/remove.js
+[2026-07-12 07:35:35] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/remove.js (5 ms)
+[2026-07-12 07:35:35] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/test-fp.js
+[2026-07-12 07:35:36] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/test-fp.js (276 ms)
+[2026-07-12 07:35:36] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/test.js
+[2026-07-12 07:35:39] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/test/test.js (3639 ms)
+[2026-07-12 07:35:39] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.markdown-doctest-setup.js
+[2026-07-12 07:35:39] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/.markdown-doctest-setup.js (4 ms)
+[2026-07-12 07:35:39] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lodash.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/lodash.js (1048 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/package.json
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/package.json (4 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/playwright.config.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/lodash/playwright.config.js (4 ms)
+[2026-07-12 07:35:40] [build-stderr] No externs trap cache found
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_notifications.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_notifications.js (15 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom3.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom3.js (34 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_anim_timing.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_anim_timing.js (5 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/page_visibility.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/page_visibility.js (1 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_screen_orientation.js
+[2026-07-12 07:35:40] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_screen_orientation.js (2 ms)
+[2026-07-12 07:35:40] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom2.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom2.js (88 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_selectors.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_selectors.js (5 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_encoding.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_encoding.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/intl.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/intl.js (9 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_event.js (32 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webgl.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webgl.js (178 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/streamsapi.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/streamsapi.js (21 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_event.js (16 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_device_sensor_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_device_sensor_event.js (5 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/fetchapi.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/fetchapi.js (27 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_dom.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_dom.js (67 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom4.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom4.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_range.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_range.js (13 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_navigation_timing.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_navigation_timing.js (17 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_requestidlecallback.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_requestidlecallback.js (3 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom1.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_dom1.js (48 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_vml.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_vml.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_css.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_css.js (11 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_event.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_batterystatus.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_batterystatus.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_css.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/ie_css.js (13 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/fileapi.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/fileapi.js (53 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_xml.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_xml.js (2 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_xml.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_xml.js (14 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_css.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_css.js (86 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/flash.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/flash.js (9 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/chrome.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/chrome.js (24 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_geolocation.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_geolocation.js (5 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/iphone.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/iphone.js (6 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_midi.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_midi.js (12 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_rtc.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_rtc.js (98 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_indexeddb.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_indexeddb.js (32 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_touch_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_touch_event.js (9 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/url.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/url.js (7 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_pointer_events.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_pointer_events.js (5 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/mediasource.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/mediasource.js (8 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_event.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_event.js (5 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_ext.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_ext.js (1 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_dom.js
+[2026-07-12 07:35:41] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_dom.js (14 ms)
+[2026-07-12 07:35:41] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/html5.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/html5.js (202 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/window.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/window.js (5 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_webcrypto.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_webcrypto.js (25 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_usercontent.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_usercontent.js (2 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/whatwg_encoding.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/whatwg_encoding.js (3 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_elementtraversal.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_elementtraversal.js (4 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_css.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webkit_css.js (59 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_serviceworker.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_serviceworker.js (29 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_gamepad.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_gamepad.js (3 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_css3d.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_css3d.js (7 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_dom.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/gecko_dom.js (33 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_permissions.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_permissions.js (4 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webstorage.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/webstorage.js (6 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_event3.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/web/w3c_event3.js (3 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/jquery-3.2.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/jquery-3.2.js (116 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/should.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/should.js (11 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/bdd.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/bdd.js (4 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/vows.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/lib/vows.js (15 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/https.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/https.js (11 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/util.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/util.js (14 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/v8.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/v8.js (3 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/assert.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/assert.js (8 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/net.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/net.js (28 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/dgram.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/dgram.js (10 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/globals.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/globals.js (98 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/process.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/process.js (2 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/vm.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/vm.js (14 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/dns.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/dns.js (18 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/repl.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/repl.js (6 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/http.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/http.js (31 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/path.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/path.js (17 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/crypto.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/crypto.js (51 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/fs.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/fs.js (94 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/readline.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/readline.js (12 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/sys.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/sys.js (1 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/buffer.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/buffer.js (6 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/timers.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/timers.js (6 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/querystring.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/querystring.js (6 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/events.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/events.js (7 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/module.js
+[2026-07-12 07:35:42] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/module.js (4 ms)
+[2026-07-12 07:35:42] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/stream.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/stream.js (44 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/url.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/url.js (5 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/console.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/console.js (1 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/string_decoder.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/string_decoder.js (3 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/assert_legacy.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/assert_legacy.js (1 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/constants.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/constants.js (83 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/os.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/os.js (15 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/tls.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/tls.js (32 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/tty.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/tty.js (5 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/punycode.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/punycode.js (4 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/domain.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/domain.js (5 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/zlib.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/zlib.js (23 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/child_process.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/child_process.js (43 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/cluster.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/nodejs/cluster.js (55 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/v8.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/v8.js (4 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/rhino.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/rhino.js (3 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/jsshell.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/jsshell.js (27 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/spidermonkey.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/vm/spidermonkey.js (1 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/proxy.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/proxy.js (1 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/intl.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/intl.js (8 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es2017.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es2017.js (2 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es6_collections.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es6_collections.js (8 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es5.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es5.js (9 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es6.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es6.js (65 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es3.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es3.js (84 ms)
+[2026-07-12 07:35:43] [build-stdout] Extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es2016.js
+[2026-07-12 07:35:43] [build-stdout] Done extracting /home/runner/work/Ansede/Ansede/codeql/javascript/tools/data/externs/es/es2016.js (1 ms)
+[2026-07-12 07:35:43] Plumbing command codeql database trace-command completed.
+[2026-07-12 07:35:43] [PROGRESS] database create> Finalizing database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash.
+[2026-07-12 07:35:43] Running plumbing command: codeql database finalize --no-db-cluster -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash
+[2026-07-12 07:35:43] [PROGRESS] database finalize> Running TRAP import for CodeQL database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash...
+[2026-07-12 07:35:43] Running plumbing command: codeql dataset import --dbscheme=/home/runner/work/Ansede/Ansede/codeql/javascript/semmlecode.javascript.dbscheme -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/trap/javascript
+[2026-07-12 07:35:43] Clearing disk cache since the version file /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript/default/cache/version does not exist
+[2026-07-12 07:35:43] Tuple pool not found. Clearing relations with cached strings
+[2026-07-12 07:35:43] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript/default/cache in mode clear.
+[2026-07-12 07:35:43] Sequence stamp origin is -5892344043678970623
+[2026-07-12 07:35:43] Pausing evaluation to hard-clear memory at sequence stamp o+0
+[2026-07-12 07:35:43] Unpausing evaluation
+[2026-07-12 07:35:43] Pausing evaluation to quickly trim disk at sequence stamp o+1
+[2026-07-12 07:35:43] Unpausing evaluation
+[2026-07-12 07:35:43] Pausing evaluation to zealously trim disk at sequence stamp o+2
+[2026-07-12 07:35:43] Unpausing evaluation
+[2026-07-12 07:35:43] Trimming completed (7ms): Purged everything.
+[2026-07-12 07:35:43] Scanning for files in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/trap/javascript
+[2026-07-12 07:35:43] Found 177 TRAP files (47.29 MiB)
+[2026-07-12 07:35:43] [PROGRESS] dataset import> Importing TRAP files
+[2026-07-12 07:35:43] Importing browser-testing.yml.trap.gz (1 of 177)
+[2026-07-12 07:35:43] Importing ci-bun.yml.trap.gz (2 of 177)
+[2026-07-12 07:35:43] Importing ci-dist-sync.yml.trap.gz (3 of 177)
+[2026-07-12 07:35:43] Importing ci-docs.yml.trap.gz (4 of 177)
+[2026-07-12 07:35:43] Importing ci-node.yml.trap.gz (5 of 177)
+[2026-07-12 07:35:43] Importing codeql.yml.trap.gz (6 of 177)
+[2026-07-12 07:35:44] Importing renovate.yml.trap.gz (7 of 177)
+[2026-07-12 07:35:44] Importing scorecards.yml.trap.gz (8 of 177)
+[2026-07-12 07:35:44] Importing .markdown-doctest-setup.js.trap.gz (9 of 177)
+[2026-07-12 07:35:44] Importing lodash.core.js.trap.gz (10 of 177)
+[2026-07-12 07:35:44] Importing lodash.fp.js.trap.gz (11 of 177)
+[2026-07-12 07:35:44] Importing lodash.js.trap.gz (12 of 177)
+[2026-07-12 07:35:45] Importing mapping.fp.js.trap.gz (13 of 177)
+[2026-07-12 07:35:45] Importing _baseConvert.js.trap.gz (14 of 177)
+[2026-07-12 07:35:45] Importing _convertBrowser.js.trap.gz (15 of 177)
+[2026-07-12 07:35:45] Importing _mapping.js.trap.gz (16 of 177)
+[2026-07-12 07:35:45] Importing placeholder.js.trap.gz (17 of 177)
+[2026-07-12 07:35:45] Importing file.js.trap.gz (18 of 177)
+[2026-07-12 07:35:45] Importing mapping.js.trap.gz (19 of 177)
+[2026-07-12 07:35:45] Importing minify.js.trap.gz (20 of 177)
+[2026-07-12 07:35:45] Importing uglify.options.js.trap.gz (21 of 177)
+[2026-07-12 07:35:45] Importing util.js.trap.gz (22 of 177)
+[2026-07-12 07:35:45] Importing build-dist.js.trap.gz (23 of 177)
+[2026-07-12 07:35:45] Importing build-doc.js.trap.gz (24 of 177)
+[2026-07-12 07:35:45] Importing build-modules.js.trap.gz (25 of 177)
+[2026-07-12 07:35:45] Importing build-dist.js.trap.gz (26 of 177)
+[2026-07-12 07:35:45] Importing build-doc.js.trap.gz (27 of 177)
+[2026-07-12 07:35:45] Importing build-modules.js.trap.gz (28 of 177)
+[2026-07-12 07:35:45] Importing build-site.js.trap.gz (29 of 177)
+[2026-07-12 07:35:45] Importing lodash.js.trap.gz (30 of 177)
+[2026-07-12 07:35:45] Importing package.json.trap.gz (31 of 177)
+[2026-07-12 07:35:45] Importing perf-ui.js.trap.gz (32 of 177)
+[2026-07-12 07:35:45] Importing index.html.trap.gz (33 of 177)
+[2026-07-12 07:35:45] Importing perf.js.trap.gz (34 of 177)
+[2026-07-12 07:35:45] Importing playwright.config.js.trap.gz (35 of 177)
+[2026-07-12 07:35:45] Importing test-ui.js.trap.gz (36 of 177)
+[2026-07-12 07:35:45] Importing worker.js.trap.gz (37 of 177)
+[2026-07-12 07:35:45] Importing backbone.html.trap.gz (38 of 177)
+[2026-07-12 07:35:45] Importing fp.html.trap.gz (39 of 177)
+[2026-07-12 07:35:45] Importing index.html.trap.gz (40 of 177)
+[2026-07-12 07:35:45] Importing playwright-runner.spec.js.trap.gz (41 of 177)
+[2026-07-12 07:35:45] Importing remove.js.trap.gz (42 of 177)
+[2026-07-12 07:35:45] Importing test-fp.js.trap.gz (43 of 177)
+[2026-07-12 07:35:45] Importing test.js.trap.gz (44 of 177)
+[2026-07-12 07:35:47] Importing underscore.html.trap.gz (45 of 177)
+[2026-07-12 07:35:47] Importing backbone.js.trap.gz (46 of 177)
+[2026-07-12 07:35:47] Importing collection.js.trap.gz (47 of 177)
+[2026-07-12 07:35:47] Importing events.js.trap.gz (48 of 177)
+[2026-07-12 07:35:47] Importing model.js.trap.gz (49 of 177)
+[2026-07-12 07:35:48] Importing noconflict.js.trap.gz (50 of 177)
+[2026-07-12 07:35:48] Importing router.js.trap.gz (51 of 177)
+[2026-07-12 07:35:48] Importing dom-setup.js.trap.gz (52 of 177)
+[2026-07-12 07:35:48] Importing environment.js.trap.gz (53 of 177)
+[2026-07-12 07:35:48] Importing sync.js.trap.gz (54 of 177)
+[2026-07-12 07:35:48] Importing view.js.trap.gz (55 of 177)
+[2026-07-12 07:35:48] Importing firebug.html.trap.gz (56 of 177)
+[2026-07-12 07:35:48] Importing firebug-lite-debug.js.trap.gz (57 of 177)
+[2026-07-12 07:35:49] Importing json2.js.trap.gz (58 of 177)
+[2026-07-12 07:35:49] Importing arrays.js.trap.gz (59 of 177)
+[2026-07-12 07:35:49] Importing chaining.js.trap.gz (60 of 177)
+[2026-07-12 07:35:49] Importing collections.js.trap.gz (61 of 177)
+[2026-07-12 07:35:49] Importing cross-document.js.trap.gz (62 of 177)
+[2026-07-12 07:35:49] Importing functions.js.trap.gz (63 of 177)
+[2026-07-12 07:35:49] Importing objects.js.trap.gz (64 of 177)
+[2026-07-12 07:35:49] Importing utility.js.trap.gz (65 of 177)
+[2026-07-12 07:35:49] Importing underscore.js.trap.gz (66 of 177)
+[2026-07-12 07:35:49] Importing es2016.js.trap.gz (67 of 177)
+[2026-07-12 07:35:49] Importing es2017.js.trap.gz (68 of 177)
+[2026-07-12 07:35:49] Importing es3.js.trap.gz (69 of 177)
+[2026-07-12 07:35:49] Importing es5.js.trap.gz (70 of 177)
+[2026-07-12 07:35:49] Importing es6.js.trap.gz (71 of 177)
+[2026-07-12 07:35:49] Importing es6_collections.js.trap.gz (72 of 177)
+[2026-07-12 07:35:49] Importing intl.js.trap.gz (73 of 177)
+[2026-07-12 07:35:49] Importing proxy.js.trap.gz (74 of 177)
+[2026-07-12 07:35:49] Importing bdd.js.trap.gz (75 of 177)
+[2026-07-12 07:35:49] Importing jquery-3.2.js.trap.gz (76 of 177)
+[2026-07-12 07:35:49] Importing should.js.trap.gz (77 of 177)
+[2026-07-12 07:35:49] Importing vows.js.trap.gz (78 of 177)
+[2026-07-12 07:35:49] Importing assert.js.trap.gz (79 of 177)
+[2026-07-12 07:35:49] Importing assert_legacy.js.trap.gz (80 of 177)
+[2026-07-12 07:35:49] Importing buffer.js.trap.gz (81 of 177)
+[2026-07-12 07:35:49] Importing child_process.js.trap.gz (82 of 177)
+[2026-07-12 07:35:49] Importing cluster.js.trap.gz (83 of 177)
+[2026-07-12 07:35:49] Importing console.js.trap.gz (84 of 177)
+[2026-07-12 07:35:49] Importing constants.js.trap.gz (85 of 177)
+[2026-07-12 07:35:50] Importing crypto.js.trap.gz (86 of 177)
+[2026-07-12 07:35:50] Importing dgram.js.trap.gz (87 of 177)
+[2026-07-12 07:35:50] Importing dns.js.trap.gz (88 of 177)
+[2026-07-12 07:35:50] Importing domain.js.trap.gz (89 of 177)
+[2026-07-12 07:35:50] Importing events.js.trap.gz (90 of 177)
+[2026-07-12 07:35:50] Importing fs.js.trap.gz (91 of 177)
+[2026-07-12 07:35:50] Importing globals.js.trap.gz (92 of 177)
+[2026-07-12 07:35:50] Importing http.js.trap.gz (93 of 177)
+[2026-07-12 07:35:50] Importing https.js.trap.gz (94 of 177)
+[2026-07-12 07:35:50] Importing module.js.trap.gz (95 of 177)
+[2026-07-12 07:35:50] Importing net.js.trap.gz (96 of 177)
+[2026-07-12 07:35:50] Importing os.js.trap.gz (97 of 177)
+[2026-07-12 07:35:50] Importing path.js.trap.gz (98 of 177)
+[2026-07-12 07:35:50] Importing process.js.trap.gz (99 of 177)
+[2026-07-12 07:35:50] Importing punycode.js.trap.gz (100 of 177)
+[2026-07-12 07:35:50] Importing querystring.js.trap.gz (101 of 177)
+[2026-07-12 07:35:50] Importing readline.js.trap.gz (102 of 177)
+[2026-07-12 07:35:50] Importing repl.js.trap.gz (103 of 177)
+[2026-07-12 07:35:50] Importing stream.js.trap.gz (104 of 177)
+[2026-07-12 07:35:50] Importing string_decoder.js.trap.gz (105 of 177)
+[2026-07-12 07:35:50] Importing sys.js.trap.gz (106 of 177)
+[2026-07-12 07:35:50] Importing timers.js.trap.gz (107 of 177)
+[2026-07-12 07:35:50] Importing tls.js.trap.gz (108 of 177)
+[2026-07-12 07:35:50] Importing tty.js.trap.gz (109 of 177)
+[2026-07-12 07:35:50] Importing url.js.trap.gz (110 of 177)
+[2026-07-12 07:35:50] Importing util.js.trap.gz (111 of 177)
+[2026-07-12 07:35:50] Importing v8.js.trap.gz (112 of 177)
+[2026-07-12 07:35:50] Importing vm.js.trap.gz (113 of 177)
+[2026-07-12 07:35:50] Importing zlib.js.trap.gz (114 of 177)
+[2026-07-12 07:35:50] Importing jsshell.js.trap.gz (115 of 177)
+[2026-07-12 07:35:50] Importing rhino.js.trap.gz (116 of 177)
+[2026-07-12 07:35:50] Importing spidermonkey.js.trap.gz (117 of 177)
+[2026-07-12 07:35:50] Importing v8.js.trap.gz (118 of 177)
+[2026-07-12 07:35:50] Importing chrome.js.trap.gz (119 of 177)
+[2026-07-12 07:35:50] Importing fetchapi.js.trap.gz (120 of 177)
+[2026-07-12 07:35:50] Importing fileapi.js.trap.gz (121 of 177)
+[2026-07-12 07:35:50] Importing flash.js.trap.gz (122 of 177)
+[2026-07-12 07:35:50] Importing gecko_css.js.trap.gz (123 of 177)
+[2026-07-12 07:35:50] Importing gecko_dom.js.trap.gz (124 of 177)
+[2026-07-12 07:35:50] Importing gecko_event.js.trap.gz (125 of 177)
+[2026-07-12 07:35:50] Importing gecko_ext.js.trap.gz (126 of 177)
+[2026-07-12 07:35:50] Importing gecko_xml.js.trap.gz (127 of 177)
+[2026-07-12 07:35:50] Importing html5.js.trap.gz (128 of 177)
+[2026-07-12 07:35:50] Importing ie_css.js.trap.gz (129 of 177)
+[2026-07-12 07:35:50] Importing ie_dom.js.trap.gz (130 of 177)
+[2026-07-12 07:35:50] Importing ie_event.js.trap.gz (131 of 177)
+[2026-07-12 07:35:50] Importing ie_vml.js.trap.gz (132 of 177)
+[2026-07-12 07:35:50] Importing intl.js.trap.gz (133 of 177)
+[2026-07-12 07:35:50] Importing iphone.js.trap.gz (134 of 177)
+[2026-07-12 07:35:50] Importing mediasource.js.trap.gz (135 of 177)
+[2026-07-12 07:35:50] Importing page_visibility.js.trap.gz (136 of 177)
+[2026-07-12 07:35:50] Importing streamsapi.js.trap.gz (137 of 177)
+[2026-07-12 07:35:50] Importing url.js.trap.gz (138 of 177)
+[2026-07-12 07:35:50] Importing w3c_anim_timing.js.trap.gz (139 of 177)
+[2026-07-12 07:35:50] Importing w3c_batterystatus.js.trap.gz (140 of 177)
+[2026-07-12 07:35:50] Importing w3c_css.js.trap.gz (141 of 177)
+[2026-07-12 07:35:50] Importing w3c_css3d.js.trap.gz (142 of 177)
+[2026-07-12 07:35:50] Importing w3c_device_sensor_event.js.trap.gz (143 of 177)
+[2026-07-12 07:35:50] Importing w3c_dom1.js.trap.gz (144 of 177)
+[2026-07-12 07:35:50] Importing w3c_dom2.js.trap.gz (145 of 177)
+[2026-07-12 07:35:50] Importing w3c_dom3.js.trap.gz (146 of 177)
+[2026-07-12 07:35:50] Importing w3c_dom4.js.trap.gz (147 of 177)
+[2026-07-12 07:35:50] Importing w3c_elementtraversal.js.trap.gz (148 of 177)
+[2026-07-12 07:35:50] Importing w3c_encoding.js.trap.gz (149 of 177)
+[2026-07-12 07:35:50] Importing w3c_event.js.trap.gz (150 of 177)
+[2026-07-12 07:35:50] Importing w3c_event3.js.trap.gz (151 of 177)
+[2026-07-12 07:35:50] Importing w3c_gamepad.js.trap.gz (152 of 177)
+[2026-07-12 07:35:50] Importing w3c_geolocation.js.trap.gz (153 of 177)
+[2026-07-12 07:35:50] Importing w3c_indexeddb.js.trap.gz (154 of 177)
+[2026-07-12 07:35:50] Importing w3c_midi.js.trap.gz (155 of 177)
+[2026-07-12 07:35:50] Importing w3c_navigation_timing.js.trap.gz (156 of 177)
+[2026-07-12 07:35:50] Importing w3c_permissions.js.trap.gz (157 of 177)
+[2026-07-12 07:35:50] Importing w3c_pointer_events.js.trap.gz (158 of 177)
+[2026-07-12 07:35:50] Importing w3c_range.js.trap.gz (159 of 177)
+[2026-07-12 07:35:50] Importing w3c_requestidlecallback.js.trap.gz (160 of 177)
+[2026-07-12 07:35:50] Importing w3c_rtc.js.trap.gz (161 of 177)
+[2026-07-12 07:35:50] Importing w3c_screen_orientation.js.trap.gz (162 of 177)
+[2026-07-12 07:35:50] Importing w3c_selectors.js.trap.gz (163 of 177)
+[2026-07-12 07:35:50] Importing w3c_serviceworker.js.trap.gz (164 of 177)
+[2026-07-12 07:35:50] Importing w3c_touch_event.js.trap.gz (165 of 177)
+[2026-07-12 07:35:50] Importing w3c_webcrypto.js.trap.gz (166 of 177)
+[2026-07-12 07:35:50] Importing w3c_xml.js.trap.gz (167 of 177)
+[2026-07-12 07:35:50] Importing webgl.js.trap.gz (168 of 177)
+[2026-07-12 07:35:50] Importing webkit_css.js.trap.gz (169 of 177)
+[2026-07-12 07:35:50] Importing webkit_dom.js.trap.gz (170 of 177)
+[2026-07-12 07:35:50] Importing webkit_event.js.trap.gz (171 of 177)
+[2026-07-12 07:35:50] Importing webkit_notifications.js.trap.gz (172 of 177)
+[2026-07-12 07:35:50] Importing webkit_usercontent.js.trap.gz (173 of 177)
+[2026-07-12 07:35:50] Importing webstorage.js.trap.gz (174 of 177)
+[2026-07-12 07:35:50] Importing whatwg_encoding.js.trap.gz (175 of 177)
+[2026-07-12 07:35:50] Importing window.js.trap.gz (176 of 177)
+[2026-07-12 07:35:50] Importing metadata.trap.gz (177 of 177)
+[2026-07-12 07:35:50] [PROGRESS] dataset import> Merging relations
+[2026-07-12 07:35:50] Merging 1 fragment for 'files'.
+[2026-07-12 07:35:50] Merged 651 bytes for 'files'.
+[2026-07-12 07:35:50] Merging 1 fragment for 'folders'.
+[2026-07-12 07:35:50] Merged 159 bytes for 'folders'.
+[2026-07-12 07:35:50] Merging 1 fragment for 'containerparent'.
+[2026-07-12 07:35:50] Merged 595 bytes for 'containerparent'.
+[2026-07-12 07:35:50] Merging 12 fragments for 'locations_default'.
+[2026-07-12 07:35:51] Merged 4160192 bytes (3.97 MiB) for 'locations_default'.
+[2026-07-12 07:35:51] Merging 14 fragments for 'hasLocation'.
+[2026-07-12 07:35:51] Merged 3025003 bytes (2.88 MiB) for 'hasLocation'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'extraction_data'.
+[2026-07-12 07:35:51] Merged 807 bytes for 'extraction_data'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'yaml_scalars'.
+[2026-07-12 07:35:51] Merged 1113 bytes (1.09 KiB) for 'yaml_scalars'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'yaml'.
+[2026-07-12 07:35:51] Merged 3251 bytes (3.17 KiB) for 'yaml'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'yaml_locations'.
+[2026-07-12 07:35:51] Merged 1230 bytes (1.20 KiB) for 'yaml_locations'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'yaml_comments'.
+[2026-07-12 07:35:51] Merged 249 bytes for 'yaml_comments'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'numlines'.
+[2026-07-12 07:35:51] Merged 2445 bytes (2.39 KiB) for 'numlines'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'filetype'.
+[2026-07-12 07:35:51] Merged 405 bytes for 'filetype'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'extraction_time'.
+[2026-07-12 07:35:51] Merged 21341 bytes (20.84 KiB) for 'extraction_time'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'scopes'.
+[2026-07-12 07:35:51] Merged 14501 bytes (14.16 KiB) for 'scopes'.
+[2026-07-12 07:35:51] Merging 2 fragments for 'indentation'.
+[2026-07-12 07:35:51] Merged 201289 bytes (196.57 KiB) for 'indentation'.
+[2026-07-12 07:35:51] Merging 7 fragments for 'tokeninfo'.
+[2026-07-12 07:35:51] Merged 3304292 bytes (3.15 MiB) for 'tokeninfo'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'toplevels'.
+[2026-07-12 07:35:51] Merged 384 bytes for 'toplevels'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'variables'.
+[2026-07-12 07:35:51] Merged 208143 bytes (203.26 KiB) for 'variables'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'scopenodes'.
+[2026-07-12 07:35:51] Merged 28621 bytes (27.95 KiB) for 'scopenodes'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'scopenesting'.
+[2026-07-12 07:35:51] Merged 26569 bytes (25.95 KiB) for 'scopenesting'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_module'.
+[2026-07-12 07:35:51] Merged 130 bytes for 'is_module'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'stmts'.
+[2026-07-12 07:35:51] Merged 476946 bytes (465.77 KiB) for 'stmts'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'stmt_containers'.
+[2026-07-12 07:35:51] Merged 152604 bytes (149.03 KiB) for 'stmt_containers'.
+[2026-07-12 07:35:51] Merging 5 fragments for 'exprs'.
+[2026-07-12 07:35:51] Merged 2794688 bytes (2.67 MiB) for 'exprs'.
+[2026-07-12 07:35:51] Merging 4 fragments for 'enclosing_stmt'.
+[2026-07-12 07:35:51] Merged 531127 bytes (518.68 KiB) for 'enclosing_stmt'.
+[2026-07-12 07:35:51] Merging 5 fragments for 'expr_containers'.
+[2026-07-12 07:35:51] Merged 482564 bytes (471.25 KiB) for 'expr_containers'.
+[2026-07-12 07:35:51] Merging 3 fragments for 'literals'.
+[2026-07-12 07:35:51] Merged 428456 bytes (418.41 KiB) for 'literals'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'regexpterm'.
+[2026-07-12 07:35:51] Merged 188409 bytes (183.99 KiB) for 'regexpterm'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'regexp_const_value'.
+[2026-07-12 07:35:51] Merged 85028 bytes (83.04 KiB) for 'regexp_const_value'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'bind'.
+[2026-07-12 07:35:51] Merged 254895 bytes (248.92 KiB) for 'bind'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'decl'.
+[2026-07-12 07:35:51] Merged 64824 bytes (63.30 KiB) for 'decl'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'properties'.
+[2026-07-12 07:35:51] Merged 44726 bytes (43.68 KiB) for 'properties'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'entry_cfg_node'.
+[2026-07-12 07:35:51] Merged 30446 bytes (29.73 KiB) for 'entry_cfg_node'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'exit_cfg_node'.
+[2026-07-12 07:35:51] Merged 30446 bytes (29.73 KiB) for 'exit_cfg_node'.
+[2026-07-12 07:35:51] Merging 6 fragments for 'successor'.
+[2026-07-12 07:35:51] Merged 1133742 bytes (1.08 MiB) for 'successor'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_nodejs'.
+[2026-07-12 07:35:51] Merged 130 bytes for 'is_nodejs'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'comments'.
+[2026-07-12 07:35:51] Merged 61049 bytes (59.62 KiB) for 'comments'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'next_token'.
+[2026-07-12 07:35:51] Merged 35353 bytes (34.52 KiB) for 'next_token'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc'.
+[2026-07-12 07:35:51] Merged 26575 bytes (25.95 KiB) for 'jsdoc'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_tags'.
+[2026-07-12 07:35:51] Merged 162849 bytes (159.03 KiB) for 'jsdoc_tags'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_tag_descriptions'.
+[2026-07-12 07:35:51] Merged 24996 bytes (24.41 KiB) for 'jsdoc_tag_descriptions'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_tag_names'.
+[2026-07-12 07:35:51] Merged 23745 bytes (23.19 KiB) for 'jsdoc_tag_names'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_type_exprs'.
+[2026-07-12 07:35:51] Merged 161349 bytes (157.57 KiB) for 'jsdoc_type_exprs'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_errors'.
+[2026-07-12 07:35:51] Merged 1926 bytes (1.88 KiB) for 'jsdoc_errors'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_arguments_object'.
+[2026-07-12 07:35:51] Merged 12892 bytes (12.59 KiB) for 'is_arguments_object'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_greedy'.
+[2026-07-12 07:35:51] Merged 625 bytes for 'is_greedy'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'char_class_escape'.
+[2026-07-12 07:35:51] Merged 639 bytes for 'char_class_escape'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'array_size'.
+[2026-07-12 07:35:51] Merged 11512 bytes (11.24 KiB) for 'array_size'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jump_targets'.
+[2026-07-12 07:35:51] Merged 567 bytes for 'jump_targets'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'guard_node'.
+[2026-07-12 07:35:51] Merged 68284 bytes (66.68 KiB) for 'guard_node'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_capture'.
+[2026-07-12 07:35:51] Merged 1072 bytes (1.05 KiB) for 'is_capture'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_inverted'.
+[2026-07-12 07:35:51] Merged 147 bytes for 'is_inverted'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'backref'.
+[2026-07-12 07:35:51] Merged 64 bytes for 'backref'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'range_quantifier_lower_bound'.
+[2026-07-12 07:35:51] Merged 70 bytes for 'range_quantifier_lower_bound'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'range_quantifier_upper_bound'.
+[2026-07-12 07:35:51] Merged 73 bytes for 'range_quantifier_upper_bound'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'json'.
+[2026-07-12 07:35:51] Merged 265 bytes for 'json'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'json_locations'.
+[2026-07-12 07:35:51] Merged 144 bytes for 'json_locations'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'json_literals'.
+[2026-07-12 07:35:51] Merged 205 bytes for 'json_literals'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'json_properties'.
+[2026-07-12 07:35:51] Merged 184 bytes for 'json_properties'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'toplevel_parent_xml_node'.
+[2026-07-12 07:35:51] Merged 91 bytes for 'toplevel_parent_xml_node'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'xmlElements'.
+[2026-07-12 07:35:51] Merged 885 bytes for 'xmlElements'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'xmllocations'.
+[2026-07-12 07:35:51] Merged 794 bytes for 'xmllocations'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'xmlAttrs'.
+[2026-07-12 07:35:51] Merged 1195 bytes (1.17 KiB) for 'xmlAttrs'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_async'.
+[2026-07-12 07:35:51] Merged 24 bytes for 'is_async'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_computed'.
+[2026-07-12 07:35:51] Merged 21 bytes for 'is_computed'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'xmlComments'.
+[2026-07-12 07:35:51] Merged 162 bytes for 'xmlComments'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'is_externs'.
+[2026-07-12 07:35:51] Merged 225 bytes for 'is_externs'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_prefix_qualifier'.
+[2026-07-12 07:35:51] Merged 1894 bytes (1.85 KiB) for 'jsdoc_prefix_qualifier'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_record_field_name'.
+[2026-07-12 07:35:51] Merged 1775 bytes (1.73 KiB) for 'jsdoc_record_field_name'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'jsdoc_has_new_parameter'.
+[2026-07-12 07:35:51] Merged 35 bytes for 'jsdoc_has_new_parameter'.
+[2026-07-12 07:35:51] Merging 1 fragment for 'sourceLocationPrefix'.
+[2026-07-12 07:35:51] Merged 17 bytes for 'sourceLocationPrefix'.
+[2026-07-12 07:35:51] Saving string and id pools to disk.
+[2026-07-12 07:35:51] Finished importing TRAP files.
+[2026-07-12 07:35:51] Read 257.09 MiB of uncompressed TRAP data.
+[2026-07-12 07:35:51] Uncompressed relation data size: 74.46 MiB
+[2026-07-12 07:35:51] Relation data size: 17.45 MiB (merge rate: 17.24 MiB/s)
+[2026-07-12 07:35:51] String pool size: 11.03 MiB
+[2026-07-12 07:35:51] ID pool size: 55.00 MiB
+[2026-07-12 07:35:51] [PROGRESS] dataset import> Finished writing database (relations: 17.45 MiB; string pool: 11.03 MiB).
+[2026-07-12 07:35:51] Pausing evaluation to close the cache at sequence stamp o+243
+[2026-07-12 07:35:51] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 07:35:51] Unpausing evaluation
+[2026-07-12 07:35:51] Plumbing command codeql dataset import completed.
+[2026-07-12 07:35:51] [PROGRESS] database finalize> TRAP import complete (8.3s).
+[2026-07-12 07:35:51] Running plumbing command: codeql database cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash
+[2026-07-12 07:35:52] [PROGRESS] database cleanup> Cleaning up existing TRAP files after import...
+[2026-07-12 07:35:52] [PROGRESS] database cleanup> TRAP files cleaned up (18ms).
+[2026-07-12 07:35:52] [PROGRESS] database cleanup> Cleaning up scratch directory...
+[2026-07-12 07:35:52] [PROGRESS] database cleanup> Scratch directory cleaned up (0ms).
+[2026-07-12 07:35:52] Running plumbing command: codeql dataset cleanup -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript
+[2026-07-12 07:35:52] [PROGRESS] dataset cleanup> Cleaning up dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript.
+[2026-07-12 07:35:52] Trimming disk cache at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript/default/cache in mode trim.
+[2026-07-12 07:35:52] Sequence stamp origin is -5892344007494489019
+[2026-07-12 07:35:52] Pausing evaluation to quickly trim memory at sequence stamp o+0
+[2026-07-12 07:35:52] Unpausing evaluation
+[2026-07-12 07:35:52] Pausing evaluation to zealously trim disk at sequence stamp o+1
+[2026-07-12 07:35:52] Unpausing evaluation
+[2026-07-12 07:35:52] Trimming completed (2ms): Trimmed disposable data from cache.
+[2026-07-12 07:35:52] Pausing evaluation to close the cache at sequence stamp o+2
+[2026-07-12 07:35:52] The disk cache is freshly trimmed; leave it be.
+[2026-07-12 07:35:52] Unpausing evaluation
+[2026-07-12 07:35:52] [PROGRESS] dataset cleanup> Trimmed disposable data from cache.
+[2026-07-12 07:35:52] [PROGRESS] dataset cleanup> Finalizing dataset in /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript
+[2026-07-12 07:35:52] [DETAILS] dataset cleanup> Finished deleting ID pool from /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash/db-javascript (4ms).
+[2026-07-12 07:35:52] Plumbing command codeql dataset cleanup completed.
+[2026-07-12 07:35:52] Plumbing command codeql database cleanup completed with status 0.
+[2026-07-12 07:35:52] [PROGRESS] database finalize> Finished zipping source archive (949.92 KiB).
+[2026-07-12 07:35:52] Plumbing command codeql database finalize completed.
+[2026-07-12 07:35:52] [PROGRESS] database create> Successfully created database at /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/lodash.
+[2026-07-12 07:35:52] Terminating normally.

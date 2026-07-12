@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$ServiceOptionsOrBuilder.members/DescriptorProtos$ServiceOptionsOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$ServiceOptionsOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$ServiceOptions.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$ExtendableMessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage.members.trap.gz
+classes/com/google/protobuf/GeneratedMessage$GeneratedExtension.members.trap.gz
+classes/com/google/protobuf/Extension.members.trap.gz
+classes/com/google/protobuf/ExtensionLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/com/google/protobuf/Message.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOptionOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$UninterpretedOption.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSetOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$FeatureSet.members.trap.gz

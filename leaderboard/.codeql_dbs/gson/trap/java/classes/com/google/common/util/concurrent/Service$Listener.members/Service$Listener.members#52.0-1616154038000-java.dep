@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/util/concurrent/Service$Listener.members/Service$Listener.members#52.0-1616154038000-java.trap.gz
+
+TRAPS
+classes/com/google/common/util/concurrent/Service$Listener.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/util/concurrent/Service.members.trap.gz
+classes/com/google/common/util/concurrent/Service$State.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz

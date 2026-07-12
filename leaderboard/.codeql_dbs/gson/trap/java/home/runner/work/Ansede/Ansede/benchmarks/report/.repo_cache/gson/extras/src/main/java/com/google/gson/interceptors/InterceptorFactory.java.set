@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/extras/src/main/java/com/google/gson/interceptors/InterceptorFactory.java.trap.gz
+classes/com/google/gson/interceptors/InterceptorFactory.members/InterceptorFactory.members#0.0-1783842439057-java.trap.gz
+classes/com/google/gson/interceptors/InterceptorFactory$InterceptorAdapter.members/InterceptorFactory$InterceptorAdapter.members#0.0-1783842439057-java.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

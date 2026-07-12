@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/CaliperRunComponent.members/CaliperRunComponent.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/CaliperRunComponent.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/RunScoped.members.trap.gz
+classes/dagger/Subcomponent.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/com/google/caliper/runner/CaliperRunModule.members.trap.gz
+classes/com/google/caliper/runner/instrument/InstrumentModule.members.trap.gz
+classes/com/google/caliper/runner/resultprocessor/ResultProcessorModule.members.trap.gz
+classes/com/google/caliper/runner/CaliperRun.members.trap.gz

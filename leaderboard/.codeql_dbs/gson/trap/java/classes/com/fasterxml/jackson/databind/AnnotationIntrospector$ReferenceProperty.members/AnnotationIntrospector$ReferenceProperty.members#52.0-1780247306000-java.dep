@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/AnnotationIntrospector$ReferenceProperty.members/AnnotationIntrospector$ReferenceProperty.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/AnnotationIntrospector$ReferenceProperty.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/AnnotationIntrospector.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/fasterxml/jackson/databind/AnnotationIntrospector$ReferenceProperty$Type.members.trap.gz

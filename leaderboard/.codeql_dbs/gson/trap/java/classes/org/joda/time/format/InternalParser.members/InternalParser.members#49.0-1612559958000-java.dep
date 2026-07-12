@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/format/InternalParser.members/InternalParser.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/format/InternalParser.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/joda/time/format/DateTimeParserBucket.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz

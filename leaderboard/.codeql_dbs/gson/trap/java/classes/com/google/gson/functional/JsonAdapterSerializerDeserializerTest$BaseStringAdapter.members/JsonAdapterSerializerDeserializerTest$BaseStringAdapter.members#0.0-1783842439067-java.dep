@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/JsonAdapterSerializerDeserializerTest$BaseStringAdapter.members/JsonAdapterSerializerDeserializerTest$BaseStringAdapter.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/JsonAdapterSerializerDeserializerTest$BaseStringAdapter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterSerializerDeserializerTest$Base.members.trap.gz
+classes/com/google/gson/functional/JsonAdapterSerializerDeserializerTest.members.trap.gz
+classes/com/google/gson/JsonSerializer.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/com/google/gson/JsonSerializationContext.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/Override.members.trap.gz

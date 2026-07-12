@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/OutOfMemoryError.members/OutOfMemoryError.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/lang/OutOfMemoryError.members.trap.gz
+classes/java/lang/VirtualMachineError.members.trap.gz
+classes/java/lang/String.members.trap.gz

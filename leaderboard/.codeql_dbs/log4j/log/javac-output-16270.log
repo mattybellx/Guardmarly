@@ -1,0 +1,9 @@
+[2026-07-12 07:59:25] [javac-output-16270] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:25] [javac-output-16270] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:25] [javac-output-16270] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:59:26] [javac-output-16270] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.springframework.core.annotation.Order,org.apache.logging.log4j.core.config.plugins.PluginLoggerContext,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginConfiguration,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute
+[2026-07-12 07:59:27] [javac-output-16270] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-spring-boot/src/main/java/org/apache/logging/log4j/spring/boot/Log4j2SpringBootLoggingSystem.java:136: warning: [deprecation] loadConfiguration(String,LogFile) in Log4J2LoggingSystem has been deprecated
+[2026-07-12 07:59:27] [javac-output-16270]     protected void loadConfiguration(final String location, final LogFile logFile) {
+[2026-07-12 07:59:27] [javac-output-16270]                    ^
+[2026-07-12 07:59:27] [javac-output-16270] /home/runner/.m2/repository/org/springframework/spring-core/5.3.39/spring-core-5.3.39.jar(/org/springframework/lang/Nullable.class): warning: [classfile] Cannot find annotation method 'when()' in type 'Nonnull'
+[2026-07-12 07:59:27] [javac-output-16270] warning: unknown enum constant When.MAYBE

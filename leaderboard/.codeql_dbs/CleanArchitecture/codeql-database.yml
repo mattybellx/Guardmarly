@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/CleanArchitecture
+baselineLinesOfCode: 8705
+unicodeNewlines: false
+columnKind: utf16
+primaryLanguage: csharp
+creationMetadata:
+  sha: a064d0b369b719ba03da71da1560d208d7e02e03
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T08:02:36.374935959Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

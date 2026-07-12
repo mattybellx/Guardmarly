@@ -1,0 +1,13 @@
+[2026-07-12 07:39:48] This is codeql database analyze benchmarks/report/.codeql_dbs/moment --format=sarif-latest --output=benchmarks/report/.codeql_dbs/moment/results.sarif codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:39:48] Log file was started late.
+[2026-07-12 07:39:48] [PROGRESS] database analyze> Running queries.
+[2026-07-12 07:39:48] Running plumbing command: codeql database run-queries --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment,codeql/javascript-queries:codeql-suites/javascript-security-extended.qls -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:39:48] Calling plumbing command: codeql resolve ram --dataset=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/db-javascript --format=json
+[2026-07-12 07:39:48] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx1800M",
+                        "--off-heap-ram=1437"
+                      ]
+[2026-07-12 07:39:48] Chaining via /tmp/codeql.qAg6jNTI to plumbing: execute queries -J-Xmx1800M --off-heap-ram=1437 --verbosity=progress --logdir=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/log --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment,codeql/javascript-queries:codeql-suites/javascript-security-extended.qls --output=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/results -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/moment/db-javascript codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
+[2026-07-12 07:39:48] Plumbing command codeql database run-queries completed with status 70.
+[2026-07-12 07:39:48] Exiting with code 70

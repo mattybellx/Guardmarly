@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/axios
+baselineLinesOfCode: 30624
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+creationMetadata:
+  sha: 7a6615e421578081743161eab032d009dc6583a4
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:33:36.927672881Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

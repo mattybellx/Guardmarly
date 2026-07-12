@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/annotation/Nonnull.members/Nonnull.members#49.0-1490957730000-java.trap.gz
+
+TRAPS
+classes/javax/annotation/Nonnull.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Documented.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/javax/annotation/meta/TypeQualifier.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/javax/annotation/meta/When.members.trap.gz

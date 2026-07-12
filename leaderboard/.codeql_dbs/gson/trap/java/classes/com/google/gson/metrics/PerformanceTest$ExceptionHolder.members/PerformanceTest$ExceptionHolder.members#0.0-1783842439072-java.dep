@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/metrics/PerformanceTest$ExceptionHolder.members/PerformanceTest$ExceptionHolder.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/metrics/PerformanceTest$ExceptionHolder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/metrics/PerformanceTest.members.trap.gz
+classes/java/lang/String.members.trap.gz

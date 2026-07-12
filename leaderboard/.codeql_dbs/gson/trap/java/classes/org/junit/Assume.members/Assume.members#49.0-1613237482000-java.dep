@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/Assume.members/Assume.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/Assume.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/org/hamcrest/Matcher.members.trap.gz
+classes/org/hamcrest/SelfDescribing.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz

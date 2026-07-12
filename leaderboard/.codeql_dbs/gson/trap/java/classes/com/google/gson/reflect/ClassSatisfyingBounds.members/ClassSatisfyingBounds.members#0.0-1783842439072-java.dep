@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/reflect/ClassSatisfyingBounds.members/ClassSatisfyingBounds.members#0.0-1783842439072-java.trap.gz
+
+TRAPS
+classes/com/google/gson/reflect/ClassSatisfyingBounds.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

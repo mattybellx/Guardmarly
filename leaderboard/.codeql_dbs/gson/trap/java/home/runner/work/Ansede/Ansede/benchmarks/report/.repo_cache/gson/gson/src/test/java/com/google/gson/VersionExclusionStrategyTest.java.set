@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/VersionExclusionStrategyTest.java.trap.gz
+classes/com/google/errorprone/annotations/Keep.members/Keep.members#52.0-1775559068000-java.trap.gz
+classes/com/google/gson/VersionExclusionStrategyTest.members/VersionExclusionStrategyTest.members#0.0-1783842439065-java.trap.gz
+classes/com/google/gson/VersionExclusionStrategyTest$MockClassSince.members/VersionExclusionStrategyTest$MockClassSince.members#0.0-1783842439065-java.trap.gz
+classes/com/google/gson/VersionExclusionStrategyTest$MockClassUntil.members/VersionExclusionStrategyTest$MockClassUntil.members#0.0-1783842439065-java.trap.gz
+classes/com/google/gson/VersionExclusionStrategyTest$MockClassBoth.members/VersionExclusionStrategyTest$MockClassBoth.members#0.0-1783842439065-java.trap.gz
+modules/java.base.trap.gz
+jars/home/runner/.m2/repository/com/google/errorprone/error_prone_annotations/2.49.0/error_prone_annotations-2.49.0.jar.trap.gz

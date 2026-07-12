@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/WorkerRunner.members/WorkerRunner.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/WorkerRunner.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerScoped.members.trap.gz
+classes/com/google/caliper/runner/worker/Worker.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerProcessor.members.trap.gz
+classes/com/google/caliper/runner/options/CaliperOptions.members.trap.gz
+classes/javax/inject/Inject.members.trap.gz

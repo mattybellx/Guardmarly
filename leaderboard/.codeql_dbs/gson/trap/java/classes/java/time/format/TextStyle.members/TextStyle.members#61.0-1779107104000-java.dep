@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/format/TextStyle.members/TextStyle.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/format/TextStyle.members.trap.gz
+classes/java/lang/Enum.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

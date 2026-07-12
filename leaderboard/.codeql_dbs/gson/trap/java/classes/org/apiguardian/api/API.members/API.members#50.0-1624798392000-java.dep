@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/apiguardian/api/API.members/API.members#50.0-1624798392000-java.trap.gz
+
+TRAPS
+classes/org/apiguardian/api/API.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Documented.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/apiguardian/api/API$Status.members.trap.gz

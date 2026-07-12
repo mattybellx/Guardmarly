@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/extras/examples/rawcollections/RawCollectionsExample$Event.members/RawCollectionsExample$Event.members#0.0-1783842439057-java.trap.gz
+
+TRAPS
+classes/com/google/gson/extras/examples/rawcollections/RawCollectionsExample$Event.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/extras/examples/rawcollections/RawCollectionsExample.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Override.members.trap.gz

@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/runner/manipulation/Filter.members/Filter.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/runner/manipulation/Filter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/junit/runner/manipulation/NoTestsRemainException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/junit/runner/Description.members.trap.gz

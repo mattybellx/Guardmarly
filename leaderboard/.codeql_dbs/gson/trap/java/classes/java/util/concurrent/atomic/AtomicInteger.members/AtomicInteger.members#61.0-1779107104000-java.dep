@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/atomic/AtomicInteger.members/AtomicInteger.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/atomic/AtomicInteger.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/function/IntBinaryOperator.members.trap.gz
+classes/java/util/function/IntUnaryOperator.members.trap.gz

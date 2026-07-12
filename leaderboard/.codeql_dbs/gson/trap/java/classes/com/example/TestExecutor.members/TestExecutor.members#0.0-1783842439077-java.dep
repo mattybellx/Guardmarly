@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/example/TestExecutor.members/TestExecutor.members#0.0-1783842439077-java.trap.gz
+
+TRAPS
+classes/com/example/TestExecutor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/function/BiConsumer.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz

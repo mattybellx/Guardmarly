@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/MultimapSubject$UsingCorrespondence.members/MultimapSubject$UsingCorrespondence.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/MultimapSubject$UsingCorrespondence.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/MultimapSubject.members.trap.gz
+classes/com/google/common/truth/Correspondence.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/truth/Ordered.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/common/collect/Multimap.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/util/TokenBuffer$Segment.members/TokenBuffer$Segment.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/util/TokenBuffer$Segment.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/databind/util/TokenBuffer.members.trap.gz
+classes/com/fasterxml/jackson/core/JsonToken.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/util/TreeMap.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/NavigableMap.members.trap.gz
+classes/java/util/SortedMap.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

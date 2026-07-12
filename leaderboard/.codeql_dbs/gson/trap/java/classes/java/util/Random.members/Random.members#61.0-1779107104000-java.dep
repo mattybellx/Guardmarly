@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/Random.members/Random.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/Random.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/stream/DoubleStream.members.trap.gz
+classes/java/util/stream/LongStream.members.trap.gz
+classes/java/util/stream/IntStream.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

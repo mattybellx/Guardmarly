@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/concurrent/CompletableFuture$BiRun.members/CompletableFuture$BiRun.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/concurrent/CompletableFuture$BiRun.members.trap.gz
+classes/java/lang/Void.members.trap.gz
+classes/java/util/concurrent/CompletableFuture$BiCompletion.members.trap.gz
+classes/java/util/concurrent/CompletableFuture$UniCompletion.members.trap.gz
+classes/java/util/concurrent/CompletableFuture$Completion.members.trap.gz
+classes/java/util/concurrent/CompletableFuture.members.trap.gz
+classes/java/util/concurrent/Executor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/util/concurrent/CompletionStage.members.trap.gz
+classes/java/lang/Runnable.members.trap.gz

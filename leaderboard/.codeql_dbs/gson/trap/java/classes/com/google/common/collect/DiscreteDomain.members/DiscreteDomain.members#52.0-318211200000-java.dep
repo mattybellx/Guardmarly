@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/DiscreteDomain.members/DiscreteDomain.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/DiscreteDomain.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/math/BigInteger.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/lang/Integer.members.trap.gz

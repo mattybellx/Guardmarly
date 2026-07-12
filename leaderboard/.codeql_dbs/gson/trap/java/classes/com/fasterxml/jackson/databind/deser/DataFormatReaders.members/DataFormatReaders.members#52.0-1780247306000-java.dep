@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/databind/deser/DataFormatReaders.members/DataFormatReaders.members#52.0-1780247306000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/databind/deser/DataFormatReaders.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/fasterxml/jackson/databind/deser/DataFormatReaders$Match.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/com/fasterxml/jackson/databind/JavaType.members.trap.gz
+classes/com/fasterxml/jackson/databind/DeserializationConfig.members.trap.gz
+classes/com/fasterxml/jackson/databind/ObjectReader.members.trap.gz
+classes/com/fasterxml/jackson/core/format/MatchStrength.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz

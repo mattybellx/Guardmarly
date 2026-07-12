@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/DoubleSubject$TolerantDoubleComparison.members/DoubleSubject$TolerantDoubleComparison.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/DoubleSubject$TolerantDoubleComparison.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/truth/DoubleSubject.members.trap.gz
+classes/com/google/common/truth/DoubleSubject$DoubleComparer.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz

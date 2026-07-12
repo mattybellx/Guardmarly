@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/UnknownFieldSetLite.members/UnknownFieldSetLite.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/UnknownFieldSetLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/StringBuilder.members.trap.gz
+classes/com/google/protobuf/Writer.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz

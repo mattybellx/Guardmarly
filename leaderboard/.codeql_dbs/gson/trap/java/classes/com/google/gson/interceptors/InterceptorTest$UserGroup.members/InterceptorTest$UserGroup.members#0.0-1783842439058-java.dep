@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/interceptors/InterceptorTest$UserGroup.members/InterceptorTest$UserGroup.members#0.0-1783842439058-java.trap.gz
+
+TRAPS
+classes/com/google/gson/interceptors/InterceptorTest$UserGroup.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$User.members.trap.gz

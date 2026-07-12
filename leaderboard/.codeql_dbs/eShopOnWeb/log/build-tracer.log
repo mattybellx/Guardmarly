@@ -1,0 +1,1042 @@
+[T 08:03:48 19985] CodeQL CLI version 2.26.0
+[T 08:03:48 19985] Initializing tracer.
+[T 08:03:48 19985] Initializing tags.
+[T 08:03:48 19985] ID set to 0000000000004E11_0000000000000001 (parent root)
+[T 08:03:48 19985] Initializing tracer.
+[T 08:03:48 19985] Initializing tags.
+[T 08:03:48 19985] ID set to 0000000000004E11_0000000000000002 (parent root)
+[T 08:03:48 19985] Warning: SEMMLE_EXEC and SEMMLE_EXECP not set. Falling back to path lookup on argv[0].
+[T 08:03:48 19985] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux (canonical: /home/runner/work/Ansede/Ansede/codeql/tools/linux64/runner-linux) ====
+[T 08:03:48 19985] Executing the following tracer actions:
+[T 08:03:48 19985] Tracer actions:
+[T 08:03:48 19985] pre_invocations(0)
+[T 08:03:48 19985] post_invocations(0)
+[T 08:03:48 19985] trace_languages(1): [csharp]
+[T 08:03:48 19985] Initializing tracer.
+[T 08:03:48 19985] Initializing tags.
+[T 08:03:48 19985] ID set to 0000000000004E11_0000000000000003 (parent 0000000000004E11_0000000000000002)
+[T 08:03:48 19985] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh (canonical: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/autobuild.sh) ====
+[T 08:03:48 19985] Executing the following tracer actions:
+[T 08:03:48 19985] Tracer actions:
+[T 08:03:48 19985] pre_invocations(0)
+[T 08:03:48 19985] post_invocations(0)
+[T 08:03:48 19985] trace_languages(1): [csharp]
+[T 08:03:48 19988] Initializing tracer.
+[T 08:03:48 19988] Initializing tags.
+[T 08:03:48 19988] ID set to 0000000000004E14_0000000000000001 (parent 0000000000004E11_0000000000000003)
+[T 08:03:48 19988] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp (canonical: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Autobuild.CSharp) ====
+[T 08:03:48 19988] Executing the following tracer actions:
+[T 08:03:48 19988] Tracer actions:
+[T 08:03:48 19988] pre_invocations(0)
+[T 08:03:48 19988] post_invocations(0)
+[T 08:03:48 19988] trace_languages(1): [csharp]
+[T 08:03:49 19996] Initializing tracer.
+[T 08:03:49 19996] Initializing tags.
+[T 08:03:49 19996] ID set to 0000000000004E1C_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:49 19996] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:49 19996] Executing the following tracer actions:
+[T 08:03:49 19996] Tracer actions:
+[T 08:03:49 19996] pre_invocations(0)
+[T 08:03:49 19996] post_invocations(0)
+[T 08:03:49 19996] trace_languages(1): [csharp]
+[T 08:03:49 20003] Initializing tracer.
+[T 08:03:49 20003] Initializing tags.
+[T 08:03:49 20003] ID set to 0000000000004E23_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:49 20003] ==== Candidate to intercept: /usr/bin/chmod (canonical: /usr/bin/chmod) ====
+[T 08:03:49 20003] Executing the following tracer actions:
+[T 08:03:49 20003] Tracer actions:
+[T 08:03:49 20003] pre_invocations(0)
+[T 08:03:49 20003] post_invocations(0)
+[T 08:03:49 20003] trace_languages(1): [csharp]
+[T 08:03:49 20004] Initializing tracer.
+[T 08:03:49 20004] Initializing tags.
+[T 08:03:49 20004] ID set to 0000000000004E24_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:49 20004] ==== Candidate to intercept: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/eShopOnWeb/working/.dotnet/dotnet-install.sh (canonical: /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/eShopOnWeb/working/.dotnet/dotnet-install.sh) ====
+[T 08:03:49 20004] Executing the following tracer actions:
+[T 08:03:49 20004] Tracer actions:
+[T 08:03:49 20004] pre_invocations(0)
+[T 08:03:49 20004] post_invocations(0)
+[T 08:03:49 20004] trace_languages(1): [csharp]
+[T 08:03:49 20004] Initializing tracer.
+[T 08:03:49 20004] Initializing tags.
+[T 08:03:49 20004] ID set to 0000000000004E24_0000000000000002 (parent 0000000000004E24_0000000000000001)
+[T 08:03:49 20004] ==== Candidate to intercept: bash (canonical: /usr/bin/bash) ====
+[T 08:03:49 20004] Executing the following tracer actions:
+[T 08:03:49 20004] Tracer actions:
+[T 08:03:49 20004] pre_invocations(0)
+[T 08:03:49 20004] post_invocations(0)
+[T 08:03:49 20004] trace_languages(1): [csharp]
+[T 08:03:49 20005] Initializing tracer.
+[T 08:03:49 20005] Initializing tags.
+[T 08:03:49 20005] ID set to 0000000000004E25_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20005] ==== Candidate to intercept: /usr/bin/basename (canonical: /usr/bin/basename) ====
+[T 08:03:49 20005] Executing the following tracer actions:
+[T 08:03:49 20005] Tracer actions:
+[T 08:03:49 20005] pre_invocations(0)
+[T 08:03:49 20005] post_invocations(0)
+[T 08:03:49 20005] trace_languages(1): [csharp]
+[T 08:03:49 20009] Initializing tracer.
+[T 08:03:49 20009] Initializing tags.
+[T 08:03:49 20009] ID set to 0000000000004E29_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20009] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20009] Executing the following tracer actions:
+[T 08:03:49 20009] Tracer actions:
+[T 08:03:49 20009] pre_invocations(0)
+[T 08:03:49 20009] post_invocations(0)
+[T 08:03:49 20009] trace_languages(1): [csharp]
+[T 08:03:49 20011] Initializing tracer.
+[T 08:03:49 20011] Initializing tags.
+[T 08:03:49 20011] ID set to 0000000000004E2B_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20011] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:03:49 20011] Executing the following tracer actions:
+[T 08:03:49 20011] Tracer actions:
+[T 08:03:49 20011] pre_invocations(0)
+[T 08:03:49 20011] post_invocations(0)
+[T 08:03:49 20011] trace_languages(1): [csharp]
+[T 08:03:49 20015] Initializing tracer.
+[T 08:03:49 20015] Initializing tags.
+[T 08:03:49 20015] ID set to 0000000000004E2F_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20015] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20015] Executing the following tracer actions:
+[T 08:03:49 20015] Tracer actions:
+[T 08:03:49 20015] pre_invocations(0)
+[T 08:03:49 20015] post_invocations(0)
+[T 08:03:49 20015] trace_languages(1): [csharp]
+[T 08:03:49 20017] Initializing tracer.
+[T 08:03:49 20017] Initializing tags.
+[T 08:03:49 20017] ID set to 0000000000004E31_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20017] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:03:49 20017] Executing the following tracer actions:
+[T 08:03:49 20017] Tracer actions:
+[T 08:03:49 20017] pre_invocations(0)
+[T 08:03:49 20017] post_invocations(0)
+[T 08:03:49 20017] trace_languages(1): [csharp]
+[T 08:03:49 20020] Initializing tracer.
+[T 08:03:49 20020] Initializing tags.
+[T 08:03:49 20021] Initializing tracer.
+[T 08:03:49 20021] Initializing tags.
+[T 08:03:49 20020] ID set to 0000000000004E34_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20020] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:03:49 20021] ID set to 0000000000004E35_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20021] ==== Candidate to intercept: /usr/bin/ldd (canonical: /usr/bin/ldd) ====
+[T 08:03:49 20020] Executing the following tracer actions:
+[T 08:03:49 20020] Tracer actions:
+[T 08:03:49 20020] pre_invocations(0)
+[T 08:03:49 20020] post_invocations(0)
+[T 08:03:49 20020] trace_languages(1): [csharp]
+[T 08:03:49 20021] Executing the following tracer actions:
+[T 08:03:49 20021] Tracer actions:
+[T 08:03:49 20021] pre_invocations(0)
+[T 08:03:49 20021] post_invocations(0)
+[T 08:03:49 20021] trace_languages(1): [csharp]
+[T 08:03:49 20025] Initializing tracer.
+[T 08:03:49 20025] Initializing tags.
+[T 08:03:49 20025] ID set to 0000000000004E39_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20025] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20025] Executing the following tracer actions:
+[T 08:03:49 20025] Tracer actions:
+[T 08:03:49 20025] pre_invocations(0)
+[T 08:03:49 20025] post_invocations(0)
+[T 08:03:49 20025] trace_languages(1): [csharp]
+[T 08:03:49 20029] Initializing tracer.
+[T 08:03:49 20029] Initializing tags.
+[T 08:03:49 20029] ID set to 0000000000004E3D_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20029] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20029] Executing the following tracer actions:
+[T 08:03:49 20029] Tracer actions:
+[T 08:03:49 20029] pre_invocations(0)
+[T 08:03:49 20029] post_invocations(0)
+[T 08:03:49 20029] trace_languages(1): [csharp]
+[T 08:03:49 20033] Initializing tracer.
+[T 08:03:49 20033] Initializing tags.
+[T 08:03:49 20033] ID set to 0000000000004E41_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20033] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20033] Executing the following tracer actions:
+[T 08:03:49 20033] Tracer actions:
+[T 08:03:49 20033] pre_invocations(0)
+[T 08:03:49 20033] post_invocations(0)
+[T 08:03:49 20033] trace_languages(1): [csharp]
+[T 08:03:49 20039] Initializing tracer.
+[T 08:03:49 20039] Initializing tags.
+[T 08:03:49 20039] ID set to 0000000000004E47_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20039] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:03:49 20039] Executing the following tracer actions:
+[T 08:03:49 20039] Tracer actions:
+[T 08:03:49 20039] pre_invocations(0)
+[T 08:03:49 20039] post_invocations(0)
+[T 08:03:49 20039] trace_languages(1): [csharp]
+[T 08:03:49 20042] Initializing tracer.
+[T 08:03:49 20042] Initializing tags.
+[T 08:03:49 20043] Initializing tracer.
+[T 08:03:49 20043] Initializing tags.
+[T 08:03:49 20042] ID set to 0000000000004E4A_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20042] ==== Candidate to intercept: /usr/bin/grep (canonical: /usr/bin/grep) ====
+[T 08:03:49 20043] ID set to 0000000000004E4B_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20043] ==== Candidate to intercept: /usr/bin/ldd (canonical: /usr/bin/ldd) ====
+[T 08:03:49 20042] Executing the following tracer actions:
+[T 08:03:49 20042] Tracer actions:
+[T 08:03:49 20042] pre_invocations(0)
+[T 08:03:49 20042] post_invocations(0)
+[T 08:03:49 20042] trace_languages(1): [csharp]
+[T 08:03:49 20043] Executing the following tracer actions:
+[T 08:03:49 20043] Tracer actions:
+[T 08:03:49 20043] pre_invocations(0)
+[T 08:03:49 20043] post_invocations(0)
+[T 08:03:49 20043] trace_languages(1): [csharp]
+[T 08:03:49 20046] Initializing tracer.
+[T 08:03:49 20046] Initializing tags.
+[T 08:03:49 20046] ID set to 0000000000004E4E_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20046] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20046] Executing the following tracer actions:
+[T 08:03:49 20046] Tracer actions:
+[T 08:03:49 20046] pre_invocations(0)
+[T 08:03:49 20046] post_invocations(0)
+[T 08:03:49 20046] trace_languages(1): [csharp]
+[T 08:03:49 20050] Initializing tracer.
+[T 08:03:49 20050] Initializing tags.
+[T 08:03:49 20050] ID set to 0000000000004E52_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20050] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:49 20050] Executing the following tracer actions:
+[T 08:03:49 20050] Tracer actions:
+[T 08:03:49 20050] pre_invocations(0)
+[T 08:03:49 20050] post_invocations(0)
+[T 08:03:49 20050] trace_languages(1): [csharp]
+[T 08:03:49 20055] Initializing tracer.
+[T 08:03:49 20055] Initializing tags.
+[T 08:03:49 20055] ID set to 0000000000004E57_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:49 20055] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:49 20055] Executing the following tracer actions:
+[T 08:03:49 20055] Tracer actions:
+[T 08:03:49 20055] pre_invocations(0)
+[T 08:03:49 20055] post_invocations(0)
+[T 08:03:49 20055] trace_languages(1): [csharp]
+[T 08:03:50 20058] Initializing tracer.
+[T 08:03:50 20058] Initializing tags.
+[T 08:03:50 20058] ID set to 0000000000004E5A_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20058] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:50 20058] Executing the following tracer actions:
+[T 08:03:50 20058] Tracer actions:
+[T 08:03:50 20058] pre_invocations(0)
+[T 08:03:50 20058] post_invocations(0)
+[T 08:03:50 20058] trace_languages(1): [csharp]
+[T 08:03:50 20066] Initializing tracer.
+[T 08:03:50 20066] Initializing tags.
+[T 08:03:50 20066] ID set to 0000000000004E62_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20066] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:50 20066] Executing the following tracer actions:
+[T 08:03:50 20066] Tracer actions:
+[T 08:03:50 20066] pre_invocations(0)
+[T 08:03:50 20066] post_invocations(0)
+[T 08:03:50 20066] trace_languages(1): [csharp]
+[T 08:03:50 20069] Initializing tracer.
+[T 08:03:50 20069] Initializing tags.
+[T 08:03:50 20069] ID set to 0000000000004E65_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20069] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:50 20069] Executing the following tracer actions:
+[T 08:03:50 20069] Tracer actions:
+[T 08:03:50 20069] pre_invocations(0)
+[T 08:03:50 20069] post_invocations(0)
+[T 08:03:50 20069] trace_languages(1): [csharp]
+[T 08:03:50 20074] Initializing tracer.
+[T 08:03:50 20074] Initializing tags.
+[T 08:03:50 20074] ID set to 0000000000004E6A_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20074] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:03:50 20074] Executing the following tracer actions:
+[T 08:03:50 20074] Tracer actions:
+[T 08:03:50 20074] pre_invocations(0)
+[T 08:03:50 20074] post_invocations(0)
+[T 08:03:50 20074] trace_languages(1): [csharp]
+[T 08:03:50 20085] Initializing tracer.
+[T 08:03:50 20085] Initializing tags.
+[T 08:03:50 20085] ID set to 0000000000004E75_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20085] ==== Candidate to intercept: /usr/bin/tr (canonical: /usr/bin/tr) ====
+[T 08:03:50 20085] Executing the following tracer actions:
+[T 08:03:50 20085] Tracer actions:
+[T 08:03:50 20085] pre_invocations(0)
+[T 08:03:50 20085] post_invocations(0)
+[T 08:03:50 20085] trace_languages(1): [csharp]
+[T 08:03:50 20090] Initializing tracer.
+[T 08:03:50 20090] Initializing tags.
+[T 08:03:50 20090] ID set to 0000000000004E7A_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20090] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:50 20090] Executing the following tracer actions:
+[T 08:03:50 20090] Tracer actions:
+[T 08:03:50 20090] pre_invocations(0)
+[T 08:03:50 20090] post_invocations(0)
+[T 08:03:50 20090] trace_languages(1): [csharp]
+[T 08:03:50 20093] Initializing tracer.
+[T 08:03:50 20093] Initializing tags.
+[T 08:03:50 20093] ID set to 0000000000004E7D_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:50 20093] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:50 20093] Executing the following tracer actions:
+[T 08:03:50 20093] Tracer actions:
+[T 08:03:50 20093] pre_invocations(0)
+[T 08:03:50 20093] post_invocations(0)
+[T 08:03:50 20093] trace_languages(1): [csharp]
+[T 08:03:51 20101] Initializing tracer.
+[T 08:03:51 20101] Initializing tags.
+[T 08:03:51 20101] ID set to 0000000000004E85_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20101] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:51 20101] Executing the following tracer actions:
+[T 08:03:51 20101] Tracer actions:
+[T 08:03:51 20101] pre_invocations(0)
+[T 08:03:51 20101] post_invocations(0)
+[T 08:03:51 20101] trace_languages(1): [csharp]
+[T 08:03:51 20104] Initializing tracer.
+[T 08:03:51 20104] Initializing tags.
+[T 08:03:51 20104] ID set to 0000000000004E88_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20104] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:51 20104] Executing the following tracer actions:
+[T 08:03:51 20104] Tracer actions:
+[T 08:03:51 20104] pre_invocations(0)
+[T 08:03:51 20104] post_invocations(0)
+[T 08:03:51 20104] trace_languages(1): [csharp]
+[T 08:03:51 20109] Initializing tracer.
+[T 08:03:51 20109] Initializing tags.
+[T 08:03:51 20109] ID set to 0000000000004E8D_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20109] ==== Candidate to intercept: /usr/bin/uname (canonical: /usr/bin/uname) ====
+[T 08:03:51 20109] Executing the following tracer actions:
+[T 08:03:51 20109] Tracer actions:
+[T 08:03:51 20109] pre_invocations(0)
+[T 08:03:51 20109] post_invocations(0)
+[T 08:03:51 20109] trace_languages(1): [csharp]
+[T 08:03:51 20117] Initializing tracer.
+[T 08:03:51 20117] Initializing tags.
+[T 08:03:51 20117] ID set to 0000000000004E95_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20117] ==== Candidate to intercept: /usr/bin/mkdir (canonical: /usr/bin/mkdir) ====
+[T 08:03:51 20117] Executing the following tracer actions:
+[T 08:03:51 20117] Tracer actions:
+[T 08:03:51 20117] pre_invocations(0)
+[T 08:03:51 20117] post_invocations(0)
+[T 08:03:51 20117] trace_languages(1): [csharp]
+[T 08:03:51 20118] Initializing tracer.
+[T 08:03:51 20118] Initializing tags.
+[T 08:03:51 20118] ID set to 0000000000004E96_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20118] ==== Candidate to intercept: /usr/bin/mktemp (canonical: /usr/bin/mktemp) ====
+[T 08:03:51 20118] Executing the following tracer actions:
+[T 08:03:51 20118] Tracer actions:
+[T 08:03:51 20118] pre_invocations(0)
+[T 08:03:51 20118] post_invocations(0)
+[T 08:03:51 20118] trace_languages(1): [csharp]
+[T 08:03:51 20120] Initializing tracer.
+[T 08:03:51 20120] Initializing tags.
+[T 08:03:51 20120] ID set to 0000000000004E98_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:51 20120] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:51 20120] Executing the following tracer actions:
+[T 08:03:51 20120] Tracer actions:
+[T 08:03:51 20120] pre_invocations(0)
+[T 08:03:51 20120] post_invocations(0)
+[T 08:03:51 20120] trace_languages(1): [csharp]
+[T 08:03:52 20123] Initializing tracer.
+[T 08:03:52 20123] Initializing tags.
+[T 08:03:52 20123] ID set to 0000000000004E9B_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:52 20123] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:52 20123] Executing the following tracer actions:
+[T 08:03:52 20123] Tracer actions:
+[T 08:03:52 20123] pre_invocations(0)
+[T 08:03:52 20123] post_invocations(0)
+[T 08:03:52 20123] trace_languages(1): [csharp]
+[T 08:03:52 20128] Initializing tracer.
+[T 08:03:52 20128] Initializing tags.
+[T 08:03:52 20128] ID set to 0000000000004EA0_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:52 20128] ==== Candidate to intercept: /usr/bin/tail (canonical: /usr/bin/tail) ====
+[T 08:03:52 20127] Initializing tracer.
+[T 08:03:52 20127] Initializing tags.
+[T 08:03:52 20127] ID set to 0000000000004E9F_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:52 20127] ==== Candidate to intercept: /usr/bin/awk (canonical: /usr/bin/gawk) ====
+[T 08:03:52 20128] Executing the following tracer actions:
+[T 08:03:52 20128] Tracer actions:
+[T 08:03:52 20128] pre_invocations(0)
+[T 08:03:52 20128] post_invocations(0)
+[T 08:03:52 20128] trace_languages(1): [csharp]
+[T 08:03:52 20127] Executing the following tracer actions:
+[T 08:03:52 20127] Tracer actions:
+[T 08:03:52 20127] pre_invocations(0)
+[T 08:03:52 20127] post_invocations(0)
+[T 08:03:52 20127] trace_languages(1): [csharp]
+[T 08:03:52 20129] Initializing tracer.
+[T 08:03:52 20129] Initializing tags.
+[T 08:03:52 20129] ID set to 0000000000004EA1_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:52 20129] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:03:52 20129] Executing the following tracer actions:
+[T 08:03:52 20129] Tracer actions:
+[T 08:03:52 20129] pre_invocations(0)
+[T 08:03:52 20129] post_invocations(0)
+[T 08:03:52 20129] trace_languages(1): [csharp]
+[T 08:03:52 20131] Initializing tracer.
+[T 08:03:52 20131] Initializing tags.
+[T 08:03:52 20131] ID set to 0000000000004EA3_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:52 20131] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:52 20131] Executing the following tracer actions:
+[T 08:03:52 20131] Tracer actions:
+[T 08:03:52 20131] pre_invocations(0)
+[T 08:03:52 20131] post_invocations(0)
+[T 08:03:52 20131] trace_languages(1): [csharp]
+[T 08:03:53 20134] Initializing tracer.
+[T 08:03:53 20134] Initializing tags.
+[T 08:03:53 20134] ID set to 0000000000004EA6_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:53 20134] ==== Candidate to intercept: /usr/bin/curl (canonical: /usr/bin/curl) ====
+[T 08:03:53 20134] Executing the following tracer actions:
+[T 08:03:53 20134] Tracer actions:
+[T 08:03:53 20134] pre_invocations(0)
+[T 08:03:53 20134] post_invocations(0)
+[T 08:03:53 20134] trace_languages(1): [csharp]
+[T 08:03:53 20139] Initializing tracer.
+[T 08:03:53 20139] Initializing tags.
+[T 08:03:53 20139] ID set to 0000000000004EAB_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:53 20139] ==== Candidate to intercept: /usr/bin/tail (canonical: /usr/bin/tail) ====
+[T 08:03:53 20138] Initializing tracer.
+[T 08:03:53 20138] Initializing tags.
+[T 08:03:53 20138] ID set to 0000000000004EAA_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:53 20138] ==== Candidate to intercept: /usr/bin/awk (canonical: /usr/bin/gawk) ====
+[T 08:03:53 20139] Executing the following tracer actions:
+[T 08:03:53 20139] Tracer actions:
+[T 08:03:53 20139] pre_invocations(0)
+[T 08:03:53 20139] post_invocations(0)
+[T 08:03:53 20139] trace_languages(1): [csharp]
+[T 08:03:53 20138] Executing the following tracer actions:
+[T 08:03:53 20138] Tracer actions:
+[T 08:03:53 20138] pre_invocations(0)
+[T 08:03:53 20138] post_invocations(0)
+[T 08:03:53 20138] trace_languages(1): [csharp]
+[T 08:03:53 20140] Initializing tracer.
+[T 08:03:53 20140] Initializing tags.
+[T 08:03:53 20140] ID set to 0000000000004EAC_0000000000000001 (parent 0000000000004E24_0000000000000002)
+[T 08:03:53 20140] ==== Candidate to intercept: /usr/bin/rm (canonical: /usr/bin/rm) ====
+[T 08:03:53 20140] Executing the following tracer actions:
+[T 08:03:53 20140] Tracer actions:
+[T 08:03:53 20140] pre_invocations(0)
+[T 08:03:53 20140] post_invocations(0)
+[T 08:03:53 20140] trace_languages(1): [csharp]
+[T 08:03:53 20141] Initializing tracer.
+[T 08:03:53 20141] Initializing tags.
+[T 08:03:53 20141] ID set to 0000000000004EAD_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:53 20141] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:53 20141] Executing the following tracer actions:
+[T 08:03:53 20141] Tracer actions:
+[T 08:03:53 20141] pre_invocations(0)
+[T 08:03:53 20141] post_invocations(0)
+[T 08:03:53 20141] trace_languages(1): [csharp]
+[T 08:03:53 20142] Initializing tracer.
+[T 08:03:53 20142] Initializing tags.
+[T 08:03:53 20142] ID set to 0000000000004EAE_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:53 20142] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:53 20142] Executing the following tracer actions:
+[T 08:03:53 20142] Tracer actions:
+[T 08:03:53 20142] pre_invocations(0)
+[T 08:03:53 20142] post_invocations(0)
+[T 08:03:53 20142] trace_languages(1): [csharp]
+[T 08:03:56 20150] Initializing tracer.
+[T 08:03:56 20150] Initializing tags.
+[T 08:03:56 20150] ID set to 0000000000004EB6_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:56 20150] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:56 20150] Lua: Execute a .NET SDK command usage detected
+[T 08:03:56 20150] Lua: Dotnet subcommand detected: clean
+[T 08:03:56 20150] Executing the following tracer actions:
+[T 08:03:56 20150] Tracer actions:
+[T 08:03:56 20150] pre_invocations(0)
+[T 08:03:56 20150] post_invocations(0)
+[T 08:03:56 20150] trace_languages(1): [csharp]
+[T 08:03:57 20171] Initializing tracer.
+[T 08:03:57 20171] Initializing tags.
+[T 08:03:57 20170] Initializing tracer.
+[T 08:03:57 20170] Initializing tags.
+[T 08:03:57 20171] ID set to 0000000000004ECB_0000000000000001 (parent 0000000000004EB6_0000000000000001)
+[T 08:03:57 20171] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:57 20170] ID set to 0000000000004ECA_0000000000000001 (parent 0000000000004EB6_0000000000000001)
+[T 08:03:57 20170] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:57 20172] Initializing tracer.
+[T 08:03:57 20172] Initializing tags.
+[T 08:03:57 20171] Lua: Execute a .NET application usage detected
+[T 08:03:57 20171] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:03:57 20171] Executing the following tracer actions:
+[T 08:03:57 20171] Tracer actions:
+[T 08:03:57 20171] pre_invocations(0)
+[T 08:03:57 20171] post_invocations(0)
+[T 08:03:57 20171] trace_languages(1): [csharp]
+[T 08:03:57 20172] ID set to 0000000000004ECC_0000000000000001 (parent 0000000000004EB6_0000000000000001)
+[T 08:03:57 20172] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:57 20170] Lua: Execute a .NET application usage detected
+[T 08:03:57 20170] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:03:57 20170] Executing the following tracer actions:
+[T 08:03:57 20170] Tracer actions:
+[T 08:03:57 20170] pre_invocations(0)
+[T 08:03:57 20170] post_invocations(0)
+[T 08:03:57 20170] trace_languages(1): [csharp]
+[T 08:03:57 20172] Lua: Execute a .NET application usage detected
+[T 08:03:57 20172] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:03:57 20172] Executing the following tracer actions:
+[T 08:03:57 20172] Tracer actions:
+[T 08:03:57 20172] pre_invocations(0)
+[T 08:03:57 20172] post_invocations(0)
+[T 08:03:57 20172] trace_languages(1): [csharp]
+[T 08:03:59 20242] Initializing tracer.
+[T 08:03:59 20242] Initializing tags.
+[T 08:03:59 20242] ID set to 0000000000004F12_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:03:59 20242] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:03:59 20242] Lua: Execute a .NET SDK command usage detected
+[T 08:03:59 20242] Lua: Dotnet subcommand detected: restore
+[T 08:03:59 20242] Executing the following tracer actions:
+[T 08:03:59 20242] Tracer actions:
+[T 08:03:59 20242] pre_invocations(0)
+[T 08:03:59 20242] post_invocations(0)
+[T 08:03:59 20242] trace_languages(1): [csharp]
+[T 08:04:00 20263] Initializing tracer.
+[T 08:04:00 20263] Initializing tags.
+[T 08:04:00 20263] ID set to 0000000000004F27_0000000000000001 (parent 0000000000004F12_0000000000000001)
+[T 08:04:00 20263] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:00 20262] Initializing tracer.
+[T 08:04:00 20262] Initializing tags.
+[T 08:04:00 20263] Lua: Execute a .NET application usage detected
+[T 08:04:00 20263] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:00 20263] Executing the following tracer actions:
+[T 08:04:00 20263] Tracer actions:
+[T 08:04:00 20263] pre_invocations(0)
+[T 08:04:00 20263] post_invocations(0)
+[T 08:04:00 20263] trace_languages(1): [csharp]
+[T 08:04:00 20262] ID set to 0000000000004F26_0000000000000001 (parent 0000000000004F12_0000000000000001)
+[T 08:04:00 20262] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:00 20262] Lua: Execute a .NET application usage detected
+[T 08:04:00 20262] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:00 20262] Executing the following tracer actions:
+[T 08:04:00 20262] Tracer actions:
+[T 08:04:00 20262] pre_invocations(0)
+[T 08:04:00 20262] post_invocations(0)
+[T 08:04:00 20262] trace_languages(1): [csharp]
+[T 08:04:00 20264] Initializing tracer.
+[T 08:04:00 20264] Initializing tags.
+[T 08:04:00 20264] ID set to 0000000000004F28_0000000000000001 (parent 0000000000004F12_0000000000000001)
+[T 08:04:00 20264] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:00 20264] Lua: Execute a .NET application usage detected
+[T 08:04:00 20264] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:00 20264] Executing the following tracer actions:
+[T 08:04:00 20264] Tracer actions:
+[T 08:04:00 20264] pre_invocations(0)
+[T 08:04:00 20264] post_invocations(0)
+[T 08:04:00 20264] trace_languages(1): [csharp]
+[T 08:04:11 20358] Initializing tracer.
+[T 08:04:11 20358] Initializing tags.
+[T 08:04:11 20358] ID set to 0000000000004F86_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:04:11 20358] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:11 20358] Lua: Execute a .NET SDK command usage detected
+[T 08:04:11 20358] Lua: Dotnet subcommand detected: build
+[T 08:04:11 20358] Lua: === Intercepted call to /usr/share/dotnet/dotnet ===
+[T 08:04:11 20358] Executing the following tracer actions:
+[T 08:04:11 20358] Tracer actions:
+[T 08:04:11 20358] pre_invocations(0)
+[T 08:04:11 20358] replacing compiler with:
+[T 08:04:11 20358] invocation: /usr/share/dotnet/dotnet, args: [build, --no-incremental, /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/eShopOnWeb/Everything.sln, -p:UseSharedCompilation=false, -p:EmitCompilerGeneratedFiles=true]
+[T 08:04:11 20358] post_invocations(0)
+[T 08:04:11 20358] trace_languages(1): [csharp]
+[T 08:04:11 20358] Initializing tracer.
+[T 08:04:11 20358] Initializing tags.
+[T 08:04:11 20358] ID set to 0000000000004F86_0000000000000002 (parent 0000000000004F86_0000000000000001)
+[T 08:04:11 20383] Initializing tracer.
+[T 08:04:11 20383] Initializing tags.
+[T 08:04:11 20382] Initializing tracer.
+[T 08:04:11 20382] Initializing tags.
+[T 08:04:11 20383] ID set to 0000000000004F9F_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:04:11 20383] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:11 20382] ID set to 0000000000004F9E_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:04:11 20382] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:11 20383] Lua: Execute a .NET application usage detected
+[T 08:04:11 20383] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:11 20382] Lua: Execute a .NET application usage detected
+[T 08:04:11 20383] Executing the following tracer actions:
+[T 08:04:11 20382] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:11 20383] Tracer actions:
+[T 08:04:11 20383] pre_invocations(0)
+[T 08:04:11 20383] post_invocations(0)
+[T 08:04:11 20383] trace_languages(1): [csharp]
+[T 08:04:11 20382] Executing the following tracer actions:
+[T 08:04:11 20382] Tracer actions:
+[T 08:04:11 20382] pre_invocations(0)
+[T 08:04:11 20382] post_invocations(0)
+[T 08:04:11 20382] trace_languages(1): [csharp]
+[T 08:04:11 20381] Initializing tracer.
+[T 08:04:11 20381] Initializing tags.
+[T 08:04:11 20381] ID set to 0000000000004F9D_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:04:11 20381] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:04:11 20381] Lua: Execute a .NET application usage detected
+[T 08:04:11 20381] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:04:11 20381] Executing the following tracer actions:
+[T 08:04:11 20381] Tracer actions:
+[T 08:04:11 20381] pre_invocations(0)
+[T 08:04:11 20381] post_invocations(0)
+[T 08:04:11 20381] trace_languages(1): [csharp]
+[T 08:04:13 20453] Initializing tracer.
+[T 08:04:13 20453] Initializing tags.
+[T 08:04:13 20453] ID set to 0000000000004FE5_0000000000000001 (parent 0000000000004F9E_0000000000000001)
+[T 08:04:13 20453] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:13 20453] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:13 20453] Executing the following tracer actions:
+[T 08:04:13 20453] Tracer actions:
+[T 08:04:13 20453] pre_invocations(0)
+[T 08:04:13 20453] post_invocations(1)
+[T 08:04:13 20453] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempX8z0z5/tmp2229f5bd433d4e56b1ae6dca2792252e.rsp]
+[T 08:04:13 20453] trace_languages(1): [csharp]
+[T 08:04:21 20474] Attempting to switch stdout/stderr to 4...
+[T 08:04:21 20474] Initializing tracer.
+[T 08:04:21 20474] Initializing tags.
+[T 08:04:21 20474] ID set to 0000000000004FFA_0000000000000001 (parent 0000000000004FE5_0000000000000001)
+[T 08:04:29 20453] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:04:29 20498] Initializing tracer.
+[T 08:04:29 20498] Initializing tags.
+[T 08:04:29 20498] ID set to 0000000000005012_0000000000000001 (parent 0000000000004F9D_0000000000000001)
+[T 08:04:29 20498] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:29 20498] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:29 20498] Executing the following tracer actions:
+[T 08:04:29 20498] Tracer actions:
+[T 08:04:29 20498] pre_invocations(0)
+[T 08:04:29 20498] post_invocations(1)
+[T 08:04:29 20498] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempgzXIYp/tmp2bc1f6c574ab40269378502083cf61b9.rsp]
+[T 08:04:29 20498] trace_languages(1): [csharp]
+[T 08:04:29 20516] Initializing tracer.
+[T 08:04:29 20516] Initializing tags.
+[T 08:04:29 20516] ID set to 0000000000005024_0000000000000001 (parent 0000000000004F9F_0000000000000001)
+[T 08:04:29 20516] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:29 20516] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:29 20516] Executing the following tracer actions:
+[T 08:04:29 20516] Tracer actions:
+[T 08:04:29 20516] pre_invocations(0)
+[T 08:04:29 20516] post_invocations(1)
+[T 08:04:29 20516] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempnBMhK9/tmp1a072ce768dc4fdfbc97760e928d5e88.rsp]
+[T 08:04:29 20516] trace_languages(1): [csharp]
+[T 08:04:32 20536] Attempting to switch stdout/stderr to 4...
+[T 08:04:32 20536] Initializing tracer.
+[T 08:04:32 20536] Initializing tags.
+[T 08:04:32 20536] ID set to 0000000000005038_0000000000000001 (parent 0000000000005012_0000000000000001)
+[T 08:04:34 20551] Attempting to switch stdout/stderr to 4...
+[T 08:04:34 20551] Initializing tracer.
+[T 08:04:34 20551] Initializing tags.
+[T 08:04:34 20551] ID set to 0000000000005047_0000000000000001 (parent 0000000000005024_0000000000000001)
+[T 08:04:35 20498] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:04:35 20570] Initializing tracer.
+[T 08:04:35 20570] Initializing tags.
+[T 08:04:35 20570] ID set to 000000000000505A_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:04:35 20570] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:35 20570] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:35 20570] Executing the following tracer actions:
+[T 08:04:35 20570] Tracer actions:
+[T 08:04:35 20570] pre_invocations(0)
+[T 08:04:35 20570] post_invocations(1)
+[T 08:04:35 20570] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempsHCDWq/tmpac86b9eae56141beb8acb3c5e02e917b.rsp]
+[T 08:04:35 20570] trace_languages(1): [csharp]
+[T 08:04:38 20592] Attempting to switch stdout/stderr to 4...
+[T 08:04:38 20592] Initializing tracer.
+[T 08:04:38 20592] Initializing tags.
+[T 08:04:38 20592] ID set to 0000000000005070_0000000000000001 (parent 000000000000505A_0000000000000001)
+[T 08:04:38 20516] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:04:39 20604] Initializing tracer.
+[T 08:04:39 20604] Initializing tags.
+[T 08:04:39 20604] ID set to 000000000000507C_0000000000000001 (parent 0000000000004F9F_0000000000000001)
+[T 08:04:39 20604] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/MSBuild (canonical: /usr/share/dotnet/sdk/10.0.301/MSBuild) ====
+[T 08:04:39 20604] Executing the following tracer actions:
+[T 08:04:39 20604] Tracer actions:
+[T 08:04:39 20604] pre_invocations(0)
+[T 08:04:39 20604] post_invocations(0)
+[T 08:04:39 20604] trace_languages(1): [csharp]
+[T 08:04:45 20570] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:04:47 20652] Initializing tracer.
+[T 08:04:47 20652] Initializing tags.
+[T 08:04:47 20652] ID set to 00000000000050AC_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:04:47 20652] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:47 20652] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:47 20652] Executing the following tracer actions:
+[T 08:04:47 20652] Tracer actions:
+[T 08:04:47 20652] pre_invocations(0)
+[T 08:04:47 20652] post_invocations(1)
+[T 08:04:47 20652] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempsHCDWq/tmp3e60e6679a1d430689543c2cd511fbf6.rsp]
+[T 08:04:47 20652] trace_languages(1): [csharp]
+[T 08:04:47 20663] Initializing tracer.
+[T 08:04:47 20663] Initializing tags.
+[T 08:04:47 20663] ID set to 00000000000050B7_0000000000000001 (parent 0000000000004F9D_0000000000000001)
+[T 08:04:47 20663] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:04:47 20663] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:04:47 20663] Executing the following tracer actions:
+[T 08:04:47 20663] Tracer actions:
+[T 08:04:47 20663] pre_invocations(0)
+[T 08:04:47 20663] post_invocations(1)
+[T 08:04:47 20663] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempgzXIYp/tmp13e2993254994040bf3da1b4e9cf21b0.rsp]
+[T 08:04:47 20663] trace_languages(1): [csharp]
+[T 08:04:50 20691] Attempting to switch stdout/stderr to 4...
+[T 08:04:50 20691] Initializing tracer.
+[T 08:04:50 20691] Initializing tags.
+[T 08:04:50 20691] ID set to 00000000000050D3_0000000000000001 (parent 00000000000050B7_0000000000000001)
+[T 08:04:54 20723] Attempting to switch stdout/stderr to 4...
+[T 08:04:54 20723] Initializing tracer.
+[T 08:04:54 20723] Initializing tags.
+[T 08:04:54 20723] ID set to 00000000000050F3_0000000000000001 (parent 00000000000050AC_0000000000000001)
+[T 08:05:04 20663] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 1.
+[T 08:05:06 20652] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:07 20769] Initializing tracer.
+[T 08:05:07 20769] Initializing tags.
+[T 08:05:07 20769] ID set to 0000000000005121_0000000000000001 (parent 0000000000004F9F_0000000000000001)
+[T 08:05:07 20769] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:07 20769] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:07 20769] Executing the following tracer actions:
+[T 08:05:07 20769] Tracer actions:
+[T 08:05:07 20769] pre_invocations(0)
+[T 08:05:07 20769] post_invocations(1)
+[T 08:05:07 20769] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempnBMhK9/tmpba506aef8c55448ebab5d3612ede6602.rsp]
+[T 08:05:07 20769] trace_languages(1): [csharp]
+[T 08:05:09 20788] Attempting to switch stdout/stderr to 4...
+[T 08:05:09 20788] Initializing tracer.
+[T 08:05:09 20788] Initializing tags.
+[T 08:05:09 20788] ID set to 0000000000005134_0000000000000001 (parent 0000000000005121_0000000000000001)
+[T 08:05:12 20769] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:12 20806] Initializing tracer.
+[T 08:05:12 20806] Initializing tags.
+[T 08:05:12 20806] ID set to 0000000000005146_0000000000000001 (parent 0000000000004F9F_0000000000000001)
+[T 08:05:12 20806] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:12 20806] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:12 20806] Executing the following tracer actions:
+[T 08:05:12 20806] Tracer actions:
+[T 08:05:12 20806] pre_invocations(0)
+[T 08:05:12 20806] post_invocations(1)
+[T 08:05:12 20806] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempnBMhK9/tmp9b0a2ba752d942f784a6a3759a0480e5.rsp]
+[T 08:05:12 20806] trace_languages(1): [csharp]
+[T 08:05:14 20825] Attempting to switch stdout/stderr to 4...
+[T 08:05:14 20825] Initializing tracer.
+[T 08:05:14 20825] Initializing tags.
+[T 08:05:14 20825] ID set to 0000000000005159_0000000000000001 (parent 0000000000005146_0000000000000001)
+[T 08:05:16 20806] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:16 20843] Initializing tracer.
+[T 08:05:16 20843] Initializing tags.
+[T 08:05:16 20843] ID set to 000000000000516B_0000000000000001 (parent 0000000000004F9D_0000000000000001)
+[T 08:05:16 20843] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:16 20843] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:16 20843] Executing the following tracer actions:
+[T 08:05:16 20843] Tracer actions:
+[T 08:05:16 20843] pre_invocations(0)
+[T 08:05:16 20843] post_invocations(1)
+[T 08:05:16 20843] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempgzXIYp/tmp7c3e1eee2878429782b0f500bd3dce0a.rsp]
+[T 08:05:16 20843] trace_languages(1): [csharp]
+[T 08:05:16 20856] Initializing tracer.
+[T 08:05:16 20856] Initializing tags.
+[T 08:05:16 20856] ID set to 0000000000005178_0000000000000001 (parent 0000000000004F86_0000000000000002)
+[T 08:05:16 20856] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:16 20856] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:16 20856] Executing the following tracer actions:
+[T 08:05:16 20856] Tracer actions:
+[T 08:05:16 20856] pre_invocations(0)
+[T 08:05:16 20856] post_invocations(1)
+[T 08:05:16 20856] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempsHCDWq/tmp16fd0382d86f4701a24fbff8980c929d.rsp]
+[T 08:05:16 20856] trace_languages(1): [csharp]
+[T 08:05:18 20883] Attempting to switch stdout/stderr to 4...
+[T 08:05:18 20883] Initializing tracer.
+[T 08:05:18 20883] Initializing tags.
+[T 08:05:18 20883] ID set to 0000000000005193_0000000000000001 (parent 0000000000005178_0000000000000001)
+[T 08:05:18 20890] Attempting to switch stdout/stderr to 4...
+[T 08:05:18 20890] Initializing tracer.
+[T 08:05:18 20890] Initializing tags.
+[T 08:05:18 20890] ID set to 000000000000519A_0000000000000001 (parent 000000000000516B_0000000000000001)
+[T 08:05:20 20856] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:20 20843] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:21 20916] Initializing tracer.
+[T 08:05:21 20916] Initializing tags.
+[T 08:05:21 20916] ID set to 00000000000051B4_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:05:21 20916] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:21 20916] Lua: Execute a .NET SDK command usage detected
+[T 08:05:21 20916] Lua: Dotnet subcommand detected: clean
+[T 08:05:21 20916] Executing the following tracer actions:
+[T 08:05:21 20916] Tracer actions:
+[T 08:05:21 20916] pre_invocations(0)
+[T 08:05:21 20916] post_invocations(0)
+[T 08:05:21 20916] trace_languages(1): [csharp]
+[T 08:05:21 20938] Initializing tracer.
+[T 08:05:21 20936] Initializing tracer.
+[T 08:05:21 20937] Initializing tracer.
+[T 08:05:21 20938] Initializing tags.
+[T 08:05:21 20936] Initializing tags.
+[T 08:05:21 20937] Initializing tags.
+[T 08:05:21 20937] ID set to 00000000000051C9_0000000000000001 (parent 00000000000051B4_0000000000000001)
+[T 08:05:21 20937] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:21 20937] Lua: Execute a .NET application usage detected
+[T 08:05:21 20937] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:21 20937] Executing the following tracer actions:
+[T 08:05:21 20937] Tracer actions:
+[T 08:05:21 20937] pre_invocations(0)
+[T 08:05:21 20937] post_invocations(0)
+[T 08:05:21 20937] trace_languages(1): [csharp]
+[T 08:05:21 20936] ID set to 00000000000051C8_0000000000000001 (parent 00000000000051B4_0000000000000001)
+[T 08:05:21 20936] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:21 20936] Lua: Execute a .NET application usage detected
+[T 08:05:21 20936] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:21 20936] Executing the following tracer actions:
+[T 08:05:21 20936] Tracer actions:
+[T 08:05:21 20936] pre_invocations(0)
+[T 08:05:21 20936] post_invocations(0)
+[T 08:05:21 20936] trace_languages(1): [csharp]
+[T 08:05:21 20938] ID set to 00000000000051CA_0000000000000001 (parent 00000000000051B4_0000000000000001)
+[T 08:05:21 20938] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:21 20938] Lua: Execute a .NET application usage detected
+[T 08:05:21 20938] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:21 20938] Executing the following tracer actions:
+[T 08:05:21 20938] Tracer actions:
+[T 08:05:21 20938] pre_invocations(0)
+[T 08:05:21 20938] post_invocations(0)
+[T 08:05:21 20938] trace_languages(1): [csharp]
+[T 08:05:23 21012] Initializing tracer.
+[T 08:05:23 21012] Initializing tags.
+[T 08:05:23 21012] ID set to 0000000000005214_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:05:23 21012] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:23 21012] Lua: Execute a .NET SDK command usage detected
+[T 08:05:23 21012] Lua: Dotnet subcommand detected: restore
+[T 08:05:23 21012] Executing the following tracer actions:
+[T 08:05:23 21012] Tracer actions:
+[T 08:05:23 21012] pre_invocations(0)
+[T 08:05:23 21012] post_invocations(0)
+[T 08:05:23 21012] trace_languages(1): [csharp]
+[T 08:05:23 21034] Initializing tracer.
+[T 08:05:23 21034] Initializing tags.
+[T 08:05:23 21034] ID set to 000000000000522A_0000000000000001 (parent 0000000000005214_0000000000000001)
+[T 08:05:23 21034] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:23 21032] Initializing tracer.
+[T 08:05:23 21032] Initializing tags.
+[T 08:05:23 21032] ID set to 0000000000005228_0000000000000001 (parent 0000000000005214_0000000000000001)
+[T 08:05:23 21032] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:23 21034] Lua: Execute a .NET application usage detected
+[T 08:05:23 21034] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:23 21034] Executing the following tracer actions:
+[T 08:05:23 21034] Tracer actions:
+[T 08:05:23 21034] pre_invocations(0)
+[T 08:05:23 21034] post_invocations(0)
+[T 08:05:23 21034] trace_languages(1): [csharp]
+[T 08:05:23 21032] Lua: Execute a .NET application usage detected
+[T 08:05:23 21032] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:23 21032] Executing the following tracer actions:
+[T 08:05:23 21032] Tracer actions:
+[T 08:05:23 21032] pre_invocations(0)
+[T 08:05:23 21032] post_invocations(0)
+[T 08:05:23 21032] trace_languages(1): [csharp]
+[T 08:05:23 21033] Initializing tracer.
+[T 08:05:23 21033] Initializing tags.
+[T 08:05:23 21033] ID set to 0000000000005229_0000000000000001 (parent 0000000000005214_0000000000000001)
+[T 08:05:23 21033] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:23 21033] Lua: Execute a .NET application usage detected
+[T 08:05:23 21033] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:23 21033] Executing the following tracer actions:
+[T 08:05:23 21033] Tracer actions:
+[T 08:05:23 21033] pre_invocations(0)
+[T 08:05:23 21033] post_invocations(0)
+[T 08:05:23 21033] trace_languages(1): [csharp]
+[T 08:05:25 21100] Initializing tracer.
+[T 08:05:25 21100] Initializing tags.
+[T 08:05:25 21100] ID set to 000000000000526C_0000000000000001 (parent 0000000000004E14_0000000000000001)
+[T 08:05:25 21100] ==== Candidate to intercept: /usr/bin/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:25 21100] Lua: Execute a .NET SDK command usage detected
+[T 08:05:25 21100] Lua: Dotnet subcommand detected: build
+[T 08:05:25 21100] Lua: === Intercepted call to /usr/share/dotnet/dotnet ===
+[T 08:05:25 21100] Executing the following tracer actions:
+[T 08:05:25 21100] Tracer actions:
+[T 08:05:25 21100] pre_invocations(0)
+[T 08:05:25 21100] replacing compiler with:
+[T 08:05:25 21100] invocation: /usr/share/dotnet/dotnet, args: [build, --no-incremental, /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/eShopOnWeb/eShopOnWeb.sln, -p:UseSharedCompilation=false, -p:EmitCompilerGeneratedFiles=true]
+[T 08:05:25 21100] post_invocations(0)
+[T 08:05:25 21100] trace_languages(1): [csharp]
+[T 08:05:25 21100] Initializing tracer.
+[T 08:05:25 21100] Initializing tags.
+[T 08:05:25 21100] ID set to 000000000000526C_0000000000000002 (parent 000000000000526C_0000000000000001)
+[T 08:05:25 21121] Initializing tracer.
+[T 08:05:25 21121] Initializing tags.
+[T 08:05:25 21121] ID set to 0000000000005281_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:25 21121] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:25 21121] Lua: Execute a .NET application usage detected
+[T 08:05:25 21121] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:25 21120] Initializing tracer.
+[T 08:05:25 21120] Initializing tags.
+[T 08:05:25 21121] Executing the following tracer actions:
+[T 08:05:25 21121] Tracer actions:
+[T 08:05:25 21121] pre_invocations(0)
+[T 08:05:25 21121] post_invocations(0)
+[T 08:05:25 21121] trace_languages(1): [csharp]
+[T 08:05:25 21120] ID set to 0000000000005280_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:25 21120] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:25 21120] Lua: Execute a .NET application usage detected
+[T 08:05:25 21120] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:25 21120] Executing the following tracer actions:
+[T 08:05:25 21120] Tracer actions:
+[T 08:05:25 21120] pre_invocations(0)
+[T 08:05:25 21120] post_invocations(0)
+[T 08:05:25 21120] trace_languages(1): [csharp]
+[T 08:05:25 21122] Initializing tracer.
+[T 08:05:25 21122] Initializing tags.
+[T 08:05:25 21122] ID set to 0000000000005282_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:25 21122] ==== Candidate to intercept: /usr/share/dotnet/dotnet (canonical: /usr/share/dotnet/dotnet) ====
+[T 08:05:25 21122] Lua: Execute a .NET application usage detected
+[T 08:05:25 21122] Lua: Dotnet path-to-application detected: /usr/share/dotnet/sdk/10.0.301/MSBuild.dll
+[T 08:05:25 21122] Executing the following tracer actions:
+[T 08:05:25 21122] Tracer actions:
+[T 08:05:25 21122] pre_invocations(0)
+[T 08:05:25 21122] post_invocations(0)
+[T 08:05:25 21122] trace_languages(1): [csharp]
+[T 08:05:27 21193] Initializing tracer.
+[T 08:05:27 21193] Initializing tags.
+[T 08:05:27 21193] ID set to 00000000000052C9_0000000000000001 (parent 0000000000005282_0000000000000001)
+[T 08:05:27 21193] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:27 21193] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:27 21193] Executing the following tracer actions:
+[T 08:05:27 21193] Tracer actions:
+[T 08:05:27 21193] pre_invocations(0)
+[T 08:05:27 21193] post_invocations(1)
+[T 08:05:27 21193] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempnsyGmR/tmpd0e25fa1be8948d19dee03b28715f630.rsp]
+[T 08:05:27 21193] trace_languages(1): [csharp]
+[T 08:05:30 21214] Attempting to switch stdout/stderr to 4...
+[T 08:05:30 21214] Initializing tracer.
+[T 08:05:30 21214] Initializing tags.
+[T 08:05:30 21214] ID set to 00000000000052DE_0000000000000001 (parent 00000000000052C9_0000000000000001)
+[T 08:05:31 21193] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:31 21228] Initializing tracer.
+[T 08:05:31 21228] Initializing tags.
+[T 08:05:31 21228] ID set to 00000000000052EC_0000000000000001 (parent 0000000000005282_0000000000000001)
+[T 08:05:31 21228] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:31 21228] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:31 21228] Executing the following tracer actions:
+[T 08:05:31 21228] Tracer actions:
+[T 08:05:31 21228] pre_invocations(0)
+[T 08:05:31 21228] post_invocations(1)
+[T 08:05:31 21228] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempnsyGmR/tmp65192b6876134cb193e637caaab95e19.rsp]
+[T 08:05:31 21228] trace_languages(1): [csharp]
+[T 08:05:31 21246] Initializing tracer.
+[T 08:05:31 21246] Initializing tags.
+[T 08:05:31 21246] ID set to 00000000000052FE_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:31 21246] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:31 21246] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:31 21246] Executing the following tracer actions:
+[T 08:05:31 21246] Tracer actions:
+[T 08:05:31 21246] pre_invocations(0)
+[T 08:05:31 21246] post_invocations(1)
+[T 08:05:31 21246] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempLtcVJt/tmpb4e48dca379b4a05a2dca49b32081110.rsp]
+[T 08:05:31 21246] trace_languages(1): [csharp]
+[T 08:05:34 21266] Attempting to switch stdout/stderr to 4...
+[T 08:05:34 21266] Initializing tracer.
+[T 08:05:34 21266] Initializing tags.
+[T 08:05:34 21266] ID set to 0000000000005312_0000000000000001 (parent 00000000000052EC_0000000000000001)
+[T 08:05:35 21279] Attempting to switch stdout/stderr to 4...
+[T 08:05:35 21279] Initializing tracer.
+[T 08:05:35 21279] Initializing tags.
+[T 08:05:35 21279] ID set to 000000000000531F_0000000000000001 (parent 00000000000052FE_0000000000000001)
+[T 08:05:36 21228] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:37 21308] Initializing tracer.
+[T 08:05:37 21308] Initializing tags.
+[T 08:05:37 21308] ID set to 000000000000533C_0000000000000001 (parent 0000000000005281_0000000000000001)
+[T 08:05:37 21308] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:37 21308] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:37 21308] Executing the following tracer actions:
+[T 08:05:37 21308] Tracer actions:
+[T 08:05:37 21308] pre_invocations(0)
+[T 08:05:37 21308] post_invocations(1)
+[T 08:05:37 21308] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempI3Q8iQ/tmp48c9c4db344f4c36a0e2ab11c4fc9cf2.rsp]
+[T 08:05:37 21308] trace_languages(1): [csharp]
+[T 08:05:39 21246] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:39 21328] Initializing tracer.
+[T 08:05:39 21328] Initializing tags.
+[T 08:05:39 21328] ID set to 0000000000005350_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:39 21328] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/MSBuild (canonical: /usr/share/dotnet/sdk/10.0.301/MSBuild) ====
+[T 08:05:39 21328] Executing the following tracer actions:
+[T 08:05:39 21328] Tracer actions:
+[T 08:05:39 21328] pre_invocations(0)
+[T 08:05:39 21328] post_invocations(0)
+[T 08:05:39 21328] trace_languages(1): [csharp]
+[T 08:05:40 21350] Attempting to switch stdout/stderr to 4...
+[T 08:05:40 21350] Initializing tracer.
+[T 08:05:40 21350] Initializing tags.
+[T 08:05:40 21350] ID set to 0000000000005366_0000000000000001 (parent 000000000000533C_0000000000000001)
+[T 08:05:43 21308] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:44 21380] Initializing tracer.
+[T 08:05:44 21380] Initializing tags.
+[T 08:05:44 21380] ID set to 0000000000005384_0000000000000001 (parent 0000000000005280_0000000000000001)
+[T 08:05:44 21380] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:44 21380] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:44 21380] Executing the following tracer actions:
+[T 08:05:44 21380] Tracer actions:
+[T 08:05:44 21380] pre_invocations(0)
+[T 08:05:44 21380] post_invocations(1)
+[T 08:05:44 21380] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempwTSvB4/tmp20a51bf74ac5481bac2595829c83feb2.rsp]
+[T 08:05:44 21380] trace_languages(1): [csharp]
+[T 08:05:46 21399] Attempting to switch stdout/stderr to 4...
+[T 08:05:46 21399] Initializing tracer.
+[T 08:05:46 21399] Initializing tags.
+[T 08:05:46 21399] ID set to 0000000000005397_0000000000000001 (parent 0000000000005384_0000000000000001)
+[T 08:05:48 21380] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 1.
+[T 08:05:48 21417] Initializing tracer.
+[T 08:05:48 21417] Initializing tags.
+[T 08:05:48 21417] ID set to 00000000000053A9_0000000000000001 (parent 0000000000005280_0000000000000001)
+[T 08:05:48 21417] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:48 21417] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:48 21417] Executing the following tracer actions:
+[T 08:05:48 21417] Tracer actions:
+[T 08:05:48 21417] pre_invocations(0)
+[T 08:05:48 21417] post_invocations(1)
+[T 08:05:48 21417] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempwTSvB4/tmp2dd1c35d29cf4ba29dc7eccec60a5d5c.rsp]
+[T 08:05:48 21417] trace_languages(1): [csharp]
+[T 08:05:53 21454] Attempting to switch stdout/stderr to 4...
+[T 08:05:53 21454] Initializing tracer.
+[T 08:05:53 21454] Initializing tags.
+[T 08:05:53 21454] ID set to 00000000000053CE_0000000000000001 (parent 00000000000053A9_0000000000000001)
+[T 08:05:58 21417] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:05:59 21481] Initializing tracer.
+[T 08:05:59 21481] Initializing tags.
+[T 08:05:59 21481] ID set to 00000000000053E9_0000000000000001 (parent 000000000000526C_0000000000000002)
+[T 08:05:59 21481] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:59 21481] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:59 21481] Executing the following tracer actions:
+[T 08:05:59 21481] Tracer actions:
+[T 08:05:59 21481] pre_invocations(0)
+[T 08:05:59 21481] post_invocations(1)
+[T 08:05:59 21481] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempLtcVJt/tmpcd33c9f39fe54ab99fcbdafd7ad96025.rsp]
+[T 08:05:59 21481] trace_languages(1): [csharp]
+[T 08:05:59 21495] Initializing tracer.
+[T 08:05:59 21495] Initializing tags.
+[T 08:05:59 21495] ID set to 00000000000053F7_0000000000000001 (parent 0000000000005281_0000000000000001)
+[T 08:05:59 21495] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:05:59 21495] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:05:59 21495] Executing the following tracer actions:
+[T 08:05:59 21495] Tracer actions:
+[T 08:05:59 21495] pre_invocations(0)
+[T 08:05:59 21495] post_invocations(1)
+[T 08:05:59 21495] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempI3Q8iQ/tmp67f2783f6f93468b9879f52a0d6c293b.rsp]
+[T 08:05:59 21495] trace_languages(1): [csharp]
+[T 08:06:02 21521] Attempting to switch stdout/stderr to 4...
+[T 08:06:02 21521] Initializing tracer.
+[T 08:06:02 21521] Initializing tags.
+[T 08:06:02 21521] ID set to 0000000000005411_0000000000000001 (parent 00000000000053E9_0000000000000001)
+[T 08:06:02 21528] Attempting to switch stdout/stderr to 4...
+[T 08:06:02 21528] Initializing tracer.
+[T 08:06:02 21528] Initializing tags.
+[T 08:06:02 21528] ID set to 0000000000005418_0000000000000001 (parent 00000000000053F7_0000000000000001)
+[T 08:06:04 21495] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:06:04 21481] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:06:04 21552] Initializing tracer.
+[T 08:06:04 21552] Initializing tags.
+[T 08:06:04 21552] ID set to 0000000000005430_0000000000000001 (parent 0000000000005281_0000000000000001)
+[T 08:06:04 21552] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:06:04 21552] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:06:04 21552] Executing the following tracer actions:
+[T 08:06:04 21552] Tracer actions:
+[T 08:06:04 21552] pre_invocations(0)
+[T 08:06:04 21552] post_invocations(1)
+[T 08:06:04 21552] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempI3Q8iQ/tmp76a091f0976d41c99c67588a72cc27c6.rsp]
+[T 08:06:04 21552] trace_languages(1): [csharp]
+[T 08:06:06 21571] Attempting to switch stdout/stderr to 4...
+[T 08:06:06 21571] Initializing tracer.
+[T 08:06:06 21571] Initializing tags.
+[T 08:06:06 21571] ID set to 0000000000005443_0000000000000001 (parent 0000000000005430_0000000000000001)
+[T 08:06:08 21552] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.
+[T 08:06:08 21585] Initializing tracer.
+[T 08:06:08 21585] Initializing tags.
+[T 08:06:08 21585] ID set to 0000000000005451_0000000000000001 (parent 0000000000005281_0000000000000001)
+[T 08:06:08 21585] ==== Candidate to intercept: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc (canonical: /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc) ====
+[T 08:06:08 21585] Lua: === Intercepted call to /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc ===
+[T 08:06:08 21585] Executing the following tracer actions:
+[T 08:06:08 21585] Tracer actions:
+[T 08:06:08 21585] pre_invocations(0)
+[T 08:06:08 21585] post_invocations(1)
+[T 08:06:08 21585] invocation: /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver, args: [--compiler, /usr/share/dotnet/sdk/10.0.301/Roslyn/bincore/csc, /noconfig, @/tmp/MSBuildTempI3Q8iQ/tmp35cfd186da3b4e36a86eeed68f328770.rsp]
+[T 08:06:08 21585] trace_languages(1): [csharp]
+[T 08:06:10 21604] Attempting to switch stdout/stderr to 4...
+[T 08:06:10 21604] Initializing tracer.
+[T 08:06:10 21604] Initializing tags.
+[T 08:06:10 21604] ID set to 0000000000005464_0000000000000001 (parent 0000000000005451_0000000000000001)
+[T 08:06:12 21585] Extractor /home/runner/work/Ansede/Ansede/codeql/csharp/tools/linux64/Semmle.Extraction.CSharp.Driver terminated with exit code 0.

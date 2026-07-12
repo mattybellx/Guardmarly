@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithContainersOfBaseFields.members/MoreSpecificTypeSerializationTest$ClassWithContainersOfBaseFields.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$ClassWithContainersOfBaseFields.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest.members.trap.gz
+classes/com/google/gson/functional/MoreSpecificTypeSerializationTest$Base.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Map.members.trap.gz

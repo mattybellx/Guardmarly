@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/junit/rules/TestRule.members/TestRule.members#49.0-1613237482000-java.trap.gz
+
+TRAPS
+classes/org/junit/rules/TestRule.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/org/junit/runners/model/Statement.members.trap.gz
+classes/org/junit/runner/Description.members.trap.gz

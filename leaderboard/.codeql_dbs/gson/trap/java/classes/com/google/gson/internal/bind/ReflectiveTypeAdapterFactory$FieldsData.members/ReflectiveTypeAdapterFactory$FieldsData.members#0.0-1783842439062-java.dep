@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/bind/ReflectiveTypeAdapterFactory$FieldsData.members/ReflectiveTypeAdapterFactory$FieldsData.members#0.0-1783842439062-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/bind/ReflectiveTypeAdapterFactory$FieldsData.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/internal/bind/ReflectiveTypeAdapterFactory.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/gson/internal/bind/ReflectiveTypeAdapterFactory$BoundField.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz

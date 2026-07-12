@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/trial/VmDataCollectingVisitor.members/VmDataCollectingVisitor.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/trial/VmDataCollectingVisitor.members.trap.gz
+classes/com/google/caliper/bridge/AbstractLogMessageVisitor.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerScoped.members.trap.gz
+classes/com/google/caliper/bridge/VmPropertiesLogMessage.members.trap.gz
+classes/com/google/caliper/bridge/VmOptionLogMessage.members.trap.gz
+classes/com/google/caliper/model/VmSpec.members.trap.gz
+classes/com/google/caliper/runner/target/Target.members.trap.gz
+classes/javax/inject/Inject.members.trap.gz

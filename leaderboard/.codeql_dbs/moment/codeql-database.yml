@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/moment
+baselineLinesOfCode: 169861
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+creationMetadata:
+  sha: 18aba135ab927ffe7f868ee09276979bed6993a6
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:38:38.638032319Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

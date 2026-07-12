@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/ObjectConstructor.members/ObjectConstructor.members#0.0-1783842439061-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/ObjectConstructor.members.trap.gz
+classes/java/lang/Object.members.trap.gz

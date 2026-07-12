@@ -1,0 +1,6 @@
+[2026-07-12 07:57:52] [javac-output-15765] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:52] [javac-output-15765] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:57:52] [javac-output-15765] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:57:53] [javac-output-15765] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.apache.logging.log4j.core.config.plugins.validation.constraints.Required,org.osgi.annotation.bundle.Export,org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory,aQute.bnd.annotation.jpms.Open,org.apache.logging.log4j.core.config.plugins.Plugin,org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute
+[2026-07-12 07:57:53] [javac-output-15765] /home/runner/.m2/repository/org/mongodb/mongodb-driver-core/4.11.5/mongodb-driver-core-4.11.5.jar(/com/mongodb/lang/Nullable.class): warning: [classfile] Cannot find annotation method 'when()' in type 'Nonnull'
+[2026-07-12 07:57:53] [javac-output-15765] warning: unknown enum constant When.MAYBE

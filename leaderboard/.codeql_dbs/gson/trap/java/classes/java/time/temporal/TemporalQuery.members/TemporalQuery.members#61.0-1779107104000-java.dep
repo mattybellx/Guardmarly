@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/temporal/TemporalQuery.members/TemporalQuery.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/temporal/TemporalQuery.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/time/temporal/TemporalAccessor.members.trap.gz

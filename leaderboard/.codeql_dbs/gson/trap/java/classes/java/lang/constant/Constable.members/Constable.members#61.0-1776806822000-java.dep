@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/constant/Constable.members/Constable.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/constant/Constable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Optional.members.trap.gz
+classes/jdk/internal/ValueBased.members.trap.gz
+classes/java/lang/constant/ConstantDesc.members.trap.gz

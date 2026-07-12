@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/fasterxml/jackson/core/ErrorReportConfiguration$Builder.members/ErrorReportConfiguration$Builder.members#52.0-1780246500000-java.trap.gz
+
+TRAPS
+classes/com/fasterxml/jackson/core/ErrorReportConfiguration$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/fasterxml/jackson/core/ErrorReportConfiguration.members.trap.gz

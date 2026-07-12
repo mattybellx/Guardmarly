@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/socket.io
+baselineLinesOfCode: 41495
+unicodeNewlines: true
+columnKind: utf16
+primaryLanguage: javascript
+creationMetadata:
+  sha: d2d753fed4435015c2d83fe62e676b44e07fa3f7
+  cliVersion: 2.26.0
+  creationTime: 2026-07-12T07:42:53.189369438Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

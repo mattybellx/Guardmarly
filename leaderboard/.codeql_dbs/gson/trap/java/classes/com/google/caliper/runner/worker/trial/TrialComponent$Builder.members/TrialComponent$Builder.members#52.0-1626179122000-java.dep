@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/trial/TrialComponent$Builder.members/TrialComponent$Builder.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/trial/TrialComponent$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/worker/trial/TrialComponent.members.trap.gz
+classes/dagger/producers/ProductionSubcomponent$Builder.members.trap.gz
+classes/java/util/concurrent/Executor.members.trap.gz
+classes/com/google/caliper/runner/worker/trial/TrialComponent$TrialRunner.members.trap.gz
+classes/com/google/caliper/runner/experiment/Experiment.members.trap.gz
+classes/dagger/BindsInstance.members.trap.gz
+classes/com/google/caliper/runner/worker/trial/TrialNumber.members.trap.gz
+classes/dagger/producers/Production.members.trap.gz

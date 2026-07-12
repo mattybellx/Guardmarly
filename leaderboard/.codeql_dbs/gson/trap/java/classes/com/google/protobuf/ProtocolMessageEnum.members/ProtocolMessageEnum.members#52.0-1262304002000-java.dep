@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/ProtocolMessageEnum.members/ProtocolMessageEnum.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/ProtocolMessageEnum.members.trap.gz
+classes/com/google/protobuf/Internal$EnumLite.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumDescriptor.members.trap.gz
+classes/com/google/protobuf/Descriptors$EnumValueDescriptor.members.trap.gz

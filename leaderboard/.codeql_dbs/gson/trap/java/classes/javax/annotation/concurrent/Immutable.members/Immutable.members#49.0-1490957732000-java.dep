@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/javax/annotation/concurrent/Immutable.members/Immutable.members#49.0-1490957732000-java.trap.gz
+
+TRAPS
+classes/javax/annotation/concurrent/Immutable.members.trap.gz
+classes/java/lang/annotation/Annotation.members.trap.gz
+classes/java/lang/annotation/Documented.members.trap.gz
+classes/java/lang/annotation/Retention.members.trap.gz
+classes/java/lang/annotation/RetentionPolicy.members.trap.gz
+classes/java/lang/annotation/Target.members.trap.gz
+classes/java/lang/annotation/ElementType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

@@ -1,0 +1,13 @@
+[2026-07-12 08:02:12] This is codeql database analyze benchmarks/report/.codeql_dbs/cobra --format=sarif-latest --output=benchmarks/report/.codeql_dbs/cobra/results.sarif codeql/go-queries:codeql-suites/go-security-extended.qls
+[2026-07-12 08:02:12] Log file was started late.
+[2026-07-12 08:02:12] [PROGRESS] database analyze> Running queries.
+[2026-07-12 08:02:12] Running plumbing command: codeql database run-queries --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra,codeql/go-queries:codeql-suites/go-security-extended.qls -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra codeql/go-queries:codeql-suites/go-security-extended.qls
+[2026-07-12 08:02:12] Calling plumbing command: codeql resolve ram --dataset=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go --format=json
+[2026-07-12 08:02:12] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx1800M",
+                        "--off-heap-ram=1493"
+                      ]
+[2026-07-12 08:02:12] Chaining via /tmp/codeql.19x8k8E0 to plumbing: execute queries -J-Xmx1800M --off-heap-ram=1493 --verbosity=progress --logdir=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/log --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra,codeql/go-queries:codeql-suites/go-security-extended.qls --output=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/results -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/cobra/db-go codeql/go-queries:codeql-suites/go-security-extended.qls
+[2026-07-12 08:02:12] Plumbing command codeql database run-queries completed with status 70.
+[2026-07-12 08:02:12] Exiting with code 70

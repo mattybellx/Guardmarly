@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/constant/DirectMethodHandleDesc.members/DirectMethodHandleDesc.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/constant/DirectMethodHandleDesc.members.trap.gz
+classes/java/lang/constant/MethodHandleDesc.members.trap.gz
+classes/java/lang/constant/DirectMethodHandleDescImpl.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/constant/ClassDesc.members.trap.gz
+classes/java/lang/constant/DirectMethodHandleDesc$Kind.members.trap.gz

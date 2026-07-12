@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BillingInstrumentWrapper.members/RuntimeTypeAdapterFactoryTest$BillingInstrumentWrapper.members#0.0-1783842439058-java.trap.gz
+
+TRAPS
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BillingInstrumentWrapper.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest.members.trap.gz
+classes/com/google/gson/typeadapters/RuntimeTypeAdapterFactoryTest$BillingInstrument.members.trap.gz

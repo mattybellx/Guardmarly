@@ -1,0 +1,10 @@
+[2026-07-12 07:55:04] [javac-output-14449] warning: [path] bad path element "/home/runner/.m2/repository/org/apache/cassandra/cassandra-all/3.11.19/apache-cassandra-thrift-3.11.19.jar": no such file or directory
+[2026-07-12 07:55:04] [javac-output-14449] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:04] [javac-output-14449] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:55:04] [javac-output-14449] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:55:05] [javac-output-14449] warning: [processing] No processor claimed any of these annotations: org.junit.Test,org.junit.experimental.categories.Category,org.junit.BeforeClass,org.junit.ClassRule
+[2026-07-12 07:55:05] [javac-output-14449] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-cassandra/src/test/java/org/apache/logging/log4j/cassandra/CassandraRule.java:168: warning: [unchecked] unchecked cast
+[2026-07-12 07:55:05] [javac-output-14449]                 final Collection<Server> servers = (Collection<Server>) serversField.get(nativeService);
+[2026-07-12 07:55:05] [javac-output-14449]                                                                                         ^
+[2026-07-12 07:55:05] [javac-output-14449]   required: Collection<Server>
+[2026-07-12 07:55:05] [javac-output-14449]   found:    Object

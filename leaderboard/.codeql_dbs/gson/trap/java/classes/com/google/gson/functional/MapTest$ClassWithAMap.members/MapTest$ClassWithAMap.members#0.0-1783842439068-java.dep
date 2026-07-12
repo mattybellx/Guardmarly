@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/MapTest$ClassWithAMap.members/MapTest$ClassWithAMap.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/MapTest$ClassWithAMap.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/MapTest.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Map.members.trap.gz

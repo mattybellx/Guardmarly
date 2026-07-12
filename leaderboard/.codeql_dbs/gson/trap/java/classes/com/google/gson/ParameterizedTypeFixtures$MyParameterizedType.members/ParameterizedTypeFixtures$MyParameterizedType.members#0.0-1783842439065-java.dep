@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/ParameterizedTypeFixtures$MyParameterizedType.members/ParameterizedTypeFixtures$MyParameterizedType.members#0.0-1783842439065-java.trap.gz
+
+TRAPS
+classes/com/google/gson/ParameterizedTypeFixtures$MyParameterizedType.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/ParameterizedTypeFixtures.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/lang/String.members.trap.gz

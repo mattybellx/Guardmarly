@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/io/InputStreamReader.members/InputStreamReader.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/io/InputStreamReader.members.trap.gz
+classes/java/io/Reader.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/nio/charset/CharsetDecoder.members.trap.gz
+classes/java/nio/charset/Charset.members.trap.gz
+classes/java/io/UnsupportedEncodingException.members.trap.gz

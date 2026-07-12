@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/sun/reflect/generics/tree/TypeArgument.members/TypeArgument.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/sun/reflect/generics/tree/TypeArgument.members.trap.gz
+classes/sun/reflect/generics/tree/TypeTree.members.trap.gz

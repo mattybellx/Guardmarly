@@ -1,0 +1,21 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/test/java/com/google/gson/DefaultMapJsonSerializerTest.java.trap.gz
+classes/com/google/gson/DefaultMapJsonSerializerTest.members/DefaultMapJsonSerializerTest.members#0.0-1783842439065-java.trap.gz
+classes/java/io/ObjectOutputStream.members/ObjectOutputStream.members#61.0-1776806822000-java.trap.gz
+classes/java/util/HashMap$Node.members/HashMap$Node.members#61.0-1776806822000-java.trap.gz
+classes/java/util/HashMap$TreeNode.members/HashMap$TreeNode.members#61.0-1776806822000-java.trap.gz
+classes/java/util/LinkedHashMap$Entry.members/LinkedHashMap$Entry.members#61.0-1776806822000-java.trap.gz
+classes/java/io/ObjectOutput.members/ObjectOutput.members#61.0-1776806822000-java.trap.gz
+classes/java/io/ObjectOutputStream$PutField.members/ObjectOutputStream$PutField.members#61.0-1776806822000-java.trap.gz
+classes/java/io/DataOutput.members/DataOutput.members#61.0-1776806822000-java.trap.gz
+modules/java.base.trap.gz

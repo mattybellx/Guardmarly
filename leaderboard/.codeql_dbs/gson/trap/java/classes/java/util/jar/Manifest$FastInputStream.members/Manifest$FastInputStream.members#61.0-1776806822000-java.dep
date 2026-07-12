@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/jar/Manifest$FastInputStream.members/Manifest$FastInputStream.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/util/jar/Manifest$FastInputStream.members.trap.gz
+classes/java/io/FilterInputStream.members.trap.gz
+classes/java/util/jar/Manifest.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/io/InputStream.members.trap.gz

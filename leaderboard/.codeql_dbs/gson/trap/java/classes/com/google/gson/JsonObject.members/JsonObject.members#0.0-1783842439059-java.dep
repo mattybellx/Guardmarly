@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/JsonObject.members/JsonObject.members#0.0-1783842439059-java.trap.gz
+
+TRAPS
+classes/com/google/gson/JsonObject.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/gson/JsonArray.members.trap.gz
+classes/com/google/gson/JsonPrimitive.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/java/lang/Character.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

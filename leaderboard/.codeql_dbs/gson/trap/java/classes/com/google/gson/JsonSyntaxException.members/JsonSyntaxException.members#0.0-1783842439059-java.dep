@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/JsonSyntaxException.members/JsonSyntaxException.members#0.0-1783842439059-java.trap.gz
+
+TRAPS
+classes/com/google/gson/JsonSyntaxException.members.trap.gz
+classes/com/google/gson/JsonParseException.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/lang/String.members.trap.gz

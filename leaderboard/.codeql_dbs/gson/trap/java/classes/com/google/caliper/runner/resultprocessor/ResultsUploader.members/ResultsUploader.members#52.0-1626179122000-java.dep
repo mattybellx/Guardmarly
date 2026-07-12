@@ -1,0 +1,17 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/resultprocessor/ResultsUploader.members/ResultsUploader.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/resultprocessor/ResultsUploader.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/api/ResultProcessor.members.trap.gz
+classes/com/google/caliper/model/Trial.members.trap.gz
+classes/java/lang/Exception.members.trap.gz
+classes/java/io/PrintWriter.members.trap.gz
+classes/com/google/gson/Gson.members.trap.gz
+classes/com/google/caliper/runner/resultprocessor/ResultsUploader$UploadHandler.members.trap.gz
+classes/com/google/caliper/runner/config/ResultProcessorConfig.members.trap.gz
+classes/com/google/caliper/runner/config/InvalidConfigurationException.members.trap.gz
+classes/java/util/logging/Logger.members.trap.gz

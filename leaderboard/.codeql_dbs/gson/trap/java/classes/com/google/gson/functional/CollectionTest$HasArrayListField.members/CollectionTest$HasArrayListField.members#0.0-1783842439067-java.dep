@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/CollectionTest$HasArrayListField.members/CollectionTest$HasArrayListField.members#0.0-1783842439067-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/CollectionTest$HasArrayListField.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/CollectionTest.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/util/ArrayList.members.trap.gz
+classes/java/util/AbstractList.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/RandomAccess.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

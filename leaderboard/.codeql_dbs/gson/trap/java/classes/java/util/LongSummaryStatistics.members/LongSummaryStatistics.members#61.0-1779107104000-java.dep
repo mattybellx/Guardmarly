@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/LongSummaryStatistics.members/LongSummaryStatistics.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/LongSummaryStatistics.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/function/LongConsumer.members.trap.gz
+classes/java/util/function/IntConsumer.members.trap.gz
+classes/java/lang/String.members.trap.gz

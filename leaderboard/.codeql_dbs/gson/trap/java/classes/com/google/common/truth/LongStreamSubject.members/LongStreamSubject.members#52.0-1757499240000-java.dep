@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/truth/LongStreamSubject.members/LongStreamSubject.members#52.0-1757499240000-java.trap.gz
+
+TRAPS
+classes/com/google/common/truth/LongStreamSubject.members.trap.gz
+classes/com/google/common/truth/Subject.members.trap.gz
+classes/com/google/common/truth/IgnoreJRERequirement.members.trap.gz
+classes/java/lang/Long.members.trap.gz
+classes/java/util/Comparator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/truth/Ordered.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/common/truth/Subject$Factory.members.trap.gz
+classes/java/util/stream/LongStream.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,4 @@
+[2026-07-12 07:56:19] [javac-output-15130] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:19] [javac-output-15130] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:56:19] [javac-output-15130] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:56:20] [javac-output-15130] warning: [processing] No processor claimed any of these annotations: org.junit.jupiter.api.Test,org.apache.logging.log4j.core.test.junit.LoggerContextSource

@@ -1,0 +1,27 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/MapMakerInternalMap$Segment.members/MapMakerInternalMap$Segment.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/MapMakerInternalMap$Segment.members.trap.gz
+classes/java/util/concurrent/locks/ReentrantLock.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$InternalEntry.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/errorprone/annotations/concurrent/GuardedBy.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$WeakValueReference.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/com/google/common/annotations/VisibleForTesting.members.trap.gz
+classes/java/lang/ref/ReferenceQueue.members.trap.gz
+classes/java/util/concurrent/atomic/AtomicReferenceArray.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/util/concurrent/ConcurrentMap.members.trap.gz
+classes/com/google/common/annotations/GwtIncompatible.members.trap.gz
+classes/com/google/common/annotations/J2ktIncompatible.members.trap.gz
+classes/org/jspecify/annotations/NullUnmarked.members.trap.gz
+classes/java/util/concurrent/atomic/AtomicInteger.members.trap.gz
+classes/com/google/j2objc/annotations/Weak.members.trap.gz

@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/constant/DirectMethodHandleDescImpl.members/DirectMethodHandleDescImpl.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/constant/DirectMethodHandleDescImpl.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/constant/DirectMethodHandleDesc.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/invoke/MethodHandles$Lookup.members.trap.gz
+classes/java/lang/invoke/MethodHandle.members.trap.gz
+classes/java/lang/ReflectiveOperationException.members.trap.gz
+classes/java/lang/constant/MethodTypeDesc.members.trap.gz
+classes/java/lang/constant/ClassDesc.members.trap.gz
+classes/java/lang/constant/DirectMethodHandleDesc$Kind.members.trap.gz

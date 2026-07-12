@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/MapEntryLite$Metadata.members/MapEntryLite$Metadata.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/MapEntryLite$Metadata.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MapEntryLite.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz

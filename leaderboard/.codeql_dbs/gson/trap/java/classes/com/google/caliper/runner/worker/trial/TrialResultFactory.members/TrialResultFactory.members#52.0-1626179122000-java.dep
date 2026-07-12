@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/trial/TrialResultFactory.members/TrialResultFactory.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/trial/TrialResultFactory.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/caliper/runner/worker/trial/VmDataCollectingVisitor.members.trap.gz
+classes/com/google/caliper/runner/instrument/MeasurementCollectingVisitor.members.trap.gz
+classes/com/google/caliper/runner/worker/trial/TrialResult.members.trap.gz

@@ -1,0 +1,24 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/ImmutableMultiset$Builder.members/ImmutableMultiset$Builder.members#52.0-1616154036000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/ImmutableMultiset$Builder.members.trap.gz
+classes/com/google/common/collect/ImmutableCollection$Builder.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/collect/ImmutableCollection.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/AbstractCollection.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/common/annotations/GwtCompatible.members.trap.gz
+classes/java/util/Iterator.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/com/google/common/collect/ImmutableMultiset.members.trap.gz
+classes/com/google/common/collect/ImmutableMultisetGwtSerializationDependencies.members.trap.gz
+classes/com/google/common/collect/Multiset.members.trap.gz
+classes/com/google/common/annotations/VisibleForTesting.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz

@@ -1,0 +1,13 @@
+[2026-07-12 07:10:59] This is codeql database analyze benchmarks/report/.codeql_dbs/fastapi --format=sarif-latest --output=benchmarks/report/.codeql_dbs/fastapi/results.sarif codeql/python-queries:codeql-suites/python-security-extended.qls
+[2026-07-12 07:10:59] Log file was started late.
+[2026-07-12 07:10:59] [PROGRESS] database analyze> Running queries.
+[2026-07-12 07:10:59] Running plumbing command: codeql database run-queries --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi,codeql/python-queries:codeql-suites/python-security-extended.qls -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi codeql/python-queries:codeql-suites/python-security-extended.qls
+[2026-07-12 07:10:59] Calling plumbing command: codeql resolve ram --dataset=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/db-python --format=json
+[2026-07-12 07:10:59] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx1800M",
+                        "--off-heap-ram=1464"
+                      ]
+[2026-07-12 07:11:00] Chaining via /tmp/codeql.2tMUoLXD to plumbing: execute queries -J-Xmx1800M --off-heap-ram=1464 --verbosity=progress --logdir=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/log --evaluator-log-level=5 --warnings=show --qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml --dynamic-join-order-mode=none --no-rerun --interpret-passthrough=null,--format=sarif-latest,-o=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/results.sarif,--max-paths=4,--csv-location-format=line-column,--print-diagnostics-summary,--print-metrics-summary,--qlconfig-file=/home/runner/work/Ansede/Ansede/qlconfig.yml,--,/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi,codeql/python-queries:codeql-suites/python-security-extended.qls --output=/home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/results -- /home/runner/work/Ansede/Ansede/benchmarks/report/.codeql_dbs/fastapi/db-python codeql/python-queries:codeql-suites/python-security-extended.qls
+[2026-07-12 07:11:00] Plumbing command codeql database run-queries completed with status 70.
+[2026-07-12 07:11:00] Exiting with code 70

@@ -1,0 +1,13 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/ReadablePeriod.members/ReadablePeriod.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/ReadablePeriod.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/MutablePeriod.members.trap.gz
+classes/org/joda/time/Period.members.trap.gz
+classes/org/joda/time/DurationFieldType.members.trap.gz
+classes/org/joda/time/PeriodType.members.trap.gz

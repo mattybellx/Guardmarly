@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/ref/Reference.members/Reference.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/ref/Reference.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/jdk/internal/vm/annotation/ForceInline.members.trap.gz
+classes/java/lang/ref/ReferenceQueue.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/java/lang/Deprecated.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/jdk/internal/vm/annotation/IntrinsicCandidate.members.trap.gz

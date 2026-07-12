@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/ResourceBundle.members/ResourceBundle.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/ResourceBundle.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Enumeration.members.trap.gz
+classes/java/lang/ClassLoader.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/java/util/ResourceBundle$Control.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

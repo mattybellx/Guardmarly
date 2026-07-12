@@ -1,0 +1,652 @@
+[2026-07-12 07:47:55] [javac-output-10186] warning: [processing] No processor claimed any of these annotations: com.google.errorprone.annotations.InlineMe,com.google.errorprone.annotations.CheckReturnValue,com.google.gson.internal.bind.IgnoreJRERequirement,com.google.errorprone.annotations.CanIgnoreReturnValue
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/GsonBuilder.java:766: warning: [unchecked] unchecked method invocation: method newFactory in class TypeAdapters is applied to given types
+[2026-07-12 07:47:57] [javac-output-10186]           TypeAdapters.newFactory(TypeToken.get(type), (TypeAdapter) typeAdapter);
+[2026-07-12 07:47:57] [javac-output-10186]                                  ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeToken<TT>,TypeAdapter<TT>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeToken<CAP#1>,TypeAdapter
+[2026-07-12 07:47:57] [javac-output-10186]   where TT is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     TT extends Object declared in method <TT>newFactory(TypeToken<TT>,TypeAdapter<TT>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/GsonBuilder.java:766: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:57] [javac-output-10186]           TypeAdapters.newFactory(TypeToken.get(type), (TypeAdapter) typeAdapter);
+[2026-07-12 07:47:57] [javac-output-10186]                                                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeAdapter<TT>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeAdapter
+[2026-07-12 07:47:57] [javac-output-10186]   where TT is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     TT extends Object declared in method <TT>newFactory(TypeToken<TT>,TypeAdapter<TT>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/GsonBuilder.java:836: warning: [unchecked] unchecked method invocation: method newTypeHierarchyFactory in class TypeAdapters is applied to given types
+[2026-07-12 07:47:57] [javac-output-10186]           TypeAdapters.newTypeHierarchyFactory(baseType, (TypeAdapter) typeAdapter);
+[2026-07-12 07:47:57] [javac-output-10186]                                               ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: Class<T1>,TypeAdapter<T1>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    Class<CAP#1>,TypeAdapter
+[2026-07-12 07:47:57] [javac-output-10186]   where T1 is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T1 extends Object declared in method <T1>newTypeHierarchyFactory(Class<T1>,TypeAdapter<T1>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/GsonBuilder.java:836: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:57] [javac-output-10186]           TypeAdapters.newTypeHierarchyFactory(baseType, (TypeAdapter) typeAdapter);
+[2026-07-12 07:47:57] [javac-output-10186]                                                          ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeAdapter<T1>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeAdapter
+[2026-07-12 07:47:57] [javac-output-10186]   where T1 is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T1 extends Object declared in method <T1>newTypeHierarchyFactory(Class<T1>,TypeAdapter<T1>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/GsonBuilder.java:1015: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     List<E> list = (List<E>) Collections.unmodifiableList(Arrays.asList(collection.toArray()));
+[2026-07-12 07:47:57] [javac-output-10186]                                                          ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: List<E>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    List<Object>
+[2026-07-12 07:47:57] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     E extends Object declared in method <E>newImmutableList(Collection<E>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:345: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]       TypeAdapter<T> adapter = (TypeAdapter<T>) cached;
+[2026-07-12 07:47:57] [javac-output-10186]                                                 ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>getAdapter(TypeToken<T>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:358: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]       TypeAdapter<T> ongoingCall = (TypeAdapter<T>) threadCalls.get(type);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                    ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>getAdapter(TypeToken<T>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:670: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     TypeAdapter<Object> adapter = (TypeAdapter<Object>) getAdapter(TypeToken.get(typeOfSrc));
+[2026-07-12 07:47:57] [javac-output-10186]                                                                   ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: TypeAdapter<Object>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:878: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     return (T) fromJson(json, TypeToken.get(typeOfT));
+[2026-07-12 07:47:57] [javac-output-10186]                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>fromJson(String,Type)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:970: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     return (T) fromJson(json, TypeToken.get(typeOfT));
+[2026-07-12 07:47:57] [javac-output-10186]                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>fromJson(Reader,Type)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:1046: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     return (T) fromJson(reader, TypeToken.get(typeOfT));
+[2026-07-12 07:47:57] [javac-output-10186]                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>fromJson(JsonReader,Type)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/Gson.java:1185: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     return (T) fromJson(json, TypeToken.get(typeOfT));
+[2026-07-12 07:47:57] [javac-output-10186]                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>fromJson(JsonElement,Type)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/reflect/TypeToken.java:75: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     this.rawType = (Class<? super T>) GsonTypes.getRawType(type);
+[2026-07-12 07:47:57] [javac-output-10186]                                                           ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: Class<? super T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    Class<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in class TypeToken
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/reflect/TypeToken.java:83: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     this.rawType = (Class<? super T>) GsonTypes.getRawType(this.type);
+[2026-07-12 07:47:57] [javac-output-10186]                                                           ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: Class<? super T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    Class<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in class TypeToken
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:110: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     InstanceCreator<T> typeCreator = (InstanceCreator<T>) instanceCreators.get(type);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                               ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: InstanceCreator<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    InstanceCreator<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>get(TypeToken<T>,boolean)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:117: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]     InstanceCreator<T> rawTypeCreator = (InstanceCreator<T>) instanceCreators.get(rawType);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                                  ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: InstanceCreator<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    InstanceCreator<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>get(TypeToken<T>,boolean)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:185: warning: [unchecked] unchecked method invocation: method noneOf in class EnumSet is applied to given types
+[2026-07-12 07:47:57] [javac-output-10186]             T set = (T) EnumSet.noneOf((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                                       ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: Class<E>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    Class
+[2026-07-12 07:47:57] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     E extends Enum<E> declared in method <E>noneOf(Class<E>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:185: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:57] [javac-output-10186]             T set = (T) EnumSet.noneOf((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                                        ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: Class<E>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    Class
+[2026-07-12 07:47:57] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     E extends Enum<E> declared in method <E>noneOf(Class<E>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:185: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]             T set = (T) EnumSet.noneOf((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                                       ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    EnumSet
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newSpecialCollectionConstructor(Type,Class<? super T>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:203: warning: [rawtypes] found raw type: EnumMap
+[2026-07-12 07:47:57] [javac-output-10186]             T map = (T) new EnumMap((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                             ^
+[2026-07-12 07:47:57] [javac-output-10186]   missing type arguments for generic class EnumMap<K,V>
+[2026-07-12 07:47:57] [javac-output-10186]   where K,V are type-variables:
+[2026-07-12 07:47:57] [javac-output-10186]     K extends Enum<K> declared in class EnumMap
+[2026-07-12 07:47:57] [javac-output-10186]     V extends Object declared in class EnumMap
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:203: warning: [unchecked] unchecked call to EnumMap(Class<K>) as a member of the raw type EnumMap
+[2026-07-12 07:47:57] [javac-output-10186]             T map = (T) new EnumMap((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                         ^
+[2026-07-12 07:47:57] [javac-output-10186]   where K is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     K extends Enum<K> declared in class EnumMap
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:203: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]             T map = (T) new EnumMap((Class) elementType);
+[2026-07-12 07:47:57] [javac-output-10186]                         ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    EnumMap
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newSpecialCollectionConstructor(Type,Class<? super T>)
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:262: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]         T newInstance = (T) constructor.newInstance();
+[2026-07-12 07:47:57] [javac-output-10186]                                                    ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newDefaultConstructor(Class<? super T>,FilterResult)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object super: T from capture of ? super T
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:301: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]       ObjectConstructor<T> constructor = (ObjectConstructor<T>) newCollectionConstructor(rawType);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                                         ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: ObjectConstructor<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    ObjectConstructor<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newDefaultImplementationConstructor(Type,Class<? super T>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Collection<?> from capture of ? extends Collection<?>
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:307: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]       ObjectConstructor<T> constructor = (ObjectConstructor<T>) newMapConstructor(type, rawType);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                                  ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: ObjectConstructor<T>
+[2026-07-12 07:47:57] [javac-output-10186]   found:    ObjectConstructor<CAP#1>
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newDefaultImplementationConstructor(Type,Class<? super T>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Map<?,Object> from capture of ? extends Map<?,Object>
+[2026-07-12 07:47:57] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/ConstructorConstructor.java:389: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:57] [javac-output-10186]           T newInstance = (T) UnsafeAllocator.INSTANCE.newInstance(rawType);
+[2026-07-12 07:47:57] [javac-output-10186]                                                                   ^
+[2026-07-12 07:47:57] [javac-output-10186]   required: T
+[2026-07-12 07:47:57] [javac-output-10186]   found:    CAP#1
+[2026-07-12 07:47:57] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     T extends Object declared in method <T>newUnsafeAllocator(Class<? super T>)
+[2026-07-12 07:47:57] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:57] [javac-output-10186]     CAP#1 extends Object super: T from capture of ? super T
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/JsonAdapterAnnotationTypeAdapterFactory.java:84: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]         getTypeAdapter(constructorConstructor, gson, targetType, annotation, true);
+[2026-07-12 07:47:58] [javac-output-10186]                       ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:58] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/JsonAdapterAnnotationTypeAdapterFactory.java:142: warning: [rawtypes] found raw type: TreeTypeAdapter
+[2026-07-12 07:47:58] [javac-output-10186]           new TreeTypeAdapter(serializer, deserializer, gson, type, skipPast, nullSafe);
+[2026-07-12 07:47:58] [javac-output-10186]               ^
+[2026-07-12 07:47:58] [javac-output-10186]   missing type arguments for generic class TreeTypeAdapter<T>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in class TreeTypeAdapter
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/JsonAdapterAnnotationTypeAdapterFactory.java:142: warning: [unchecked] unchecked call to TreeTypeAdapter(JsonSerializer<T>,JsonDeserializer<T>,Gson,TypeToken<T>,TypeAdapterFactory,boolean) as a member of the raw type TreeTypeAdapter
+[2026-07-12 07:47:58] [javac-output-10186]           new TreeTypeAdapter(serializer, deserializer, gson, type, skipPast, nullSafe);
+[2026-07-12 07:47:58] [javac-output-10186]           ^
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in class TreeTypeAdapter
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonWriter.java:813: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]       case EMPTY_DOCUMENT: // first in document
+[2026-07-12 07:47:58] [javac-output-10186]       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:595: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]         case ',':
+[2026-07-12 07:47:58] [javac-output-10186]         ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:611: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]           case ',':
+[2026-07-12 07:47:58] [javac-output-10186]           ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:685: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]       case ';':
+[2026-07-12 07:47:58] [javac-output-10186]       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:903: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]       case '{':
+[2026-07-12 07:47:58] [javac-output-10186]       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:1213: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]           case '{':
+[2026-07-12 07:47:58] [javac-output-10186]           ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:1296: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]           case '{':
+[2026-07-12 07:47:58] [javac-output-10186]           ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:1821: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]       case '\'':
+[2026-07-12 07:47:58] [javac-output-10186]       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/stream/JsonReader.java:1825: warning: [fallthrough] possible fall-through into case
+[2026-07-12 07:47:58] [javac-output-10186]       case '"':
+[2026-07-12 07:47:58] [javac-output-10186]       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonObject.java:45: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonObject() {}
+[2026-07-12 07:47:58] [javac-output-10186]                       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonArray.java:47: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonArray() {
+[2026-07-12 07:47:58] [javac-output-10186]                      ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonArray.java:59: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonArray(int capacity) {
+[2026-07-12 07:47:58] [javac-output-10186]                                  ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonPrimitive.java:48: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonPrimitive(Boolean bool) {
+[2026-07-12 07:47:58] [javac-output-10186]                                      ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonPrimitive.java:58: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonPrimitive(Number number) {
+[2026-07-12 07:47:58] [javac-output-10186]                                       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonPrimitive.java:68: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonPrimitive(String string) {
+[2026-07-12 07:47:58] [javac-output-10186]                                       ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/JsonPrimitive.java:82: warning: [deprecation] JsonElement() in JsonElement has been deprecated
+[2026-07-12 07:47:58] [javac-output-10186]   public JsonPrimitive(Character c) {
+[2026-07-12 07:47:58] [javac-output-10186]                                     ^
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/LinkedTreeMap.java:150: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]       Comparable<Object> comparableKey = comparator == null ? (Comparable<Object>) key : null;
+[2026-07-12 07:47:58] [javac-output-10186]                                                                                    ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Comparable<Object>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    K
+[2026-07-12 07:47:58] [javac-output-10186]   where K is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     K extends Object declared in class LinkedTreeMap
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/LinkedTreeMap.java:206: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]       return key != null ? find((K) key, false) : null;
+[2026-07-12 07:47:58] [javac-output-10186]                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: K
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:58] [javac-output-10186]   where K is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     K extends Object declared in class LinkedTreeMap
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:65: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == int.class) return (Class<T>) Integer.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Integer>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:66: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == float.class) return (Class<T>) Float.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Float>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:67: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == byte.class) return (Class<T>) Byte.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Byte>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:68: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == double.class) return (Class<T>) Double.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                       ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Double>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:69: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == long.class) return (Class<T>) Long.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Long>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:70: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == char.class) return (Class<T>) Character.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                        ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Character>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:71: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == boolean.class) return (Class<T>) Boolean.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                         ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Boolean>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:72: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == short.class) return (Class<T>) Short.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Short>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:73: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == void.class) return (Class<T>) Void.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Void>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>wrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:89: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Integer.class) return (Class<T>) int.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Integer>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:90: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Float.class) return (Class<T>) float.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Float>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:91: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Byte.class) return (Class<T>) byte.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Byte>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:92: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Double.class) return (Class<T>) double.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                       ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Double>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:93: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Long.class) return (Class<T>) long.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Long>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:94: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Character.class) return (Class<T>) char.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                        ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Character>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:95: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Boolean.class) return (Class<T>) boolean.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                         ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Boolean>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:96: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Short.class) return (Class<T>) short.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Short>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:58] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/Primitives.java:97: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:58] [javac-output-10186]     if (type == Void.class) return (Class<T>) void.class;
+[2026-07-12 07:47:58] [javac-output-10186]                                                   ^
+[2026-07-12 07:47:58] [javac-output-10186]   required: Class<T>
+[2026-07-12 07:47:58] [javac-output-10186]   found:    Class<Void>
+[2026-07-12 07:47:58] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:58] [javac-output-10186]     T extends Object declared in method <T>unwrap(Class<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java:64: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           return (T) allocateInstance.invoke(unsafe, c);
+[2026-07-12 07:47:59] [javac-output-10186]                                             ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: T
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>newInstance(Class<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java:89: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           return (T) newInstance.invoke(null, c, constructorId);
+[2026-07-12 07:47:59] [javac-output-10186]                                        ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: T
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>newInstance(Class<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/UnsafeAllocator.java:110: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           return (T) newInstance.invoke(null, c, Object.class);
+[2026-07-12 07:47:59] [javac-output-10186]                                        ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: T
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>newInstance(Class<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ArrayTypeAdapter.java:50: warning: [rawtypes] found raw type: ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]               new ArrayTypeAdapter(gson, componentTypeAdapter, GsonTypes.getRawType(componentType));
+[2026-07-12 07:47:59] [javac-output-10186]                   ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class ArrayTypeAdapter<E>
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ArrayTypeAdapter.java:50: warning: [unchecked] unchecked call to ArrayTypeAdapter(Gson,TypeAdapter<E>,Class<E>) as a member of the raw type ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]               new ArrayTypeAdapter(gson, componentTypeAdapter, GsonTypes.getRawType(componentType));
+[2026-07-12 07:47:59] [javac-output-10186]               ^
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ArrayTypeAdapter.java:50: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:59] [javac-output-10186]               new ArrayTypeAdapter(gson, componentTypeAdapter, GsonTypes.getRawType(componentType));
+[2026-07-12 07:47:59] [javac-output-10186]               ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ArrayTypeAdapter.java:92: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]       E[] array = (E[]) Array.newInstance(componentType, size);
+[2026-07-12 07:47:59] [javac-output-10186]                                          ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: E[]
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ArrayTypeAdapter.java:107: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]       E value = (E) Array.get(array, i);
+[2026-07-12 07:47:59] [javac-output-10186]                              ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: E
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class ArrayTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/CollectionTypeAdapterFactory.java:60: warning: [rawtypes] found raw type: Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedTypeAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                                 ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class Adapter<E>
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class Adapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/CollectionTypeAdapterFactory.java:60: warning: [unchecked] unchecked call to Adapter(TypeAdapter<E>,ObjectConstructor<? extends Collection<E>>) as a member of the raw type Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedTypeAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                             ^
+[2026-07-12 07:47:59] [javac-output-10186]   where E is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     E extends Object declared in class Adapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/CollectionTypeAdapterFactory.java:60: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedTypeAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                             ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Adapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/DefaultDateTypeAdapter.java:71: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]                   new DefaultDateTypeAdapter<>(
+[2026-07-12 07:47:59] [javac-output-10186]                   ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    DefaultDateTypeAdapter<Date>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/EnumTypeAdapter.java:48: warning: [rawtypes] found raw type: EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]           TypeAdapter<T> adapter = (TypeAdapter<T>) new EnumTypeAdapter(rawType);
+[2026-07-12 07:47:59] [javac-output-10186]                                                         ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class EnumTypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Enum<T> declared in class EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/EnumTypeAdapter.java:48: warning: [unchecked] unchecked call to EnumTypeAdapter(Class<T>) as a member of the raw type EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]           TypeAdapter<T> adapter = (TypeAdapter<T>) new EnumTypeAdapter(rawType);
+[2026-07-12 07:47:59] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Enum<T> declared in class EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/EnumTypeAdapter.java:48: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           TypeAdapter<T> adapter = (TypeAdapter<T>) new EnumTypeAdapter(rawType);
+[2026-07-12 07:47:59] [javac-output-10186]                                                     ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/EnumTypeAdapter.java:91: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         T constant = (T) constantField.get(null);
+[2026-07-12 07:47:59] [javac-output-10186]                                           ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: T
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Enum<T> declared in class EnumTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:66: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:47:59] [javac-output-10186]   public static final TypeAdapter<Class> CLASS =
+[2026-07-12 07:47:59] [javac-output-10186]                                   ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class Class<T>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in class Class
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:67: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:47:59] [javac-output-10186]       new TypeAdapter<Class>() {
+[2026-07-12 07:47:59] [javac-output-10186]                       ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class Class<T>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in class Class
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:69: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:47:59] [javac-output-10186]         public void write(JsonWriter out, Class value) throws IOException {
+[2026-07-12 07:47:59] [javac-output-10186]                                           ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class Class<T>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in class Class
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:79: warning: [rawtypes] found raw type: Class
+[2026-07-12 07:47:59] [javac-output-10186]         public Class read(JsonReader in) throws IOException {
+[2026-07-12 07:47:59] [javac-output-10186]                ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class Class<T>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in class Class
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:971: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         return typeToken.equals(type) ? (TypeAdapter<T>) typeAdapter : null;
+[2026-07-12 07:47:59] [javac-output-10186]                                                          ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<TT>
+[2026-07-12 07:47:59] [javac-output-10186]   where TT,T are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     TT extends Object declared in method <TT>newFactory(TypeToken<TT>,TypeAdapter<TT>)
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:982: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         return typeToken.getRawType() == type ? (TypeAdapter<T>) typeAdapter : null;
+[2026-07-12 07:47:59] [javac-output-10186]                                                                  ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<TT>
+[2026-07-12 07:47:59] [javac-output-10186]   where TT,T are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     TT extends Object declared in method <TT>newFactory(Class<TT>,TypeAdapter<TT>)
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:1000: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         return (rawType == unboxed || rawType == boxed) ? (TypeAdapter<T>) typeAdapter : null;
+[2026-07-12 07:47:59] [javac-output-10186]                                                                            ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:59] [javac-output-10186]   where TT,T are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     TT extends Object declared in method <TT>newFactory(Class<TT>,Class<TT>,TypeAdapter<? super TT>)
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     CAP#1 extends Object super: TT from capture of ? super TT
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:1024: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         return (rawType == base || rawType == sub) ? (TypeAdapter<T>) typeAdapter : null;
+[2026-07-12 07:47:59] [javac-output-10186]                                                                       ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:59] [javac-output-10186]   where TT,T are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     TT extends Object declared in method <TT>newFactoryForMultipleTypes(Class<TT>,Class<? extends TT>,TypeAdapter<? super TT>)
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     CAP#1 extends Object super: TT from capture of ? super TT
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/TypeAdapters.java:1055: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]             new TypeAdapter<T1>() {
+[2026-07-12 07:47:59] [javac-output-10186]             ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T2>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    <anonymous TypeAdapter<T1>>
+[2026-07-12 07:47:59] [javac-output-10186]   where T1,T2 are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     T1 extends Object declared in method <T1>newTypeHierarchyFactory(Class<T1>,TypeAdapter<T1>)
+[2026-07-12 07:47:59] [javac-output-10186]     T2 extends Object declared in method <T2>create(Gson,TypeToken<T2>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/JavaTimeTypeAdapters.java:437: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           TypeAdapter<T> result = (TypeAdapter<T>) adapter;
+[2026-07-12 07:47:59] [javac-output-10186]                                                    ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     CAP#1 extends Object from capture of ?
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java:150: warning: [rawtypes] found raw type: MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedKeyAdapter, wrappedValueAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                                 ^
+[2026-07-12 07:47:59] [javac-output-10186]   missing type arguments for generic class MapTypeAdapterFactory.Adapter<K,V>
+[2026-07-12 07:47:59] [javac-output-10186]   where K,V are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     K extends Object declared in class MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     V extends Object declared in class MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java:150: warning: [unchecked] unchecked call to MapTypeAdapterFactory.Adapter(TypeAdapter<K>,TypeAdapter<V>,ObjectConstructor<? extends Map<K,V>>) as a member of the raw type MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedKeyAdapter, wrappedValueAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                             ^
+[2026-07-12 07:47:59] [javac-output-10186]   where K,V are type-variables:
+[2026-07-12 07:47:59] [javac-output-10186]     K extends Object declared in class MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186]     V extends Object declared in class MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/MapTypeAdapterFactory.java:150: warning: [unchecked] unchecked conversion
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<T> result = new Adapter(wrappedKeyAdapter, wrappedValueAdapter, constructor);
+[2026-07-12 07:47:59] [javac-output-10186]                             ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    MapTypeAdapterFactory.Adapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/NumberTypeAdapter.java:49: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]         return type.getRawType() == Number.class ? (TypeAdapter<T>) adapter : null;
+[2026-07-12 07:47:59] [javac-output-10186]                                                                     ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    NumberTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ObjectTypeAdapter.java:58: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           return (TypeAdapter<T>) new ObjectTypeAdapter(gson, toNumberStrategy);
+[2026-07-12 07:47:59] [javac-output-10186]                                   ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<T>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    ObjectTypeAdapter
+[2026-07-12 07:47:59] [javac-output-10186]   where T is a type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     T extends Object declared in method <T>create(Gson,TypeToken<T>)
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ObjectTypeAdapter.java:139: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           List<Object> list = (List<Object>) current;
+[2026-07-12 07:47:59] [javac-output-10186]                                              ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: List<Object>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ObjectTypeAdapter.java:143: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]           Map<String, Object> map = (Map<String, Object>) current;
+[2026-07-12 07:47:59] [javac-output-10186]                                                           ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: Map<String,Object>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    Object
+[2026-07-12 07:47:59] [javac-output-10186] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/src/main/java/com/google/gson/internal/bind/ObjectTypeAdapter.java:177: warning: [unchecked] unchecked cast
+[2026-07-12 07:47:59] [javac-output-10186]     TypeAdapter<Object> typeAdapter = (TypeAdapter<Object>) gson.getAdapter(value.getClass());
+[2026-07-12 07:47:59] [javac-output-10186]                                                                            ^
+[2026-07-12 07:47:59] [javac-output-10186]   required: TypeAdapter<Object>
+[2026-07-12 07:47:59] [javac-output-10186]   found:    TypeAdapter<CAP#1>
+[2026-07-12 07:47:59] [javac-output-10186]   where CAP#1 is a fresh type-variable:
+[2026-07-12 07:47:59] [javac-output-10186]     CAP#1 extends Object from capture of ? extends Object

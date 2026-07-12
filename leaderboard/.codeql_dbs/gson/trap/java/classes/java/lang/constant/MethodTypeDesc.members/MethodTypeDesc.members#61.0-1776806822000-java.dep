@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/constant/MethodTypeDesc.members/MethodTypeDesc.members#61.0-1776806822000-java.trap.gz
+
+TRAPS
+classes/java/lang/constant/MethodTypeDesc.members.trap.gz
+classes/java/lang/constant/ConstantDesc.members.trap.gz
+classes/java/lang/constant/ClassDesc.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor$OfMethod.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor.members.trap.gz
+classes/java/lang/invoke/TypeDescriptor$OfField.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/constant/MethodTypeDescImpl.members.trap.gz
+classes/java/lang/String.members.trap.gz

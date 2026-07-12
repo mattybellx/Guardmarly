@@ -1,0 +1,9 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/UncategorizedTest$Derived1.members/UncategorizedTest$Derived1.members#0.0-1783842439069-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/UncategorizedTest$Derived1.members.trap.gz
+classes/com/google/gson/functional/UncategorizedTest$Base.members.trap.gz
+classes/com/google/gson/functional/UncategorizedTest.members.trap.gz

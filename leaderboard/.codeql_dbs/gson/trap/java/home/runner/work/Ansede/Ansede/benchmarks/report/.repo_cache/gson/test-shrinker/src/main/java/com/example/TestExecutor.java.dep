@@ -1,0 +1,19 @@
+TRAP dependencies 1.2
+
+TRAP
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-shrinker/src/main/java/com/example/TestExecutor.java.trap.gz
+
+TRAPS
+classes/java/util/Optional.members.trap.gz
+classes/java/util/function/BiConsumer.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/com/example/TestExecutor.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/RuntimeException.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/util/function/Function.members.trap.gz
+classes/java/util/function/Predicate.members.trap.gz
+classes/java/util/function/Consumer.members.trap.gz
+classes/java/lang/AssertionError.members.trap.gz

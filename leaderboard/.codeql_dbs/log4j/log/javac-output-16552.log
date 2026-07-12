@@ -1,0 +1,12 @@
+[2026-07-12 07:59:58] [javac-output-16552] warning: [options] source value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:58] [javac-output-16552] warning: [options] target value 8 is obsolete and will be removed in a future release
+[2026-07-12 07:59:58] [javac-output-16552] warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+[2026-07-12 07:59:59] [javac-output-16552] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:59:59] [javac-output-16552] warning: unknown enum constant ElementType.MODULE
+[2026-07-12 07:59:59] [javac-output-16552] warning: [processing] No processor claimed any of these annotations: org.osgi.annotation.versioning.Version,org.osgi.annotation.bundle.Export,org.jspecify.annotations.NullMarked
+[2026-07-12 07:59:59] [javac-output-16552] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-taglib/src/main/java/org/apache/logging/log4j/taglib/LoggingMessageTagSupport.java:43: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:59:59] [javac-output-16552]     private List<Object> attributes;
+[2026-07-12 07:59:59] [javac-output-16552]                          ^
+[2026-07-12 07:59:59] [javac-output-16552] /home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/log4j/log4j-taglib/src/main/java/org/apache/logging/log4j/taglib/EntryTag.java:36: warning: [serial] non-transient instance field of a serializable class declared with a non-serializable type
+[2026-07-12 07:59:59] [javac-output-16552]     private List<Object> attributes;
+[2026-07-12 07:59:59] [javac-output-16552]                          ^

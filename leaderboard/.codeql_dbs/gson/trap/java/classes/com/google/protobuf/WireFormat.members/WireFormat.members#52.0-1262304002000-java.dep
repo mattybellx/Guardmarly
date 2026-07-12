@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/WireFormat.members/WireFormat.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/WireFormat.members.trap.gz
+classes/java/lang/Object.members.trap.gz

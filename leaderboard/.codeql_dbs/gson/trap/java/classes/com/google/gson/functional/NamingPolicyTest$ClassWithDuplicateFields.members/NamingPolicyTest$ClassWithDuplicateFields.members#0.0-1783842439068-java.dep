@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/functional/NamingPolicyTest$ClassWithDuplicateFields.members/NamingPolicyTest$ClassWithDuplicateFields.members#0.0-1783842439068-java.trap.gz
+
+TRAPS
+classes/com/google/gson/functional/NamingPolicyTest$ClassWithDuplicateFields.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/functional/NamingPolicyTest.members.trap.gz
+classes/java/lang/SuppressWarnings.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Integer.members.trap.gz
+classes/java/lang/Double.members.trap.gz
+classes/com/google/gson/annotations/SerializedName.members.trap.gz

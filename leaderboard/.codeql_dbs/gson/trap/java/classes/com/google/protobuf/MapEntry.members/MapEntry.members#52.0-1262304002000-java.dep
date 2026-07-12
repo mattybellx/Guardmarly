@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/MapEntry.members/MapEntry.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/MapEntry.members.trap.gz
+classes/com/google/protobuf/AbstractMessage.members.trap.gz
+classes/com/google/protobuf/MapEntry$Metadata.members.trap.gz
+classes/com/google/protobuf/MapEntryLite$Metadata.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MapEntryLite.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet.members.trap.gz
+classes/com/google/protobuf/Descriptors$FieldDescriptor.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/com/google/protobuf/Descriptors$Descriptor.members.trap.gz
+classes/com/google/protobuf/MapEntry$Builder.members.trap.gz
+classes/com/google/protobuf/AbstractMessage$Builder.members.trap.gz
+classes/com/google/protobuf/AbstractMessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/MessageLite$Builder.members.trap.gz
+classes/com/google/protobuf/AbstractMessageLite.members.trap.gz
+classes/com/google/protobuf/Message$Builder.members.trap.gz
+classes/com/google/protobuf/Parser.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz

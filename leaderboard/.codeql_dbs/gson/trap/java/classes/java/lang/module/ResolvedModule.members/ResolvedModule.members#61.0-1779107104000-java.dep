@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/lang/module/ResolvedModule.members/ResolvedModule.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/lang/module/ResolvedModule.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/Set.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/module/ModuleReference.members.trap.gz
+classes/java/lang/module/Configuration.members.trap.gz

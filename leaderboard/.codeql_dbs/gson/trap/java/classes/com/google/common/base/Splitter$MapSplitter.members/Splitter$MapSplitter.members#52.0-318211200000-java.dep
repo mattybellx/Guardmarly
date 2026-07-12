@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/base/Splitter$MapSplitter.members/Splitter$MapSplitter.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/base/Splitter$MapSplitter.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/base/Splitter.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/lang/String.members.trap.gz

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ansede-static v6.2.2 — 3-Tool SAST Comparison</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: system-ui, -apple-system, sans-serif; background:#0d1117; color:#c9d1d9; padding:2rem; }
+.container { max-width:1200px; margin:0 auto; }
+h1 { color:#58a6ff; font-size:2rem; margin-bottom:0.5rem; }
+.subtitle { color:#8b949e; margin-bottom:2rem; }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-bottom:2rem; }
+.card { background:#161b22; border:1px solid #30363d; border-radius:8px; padding:1.5rem; text-align:center; }
+.card .number { font-size:2.5rem; font-weight:700; }
+.card .label { color:#8b949e; font-size:0.9rem; margin-top:0.25rem; }
+.card.ansede .number { color:#4caf50; }
+.card.semgrep .number { color:#ff9800; }
+.card.codeql .number { color:#f44336; }
+.ratio { font-size:1.2rem; color:#58a6ff; margin-top:0.5rem; }
+table { width:100%; border-collapse:collapse; }
+th, td { padding:0.75rem 1rem; text-align:left; border-bottom:1px solid #21262d; }
+th { background:#161b22; color:#8b949e; font-weight:600; text-transform:uppercase; font-size:0.8rem; }
+tr:hover { background:#1c2128; }
+.footer { margin-top:2rem; color:#8b949e; font-size:0.85rem; text-align:center; }
+a { color:#58a6ff; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>** ansede-static — 3-Tool SAST Comparison</h1>
+<p class="subtitle">Generated 2026-07-12 08:07 UTC · 18 repos · v6.2.2</p>
+
+<div class="cards">
+    <div class="card ansede">
+        <div class="number">675</div>
+        <div class="label">ansede-static findings</div>
+        <div class="ratio">3.6x CodeQL</div>
+    </div>
+    <div class="card semgrep">
+        <div class="number">100</div>
+        <div class="label">Semgrep findings</div>
+    </div>
+    <div class="card codeql">
+        <div class="number">190</div>
+        <div class="label">CodeQL findings</div>
+    </div>
+</div>
+
+<table>
+<thead><tr><th>Repository</th><th>Lang</th><th>Files</th><th>LOC</th><th>ansede</th><th>semgrep</th><th>codeql</th><th>Winner</th></tr></thead>
+<tbody>
+        <tr>
+            <td>flask</td><td>python</td><td>83</td><td>18,337</td>
+            <td style="color:#4caf50"><strong>209</strong></td>
+            <td>1</td>
+            <td>8</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>requests</td><td>python</td><td>37</td><td>12,032</td>
+            <td style="color:#4caf50"><strong>9</strong></td>
+            <td>2</td>
+            <td>9</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>fastapi</td><td>python</td><td>1,129</td><td>112,073</td>
+            <td style="color:#4caf50"><strong>177</strong></td>
+            <td>7</td>
+            <td>3</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>django</td><td>python</td><td>2,926</td><td>522,917</td>
+            <td style="color:#4caf50"><strong>0</strong></td>
+            <td>9</td>
+            <td>55</td>
+            <td>codeql</td>
+        </tr>
+        <tr>
+            <td>scrapy</td><td>python</td><td>446</td><td>79,974</td>
+            <td style="color:#4caf50"><strong>49</strong></td>
+            <td>10</td>
+            <td>6</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>express</td><td>javascript</td><td>141</td><td>21,440</td>
+            <td style="color:#4caf50"><strong>39</strong></td>
+            <td>41</td>
+            <td>5</td>
+            <td>semgrep</td>
+        </tr>
+        <tr>
+            <td>axios</td><td>javascript</td><td>228</td><td>37,346</td>
+            <td style="color:#4caf50"><strong>63</strong></td>
+            <td>1</td>
+            <td>22</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>lodash</td><td>javascript</td><td>55</td><td>119,100</td>
+            <td style="color:#4caf50"><strong>11</strong></td>
+            <td>1</td>
+            <td>16</td>
+            <td>codeql</td>
+        </tr>
+        <tr>
+            <td>moment</td><td>javascript</td><td>766</td><td>339,124</td>
+            <td style="color:#4caf50"><strong>53</strong></td>
+            <td>0</td>
+            <td>4</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>socket.io</td><td>javascript</td><td>375</td><td>64,218</td>
+            <td style="color:#4caf50"><strong>38</strong></td>
+            <td>18</td>
+            <td>52</td>
+            <td>codeql</td>
+        </tr>
+        <tr>
+            <td>spring-petclinic</td><td>java</td><td>48</td><td>3,849</td>
+            <td style="color:#4caf50"><strong>7</strong></td>
+            <td>0</td>
+            <td>2</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>gson</td><td>java</td><td>262</td><td>55,620</td>
+            <td style="color:#4caf50"><strong>0</strong></td>
+            <td>0</td>
+            <td>0</td>
+            <td>—</td>
+        </tr>
+        <tr>
+            <td>log4j</td><td>java</td><td>2,591</td><td>350,091</td>
+            <td style="color:#4caf50"><strong>12</strong></td>
+            <td>4</td>
+            <td>0</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>gin</td><td>go</td><td>99</td><td>24,099</td>
+            <td style="color:#4caf50"><strong>1</strong></td>
+            <td>2</td>
+            <td>2</td>
+            <td>semgrep</td>
+        </tr>
+        <tr>
+            <td>echo</td><td>go</td><td>102</td><td>39,889</td>
+            <td style="color:#4caf50"><strong>2</strong></td>
+            <td>3</td>
+            <td>1</td>
+            <td>semgrep</td>
+        </tr>
+        <tr>
+            <td>cobra</td><td>go</td><td>36</td><td>16,765</td>
+            <td style="color:#4caf50"><strong>1</strong></td>
+            <td>0</td>
+            <td>0</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>CleanArchitecture</td><td>csharp</td><td>362</td><td>11,397</td>
+            <td style="color:#4caf50"><strong>3</strong></td>
+            <td>0</td>
+            <td>0</td>
+            <td>ansede</td>
+        </tr>
+        <tr>
+            <td>eShopOnWeb</td><td>csharp</td><td>254</td><td>10,733</td>
+            <td style="color:#4caf50"><strong>1</strong></td>
+            <td>1</td>
+            <td>5</td>
+            <td>codeql</td>
+        </tr></tbody>
+</table>
+
+<p class="footer">
+    <a href="https://github.com/mattybellx/Ansede">View on GitHub</a> ·
+    Reproduce: <code>pip install ansede-static semgrep && python benchmarks/one_click_compare.py</code>
+</p>
+</div>
+</body>
+</html>

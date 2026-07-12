@@ -1,0 +1,23 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/MapEntryLite.members/MapEntryLite.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/MapEntryLite.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MapEntryLite$Metadata.members.trap.gz
+classes/com/google/protobuf/MapFieldLite.members.trap.gz
+classes/java/util/LinkedHashMap.members.trap.gz
+classes/java/util/HashMap.members.trap.gz
+classes/java/util/AbstractMap.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/util/Map$Entry.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/com/google/protobuf/WireFormat$FieldType.members.trap.gz

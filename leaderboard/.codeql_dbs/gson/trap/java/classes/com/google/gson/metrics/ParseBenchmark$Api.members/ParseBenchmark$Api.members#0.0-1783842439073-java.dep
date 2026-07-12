@@ -1,0 +1,20 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/metrics/ParseBenchmark$Api.members/ParseBenchmark$Api.members#0.0-1783842439073-java.trap.gz
+
+TRAPS
+classes/com/google/gson/metrics/ParseBenchmark$Api.members.trap.gz
+classes/java/lang/Enum.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/Class.members.trap.gz
+classes/java/lang/reflect/GenericDeclaration.members.trap.gz
+classes/java/lang/reflect/Type.members.trap.gz
+classes/java/lang/reflect/AnnotatedElement.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/CloneNotSupportedException.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark.members.trap.gz
+classes/com/google/gson/metrics/ParseBenchmark$Parser.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz

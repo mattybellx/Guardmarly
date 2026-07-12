@@ -1,0 +1,26 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/caliper/runner/worker/Worker.members/Worker.members#52.0-1626179122000-java.trap.gz
+
+TRAPS
+classes/com/google/caliper/runner/worker/Worker.members.trap.gz
+classes/com/google/common/util/concurrent/AbstractService.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerScoped.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/util/concurrent/TimeUnit.members.trap.gz
+classes/com/google/caliper/runner/worker/Worker$StreamItem.members.trap.gz
+classes/java/lang/InterruptedException.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerOutputLogger.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/caliper/runner/worker/WorkerSpec.members.trap.gz
+classes/com/google/caliper/runner/target/Device.members.trap.gz
+classes/com/google/caliper/bridge/OpenedSocket.members.trap.gz
+classes/com/google/common/util/concurrent/ListenableFuture.members.trap.gz
+classes/java/util/concurrent/Future.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/errorprone/annotations/DoNotMock.members.trap.gz
+classes/com/google/caliper/bridge/LogMessage.members.trap.gz
+classes/com/google/caliper/util/Parser.members.trap.gz
+classes/javax/inject/Inject.members.trap.gz

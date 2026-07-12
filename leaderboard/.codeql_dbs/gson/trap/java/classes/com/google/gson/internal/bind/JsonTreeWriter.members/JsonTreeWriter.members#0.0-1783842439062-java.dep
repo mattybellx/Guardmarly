@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/bind/JsonTreeWriter.members/JsonTreeWriter.members#0.0-1783842439062-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/bind/JsonTreeWriter.members.trap.gz
+classes/com/google/gson/stream/JsonWriter.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/errorprone/annotations/CanIgnoreReturnValue.members.trap.gz
+classes/java/lang/Number.members.trap.gz
+classes/java/lang/Boolean.members.trap.gz
+classes/com/google/gson/JsonElement.members.trap.gz

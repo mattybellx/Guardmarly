@@ -1,0 +1,18 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/field/AbstractReadableInstantFieldProperty.members/AbstractReadableInstantFieldProperty.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/field/AbstractReadableInstantFieldProperty.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/org/joda/time/ReadablePartial.members.trap.gz
+classes/org/joda/time/ReadableInstant.members.trap.gz
+classes/org/joda/time/Interval.members.trap.gz
+classes/java/util/Locale.members.trap.gz
+classes/org/joda/time/DurationField.members.trap.gz
+classes/org/joda/time/Chronology.members.trap.gz
+classes/org/joda/time/DateTimeFieldType.members.trap.gz
+classes/org/joda/time/DateTimeField.members.trap.gz

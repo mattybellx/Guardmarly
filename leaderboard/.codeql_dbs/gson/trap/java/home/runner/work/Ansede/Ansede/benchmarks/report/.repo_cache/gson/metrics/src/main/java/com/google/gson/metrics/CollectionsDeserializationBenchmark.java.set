@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/metrics/src/main/java/com/google/gson/metrics/CollectionsDeserializationBenchmark.java.trap.gz
+classes/com/google/gson/metrics/CollectionsDeserializationBenchmark.members/CollectionsDeserializationBenchmark.members#0.0-1783842439073-java.trap.gz
+jars/home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/gson/target/gson-2.14.1-SNAPSHOT.jar.trap.gz

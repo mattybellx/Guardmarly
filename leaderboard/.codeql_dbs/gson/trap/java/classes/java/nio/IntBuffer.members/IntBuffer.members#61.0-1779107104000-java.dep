@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/IntBuffer.members/IntBuffer.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/IntBuffer.members.trap.gz
+classes/java/nio/Buffer.members.trap.gz
+classes/java/lang/Comparable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/nio/ByteOrder.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz

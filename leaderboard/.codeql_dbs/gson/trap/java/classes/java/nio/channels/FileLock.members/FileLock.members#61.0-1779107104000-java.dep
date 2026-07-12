@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/nio/channels/FileLock.members/FileLock.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/nio/channels/FileLock.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/AutoCloseable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/nio/channels/Channel.members.trap.gz
+classes/java/nio/channels/FileChannel.members.trap.gz
+classes/java/nio/channels/AsynchronousFileChannel.members.trap.gz

@@ -1,0 +1,14 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/util/OptionalLong.members/OptionalLong.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/util/OptionalLong.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/function/Supplier.members.trap.gz
+classes/java/lang/FunctionalInterface.members.trap.gz
+classes/java/lang/Throwable.members.trap.gz
+classes/java/util/function/LongSupplier.members.trap.gz
+classes/java/util/function/LongConsumer.members.trap.gz

@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+SOURCES
+
+INCLUDES
+
+OBJECTS
+
+INPUT_OBJECTS
+
+TRAPS
+home/runner/work/Ansede/Ansede/benchmarks/report/.repo_cache/gson/test-jpms/src/test/java/com/google/gson/jpms_test/ModuleTest.java.trap.gz
+classes/java/util/stream/Collectors.members/Collectors.members#61.0-1779107104000-java.trap.gz
+classes/com/google/gson/jpms_test/ModuleTest.members/ModuleTest.members#0.0-1783842439076-java.trap.gz
+modules/java.base.trap.gz
+modules/com.google.gson.jpms_test.trap.gz

@@ -1,0 +1,25 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/UnknownFieldSet.members/UnknownFieldSet.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/UnknownFieldSet.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/MessageLite.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet$Parser.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet$Builder.members.trap.gz
+classes/java/io/InputStream.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/protobuf/InvalidProtocolBufferException.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/com/google/protobuf/CodedInputStream.members.trap.gz
+classes/com/google/protobuf/Writer.members.trap.gz
+classes/com/google/protobuf/CodedOutputStream.members.trap.gz
+classes/java/io/OutputStream.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/com/google/protobuf/UnknownFieldSet$Field.members.trap.gz
+classes/java/util/Map.members.trap.gz
+classes/java/lang/Integer.members.trap.gz

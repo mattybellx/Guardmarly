@@ -1,0 +1,8 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/org/joda/time/base/BaseLocal.members/BaseLocal.members#49.0-1612559958000-java.trap.gz
+
+TRAPS
+classes/org/joda/time/base/BaseLocal.members.trap.gz
+classes/org/joda/time/base/AbstractPartial.members.trap.gz

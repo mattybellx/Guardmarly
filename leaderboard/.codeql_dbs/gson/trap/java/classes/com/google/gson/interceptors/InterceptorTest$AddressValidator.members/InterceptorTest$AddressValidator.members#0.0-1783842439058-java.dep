@@ -1,0 +1,12 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/interceptors/InterceptorTest$AddressValidator.members/InterceptorTest$AddressValidator.members#0.0-1783842439058-java.trap.gz
+
+TRAPS
+classes/com/google/gson/interceptors/InterceptorTest$AddressValidator.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest$Address.members.trap.gz
+classes/com/google/gson/interceptors/JsonPostDeserializer.members.trap.gz
+classes/com/google/gson/interceptors/InterceptorTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz

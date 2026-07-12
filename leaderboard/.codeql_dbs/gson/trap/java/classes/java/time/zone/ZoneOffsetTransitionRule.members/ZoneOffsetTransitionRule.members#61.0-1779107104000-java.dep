@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/time/zone/ZoneOffsetTransitionRule.members/ZoneOffsetTransitionRule.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/time/zone/ZoneOffsetTransitionRule.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/time/zone/ZoneOffsetTransition.members.trap.gz
+classes/java/time/ZoneOffset.members.trap.gz
+classes/java/time/zone/ZoneOffsetTransitionRule$TimeDefinition.members.trap.gz
+classes/java/time/LocalTime.members.trap.gz
+classes/java/time/DayOfWeek.members.trap.gz
+classes/java/time/Month.members.trap.gz

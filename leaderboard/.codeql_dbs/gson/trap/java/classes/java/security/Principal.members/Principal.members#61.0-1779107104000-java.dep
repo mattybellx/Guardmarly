@@ -1,0 +1,10 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/java/security/Principal.members/Principal.members#61.0-1779107104000-java.trap.gz
+
+TRAPS
+classes/java/security/Principal.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/javax/security/auth/Subject.members.trap.gz
+classes/java/lang/String.members.trap.gz

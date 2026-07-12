@@ -1,0 +1,11 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/common/collect/MapMakerInternalMap$WeakValueReference.members/MapMakerInternalMap$WeakValueReference.members#52.0-318211200000-java.trap.gz
+
+TRAPS
+classes/com/google/common/collect/MapMakerInternalMap$WeakValueReference.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap.members.trap.gz
+classes/com/google/common/collect/MapMakerInternalMap$InternalEntry.members.trap.gz
+classes/java/lang/ref/ReferenceQueue.members.trap.gz

@@ -1,0 +1,15 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/gson/internal/StreamsTest$TestAppendable.members/StreamsTest$TestAppendable.members#0.0-1783842439071-java.trap.gz
+
+TRAPS
+classes/com/google/gson/internal/StreamsTest$TestAppendable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/java/lang/Appendable.members.trap.gz
+classes/java/io/Flushable.members.trap.gz
+classes/java/io/Closeable.members.trap.gz
+classes/com/google/gson/internal/StreamsTest.members.trap.gz
+classes/java/lang/Override.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/java/lang/CharSequence.members.trap.gz

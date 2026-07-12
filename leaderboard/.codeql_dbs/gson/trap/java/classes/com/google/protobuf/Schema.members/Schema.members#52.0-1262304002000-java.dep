@@ -1,0 +1,16 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/Schema.members/Schema.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/Schema.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/CheckReturnValue.members.trap.gz
+classes/java/lang/Cloneable.members.trap.gz
+classes/java/io/Serializable.members.trap.gz
+classes/com/google/protobuf/ArrayDecoders$Registers.members.trap.gz
+classes/java/io/IOException.members.trap.gz
+classes/com/google/protobuf/Reader.members.trap.gz
+classes/com/google/protobuf/ExtensionRegistryLite.members.trap.gz
+classes/com/google/protobuf/Writer.members.trap.gz

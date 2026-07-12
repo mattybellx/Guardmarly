@@ -1,0 +1,22 @@
+TRAP dependencies 1.2
+
+TRAP
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProtoOrBuilder.members/DescriptorProtos$EnumDescriptorProtoOrBuilder.members#52.0-1262304002000-java.trap.gz
+
+TRAPS
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProtoOrBuilder.members.trap.gz
+classes/com/google/protobuf/MessageOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$SymbolVisibility.members.trap.gz
+classes/com/google/protobuf/ByteString.members.trap.gz
+classes/java/lang/String.members.trap.gz
+classes/java/util/List.members.trap.gz
+classes/java/util/Collection.members.trap.gz
+classes/java/lang/Iterable.members.trap.gz
+classes/java/lang/Object.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto$EnumReservedRangeOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumDescriptorProto$EnumReservedRange.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumOptionsOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumOptions.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumValueDescriptorProtoOrBuilder.members.trap.gz
+classes/com/google/protobuf/DescriptorProtos$EnumValueDescriptorProto.members.trap.gz
