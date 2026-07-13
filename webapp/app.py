@@ -1150,7 +1150,7 @@ _ERROR_BODY = r"""
 
 @app.route("/")
 def index():
-    return _HTML.replace("{{title}}", "World's Best Offline SAST").replace("{{body}}", _INDEX_BODY)
+    return render_template("index.html")
 
 
 @app.route("/autofix-studio")
