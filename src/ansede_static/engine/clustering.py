@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 from collections import defaultdict
 
-from ansede_static._types import Finding, Severity
+from ansede_static._types import Finding
 
 # ── CWE Family Mapping ────────────────────────────────────────────────────
 # Related CWEs that describe the same vulnerability class from different

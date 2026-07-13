@@ -16,7 +16,6 @@ Design constraints from spec:
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 from ansede_static.v2.nodes import ASTNode
 

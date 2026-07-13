@@ -2588,7 +2588,6 @@ def _detect_framework_root(file_path: str) -> bool:
     (setup.py, setup.cfg, pyproject.toml with framework metadata, or
     package.json for JS frameworks). Caches results per directory root.
     """
-    import os as _os
     from pathlib import Path as _Path
 
     try:

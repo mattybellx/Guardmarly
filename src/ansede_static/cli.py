@@ -27,7 +27,6 @@ from typing import Any, Callable
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.config import apply_config_to_results, load_config, temporary_analyzer_config
 from ansede_static.python_analyzer import analyze_python
-from ansede_static.js_analyzer import analyze_js
 from ansede_static.js_engine.backends import (
     backend_choices,
     backend_execution_record,
@@ -36,7 +35,6 @@ from ansede_static.js_engine.backends import (
 )
 from ansede_static.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
 from ansede_static.rules import describe_rule, list_rule_contracts
-from ansede_static.schema import FINGERPRINT_VERSION
 from ansede_static import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS
 
 from ansede_static.ir.global_graph import GlobalGraph
@@ -1303,7 +1301,6 @@ def _handle_baseline_command(args: list[str]) -> None:
 
     cmd = args[0]
     if cmd == "generate":
-        from ansede_static.v2.baseline import BaselineStore
         # Scan current directory and generate a baseline
         parser = argparse.ArgumentParser(prog="ansede baseline generate")
         parser.add_argument("--output", "-o", type=Path, default=Path("baseline.json"), metavar="FILE")
@@ -1851,7 +1848,6 @@ def _analyze_file_with_timeout(
     ThreadPoolExecutor registers an atexit handler that calls shutdown(wait=True),
     which blocks forever when a worker is stuck — daemon threads have no such hook.
     """
-    import threading
     import queue as _queue
 
     result_holder: _queue.Queue[AnalysisResult] = _queue.Queue(maxsize=1)
@@ -3368,7 +3364,7 @@ def _main_impl() -> None:
     _semgrep_stats: dict[str, Any] | None = None
     if getattr(args, "with_semgrep", False):
         try:
-            from ansede_static.engine.semgrep_ import run_semgrep_on_path, merge_semgrep_findings, is_available
+            from ansede_static.engine.semgrep_ import run_semgrep_on_path, is_available
             if is_available():
                 _before = sum(len(r.findings) for r in results)
                 _all_semgrep: list[Any] = []

@@ -17,10 +17,9 @@ import logging
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-from typing import Callable, Iterator
+from typing import Iterator
 
 from ansede_static.v2.model import SemanticModel
-from ansede_static.v2.nodes import ASTNode
 from ansede_static.v2.rule_protocol import Finding, REGISTRY, RuleRegistry
 
 # Import all rule packages to trigger @REGISTRY.register decorators.

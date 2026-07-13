@@ -14,7 +14,6 @@ import hashlib
 import logging
 import re
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any
 
 from tree_sitter import Language, Parser, Node

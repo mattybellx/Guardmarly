@@ -20,7 +20,7 @@ import hashlib
 import json as _json
 from typing import Any
 
-from ansede_static._types import AnalysisResult, Finding, Severity
+from ansede_static._types import AnalysisResult, Finding
 from ansede_static.engine_version import get_engine_version
 from ansede_static.rules import get_rule_contract, _unique_tags
 from ansede_static.schema import build_report
@@ -271,7 +271,6 @@ def format_ciso_report(results: list[AnalysisResult]) -> str:
         return "Install rich library for CISO reports."
         
     from rich.table import Table
-    from rich.panel import Panel
     
     total_files = len(results)
     total_vulns = sum(len(r.findings) for r in results)

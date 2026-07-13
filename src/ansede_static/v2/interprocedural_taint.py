@@ -27,19 +27,14 @@ Example:
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 from ansede_static.v2.call_graph import CallGraph
 from ansede_static.v2.ifds import (
     CFGNode,
-    CallSite,
     Context,
     DataFlowFact,
     FlowFunction,
     IFDSSolver,
-    IdentityFlowFunction,
-    KillFlowFunction,
-    ZERO_FACT,
     TaintFact,
 )
 from ansede_static.v2.model import SemanticModel
@@ -47,7 +42,6 @@ from ansede_static.v2.nodes import ASTNode, CallNode, AssignNode, ReturnNode, Fu
 from ansede_static.v2.taint import (
     TAINT_SINKS,
     TAINT_SOURCES,
-    SANITIZER_FUNCTIONS,
     TaintSink,
     TaintSource,
 )

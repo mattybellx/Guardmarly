@@ -28,7 +28,6 @@ from ansede_static._types import Finding
 from ansede_static.engine.explain import get_explanation
 from ansede_static.engine.shadow_scan import (
     ShadowMatch,
-    ShadowScanReport,
     run_shadow_scan,
     diff_scans,
     shadow_report_to_dict,

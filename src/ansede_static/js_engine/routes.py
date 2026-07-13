@@ -19,14 +19,6 @@ from ansede_static.js_engine.constants import (
     CREDENTIAL_SOURCE_RE,
     VERIFICATION_CALL_RE,
     PRIVILEGE_KEY_RE,
-    REQUEST_OBJECT_ARG_RE,
-    callee_matches,
-    DOCUMENT_WRITE_CALLEES,
-    SQL_CALLEES,
-    LOOKUP_CALLEE_PARTS,
-    MUTATION_CALLEE_PARTS,
-    PATH_CALLEE_PARTS,
-    SSRF_CALLEES,
 )
 from ansede_static.js_engine.project import (
     build_js_project_index,
@@ -35,7 +27,7 @@ from ansede_static.js_engine.project import (
     resolve_js_function,
     summarize_js_function,
 )
-from ansede_static.js_engine.structure import collect_calls, mask_js_text, parse_object_literal, split_top_level_args
+from ansede_static.js_engine.structure import collect_calls, parse_object_literal, split_top_level_args
 from ansede_static.js_engine.taint import append_trace, extract_taint_traces, merge_traces, trace_for_expr
 
 _DIRECT_ROUTE_METHODS = {

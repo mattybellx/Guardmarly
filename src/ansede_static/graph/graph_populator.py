@@ -1,7 +1,6 @@
 """Populate SQLite GraphStore from Rust/Tree-sitter parse output."""
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 from ansede_static.graph.sqlite_graph import GraphStore

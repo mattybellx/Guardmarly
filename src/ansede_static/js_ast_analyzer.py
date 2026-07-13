@@ -14,7 +14,6 @@ from ansede_static.js_engine import (
     append_trace,
     collect_calls,
     collect_property_writes,
-    dedup_findings,
     extract_taint_traces,
     filter_inline_suppressions,
     trace_for_expr,
@@ -39,7 +38,6 @@ from ansede_static.js_engine.sourcemap_rescanner import rescore_via_source_map
 from ansede_static.js_engine.project import build_js_project_index, propagate_helper_return_traces
 from ansede_static.js_engine.project_context import (
     ProjectContext,
-    Runtime,
     classify_runtime,
     is_fs_callee,
 )

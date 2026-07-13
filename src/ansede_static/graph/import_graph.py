@@ -6,7 +6,6 @@ import ast
 import json
 import re
 from pathlib import Path
-from typing import Any
 
 from ansede_static.graph.unified_source_graph import SourceEdge, SourceNode, UnifiedSourceGraph
 

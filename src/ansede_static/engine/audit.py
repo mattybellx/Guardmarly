@@ -1024,7 +1024,7 @@ def audit_json_scan(
     verbose: bool = False,
 ) -> AuditReport:
     """Run audit directly on a JSON scan output file."""
-    from ansede_static._types import AnalysisResult, Severity, TraceFrame
+    from ansede_static._types import AnalysisResult, Severity
 
     with open(scan_json_path, encoding="utf-8") as f:
         data = json.load(f)

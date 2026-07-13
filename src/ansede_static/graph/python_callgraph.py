@@ -6,7 +6,7 @@ import ast
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from ansede_static.graph.import_graph import _build_python_module_index, _ensure_file_node, _node_id_for_file
+from ansede_static.graph.import_graph import _build_python_module_index, _ensure_file_node
 from ansede_static.graph.unified_source_graph import SourceEdge, SourceNode, UnifiedSourceGraph
 
 

@@ -21,9 +21,8 @@ Reference: Reps, Horwitz, Sagiv (1995) "Precise Interprocedural Dataflow Analysi
 """
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Callable, FrozenSet, Iterator, Optional, Protocol, runtime_checkable
+from typing import FrozenSet, Protocol, runtime_checkable
 
 
 # ── Data flow fact ─────────────────────────────────────────────────────────────

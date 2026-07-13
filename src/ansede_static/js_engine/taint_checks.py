@@ -4,7 +4,7 @@ import re
 
 from ansede_static._types import Finding, Severity, TraceFrame
 from ansede_static.ir.global_graph import GlobalGraph
-from ansede_static.js_engine.common import COMMENT_LINE_RE, consume_balanced
+from ansede_static.js_engine.common import COMMENT_LINE_RE
 from ansede_static.js_engine.constants import (
     PATH_CALLEE_PARTS,
     SSRF_CALLEES,

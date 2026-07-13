@@ -269,7 +269,6 @@ class ContextAnalyzer:
     @staticmethod
     def is_test_context(file_path: str, code_snippet: str) -> tuple[bool, str]:
         """Determine if code is in test/fixture context."""
-        import os
         path_lower = file_path.lower().replace("\\", "/")
         code_lower = code_snippet.lower()
         # Split into path components for precise matching
@@ -312,7 +311,6 @@ class ContextAnalyzer:
     @staticmethod
     def is_mock_context(file_path: str, code_snippet: str) -> tuple[bool, str]:
         """Determine if code is in mock/fixture context."""
-        import os
         path_lower = file_path.lower().replace("\\", "/")
         code_lower = code_snippet.lower()
         fname = os.path.basename(file_path).lower()
@@ -373,7 +371,6 @@ class ContextAnalyzer:
         Supports Python (#), JS/Go/C# (//), and C-style (/* */) single-line comments.
         Results are cached per file for performance.
         """
-        import os
         norm = os.path.normpath(str(file_path))
         if norm not in ContextAnalyzer._comment_line_cache:
             try:

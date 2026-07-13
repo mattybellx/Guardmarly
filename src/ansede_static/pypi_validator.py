@@ -16,7 +16,6 @@ Run: python -m ansede_static.pypi_validator
 
 from __future__ import annotations
 
-import json
 import logging
 import re
 import subprocess

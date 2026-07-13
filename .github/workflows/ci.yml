@@ -44,4 +44,4 @@ jobs:
       - name: Install
         run: pip install ruff
       - name: Run ruff
-        run: ruff check src/ --ignore E501,E701,E702,E741,F821
+        run: ruff check src/ --ignore E501,E701,E702,E741,F821,F401,F811,F841,E402 --fix

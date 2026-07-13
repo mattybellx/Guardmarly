@@ -17,10 +17,9 @@ Usage:
 """
 from __future__ import annotations
 
-import re
 from typing import Any
 
-from ansede_static.rules import get_rule_contract, _PY_RULE_CONTRACTS
+from ansede_static.rules import get_rule_contract
 
 # ── Pattern mapping: ansede rule IDs → Semgrep patterns ──────────────────
 # These are hand-curated mappings for high-value rules where the ansede

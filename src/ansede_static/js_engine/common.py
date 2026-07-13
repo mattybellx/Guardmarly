@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from functools import lru_cache
 import re
-from typing import Callable
 
 from ansede_static._types import Finding
 

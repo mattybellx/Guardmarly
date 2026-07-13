@@ -72,9 +72,8 @@ Zero external dependencies.  Python 3.9+.
 from __future__ import annotations
 
 import ast
-import re as _re
 from dataclasses import dataclass, field
-from typing import Any, FrozenSet, List, Optional, Set, Tuple
+from typing import FrozenSet, List, Optional, Set, Tuple
 
 from ansede_static.cpg.graph import CPG, CPGNode, EdgeKind
 

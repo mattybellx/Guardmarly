@@ -32,8 +32,7 @@ warnings.warn(
 )
 import subprocess
 import sys
-from dataclasses import dataclass, field
-from typing import Iterator, Optional
+from typing import Iterator
 
 from ansede_static._types import AnalysisResult, Finding, Severity
 

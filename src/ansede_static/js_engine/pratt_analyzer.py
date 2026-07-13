@@ -13,20 +13,19 @@ Zero dependencies — pure Python 3.9+ stdlib, parsing via js_engine.pratt.
 
 from __future__ import annotations
 
-from collections import defaultdict
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set, Tuple
 
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.js_engine.pratt import parse
 from ansede_static.js_engine.pratt.ast_nodes import (
     ArrowFunctionExpr, AssignmentExpr, BinaryExpr, BlockStatement,
-    CallExpr, ClassDeclaration, ClassMember, ConditionalExpr,
+    CallExpr, ClassDeclaration, ConditionalExpr,
     ExpressionStatement, FunctionDeclaration, FunctionExpr, Identifier,
     IfStatement, ImportDeclaration, Literal, MemberExpr, NewExpr,
-    ObjectExpr, Program, Property, ReturnStatement, TemplateLiteral,
-    ThisExpr, ThrowStatement, TryStatement, UnaryExpr,
-    VariableDeclaration, VariableDeclarator, WhileStatement, ForStatement,
-    Expr, Statement, Pattern,
+    ObjectExpr, Program, ReturnStatement, TemplateLiteral,
+    ThrowStatement, TryStatement, UnaryExpr,
+    VariableDeclaration, WhileStatement, ForStatement,
+    Expr, Statement,
 )
 
 

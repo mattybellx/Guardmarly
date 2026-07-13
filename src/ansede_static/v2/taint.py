@@ -159,7 +159,6 @@ class TaintGraph:
         """
         Run taint analysis over *model* and return confirmed source→sink pairs.
         """
-        from ansede_static.v2.model import SemanticModel  # local import to avoid circular
         self._tainted_vars.clear()
         self.sources.clear()
         self.sinks.clear()

@@ -17,7 +17,7 @@ import concurrent.futures
 import logging
 import multiprocessing
 from pathlib import Path
-from typing import Callable, Any
+from typing import Callable
 
 from ansede_static._types import AnalysisResult, Finding
 

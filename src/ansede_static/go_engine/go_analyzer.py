@@ -20,8 +20,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
 from ansede_static.go_engine.go_parser import (
     GoAssignStmt, GoBinaryExpr, GoBlockStmt, GoCallExpr, GoExprStmt,
-    GoFile, GoFuncDecl, GoFuncLit, GoIdent, GoIfStmt, GoImportSpec,
-    GoLiteral, GoReturnStmt, GoSelectorExpr, GoForStmt, GoRangeStmt,
+    GoFile, GoFuncDecl, GoFuncLit, GoIdent, GoIfStmt, GoLiteral, GoReturnStmt, GoSelectorExpr, GoForStmt, GoRangeStmt,
     GoExpr, GoStmt, parse_go,
 )
 

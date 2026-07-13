@@ -10,11 +10,9 @@ from pathlib import Path
 from ansede_static._types import TraceFrame
 from ansede_static.hardening import detect_minified
 from ansede_static.ir.global_graph import GlobalGraph
-from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments, consume_balanced
+from ansede_static.js_engine.common import COMMENT_LINE_RE, strip_comments
 from ansede_static.js_engine.project_context import is_fs_callee
 from ansede_static.js_engine.constants import (
-    AUTH_MIDDLEWARE_RE,
-    PRIVILEGE_MIDDLEWARE_RE,
     OWNERSHIP_KEY_RE,
     PRINCIPAL_REF_RE,
     VERIFICATION_CALL_RE,
@@ -24,7 +22,6 @@ from ansede_static.js_engine.constants import (
     MUTATION_CALLEE_PARTS,
     PATH_CALLEE_PARTS,
     SSRF_CALLEES,
-    callee_matches,
 )
 from ansede_static.js_engine.structure import collect_calls, mask_js_text, parse_object_literal, split_top_level_args
 from ansede_static.js_engine.taint import (

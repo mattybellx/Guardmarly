@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 from typing import Optional
 
-from ansede_static.v2.nodes import ASTNode, CallNode, FuncDefNode, AssignNode
+from ansede_static.v2.nodes import ASTNode, CallNode, FuncDefNode
 from ansede_static.v2.model import SemanticModel
 from ansede_static.v2.rule_protocol import Finding, REGISTRY
 

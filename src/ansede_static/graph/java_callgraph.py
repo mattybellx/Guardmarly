@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from pathlib import Path
 
 from tree_sitter import Language, Parser, Node
 import tree_sitter_java as tsjava
