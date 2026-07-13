@@ -1535,14 +1535,18 @@ def blog():
 
 @app.route("/api/demo-request", methods=["POST"])
 def api_demo_request():
-    """Capture demo request leads."""
+    """Capture demo request leads and notify by email."""
     data = request.get_json(silent=True) or {}
+    name = (data.get("name") or "").strip()
     email = (data.get("email") or "").strip()
     company = (data.get("company") or "").strip()
     team_size = (data.get("teamSize") or "").strip()
-    current_tool = (data.get("currentTool") or "").strip()
+    current_tool = (data.get("currentTool") or data.get("current_tool") or "").strip()
     languages = (data.get("languages") or "").strip()
     message = (data.get("message") or "").strip()
+
+    if not email:
+        return jsonify({"success": False, "message": "Email is required."}), 400
 
     # Store lead in database
     try:
@@ -1566,11 +1570,63 @@ def api_demo_request():
         )
         db.commit()
         db.close()
-        print(f"[lead] 📅 Demo request: {email} from {company} ({team_size})", flush=True)
     except Exception as exc:
         print(f"[lead] Failed to store: {exc}", flush=True)
 
+    # Build notification
+    subject = f"Ansede Demo Request: {name or email} from {company or 'Unknown'}"
+    body = f"""New Demo Request
+
+Name: {name or 'Not provided'}
+Email: {email}
+Company: {company or 'Not provided'}
+Current Tool: {current_tool or 'Not specified'}
+Message: {message or 'None'}
+
+Time: {datetime.now(timezone.utc).isoformat()}
+"""
+    print(f"[lead] 📅 {subject}", flush=True)
+    print(f"[lead] {body}", flush=True)
+
+    # Try to send email notification
+    _send_notification(subject, body)
+
     return jsonify({"success": True, "message": "Demo request received. We'll reach out within 24 hours."})
+
+
+def _send_notification(subject: str, body: str) -> bool:
+    """Send email notification. Uses SMTP if configured, otherwise just logs."""
+    notify_email = os.environ.get("NOTIFY_EMAIL", "mattybellx@gmail.com")
+    smtp_host = os.environ.get("SMTP_HOST", "")
+    smtp_port = int(os.environ.get("SMTP_PORT", "587"))
+    smtp_user = os.environ.get("SMTP_USER", "")
+    smtp_pass = os.environ.get("SMTP_PASS", "")
+
+    if not smtp_host:
+        print(f"[notify] SMTP not configured — would send to {notify_email}: {subject}", flush=True)
+        return False
+
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+
+        msg = MIMEMultipart()
+        msg["From"] = smtp_user or "ansede@render.com"
+        msg["To"] = notify_email
+        msg["Subject"] = subject
+        msg.attach(MIMEText(body, "plain"))
+
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+            server.starttls()
+            if smtp_user and smtp_pass:
+                server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+        print(f"[notify] ✅ Email sent to {notify_email}", flush=True)
+        return True
+    except Exception as exc:
+        print(f"[notify] ❌ Failed to send email: {exc}", flush=True)
+        return False
 
 
 if __name__ == "__main__":
