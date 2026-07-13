@@ -3330,6 +3330,8 @@ def _rule_06(ctx: _Ctx) -> list[Finding]:
                     line=lineno,
                     suggestion="Avoid using this pattern with untrusted data. Use safer alternatives.",
                     cwe=cwe, agent="python-analyzer",
+                    analysis_kind="direct_sink",
+                    confidence=1.0,
                 ))
                 break
 
@@ -7472,7 +7474,7 @@ _PY_CMD_INJ_SINK = re.compile(
 )
 
 _PY_XSS_SINK = re.compile(
-    r'(?:render|render_to_response|HttpResponse|JsonResponse|make_response|redirect|Response|'
+    r'(?:render_template_string|render|render_to_response|HttpResponse|JsonResponse|make_response|redirect|Response|'
     r'HTTPResponse|streaminghttpresponse|FileResponse)\s*\(|'
     r'\.write\s*\(|\.writelines\s*\(',
     re.IGNORECASE,

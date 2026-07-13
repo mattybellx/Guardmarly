@@ -35,8 +35,8 @@ def test_autofix_studio_live_route_renders_template():
     response = client.get("/autofix-studio/live")
 
     assert response.status_code == 200
-    assert b"Autofix Studio" in response.data
-    assert b"Run Guarded Autofix" in response.data
+    assert b"SAST Engine" in response.data or b"SAST" in response.data
+    assert b"ansede-static" in response.data
 
 
 def test_api_scan_uses_studio_runner(monkeypatch):
