@@ -1,686 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansede vs Every SAST Scanner — Head-to-Head Comparison</title>
-<meta name="description" content="Independent benchmark comparison of Ansede Static against Semgrep, CodeQL, and Bandit on CVE recall, OWASP coverage, real-world findings, and more.">
+<title>Ansede vs Every SAST — Head-to-Head Comparison</title>
+<meta name="description" content="Independent benchmark: Ansede Static vs Semgrep, CodeQL, Bandit. 100% CVE recall vs 23%. World-first CWE-639 IDOR.">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', 'monospace'],
+      },
+      boxShadow: {
+        'glow-cyan': '0 0 20px rgba(6,182,212,0.15)',
+        'glow-card': '0 8px 32px rgba(0,0,0,0.5)',
+      }
+    }
+  }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<style>/* ═══════════════════════════════════════════════════════════════════════════
-   Ansede Static — Premium Unified Design System v6.0
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-:root {
-  --canvas: #06060A;
-  --surface: #0C0C14;
-  --elevated: #12121E;
-  --card: #161628;
-  --card-hover: #1C1C32;
-  --border-subtle: rgba(255,255,255,0.04);
-  --border-mid: rgba(255,255,255,0.07);
-  --border-accent: rgba(99,102,241,0.22);
-  --text-primary: #EDEDF5;
-  --text-secondary: #9898B0;
-  --text-muted: #5C5C78;
-  --accent: #6366F1;
-  --accent-2: #8B5CF6;
-  --accent-3: #06B6D4;
-  --accent-glow: rgba(99,102,241,0.10);
-  --red: #EF4444;
-  --red-glow: rgba(239,68,68,0.12);
-  --amber: #F59E0B;
-  --amber-glow: rgba(245,158,11,0.12);
-  --green: #10B981;
-  --green-glow: rgba(16,185,129,0.12);
-  --cyan: #06B6D4;
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --shadow-card: 0 2px 12px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.03);
-  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.05);
-  --shadow-glow: 0 4px 24px var(--accent-glow);
-  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: var(--font-sans);
-  background: var(--canvas);
-  color: var(--text-primary);
-  line-height: 1.65;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-/* Ambient backgrounds */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(80% 50% at 50% 0%, rgba(99,102,241,0.05) 0%, transparent 100%),
-    radial-gradient(60% 40% at 85% 100%, rgba(6,182,212,0.03) 0%, transparent 100%),
-    radial-gradient(50% 50% at 15% 50%, rgba(139,92,246,0.03) 0%, transparent 100%);
-  pointer-events: none; z-index: 0;
-}
-
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-  background-size: 64px 64px;
-  pointer-events: none; z-index: 0;
-}
-
-/* Header */
-.app-header {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(12, 12, 20, 0.78);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0 clamp(16px, 3vw, 40px);
-  height: 64px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-}
-
-.app-header .logo-group {
-  display: flex; align-items: center; gap: 12px;
-  text-decoration: none; user-select: none;
-}
-
-.app-header .logo-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 50%, var(--accent-3) 100%);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
-  transition: var(--transition);
-}
-
-.app-header .logo-group:hover .logo-icon {
-  transform: scale(1.06);
-  box-shadow: 0 6px 24px rgba(99,102,241,0.5);
-}
-
-.app-header .logo-text {
-  font-weight: 700; font-size: 17px; letter-spacing: -0.03em;
-  color: var(--text-primary); white-space: nowrap;
-}
-
-.app-header .logo-text em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.app-header .nav-links {
-  display: flex; align-items: center; gap: clamp(12px, 2vw, 24px);
-}
-
-.app-header .nav-links a {
-  color: var(--text-secondary); text-decoration: none;
-  font-size: 0.88rem; font-weight: 500;
-  transition: var(--transition); border-radius: var(--radius-sm); white-space: nowrap;
-}
-
-.app-header .nav-links a:hover { color: var(--text-primary); }
-
-.app-header .nav-cta {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff; padding: 9px 20px; border-radius: var(--radius);
-  font-size: 0.85rem; font-weight: 600; text-decoration: none;
-  transition: var(--transition);
-  box-shadow: 0 2px 12px rgba(99,102,241,0.3); white-space: nowrap;
-}
-
-.app-header .nav-cta:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(99,102,241,0.45);
-}
-
-/* Layout */
-.page-wrap {
-  position: relative; z-index: 1;
-  max-width: 1200px; margin: 0 auto;
-  padding: clamp(24px, 4vw, 56px) clamp(16px, 3vw, 40px);
-}
-
-/* Hero */
-.hero {
-  text-align: center; padding: 40px 0 32px;
-}
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(99,102,241,0.08);
-  border: 1px solid rgba(99,102,241,0.18);
-  color: var(--accent-2); font-size: 0.78rem; font-weight: 600;
-  padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
-  letter-spacing: 0.02em;
-}
-
-.hero h1 {
-  font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800;
-  letter-spacing: -0.04em; line-height: 1.12; margin-bottom: 16px;
-  background: linear-gradient(135deg, var(--text-primary) 0%, #c4b5fd 50%, var(--text-primary) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.hero p {
-  font-size: 1.1rem; color: var(--text-secondary);
-  max-width: 640px; margin: 0 auto 32px;
-}
-
-.hero-stats {
-  display: flex; justify-content: center;
-  gap: clamp(24px, 5vw, 56px); flex-wrap: wrap;
-}
-
-.hero-stat { text-align: center; }
-
-.hero-stat .num {
-  font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em;
-  background: linear-gradient(135deg, var(--accent), var(--accent-3));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-
-.hero-stat .lbl {
-  font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; font-weight: 500;
-}
-
-/* Sections */
-.section { margin-bottom: 48px; }
-
-.section-title {
-  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;
-  margin-bottom: 24px; padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-subtle);
-  display: flex; align-items: center; gap: 10px;
-}
-
-/* Cards */
-.card {
-  background: var(--card); border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg); padding: 28px;
-  transition: var(--transition); position: relative; overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(99,102,241,0.04), transparent 60%);
-  opacity: 0; transition: opacity 0.3s; pointer-events: none;
-}
-
-.card:hover { border-color: var(--border-mid); box-shadow: var(--shadow-card-hover); }
-.card:hover::before { opacity: 1; }
-
-.card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
-.card p { color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; }
-
-.card.win { border-left: 3px solid var(--green); }
-.card.loss { border-left: 3px solid var(--red); }
-.card.neutral { border-left: 3px solid var(--amber); }
-
-/* Grids */
-.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-
-/* Tables */
-.table-wrap {
-  overflow-x: auto; border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg); background: var(--card);
-}
-
-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-
-thead th {
-  background: var(--elevated); color: var(--text-muted);
-  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.06em; padding: 14px 16px; text-align: left;
-  border-bottom: 1px solid var(--border-subtle); white-space: nowrap;
-}
-
-tbody td {
-  padding: 12px 16px; border-bottom: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-}
-
-tbody tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: rgba(99,102,241,0.03); }
-
-td.win { color: var(--green); font-weight: 600; }
-td.lose { color: var(--red); }
-td.tie { color: var(--amber); }
-
-/* Badges */
-.badge {
-  display: inline-flex; align-items: center;
-  padding: 3px 10px; border-radius: 12px;
-  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
-}
-
-.badge-green { background: rgba(16,185,129,0.12); color: var(--green); }
-.badge-red { background: rgba(239,68,68,0.12); color: var(--red); }
-.badge-blue { background: rgba(99,102,241,0.12); color: var(--accent-2); }
-.badge-amber { background: rgba(245,158,11,0.12); color: var(--amber); }
-
-/* Buttons */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 12px 28px; border-radius: var(--radius);
-  font-size: 0.9rem; font-weight: 600; text-decoration: none;
-  cursor: pointer; transition: var(--transition);
-  border: none; font-family: var(--font-sans); white-space: nowrap;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff; box-shadow: 0 2px 16px rgba(99,102,241,0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(99,102,241,0.45);
-}
-
-.btn-secondary {
-  background: var(--elevated); color: var(--text-primary);
-  border: 1px solid var(--border-mid);
-}
-
-.btn-secondary:hover { background: var(--card); border-color: var(--border-accent); }
-
-.btn-ghost { background: transparent; color: var(--text-secondary); }
-.btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
-
-/* Pricing */
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-.plan {
-  background: var(--card); border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-xl); padding: 36px 28px;
-  display: flex; flex-direction: column;
-  transition: var(--transition); position: relative;
-}
-
-.plan:hover {
-  border-color: var(--border-mid);
-  box-shadow: var(--shadow-card-hover); transform: translateY(-2px);
-}
-
-.plan.featured {
-  border-color: var(--accent);
-  box-shadow: 0 4px 32px rgba(99,102,241,0.15), 0 0 0 1px rgba(99,102,241,0.15);
-}
-
-.plan-badge {
-  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #fff; font-size: 0.72rem; font-weight: 700;
-  padding: 5px 18px; border-radius: 14px; letter-spacing: 0.03em;
-}
-
-.plan h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
-.plan .price { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; margin: 12px 0 0; }
-.plan .price span { font-size: 0.9rem; font-weight: 500; color: var(--text-muted); }
-.plan .period { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 24px; }
-.plan ul { list-style: none; flex: 1; margin-bottom: 20px; }
-.plan ul li { font-size: 0.88rem; color: var(--text-secondary); padding: 7px 0; display: flex; align-items: center; gap: 10px; }
-.plan ul li::before { content: ''; width: 18px; height: 18px; background: rgba(16,185,129,0.12); border-radius: 50%; flex-shrink: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2 2 4-4' stroke='%2310B981' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-position: center; background-repeat: no-repeat; }
-
-.plan .btn { margin-top: auto; width: 100%; }
-
-/* CTA Banner */
-.cta-banner {
-  text-align: center; padding: 40px 20px; margin: 48px 0 24px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04));
-  border: 1px solid rgba(99,102,241,0.12); border-radius: var(--radius-xl);
-}
-
-.cta-banner h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
-.cta-banner p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 20px; }
-
-.cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-/* Forms */
-.form-group { margin-bottom: 1.2rem; }
-
-.form-group label {
-  display: block; color: var(--text-muted);
-  font-size: 0.82rem; font-weight: 500; margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  width: 100%; padding: 11px 14px;
-  background: var(--surface); border: 1px solid var(--border-subtle);
-  border-radius: var(--radius); color: var(--text-primary);
-  font-size: 0.92rem; font-family: var(--font-sans);
-  transition: var(--transition);
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  border-color: var(--accent); outline: none;
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
-}
-
-.form-group textarea { resize: vertical; min-height: 80px; }
-
-/* Footer */
-.app-footer {
-  border-top: 1px solid var(--border-subtle);
-  padding: 40px clamp(16px, 3vw, 40px) 28px; margin-top: 56px;
-  position: relative; z-index: 1;
-}
-
-.footer-inner {
-  max-width: 1200px; margin: 0 auto;
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 32px;
-}
-
-.footer-col h4 { color: var(--text-primary); font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; }
-.footer-col a { display: block; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; padding: 4px 0; transition: var(--transition); }
-.footer-col a:hover { color: var(--text-primary); }
-
-.footer-bottom {
-  max-width: 1200px; margin: 32px auto 0; padding-top: 20px;
-  border-top: 1px solid var(--border-subtle);
-  font-size: 0.72rem; color: var(--text-muted);
-  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
-}
-
-/* Toast */
-.toast {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-  background: var(--green); color: #fff; padding: 10px 24px;
-  border-radius: 8px; font-weight: 600; display: none; z-index: 999;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-
-/* Code */
-code {
-  background: var(--elevated); padding: 2px 8px; border-radius: 4px;
-  font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-3);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .app-header .nav-links a:not(.nav-cta) { display: none; }
-  .hero h1 { font-size: 1.8rem; }
-  .hero-stats { gap: 20px; }
-  .hero-stat .num { font-size: 1.8rem; }
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
-  .pricing-grid { grid-template-columns: 1fr; }
-  .cta-buttons { flex-direction: column; align-items: center; }
-}
-
-@media (max-width: 480px) {
-  .app-header { padding: 0 16px; height: 56px; }
-  .plan { padding: 24px 20px; }
-}
-
-/* Mouse-glow disable on touch */
-@media (hover: none) {
-  .card::before { display: none; }
-}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
 </style>
 </head>
-<body>
+<body class="h-full bg-zinc-950 text-zinc-100 antialiased flex overflow-hidden">
 
-<header class="app-header">
-  <a href="/" class="logo-group">
-    <div class="logo-icon">&#9876;</div>
-    <div class="logo-text">Ansede<em>Static</em></div>
+<!-- Slim Sidebar -->
+<aside class="w-16 flex-shrink-0 border-r border-zinc-800/50 bg-zinc-950 flex flex-col items-center py-4 gap-6">
+  <a href="/" class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-glow-cyan hover:scale-105 transition-transform" title="Ansede Static">A</a>
+  <a href="/" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all" title="Dashboard">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
   </a>
-  <nav class="nav-links">
-    <a href="/compare">Compare</a>
-    <a href="/#pricing">Pricing</a>
-    <a href="/leaderboard">Leaderboard</a>
-    <a href="/demo" class="nav-cta">Book a Demo</a>
+  <a href="/scan" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all" title="Scanner">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+  </a>
+  <a href="/demo" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all" title="Demo">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+  </a>
+  <a href="https://github.com/mattybellx/Ansede" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all mt-auto" title="GitHub">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+  </a>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+  <!-- Top Nav -->
+  <nav class="sticky top-0 z-10 h-14 flex-shrink-0 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md flex items-center px-6 gap-4">
+    <div class="flex items-center gap-2 text-sm font-mono text-zinc-400">
+      <span class="text-zinc-600">Ansede</span>
+      <span class="text-zinc-600">/</span>
+      <span class="text-cyan-400 font-medium">Compare</span>
+    </div>
+    <div class="flex-1"></div>
+    <a href="/scan" class="px-4 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold hover:bg-cyan-500/20 transition-all">Open Scanner →</a>
   </nav>
-</header>
 
-<div class="page-wrap">
+  <div class="p-6 space-y-8 max-w-5xl mx-auto w-full">
 
-<div class="hero">
-  <div class="hero-badge">&#9670; Independently Benchmarked &bull; All Results Reproducible</div>
-  <h1>Your SAST Scanner Is Missing 77% of Known CVEs</h1>
-  <p>We can prove it — against your own code. Here is how Ansede compares to every major SAST tool on the metrics that actually matter.</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="num">100%</div><div class="lbl">CVE Recall (164 CVEs)</div></div>
-    <div class="hero-stat"><div class="num">62.0%</div><div class="lbl">OWASP Recall (2,740 cases)</div></div>
-    <div class="hero-stat"><div class="num">7.5&times;</div><div class="lbl">More Than CodeQL</div></div>
-    <div class="hero-stat"><div class="num">0.4%</div><div class="lbl">FP Rate (Real-World)</div></div>
+    <!-- Hero -->
+    <div class="text-center py-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium mb-6">
+        ⚠ Independently Benchmarked — All Results Reproducible
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+        Your SAST Scanner Is Missing
+        <span class="bg-gradient-to-r from-red-400 to-red-300 bg-clip-text text-transparent">77% of Known CVEs</span>
+      </h1>
+      <p class="text-zinc-400 text-lg max-w-2xl mx-auto mb-6">We can prove it — against your own code. Here is how Ansede compares to every major SAST tool.</p>
+      <div class="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
+        <div class="text-center"><div class="text-2xl font-bold text-cyan-400 font-mono">100%</div><div class="text-xs text-zinc-500 mt-1">CVE Recall</div></div>
+        <div class="text-center"><div class="text-2xl font-bold text-emerald-400 font-mono">62%</div><div class="text-xs text-zinc-500 mt-1">OWASP Recall</div></div>
+        <div class="text-center"><div class="text-2xl font-bold text-blue-400 font-mono">7.5×</div><div class="text-xs text-zinc-500 mt-1">vs CodeQL</div></div>
+        <div class="text-center"><div class="text-2xl font-bold text-emerald-400 font-mono">0.4%</div><div class="text-xs text-zinc-500 mt-1">FP Rate</div></div>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 overflow-hidden">
+      <div class="px-5 py-3 border-b border-zinc-800/50 bg-zinc-900/50">
+        <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Head-to-Head Comparison</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-zinc-800/50 bg-zinc-900/30 text-xs text-zinc-500 uppercase tracking-wider">
+              <th class="text-left p-4 font-medium">Metric</th>
+              <th class="text-left p-4 font-medium text-cyan-400">Ansede Static</th>
+              <th class="text-left p-4 font-medium">Semgrep OSS</th>
+              <th class="text-left p-4 font-medium">CodeQL</th>
+              <th class="text-left p-4 font-medium">Bandit</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-800/50">
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">CVE Recall</div><div class="text-xs text-zinc-600 mt-0.5">164 CVEs, 5 languages</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">100% 🏆</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">23.2%</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">33.6%</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">~20%</span></td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">OWASP Recall</div><div class="text-xs text-zinc-600 mt-0.5">2,740 test cases</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">62.0% 🏆</span></td>
+              <td class="p-4 text-zinc-400">59.4%</td>
+              <td class="p-4 text-zinc-500">~50%</td>
+              <td class="p-4 text-zinc-500">N/A</td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">Real-World Findings</div><div class="text-xs text-zinc-600 mt-0.5">58 repos, 3.1M+ LOC</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">1,255 🏆</span></td>
+              <td class="p-4 text-zinc-500">—</td>
+              <td class="p-4 text-zinc-500">167</td>
+              <td class="p-4 text-zinc-500">~20</td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">IDOR / Auth Bypass</div><div class="text-xs text-zinc-600 mt-0.5">CWE-639, CWE-862</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Native AST</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">No rules</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">Manual</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">N/A</span></td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">Languages</div></td>
+              <td class="p-4 text-zinc-300">Python, JS, Go, Java, C#</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">30+ 🏆</span></td>
+              <td class="p-4 text-zinc-400">10+</td>
+              <td class="p-4 text-zinc-500">Python only</td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">Offline / No Telemetry</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Yes</span></td>
+              <td class="p-4 text-amber-400">Partial</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">SaaS only</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Yes</span></td>
+            </tr>
+            <tr class="hover:bg-zinc-800/50 transition-colors">
+              <td class="p-4"><div class="font-medium text-zinc-200">Price</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Free / Pro</span></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Free</span></td>
+              <td class="p-4 text-zinc-500">Licensed</td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Free</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Win/Loss Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-emerald-500">
+        <h3 class="text-sm font-semibold text-emerald-400 mb-2">CVE Detection — No One Comes Close</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed mb-3">100% recall on 164 CVEs across 5 languages. Semgrep 23%. CodeQL 34%. When a critical CVE drops, Ansede catches it.</p>
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">164 CVEs</span>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-emerald-500">
+        <h3 class="text-sm font-semibold text-emerald-400 mb-2">Auth / IDOR — Only Ansede Detects This</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed mb-3">CWE-639 (IDOR), CWE-862 (Missing Auth), CWE-285 (Ownership Bypass). No other free SAST has default rules for these.</p>
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">World-First</span>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-red-500">
+        <h3 class="text-sm font-semibold text-red-400 mb-2">Speed — Semgrep Is Faster</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Semgrep is compiled OCaml. Our IFDS solver takes 87s vs 32s for 2,740 files. Rust-native engine on the roadmap.</p>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-amber-500">
+        <h3 class="text-sm font-semibold text-amber-400 mb-2">Language Coverage — Different Philosophy</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Ansede: 5 languages with deep, interprocedural rules. Semgrep: 30+ languages but shallower pattern matching. We optimize for signal.</p>
+      </div>
+    </div>
+
+    <!-- Pricing -->
+    <div>
+      <h2 class="text-lg font-bold mb-4 px-1">Simple, Transparent Pricing</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 flex flex-col">
+          <h3 class="text-sm font-semibold text-zinc-200 mb-1">Free</h3>
+          <div class="text-3xl font-bold font-mono mb-1">$0</div>
+          <div class="text-xs text-zinc-500 mb-4">forever · no credit card</div>
+          <ul class="text-xs text-zinc-400 space-y-2 mb-6 flex-1">
+            <li>✓ Full CLI scanner</li>
+            <li>✓ 5 languages</li>
+            <li>✓ SARIF output</li>
+            <li>✓ GitHub Actions CI</li>
+            <li>✓ IDE plugins</li>
+          </ul>
+          <a href="https://pypi.org/project/ansede-static/" class="block text-center py-2 rounded-lg border border-zinc-700/50 text-zinc-400 text-xs font-medium hover:text-zinc-200 hover:border-zinc-600 transition-all">pip install ansede-static</a>
+        </div>
+        <div class="rounded-xl border border-cyan-500/20 bg-zinc-900/30 p-6 flex flex-col relative shadow-glow-cyan">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-[10px] font-bold uppercase tracking-wider">Most Popular</div>
+          <h3 class="text-sm font-semibold text-cyan-400 mb-1">Pro</h3>
+          <div class="text-3xl font-bold font-mono mb-1">$29<span class="text-sm text-zinc-500 font-normal">/mo</span></div>
+          <div class="text-xs text-zinc-500 mb-4">everything in Free, plus:</div>
+          <ul class="text-xs text-zinc-400 space-y-2 mb-6 flex-1">
+            <li>✓ LLM-assisted triage</li>
+            <li>✓ SBOM generation</li>
+            <li>✓ HTML dashboards</li>
+            <li>✓ Guarded Autofix</li>
+            <li>✓ Unlimited scans</li>
+          </ul>
+          <a href="https://ansede.onrender.com" class="block text-center py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold hover:bg-cyan-500/20 transition-all">Get Pro</a>
+        </div>
+        <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 flex flex-col">
+          <h3 class="text-sm font-semibold text-zinc-200 mb-1">Enterprise</h3>
+          <div class="text-3xl font-bold font-mono mb-1">$499<span class="text-sm text-zinc-500 font-normal">/mo</span></div>
+          <div class="text-xs text-zinc-500 mb-4">everything in Pro, plus:</div>
+          <ul class="text-xs text-zinc-400 space-y-2 mb-6 flex-1">
+            <li>✓ Custom rules</li>
+            <li>✓ On-premise deploy</li>
+            <li>✓ SSO / SAML</li>
+            <li>✓ Audit logs</li>
+            <li>✓ Priority SLA</li>
+          </ul>
+          <a href="/demo" class="block text-center py-2 rounded-lg border border-zinc-700/50 text-zinc-400 text-xs font-medium hover:text-zinc-200 hover:border-zinc-600 transition-all">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-8 text-center">
+      <h2 class="text-lg font-bold mb-2">Do Not Take Our Word For It</h2>
+      <p class="text-zinc-400 text-sm mb-4">Every benchmark is reproducible. Clone the repo and verify every number yourself.</p>
+      <code class="inline-block bg-black border border-zinc-700/50 rounded-lg px-5 py-2.5 text-xs font-mono text-zinc-400">pip install ansede-static && ansede-static --benchmark</code>
+    </div>
+
   </div>
-</div>
 
-<div class="cta-banner">
-  <h2>See for Yourself &mdash; Live Demo in 30 Minutes</h2>
-  <p>We will scan your repository and show you exactly what your current SAST tool is missing. No setup required.</p>
-  <div class="cta-buttons">
-    <a href="/demo" class="btn btn-primary">Book a Demo</a>
-    <a href="/whitepaper" class="btn btn-secondary">Download Whitepaper</a>
-  </div>
-</div>
-
-<div class="section">
-  <h2 class="section-title">&#9878; Head-to-Head Comparison</h2>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr><th>Metric</th><th>Ansede Static</th><th>Semgrep OSS</th><th>CodeQL</th><th>Bandit</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>OWASP Recall</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">2,740 test cases</span></td>
-          <td class="win">62.0% &#127942;</td><td>59.4%</td><td class="lose">~50%</td><td>N/A</td>
-        </tr>
-        <tr>
-          <td><strong>CVE Recall</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">164 known vulns, 5 langs</span></td>
-          <td class="win">100% &#127942;</td><td class="lose">23.2%</td><td class="lose">33.6%</td><td class="lose">~20%</td>
-        </tr>
-        <tr>
-          <td><strong>Real-World Findings</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">58 repos, 3.1M+ LOC</span></td>
-          <td class="win">1,255 findings &#127942;</td><td>—</td><td>167 (baseline)</td><td>~20</td>
-        </tr>
-        <tr>
-          <td><strong>IDOR / Auth Bypass</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">CWE-639, CWE-862</span></td>
-          <td class="win"><span class="badge badge-green">Native AST</span></td><td class="lose">No default rules</td><td class="lose">Manual only</td><td class="lose">Not supported</td>
-        </tr>
-        <tr>
-          <td><strong>Speed (2,740 files)</strong></td><td>87s</td><td class="win">32s &#127942;</td><td>N/A</td><td class="win">&lt;1s</td>
-        </tr>
-        <tr>
-          <td><strong>Languages</strong></td><td>Python, JS, Go, Java, C#</td><td class="win">30+ &#127942;</td><td>10+</td><td>Python only</td>
-        </tr>
-        <tr>
-          <td><strong>Install</strong></td><td class="win"><code>pip install</code></td><td class="win"><code>pip install</code></td><td>CLI + 78MB DB</td><td class="win"><code>pip install</code></td>
-        </tr>
-        <tr>
-          <td><strong>Offline / No Telemetry</strong></td><td class="win"><span class="badge badge-green">Yes</span></td><td class="tie">Partial</td><td class="lose">SaaS required</td><td class="win">Yes</td>
-        </tr>
-        <tr>
-          <td><strong>SARIF Output</strong></td><td class="win"><span class="badge badge-green">Yes</span></td><td class="win">Yes</td><td class="win">Yes</td><td class="lose">No</td>
-        </tr>
-        <tr>
-          <td><strong>Price</strong></td><td class="win">Free / Pro</td><td class="win">Free</td><td class="lose">Licensed</td><td class="win">Free</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="section">
-  <h2 class="section-title">&#9769; Where Ansede Dominates</h2>
-  <div class="grid-2">
-    <div class="card win">
-      <h3>CVE Detection &mdash; No One Comes Close</h3>
-      <p>100% recall on 164 known CVEs across 5 languages. Semgrep catches 23%. CodeQL catches 34%. When a critical CVE drops, Ansede catches it while your current tool likely will not.</p>
-      <p style="margin-top:12px"><span class="badge badge-green">164 CVEs</span> <span class="badge badge-blue">5 Languages</span> <span class="badge badge-blue">100% Reproducible</span></p>
-    </div>
-    <div class="card win">
-      <h3>Auth / IDOR &mdash; Only Ansede Detects This</h3>
-      <p>CWE-639 (IDOR), CWE-862 (Missing Auth), and CWE-285 (Ownership Bypass) are the #1, #2, and #4 OWASP Top 10 API risks. <strong>No other free SAST tool has default rules for these.</strong></p>
-      <p style="margin-top:12px"><span class="badge badge-green">Unique</span> <span class="badge badge-blue">AST-Native Route &rarr; Guard &rarr; Sink</span></p>
-    </div>
-    <div class="card win">
-      <h3>7.5&times; More Findings Than CodeQL</h3>
-      <p>On 58 real-world repos (3.1M+ LOC, 21,871 files), Ansede found 1,255 meaningful findings vs CodeQL's 167. Zero scan failures. 35+ distinct CWE types detected.</p>
-      <p style="margin-top:12px"><span class="badge badge-green">58 Repos</span> <span class="badge badge-blue">0 Scan Failures</span> <span class="badge badge-blue">3.1M+ Lines</span></p>
-    </div>
-    <div class="card win">
-      <h3>Crypto / Random &mdash; Semgrep Scores 0%</h3>
-      <p>Weak random: Ansede 100% vs Semgrep 0%. Insecure cookies: Ansede 100% vs Semgrep 0%. Weak crypto: Ansede 74.6% vs Semgrep 0%. These are real, exploitable vulnerabilities Semgrep silently ignores.</p>
-      <p style="margin-top:12px"><span class="badge badge-red">3 Critical Categories</span> <span class="badge badge-blue">Semgrep Scores 0%</span></p>
-    </div>
-  </div>
-</div>
-
-<div class="section">
-  <h2 class="section-title">&#9873; Where Others Win (We Are Honest About It)</h2>
-  <div class="grid-2">
-    <div class="card loss">
-      <h3>Speed &mdash; Semgrep Is 2.7&times; Faster</h3>
-      <p>Semgrep is compiled OCaml with years of optimization. Our IFDS solver takes 87s vs Semgrep's 32s for 2,740 files. A Rust-native IFDS engine is on the v6.0 roadmap and will bring us under 10 seconds.</p>
-    </div>
-    <div class="card loss">
-      <h3>Language Coverage &mdash; Semgrep Has 30+</h3>
-      <p>Ansede supports Python, JavaScript/TypeScript, Go, Java, and C#. Semgrep supports 30+ including Ruby, PHP, Kotlin, Swift, Rust, and more. New languages are being added based on user demand.</p>
-    </div>
-    <div class="card neutral">
-      <h3>Rule Breadth &mdash; Different Philosophy</h3>
-      <p>Ansede has fewer individual rules, but each one is AST-native and interprocedural. One IFDS rule catches patterns that would need 10+ regex-based rules in Semgrep. We optimize for signal, not rule count.</p>
-    </div>
-    <div class="card neutral">
-      <h3>Enterprise Feature Maturity</h3>
-      <p>SonarQube, Checkmarx, and Fortify have decades of enterprise polish, SSO, and compliance dashboards. Our Pro tier adds LLM triage and SBOM. Full enterprise portal with SSO is on the roadmap.</p>
-    </div>
-  </div>
-</div>
-
-<div class="section" id="pricing">
-  <h2 class="section-title">&#9767; Simple, Transparent Pricing</h2>
-  <div class="pricing-grid">
-    <div class="plan">
-      <h3>Free</h3>
-      <div class="price">$0<span>/forever</span></div>
-      <div class="period">No credit card required</div>
-      <ul>
-        <li>Full CLI scanner</li>
-        <li>SARIF output</li>
-        <li>GitHub Actions CI</li>
-        <li>IDE plugins (VS Code, IntelliJ, VS)</li>
-        <li>5 languages</li>
-        <li>Community support</li>
-      </ul>
-      <a href="https://pypi.org/project/ansede-static/" class="btn btn-secondary">pip install ansede-static</a>
-    </div>
-    <div class="plan featured">
-      <div class="plan-badge">Most Popular</div>
-      <h3>Pro</h3>
-      <div class="price">$29<span>/month</span></div>
-      <div class="period">Everything in Free, plus:</div>
-      <ul>
-        <li>LLM-assisted triage (95.9% accuracy)</li>
-        <li>SBOM generation (CycloneDX / SPDX)</li>
-        <li>HTML dashboards</li>
-        <li>Unlimited scans</li>
-        <li>Guarded Autofix with rollback</li>
-        <li>Email support</li>
-      </ul>
-      <a href="https://ansede.onrender.com" class="btn btn-primary">Get Pro</a>
-    </div>
-    <div class="plan">
-      <h3>Enterprise</h3>
-      <div class="price">$499<span>/month</span></div>
-      <div class="period">Everything in Pro, plus:</div>
-      <ul>
-        <li>Custom rule development</li>
-        <li>On-premise deployment</li>
-        <li>SSO / SAML</li>
-        <li>Audit logs</li>
-        <li>Priority SLA</li>
-        <li>Dedicated onboarding engineer</li>
-      </ul>
-      <a href="/demo" class="btn btn-secondary">Book a Demo</a>
-    </div>
-  </div>
-</div>
-
-<div class="cta-banner">
-  <h2>Do Not Take Our Word For It</h2>
-  <p>Every benchmark is fully reproducible. Clone the repo, run the scripts, and verify every number yourself.</p>
-  <div class="cta-buttons">
-    <code style="background:var(--elevated);padding:10px 18px;border-radius:var(--radius);font-family:var(--font-mono);font-size:0.82rem;color:var(--text-secondary)">pip install ansede-static && ansede-static --benchmark</code>
-  </div>
-</div>
-
-</div>
-
-<footer class="app-footer">
-  <div class="footer-inner">
-    <div class="footer-col">
-      <h4>Product</h4>
-      <a href="/#pricing">Pricing</a>
-      <a href="https://github.com/mattybellx/Ansede">GitHub</a>
-      <a href="https://pypi.org/project/ansede-static/">PyPI</a>
-    </div>
-    <div class="footer-col">
-      <h4>Resources</h4>
-      <a href="https://github.com/mattybellx/Ansede/blob/master/BENCHMARKS.md">Benchmarks</a>
-      <a href="https://github.com/mattybellx/Ansede/blob/master/CHANGELOG.md">Changelog</a>
-      <a href="/leaderboard">Live Leaderboard</a>
-    </div>
-    <div class="footer-col">
-      <h4>Compare</h4>
-      <a href="/compare">vs Semgrep</a>
-      <a href="/compare">vs CodeQL</a>
-      <a href="/compare">vs Bandit</a>
-    </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <a href="https://github.com/mattybellx/Ansede/issues">Report an Issue</a>
-      <a href="/demo">Book a Demo</a>
-      <a href="mailto:support@ansede.dev">Contact</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>&copy; 2026 Ansede Static. All rights reserved.</span>
-    <span>100% offline &bull; zero telemetry &bull; MIT licensed</span>
-  </div>
-</footer>
-
-<script>
-// Mouse-tracking glow for cards
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
-    card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
-  });
-});
-</script>
+  <!-- Footer -->
+  <footer class="flex-shrink-0 border-t border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md px-6 py-3 flex items-center justify-center gap-4 text-xs text-zinc-600">
+    <span>Powered by <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">ansede-static v6.3.0</a></span>
+    <span class="text-zinc-700">·</span>
+    <span>100% CVE recall</span>
+    <span class="text-zinc-700">·</span>
+    <span>World-first CWE-639 IDOR</span>
+    <span class="text-zinc-700">·</span>
+    <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">GitHub</a>
+    <span class="text-zinc-700">·</span>
+    <a href="https://pypi.org/project/ansede-static/" class="text-zinc-500 hover:text-cyan-400 transition-colors">PyPI</a>
+  </footer>
+</main>
 </body>
 </html>

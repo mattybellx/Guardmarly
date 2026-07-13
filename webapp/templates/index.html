@@ -1,1590 +1,216 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" class="h-full">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Autofix Studio — Guarded Security Scanner</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-/* ═══════════════════════════════════════════════════════════════════════════
-   Autofix Studio — Cinematic Design System
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-:root {
-  --canvas: #070709;
-  --surface: #0E0E12;
-  --elevated: #161620;
-  --card: #1A1A28;
-  --card-hover: #1F1F30;
-  --border-subtle: rgba(255,255,255,0.05);
-  --border-mid: rgba(255,255,255,0.08);
-  --border-accent: rgba(99,102,241,0.3);
-  --text-primary: #F3F4F6;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
-  --accent: #6366F1;
-  --accent-glow: rgba(99,102,241,0.12);
-  --accent-glow-intense: rgba(99,102,241,0.25);
-  --red: #EF4444;
-  --red-glow: rgba(239,68,68,0.15);
-  --amber: #F59E0B;
-  --amber-glow: rgba(245,158,11,0.15);
-  --cyan: #06B6D4;
-  --cyan-glow: rgba(6,182,212,0.15);
-  --green: #10B981;
-  --green-glow: rgba(16,185,129,0.15);
-  --radius-sm: 6px;
-  --radius: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
-  --radius-2xl: 24px;
-  --shadow-glass: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.03);
-  --shadow-glass-lg: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04);
-  --shadow-glow: 0 4px 24px var(--accent-glow);
-  --transition-premium: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'JetBrains Mono', monospace;
-}
-
-[data-theme="light"] {
-  --canvas: #F5F5F7;
-  --surface: #FFFFFF;
-  --elevated: #F0F0F5;
-  --card: #FFFFFF;
-  --card-hover: #FAFAFD;
-  --border-subtle: rgba(0,0,0,0.06);
-  --border-mid: rgba(0,0,0,0.1);
-  --border-accent: rgba(99,102,241,0.25);
-  --text-primary: #1A1A2E;
-  --text-secondary: #6B7280;
-  --text-muted: #9CA3AF;
-  --accent: #4F46E5;
-  --accent-glow: rgba(79,70,229,0.08);
-  --accent-glow-intense: rgba(79,70,229,0.18);
-  --shadow-glass: 0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-  --shadow-glass-lg: 0 16px 48px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05);
-  --shadow-glow: 0 4px 24px var(--accent-glow);
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: var(--font-sans);
-  background: var(--canvas);
-  color: var(--text-primary);
-  line-height: 1.6;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-
-/* ── Ambient gradient background ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(100% 60% at 50% 0%, rgba(99,102,241,0.04) 0%, transparent 100%),
-    radial-gradient(80% 40% at 80% 100%, rgba(16,185,129,0.03) 0%, transparent 100%),
-    radial-gradient(60% 50% at 20% 60%, rgba(168,85,247,0.03) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ═══════════════════ HEADER ═══════════════════ */
-
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(14, 14, 18, 0.82);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border-bottom: 1px solid var(--border-subtle);
-  padding: 0 clamp(16px, 3vw, 32px);
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-[data-theme="light"] .app-header {
-  background: rgba(255, 255, 255, 0.82);
-}
-
-.app-header::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.app-header .logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  user-select: none;
-}
-
-.app-header .logo .icon {
-  width: 30px;
-  height: 30px;
-  background: linear-gradient(135deg, var(--accent), #A855F7, #EC4899);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  box-shadow: 0 2px 12px rgba(99,102,241,0.3);
-  transition: var(--transition-premium);
-}
-
-.app-header .logo:hover .icon {
-  transform: scale(1.05);
-  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
-}
-
-.app-header .logo .brand {
-  font-weight: 700;
-  font-size: 17px;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-}
-
-.app-header .logo .brand em {
-  font-style: normal;
-  background: linear-gradient(135deg, var(--accent), #A855F7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.app-header .actions {
-  display: flex;
-  align-items: center;
-  gap: clamp(8px, 1.5vw, 14px);
-}
-
-.theme-toggle {
-  background: var(--elevated);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition-premium);
-  will-change: transform, background, border-color;
-  backdrop-filter: blur(4px);
-}
-
-.theme-toggle:hover {
-  transform: scale(1.1);
-  background: var(--card);
-  border-color: var(--accent);
-  color: var(--text-primary);
-  box-shadow: 0 0 20px rgba(99,102,241,0.1);
-}
-
-.theme-toggle:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.theme-toggle:active {
-  transform: scale(0.95);
-}
-
-/* ═══════════════════ CONTAINER ═══════════════════ */
-
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: clamp(20px, 3vw, 40px) clamp(16px, 3vw, 32px);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(16px, 2.5vw, 24px);
-}
-
-/* ═══════════════════ UPLOAD ZONE ═══════════════════ */
-
-.upload-zone {
-  position: relative;
-  background: var(--card);
-  border: 1.5px dashed var(--border-mid);
-  border-radius: var(--radius-xl);
-  padding: clamp(32px, 5vw, 56px) clamp(24px, 3vw, 40px);
-  text-align: center;
-  cursor: pointer;
-  transition: var(--transition-premium);
-  will-change: transform, border-color, background, box-shadow;
-  backdrop-filter: blur(8px);
-  overflow: hidden;
-  box-shadow: var(--shadow-glass);
-}
-
-.upload-zone::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, transparent 40%, var(--accent-glow) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: var(--transition-premium);
-  pointer-events: none;
-}
-
-.upload-zone:hover::before,
-.upload-zone.drag-over::before {
-  opacity: 1;
-}
-
-.upload-zone:hover {
-  transform: scale(1.015);
-  border-color: var(--border-accent);
-  background: var(--card-hover);
-  box-shadow: var(--shadow-glass), var(--shadow-glow);
-}
-
-.upload-zone.drag-over {
-  transform: scale(1.015);
-  border-color: var(--accent);
-  background: var(--card-hover);
-  box-shadow: var(--shadow-glass), 0 0 60px var(--accent-glow);
-}
-
-.upload-zone:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-  border-color: var(--accent);
-}
-
-.upload-zone:active {
-  transform: scale(0.995);
-}
-
-.upload-zone .icon-big {
-  font-size: clamp(36px, 5vw, 52px);
-  margin-bottom: clamp(12px, 1.5vw, 18px);
-  opacity: 0.7;
-  filter: drop-shadow(0 4px 16px var(--accent-glow));
-  transition: var(--transition-premium);
-}
-
-.upload-zone:hover .icon-big {
-  opacity: 1;
-  transform: translateY(-2px);
-}
-
-.upload-zone h2 {
-  font-size: clamp(18px, 2.5vw, 24px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-  margin-bottom: clamp(6px, 0.8vw, 10px);
-}
-
-.upload-zone p {
-  color: var(--text-secondary);
-  font-size: clamp(13px, 1.4vw, 15px);
-  margin-bottom: clamp(16px, 2vw, 24px);
-  max-width: 540px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.upload-zone input[type="file"] { display: none; }
-
-/* ── Upload zone glow ring ── */
-.upload-zone .glow-ring {
-  position: absolute;
-  inset: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-glow) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.upload-zone:hover .glow-ring,
-.upload-zone.drag-over .glow-ring {
-  opacity: 1;
-}
-
-/* ═══════════════════ CODE SECTION ═══════════════════ */
-
-.code-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.code-section .tabs {
-  display: flex;
-  gap: 4px;
-}
-
-.code-section .tab {
-  padding: 8px 18px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border-subtle);
-  background: var(--surface);
-  color: var(--text-secondary);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  font-family: var(--font-sans);
-  letter-spacing: -0.01em;
-  transition: var(--transition-premium);
-  will-change: transform, background, border-color, color;
-  backdrop-filter: blur(4px);
-}
-
-.code-section .tab:hover {
-  transform: scale(1.015);
-  background: var(--elevated);
-  border-color: var(--border-mid);
-  color: var(--text-primary);
-  box-shadow: 0 0 16px rgba(99,102,241,0.06);
-}
-
-.code-section .tab:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.code-section .tab:active {
-  transform: scale(0.97);
-}
-
-.code-section .tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.3);
-}
-
-.code-section .tab.active:hover {
-  transform: scale(1.015);
-  background: #7577F5;
-  border-color: #7577F5;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
-}
-
-.code-section .tab.active:active {
-  transform: scale(0.97);
-}
-
-.code-section textarea {
-  width: 100%;
-  min-height: 180px;
-  background: var(--surface);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-lg);
-  padding: clamp(14px, 1.8vw, 20px);
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-  font-size: clamp(13px, 1.2vw, 14px);
-  line-height: 1.7;
-  resize: vertical;
-  transition: var(--transition-premium);
-  will-change: border-color, box-shadow;
-  backdrop-filter: blur(4px);
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.15);
-}
-
-.code-section textarea:hover {
-  border-color: var(--border-accent);
-}
-
-.code-section textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.15), 0 0 0 3px var(--accent-glow), 0 0 24px var(--accent-glow);
-}
-
-.code-section textarea::placeholder {
-  color: var(--text-muted);
-  opacity: 0.6;
-}
-
-.code-section textarea:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ═══════════════════ BUTTONS ═══════════════════ */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: clamp(10px, 1.2vw, 14px) clamp(18px, 2vw, 28px);
-  border-radius: var(--radius);
-  font-size: clamp(13px, 1.1vw, 14px);
-  font-weight: 600;
-  font-family: var(--font-sans);
-  cursor: pointer;
-  transition: var(--transition-premium);
-  will-change: transform, background, border-color, box-shadow, color;
-  border: none;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  backdrop-filter: blur(4px);
-}
-
-.btn:hover {
-  transform: scale(1.015);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.btn:active {
-  transform: scale(0.97);
-}
-
-.btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), #7577F5);
-  color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.3);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #7577F5, #8B8CF7);
-  box-shadow: 0 6px 24px rgba(99,102,241,0.4);
-}
-
-.btn-primary:active {
-  box-shadow: 0 2px 8px rgba(99,102,241,0.2);
-}
-
-.btn-secondary {
-  background: var(--elevated);
-  border: 1px solid var(--border-mid);
-  color: var(--text-primary);
-  box-shadow: var(--shadow-glass);
-}
-
-.btn-secondary:hover {
-  background: var(--card);
-  border-color: var(--border-accent);
-  box-shadow: var(--shadow-glass), 0 0 16px var(--accent-glow);
-}
-
-.btn-secondary:active {
-  background: var(--surface);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-secondary);
-  padding: 8px 14px;
-  font-size: 13px;
-}
-
-.btn-ghost:hover {
-  color: var(--text-primary);
-  background: var(--elevated);
-  box-shadow: 0 0 12px rgba(255,255,255,0.02);
-}
-
-.btn-row {
-  display: flex;
-  gap: clamp(8px, 1.5vw, 14px);
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-/* ═══════════════════ SPINNER ═══════════════════ */
-
-.spinner {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255,255,255,0.15);
-  border-top-color: #FFFFFF;
-  border-radius: 50%;
-  animation: spin 0.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ═══════════════════ RESULTS ═══════════════════ */
-
-.results-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding: 4px 0;
-}
-
-.results-header h2 {
-  font-size: clamp(17px, 2vw, 21px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-}
-
-.results-header .stats {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.stat-badge {
-  padding: 4px 14px;
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  border: 1px solid transparent;
-  backdrop-filter: blur(4px);
-}
-
-.stat-badge.critical {
-  background: var(--red-glow);
-  color: var(--red);
-  border-color: rgba(239,68,68,0.2);
-}
-
-.stat-badge.high {
-  background: var(--amber-glow);
-  color: var(--amber);
-  border-color: rgba(245,158,11,0.2);
-}
-
-.stat-badge.medium {
-  background: var(--cyan-glow);
-  color: var(--cyan);
-  border-color: rgba(6,182,212,0.2);
-}
-
-.stat-badge.low {
-  background: var(--green-glow);
-  color: var(--green);
-  border-color: rgba(16,185,129,0.2);
-}
-
-/* ── Studio Summary ── */
-
-.studio-summary {
-  margin: 8px 0 16px;
-  padding: clamp(16px, 2.5vw, 24px) clamp(16px, 2.5vw, 24px);
-  border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(16,185,129,0.04));
-  border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(8px);
-  position: relative;
-  overflow: hidden;
-}
-
-.studio-summary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(99,102,241,0.1), transparent 50%, rgba(16,185,129,0.05));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.studio-summary h3 {
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
-  color: var(--text-primary);
-}
-
-.studio-summary p {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin-bottom: 10px;
-  line-height: 1.6;
-}
-
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 15vw, 160px), 1fr));
-  gap: clamp(8px, 1.2vw, 12px);
-  margin-top: 14px;
-}
-
-.summary-card {
-  padding: clamp(10px, 1.2vw, 14px) clamp(10px, 1.2vw, 14px);
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--border-subtle);
-  transition: var(--transition-premium);
-  backdrop-filter: blur(4px);
-}
-
-.summary-card:hover {
-  border-color: var(--border-mid);
-  background: var(--elevated);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-glass);
-}
-
-.summary-card .label {
-  display: block;
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-
-.summary-card .value {
-  display: block;
-  font-size: clamp(17px, 2vw, 20px);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
-}
-
-/* ── Workflow Rail ── */
-
-.workflow-rail {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(150px, 18vw, 190px), 1fr));
-  gap: clamp(10px, 1.2vw, 14px);
-  margin-bottom: 20px;
-}
-
-.workflow-step {
-  background: var(--card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: clamp(14px, 1.8vw, 20px);
-  position: relative;
-  transition: var(--transition-premium);
-  backdrop-filter: blur(4px);
-  box-shadow: var(--shadow-glass);
-  overflow: hidden;
-}
-
-.workflow-step::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 3px;
-  border-radius: 3px 0 0 3px;
-  background: var(--border-mid);
-  transition: var(--transition-premium);
-}
-
-.workflow-step.done::before { background: var(--green); box-shadow: 0 0 12px var(--green-glow); }
-.workflow-step.fail::before { background: var(--red); box-shadow: 0 0 12px var(--red-glow); }
-.workflow-step.blocked::before { background: var(--amber); box-shadow: 0 0 12px var(--amber-glow); }
-
-.workflow-step:hover {
-  border-color: var(--border-mid);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-glass-lg);
-}
-
-.workflow-step .step-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 10px;
-  align-items: center;
-}
-
-.workflow-step .step-label {
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-}
-
-.workflow-step .step-status {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 100px;
-  background: var(--elevated);
-  color: var(--text-muted);
-  border: 1px solid var(--border-subtle);
-}
-
-.workflow-step.done .step-status {
-  background: var(--green-glow);
-  color: var(--green);
-  border-color: rgba(16,185,129,0.2);
-}
-
-.workflow-step.fail .step-status {
-  background: var(--red-glow);
-  color: var(--red);
-  border-color: rgba(239,68,68,0.2);
-}
-
-.workflow-step.blocked .step-status {
-  background: var(--amber-glow);
-  color: var(--amber);
-  border-color: rgba(245,158,11,0.2);
-}
-
-.workflow-step p {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-
-/* ── File Grid ── */
-
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(clamp(300px, 40vw, 420px), 1fr));
-  gap: 14px;
-  margin-bottom: 20px;
-}
-
-.file-card {
-  background: var(--card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  transition: var(--transition-premium);
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(4px);
-}
-
-.file-card:hover {
-  border-color: var(--border-mid);
-  box-shadow: var(--shadow-glass-lg);
-  transform: translateY(-1px);
-}
-
-.file-card .file-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  align-items: center;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.file-card .file-name {
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  font-family: var(--font-mono);
-}
-
-.file-card .file-status {
-  padding: 3px 10px;
-  border-radius: 100px;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border: 1px solid transparent;
-}
-
-.file-status.changed {
-  background: var(--green-glow);
-  color: var(--green);
-  border-color: rgba(16,185,129,0.2);
-}
-
-.file-status.unchanged {
-  background: var(--elevated);
-  color: var(--text-muted);
-  border-color: var(--border-subtle);
-}
-
-.file-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.file-pane {
-  padding: 14px 18px;
-}
-
-.file-pane + .file-pane {
-  border-left: 1px solid var(--border-subtle);
-}
-
-.file-pane h4 {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.file-pane pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 1.55;
-  color: var(--text-secondary);
-  max-height: 260px;
-  overflow: auto;
-  padding: 0;
-}
-
-.file-pane pre code {
-  display: block;
-}
-
-/* ── Finding Cards ── */
-
-.finding-card {
-  background: var(--card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: clamp(16px, 2.5vw, 24px) clamp(16px, 2.5vw, 24px);
-  margin-bottom: 14px;
-  transition: var(--transition-premium);
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-glass);
-  backdrop-filter: blur(4px);
-}
-
-.finding-card:hover {
-  border-color: var(--border-mid);
-  box-shadow: var(--shadow-glass-lg);
-  transform: translateY(-1px);
-}
-
-.finding-card::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  border-radius: 3px 0 0 3px;
-  transition: var(--transition-premium);
-}
-
-.finding-card.critical::before { background: var(--red); box-shadow: 0 0 16px var(--red-glow); }
-.finding-card.high::before { background: var(--amber); box-shadow: 0 0 16px var(--amber-glow); }
-.finding-card.medium::before { background: var(--cyan); box-shadow: 0 0 16px var(--cyan-glow); }
-.finding-card.low::before { background: var(--green); box-shadow: 0 0 16px var(--green-glow); }
-
-.finding-card .card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.finding-card .severity-tag {
-  padding: 3px 12px;
-  border-radius: 100px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  border: 1px solid transparent;
-}
-
-.severity-tag.critical {
-  background: var(--red-glow);
-  color: var(--red);
-  border-color: rgba(239,68,68,0.2);
-}
-
-.severity-tag.high {
-  background: var(--amber-glow);
-  color: var(--amber);
-  border-color: rgba(245,158,11,0.2);
-}
-
-.severity-tag.medium {
-  background: var(--cyan-glow);
-  color: var(--cyan);
-  border-color: rgba(6,182,212,0.2);
-}
-
-.severity-tag.low {
-  background: var(--green-glow);
-  color: var(--green);
-  border-color: rgba(16,185,129,0.2);
-}
-
-.finding-card .card-title {
-  font-size: 15px;
-  font-weight: 600;
-  flex: 1;
-  letter-spacing: -0.02em;
-  line-height: 1.5;
-  color: var(--text-primary);
-}
-
-.finding-card .card-meta {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.finding-card .meta-item {
-  font-size: 11px;
-  color: var(--text-muted);
-  background: var(--elevated);
-  padding: 3px 10px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  border: 1px solid var(--border-subtle);
-}
-
-.finding-card .card-desc {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-bottom: 14px;
-  line-height: 1.7;
-}
-
-.finding-card .card-suggestion {
-  font-size: 13px;
-  color: var(--green);
-  background: var(--green-glow);
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  border-left: 2px solid var(--green);
-  margin-bottom: 14px;
-  line-height: 1.6;
-}
-
-.finding-card .code-block {
-  background: var(--surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
-  overflow: hidden;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.finding-card .code-line {
-  display: flex;
-  padding: 3px 14px;
-  transition: var(--transition-premium);
-}
-
-.finding-card .code-line.target {
-  background: var(--accent-glow);
-  border-left: 3px solid var(--accent);
-}
-
-.finding-card .code-line .line-num {
-  color: var(--text-muted);
-  width: 36px;
-  text-align: right;
-  margin-right: 14px;
-  user-select: none;
-  flex-shrink: 0;
-  opacity: 0.5;
-}
-
-/* ── Trace Flow ── */
-
-.finding-card .trace-flow {
-  margin-top: 14px;
-  padding: 14px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
-}
-
-.finding-card .trace-step {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 4px 0;
-  color: var(--text-secondary);
-  font-size: 12px;
-}
-
-.finding-card .trace-step .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  box-shadow: 0 0 8px currentColor;
-}
-
-.trace-step .dot.source { background: var(--green); color: var(--green); }
-.trace-step .dot.propagator { background: var(--amber); color: var(--amber); }
-.trace-step .dot.helper { background: var(--cyan); color: var(--cyan); }
-.trace-step .dot.sink { background: var(--red); color: var(--red); }
-.trace-step .dot.check { background: var(--accent); color: var(--accent); }
-.trace-step .dot.gap { background: var(--red); color: var(--red); animation: pulse-dot 1.5s ease-in-out infinite; }
-
-@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.2;transform:scale(0.7)} }
-
-/* ── Empty State ── */
-
-.empty-state {
-  text-align: center;
-  padding: 56px 24px;
-  color: var(--text-muted);
-}
-
-.empty-state .icon {
-  font-size: 48px;
-  margin-bottom: 14px;
-  opacity: 0.4;
-  filter: drop-shadow(0 4px 12px var(--green-glow));
-}
-
-.empty-state h3 {
-  font-size: 17px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: var(--text-secondary);
-  letter-spacing: -0.02em;
-}
-
-.empty-state p {
-  font-size: 14px;
-  color: var(--text-muted);
-}
-
-/* ── Footer ── */
-
-.app-footer {
-  text-align: center;
-  padding: clamp(24px, 3vw, 40px) 24px clamp(32px, 4vw, 48px);
-  color: var(--text-muted);
-  font-size: 12px;
-  border-top: 1px solid var(--border-subtle);
-  margin-top: 16px;
-  letter-spacing: 0.02em;
-}
-
-/* ── Glass toast ── */
-
-.toast {
-  position: fixed;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--card);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius);
-  padding: 12px 24px;
-  font-size: 13px;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-glass-lg);
-  backdrop-filter: blur(16px);
-  opacity: 0;
-  transition: var(--transition-premium);
-  pointer-events: none;
-  z-index: 200;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-/* ── Responsive ── */
-
-@media (max-width: 768px) {
-  .file-columns { grid-template-columns: 1fr; }
-  .file-pane + .file-pane { border-left: none; border-top: 1px solid var(--border-subtle); }
-  .workflow-rail { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 480px) {
-  .workflow-rail { grid-template-columns: 1fr; }
-  .btn { width: 100%; justify-content: center; }
-}
-</style>
-</head>
-<body>
-
-<!-- ═════════════════════ HEADER ═════════════════════ -->
-<header class="app-header">
-  <div class="logo">
-    <div class="icon">&#9760;</div>
-    <span class="brand">Autofix <em>Studio</em></span>
-  </div>
-  <div class="actions">
-    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle color theme">
-      <span id="theme-icon">&#9789;</span>
-    </button>
-  </div>
-</header>
-
-<div class="container">
-
-  <!-- ═══════════════════ UPLOAD ZONE ══════════════════ -->
-  <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="Drop zone for source code files">
-    <div class="glow-ring" id="glowRing"></div>
-    <div class="icon-big">&#128230;</div>
-    <h2>Drop a snippet or a small code bundle</h2>
-    <p>Run the real scanner in an isolated demo workspace, then try Guarded Autofix with verification and automatic rollback.</p>
-    <input type="file" id="fileInput" multiple accept=".py,.js,.ts,.jsx,.tsx,.mjs" onchange="handleFiles(this.files)">
-    <div class="btn-row" style="justify-content:center">
-      <span class="btn btn-secondary" onclick="event.stopPropagation(); document.getElementById('fileInput').click()">Choose Files</span>
-    </div>
-  </div>
-
-  <!-- ═══════════════════ CODE INPUT ═══════════════════ -->
-  <div class="code-section">
-    <div class="tabs">
-      <button class="tab active" onclick="setLanguage('auto', this)">Auto-detect</button>
-      <button class="tab" onclick="setLanguage('python', this)">Python</button>
-      <button class="tab" onclick="setLanguage('javascript', this)">JavaScript</button>
-    </div>
-    <textarea id="codeInput" spellcheck="false" placeholder="Paste your source code here...&#10;&#10;Example:&#10;from flask import request&#10;@app.route('/user/&lt;id&gt;')&#10;def get_user(id):&#10;    return db.execute(f&quot;SELECT * FROM users WHERE id = '{id}'&quot;)"></textarea>
-  </div>
-
-  <!-- ═══════════════════ ACTIONS ══════════════════════ -->
-  <div class="btn-row">
-    <button class="btn btn-primary" id="scanBtn" onclick="runScan()">
-      &#128269; Scan for Vulnerabilities
-    </button>
-    <button class="btn btn-secondary" id="guardedFixBtn" onclick="runGuardedFix()">
-      &#128737; Run Guarded Autofix
-    </button>
-    <span style="color:var(--text-muted);font-size:13px" id="fileCount">No files selected</span>
-  </div>
-
-  <!-- ═══════════════════ RESULTS ══════════════════════ -->
-  <div id="resultsSection" style="display:none">
-    <div class="results-header">
-      <h2 id="resultsTitle">Scan Results</h2>
-      <div class="stats" id="statsRow"></div>
-    </div>
-    <div class="studio-summary" id="studioSummary" style="display:none"></div>
-    <div class="workflow-rail" id="workflowRail" style="display:none"></div>
-    <div class="file-grid" id="fileGrid" style="display:none"></div>
-    <div class="btn-row" style="margin-top:0;margin-bottom:16px">
-      <button class="btn btn-secondary" onclick="exportResults('sarif')">&#128196; Export SARIF</button>
-      <button class="btn btn-secondary" onclick="exportResults('json')">&#128196; Export JSON</button>
-      <button class="btn btn-ghost" onclick="clearResults()">Clear Results</button>
-    </div>
-    <div id="findingsList"></div>
-    <div class="empty-state" id="emptyState" style="display:none">
-      <div class="icon">&#9989;</div>
-      <h3>No vulnerabilities found</h3>
-      <p>Your code looks clean! Everything is secure.</p>
-    </div>
-  </div>
-
-  <footer class="app-footer">
-    Autofix Studio &middot; Powered by real ansede-static scans &middot; Verification covers submitted scope only
-  </footer>
-</div>
-
-<div class="toast" id="toast"></div>
-
+<title>Ansede Static — World's Most Accurate SAST Scanner</title>
+<meta name="description" content="100% CVE recall across 164 CVEs. World-first CWE-639 IDOR detection. Enterprise-grade SAST that is fully offline.">
+<script src="https://cdn.tailwindcss.com"></script>
 <script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   Autofix Studio — App Logic
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-let selectedLanguage = 'auto';
-let uploadedFiles = [];
-let scanResults = [];
-let lastReport = null;
-let lastArtifacts = {};
-let lastStudio = null;
-
-// ── Theme ─────────────────────────────────────────────────────────────
-function toggleTheme() {
-  const html = document.documentElement;
-  const icon = document.getElementById('theme-icon');
-  const current = html.getAttribute('data-theme');
-  const next = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  icon.innerHTML = next === 'dark' ? '&#9789;' : '&#9728;';
-  localStorage.setItem('ansede-theme', next);
-}
-(function() {
-  const saved = localStorage.getItem('ansede-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', saved);
-  document.getElementById('theme-icon').innerHTML = saved === 'dark' ? '&#9789;' : '&#9728;';
-})();
-
-// ── Upload zone mouse-tracking glow ────────────────────────────────────
-(function() {
-  const zone = document.getElementById('uploadZone');
-  const ring = document.getElementById('glowRing');
-  if (zone && ring) {
-    zone.addEventListener('mousemove', function(e) {
-      const rect = this.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-      const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-      ring.style.setProperty('--mouse-x', x + '%');
-      ring.style.setProperty('--mouse-y', y + '%');
-    });
-  }
-})();
-
-// ── Drag & Drop ──────────────────────────────────────────────────────
-(function() {
-  const zone = document.getElementById('uploadZone');
-  if (!zone) return;
-  ['dragenter','dragover'].forEach(e => {
-    zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.add('drag-over'); });
-  });
-  ['dragleave','drop'].forEach(e => {
-    zone.addEventListener(e, ev => { ev.preventDefault(); zone.classList.remove('drag-over'); });
-  });
-  zone.addEventListener('drop', ev => {
-    handleFiles(ev.dataTransfer.files);
-  });
-  // Keyboard activation
-  zone.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      document.getElementById('fileInput').click();
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', 'monospace'],
+      },
+      boxShadow: {
+        'glow-cyan': '0 0 20px rgba(6,182,212,0.15)',
+        'glow-card': '0 8px 32px rgba(0,0,0,0.5)',
+      }
     }
-  });
-})();
-
-// ── Language Tabs ────────────────────────────────────────────────────
-function setLanguage(lang, btn) {
-  selectedLanguage = lang;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-// ── File Handling ────────────────────────────────────────────────────
-function handleFiles(files) {
-  uploadedFiles = Array.from(files);
-  document.getElementById('fileCount').textContent =
-    uploadedFiles.length ? `${uploadedFiles.length} file(s) selected` : 'No files selected';
-}
-
-// ── Scan ─────────────────────────────────────────────────────────────
-function buildFormData() {
-  const code = document.getElementById('codeInput').value.trim();
-  if (!code && !uploadedFiles.length) {
-    alert('Drop a file or paste some code first!');
-    return null;
   }
-
-  const formData = new FormData();
-  uploadedFiles.forEach(f => formData.append('files', f));
-  if (code) {
-    formData.append('code', code);
-    formData.append('language', selectedLanguage);
-  }
-  return formData;
-}
-
-function setBusy(isBusy, activeLabel) {
-  const scanBtn = document.getElementById('scanBtn');
-  const fixBtn = document.getElementById('guardedFixBtn');
-  scanBtn.disabled = isBusy;
-  fixBtn.disabled = isBusy;
-  scanBtn.innerHTML = activeLabel === 'scan'
-    ? '<span class="spinner"></span> Scanning...'
-    : '&#128269; Scan for Vulnerabilities';
-  fixBtn.innerHTML = activeLabel === 'guarded-fix'
-    ? '<span class="spinner"></span> Verifying fixes...'
-    : '&#128737; Run Guarded Autofix';
-}
-
-async function runStudio(endpoint, activeLabel) {
-  const formData = buildFormData();
-  if (!formData) return;
-
-  setBusy(true, activeLabel);
-
-  try {
-    const resp = await fetch(endpoint, { method: 'POST', body: formData });
-    const data = await resp.json();
-    if (data.success) {
-      displayResults(data);
-    } else {
-      alert('Studio run failed: ' + (data.error || 'Unknown error'));
-    }
-  } catch (err) {
-    alert('Connection error \u2014 is the server running? ' + err.message);
-  } finally {
-    setBusy(false, '');
-  }
-}
-
-async function runScan() {
-  await runStudio('/api/scan', 'scan');
-}
-
-async function runGuardedFix() {
-  await runStudio('/api/guarded-fix', 'guarded-fix');
-}
-
-// ── Display Results ──────────────────────────────────────────────────
-function displayResults(data) {
-  scanResults = data.results || [];
-  lastReport = data.report || null;
-  lastArtifacts = data.artifacts || {};
-  lastStudio = data.studio || null;
-  const total = data.total_findings || 0;
-  const section = document.getElementById('resultsSection');
-  const empty = document.getElementById('emptyState');
-  const list = document.getElementById('findingsList');
-  const title = document.getElementById('resultsTitle');
-  const statsRow = document.getElementById('statsRow');
-
-  section.style.display = 'block';
-  list.innerHTML = '';
-
-  renderStudioSummary(data);
-  renderWorkflow(data.studio && data.studio.timeline ? data.studio.timeline : []);
-  renderFileGrid(data.studio && data.studio.files ? data.studio.files : []);
-
-  if (total === 0) {
-    empty.style.display = 'block';
-    title.textContent = data.mode === 'guarded-fix' ? 'Guarded Autofix \u2014 Clean Scope' : 'Scan Results \u2014 Clean!';
-    statsRow.innerHTML = '';
-    return;
-  }
-
-  empty.style.display = 'none';
-  title.textContent = data.mode === 'guarded-fix'
-    ? `Guarded Autofix \u2014 ${total} Remaining Finding${total !== 1 ? 's' : ''}`
-    : `Scan Results \u2014 ${total} Finding${total !== 1 ? 's' : ''}`;
-
-  // Stats
-  let critical = 0, high = 0, medium = 0, low = 0;
-  scanResults.forEach(r => {
-    r.findings.forEach(f => {
-      if (f.severity === 'critical') critical++;
-      else if (f.severity === 'high') high++;
-      else if (f.severity === 'medium') medium++;
-      else low++;
-    });
-  });
-  statsRow.innerHTML = [
-    critical ? `<span class="stat-badge critical">${critical} CRITICAL</span>` : '',
-    high ? `<span class="stat-badge high">${high} HIGH</span>` : '',
-    medium ? `<span class="stat-badge medium">${medium} MEDIUM</span>` : '',
-    low ? `<span class="stat-badge low">${low} LOW</span>` : '',
-  ].join('');
-
-  // Findings
-  scanResults.forEach(result => {
-    result.findings.forEach(finding => {
-      const card = document.createElement('div');
-      card.className = `finding-card ${finding.severity}`;
-
-      const traceHtml = (finding.trace && finding.trace.length) ? `
-        <div class="trace-flow">
-          <div style="font-weight:600;margin-bottom:8px;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted)">Data Flow Trace</div>
-          ${finding.trace.map(t => `
-            <div class="trace-step">
-              <span class="dot ${t.kind}"></span>
-              <span style="font-weight:600">${t.kind.toUpperCase()}</span>
-              <span>${escapeHtml(t.label)}</span>
-              ${t.line ? `<span style="color:var(--text-muted);margin-left:auto">L${t.line}</span>` : ''}
-            </div>
-          `).join('')}
-        </div>
-      ` : '';
-
-      const codeHtml = (finding.code_context && finding.code_context.length) ? `
-        <div class="code-block">
-          ${finding.code_context.map(l => `
-            <div class="code-line${l.is_target ? ' target' : ''}">
-              <span class="line-num">${l.line_num}</span>
-              <span>${escapeHtml(l.code)}</span>
-            </div>
-          `).join('')}
-        </div>
-      ` : '';
-
-      card.innerHTML = `
-        <div class="card-header">
-          <span class="severity-tag ${finding.severity}">${finding.severity}</span>
-          <span class="card-title">${escapeHtml(finding.title)}</span>
-        </div>
-        <div class="card-meta">
-          ${finding.cwe ? `<span class="meta-item">${escapeHtml(finding.cwe)}</span>` : ''}
-          ${finding.rule_id ? `<span class="meta-item">${escapeHtml(finding.rule_id)}</span>` : ''}
-          <span class="meta-item">L${finding.line || '?'}</span>
-          <span class="meta-item">confidence ${Math.round(finding.confidence * 100)}%</span>
-        </div>
-        <div class="card-desc">${escapeHtml(finding.description)}</div>
-        ${finding.suggestion ? `<div class="card-suggestion">&#128161; ${escapeHtml(finding.suggestion)}</div>` : ''}
-        ${codeHtml}
-        ${traceHtml}
-      `;
-      list.appendChild(card);
-    });
-  });
-
-  // Scroll to results
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function renderStudioSummary(data) {
-  const node = document.getElementById('studioSummary');
-  const studio = data.studio || {};
-  const execution = data.execution || {};
-  const guarded = execution.guarded_autofix || {};
-  const remainingQuota = studio.remaining_guarded_quota;
-  const summary = data.summary || {};
-
-  node.style.display = 'block';
-  node.innerHTML = `
-    <h3>${data.mode === 'guarded-fix' ? 'Guarded Autofix decision' : 'Scanner summary'}</h3>
-    <p>${escapeHtml(studio.verification_message || 'Static scan completed for the submitted scope.')}</p>
-    <p>${escapeHtml(studio.scope_note || '')}</p>
-    <div class="summary-grid">
-      <div class="summary-card"><span class="label">Mode</span><span class="value">${data.mode === 'guarded-fix' ? 'Guarded Fix' : 'Scan'}</span></div>
-      <div class="summary-card"><span class="label">Files</span><span class="value">${summary.files_scanned || 0}</span></div>
-      <div class="summary-card"><span class="label">Findings</span><span class="value">${summary.total_findings || 0}</span></div>
-      <div class="summary-card"><span class="label">Changed files</span><span class="value">${studio.changed_files || 0}</span></div>
-      <div class="summary-card"><span class="label">Applied fixes</span><span class="value">${guarded.applied || 0}</span></div>
-      <div class="summary-card"><span class="label">Free quota left</span><span class="value">${remainingQuota === null || remainingQuota === undefined ? '\u221E' : remainingQuota}</span></div>
-    </div>
-  `;
-}
-
-function renderWorkflow(timeline) {
-  const rail = document.getElementById('workflowRail');
-  if (!timeline || !timeline.length) {
-    rail.style.display = 'none';
-    rail.innerHTML = '';
-    return;
-  }
-  rail.style.display = 'grid';
-  rail.innerHTML = timeline.map(step => `
-    <div class="workflow-step ${escapeHtml(step.status || 'idle')}">
-      <div class="step-top">
-        <span class="step-label">${escapeHtml(step.label || 'Step')}</span>
-        <span class="step-status">${escapeHtml(step.status || 'idle')}</span>
-      </div>
-      <p>${escapeHtml(step.detail || '')}</p>
-    </div>
-  `).join('');
-}
-
-function renderFileGrid(files) {
-  const grid = document.getElementById('fileGrid');
-  if (!files || !files.length) {
-    grid.style.display = 'none';
-    grid.innerHTML = '';
-    return;
-  }
-  grid.style.display = 'grid';
-  grid.innerHTML = files.map(file => `
-    <div class="file-card">
-      <div class="file-head">
-        <span class="file-name">${escapeHtml(file.file || 'snippet')}</span>
-        <span class="file-status ${file.changed ? 'changed' : 'unchanged'}">${file.changed ? 'changed' : 'unchanged'}</span>
-      </div>
-      <div class="file-columns">
-        <div class="file-pane">
-          <h4>Before</h4>
-          <pre><code>${escapeHtml(previewText(file.original || ''))}</code></pre>
-        </div>
-        <div class="file-pane">
-          <h4>After</h4>
-          <pre><code>${escapeHtml(previewText(file.final || ''))}</code></pre>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ── Export ────────────────────────────────────────────────────────────
-async function exportResults(format) {
-  try {
-    const resp = await fetch('/api/export', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ format, report: lastReport, artifacts: lastArtifacts }),
-    });
-    const data = await resp.json();
-    if (data.success) {
-      const blob = new Blob([JSON.stringify(data.content, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `ansede-studio-results.${format}`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  } catch (err) {
-    alert('Export failed: ' + err.message);
-  }
-}
-
-// ── Helpers ───────────────────────────────────────────────────────────
-function clearResults() {
-  document.getElementById('resultsSection').style.display = 'none';
-  document.getElementById('findingsList').innerHTML = '';
-  document.getElementById('workflowRail').innerHTML = '';
-  document.getElementById('studioSummary').innerHTML = '';
-  document.getElementById('fileGrid').innerHTML = '';
-  document.getElementById('codeInput').value = '';
-  uploadedFiles = [];
-  scanResults = [];
-  lastReport = null;
-  lastArtifacts = {};
-  lastStudio = null;
-  document.getElementById('fileCount').textContent = 'No files selected';
-}
-
-function previewText(str) {
-  const lines = String(str || '').split('\n');
-  return lines.slice(0, 18).join('\n');
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = String(str || '');
-  return div.innerHTML;
 }
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @keyframes pulse-scan { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .scan-pulse { animation: pulse-scan 2s ease-in-out infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { animation: spin 0.6s linear infinite; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+  textarea::placeholder { color: #52525b; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+</style>
+</head>
+<body class="h-full bg-zinc-950 text-zinc-100 antialiased flex overflow-hidden">
+
+<!-- Slim Sidebar -->
+<aside class="w-16 flex-shrink-0 border-r border-zinc-800/50 bg-zinc-950 flex flex-col items-center py-4 gap-6">
+  <a href="/" class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 flex items-center justify-center text-white font-bold text-lg shadow-glow-cyan hover:scale-105 transition-transform" title="Ansede Static">A</a>
+  <a href="/scan" class="w-9 h-9 rounded-lg flex items-center justify-center text-cyan-400 bg-cyan-500/10" title="Scanner">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+  </a>
+  <a href="/compare" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all" title="Compare">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg>
+  </a>
+  <a href="/demo" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all" title="Demo">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+  </a>
+  <a href="https://github.com/mattybellx/Ansede" target="_blank" class="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-500 hover:text-cyan-400 hover:bg-zinc-800/50 transition-all mt-auto" title="GitHub">
+    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+  </a>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+
+  <!-- Top Nav -->
+  <nav class="sticky top-0 z-10 h-14 flex-shrink-0 border-b border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md flex items-center px-6 gap-4">
+    <div class="flex items-center gap-2 text-sm font-mono text-zinc-400">
+      <span class="text-zinc-600">Ansede</span>
+      <span class="text-zinc-600">/</span>
+      <span class="text-cyan-400 font-medium">Dashboard</span>
+    </div>
+    <div class="flex-1"></div>
+    <a href="/scan" class="flex items-center gap-2 px-4 py-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all shadow-glow-cyan">Open Scanner →</a>
+  </nav>
+
+  <div class="p-6 space-y-8 max-w-6xl mx-auto w-full">
+
+    <!-- Hero -->
+    <div class="text-center py-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-medium mb-6">
+        <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 scan-pulse"></span>
+        v6.3.0 — Now with world-first CWE-639 IDOR detection
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+        The SAST Engine That
+        <span class="bg-gradient-to-r from-cyan-400 to-cyan-300 bg-clip-text text-transparent">Actually Finds</span>
+        Vulnerabilities
+      </h1>
+      <p class="text-zinc-400 text-lg max-w-2xl mx-auto mb-8">
+        Your current SAST tool misses 77% of known CVEs. Ansede catches 100%. Fully offline. Zero telemetry. World-first CWE-639 IDOR detection.
+      </p>
+      <div class="flex items-center justify-center gap-3">
+        <a href="/scan" class="px-5 py-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-semibold hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all shadow-glow-cyan">Try Live Scanner</a>
+        <a href="/compare" class="px-5 py-2.5 rounded-lg border border-zinc-700/50 text-zinc-400 text-sm font-medium hover:text-zinc-200 hover:border-zinc-600 transition-all">See Benchmarks</a>
+      </div>
+    </div>
+
+    <!-- Metrics Bento Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+        <div class="relative z-10">
+          <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">CVE Recall</div>
+          <div class="text-3xl font-bold text-cyan-400 font-mono">100%</div>
+          <div class="text-xs text-zinc-500 mt-1">164 CVEs across 5 languages</div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+        <div class="relative z-10">
+          <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">OWASP Recall</div>
+          <div class="text-3xl font-bold text-emerald-400 font-mono">62%</div>
+          <div class="text-xs text-zinc-500 mt-1">2,740 test cases</div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+        <div class="relative z-10">
+          <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">Real Repos Scanned</div>
+          <div class="text-3xl font-bold text-blue-400 font-mono">58</div>
+          <div class="text-xs text-zinc-500 mt-1">3.1M+ lines · 0 failures</div>
+        </div>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5">
+        <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">Install</div>
+        <div class="bg-black rounded-lg p-3 font-mono text-xs text-cyan-400 leading-relaxed">
+          $ pip install ansede-static<br>
+          <span class="text-zinc-500">$ ansede-static --help</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Row: Features -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 hover:border-zinc-700/50 transition-all duration-300">
+        <div class="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-zinc-200 mb-2">CWE-639 IDOR Detection</h3>
+        <p class="text-xs text-zinc-500 leading-relaxed">World-first open-source detection of Insecure Direct Object References. AST-native route→guard→sink analysis. No other free SAST tool has this.</p>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 hover:border-zinc-700/50 transition-all duration-300">
+        <div class="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-zinc-200 mb-2">100% Offline & Private</h3>
+        <p class="text-xs text-zinc-500 leading-relaxed">No cloud, no telemetry, no data ever leaves your machine. Enterprise-grade security scanning you can trust with proprietary source code.</p>
+      </div>
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 hover:border-zinc-700/50 transition-all duration-300">
+        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-sm font-semibold text-zinc-200 mb-2">5 Languages · 35+ CWE Types</h3>
+        <p class="text-xs text-zinc-500 leading-relaxed">Python, JavaScript/TypeScript, Go, Java, C#. Detects SQL injection, XSS, SSRF, path traversal, command injection, deserialization, and 30+ more.</p>
+      </div>
+    </div>
+
+    <!-- Code Demo -->
+    <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 overflow-hidden">
+      <div class="flex items-center gap-2 px-4 py-2.5 border-b border-zinc-800/50 bg-zinc-900/50">
+        <span class="text-xs font-medium text-zinc-400 uppercase tracking-wider">Quick Demo</span>
+        <span class="text-xs text-zinc-600 font-mono ml-2">demo.py</span>
+      </div>
+      <div class="p-5">
+        <div class="bg-[#0d0d0d] rounded-lg border border-zinc-800/50 p-4 font-mono text-sm leading-relaxed">
+          <div class="text-zinc-500"><span class="text-zinc-600">1</span>  from flask import Flask, request</div>
+          <div class="text-zinc-500"><span class="text-zinc-600">2</span>  app = Flask(__name__)</div>
+          <div class="text-zinc-500"><span class="text-zinc-600">3</span>  </div>
+          <div class="text-zinc-500"><span class="text-zinc-600">4</span>  @app.route('/user/&lt;id&gt;')</div>
+          <div class="bg-red-500/20 border-l-2 border-red-400"><span class="text-zinc-600">5</span>  def get_user(id):</div>
+          <div class="bg-red-500/20 border-l-2 border-red-400"><span class="text-zinc-600">6</span>      <span class="text-red-400">query = "SELECT * FROM users WHERE id = " + id</span></div>
+          <div class="bg-red-500/20 border-l-2 border-red-400"><span class="text-zinc-600">7</span>      return db.execute(query)</div>
+          <div class="text-zinc-500"><span class="text-zinc-600">8</span>  </div>
+          <div class="text-zinc-500"><span class="text-zinc-600">9</span>  @app.route('/admin')</div>
+          <div class="bg-orange-500/20 border-l-2 border-orange-400"><span class="text-zinc-600">10</span> def admin_panel():</div>
+          <div class="bg-orange-500/20 border-l-2 border-orange-400"><span class="text-zinc-600">11</span>     return render_template('admin.html')  <span class="text-orange-400"># ← Missing auth check</span></div>
+        </div>
+        <div class="mt-4 rounded-lg bg-cyan-500/5 border border-cyan-500/20 p-3">
+          <div class="text-[10px] font-semibold text-cyan-400 uppercase tracking-wider mb-1.5">Ansede Auto-Remediation Tip</div>
+          <p class="text-xs text-zinc-300 leading-relaxed font-mono">
+            <span class="text-emerald-400"># Use parameterized queries:</span><br>
+            query = "SELECT * FROM users WHERE id = ?"<br>
+            db.execute(query, (id,))
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center py-8">
+      <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-8 max-w-2xl mx-auto">
+        <h2 class="text-xl font-bold mb-2">Ready to find what your SAST is missing?</h2>
+        <p class="text-zinc-400 text-sm mb-6">Every benchmark is reproducible. Clone the repo, run the scripts, verify everything.</p>
+        <div class="flex items-center justify-center gap-3">
+          <a href="/scan" class="px-5 py-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-semibold hover:bg-cyan-500/20 hover:border-cyan-500/40 transition-all shadow-glow-cyan">Try Live Scanner</a>
+          <a href="/demo" class="px-5 py-2.5 rounded-lg border border-zinc-700/50 text-zinc-400 text-sm font-medium hover:text-zinc-200 hover:border-zinc-600 transition-all">Book a Demo</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="flex-shrink-0 border-t border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md px-6 py-3 flex items-center justify-center gap-4 text-xs text-zinc-600">
+    <span>Powered by <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">ansede-static v6.3.0</a></span>
+    <span class="text-zinc-700">·</span>
+    <span>100% CVE recall</span>
+    <span class="text-zinc-700">·</span>
+    <span>World-first CWE-639 IDOR</span>
+    <span class="text-zinc-700">·</span>
+    <span>Fully offline · Zero telemetry</span>
+    <span class="text-zinc-700">·</span>
+    <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">GitHub</a>
+    <span class="text-zinc-700">·</span>
+    <a href="https://pypi.org/project/ansede-static/" class="text-zinc-500 hover:text-cyan-400 transition-colors">PyPI</a>
+  </footer>
+</main>
 </body>
 </html>
