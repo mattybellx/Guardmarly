@@ -66,10 +66,10 @@ def test_json_report_has_versioned_envelope():
     assert payload["schema_version"] == SCHEMA_VERSION
     assert payload["fingerprint_version"] == FINGERPRINT_VERSION
     assert payload["tool"] == ENGINE_NAME
-    assert payload["summary"]["total_findings"] == 1
-    assert payload["summary"]["security_findings"] == 1
+    assert payload["summary"]["total_findings"] == 2
+    assert payload["summary"]["security_findings"] == 2
     assert payload["summary"]["quality_findings"] == 0
-    assert payload["summary"]["by_category"]["security"] == 1
+    assert payload["summary"]["by_category"]["security"] == 2
     assert payload["files_scanned"] == 1
     assert payload["results"][0]["file"] == "sample.py"
     assert payload["results"][0]["file_path"] == "sample.py"
@@ -83,7 +83,7 @@ def test_json_report_has_versioned_envelope():
 def test_ir_builder_emits_records():
     records = build_issue_records(_sample_results())
 
-    assert len(records) == 1
+    assert len(records) == 2
     assert records[0].rule_id == "PY-004"
     assert records[0].location.file_path == "sample.py"
     assert "security" in records[0].tags

@@ -7735,7 +7735,8 @@ def _fallback_idor_detect(code: str, filename: str) -> list[Finding]:
         r'request\.user\b|current_user\b|\.is_authenticated|'
         r'login_required\s*\(|\.has_perm\s*\(|UserPassesTestMixin|'
         r'request\.user\s*==|\.owner\s*==\s*request\.user|'
-        r'\.user\s*==\s*request\.user',
+        r'\.user\s*==\s*request\.user|g\.user_id\b|g\.user\b|'
+        r'\.owner_id\s*==|owner_id\s*=\s*[^.]+\.user',
         code, re.IGNORECASE,
     ))
     if has_auth_guard:
