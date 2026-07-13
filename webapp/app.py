@@ -1317,7 +1317,7 @@ def usage_stats():
         "total_lines": stats.get("total_lines", 0),
         "scans_today": stats.get("scans_today", 0),
         "unique_ips_today": unique_today,
-        "version": "6.2.2",
+        "version": "6.3.0",
     })
 
 
