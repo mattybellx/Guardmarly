@@ -1,136 +1,270 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ansede Static — Live Security Scanner Playground</title>
-<meta name="description" content="Paste Python or JavaScript code and find security vulnerabilities instantly. No install required. Powered by Ansede Static — #1 CVE recall.">
+<title>Ansede Static — Live Security Scanner</title>
+<meta name="description" content="World's first open-source SAST with CWE-639 IDOR detection. Paste code, find vulnerabilities instantly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --card: #161622;
+  --border: rgba(255,255,255,0.06);
+  --border-accent: rgba(99,102,241,0.25);
+  --text: #e4e4ed;
+  --text-secondary: #8b8b9e;
+  --accent: #6366f1;
+  --accent-glow: rgba(99,102,241,0.15);
+  --green: #22c55e;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --transition: all 0.2s ease;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
-header { background: #161b22; border-bottom: 1px solid #30363d; padding: 10px 20px; display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
-header .logo { color: #e6edf3; text-decoration: none; font-weight: 700; font-size: 17px; display: flex; align-items: center; gap: 7px; }
-header .logo span { color: #3fb950; }
-header .tagline { color: #8b949e; font-size: 13px; }
-header .gh-link { margin-left: auto; color: #8b949e; text-decoration: none; font-size: 12px; border: 1px solid #30363d; border-radius: 6px; padding: 4px 10px; transition: border-color .2s; }
-header .gh-link:hover { border-color: #58a6ff; color: #58a6ff; }
-.main { display: grid; grid-template-columns: 1fr 1fr; flex: 1; overflow: hidden; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99,102,241,0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(6,182,212,0.04), transparent);
+}
+
+/* Header */
+.header {
+  background: rgba(17,17,24,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex; align-items: center; gap: 16px;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo {
+  display: flex; align-items: center; gap: 8px;
+  text-decoration: none; color: var(--text);
+  font-weight: 800; font-size: 18px; letter-spacing: -0.3px;
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--accent), #06b6d4);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #fff;
+}
+.tagline { color: var(--text-secondary); font-size: 13px; font-weight: 500; }
+.gh-btn {
+  margin-left: auto;
+  padding: 6px 14px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-secondary); font-size: 12px; font-weight: 600;
+  text-decoration: none; transition: var(--transition);
+}
+.gh-btn:hover { border-color: var(--border-accent); color: #fff; background: rgba(99,102,241,0.08); }
+
+/* Main layout */
+.main {
+  display: grid; grid-template-columns: 1fr 1fr;
+  flex: 1; overflow: hidden; min-height: 0;
+}
 .panel { display: flex; flex-direction: column; min-height: 0; }
-.panel-header { background: #161b22; border-bottom: 1px solid #30363d; padding: 8px 14px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; }
-.panel-header select { background: #21262d; border: 1px solid #30363d; color: #e6edf3; border-radius: 6px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
-.example-btn { background: none; border: 1px solid #30363d; color: #8b949e; border-radius: 4px; padding: 3px 8px; cursor: pointer; font-size: 11px; transition: all .15s; white-space: nowrap; }
-.example-btn:hover { border-color: #58a6ff; color: #58a6ff; }
-.scan-btn { background: #238636; border: 1px solid #2ea043; color: #fff; border-radius: 6px; padding: 5px 16px; cursor: pointer; font-size: 13px; font-weight: 600; margin-left: auto; transition: background .15s; display: flex; align-items: center; gap: 6px; }
-.scan-btn:hover:not(:disabled) { background: #2ea043; }
-.scan-btn:disabled { background: #1a3626; color: #666; cursor: not-allowed; border-color: #1a3626; }
-.spinner { width: 14px; height: 14px; border: 2px solid #30363d; border-top-color: #58a6ff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+
+/* Toolbar */
+.toolbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.toolbar select {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); border-radius: 8px; padding: 6px 12px;
+  font-size: 12px; font-family: 'Inter', sans-serif; cursor: pointer;
+}
+.example-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-secondary); border-radius: 6px;
+  padding: 5px 10px; cursor: pointer; font-size: 11px;
+  font-family: 'Inter', sans-serif; font-weight: 500;
+  transition: var(--transition);
+}
+.example-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+.scan-btn {
+  margin-left: auto;
+  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  border: none; color: #fff; border-radius: 8px;
+  padding: 8px 20px; cursor: pointer; font-size: 13px;
+  font-weight: 700; font-family: 'Inter', sans-serif;
+  transition: var(--transition); display: flex; align-items: center; gap: 6px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.3);
+}
+.scan-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 30px rgba(99,102,241,0.4); }
+.scan-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; display: none; }
 .spinner.active { display: inline-block; }
 @keyframes spin { to { transform: rotate(360deg); } }
-textarea { flex: 1; background: #0d1117; color: #e6edf3; border: none; border-right: 1px solid #30363d; padding: 14px; font-family: 'SFMono-Regular', 'Cascadia Code', Consolas, 'Courier New', monospace; font-size: 13px; line-height: 1.65; resize: none; outline: none; tab-size: 4; min-height: 0; }
-textarea::placeholder { color: #484f58; }
+
+/* Editor */
+.editor-wrap {
+  flex: 1; position: relative; min-height: 0;
+}
+.editor-wrap textarea {
+  width: 100%; height: 100%;
+  background: var(--bg); color: var(--text);
+  border: none; border-right: 1px solid var(--border);
+  padding: 20px; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 13px; line-height: 1.7; resize: none; outline: none;
+}
+.editor-wrap textarea::placeholder { color: #3a3a4a; }
+
+/* Results */
 .results-panel { display: flex; flex-direction: column; min-height: 0; }
-.summary-bar { background: #161b22; border-bottom: 1px solid #30363d; padding: 7px 14px; font-size: 13px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; display: none; }
-.cnt { font-weight: 700; }
-.cnt.red { color: #f85149; }
-.cnt.yellow { color: #d29922; }
-.cnt.green { color: #3fb950; }
-.results-scroll { flex: 1; overflow-y: auto; padding: 14px; }
-.placeholder { color: #484f58; padding: 40px 20px; text-align: center; line-height: 1.7; }
-.placeholder code { background: #161b22; border: 1px solid #30363d; border-radius: 4px; padding: 2px 6px; font-family: monospace; color: #58a6ff; font-size: 12px; }
-.placeholder h3 { font-size: 15px; color: #8b949e; margin-bottom: 14px; }
-.placeholder ul { list-style: none; font-size: 13px; }
-.placeholder ul li::before { content: "✓ "; color: #3fb950; }
-.finding { border: 1px solid #30363d; border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
-.finding-hdr { display: flex; align-items: center; gap: 7px; padding: 9px 12px; background: #161b22; }
-.badge { border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; flex-shrink: 0; }
-.badge.critical { background: #b91c1c; color: #fff; }
-.badge.high { background: #7c2d12; color: #fbbf24; }
-.badge.medium { background: #1c3557; color: #60a5fa; }
-.badge.low { background: #1a3626; color: #4ade80; }
-.badge.info { background: #1c1c2e; color: #a78bfa; }
+.summary-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px; font-size: 12px;
+  display: none; align-items: center; gap: 12px;
+}
+.summary-bar .ver { margin-left: auto; color: #4a4a5a; font-size: 11px; }
+.results-scroll { flex: 1; overflow-y: auto; padding: 16px; }
+.placeholder {
+  text-align: center; padding: 48px 20px; color: var(--text-secondary);
+}
+.placeholder h3 { font-size: 16px; color: var(--text); margin-bottom: 16px; font-weight: 700; }
+.placeholder ul { list-style: none; font-size: 13px; line-height: 2; }
+.placeholder ul li::before { content: "✓ "; color: var(--green); font-weight: 700; }
+.placeholder code {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 8px; font-family: monospace;
+  color: var(--accent); font-size: 12px;
+}
+
+/* Findings */
+.finding {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 10px;
+  overflow: hidden; transition: var(--transition);
+}
+.finding:hover { border-color: var(--border-accent); }
+.finding-hdr {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--border);
+}
+.badge {
+  border-radius: 6px; padding: 3px 8px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.badge.critical { background: rgba(239,68,68,0.15); color: #ef4444; }
+.badge.high { background: rgba(245,158,11,0.15); color: #f59e0b; }
+.badge.medium { background: rgba(99,102,241,0.15); color: #818cf8; }
+.badge.low { background: rgba(34,197,94,0.15); color: #4ade80; }
 .finding-title { font-weight: 600; font-size: 13px; flex: 1; }
-.finding-meta { display: flex; gap: 8px; align-items: center; }
-.finding-line { color: #484f58; font-size: 11px; font-family: monospace; }
-.conf-pill { color: #8b949e; font-size: 10px; border: 1px solid #30363d; border-radius: 3px; padding: 1px 5px; }
-.finding-body { padding: 10px 12px; }
-.cwe-tag { color: #58a6ff; font-size: 11px; font-weight: 600; margin-bottom: 5px; }
-.finding-desc { color: #8b949e; font-size: 12px; line-height: 1.55; margin-bottom: 7px; }
-.fix-box { background: #0a1f0a; border: 1px solid #1a4d1a; border-radius: 4px; padding: 8px 10px; font-size: 11px; color: #4ade80; line-height: 1.55; }
-.fix-box strong { color: #3fb950; }
-.zero-state { text-align: center; padding: 50px 20px; }
-.zero-state .icon { font-size: 44px; }
-.zero-state h3 { color: #3fb950; font-size: 16px; margin: 10px 0 6px; }
-.zero-state small { color: #484f58; font-size: 12px; }
-.error-box { background: #1a0a0a; border: 1px solid #5a1a1a; border-radius: 6px; padding: 12px; color: #f85149; font-size: 13px; margin: 14px; }
-footer { background: #161b22; border-top: 1px solid #30363d; padding: 8px 20px; text-align: center; font-size: 11px; color: #484f58; flex-shrink: 0; }
-footer a { color: #8b949e; text-decoration: none; }
-footer a:hover { color: #58a6ff; }
+.finding-line { color: #5a5a6a; font-size: 11px; font-family: monospace; }
+.conf-pill { color: var(--text-secondary); font-size: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; }
+.finding-body { padding: 12px 14px; }
+.cwe-tag { color: var(--accent); font-size: 11px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.3px; }
+.finding-desc { color: var(--text-secondary); font-size: 12px; line-height: 1.6; margin-bottom: 8px; }
+.fix-box {
+  background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15);
+  border-radius: 8px; padding: 10px 12px; font-size: 12px;
+  color: #4ade80; line-height: 1.6;
+}
+.fix-box strong { color: var(--green); }
+.zero-state { text-align: center; padding: 60px 20px; }
+.zero-state .icon { font-size: 48px; margin-bottom: 8px; }
+.zero-state h3 { color: var(--green); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.zero-state small { color: var(--text-secondary); font-size: 12px; }
+.error-box {
+  background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2);
+  border-radius: var(--radius); padding: 14px; color: #ef4444; font-size: 13px; margin: 14px;
+}
+
+/* Footer */
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 24px; text-align: center;
+  font-size: 11px; color: #4a4a5a;
+}
+.footer a { color: var(--text-secondary); text-decoration: none; transition: var(--transition); }
+.footer a:hover { color: var(--accent); }
 </style>
 </head>
 <body>
-<header>
-  <a class="logo" href="/"><span>🛡</span> Ansede Static</a>
-  <span class="tagline">Live Playground — find security bugs in seconds, no install required</span>
-  <a class="gh-link" href="https://github.com/mattybellx/Ansede" target="_blank" rel="noopener">⭐ Star on GitHub</a>
+<header class="header">
+  <a class="logo" href="/">
+    <div class="logo-icon">⚔</div>
+    Ansede<span style="color:var(--accent)">Static</span>
+  </a>
+  <span class="tagline">Live scanner — find vulnerabilities in seconds</span>
+  <a class="gh-btn" href="https://github.com/mattybellx/Ansede" target="_blank">⭐ Star on GitHub</a>
 </header>
 
 <div class="main">
-  <!-- Left: Code editor -->
   <div class="panel">
-    <div class="panel-header">
-      <select id="langSelect" title="Language">
+    <div class="toolbar">
+      <select id="langSelect">
         <option value="python">Python</option>
         <option value="javascript">JavaScript / TypeScript</option>
       </select>
-      <span style="color:#484f58;font-size:11px;margin-left:4px">Try:</span>
+      <span style="color:var(--text-secondary);font-size:11px;margin:0 4px">Try:</span>
       {% for key, ex in examples.items() %}
-      <button class="example-btn" onclick="loadExample('{{ key }}')" title="{{ ex.label }}">{{ ex.label }}</button>
+      <button class="example-btn" onclick="loadExample('{{ key }}')">{{ ex.label }}</button>
       {% endfor %}
       <button class="scan-btn" id="scanBtn" onclick="runScan()">
         <span>▶ Scan</span>
         <div class="spinner" id="spinner"></div>
       </button>
     </div>
-    <textarea id="codeInput"
-      placeholder="Paste Python or JavaScript code here…
+    <div class="editor-wrap">
+      <textarea id="codeInput" placeholder="Paste Python or JavaScript code here…
 
 Press ▶ Scan or Ctrl+Enter to scan.
-Click an example button above to load a vulnerable code sample.
+Click an example above to load a vulnerable code sample.
 
 Detects: SQL injection · XSS · IDOR · Missing auth · Hardcoded secrets · Path traversal · SSRF · Command injection · 30+ more CWE types"></textarea>
+    </div>
   </div>
 
-  <!-- Right: Results -->
   <div class="results-panel">
     <div class="summary-bar" id="summaryBar">
       <span id="summaryText"></span>
-      <span style="margin-left:auto;color:#484f58;font-size:11px">ansede-static v5.6.0 · offline · no data sent</span>
+      <span class="ver">ansede-static v6.3.0 · offline · no data sent</span>
     </div>
     <div class="results-scroll" id="resultsPanel">
       <div class="placeholder">
         <h3>↑ Paste code and press ▶ Scan</h3>
         <ul>
           <li>SQL injection (CWE-89) — all major DB drivers</li>
-          <li>IDOR / Broken Access Control (CWE-639)</li>
+          <li>IDOR / Broken Access Control (CWE-639) — world first</li>
           <li>Missing authentication (CWE-862)</li>
           <li>Hardcoded secrets and API keys (CWE-798)</li>
           <li>XSS, SSRF, path traversal, command injection</li>
           <li>Unsafe deserialization (pickle, yaml.load)</li>
         </ul>
-        <p style="margin-top:18px;font-size:12px">
+        <p style="margin-top:20px;font-size:12px">
           Install: <code>pip install ansede-static</code><br>
-          <span style="color:#3a3f47">Zero cloud · Zero telemetry · Fully offline</span>
+          <span style="color:#3a3a4a">Zero cloud · Zero telemetry · 100% offline</span>
         </p>
       </div>
     </div>
   </div>
 </div>
 
-<footer>
-  Powered by <a href="https://github.com/mattybellx/Ansede" target="_blank">ansede-static</a> —
-  #1 CVE recall (100%) · 93.3% OWASP recall · Fully offline ·
-  <a href="https://github.com/mattybellx/Ansede" target="_blank">GitHub</a> ·
-  <a href="https://pypi.org/project/ansede-static/" target="_blank">PyPI</a>
+<footer class="footer">
+  Powered by <a href="https://github.com/mattybellx/Ansede">ansede-static v6.3.0</a> —
+  #1 CVE recall (100%) · World-first CWE-639 IDOR · Fully offline ·
+  <a href="https://github.com/mattybellx/Ansede">GitHub</a> ·
+  <a href="https://pypi.org/project/ansede-static/">PyPI</a>
 </footer>
 
 <script>
