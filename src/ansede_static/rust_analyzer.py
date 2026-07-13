@@ -18,6 +18,15 @@ Status: v0.1 — pattern-based analysis. AST-depth via tree-sitter-rust planned 
 from __future__ import annotations
 
 import re
+import warnings
+
+# ⚠ Rust analysis is v0.1 — regex-only, no AST. False-positive rates may be high.
+warnings.warn(
+    "ansede-static: Rust analyzer is experimental v0.1 (regex-only, no AST). "
+    "False-positive rates may be high. Tree-sitter-rust integration planned.",
+    RuntimeWarning,
+    stacklevel=2,
+)
 
 from ansede_static._types import AnalysisResult, Finding, Severity
 

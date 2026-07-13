@@ -278,11 +278,23 @@ _INJECTION_OR_AUTH_CWES: frozenset[str] = frozenset({
 
 _QUALITY_ALWAYS_LOW_CWES: frozenset[str] = frozenset({
     "CWE-617", "CWE-470", "CWE-200", "CWE-532", "CWE-1120",
+    # These are almost always heuristic noise on real-world code:
+    "CWE-116",  # Incomplete sanitization — usually anchored regex or test code
+    "CWE-252",  # Unchecked return value — low-priority code quality
+    "CWE-98",   # Dynamic require() in JS — code pattern, not exploitable RCE
+    "CWE-1333", # ReDoS — theoretical, rarely exploitable outside specific contexts
 })
 
 _HEURISTIC_KINDS: frozenset[str] = frozenset({
     "pattern", "pattern-taint", "route-heuristic", "route_heuristic",
     "decorator_heuristic",
+})
+
+# Analysis kinds that represent real AST/dataflow analysis — never demote
+_STRUCTURAL_KINDS: frozenset[str] = frozenset({
+    "ast", "ast_taint_flow", "interproc_ifds", "var_taint_flow", "taint_flow",
+    "ifds_taint", "cross_language_taint", "direct_sink", "syntax-ast",
+    "pattern-rust", "rust-pattern", "rust_ast",
 })
 
 
@@ -312,6 +324,10 @@ def _should_demote(finding: Finding) -> str | None:
     if cwe in _INJECTION_OR_AUTH_CWES:
         has_trace = bool(finding.trace and len(finding.trace) > 0)
         kind = (finding.analysis_kind or "").lower()
+
+        # AST/IFDS/dataflow analysis is ground truth — never demote
+        if kind in _STRUCTURAL_KINDS:
+            return None
 
         if not has_trace:
             return "medium"

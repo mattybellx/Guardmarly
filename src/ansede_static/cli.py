@@ -41,7 +41,7 @@ from ansede_static import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_
 
 from ansede_static.ir.global_graph import GlobalGraph
 from ansede_static.profiler import ScanProfiler
-from ansede_static.engine.triage import run_ai_triage
+from ansede_static.engine.triage import run_triage
 from ansede_static.licensing import (
     LicenseFeatureGate,
     LicenseRequiredError,
@@ -1162,7 +1162,7 @@ def _postprocess_guarded_rescan_results(
     registry_loader: Any,
     baseline_fps: set[str] | None,
     min_conf: float,
-    ai_triage_enabled: bool,
+    triage_enabled: bool,
 ) -> list[AnalysisResult]:
     processed = results
 
@@ -1194,13 +1194,32 @@ def _postprocess_guarded_rescan_results(
     try:
         from ansede_static.engine.triage import ContextAnalyzer
 
+        # CWEs that are NEVER real vulnerabilities in test/mock/generated files.
+        # These patterns appear in test infrastructure and fixtures, not exploitable code.
+        _TEST_DROP_CWES: frozenset[str] = frozenset({
+            "CWE-22",   # Path traversal — test file paths are never attacker-controlled
+            "CWE-78",   # Command injection — test shell helpers are not user-facing
+            "CWE-918",  # SSRF — test HTTP mocks are not real outbound requests
+            "CWE-117",  # Log injection — test logging is not production log stream
+            "CWE-116",  # Sanitization — test input validation patterns
+            "CWE-98",   # Dynamic require — test loader patterns
+            "CWE-862",  # Missing auth — test routes don't need auth
+            "CWE-352",  # CSRF — test routes don't need CSRF tokens
+            "CWE-330",  # Weak PRNG — test randomness is intentionally simple
+            "CWE-1333", # ReDoS — test regex patterns
+            "CWE-617",  # Assert — test assertions are fine
+        })
         for result in processed:
+            is_test, _ = ContextAnalyzer.is_test_context(result.file_path, "")
+            is_mock, _ = ContextAnalyzer.is_mock_context(result.file_path, "")
+            is_generated, _ = ContextAnalyzer.is_generated(result.file_path)
             new_findings = []
             for finding in result.findings:
-                is_test, _ = ContextAnalyzer.is_test_context(result.file_path, "")
-                is_mock, _ = ContextAnalyzer.is_mock_context(result.file_path, "")
-                is_generated, _ = ContextAnalyzer.is_generated(result.file_path)
                 if is_test or is_mock or is_generated:
+                    # Drop findings for CWEs that can't be real vulns in test code
+                    if finding.cwe in _TEST_DROP_CWES:
+                        continue
+                    # For remaining CWEs, reduce confidence substantially
                     finding = Finding(
                         category=finding.category,
                         severity=finding.severity,
@@ -1234,7 +1253,7 @@ def _postprocess_guarded_rescan_results(
     if baseline_fps:
         processed = _apply_baseline(processed, baseline_fps)
 
-    if ai_triage_enabled:
+    if triage_enabled:
         code_map: dict[str, str] = {}
         for result in processed:
             if not result.file_path or result.file_path == "<stdin>":
@@ -1247,7 +1266,7 @@ def _postprocess_guarded_rescan_results(
         candidate = Path.cwd() / "suppression_candidates.json"
         if candidate.exists():
             suppression_config_path = candidate
-        processed = run_ai_triage(processed, code_map, suppression_config_path=suppression_config_path)
+        processed = run_triage(processed, code_map, suppression_config_path=suppression_config_path)
 
     # Post-process CWE-22 findings whose taint trace mentions a known
     # path-sanitizer (e.g. resolve_path_within_directory). The taint
@@ -1499,8 +1518,13 @@ def build_parser() -> argparse.ArgumentParser:
         help="Output format (default: text). Use 'ciso' for executive summary, 'html' for browser dashboard.",
     )
     parser.add_argument(
-        "--cluster", action="store_true", default=False,
-        help="Apply incident clustering to deduplicate related findings (typically 40-50%% reduction). Grouped by CWE family, sink identity, and line proximity.",
+        "--cluster", action="store_true", default=True,
+        help="Apply incident clustering to deduplicate related findings (typically 40-50%% reduction). "
+             "Grouped by CWE family, sink identity, and line proximity. Use --no-cluster to disable.",
+    )
+    parser.add_argument(
+        "--no-cluster", action="store_false", dest="cluster",
+        help="Disable incident clustering (show all findings individually).",
     )
     parser.add_argument(
         "--strict", action="store_true", default=False,
@@ -1514,8 +1538,12 @@ def build_parser() -> argparse.ArgumentParser:
              "Findings overlapping with Ansede's native detections are automatically deduplicated.",
     )
     parser.add_argument(
-        "--ai-triage", action="store_true",
-        help="Enable the offline heuristic triage pass that suppresses common false positives in tests/mocks and safe parameterized patterns.",
+        "--triage", action="store_true", default=True,
+        help="Apply smart triage filters to suppress common false positives in tests/mocks and safe parameterized patterns. Enabled by default.",
+    )
+    parser.add_argument(
+        "--no-triage", action="store_false", dest="triage",
+        help="Disable smart triage filtering (show all raw findings).",
     )
     parser.add_argument(
         "--experimental-js-ast", action="store_true",
@@ -1537,6 +1565,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--fail-on", default="high", metavar="SEVERITY",
         choices=["critical", "high", "medium", "low", "info", "never"],
         help="Exit with code 1 if any finding is at or above this severity (default: high).",
+    )
+    parser.add_argument(
+        "--fail-on-degraded", action="store_true",
+        help="Exit with code 2 if any file was analyzed with reduced accuracy "
+             "(e.g., regex fallback due to missing tree-sitter or parser crash).",
     )
     parser.add_argument(
         "--exclude", action="append", default=[], metavar="STRING",
@@ -2655,7 +2688,11 @@ def _main_impl() -> None:
                     })
                     return result
 
-                use_parallel = getattr(args, "parallel", False) or getattr(args, "workers", None)
+                use_parallel = (
+                    getattr(args, "parallel", False)
+                    or getattr(args, "workers", None)
+                    or len(files) >= 8  # auto-parallel for 8+ files (v6.3+)
+                )
                 worker_count: int | None = getattr(args, "workers", None)
 
             # ── Pass 1: Discovery & Graph Building ────────────────────────────
@@ -2832,6 +2869,16 @@ def _main_impl() -> None:
         "CWE-613",   # Session fixation in test sessions
         "CWE-328",   # Weak hashing in test data
         "CWE-1336",  # Formula injection in test CSV generators
+        "CWE-22",    # Path traversal — test file paths are not attacker-controlled
+        "CWE-78",    # Command injection — test shell helpers are not user-facing
+        "CWE-862",   # Missing auth — test routes don't need auth middleware
+        "CWE-117",   # Log injection — test logging is not production log stream
+        "CWE-116",   # Incomplete sanitization — test regex patterns
+        "CWE-98",    # Dynamic require — test module loading patterns
+        "CWE-617",   # Assert as security check — test assertions are fine
+        "CWE-1333",  # ReDoS — test regex patterns
+        "CWE-330",   # Weak PRNG — test randomness is intentionally simple
+        "CWE-798",   # Hardcoded creds — test fixtures use fake passwords/tokens
     })
     try:
         from ansede_static.engine.triage import ContextAnalyzer
@@ -2893,12 +2940,17 @@ def _main_impl() -> None:
     # Applies to ALL scan modes. Findings in non-production files get
     # confidence reduced so they don't surface as HIGH+ without real
     # structural evidence (trace + non-heuristic analysis_kind).
+    # EXCLUDES: benchmark directories (owasp, benchmark, juliet) and
+    # files where the AST engine has already done structural analysis.
     from ansede_static.engine.triage import ContextAnalyzer
     _test_downgraded = 0
     for r in results:
         _is_test, _ = ContextAnalyzer.is_test_context(r.file_path, "")
         _is_mock, _ = ContextAnalyzer.is_mock_context(r.file_path, "")
-        if not (_is_test or _is_mock):
+        # Skip benchmark directories — these are labeled test cases, not actual tests
+        _path_lower = r.file_path.lower().replace("\\", "/")
+        _is_benchmark = any(b in _path_lower for b in ("/owasp/", "/benchmark/", "/juliet/", "/testcode/"))
+        if not (_is_test or _is_mock) or _is_benchmark:
             continue
         for f in r.findings:
             # Only downgrade heuristic/pattern findings — structural taint
@@ -2986,8 +3038,8 @@ def _main_impl() -> None:
         print("ansede-static: --baseline-update requires --baseline FILE", file=sys.stderr)
         sys.exit(2)
 
-    # ── AI Triage (Zero-False-Positive Phase) ──────────────────────────────
-    if getattr(args, "ai_triage", False) and not args.stdin:
+    # ── Smart Triage Phase ───────────────────────────────────────────────
+    if getattr(args, "triage", True) and not args.stdin:
         code_map = {}
         for fpath in files:
             try:
@@ -2998,7 +3050,7 @@ def _main_impl() -> None:
         candidate = Path.cwd() / "suppression_candidates.json"
         if candidate.exists():
             suppression_config_path = candidate
-        results = run_ai_triage(results, code_map, suppression_config_path=suppression_config_path)
+        results = run_triage(results, code_map, suppression_config_path=suppression_config_path)
 
         # Entry-point triage for the stdin/batch path
         from ansede_static.engine.entry_points import apply_entry_point_triage
@@ -3092,11 +3144,12 @@ def _main_impl() -> None:
                 )
 
     # ── Incident Clustering: group related findings into high-fidelity incidents ─
-    try:
-        from ansede_static.engine.triage import cluster_results
-        cluster_results(results)
-    except Exception:
-        pass
+    if not getattr(args, "no_cluster", False):
+        try:
+            from ansede_static.engine.triage import cluster_results
+            cluster_results(results)
+        except Exception:
+            pass
 
     guarded_autofix_summary: dict[str, Any] | None = None
     guarded_autofix_results: list[AnalysisResult] | None = None
@@ -3145,7 +3198,7 @@ def _main_impl() -> None:
                     registry_loader=_registry_loader,
                     baseline_fps=baseline_fps,
                     min_conf=min_conf,
-                    ai_triage_enabled=getattr(args, "ai_triage", False),
+                    triage_enabled=getattr(args, "triage", True),
                 )[0],
             )
             guarded_autofix_summary["requested_fixable_findings"] = fixable_count

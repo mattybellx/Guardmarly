@@ -145,6 +145,8 @@ class AnalysisResult:
     findings: list[Finding] = field(default_factory=list)
     lines_scanned: int = 0
     parse_error: str = ""
+    analysis_degraded: bool = False    # True when AST was unavailable, regex fallback used
+    degradation_reason: str = ""       # human-readable explanation of degradation
 
     @property
     def critical_count(self) -> int:
@@ -197,7 +199,7 @@ class AnalysisResult:
         }
 
     def as_dict(self) -> dict[str, Any]:
-        return {
+        result: dict[str, Any] = {
             "file": self.file_path,
             "file_path": self.file_path,
             "language": self.language,
@@ -207,3 +209,7 @@ class AnalysisResult:
             "findings": [f.as_dict(language=self.language) for f in self.sorted_findings()],
             "summary": self.summary_dict(),
         }
+        if self.analysis_degraded:
+            result["analysis_degraded"] = True
+            result["degradation_reason"] = self.degradation_reason
+        return result

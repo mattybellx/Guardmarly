@@ -160,6 +160,8 @@ class ContextAnalyzer:
         '/docs_src/', '\\docs_src\\', '/doc_src/', '\\doc_src\\',
         # Filename patterns that indicate test/example/tutorial code
         'tutorial', 'example_', 'demo_',
+        # Directory patterns with underscore prefix (e.g., _examples/, _fixtures/)
+        '/_examples/', '\\_examples\\', '/_fixtures/', '\\_fixtures\\',
         # Build tooling
         '/build-tools/', '/build-scripts/', 'gulpfile.', 'gruntfile.', 'webpack.',
         '/scripts/', '\\scripts\\',
@@ -261,18 +263,30 @@ class ContextAnalyzer:
     QUALITY_CWES: frozenset[str] = frozenset({
         "CWE-617",   # Assertion / exception swallowing
         "CWE-1120",  # Cyclomatic complexity
+        "CWE-117",   # Log injection (module-level logging is almost always FP)
     })
 
     @staticmethod
     def is_test_context(file_path: str, code_snippet: str) -> tuple[bool, str]:
         """Determine if code is in test/fixture context."""
-        path_lower = file_path.lower()
+        import os
+        path_lower = file_path.lower().replace("\\", "/")
         code_lower = code_snippet.lower()
+        # Split into path components for precise matching
+        fname = os.path.basename(file_path).lower()
+        pdir = os.path.basename(os.path.dirname(file_path)).lower()
 
-        # File path indicators
+        # File path indicators — check filename and immediate parent only
+        # to avoid false positives from ancestor directories like "harsh_test/"
         for pattern in ContextAnalyzer.TEST_PATTERNS:
-            if pattern in path_lower:
-                return True, f"Test pattern '{pattern}' in file path"
+            # Directory-structure patterns (with slashes): match anywhere
+            if "/" in pattern or "\\" in pattern:
+                if pattern in path_lower:
+                    return True, f"Test pattern '{pattern}' in file path"
+            # Name patterns (no slashes): match filename or parent dir only
+            else:
+                if pattern in fname or pattern in pdir:
+                    return True, f"Test pattern '{pattern}' in filename or parent dir"
 
         # Code pattern indicators
         test_markers = [
@@ -298,12 +312,19 @@ class ContextAnalyzer:
     @staticmethod
     def is_mock_context(file_path: str, code_snippet: str) -> tuple[bool, str]:
         """Determine if code is in mock/fixture context."""
-        path_lower = file_path.lower()
+        import os
+        path_lower = file_path.lower().replace("\\", "/")
         code_lower = code_snippet.lower()
+        fname = os.path.basename(file_path).lower()
+        pdir = os.path.basename(os.path.dirname(file_path)).lower()
 
         for pattern in ContextAnalyzer.MOCK_PATTERNS:
-            if pattern in path_lower:
-                return True, f"Mock pattern '{pattern}' in file path"
+            if "/" in pattern or "\\" in pattern:
+                if pattern in path_lower:
+                    return True, f"Mock pattern '{pattern}' in file path"
+            else:
+                if pattern in fname or pattern in pdir:
+                    return True, f"Mock pattern '{pattern}' in filename or parent dir"
 
         mock_markers = [
             ('mock(', 'mock function'),
@@ -417,6 +438,17 @@ class SafePatternDetector:
     )
     PATH_WHITELIST_RE = re.compile(
         r'(?:allowed_|safe_|whitelisted_|approved_)(?:path|file|dir)',
+        re.IGNORECASE
+    )
+
+    # Open Redirect safe patterns — path sanitization guarantees same-origin redirect
+    GO_TRIM_SLASH_REDIRECT_RE = re.compile(
+        r'["\']/["\']\s*[\+]\s*strings\.Trim\s*\([^)]*,\s*["\']/["\']\)',
+        re.IGNORECASE
+    )
+    # Also match Go's := short declaration: path := "/" + strings.Trim(...)
+    GO_TRIM_SLASH_DECLARE_RE = re.compile(
+        r':=\s*["\']/["\']\s*[\+]\s*strings\.Trim\s*\([^)]*,\s*["\']/["\']\)',
         re.IGNORECASE
     )
 
@@ -641,6 +673,20 @@ class CWETriageRules:
         return None
 
     @staticmethod
+    def triage_cwe_601(finding: Finding, snippet: str, file_path: str) -> TriageResult | None:
+        """CWE-601: Open Redirect."""
+        # Go: strings.Trim(path, "/") + "/" guarantees same-origin redirect
+        if (SafePatternDetector.GO_TRIM_SLASH_REDIRECT_RE.search(snippet) or
+                SafePatternDetector.GO_TRIM_SLASH_DECLARE_RE.search(snippet)):
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.95,
+                reason="Path sanitized via Trim+slash pattern — always same-origin redirect",
+                remediation_level="suppress"
+            )
+        return None
+
+    @staticmethod
     def triage_cwe_327(finding: Finding, snippet: str, file_path: str) -> TriageResult | None:
         """CWE-327: Use of a Broken or Risky Cryptographic Algorithm."""
         is_safe, reason = SafePatternDetector.detect_weak_crypto_pattern(snippet)
@@ -765,7 +811,7 @@ class AlgorithmicTriageEngine:
     """
     Production-grade deterministic AppSec triage engine.
 
-    World-class triage that's:
+    Deterministic heuristic triage that's:
     - 100% offline & zero-dependency
     - CWE-aware with specific triage rules
     - Context-sensitive (test/mock/generated file detection)
@@ -778,6 +824,7 @@ class AlgorithmicTriageEngine:
         "CWE-89": CWETriageRules.triage_cwe_89,
         "CWE-22": CWETriageRules.triage_cwe_22,
         "CWE-78": CWETriageRules.triage_cwe_78,
+        "CWE-601": CWETriageRules.triage_cwe_601,
         "CWE-327": CWETriageRules.triage_cwe_327,
         "CWE-862": CWETriageRules.triage_cwe_862,
         "CWE-639": CWETriageRules.triage_cwe_639,
@@ -816,7 +863,17 @@ class AlgorithmicTriageEngine:
                 remediation_level="suppress"
             )
 
-        # 2. Apply CWE-specific triage rules
+        # 2. Suppress purely quality/metric findings (not security)
+        if finding.cwe and finding.cwe in ContextAnalyzer.QUALITY_CWES:
+            self.stats["suppressed"] += 1
+            return TriageResult(
+                is_true_positive=False,
+                confidence=0.97,
+                reason=f"Quality/metric finding ({finding.cwe}), not a security vulnerability",
+                remediation_level="suppress"
+            )
+
+        # 3. Apply CWE-specific triage rules
         if finding.cwe in self.CWE_TRIAGE_HANDLERS:
             handler = self.CWE_TRIAGE_HANDLERS[finding.cwe]
             result = handler(finding, snippet, filepath)
@@ -1126,17 +1183,17 @@ def deploy_candidate_suppressions_with_cve_guard(
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     return payload
 
-def run_ai_triage(
+def run_triage(
     results: list[AnalysisResult],
     code_map: dict[str, str],
     *,
     suppression_config_path: str | Path | None = None,
 ) -> list[AnalysisResult]:
-    """Orchestrates the offline deterministic triage across all findings."""
+    """Orchestrates the deterministic heuristic triage across all findings."""
     verifier = AlgorithmicTriageEngine()
     active_suppressions = _load_active_suppression_rules(suppression_config_path)
     if console:
-        console.print("[bold purple]🧠 Initiating Zero-Dependency Algorithmic Advanced Triage Layer...[/bold purple]")
+        console.print("[bold cyan]Applying smart triage filters...[/bold cyan]")
         
     for r in results:
         if not r.findings:

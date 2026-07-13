@@ -356,9 +356,9 @@ def _classify_test_file(cwe: str, severity: Any) -> tuple[Verdict, str] | None:
     verdict_str, reason = _TEST_CWE_REASONS.get(cwe, (None, None))
     if verdict_str is None:
         return None
-    # CWE-78 in tests is LIKELY_FP unless severity is CRITICAL
-    if cwe == "CWE-78" and severity.name == "CRITICAL":
-        return None
+    # ALL test-file findings for these CWEs are LIKELY_FP — no escape hatches.
+    # Previously CWE-78 at CRITICAL was excluded, but test infra commands
+    # are not exploitable vulnerabilities.
     return Verdict.LIKELY_FP, reason
 
 

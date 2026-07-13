@@ -17,6 +17,15 @@ Detection coverage:
 from __future__ import annotations
 
 import re
+import warnings
+
+# ⚠ PHP analysis is regex-only (no AST). False-positive rates may be high.
+warnings.warn(
+    "ansede-static: PHP analyzer is experimental (regex-only, no AST). "
+    "False-positive rates may be high. Tree-sitter-php integration planned.",
+    RuntimeWarning,
+    stacklevel=2,
+)
 
 from ansede_static._types import AnalysisResult, Finding, Severity
 

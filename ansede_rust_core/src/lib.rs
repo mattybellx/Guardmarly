@@ -15,26 +15,52 @@ pub struct ParsedNode {
     pub children: Vec<ParsedNode>,
 }
 
+use std::panic;
+
+/// Maximum AST recursion depth to prevent stack overflow on deeply nested code.
+const MAX_PARSE_DEPTH: usize = 500;
+
 fn parse_with_language(code: &str, lang: &str) -> Result<Vec<ParsedNode>, String> {
-    let mut parser = tree_sitter::Parser::new();
-    let language: tree_sitter::Language = match lang {
-        "python" => tree_sitter_python::LANGUAGE.into(),
-        "javascript" | "typescript" | "js" | "ts" => tree_sitter_javascript::LANGUAGE.into(),
-        "java" | "jv" => tree_sitter_java::LANGUAGE.into(),
-        "go" | "golang" => tree_sitter_go::LANGUAGE.into(),
-        "csharp" | "c#" | "cs" => tree_sitter_c_sharp::LANGUAGE.into(),
-        _ => return Err(format!("Unsupported language: {}", lang)),
-    };
-    parser.set_language(&language).map_err(|e| format!("set_language: {}", e))?;
-    let tree = parser.parse(code, None).ok_or("parse failed")?;
-    Ok(walk_node(&tree.root_node(), code))
+    let result: std::thread::Result<Result<Vec<ParsedNode>, String>> = panic::catch_unwind(|| {
+        let mut parser = tree_sitter::Parser::new();
+        let language: tree_sitter::Language = match lang {
+            "python" => tree_sitter_python::LANGUAGE.into(),
+            "javascript" | "typescript" | "js" | "ts" => tree_sitter_javascript::LANGUAGE.into(),
+            "java" | "jv" => tree_sitter_java::LANGUAGE.into(),
+            "go" | "golang" => tree_sitter_go::LANGUAGE.into(),
+            "csharp" | "c#" | "cs" => tree_sitter_c_sharp::LANGUAGE.into(),
+            _ => return Err(format!("Unsupported language: {}", lang)),
+        };
+        parser.set_language(&language).map_err(|e| format!("set_language: {}", e))?;
+        let tree = parser.parse(code, None).ok_or("parse failed")?;
+        Ok(walk_node(&tree.root_node(), code, 0))
+    });
+
+    match result {
+        Ok(inner) => inner,
+        Err(_panic) => Err("parse panicked (likely stack overflow from deeply nested code — "
+            .to_string() + "try reducing nesting depth below " + &MAX_PARSE_DEPTH.to_string() + " levels)"),
+    }
 }
 
-fn walk_node(node: &tree_sitter::Node, source: &str) -> Vec<ParsedNode> {
+fn walk_node(node: &tree_sitter::Node, source: &str, depth: usize) -> Vec<ParsedNode> {
+    if depth > MAX_PARSE_DEPTH {
+        return vec![ParsedNode {
+            id: node.id(),
+            kind: node.kind().to_string(),
+            text: "[truncated: max depth exceeded]".to_string(),
+            start_line: node.start_position().row + 1,
+            start_col: node.start_position().column,
+            end_line: node.end_position().row + 1,
+            end_col: node.end_position().column,
+            children: vec![],
+        }];
+    }
+
     let mut children = Vec::new();
     let mut cursor = node.walk();
     for child in node.children(&mut cursor) {
-        children.extend(walk_node(&child, source));
+        children.extend(walk_node(&child, source, depth + 1));
     }
     let text = node.utf8_text(source.as_bytes()).unwrap_or("").to_string();
     vec![ParsedNode {

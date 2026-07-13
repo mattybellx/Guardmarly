@@ -1,29 +1,36 @@
-﻿<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: light)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png">
-    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png">
-    <img alt="Ansede Static" src="https://github.com/mattybellx/Ansede/blob/master/assets/AS.png" width="600">
-  </picture>
-</p>
+﻿# Ansede Static · v6.3.0
 
-<p align="center">
-  <strong>Finds the vulnerabilities other SAST tools miss.</strong><br>
-  #1 CVE recall (100%) · 6 languages · 35+ CWE types · Fully offline<br>
-  <code>pip install ansede-static</code>
-</p>
+**World's first open-source SAST with CWE-639 IDOR detection.**  
+100% CVE recall · 91.4% known-vuln detection · 0.04 findings/kLOC on production code
+
+```bash
+pip install ansede-static && ansede-static src/
+```
 
 <p align="center">
   <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/CVE%20Recall-100%25-success" alt="CVE 100%"></a>
-  <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Recall-93.3%25-success?logo=owasp" alt="OWASP 93%"></a>
-  <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/OWASP%20Score-%2B0.8%25%20Youden-success" alt="OWASP Score"></a>
-  <a href=""><img src="https://img.shields.io/badge/Languages-6-blue" alt="6 langs"></a>
+  <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Vuln%20Detection-91.4%25-success" alt="91.4%"></a>
+  <a href="docs/BENCHMARKS.md"><img src="https://img.shields.io/badge/Production%20Noise-0.04%2FkLOC-success" alt="0.04/kLOC"></a>
+  <a href=""><img src="https://img.shields.io/badge/CWE--639%20IDOR-World%20First-blue" alt="IDOR"></a>
+  <a href=""><img src="https://img.shields.io/badge/Languages-5-blue" alt="5 langs"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT"></a>
-  <a href=""><img src="https://img.shields.io/badge/tests-1239%20passed-success" alt="1239 tests"></a>
+  <a href=""><img src="https://img.shields.io/badge/tests-1215%20passed-success" alt="1215 tests"></a>
   <a href="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Ansede/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/dm/ansede-static?label=PyPI%20installs&color=blue" alt="PyPI installs"></a>
+  <a href="https://pypi.org/project/ansede-static/"><img src="https://img.shields.io/pypi/dm/ansede-static?label=installs&color=blue" alt="PyPI"></a>
+  <a href="https://ansede.onrender.com"><img src="https://img.shields.io/badge/Live%20Demo-ansede.onrender.com-9cf" alt="Demo"></a>
 </p>
 
 ---
+
+## Why Ansede?
+
+| Capability | Ansede | Semgrep | CodeQL |
+|-----------|--------|---------|--------|
+| **CVE Recall** | **100%** (164/164) | ~23% | ~34% |
+| **CWE-639 IDOR** | ✅ World-first | ❌ No rules | ❌ No rules |
+| **Production noise** | **0.04/kLOC** | Config-dependent | Config-dependent |
+| **Languages** | 5 deep | 30+ shallow | 7 deep |
+| **Offline** | ✅ | ❌ (needs registry) | ❌ (needs build) |
 
 ## Quick Start
 
@@ -37,7 +44,7 @@ ansede-static src/ --diff-only        # PR scan: only changed files (< 5s)
 ansede-static src/ --suggest          # Adaptive rules: improve based on your codebase
 ```
 
-No network, no API keys, no compilation. Just Python 3.9+ and `rich`.
+No network, no API keys, no compilation. Just Python 3.9+.
 
 **[Try the live playground →](https://ansede.onrender.com/scan)** — no install required.
 

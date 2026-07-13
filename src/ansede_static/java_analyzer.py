@@ -60,7 +60,14 @@ try:
     from ansede_static.java_ast_analyzer import analyze_java_ast  # noqa: F811
     _AST_AVAILABLE = True
 except ImportError:
-    _log.debug("java_ast_analyzer not available — using regex fallback")
+    import warnings
+    warnings.warn(
+        "ansede-static: tree-sitter-java not installed — Java analysis "
+        "will use regex fallback (reduced accuracy). Install with: "
+        "pip install ansede-static[treesitter]",
+        RuntimeWarning,
+        stacklevel=2,
+    )
 
 
 _ROUTE_ANNOTATIONS = {
@@ -96,6 +103,62 @@ _CMD_INJECTION_RE = re.compile(
     r"Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\(|"
     r"\.start\s*\(\s*\)|\.command\s*\(\s*\"(?:/bin/|cmd\.exe|/usr/bin/|/bin/sh|/bin/bash)|"
     r"\w+\.exec\s*\(\s*\w+\s*,\s*\w+",  # .exec(args, env) two-arg variant
+    re.IGNORECASE,
+)
+
+# ── Two-step SQL injection: variable built with concat, then passed to sink ──
+# Matches: String sql = "SELECT..." + param;  ...  stmt.executeQuery(sql);
+_VAR_SQL_CONCAT_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"[^"]*"\s*\+\s*(\w+)',
+    re.IGNORECASE,
+)
+# Matches: String sql = "{call " + param + "}";
+_VAR_SQL_CONCAT2_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"(?:\{\s*call\s+|SELECT|INSERT|UPDATE|DELETE)[^"]*"\s*\+\s*(\w+)',
+    re.IGNORECASE,
+)
+# Matches: String query = param + "...";
+_VAR_SQL_CONCAT3_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*(\w+)\s*\+\s*"[^"]*"',
+    re.IGNORECASE,
+)
+# Sinks that receive a variable containing tainted SQL
+_VAR_SQL_SINK_RE = re.compile(
+    r'(?:\.executeQuery|\.executeUpdate|\.execute\s*\(|prepareCall|prepareStatement|createQuery|'
+    r'JdbcTemplate\.(?:query|execute|queryForObject|update))\s*\(\s*(\w+)\s*\)',
+    re.IGNORECASE,
+)
+
+# ── Two-step command injection ──
+_VAR_CMD_CONCAT_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"[^"]*"\s*\+\s*(\w+)',
+    re.IGNORECASE,
+)
+_VAR_CMD_SINK_RE = re.compile(
+    r'Runtime\.getRuntime\(\)\.exec\s*\(\s*(\w+)\s*\)|'
+    r'new\s+ProcessBuilder\s*\(\s*(\w+)\s*\)',
+    re.IGNORECASE,
+)
+
+# ── Two-step path traversal ──
+_VAR_PATH_CONCAT_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"[^"]*"\s*\+\s*(\w+)',
+    re.IGNORECASE,
+)
+_VAR_PATH_SINK_RE = re.compile(
+    r'new\s+(?:File|FileInputStream|FileOutputStream|FileReader|FileWriter)\s*\(\s*(\w+)\s*\)|'
+    r'Files\.(?:read|write|copy|move|delete|newInputStream|newOutputStream)\s*\([^)]*\b(\w+)\b',
+    re.IGNORECASE,
+)
+
+# ── Two-step XSS ──
+_VAR_XSS_CONCAT_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"[^"]*"\s*\+\s*(\w+)',
+    re.IGNORECASE,
+)
+_VAR_XSS_SINK_RE = re.compile(
+    r'(?:\.getWriter\(\)\.(?:write|print|println)|\.getOutputStream\(\)\.(?:write|print))\s*\(\s*(\w+)\s*\)|'
+    r'response\.(?:sendError|setHeader|addHeader)\s*\([^,]*,\s*(\w+)\s*\)',
     re.IGNORECASE,
 )
 _WEAK_CRYPTO_JAVA_RE = re.compile(r"MessageDigest\.getInstance\(\s*[\"']MD5[\"']|MessageDigest\.getInstance\(\s*[\"']SHA1[\"']|[\"']MD5[\"']|[\"']SHA-?1[\"']|Cipher\.getInstance\(\s*[\"'](?:DES|RC2|RC4|Blowfish)|Hashing\.(?:md5|sha1)\s*\(\)|DigestUtils\.(?:md5|sha1)(?:Hex)?\s*\(", re.IGNORECASE)
@@ -370,6 +433,14 @@ def _collect_methods(source: str) -> list[_JavaMethod]:
 def _first_matching_line(text: str, pattern: re.Pattern[str], start_line: int) -> int:
     for offset, line in enumerate(text.splitlines(), start=0):
         if pattern.search(line):
+            return start_line + offset
+    return start_line
+
+
+def _first_line_containing(text: str, needle: str, start_line: int) -> int:
+    """Find first line containing a literal substring."""
+    for offset, line in enumerate(text.splitlines(), start=0):
+        if needle in line:
             return start_line + offset
     return start_line
 
@@ -736,6 +807,117 @@ def _append_method_level_regex_findings(source: str, findings: list[Finding]) ->
                 ))
                 existing_keys.add(key)
 
+        # JV-004var: Two-step SQL injection — SQL built in variable, then passed to sink
+        # Detects: String sql = "SELECT..." + param; ... stmt.executeQuery(sql);
+        _tainted_vars: set[str] = set()
+        for m in _VAR_SQL_CONCAT_RE.finditer(method.body):
+            _tainted_vars.add(m.group(1))
+        for m in _VAR_SQL_CONCAT2_RE.finditer(method.body):
+            _tainted_vars.add(m.group(1))
+        for m in _VAR_SQL_CONCAT3_RE.finditer(method.body):
+            _tainted_vars.add(m.group(1))
+
+        _sink_vars: set[str] = set()
+        for m in _VAR_SQL_SINK_RE.finditer(method.body):
+            for g in m.groups():
+                if g:
+                    _sink_vars.add(g)
+
+        _sqli_var_matches = _tainted_vars & _sink_vars
+        if _sqli_var_matches and _has_tainted_param(method) and "CWE-89" not in _safe_skip_cwes:
+            for var_name in _sqli_var_matches:
+                line = _first_line_containing(method.body, var_name, method.start_line)
+                key = (line, f"JV-004-{var_name}")
+                if key not in existing_keys:
+                    findings.append(Finding(
+                        category="security", severity=Severity.CRITICAL,
+                        title=f"CWE-89: SQL built in variable `{var_name}` then executed in `{method.name}()`",
+                        description=f"Variable `{var_name}` is built with string concatenation and then passed to a SQL execution sink.",
+                        line=line,
+                        suggestion="Use PreparedStatement with bind parameters instead of building SQL via string concatenation.",
+                        rule_id="JV-004", cwe="CWE-89", agent="java-analyzer",
+                        confidence=0.90, analysis_kind="var_taint_flow",
+                    ))
+                    existing_keys.add(key)
+
+        # JV-008var: Two-step command injection
+        _cmd_tainted_vars: set[str] = set()
+        for m in _VAR_CMD_CONCAT_RE.finditer(method.body):
+            _cmd_tainted_vars.add(m.group(1))
+        _cmd_sink_vars: set[str] = set()
+        for m in _VAR_CMD_SINK_RE.finditer(method.body):
+            for g in m.groups():
+                if g:
+                    _cmd_sink_vars.add(g)
+        _cmd_var_matches = _cmd_tainted_vars & _cmd_sink_vars
+        if _cmd_var_matches and _has_tainted_param(method):
+            for var_name in _cmd_var_matches:
+                line = _first_line_containing(method.body, var_name, method.start_line)
+                key = (line, f"JV-008-{var_name}")
+                if key not in existing_keys:
+                    findings.append(Finding(
+                        category="security", severity=Severity.CRITICAL,
+                        title=f"CWE-78: Command built in variable `{var_name}` then executed in `{method.name}()`",
+                        description="OS command is assembled with user input in a variable, then passed to Runtime.exec/ProcessBuilder.",
+                        line=line,
+                        suggestion="Avoid building shell commands from user input. Use ProcessBuilder with explicit argument arrays.",
+                        rule_id="JV-008", cwe="CWE-78", agent="java-analyzer",
+                        confidence=0.88, analysis_kind="var_taint_flow",
+                    ))
+                    existing_keys.add(key)
+
+        # JV-007var: Two-step path traversal
+        _path_tainted_vars: set[str] = set()
+        for m in _VAR_PATH_CONCAT_RE.finditer(method.body):
+            _path_tainted_vars.add(m.group(1))
+        _path_sink_vars: set[str] = set()
+        for m in _VAR_PATH_SINK_RE.finditer(method.body):
+            for g in m.groups():
+                if g:
+                    _path_sink_vars.add(g)
+        _path_var_matches = _path_tainted_vars & _path_sink_vars
+        if _path_var_matches and _has_tainted_param(method):
+            for var_name in _path_var_matches:
+                line = _first_line_containing(method.body, var_name, method.start_line)
+                key = (line, f"JV-007-{var_name}")
+                if key not in existing_keys:
+                    findings.append(Finding(
+                        category="security", severity=Severity.HIGH,
+                        title=f"CWE-22: Path built in variable `{var_name}` then opened in `{method.name}()`",
+                        description="File path is assembled with user input in a variable, then passed to file I/O APIs.",
+                        line=line,
+                        suggestion="Validate and sanitize file paths. Use path canonicalization and whitelist-based validation.",
+                        rule_id="JV-007", cwe="CWE-22", agent="java-analyzer",
+                        confidence=0.85, analysis_kind="var_taint_flow",
+                    ))
+                    existing_keys.add(key)
+
+        # JV-011var: Two-step XSS via response write
+        _xss_tainted_vars: set[str] = set()
+        for m in _VAR_XSS_CONCAT_RE.finditer(method.body):
+            _xss_tainted_vars.add(m.group(1))
+        _xss_sink_vars: set[str] = set()
+        for m in _VAR_XSS_SINK_RE.finditer(method.body):
+            for g in m.groups():
+                if g:
+                    _xss_sink_vars.add(g)
+        _xss_var_matches = _xss_tainted_vars & _xss_sink_vars
+        if _xss_var_matches and _has_tainted_param(method):
+            for var_name in _xss_var_matches:
+                line = _first_line_containing(method.body, var_name, method.start_line)
+                key = (line, f"JV-011-{var_name}")
+                if key not in existing_keys:
+                    findings.append(Finding(
+                        category="security", severity=Severity.HIGH,
+                        title=f"CWE-79: XSS — user data in variable `{var_name}` written to response in `{method.name}()`",
+                        description="Response output contains user-controlled data without HTML encoding.",
+                        line=line,
+                        suggestion="HTML-encode all user-controlled data before writing to HTTP response. Use OWASP Encoder or similar.",
+                        rule_id="JV-011", cwe="CWE-79", agent="java-analyzer",
+                        confidence=0.85, analysis_kind="var_taint_flow",
+                    ))
+                    existing_keys.add(key)
+
         # JV-010: Open redirect via sendRedirect (CWE-601) — AST misses local vars
         if _REDIRECT_JAVA_RE.search(method.body):
             # FP guard: skip if allowlist/validation is present
@@ -756,6 +938,47 @@ def _append_method_level_regex_findings(source: str, findings: list[Finding]) ->
                         confidence=0.72, analysis_kind="pattern",
                     ))
                     existing_keys.add(key)
+
+        # JV-016: CSRF — mutating Spring endpoint missing anti-CSRF protection (CWE-352)
+        if (_has_route(method) and method.http_method in {"POST", "PUT", "DELETE", "PATCH"}
+                and not re.search(r"csrf|Csrf|CSRF|_csrf|@CrossOrigin|SameSite", method.body, re.IGNORECASE)
+                and not re.search(r"\.headers\s*\(|addHeader|setHeader.*csrf|HttpOnly|SameSite", method.body, re.IGNORECASE)):
+            key = (method.start_line, "JV-016")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-352: CSRF — mutating endpoint `{method.name}()` missing anti-CSRF protection",
+                    description="Spring mutating route (POST/PUT/DELETE) has no detectable CSRF token, SameSite cookie, or @CrossOrigin protection.",
+                    line=method.start_line,
+                    suggestion="Enable Spring Security CSRF protection, add @CrossOrigin, or set SameSite=Strict on session cookies.",
+                    rule_id="JV-016", cwe="CWE-352", agent="java-analyzer",
+                    confidence=0.78, analysis_kind="route_heuristic",
+                ))
+                existing_keys.add(key)
+
+        # JV-017: SSRF — URL constructed from user input (CWE-918)
+        _has_ssrf_sink = bool(re.search(
+            r'new\s+URL\s*\(|HttpURLConnection|openConnection\s*\(|RestTemplate|WebClient\.create\s*\(|'
+            r'\.getForObject\s*\(|\.postForObject\s*\(|\.getForEntity\s*\(',
+            method.body, re.IGNORECASE))
+        _has_ssrf_sanitizer = bool(re.search(
+            r'ALLOWED_HOSTS|allowedHosts|ALLOWED_DOMAINS|isValidUrl|validateUrl|'
+            r'\.startsWith\s*\(\s*"https?://(?:localhost|127\.|10\.|172\.|192\.)',
+            method.body, re.IGNORECASE))
+        if _has_ssrf_sink and _has_tainted_param(method) and not _has_ssrf_sanitizer:
+            line = _first_matching_line(method.body, _SSRF_JAVA_RE, method.start_line)
+            key = (line, "JV-017")
+            if key not in existing_keys:
+                findings.append(Finding(
+                    category="security", severity=Severity.HIGH,
+                    title=f"CWE-918: SSRF — outbound URL built from user input in `{method.name}()`",
+                    description="HTTP client is called with a URL that may be attacker-influenced, enabling Server-Side Request Forgery.",
+                    line=line,
+                    suggestion="Validate the target URL against an allowlist of permitted hosts. Never pass user-controlled URLs directly to HTTP clients.",
+                    rule_id="JV-017", cwe="CWE-918", agent="java-analyzer",
+                    confidence=0.82, analysis_kind="taint_flow",
+                ))
+                existing_keys.add(key)
 
         # JV-015: Session fixation (CWE-384) — route with login but no session regeneration
         _has_session_set = bool(re.search(r'getSession\(\)\.setAttribute|session\.setAttribute', method.body, re.IGNORECASE))
@@ -1484,6 +1707,196 @@ def _append_line_level_findings(source: str, findings: list[Finding]) -> None:
                     existing_keys.add(key)
 
 
+# ── Java fallback detection for blind-spot CWEs ─────────────────────────
+
+_JAVA_TAINT_SOURCE = re.compile(
+    r'request\.getParameter\(|request\.getHeader\(|request\.getQueryString\(|'
+    r'request\.getCookies\(|getParameter\(|getHeader\(|@RequestParam|@PathVariable|'
+    r'@RequestBody|@QueryParam|@FormParam|@HeaderParam',
+    re.IGNORECASE,
+)
+
+# Struts2 / Spring MVC / generic web framework indicators
+# Classes extending ActionSupport or containing action/controller patterns
+# have implicit taint via parameter binding (setXxx methods)
+_HAS_WEB_FRAMEWORK = re.compile(
+    r'extends\s+(?:ActionSupport|BaseController|Action\b)|'
+    r'implements\s+(?:ServletRequestAware|SessionAware|ServletRequest|ParameterAware)|'
+    r'package\s+.*\.(?:action|controller|web|struts)\b|'
+    r'@(?:Controller|RestController|RequestMapping)\b',
+    re.IGNORECASE,
+)
+
+_JAVA_CMD_INJ_SINK = re.compile(
+    r'Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\([^)]*\)\s*\.start\s*\(|'
+    r'\.exec\s*\(\s*\w+\s*\+|\.exec\s*\(\s*\w+\s*\)',
+    re.IGNORECASE,
+)
+
+_JAVA_PATH_SINK = re.compile(
+    r'new\s+(?:File|FileInputStream|FileOutputStream|FileReader|FileWriter)\s*\(|'
+    r'Files\.(?:read|write|copy|move|delete|newInputStream|newOutputStream|walk)\s*\(',
+    re.IGNORECASE,
+)
+
+_JAVA_XSS_SINK = re.compile(
+    r'\.getWriter\(\)\.(?:write|print|println)\s*\(|\.getOutputStream\(\)\.(?:write|print)\s*\(|'
+    r'response\.sendError\s*\([^,]*,\s*\w',
+    re.IGNORECASE,
+)
+
+# Variable propagation: String x = request.getParameter("y");
+_JAVA_VAR_PROP = re.compile(
+    r'(?:String|int|long|double|boolean|Object)\s+([A-Za-z_]\w*)\s*=\s*(?:request\.)?(?:getParameter|getHeader|getQueryString|getCookies)\s*\(|'
+    r'(?:String|int|long|double|boolean|Object)\s+([A-Za-z_]\w*)\s*=\s*.*@RequestParam\b|'
+    r'(?:String|int|long|double|boolean|Object)\s+([A-Za-z_]\w*)\s*=\s*.*@PathVariable\b',
+    re.IGNORECASE,
+)
+_JAVA_VAR_CHAIN = re.compile(
+    r'(?:String|int|long|double|boolean|Object)\s+([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\s*;',
+    re.IGNORECASE,
+)
+
+
+def _get_java_propagated_taint(source: str) -> set[str]:
+    """Find Java variables that receive tainted values through assignments."""
+    tainted: set[str] = set()
+    for m in _JAVA_VAR_PROP.finditer(source):
+        for g in m.groups():
+            if g and not g.startswith(('String', 'int', 'long', 'double', 'boolean', 'Object', 'request')):
+                tainted.add(g)
+                break
+    for _ in range(3):
+        new = False
+        for m in _JAVA_VAR_CHAIN.finditer(source):
+            vname = m.group(1)
+            src = m.group(2)
+            if src in tainted and vname not in tainted:
+                tainted.add(vname)
+                new = True
+        if not new:
+            break
+    return tainted
+
+
+def _java_fallback_detect(source: str, findings: list) -> None:
+    """Add fallback findings for CWE-78, CWE-22, CWE-79 in Java."""
+    # Taint sources can come from explicit getParameter() calls OR
+    # from web framework parameter binding (Struts2 setters, Spring @RequestParam)
+    has_direct_taint = bool(_JAVA_TAINT_SOURCE.search(source))
+    has_web_fw = bool(_HAS_WEB_FRAMEWORK.search(source))
+    if not has_direct_taint and not has_web_fw:
+        return
+    
+    lines = source.splitlines()
+    propagated = _get_java_propagated_taint(source)
+    # In web framework classes with setters, all private fields are potentially tainted
+    if has_web_fw and not propagated:
+        # Extract private field names as potentially tainted
+        for fm in re.finditer(r'private\s+(?:String|int|long|boolean)\s+(\w+)\s*;', source):
+            propagated.add(fm.group(1))
+    
+    def _arg_contains_taint(m: re.Match, max_dist: int = 200) -> tuple[bool, set[str]]:
+        sink_end = m.end()
+        arg_text = ""
+        depth = 0
+        arg_start = None
+        for i in range(sink_end, min(sink_end + max_dist, len(source))):
+            c = source[i]
+            if c == '(' and depth == 0:
+                arg_start = i + 1
+                depth = 1
+            elif c == '(':
+                depth += 1
+            elif c == ')':
+                depth -= 1
+                if depth == 0:
+                    arg_text = source[arg_start:i] if arg_start else ""
+                    break
+        arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg_text)) if arg_text else set()
+        return bool(arg_vars & propagated) if propagated else False, arg_vars & propagated
+    
+    # CWE-78: Command injection
+    for m in _JAVA_CMD_INJ_SINK.finditer(source):
+        line_no = source[:m.start()].count('\n') + 1
+        ctx = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        # Check for string concat in the match itself, args, OR broader context
+        matched_has_concat = '+' in m.group() or '${' in m.group()
+        ctx_has_concat = '+' in ctx or 'format' in ctx.lower()
+        if not has_prop and not matched_has_concat and not ctx_has_concat:
+            continue
+        findings.append(Finding(
+            category="security", severity=Severity.CRITICAL,
+            title=f"CWE-78: Command injection via {m.group()[:60]} at line {line_no}",
+            description=f"OS command execution with dynamic input at L{line_no}."
+                + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+            line=line_no, suggestion="Use ProcessBuilder with explicit argument arrays.",
+            rule_id="JV-008F", cwe="CWE-78", agent="java-fallback",
+            confidence=0.85 if (has_prop or taint_vars) else 0.82, analysis_kind="direct_sink",
+        ))
+    
+    # CWE-22: Path traversal
+    for m in _JAVA_PATH_SINK.finditer(source):
+        line_no = source[:m.start()].count('\n') + 1
+        ctx = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        matched_has_concat = '+' in m.group()
+        if not has_prop and not matched_has_concat and '+' not in ctx and 'concat' not in ctx.lower():
+            continue
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-22: Path traversal via {m.group()[:60]} at line {line_no}",
+            description=f"File operation with tainted path at L{line_no}."
+                + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+            line=line_no, suggestion="Validate paths against a base directory.",
+            rule_id="JV-007F", cwe="CWE-22", agent="java-fallback",
+            confidence=0.85 if (has_prop or taint_vars) else 0.82, analysis_kind="direct_sink",
+        ))
+    
+    # CWE-79: XSS
+    for m in _JAVA_XSS_SINK.finditer(source):
+        line_no = source[:m.start()].count('\n') + 1
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-79: XSS via {m.group()[:60]} at line {line_no}",
+            description=f"Response output with unescaped data at L{line_no}."
+                + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+            line=line_no, suggestion="HTML-encode all user data before writing to response.",
+            rule_id="JV-011F", cwe="CWE-79", agent="java-fallback",
+            confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
+        ))
+    
+    # CWE-639 IDOR: Spring @PathVariable/@RequestParam → JPA query without @PreAuthorize
+    _has_spring_route = bool(re.search(
+        r'@(?:GetMapping|PostMapping|PutMapping|DeleteMapping|RequestMapping)\b|'
+        r'@PathVariable|@RequestParam',
+        source, re.IGNORECASE,
+    ))
+    _has_jpa_query = bool(re.search(
+        r'\.(?:findById|findOne|findAll|getOne|getById)\s*\(',
+        source, re.IGNORECASE,
+    ))
+    _has_auth = bool(re.search(
+        r'@PreAuthorize|@PostAuthorize|@Secured|@RolesAllowed|'
+        r'SecurityContextHolder|Authentication\b|Principal\b',
+        source, re.IGNORECASE,
+    ))
+    if _has_spring_route and _has_jpa_query and not _has_auth:
+        for m in re.finditer(r'\.(?:findById|findOne|findAll|getOne|getById)\s*\(', source, re.IGNORECASE):
+            line_no = source[:m.start()].count('\n') + 1
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-639: IDOR — {m.group()[:50]} at line {line_no} without @PreAuthorize",
+                description=f"JPA repository query at L{line_no} in a Spring controller with no authorization annotation.",
+                line=line_no,
+                suggestion="Add @PreAuthorize or verify the authenticated user owns the requested resource.",
+                rule_id="JV-017F", cwe="CWE-639", agent="java-fallback",
+                confidence=0.65, analysis_kind="direct_sink",
+            ))
+
+
 def analyze_java(
     source: str,
     filename: str = "<input>",
@@ -1499,6 +1912,7 @@ def analyze_java(
             # Merge: also run line-level and method-level regex checks the AST path misses
             _append_line_level_findings(source, ast_result.findings)
             _append_method_level_regex_findings(source, ast_result.findings)
+            _java_fallback_detect(source, ast_result.findings)
             return ast_result
         except Exception:
             _log.debug("AST analysis failed for %r — falling back to regex", filename, exc_info=True)

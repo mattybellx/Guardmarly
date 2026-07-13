@@ -17,7 +17,9 @@ import re
 DOCUMENT_WRITE_CALLEES: frozenset[str] = frozenset({"document.write", "document.writeln"})
 TIMER_CALLEES: frozenset[str] = frozenset({"setTimeout", "setInterval"})
 COMMAND_EXEC_CALLEES: frozenset[str] = frozenset({
-    "exec", "execSync",
+    # NOTE: bare "exec" / "execSync" removed — they match RegExp.prototype.exec()
+    # which is a string method, NOT child_process.exec(). Only qualified imports
+    # (child_process.exec etc.) are actual command injection sinks.
     "child_process.exec", "child_process.execSync",
     "child_process.spawn", "child_process.spawnSync",
     "child_process.execFile", "child_process.execFileSync",

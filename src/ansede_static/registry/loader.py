@@ -117,6 +117,19 @@ _PACK_LANGUAGE: dict[str, str] = {
     "aspnet_core": "csharp",
 }
 
+# Packs that REQUIRE framework detection — should NOT load on generic code.
+# These rules are specific to web frameworks and produce false positives
+# when applied to CLI tools, libraries, or non-web Python/JS code.
+_FRAMEWORK_ONLY_PACKS: frozenset[str] = frozenset({
+    # Python web frameworks
+    "django", "django_rest", "flask", "fastapi", "aiohttp_web", "tornado_web",
+    # JS web frameworks
+    "express_js", "react_frontend", "nextjs_framework", "nestjs_framework",
+    "angular_js", "vue_js", "pug_js", "hono_framework",
+    # Java / C# frameworks
+    "spring_boot", "aspnet_core",
+})
+
 
 def detect_frameworks(source: str, language: str) -> frozenset[str]:
     """Detect which frameworks are used in the given source code.
@@ -338,9 +351,19 @@ def load_packs_for_source(source: str, language: str) -> list[Any]:
     """
     frameworks = detect_frameworks(source, language)
     if not frameworks:
-        # If no specific framework detected, fall back to all language packs
-        # (handles generic Python/JS without framework imports).
-        return load_packs_for_language(language)
+        # No framework detected — only load generic/non-framework packs.
+        # Framework-specific rules (Django, Flask, Express, etc.) produce
+        # false positives on CLI tools, libraries, and non-web code.
+        rules: list[Any] = []
+        for stem, lang in _PACK_LANGUAGE.items():
+            if lang != normalised:
+                continue
+            if stem in _FRAMEWORK_ONLY_PACKS:
+                continue
+            pack_path = _REGISTRY_DIR / f"{stem}.yaml"
+            if pack_path.is_file():
+                rules.extend(_load_single_pack(str(pack_path)))
+        return rules
 
     rules: list[Any] = []
     for framework_id in frameworks:

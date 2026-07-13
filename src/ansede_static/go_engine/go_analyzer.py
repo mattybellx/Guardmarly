@@ -654,21 +654,22 @@ class GoSecurityWalker:
                         analysis_kind="go-ast-taint",
                     ))
                     return
-            # Flag even without taint for critical sinks
-            if severity in ("critical", "high"):
-                sev = Severity(severity)
-                self.findings.append(Finding(
-                    category="security",
-                    severity=sev,
-                    title=title,
-                    description=f"Dangerous call to {func_name} detected (no taint source identified but sink is high-risk)",
-                    line=call.loc[0],
-                    rule_id=f"GO-{cwe.replace('CWE-', '')}",
-                    cwe=cwe,
-                    confidence=0.55 if severity == "critical" else 0.40,
-                    trace=(TraceFrame(kind="sink", label=f"Sink: {func_name}()", line=call.loc[0]),),
-                    analysis_kind="go-ast-sink",
-                ))
+            # Flag even without taint for critical sinks — but at INFO severity only.
+            # Sink-only findings (no taint source identified) are low-confidence signals.
+            # Real vulnerabilities require user-controlled data reaching the sink.
+            sev = Severity.INFO
+            self.findings.append(Finding(
+                category="security",
+                severity=sev,
+                title=title,
+                description=f"Dangerous call to {func_name} detected (no taint source identified but sink is high-risk)",
+                line=call.loc[0],
+                rule_id=f"GO-{cwe.replace('CWE-', '')}",
+                cwe=cwe,
+                confidence=0.25,
+                trace=(TraceFrame(kind="sink", label=f"Sink: {func_name}()", line=call.loc[0]),),
+                analysis_kind="go-ast-sink",
+            ))
 
         # Walk sub-expressions (including func so chained calls like
         # exec.Command(...).Output() properly visit the inner dangerous call).

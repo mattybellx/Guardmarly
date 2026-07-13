@@ -272,6 +272,157 @@ _PB_COMMAND_METHODS: frozenset[str] = frozenset({
     "command",
 })
 
+# ── Sanitizer Tracker: per-method variable sanitization ──────────────────
+# Tracks which variables have been sanitized (safe to pass to sinks).
+# Goal: reduce FPR by recognizing PreparedStatement + setString, ESAPI encoding,
+# and other sanitizer patterns WITHOUT losing true positives.
+
+# SQL sanitizers — patterns that neutralize SQL injection risk
+_SQL_SANITIZER_METHODS: frozenset[str] = frozenset({
+    "setString", "setInt", "setLong", "setDouble", "setFloat",
+    "setBoolean", "setDate", "setTimestamp", "setObject", "setBytes",
+    "setNull", "setBigDecimal", "setTime", "setURL", "setArray",
+})
+
+# SQL prepared-statement variable patterns — if a method has BOTH of these, SQL is safe
+_SQL_PREPARED_PATTERNS: tuple[re.Pattern, ...] = (
+    re.compile(r'prepareStatement\s*\(\s*"[^"]*\?[^"]*"', re.IGNORECASE),
+    re.compile(r'prepareCall\s*\(\s*"[^"]*\?[^"]*"', re.IGNORECASE),
+)
+
+# XSS sanitizers — encoding functions that neutralize XSS
+_XSS_SANITIZER_PATTERNS: tuple[re.Pattern, ...] = (
+    re.compile(r'(?:ESAPI\.encoder\(\)\.encodeForHTML|encodeForHTML|StringEscapeUtils\.escapeHtml4?|'
+               r'HtmlUtils\.htmlEscape|OWASP\w*Encoder\.encodeForHTML|HTMLEntityCodec|'
+               r'\.encode\s*\(\s*\w+\s*,\s*"(?:HTML|html))', re.IGNORECASE),
+    re.compile(r'(?:Jsoup\.clean|Sanitizer\.sanitize|DOMPurify)', re.IGNORECASE),
+)
+
+# Command injection sanitizers — patterns that make exec safe
+_CMD_SANITIZER_PATTERNS: tuple[re.Pattern, ...] = (
+    re.compile(r'new\s+ProcessBuilder\s*\(', re.IGNORECASE),  # array form, no shell
+    re.compile(r'\.command\s*\(\s*new\s+\w+\[\]', re.IGNORECASE),
+)
+
+# Hardcoded string assignment — not tainted
+_HARDCODED_STRING_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*"(?:[^"\\]|\\.)*"\s*;',
+    re.IGNORECASE,
+)
+
+# Variable assignment from sanitizer function: String safe = encode(x);
+_SANITIZER_ASSIGN_RE = re.compile(
+    r'(?:String|var)\s+(\w+)\s*=\s*(\w+(?:\.\w+)*)\s*\(\s*(\w+)',
+    re.IGNORECASE,
+)
+
+# String concatenation: param + "..." or "..." + param
+_STRING_CONCAT_RE = re.compile(r'(\w+)\s*\+\s*"[^"]*"|"[^"]*"\s*\+\s*(\w+)', re.IGNORECASE)
+
+
+class SanitizerTracker:
+    """Per-method tracking of which variables have been sanitized for specific CWEs."""
+
+    def __init__(self, method_body: str):
+        self._body = method_body
+        self._body_lower = method_body.lower()
+        # CWE → set of safe variable names
+        self._safe_vars: dict[str, set[str]] = {
+            "CWE-89": set(),   # SQL-safe vars
+            "CWE-79": set(),   # XSS-safe vars
+            "CWE-78": set(),   # CmdInj-safe vars
+        }
+        # Variables set to hardcoded strings (not tainted)
+        self._hardcoded_vars: set[str] = set()
+        # Variables that went through string concatenation (definitely tainted)
+        self._concat_vars: set[str] = set()
+        # Whether the method uses PreparedStatement with setString (completely SQL-safe)
+        self._has_safe_sql: bool = False
+        # Whether the method uses ESAPI/OWASP HTML encoding
+        self._has_html_encoding: bool = False
+
+        self._analyze()
+
+    def _analyze(self) -> None:
+        """Scan method body for sanitizer patterns."""
+        b = self._body
+
+        # 1. Detect PreparedStatement + parameterized query (completely SQL-safe)
+        has_param_query = any(p.search(b) for p in _SQL_PREPARED_PATTERNS)
+        has_set_param = bool(re.search(
+            r'\.(?:setString|setInt|setLong|setDouble|setFloat|setBoolean|setDate|setTimestamp|setObject)\s*\(',
+            b, re.IGNORECASE))
+        has_raw_statement = bool(re.search(r'createStatement\s*\(\s*\)', b))
+        if has_param_query and has_set_param and not has_raw_statement:
+            self._has_safe_sql = True
+            # All variables passed through setString/setInt are SQL-safe
+            for m in re.finditer(r'\.(?:setString|setInt|setLong|setDouble|setFloat|setBoolean|setObject)\s*\(\s*\d+\s*,\s*(\w+)', b, re.IGNORECASE):
+                self._safe_vars["CWE-89"].add(m.group(1))
+
+        # 2. Detect HTML encoding (XSS-safe)
+        for pat in _XSS_SANITIZER_PATTERNS:
+            if pat.search(b):
+                self._has_html_encoding = True
+                break
+
+        # 3. Detect sanitizer assignments: String safe = ESAPI.encoder().encodeForHTML(x)
+        for m in _SANITIZER_ASSIGN_RE.finditer(b):
+            var_name = m.group(1)
+            func_call = m.group(2).lower()
+            source_var = m.group(3)
+            if any(kw in func_call for kw in ('encodeforhtml', 'escapehtml', 'encode', 'sanitize', 'clean', 'purify')):
+                self._safe_vars["CWE-79"].add(var_name)
+            if 'preparestatement' in func_call or 'preparecall' in func_call:
+                self._safe_vars["CWE-89"].add(var_name)
+
+        # 4. Detect hardcoded strings
+        for m in _HARDCODED_STRING_RE.finditer(b):
+            self._hardcoded_vars.add(m.group(1))
+
+        # 5. Detect string concatenation (tainted)
+        for m in _STRING_CONCAT_RE.finditer(b):
+            for g in m.groups():
+                if g:
+                    self._concat_vars.add(g)
+
+        # 6. Detect ProcessBuilder (safer than Runtime.exec with shell)
+        if any(p.search(b) for p in _CMD_SANITIZER_PATTERNS):
+            # ProcessBuilder with array args is safer
+            pb_vars = set()
+            for m in re.finditer(r'new\s+ProcessBuilder\s*\(\s*(\w+)', b, re.IGNORECASE):
+                pb_vars.add(m.group(1))
+            for m in re.finditer(r'\.command\s*\(\s*(\w+)', b, re.IGNORECASE):
+                pb_vars.add(m.group(1))
+            # Variables passed to ProcessBuilder are cmd-safe
+            self._safe_vars["CWE-78"].update(pb_vars)
+
+    def is_sanitized(self, cwe: str, var_name: str) -> bool:
+        """Check if a variable has been sanitized for a given CWE."""
+        if cwe == "CWE-89" and self._has_safe_sql:
+            # If the entire method uses PreparedStatement safely, all SQL is safe
+            # unless the variable went through string concatenation
+            if var_name not in self._concat_vars:
+                return True
+        if var_name in self._safe_vars.get(cwe, set()):
+            return True
+        # Hardcoded strings are safe for CWE-78 (command injection)
+        if cwe == "CWE-78" and var_name in self._hardcoded_vars:
+            return True
+        return False
+
+    def any_sanitized(self, cwe: str, var_names: set[str]) -> bool:
+        """Check if ANY of the given variables is sanitized."""
+        return any(self.is_sanitized(cwe, v) for v in var_names)
+
+    @property
+    def sql_is_safe(self) -> bool:
+        return self._has_safe_sql
+
+    @property
+    def xss_is_encoded(self) -> bool:
+        return self._has_html_encoding
+
+
 # ── Data classes ────────────────────────────────────────────────────────────
 
 
@@ -1091,6 +1242,18 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
                                                       "getQueryString", "getTheParameter", "getTheValue"))
         if not _has_taint:
             continue
+
+        # ── FPR Guard: skip method if ALL SQL is parameterized ──
+        # Expanded: also check for PreparedStatement + setString/setInt (safe pattern)
+        _has_prepared = bool(re.search(r'prepareStatement\s*\(', method.body))
+        _has_bind_params = bool(re.search(r'\.setString\s*\(|\.setInt\s*\(|\.setLong\s*\(|\.setObject\s*\(', method.body))
+        _has_raw_statement = bool(re.search(r'createStatement\s*\(\s*\)', method.body))
+        if _has_prepared and _has_bind_params and not _has_raw_statement:
+            continue  # Uses PreparedStatement with bind parameters and no raw Statement — safe
+
+        # ── SanitizerTracker: per-method variable sanitization ──
+        tracker = SanitizerTracker(method.body)
+
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
         calls = _collect_method_invocations(body_tree, body_bytes)
@@ -1123,6 +1286,9 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
                 rule_id = f.get("rule_id", "JV-004")
                 severity = Severity.CRITICAL if cwe in ("CWE-89", "CWE-78") else Severity.HIGH
                 sink_type = {"CWE-89": "SQL", "CWE-78": "command", "CWE-79": "XSS"}.get(cwe, "data")
+                # FPR guard: skip if tainted vars were sanitized
+                if cwe == "CWE-89" and tracker.any_sanitized(cwe, set(tainted_names)):
+                    continue
                 findings.append(_make_finding(
                     line=fl,
                     title=f"{cwe}: {sink_type} injection (interproc IFDS) — tainted {tainted_names} at line {fl}",
@@ -1157,6 +1323,9 @@ def _check_sqli(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
                         rule_id = f.get("rule_id", "JV-004")
                         severity = Severity.CRITICAL if cwe in ("CWE-89", "CWE-78") else Severity.HIGH
                         sink_type = {"CWE-89": "SQL", "CWE-78": "command", "CWE-79": "XSS"}.get(cwe, "data")
+                        # FPR guard: skip if tainted vars were sanitized
+                        if cwe == "CWE-89" and tracker.any_sanitized(cwe, set(tainted_names)):
+                            continue
                         findings.append(_make_finding(
                             line=fl,
                             title=f"{cwe}: {sink_type} injection (IFDS) — tainted {tainted_names} at line {fl}",
@@ -1687,6 +1856,10 @@ def _check_xss(methods: list[_JavaMethod], source: bytes) -> list[Finding]:
         origins = collect_taint_origins(body_tree, body_bytes, method.params,
                                          method.framework_tainted_params)
         calls = _collect_method_invocations(body_tree, body_bytes)
+        # SanitizerTracker: check for HTML encoding before response write
+        tracker = SanitizerTracker(method.body)
+        if tracker.xss_is_encoded:
+            continue  # Method has HTML encoding — XSS is mitigated
         # Check if this method is in an HTTP servlet context (has HttpServletResponse/getWriter)
         _body_lower = method.body.lower()
         _is_http_context = any(kw in _body_lower for kw in (

@@ -21,6 +21,15 @@ from __future__ import annotations
 
 import json
 import re
+import warnings
+
+# ⚠ Ruby analysis is regex-only (no AST). False-positive rates may be high.
+warnings.warn(
+    "ansede-static: Ruby analyzer is experimental (regex-only, no AST). "
+    "False-positive rates may be high.",
+    RuntimeWarning,
+    stacklevel=2,
+)
 import subprocess
 import sys
 from dataclasses import dataclass, field

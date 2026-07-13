@@ -89,6 +89,7 @@ _VENDOR_NOISE_CWES: frozenset[str] = frozenset({
 # CWEs that are noise in test files (test routes don't need auth, etc.)
 _TEST_NOISE_CWES: frozenset[str] = frozenset({
     "CWE-862", "CWE-352", "CWE-209", "CWE-918", "CWE-1188",
+    "CWE-98",  # Dynamic require() in test files — pattern not security
 })
 
 _FRAMEWORK_INTERNAL_NOISE_CWES: frozenset[str] = frozenset({
@@ -807,6 +808,17 @@ def _check_csrf_js(code: str) -> list[Finding]:
         r'csrfProtection|csurf|req\.csrfToken|lusca)',
         re.IGNORECASE,
     )
+    # ── Global CSRF middleware pre-scan ───────────────────────────────
+    # If the app applies CSRF middleware globally (app.use(csurf()),
+    # server.use(csrf()), etc.), ALL routes are protected — skip checking.
+    _GLOBAL_CSRF_RE = re.compile(
+        r'(?:app|server|router|express)\.use\s*\(\s*'
+        r'(?:csurf|csrf|lusca\.csrf|helmet|csrfProtection)\b',
+        re.IGNORECASE,
+    )
+    if _GLOBAL_CSRF_RE.search(code):
+        return findings  # Global middleware present — all routes protected
+    # ──────────────────────────────────────────────────────────────────
     for lineno, line in enumerate(code.splitlines(), 1):
         if not _MUTATING_METHOD_RE.search(line):
             continue

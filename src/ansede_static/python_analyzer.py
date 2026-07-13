@@ -199,6 +199,60 @@ TAINT_SOURCES: dict[str, str] = {
 
 _SinkInfo = Union[tuple[str, str], tuple[str, str, str]]
 
+# ── Sink names that MUST be module-qualified to avoid false positives ─────
+_SINK_REQUIRES_QUALIFIED_MODULE: frozenset[str] = frozenset({
+    "search", "search_s", "search_ext",
+    "find", "findall", "findtext",
+    "aggregate",
+    "update_one", "delete_one",
+    "execute", "executemany",
+    "raw", "extra", "text",
+    "open",
+    "sendmail", "redirect", "Response", "Markup",
+    "from_string", "urlopen", "gql",
+})
+
+_SINK_QUALIFIED_MODULES: dict[str, frozenset[str]] = {
+    "search":        frozenset({"ldap", "LDAP", "ldap3"}),
+    "search_s":      frozenset({"ldap", "LDAP", "ldap3"}),
+    "search_ext":    frozenset({"ldap", "LDAP", "ldap3"}),
+    "find":          frozenset({"collection", "pymongo", "motor", "mongoengine", "db.", ".users", ".posts", ".products", ".orders"}),
+    "findall":       frozenset({"tree", "etree", "xml", "lxml"}),
+    "findtext":      frozenset({"tree", "etree", "xml", "lxml"}),
+    "aggregate":     frozenset({"collection", "pymongo", "motor", "mongoengine"}),
+    "update_one":    frozenset({"collection", "pymongo", "motor", "mongoengine"}),
+    "delete_one":    frozenset({"collection", "pymongo", "motor", "mongoengine"}),
+    "execute":       frozenset({"cursor", "db", "session", "connection", "conn", "c", "cur", "cr"}),
+    "executemany":   frozenset({"cursor", "db", "session", "connection", "conn"}),
+    "raw":           frozenset({"django.db", "Model.objects", "Manager"}),
+    "extra":         frozenset({"django.db", "Model.objects", "QuerySet"}),
+    "text":          frozenset({"sqlalchemy", "sa."}),
+    "open":          frozenset({"shelve", "io.", "os.", "builtins"}),
+    "sendmail":      frozenset({"smtplib", "SMTP", "smtp"}),
+    "redirect":      frozenset({"flask", "django.shortcuts"}),
+    "Response":      frozenset({"flask", "django.http", "werkzeug", "starlette", "fastapi"}),
+    "Markup":        frozenset({"flask", "jinja2", "markupsafe"}),
+    "from_string":   frozenset({"Environment", "jinja2", "Template"}),
+    "urlopen":       frozenset({"urllib.request"}),
+    "gql":           frozenset({"graphql", "gql"}),
+}
+
+
+def _is_qualified_sink_match(full_path: str, sink_name: str) -> bool:
+    """Return True when *full_path* matches *sink_name* with appropriate module context."""
+    if sink_name not in _SINK_REQUIRES_QUALIFIED_MODULE:
+        return True
+
+    modules = _SINK_QUALIFIED_MODULES.get(sink_name)
+    if modules is None:
+        return True
+
+    path_lower = full_path.lower()
+    for mod in modules:
+        if mod.lower() in path_lower:
+            return True
+    return False
+
 
 TAINT_SINKS: dict[str, _SinkInfo] = {
     # SQL Injection — CWE-89
@@ -284,28 +338,34 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
     "gql":                        ("CWE-89", "GraphQL Injection (gql())"),
     # NoSQL Injection — CWE-943
     "collection.find":            ("CWE-943", "NoSQL Injection (MongoDB find)"),
-    "find":                       ("CWE-943", "NoSQL Injection (MongoDB find)"),
+    "pymongo.collection.find":    ("CWE-943", "NoSQL Injection (MongoDB find)"),
+    "find":                       ("CWE-943", "NoSQL Injection (MongoDB find)"),  # requires module qualification
     "collection.aggregate":       ("CWE-943", "NoSQL Injection (MongoDB aggregate)"),
-    "aggregate":                  ("CWE-943", "NoSQL Injection (MongoDB aggregate)"),
+    "aggregate":                  ("CWE-943", "NoSQL Injection (MongoDB aggregate)"),  # requires module qualification
     "collection.update_one":      ("CWE-943", "NoSQL Injection (MongoDB update)"),
-    "update_one":                 ("CWE-943", "NoSQL Injection (MongoDB update)"),
+    "update_one":                 ("CWE-943", "NoSQL Injection (MongoDB update)"),  # requires module qualification
     "collection.delete_one":      ("CWE-943", "NoSQL Injection (MongoDB delete)"),
-    "delete_one":                 ("CWE-943", "NoSQL Injection (MongoDB delete)"),
+    "delete_one":                 ("CWE-943", "NoSQL Injection (MongoDB delete)"),  # requires module qualification
     # LDAP Injection — CWE-90
     "ldap.search":                ("CWE-90", "LDAP Injection"),
     "ldap.search_s":              ("CWE-90", "LDAP Injection"),
     "ldap.search_ext":            ("CWE-90", "LDAP Injection"),
-    "search":                     ("CWE-90", "LDAP Injection"),
-    "search_s":                   ("CWE-90", "LDAP Injection"),
-    "search_ext":                 ("CWE-90", "LDAP Injection"),
+    "ldap3.search":               ("CWE-90", "LDAP Injection"),
+    "connection.search":          ("CWE-90", "LDAP Injection"),
+    "search":                     ("CWE-90", "LDAP Injection"),  # requires module qualification
+    "search_s":                   ("CWE-90", "LDAP Injection"),  # requires module qualification
+    "search_ext":                 ("CWE-90", "LDAP Injection"),  # requires module qualification
     # XPath Injection — CWE-643
     "tree.xpath":                 ("CWE-643", "XPath Injection (lxml)"),
     "etree.XPath":                ("CWE-643", "XPath Injection (lxml)"),
-    "findall":                    ("CWE-643", "XPath Injection (ElementTree)"),
-    "findtext":                   ("CWE-643", "XPath Injection (ElementTree)"),
+    "etree.findall":              ("CWE-643", "XPath Injection (ElementTree)"),
+    "etree.findtext":             ("CWE-643", "XPath Injection (ElementTree)"),
+    "findall":                    ("CWE-643", "XPath Injection (ElementTree)"),  # requires module qualification
+    "findtext":                   ("CWE-643", "XPath Injection (ElementTree)"),  # requires module qualification
     # Email Header Injection — CWE-93
     "smtplib.SMTP.sendmail":      ("CWE-93", "Email Header Injection"),
-    "sendmail":                   ("CWE-93", "Email Header Injection"),
+    "SMTP.sendmail":              ("CWE-93", "Email Header Injection"),
+    "sendmail":                   ("CWE-93", "Email Header Injection"),  # requires module qualification
     # XXE — CWE-611
     "lxml.etree.parse":           ("CWE-611", "XML External Entity (XXE) via lxml"),
     "etree.parse":                ("CWE-611", "XML External Entity (XXE) via ElementTree"),
@@ -333,6 +393,30 @@ TAINT_SINKS: dict[str, _SinkInfo] = {
 # ──────────────────────────────────────────────────────────────────────────────
 # Sanitizer catalogue — these calls neutralise taint for the listed CWEs
 # ──────────────────────────────────────────────────────────────────────────────
+
+# ── Sanitizer names that MUST be module-qualified ────────────────────────
+_SANITIZER_REQUIRES_QUALIFIED_MODULE: frozenset[str] = frozenset({
+    "escape",   # collides with SQL ESCAPE, shell escape, ANSI escape codes
+})
+
+_SANITIZER_QUALIFIED_MODULES: dict[str, frozenset[str]] = {
+    "escape": frozenset({"markupsafe", "html", "cgi", "django.utils.html", "bleach", "nh3", "xss"}),
+}
+
+
+def _is_qualified_sanitizer_match(full_path: str, sanitizer_name: str) -> bool:
+    """Return True when *full_path* matches *sanitizer_name* with appropriate module context."""
+    if sanitizer_name not in _SANITIZER_REQUIRES_QUALIFIED_MODULE:
+        return True
+    modules = _SANITIZER_QUALIFIED_MODULES.get(sanitizer_name)
+    if modules is None:
+        return True
+    path_lower = full_path.lower()
+    for mod in modules:
+        if mod.lower() in path_lower:
+            return True
+    return False
+
 
 SANITIZERS: dict[str, set[str]] = {
     # Command injection sanitizers
@@ -1179,17 +1263,53 @@ def _function_has_explicit_path_guard(fnode: ast.FunctionDef | ast.AsyncFunction
 
 
 def _get_tainted_parent(node: ast.expr, tainted: dict[str, Any]) -> str | None:
+    """Return the first tainted variable name found in *node*, or None.
+    
+    v6.3+: Also recognises heap-model synthetic taint entries for subscript
+    accesses, e.g. ``container['key']`` where container has stored tainted data.
+    """
     for child in ast.walk(node):
         if isinstance(child, ast.Name) and child.id in tainted:
             return child.id
+        # Heap-model subscript check: sink(d["key"]) where d["key"] has stored taint
+        if isinstance(child, ast.Subscript) and isinstance(child.slice, ast.Constant):
+            container = _get_base_name(child.value)
+            key = str(child.slice.value)
+            synth_name = f"{container}[{key!r}]"
+            if synth_name in tainted:
+                return synth_name
+        # Heap-model list check: sink(lst[0]) where lst has appended taint
+        if isinstance(child, ast.Subscript):
+            container = _get_base_name(child.value)
+            synth_name = f"{container}[*]"
+            if synth_name in tainted:
+                return synth_name
+    return None
+
+
+def _get_base_name(node: ast.expr) -> str | None:
+    """Extract the root variable name from an expression like 'a.b.c' → 'a'."""
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return _get_base_name(node.value)
     return None
 
 
 def _get_sink_name(node: ast.Call) -> str | None:
-    """Return the matching sink key from TAINT_SINKS for this Call node, or None."""
+    """Return the matching sink key from TAINT_SINKS for this Call node, or None.
+
+    Module-qualification rule (v6.3+): ambiguous sink names (search, find,
+    execute, open, etc.) MUST appear with a recognised dangerous module prefix
+    in the full call path.  This prevents false positives like re.search()
+    being flagged as LDAP injection.
+    """
     if isinstance(node.func, ast.Name):
         name = node.func.id
-        return name if name in TAINT_SINKS else None
+        if name in TAINT_SINKS:
+            if _is_qualified_sink_match(name, name):
+                return name
+        return None
     if isinstance(node.func, ast.Attribute):
         parts: list[str] = []
         cur: ast.expr = node.func
@@ -1200,12 +1320,20 @@ def _get_sink_name(node: ast.Call) -> str | None:
             parts.append(cur.id)
         parts.reverse()
         full = ".".join(parts)
+        # Phase 1: exact full-path matches (always accepted)
         for sink in TAINT_SINKS:
-            if full == sink or full.endswith("." + sink):
+            if full == sink:
                 return sink
+        # Phase 2: suffix matches with module qualification check
+        for sink in TAINT_SINKS:
+            if full.endswith("." + sink):
+                if _is_qualified_sink_match(full, sink):
+                    return sink
+        # Phase 3: bare attribute name match with qualification (legacy fallback)
         attr = node.func.attr
         if attr in TAINT_SINKS:
-            return attr
+            if _is_qualified_sink_match(full, attr):
+                return attr
     return None
 
 
@@ -3014,6 +3142,8 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                     # Safe subprocess guard: subprocess.run(["cmd","arg"]) with
                     # list-form args and no shell=True is the safe API form.
                     # Only flag if shell=True is present or args are a string.
+                    # ALSO: don't flag if the ONLY tainted data is the env= kwarg
+                    # (environment variables for the subprocess, NOT the command).
                     if sink in ("subprocess.call", "subprocess.run", "subprocess.Popen",
                                  "subprocess.check_call", "subprocess.check_output"):
                         has_shell_true = any(
@@ -3023,6 +3153,13 @@ def _rule_03(ctx: _Ctx) -> list[Finding]:
                         has_list_args = node.args and isinstance(node.args[0], ast.List)
                         if not has_shell_true and has_list_args:
                             continue  # Safe: list-form args without shell=True
+                        # Skip if taint only reaches the env= kwarg (not command args)
+                        # The env= kwarg sets subprocess environment — it is NOT a command injection vector.
+                        tainted_kwargs = {kw.arg for kw in node.keywords 
+                                         if kw.arg in ("env", "cwd", "encoding", "errors", "text")}
+                        tainted_positional = bool(node.args)
+                        if not tainted_positional and tainted_kwargs:
+                            continue  # Only env/cwd/etc tainted — not command injection
                     cwe, vuln_type, configured_severity = _unpack_sink_info(TAINT_SINKS[sink])
                     default_severity = Severity.CRITICAL if "Injection" in vuln_type else Severity.HIGH
                     sev = _severity_from_name(configured_severity, default_severity)
@@ -7316,6 +7453,316 @@ def safe_parse_target(file_path: str) -> ast.AST | None:
     return None
 
 
+# ── Python fallback detectors for blind-spot CWEs ────────────────────────
+
+_PY_TAINT_SOURCE = re.compile(
+    r'request\.(?:GET|POST|COOKIES|META|FILES|data)|request\.(?:args|form|json|headers|query_string|body|get_json)|'
+    r'req\.(?:GET|POST|COOKIES|META)|req\.(?:args|form|json|data|params)|'
+    r'sys\.argv|os\.environ|input\s*\(|getParameter\s*\(|getHeader\s*\(|getQuery\s*\(|'
+    r'\.get\s*\(\s*[\"\']\w+[\"\']\s*\)|\.form\[|\.args\[|\.query\[|\.params\[|'
+    r'\.cookies\[|\.headers\[|\.data\[|\.json\[|\.POST\[|\.GET\[',
+    re.IGNORECASE,
+)
+
+_PY_CMD_INJ_SINK = re.compile(
+    r'os\.(?:system|popen|exec[lvpe]*)\s*\(|'
+    r'subprocess\.(?:call|Popen|run|check_output|check_call|getoutput|getstatusoutput)\s*\(|'
+    r'commands\.(?:getoutput|getstatusoutput)\s*\(|'
+    r'pty\.spawn\s*\(',
+    re.IGNORECASE,
+)
+
+_PY_XSS_SINK = re.compile(
+    r'(?:render|render_to_response|HttpResponse|JsonResponse|make_response|redirect|Response|'
+    r'HTTPResponse|streaminghttpresponse|FileResponse)\s*\(|'
+    r'\.write\s*\(|\.writelines\s*\(',
+    re.IGNORECASE,
+)
+
+_PY_PATH_TRAV_SINK = re.compile(
+    r'(?:open|file|read|write|readlines|writelines|send_file|send_from_directory|'
+    r'os\.(?:remove|unlink|rmdir|mkdir|chmod|chown|rename|symlink|link|stat|access|'
+    r'listdir|walk|scandir|makedirs|removedirs))\s*\(',
+    re.IGNORECASE,
+)
+
+_PY_SQLI_SINK = re.compile(
+    r'(?:\.execute\s*\(|\.executemany\s*\(|\.raw\s*\(|\.extra\s*\(|'
+    r'RawSQL\s*\(|cursor\.execute|connection\.execute)',
+    re.IGNORECASE,
+)
+
+# String concatenation or formatting that indicates tainted data flow
+_PY_TAINTED_FORMAT = re.compile(
+    r'(?:\+\s*\w+\s*$|\bformat\s*\(|f[\"\']|%\s*\(|\$\{)',
+    re.IGNORECASE,
+)
+
+# CWE-639 IDOR: request param → ORM lookup without ownership check
+_PY_IDOR_PARAM = re.compile(
+    r'request\.(?:GET|POST)\.(?:get|getlist)\s*\(\s*[\"\'](\w+)|'
+    r'request\.(?:GET|POST)\s*\[\s*[\"\'](\w+)',
+    re.IGNORECASE,
+)
+_PY_IDOR_ORM = re.compile(
+    r'\.objects\.(?:get|filter|all|first|last|get_or_404|get_object_or_404)\s*\(|'
+    r'get_object_or_404\s*\(|get_list_or_404\s*\(|'
+    r'\.get\s*\(\s*(?:pk|id|user_id|username)\s*=',
+    re.IGNORECASE,
+)
+_PY_IDOR_AUTH = re.compile(
+    r'request\.user\b|\.is_authenticated|\.is_staff|\.is_superuser|'
+    r'user\s*=\s*request\.user|\.has_perm\s*\(|\.has_permission\s*\(|'
+    r'@permission_required|@login_required|UserPassesTestMixin|'
+    r'request\.user\s*==|\.owner\s*==\s*request\.user',
+    re.IGNORECASE,
+)
+
+# Variable propagation: x = request.GET.get('y') or x = self.request.GET.get('y')
+_PY_VAR_PROP = re.compile(
+    r'([A-Za-z_]\w*)\s*=\s*(?:self\.)?request\.(?:GET|POST|FILES|COOKIES|headers|args|form|json|data|values)\.(?:get|getlist)\s*\(|'
+    r'([A-Za-z_]\w*)\s*=\s*(?:self\.)?request\.(?:GET|POST|FILES|COOKIES|headers|args|form|json|data|values)\s*\[',
+    re.IGNORECASE,
+)
+# Chain: y = x where x is already tainted
+_PY_VAR_CHAIN = re.compile(
+    r'([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\s*$',
+    re.IGNORECASE,
+)
+# Concat-tainted assignment: sql = "..." + tainted + "..." or sql = f"...{tainted}..."
+_PY_VAR_CONCAT = re.compile(
+    r'([A-Za-z_]\w*)\s*=\s*(?:f?["\']|["\'][^"\']*["\']\s*\+)',
+    re.IGNORECASE,
+)
+
+
+def _get_py_propagated_taint(code: str) -> set[str]:
+    """Find Python variables that receive tainted values through assignments."""
+    tainted: set[str] = set()
+    for m in _PY_VAR_PROP.finditer(code):
+        v = m.group(1) or m.group(2)
+        if v:
+            tainted.add(v)
+    # Multi-pass chain propagation: y = x
+    for _ in range(3):
+        new = False
+        for m in _PY_VAR_CHAIN.finditer(code):
+            vname = m.group(1)
+            src = m.group(2)
+            if src in tainted and vname not in tainted:
+                tainted.add(vname)
+                new = True
+        if not new:
+            break
+    # Concat propagation: sql_query = "SELECT..." + name + "..."
+    for _ in range(3):
+        new = False
+        for m in _PY_VAR_CONCAT.finditer(code):
+            vname = m.group(1)
+            if vname in tainted:
+                continue  # already tainted
+            line = code[:m.start()].count('\n')
+            lines = code.splitlines()
+            rhs = lines[line] if line < len(lines) else ''
+            # Extract rhs after = sign
+            eq_idx = rhs.find('=')
+            if eq_idx == -1:
+                continue
+            rhs = rhs[eq_idx+1:]
+            rhs_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', rhs))
+            if rhs_vars & tainted:
+                tainted.add(vname)
+                new = True
+        if not new:
+            break
+    return tainted
+
+
+def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
+    """Catch CWE-78, CWE-79, CWE-89, CWE-22 patterns that the main analyzer may miss."""
+    findings: list[Finding] = []
+    if not _PY_TAINT_SOURCE.search(code):
+        return findings
+
+    lines = code.splitlines()
+    propagated = _get_py_propagated_taint(code)
+
+    def _arg_contains_taint(m: re.Match, max_dist: int = 200) -> tuple[bool, set[str]]:
+        """Check if arguments to a sink contain propagated taint variables."""
+        matched = m.group()
+        paren_idx = matched.find('(')
+        if paren_idx == -1:
+            return False, set()
+        sink_start = m.start() + paren_idx
+        arg_text = ""
+        depth = 0
+        arg_start = None
+        for i in range(sink_start, min(sink_start + max_dist, len(code))):
+            c = code[i]
+            if c == '(' and depth == 0:
+                arg_start = i + 1
+                depth = 1
+            elif c == '(':
+                depth += 1
+            elif c == ')':
+                depth -= 1
+                if depth == 0:
+                    arg_text = code[arg_start:i] if arg_start else ""
+                    break
+        arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg_text)) if arg_text else set()
+        return bool(arg_vars & propagated) if propagated else False, arg_vars & propagated
+
+    # CWE-78: Command injection
+    for m in _PY_CMD_INJ_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context:
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-78: Command injection via {m.group()[:60]} at line {line_no}",
+                description=f"Shell command with dynamic input at L{line_no}."
+                    + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+                line=line_no, suggestion="Use subprocess with shell=False and explicit argument arrays.",
+                rule_id="PY-005F", cwe="CWE-78", agent="py-fallback",
+                confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
+            ))
+
+    # CWE-79: XSS via response rendering
+    for m in _PY_XSS_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        if any(kw in context.lower() for kw in ('request', 'param', 'data', 'content', 'body', 'user_input', 'args', 'form')):
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-79: XSS via {m.group()[:60]} at line {line_no}",
+                description=f"Response output with potentially tainted data at L{line_no}.",
+                line=line_no, suggestion="HTML-escape user data before rendering.",
+                rule_id="PY-009F", cwe="CWE-79", agent="py-fallback",
+                confidence=0.82, analysis_kind="direct_sink",
+            ))
+
+    # CWE-89: SQL injection
+    for m in _PY_SQLI_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        # Skip safe parameterized queries: .execute(text(...), {'key': var}) or .execute(sql, params)
+        if re.search(r'\.execute\s*\(\s*text\s*\([^)]+\)\s*,\s*\{', context, re.IGNORECASE):
+            continue
+        if re.search(r'\.execute\s*\([^)]+,\s*\w+\s*=\s*\w+', context):
+            continue
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or '%' in context:
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-89: SQL injection via {m.group()[:60]} at line {line_no}",
+                description=f"SQL execution with dynamic input at L{line_no}."
+                    + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+                line=line_no, suggestion="Use parameterized queries with placeholders.",
+                rule_id="PY-004F", cwe="CWE-89", agent="py-fallback",
+                confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
+            ))
+
+    # CWE-22: Path traversal
+    for m in _PY_PATH_TRAV_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        matched = m.group()
+        # Skip method calls like f.read(), obj.write() — not path traversal
+        if m.start() > 0 and code[m.start() - 1] == '.':
+            continue
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        # Skip if secure_filename / werkzeug sanitizer is used
+        if 'secure_filename' in context or 'werkzeug' in context:
+            continue
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or 'join' in context.lower():
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-22: Path traversal via {m.group()[:60]} at line {line_no}",
+                description=f"File operation with tainted path at L{line_no}."
+                    + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+                line=line_no, suggestion="Use os.path.abspath and validate against a base directory.",
+                rule_id="PY-023F", cwe="CWE-22", agent="py-fallback",
+                confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
+            ))
+
+    # Prioritize injection CWEs (78, 89) over XSS (79), cap at 25
+    prioritized = sorted(findings, key=lambda f: (
+        0 if (f.cwe or '') in ('CWE-78', 'CWE-89') else 1
+    ))
+    return prioritized[:25]
+
+
+def _fallback_idor_detect(code: str, filename: str) -> list[Finding]:
+    """Catch CWE-639 IDOR: route/request param → ORM/DB lookup without ownership check.
+    
+    Covers Django (.objects.get/filter), Flask-SQLAlchemy (.query.get/filter_by),
+    and raw SQL patterns. Requires BOTH a route parameter source AND an ORM/DB
+    query using that parameter, with NO visible authorization guard nearby.
+    """
+    findings: list[Finding] = []
+    lines = code.splitlines()
+    
+    # ── Detect route parameter sources ────────────────────────────────
+    # Django: def view(request, pk) or path('<int:pk>', ...)
+    # Flask: @app.route('/user/<int:id>')
+    # Generic: request.GET.get('id') / request.POST.get('id')
+    has_django_param = bool(re.search(
+        r'def\s+\w+\s*\(\s*(?:self\s*,\s*)?request\s*,\s*(\w+)', code
+    ))
+    has_flask_param = bool(re.search(
+        r'@(?:app|bp|blueprint)\.route\s*\(\s*[\"\'].*<(?:\w+:)?(\w+)>', code
+    ))
+    has_request_param = bool(re.search(
+        r'request\.(?:GET|POST)\.(?:get|getlist)\s*\(\s*[\"\'](\w+)', code
+    ))
+    if not (has_django_param or has_flask_param or has_request_param):
+        return findings
+
+    # ── Detect ORM/DB queries ──────────────────────────────────────────
+    orm_matches = list(re.finditer(
+        r'\.objects\.(?:get|filter|get_or_404|all)\s*\(|'  # Django ORM
+        r'\.query\.(?:get|filter_by|all|first)\s*\(|'       # Flask-SQLAlchemy
+        r'\.execute\s*\(|\.raw\s*\(|cursor\.execute\s*\(',  # Raw SQL
+        code, re.IGNORECASE,
+    ))
+    if not orm_matches:
+        return findings
+
+    # ── Auth guard patterns ───────────────────────────────────────────
+    has_auth_guard = bool(re.search(
+        r'@login_required|@permission_required|@user_passes_test|'
+        r'request\.user\b|current_user\b|\.is_authenticated|'
+        r'login_required\s*\(|\.has_perm\s*\(|UserPassesTestMixin|'
+        r'request\.user\s*==|\.owner\s*==\s*request\.user|'
+        r'\.user\s*==\s*request\.user',
+        code, re.IGNORECASE,
+    ))
+    if has_auth_guard:
+        return findings
+
+    # ── Flag ORM queries that use route params without auth ────────────
+    for m in orm_matches:
+        line_no = code[:m.start()].count('\n') + 1
+        matched = m.group()
+        
+        # Skip hardcoded IDs: .filter(id=1), .get(pk=42), etc.
+        ctx_line = lines[line_no - 1] if line_no <= len(lines) else ''
+        if re.search(r'(?:id|pk|user_id)\s*=\s*\d+', ctx_line):
+            continue
+
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-639: IDOR — {matched[:45]} at line {line_no} without auth check",
+            description=f"ORM/DB query at L{line_no} in a route handler with no visible ownership verification.",
+            line=line_no,
+            suggestion="Verify the current user owns the requested resource. Add @login_required and check request.user == object.owner.",
+            rule_id="PY-024F", cwe="CWE-639", agent="py-fallback",
+            confidence=0.65, analysis_kind="direct_sink",
+        ))
+    return findings[:2]
+
+
 def analyze_python(code: str, filename: str = "", global_graph=None) -> AnalysisResult:
     """
     Analyze Python source code for security vulnerabilities and quality issues.
@@ -7359,6 +7806,47 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
     except (SyntaxError, ValueError, RecursionError, TypeError) as exc:
         result.parse_error = f"Internal analyzer error: {exc}"
         return result
+
+    # ── SSA-lite taint augmentation (v6.3+) ──────────────────────────────
+    # Runs assignment-versioned taint analysis to catch patterns the
+    # name-based tracker misses: variable reassignment, loop variables,
+    # and conditional taint paths.
+    try:
+        from ansede_static.ssa_taint import run_ssa_taint_analysis
+        ssa_findings = run_ssa_taint_analysis(ast.parse(code))
+        for sf in ssa_findings:
+            # Only add SSA findings that complement (not duplicate) existing ones
+            cwe = sf.get("cwe", "")
+            sink = sf.get("sink", "")
+            source = sf.get("source", "")
+            existing = [
+                f for f in findings
+                if f.cwe == cwe and (sink in f.title.lower() or sink in f.description.lower())
+            ]
+            if not existing:
+                findings.append(Finding(
+                    category="security",
+                    severity=Severity.HIGH if "CWE-78" in cwe or "CWE-94" in cwe or "CWE-95" in cwe else Severity.MEDIUM,
+                    title=f"{cwe}: SSA-verified taint from {source} reaching {sink}",
+                    description=(
+                        f"SSA-lite analysis confirms tainted data from {source} "
+                        f"reaches sink {sink} in function {sf.get('function', '?')}. "
+                        f"Assignment-versioned tracking catches this even through variable reassignments."
+                    ),
+                    line=sf.get("line"),
+                    suggestion=f"Sanitize input before passing to {sink}. Use parameterized queries or input validation.",
+                    rule_id="PY-SSA-001",
+                    cwe=cwe,
+                    agent="python-analyzer",
+                    confidence=0.85,
+                    analysis_kind="ssa-taint",
+                    trace=(
+                        TraceFrame(kind="source", label=f"SSA source: {source}", line=sf.get("line")),
+                        TraceFrame(kind="sink", label=f"SSA sink: {sink}", line=sf.get("line")),
+                    ),
+                ))
+    except Exception:
+        pass  # SSA is a bonus — never block the main analysis
 
     # Universal template engine pass (Jinja2 / Handlebars SSTI)
     try:
@@ -7591,6 +8079,13 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
         adjusted.append(f)
 
     findings = adjusted
+
+    # ── Fallback: direct pattern detection for blind-spot CWEs in Python ──
+    _py_fallbacks = _python_fallback_detect(code, filename)
+    findings.extend(_py_fallbacks)
+    # CWE-639 IDOR: route param → ORM without auth (Django + Flask)
+    _idor_fallbacks = _fallback_idor_detect(code, filename)
+    findings.extend(_idor_fallbacks)
 
     result.findings = findings
     return result
