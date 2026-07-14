@@ -58,7 +58,7 @@ _FRAMEWORK_MARKERS: dict[str, list[tuple[str, list[str]]]] = {
         ("tornado_web", ["import tornado", "from tornado", "RequestHandler", "tornado.web.Application", "self.render_string", "self.set_secure_cookie", "self.write(", "tornado.escape", "check_xsrf_cookie", "set_header(", "self.set_header", "os.remove"]),
         ("pydantic", ["from pydantic", "import pydantic", "BaseModel", "model_validator", "field_validator"]),
         ("socketio", ["import socketio", "from socketio", "socketio.Server(", "flask_socketio"]),
-        ("archive_extraction_py", ["import tarfile", "import zipfile", "from tarfile", "from zipfile", "tarfile.open(", "zipfile.ZipFile(", "shutil.unpack_archive(", "zipimport", "patoolib", "py7zr", "rarfile", "bz2", "gzip", "lzma", ".namelist(", ".getmember(", ".extractall("]),
+        ("archive_extraction_py", ["import tarfile", "import zipfile", "zipfile", "tarfile", "from tarfile", "from zipfile", "tarfile.open(", "zipfile.ZipFile(", "shutil.unpack_archive(", "zipimport", "patoolib", "py7zr", "rarfile", "bz2", "gzip", "lzma", ".namelist(", ".getmember(", ".extractall("]),
     ],
     "javascript": [
         ("express_js", ["require('express')", 'require("express")', "from 'express'", 'from "express"', "express()", "require('ejs')", "ejs.compile(", "ejs.render(", "require('nunjucks')", "nunjucks.compile(", "nunjucks.render(", "require('handlebars')", "handlebars.compile("]),

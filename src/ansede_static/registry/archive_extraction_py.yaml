@@ -120,8 +120,10 @@ rules:
     title: "Potential Zip Slip via joining extract dir with archive member filename"
     cwe: CWE-22
     severity: high
-    pattern_type: regex
-    regex: "member\.filename|os\.path\.join.*member"
+    pattern_type: taint_sink
+    sinks:
+      - member.filename
+      - os.path.join(extract_dir, member
     suggestion: "Use canonical path checks to ensure output paths remain inside extraction directory"
 
   - id: registry/python/archive/zipfile-extract-user-member
@@ -167,8 +169,10 @@ rules:
     title: "Potential Tar traversal via member.name joined into output path"
     cwe: CWE-22
     severity: high
-    pattern_type: regex
-    regex: "member\.name|os\.path\.join.*member"
+    pattern_type: taint_sink
+    sinks:
+      - member.name
+      - os.path.join(root, member
     suggestion: "Reject member names with traversal/absolute patterns before constructing output paths"
 
   - id: registry/python/archive/patoolib-extract-user
