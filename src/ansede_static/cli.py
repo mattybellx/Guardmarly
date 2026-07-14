@@ -3140,7 +3140,7 @@ def _main_impl() -> None:
                 )
 
     # ── Incident Clustering: group related findings into high-fidelity incidents ─
-    if not getattr(args, "no_cluster", False):
+    if getattr(args, "cluster", True):
         try:
             from ansede_static.engine.triage import cluster_results
             cluster_results(results)

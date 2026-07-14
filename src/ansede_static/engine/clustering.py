@@ -81,7 +81,9 @@ def _extract_sink_identity(finding: Finding) -> str:
                 match = _SINK_TAIL_RE.search(label)
                 if match:
                     return match.group(1).strip().lower()[:80]
-                return label.lower()[:80]
+                # Fall through to title-based extraction instead of
+                # returning the raw label which differs from title-derived sinks
+                break
 
     # 2. From title
     title = finding.title.lower()
@@ -187,8 +189,10 @@ def cluster_findings(findings: list[Finding]) -> list[Finding]:
         partition_reps[cwe_family].append(key)
 
     # Phase 3: Cross-cluster merging — merge clusters that overlap in
-    # (cwe_family, line) even if sink identity differs slightly
-    # (e.g., "db.query()" and "db.execute()" for same SQL injection line)
+    # (cwe_family, line) AND share the same sink identity.
+    # Only merge when two different rules detect the SAME sink on nearby lines.
+    # Different sinks (e.g., os.system vs subprocess.run) are independent
+    # vulnerabilities and MUST NOT be merged.
     merged: list[Finding] = []
     used_keys: set[tuple[str, int, str]] = set()
 
@@ -200,13 +204,14 @@ def cluster_findings(findings: list[Finding]) -> list[Finding]:
             _, region, sink = key
             overlap_keys: set[tuple[str, int, str]] = set()
 
-            # Find overlapping clusters in identical CWE partition only!
+            # Find overlapping clusters in identical CWE partition only
             for other_key in family_keys:
                 if other_key in used_keys or other_key == key:
                     continue
                 _, other_region, other_sink = other_key
 
-                if abs(other_region - region) > 1:
+                # MUST be in the exact same region AND share the same sink identity
+                if other_region != region or other_sink != sink:
                     continue
 
                 rep = representative_map[key]

@@ -451,7 +451,7 @@ def run_taint_flow_checks(
     if project_context and project_context.skip_node_rules:
         return []
 
-    active_project = project or (build_js_project_index(filename, code) if filename else None)
+    active_project = project or (build_js_project_index(filename, code, fast=True) if filename else None)
     taint_traces = extract_taint_traces(code)
     if active_project and filename:
         taint_traces = propagate_helper_return_traces(

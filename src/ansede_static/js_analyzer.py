@@ -29,7 +29,7 @@ _log = logging.getLogger(__name__)
 
 
 def _filter_sanitized_xss_findings(all_findings, code: str, *, filename: str, project, global_graph: object | None = None):
-    xss_rule_ids = {"JS-001", "JS-002", "JS-059"}
+    xss_rule_ids = {"JS-001", "JS-001F", "JS-002", "JS-002F", "JS-059"}
     if not any(finding.rule_id in xss_rule_ids for finding in all_findings):
         return all_findings
 
@@ -74,7 +74,7 @@ def analyze_js(
     )
     all_findings = []
     if project is None and filename:
-        project = build_js_project_index(filename, code)
+        project = build_js_project_index(filename, code, fast=True)
 
     for runner, label in (
         (lambda: run_pattern_rules(code, agent="js-analyzer"), "pattern rules"),
@@ -285,8 +285,25 @@ def _fallback_xss_detect(code: str, filename: str) -> list[Finding]:
     findings: list[Finding] = []
     if not _HAS_TAINT_SOURCE_JS.search(code):
         return findings
+
+    # Check for sanitizer usage — if DOMPurify.sanitize or similar is present
+    # near the taint source, suppress the fallback finding (structural/flow
+    # analysis handles the precise trace-level sanitizer check).
+    _SANITIZER_PATTERN = re.compile(
+        r'DOMPurify\.sanitize|sanitizeHtml|escapeHtml|\.sanitize\s*\(',
+        re.IGNORECASE,
+    )
+
     for m in _XSS_SINK_PATTERN.finditer(code):
         line = code[:m.start()].count('\n') + 1
+
+        # Check a window around the sink for sanitizer usage
+        line_start = max(0, m.start() - 500)
+        line_end = min(len(code), m.end() + 500)
+        surrounding = code[line_start:line_end]
+        if _SANITIZER_PATTERN.search(surrounding):
+            continue
+
         findings.append(Finding(
             category="security", severity=Severity.HIGH,
             title=f"CWE-79: XSS via {m.group()[:60]} at line {line}",
@@ -425,6 +442,9 @@ def _fallback_nosql_detect(code: str, filename: str) -> list[Finding]:
         return findings
     for m in _NOSQL_INJ_PATTERN.finditer(code):
         line = code[:m.start()].count('\n') + 1
+        # Skip ORM where: clauses (safe exact-match queries)
+        if 'where:' in m.group():
+            continue
         findings.append(Finding(
             category="security", severity=Severity.CRITICAL,
             title=f"CWE-943: NoSQL injection via {m.group()[:60]} at line {line}",

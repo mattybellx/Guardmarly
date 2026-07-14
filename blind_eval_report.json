@@ -1,0 +1,10 @@
+{
+  "tp": 20,
+  "fp": 5,
+  "tn": 20,
+  "fn": 5,
+  "precision_pct": 80.0,
+  "recall_pct": 80.0,
+  "f1_pct": 80.0,
+  "accuracy_pct": 80.0
+}

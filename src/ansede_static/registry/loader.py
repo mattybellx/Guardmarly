@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import logging
 import re
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -35,34 +36,34 @@ _FRAMEWORK_MARKERS: dict[str, list[tuple[str, list[str]]]] = {
         ("ldap_py", ["import ldap", "from ldap", "import ldap3", "from ldap3", "Connection(", "search_filter="]),
         ("jwt_py", ["import jwt", "from jose import jwt", "jwt.decode(", "jwt.encode(", "get_unverified_header("]),
         ("graphql_py", ["import graphene", "from graphene", "import strawberry", "from strawberry", "import ariadne", "GraphQL("]),
-        ("second_order_sql", ["RawSQL(", "cursor.execute(sql_", "cursor.execute(query_", "text(sql_", "text(query_", "cursor.mogrify(", ".raw(sql_", ".raw(query_", "text(f\"SELECT", "text(f'SELECT"]),
+        ("second_order_sql", ["RawSQL(", "cursor.execute(sql_", "cursor.execute(query_", "text(sql_", "text(query_", "cursor.mogrify(", ".raw(sql_", ".raw(query_", "text(f\"SELECT", "text(f'SELECT", "psycopg2", "executemany"]),
         ("cloud_security", ["import boto3", "from boto3", "service_account.Credentials", "DefaultEndpointsProtocol=https", "PubliclyAccessible=True"]),
         ("deserialization_py", ["import jsonpickle", "jsonpickle.decode(", "marshal.loads(", "dill.loads(", "joblib.load(", "numpy.load(", "np.load(", "msgpack.unpackb(", "torch.load("]),
         ("template_engines_py", ["import jinja2", "from jinja2", "Template(", "from_string(", "import mako", "import pystache", "render_template_string(", "markupsafe.Markup(", "django.template.Template("]),
-        ("api_security", ["allow_origins=[\"*\"]", "allow_credentials=True", "supports_credentials=True", "@app.route(\"/api/login\"", "@app.route('/api/login'", "HTTPBasicAuth()"]),
+        ("api_security", ["allow_origins=[\"*\"]", "allow_credentials=True", "supports_credentials=True", "@app.route(\"/api/login\"", "@app.route('/api/login'", "HTTPBasicAuth()", "API_KEY", "api_key", "SECRET_KEY", "secret_key", "CORS(", "cors(", "@cross_origin", "SESSION_COOKIE_SECURE", "SESSION_COOKIE_HTTPONLY"]),
         ("race_condition_py", ["os.path.exists(", "os.access(", "tempfile.mktemp(", "os.rename(", "os.chmod(", "os.unlink(", "os.stat(", "os.lstat(", "os.path.isfile(", "os.open("]),
         ("supply_chain", ["__import__(", "importlib.import_module(", "pip.main(['install'", "exec(compile(", "git+https://", "pkg_resources.require(", "sys.path.insert(", "sys.path.append(", "importlib.resources.files(", "['pip', 'install'", "[\"pip\", \"install\""]),
         ("sqlalchemy", ["from sqlalchemy", "import sqlalchemy", "create_engine(", "declarative_base", "sessionmaker("]),
         ("django_rest", ["from rest_framework", "import rest_framework", "APIView", "ModelSerializer", "viewsets."]),
-        ("aiohttp_web", ["from aiohttp", "import aiohttp", "web.Application(", "web.RouteTableDef"]),
-        ("celery", ["from celery", "import celery", "Celery(", "@app.task", "@celery.task", "shared_task"]),
+        ("aiohttp_web", ["from aiohttp", "import aiohttp", "web.Application(", "web.RouteTableDef", "orjson.loads", "aiohttp.web", "aiofiles", "web.FileResponse", "request.query", "aiohttp.web.FileResponse"]),
+        ("celery", ["from celery", "import celery", "Celery(", "@app.task", "@celery.task", "shared_task", "dill", "pickle", "broker=", "broker_url", "redis://"]),
         ("boto3_aws", ["import boto3", "from boto3", "boto3.client(", "boto3.resource(", "boto3.Session("]),
         ("requests_lib", ["import requests", "from requests", "requests.get(", "requests.post(", "import httpx", "httpx.get("]),
         ("pymongo", ["import pymongo", "from pymongo", "MongoClient(", "gridfs.", "motor."]),
         ("redis_py", ["import redis", "from redis", "Redis(", "StrictRedis(", "from redis.client"]),
         ("cryptography_lib", ["from cryptography", "import cryptography", "from Crypto", "import Crypto", "import hashlib", "import hmac", "hmac.new("]),
-        ("subprocess_lib", ["import subprocess", "from subprocess", "subprocess.run(", "subprocess.call(", "os.system(", "os.popen(", "import shutil", "from shutil", "shutil.copy(", "shutil.move(", "shutil.rmtree("]),
+        ("subprocess_lib", ["import subprocess", "from subprocess", "subprocess.run(", "subprocess.call(", "os.system(", "os.popen(", "import shutil", "from shutil", "shutil.copy(", "shutil.move(", "shutil.rmtree(", "os.remove(", "os.unlink("]),
         ("xml_parsers", ["import xml", "from xml", "ElementTree", "minidom", "from lxml", "import lxml", "import xmltodict", "from xmltodict", "import pulldom", "from pulldom"]),
-        ("yaml_load", ["import yaml", "from yaml", "yaml.load(", "yaml.safe_load(", "ruamel", "import configparser", "from configparser"]),
-        ("tornado_web", ["import tornado", "from tornado", "RequestHandler", "tornado.web.Application"]),
+        ("yaml_load", ["import yaml", "from yaml", "yaml.load(", "yaml.safe_load(", "ruamel", "import configparser", "from configparser", "json.loads(", "toml.load"]),
+        ("tornado_web", ["import tornado", "from tornado", "RequestHandler", "tornado.web.Application", "self.render_string", "self.set_secure_cookie", "self.write(", "tornado.escape", "check_xsrf_cookie", "set_header(", "self.set_header", "os.remove"]),
         ("pydantic", ["from pydantic", "import pydantic", "BaseModel", "model_validator", "field_validator"]),
         ("socketio", ["import socketio", "from socketio", "socketio.Server(", "flask_socketio"]),
-        ("archive_extraction_py", ["import tarfile", "import zipfile", "from tarfile", "from zipfile", "tarfile.open(", "zipfile.ZipFile(", "shutil.unpack_archive(", "zipimport"]),
+        ("archive_extraction_py", ["import tarfile", "import zipfile", "from tarfile", "from zipfile", "tarfile.open(", "zipfile.ZipFile(", "shutil.unpack_archive(", "zipimport", "patoolib", "py7zr", "rarfile", "bz2", "gzip", "lzma", ".namelist(", ".getmember(", ".extractall("]),
     ],
     "javascript": [
-        ("express_js", ["require('express')", 'require("express")', "from 'express'", 'from "express"', "express()"]),
+        ("express_js", ["require('express')", 'require("express")', "from 'express'", 'from "express"', "express()", "require('ejs')", "ejs.compile(", "ejs.render(", "require('nunjucks')", "nunjucks.compile(", "nunjucks.render(", "require('handlebars')", "handlebars.compile("]),
         ("hono_framework", ["from 'hono'", 'from "hono"', "new Hono(", "import { Hono }", "c.req.query", "c.req.param", "c.html(", "c.json("]),
-        ("pug_js", ["require('pug')", 'require("pug")', "from 'pug'", 'from "pug"', "pug.compile(", "pug.render(", "pug.compileFile("] ),
+        ("pug_js", ["require('pug')", 'require("pug")', "from 'pug'", 'from "pug"', "pug.compile(", "pug.render(", "pug.compileFile(", "ejs.compile(", "ejs.render(", "nunjucks.compile(", "nunjucks.render("] ),
         ("ldap_js", ["require('ldapjs')", 'require("ldapjs")', "from 'ldapts'", 'from "ldapts"', "search(baseDN", "search(filter)"]),
         ("jwt_js", ["require('jsonwebtoken')", 'require("jsonwebtoken")', "jwt.verify(", "jwt.sign(", "new SignJWT("]),
         ("react_frontend", ["from 'react'", 'from "react"', "React.Component", "useState(", "useEffect(", "jsx"]),
@@ -75,18 +76,18 @@ _FRAMEWORK_MARKERS: dict[str, list[tuple[str, list[str]]]] = {
         ("pg_js", ["require('pg')", "new Pool(", "new Client(", "pg.Pool", "pg.Client"]),
         ("knex_js", ["require('knex')", "knex(", "knex.raw(", "queryBuilder", ".whereRaw("]),
         ("axios_js", ["require('axios')", "axios.get(", "axios.post(", "axios.put(", "axios.delete("]),
-        ("nodejs_core", ["require('fs')", "require('child_process')", "require('path')", "require('crypto')", "require('http')"]),
-        ("prototype_pollution_js", ["Object.assign(", "_.merge(", "deepmerge(", "jQuery.extend(true", "$.extend(true", "require('lodash')", "require('deepmerge')"]),
+        ("nodejs_core", ["require('fs')", "require('child_process')", "require('path')", "require('crypto')", "require('http')", "require('https')", "require('net')", "require('vm')", "https.get(", "https.request(", "net.connect(", "net.createConnection(", "vm.run(", "vm.runInNewContext(", "fetch("]),
+        ("prototype_pollution_js", ["Object.assign(", "_.merge(", "deepmerge(", "jQuery.extend(true", "$.extend(true", "require('lodash')", "require('deepmerge')", "for (", "...req.body", "...req.query", "qs.parse", "hoek.merge", "Hoek.merge", "immer.produce", "produce(", "klona", "mixin(", "json-merge-patch", "mergeDeep", "merge-deep", "obj[req.", "req.body.key"]),
         ("graphql_js", ["require('graphql')", "require('apollo-server')", "gql`", "makeExecutableSchema", "ApolloServer("]),
         ("nestjs_framework", ["@Controller(", "@Injectable()", "@Module(", "@Get(", "@UseGuards(", "NestFactory"]),
         ("angular_js", ["@Component(", "@NgModule(", "@Injectable()", "Angular", "ngModule"]),
         ("vue_js", ["createApp(", "defineComponent(", "Vue.component(", "v-html", "vue-router"]),
     ],
     "java": [
-        ("spring_boot", ["@SpringBootApplication", "@RestController", "@Controller", "@Service", "@Repository"]),
+        ("spring_boot", ["@SpringBootApplication", "@RestController", "@Controller", "@Service", "@Repository", "jwt", "Jwt", "JWT", "SecretKey"]),
     ],
     "csharp": [
-        ("aspnet_core", ["[ApiController]", "[HttpGet]", "[HttpPost]", "IActionResult", "ControllerBase"]),
+        ("aspnet_core", ["[ApiController]", "[HttpGet]", "[HttpPost]", "IActionResult", "ControllerBase", "Jwt", "JWT", "TokenValidationParameters"]),
     ],
 }
 
@@ -234,7 +235,9 @@ def _build_custom_rule_from_entry(
         if not raw_pattern:
             return None
         try:
-            compiled_pattern = re.compile(raw_pattern)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", SyntaxWarning)
+                compiled_pattern = re.compile(raw_pattern)
         except re.error as exc:
             _log.warning("Registry rule %r: invalid regex: %s", rule_id, exc)
             return None

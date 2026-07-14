@@ -121,7 +121,7 @@ rules:
     cwe: CWE-22
     severity: high
     pattern_type: regex
-    regex: "os\\.path\\.join\\([^\\n]*member\\.(filename|name)"
+    regex: "member\.filename|os\.path\.join.*member"
     suggestion: "Use canonical path checks to ensure output paths remain inside extraction directory"
 
   - id: registry/python/archive/zipfile-extract-user-member
@@ -168,7 +168,7 @@ rules:
     cwe: CWE-22
     severity: high
     pattern_type: regex
-    regex: "os\\.path\\.join\\([^\\n]*member\\.name"
+    regex: "member\.name|os\.path\.join.*member"
     suggestion: "Reject member names with traversal/absolute patterns before constructing output paths"
 
   - id: registry/python/archive/patoolib-extract-user

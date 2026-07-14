@@ -55,20 +55,20 @@ class ClassifiedFinding:
 
 # Path segments that indicate non-production code
 _TEST_PATH_SEGMENTS: frozenset[str] = frozenset({
-    "/test", "\\test", "/tests", "\\tests",
-    "/test_", "\\test_", "_test.", "_test\\",
-    "/spec", "\\spec", "/__tests__", "\\__tests__",
-    "/e2e", "\\e2e", "/cypress", "\\cypress",
-    "/playwright", "\\playwright",
+    "/test", "/tests",
+    "/test_", "_test.",
+    "/spec", "/__tests__",
+    "/e2e", "/cypress",
+    "/playwright",
 })
 
 _MOCK_PATH_SEGMENTS: frozenset[str] = frozenset({
-    "/mock", "\\mock", "/fixtures", "\\fixtures",
-    "/fixture", "\\fixture", "/stubs", "\\stubs",
-    "/examples", "\\examples", "/example", "\\example",
-    "/demo", "\\demo", "/samples", "\\samples",
-    "/sample", "\\sample", "/docs", "\\docs",
-    "/tutorial", "\\tutorial",
+    "/mock", "/fixtures",
+    "/fixture", "/stubs",
+    "/examples", "/example",
+    "/demo", "/samples",
+    "/sample", "/docs",
+    "/tutorial",
 })
 
 _GENERATED_PATH_SEGMENTS: frozenset[str] = frozenset({

@@ -499,6 +499,7 @@ SECRET_PATTERNS: list[tuple[str, str]] = [
     (r'(?:api[_-]?secret|client_secret)\s*[=:]\s*["\'][A-Za-z0-9_\-]{8,}["\']',    "API secret / client secret"),
     (r'(?:smtp|email)_(?:password|pass|pwd)\s*[=:]\s*["\'][^"\']{3,}["\']',        "Email/SMTP password"),
     (r'(?:redis|memcached)_(?:url|uri)\s*[=:]\s*["\']redis://[^:]+:[^@]+@',        "Redis connection string with auth"),
+    (r'(?:DB_PASS|DB_PWD|DB_PASSWORD|DATABASE_URL|DB_URL|DATABASE_PASSWORD)\s*[=:]\s*["\'][^"\']{3,}["\']', "Database credential"),
 ]
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -3308,18 +3309,41 @@ def _rule_05(ctx: _Ctx) -> list[Finding]:
 def _rule_06(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     sans = ctx.sans
-    # ── Rule 6: Unsafe deserialization + code execution ──────────────────
+    # ── Rule 6: Unsafe deserialization + code execution + command injection ──
     for lineno, line_text in enumerate(sans, 1):  # use string-blanked lines
         if line_text.strip().startswith("#"):
             continue
         for pattern, desc, cwe, sev in [
+            # Unsafe deserialization
             (r'pickle\.loads?\(', "pickle deserialization", "CWE-502", Severity.CRITICAL),
             (r'marshal\.loads?\(', "marshal deserialization", "CWE-502", Severity.CRITICAL),
             (r'yaml\.load\((?!.*Loader\s*=\s*(?:yaml\.)?(?:C?SafeLoader))', "yaml.load without SafeLoader", "CWE-502", Severity.CRITICAL),
+            # Code injection
             (r'\bexec\s*\(', "exec() code execution", "CWE-94", Severity.CRITICAL),
+            (r'\beval\s*\(', "eval() code injection", "CWE-95", Severity.CRITICAL),
+            # Command injection — direct os calls
+            (r'os\.system\s*\(', "os.system() command injection", "CWE-78", Severity.CRITICAL),
+            (r'os\.popen\s*\(', "os.popen() command injection", "CWE-78", Severity.CRITICAL),
+            (r'os\.execve?p?\s*\(', "os.execve/execvp command injection", "CWE-78", Severity.CRITICAL),
+            (r'os\.execl\w*\s*\(', "os.execl command injection", "CWE-78", Severity.CRITICAL),
+            # Command injection — subprocess with shell=True (implicit or explicit)
+            (r'subprocess\.getoutput\s*\(', "subprocess.getoutput() command injection (implicit shell=True)", "CWE-78", Severity.CRITICAL),
+            (r'subprocess\.getstatusoutput\s*\(', "subprocess.getstatusoutput() command injection (implicit shell=True)", "CWE-78", Severity.CRITICAL),
+            # Command injection — pty.spawn
+            (r'pty\.spawn\s*\(', "pty.spawn() command injection", "CWE-78", Severity.CRITICAL),
+            # Additional unsafe deserialization
+            (r'dill\.loads?\(', "dill deserialization", "CWE-502", Severity.CRITICAL),
+            (r'jsonpickle\.decode\s*\(', "jsonpickle deserialization", "CWE-502", Severity.CRITICAL),
         ]:
-            if re.search(pattern, line_text):
-                title = f"{cwe}: Unsafe {desc} at line {lineno}" if "deserialization" in desc else f"{cwe}: Unsafe {desc} at line {lineno}"
+            if re.search(pattern, line_text, re.IGNORECASE):
+                # Skip eval() when restricted globals are used (safe pattern)
+                if desc == "eval() code injection":
+                    ctx_s = max(0, lineno - 3)
+                    ctx_e = min(len(ctx.lines), lineno + 3)
+                    ctx_window = "\n".join(ctx.lines[ctx_s:ctx_e])
+                    if "__builtins__" in ctx_window:
+                        continue
+                title = f"{cwe}: Unsafe {desc} at line {lineno}"
                 findings.append(Finding(
                     category="security", severity=sev,
                     title=title,
@@ -3468,11 +3492,14 @@ def _rule_10(ctx: _Ctx) -> list[Finding]:
     for lineno, line_text in enumerate(lines, 1):
         if line_text.strip().startswith("#"):
             continue
-        if re.search(r'random\.(choice|randint|random|sample|randrange)\(', line_text):
+        if re.search(r'random\.(choice|choices|randint|random|sample|randrange|getrandbits|uniform)\(', line_text):
             ctx_start = max(0, lineno - 3)
             ctx_end = min(len(lines), lineno + 2)
             ctx_window = "\n".join(lines[ctx_start:ctx_end])
-            if re.search(r'token|secret|key|password|nonce|session|auth|csrf|salt', ctx_window, re.IGNORECASE):
+            has_sec_context = bool(re.search(r'token|secret|key|password|nonce|session|auth|csrf|salt|hex|join.*random', ctx_window, re.IGNORECASE))
+            # Also flag if random is used to generate hex strings (looks like token gen)
+            looks_like_token = bool(re.search(r'(?:join|hexdigits|0123456789abcdef|string\.hex)', ctx_window, re.IGNORECASE))
+            if has_sec_context or looks_like_token:
                 findings.append(Finding(
                     category="security", severity=Severity.MEDIUM,
                     title=f"CWE-338: Weak PRNG for security token at line {lineno}",
@@ -7005,8 +7032,10 @@ def _rule_49(ctx: _Ctx) -> list[Finding]:
                 ))
 
     # ── Module-level log injection (not inside any function) ─────────────
+    # Only flag concatenation/f-string, NOT %s-parameterized logging (which is safe)
     _PCT_LOG_RE = re.compile(
-        r"(?:logger|log|logging)\.(?:info|warning|error|debug|critical|warn|exception)\s*\(\s*[\"'].*?%[srd].*?[\"']\s*,\s*(\w+)",
+        r"(?:logger|log|logging)\.(?:info|warning|error|debug|critical|warn|exception)\s*\(\s*"
+        r"(?:f[\"'][^\"']*\{[^}]*\}|\"[\"']\s*\+|[^\"']+\s*\+\s*[\"']|[\"'][^\"']*[\"']\s*%\s*\()",
         re.IGNORECASE,
     )
     for lineno, line in enumerate(ctx.lines, 1):
@@ -7015,20 +7044,17 @@ def _rule_49(ctx: _Ctx) -> list[Finding]:
             continue
         m = _PCT_LOG_RE.search(stripped)
         if m:
-            var_name = m.group(1)
-            # Check it's not a literal constant
-            if not var_name.startswith(("'", '"')) and not var_name.isdigit():
-                findings.append(Finding(
-                    category="security", severity=Severity.MEDIUM,
-                    title=f"CWE-117: Log injection at module level at line {lineno}",
-                    description=(
-                        f"Module-level log call at L{lineno} passes variable `{var_name}` via %-format. "
-                        "An attacker can inject fake log entries via CRLF sequences."
-                    ),
-                    line=lineno,
-                    suggestion="Sanitize: `safe = str(val).replace(chr(10), '').replace(chr(13), '')[:200]`",
-                    cwe="CWE-117", agent="python-analyzer",
-                ))
+            findings.append(Finding(
+                category="security", severity=Severity.MEDIUM,
+                title=f"CWE-117: Log injection at module level at line {lineno}",
+                description=(
+                    f"Module-level log call at L{lineno} uses string concatenation or f-string with user data. "
+                    "An attacker can inject fake log entries via CRLF sequences."
+                ),
+                line=lineno,
+                suggestion="Use parameterized logging: logger.info('msg %s', val). Sanitize: str(val).replace(chr(10),'').replace(chr(13),'')[:200]",
+                cwe="CWE-117", agent="python-analyzer",
+            ))
 
     return _assign_rule_ids(findings, "PY-062")
 
@@ -7475,8 +7501,9 @@ _PY_CMD_INJ_SINK = re.compile(
 
 _PY_XSS_SINK = re.compile(
     r'(?:render_template_string|render|render_to_response|HttpResponse|JsonResponse|make_response|redirect|Response|'
-    r'HTTPResponse|streaminghttpresponse|FileResponse)\s*\(|'
-    r'\.write\s*\(|\.writelines\s*\(',
+    r'HTTPResponse|streaminghttpresponse|FileResponse|send_file)\s*\(|'
+    r'\.write\s*\(|\.writelines\s*\(|'
+    r'return\s+["\'][^"\']*["\']\s*\+|return\s+\w+\s*\+\s*["\']|return\s+["\'][^"\']*["\']\s*%\s*\(',
     re.IGNORECASE,
 )
 
@@ -7489,7 +7516,22 @@ _PY_PATH_TRAV_SINK = re.compile(
 
 _PY_SQLI_SINK = re.compile(
     r'(?:\.execute\s*\(|\.executemany\s*\(|\.raw\s*\(|\.extra\s*\(|'
-    r'RawSQL\s*\(|cursor\.execute|connection\.execute)',
+    r'RawSQL\s*\(|cursor\.execute|connection\.execute|'
+    r'\.fetch_one\s*\(|\.fetch_all\s*\(|\.fetchmany\s*\(|\.fetchval\s*\(|'
+    r'\.query\s*\(|db\.execute|db\.fetch)',
+    re.IGNORECASE,
+)
+
+_PY_SSRF_SINK = re.compile(
+    r'(?:requests\.(?:get|post|put|patch|delete|head|options|request)\s*\(|'
+    r'urllib\.request\.(?:urlopen|urlretrieve)\s*\(|'
+    r'httpx\.(?:get|post|put|patch|delete|request)\s*\(|'
+    r'urllib2\.(?:urlopen|Request)\s*\()',
+    re.IGNORECASE,
+)
+
+_PY_EVAL_INJ_SINK = re.compile(
+    r'\beval\s*\(|exec\s*\(|compile\s*\(.*,\s*[\"\'](?:exec|eval|single)[\"\']',
     re.IGNORECASE,
 )
 
@@ -7582,7 +7624,16 @@ def _get_py_propagated_taint(code: str) -> set[str]:
 def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
     """Catch CWE-78, CWE-79, CWE-89, CWE-22 patterns that the main analyzer may miss."""
     findings: list[Finding] = []
-    if not _PY_TAINT_SOURCE.search(code):
+    # Run fallback if code has visible taint sources OR function parameters (potential
+    # external input) combined with suspicious sink patterns.
+    has_taint_source = bool(_PY_TAINT_SOURCE.search(code))
+    has_func_params = bool(re.search(r'def\s+\w+\s*\([^)]*\w+[^)]*\)', code))
+    has_suspicious_sink = bool(
+        _PY_CMD_INJ_SINK.search(code) or _PY_SQLI_SINK.search(code) or
+        _PY_XSS_SINK.search(code) or _PY_PATH_TRAV_SINK.search(code) or
+        _PY_SSRF_SINK.search(code)
+    )
+    if not has_taint_source and not (has_func_params and has_suspicious_sink):
         return findings
 
     lines = code.splitlines()
@@ -7673,7 +7724,7 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
             continue
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         # Skip if secure_filename / werkzeug sanitizer is used
-        if 'secure_filename' in context or 'werkzeug' in context:
+        if 'secure_filename' in context or 'werkzeug' in context or 'basename' in context:
             continue
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
         if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or 'join' in context.lower():
@@ -7687,11 +7738,70 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
                 confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
             ))
 
+    # CWE-95: eval() code injection — catch dynamic eval calls
+    for m in _PY_EVAL_INJ_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        # Skip if restricted globals are used (safe eval pattern)
+        if '__builtins__' in context:
+            continue
+        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context:
+            findings.append(Finding(
+                category="security", severity=Severity.CRITICAL,
+                title=f"CWE-95: Code injection via eval() at line {line_no}",
+                description=f"Dynamic eval() with potentially tainted input at L{line_no}."
+                    + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+                line=line_no, suggestion="Never pass user input to eval(). Use ast.literal_eval() or a safe parser.",
+                rule_id="PY-006F", cwe="CWE-95", agent="py-fallback",
+                confidence=0.85 if has_prop else 0.82, analysis_kind="direct_sink",
+            ))
+
+    # CWE-918: SSRF — catch requests/httpx/urllib with dynamic URL
+    # Only apply function-parameter heuristic when there's NO visible web-framework
+    # taint source (request.args etc.), to avoid FP on reassigned-to-constant cases.
+    for m in _PY_SSRF_SINK.finditer(code):
+        line_no = code[:m.start()].count('\n') + 1
+        context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        # Function-param SSRF: only when no visible request.* source exists
+        arg_is_param = False
+        if not has_prop and not has_taint_source:
+            # Extract arg vars from the full sink call (not just the match)
+            arg_text = ""
+            paren_idx = m.group().find('(')
+            if paren_idx != -1:
+                sink_start = m.start() + paren_idx
+                max_dist = min(200, len(code) - sink_start)
+                arg_text = code[sink_start:sink_start + max_dist]
+            arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg_text)) if arg_text else set()
+            for var in arg_vars:
+                if re.search(rf'def\s+\w+\s*\([^)]*\b{re.escape(var)}\b[^)]*\)', code):
+                    arg_is_param = True
+                    break
+        # Skip if the variable was reassigned to a string constant before the sink
+        # (e.g., url = request.args.get('url'); url = 'https://constant'; requests.get(url))
+        if has_prop and taint_vars:
+            for var in list(taint_vars):
+                if re.search(rf'\b{re.escape(var)}\s*=\s*["\']https?://', context):
+                    has_prop = False
+                    break
+        if has_prop or arg_is_param or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or '%' in context:
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title=f"CWE-918: SSRF via {m.group()[:50]} at line {line_no}",
+                description=f"HTTP request with potentially unvalidated URL at L{line_no}."
+                    + (f" Variable(s) {sorted(taint_vars)} traced to user input." if taint_vars else ""),
+                line=line_no, suggestion="Validate URL hostname against an allowlist, block internal IPs.",
+                rule_id="PY-030F", cwe="CWE-918", agent="py-fallback",
+                confidence=0.82, analysis_kind="direct_sink",
+            ))
+
     # Prioritize injection CWEs (78, 89) over XSS (79), cap at 25
     prioritized = sorted(findings, key=lambda f: (
         0 if (f.cwe or '') in ('CWE-78', 'CWE-89') else 1
     ))
-    return prioritized[:25]
+    return prioritized[:30]
 
 
 def _fallback_idor_detect(code: str, filename: str) -> list[Finding]:
@@ -8081,6 +8191,32 @@ def analyze_python(code: str, filename: str = "", global_graph=None) -> Analysis
         adjusted.append(f)
 
     findings = adjusted
+
+    # ── Standalone pattern checks (no taint source required) ─────────────
+    # CWE-326: Weak TLS / SSL protocol version
+    for m in re.finditer(r'ssl\.(?:PROTOCOL_TLSv1(?!\d)|PROTOCOL_SSLv\d)', code):
+        line_no = code[:m.start()].count('\n') + 1
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-326: Weak TLS protocol version at line {line_no}",
+            description=f"`{m.group()}` at L{line_no} uses a deprecated TLS/SSL version.",
+            line=line_no,
+            suggestion="Use `ssl.PROTOCOL_TLS_CLIENT` with `minimum_version=ssl.TLSVersion.TLSv1_2`.",
+            rule_id="PY-050F", cwe="CWE-326", agent="py-fallback",
+            confidence=0.90, analysis_kind="pattern",
+        ))
+    # CWE-1333: ReDoS — inefficient regex with nested quantifiers
+    for m in re.finditer(r're\.(?:match|search|fullmatch|sub|compile)\s*\(\s*r?[\"\'].*\([^)]*\+[^)]*\).*[\"\']', code):
+        line_no = code[:m.start()].count('\n') + 1
+        findings.append(Finding(
+            category="security", severity=Severity.MEDIUM,
+            title=f"CWE-1333: Potential ReDoS via nested quantifier at line {line_no}",
+            description=f"Regex at L{line_no} may allow exponential backtracking on crafted input.",
+            line=line_no,
+            suggestion="Simplify regex or validate input length before matching.",
+            rule_id="PY-051F", cwe="CWE-1333", agent="py-fallback",
+            confidence=0.75, analysis_kind="pattern",
+        ))
 
     # ── Fallback: direct pattern detection for blind-spot CWEs in Python ──
     _py_fallbacks = _python_fallback_detect(code, filename)

@@ -14,6 +14,8 @@ import ast
 import json
 import logging
 import re
+import warnings
+import re
 from functools import lru_cache
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -286,7 +288,9 @@ def _is_valid_cwe(cwe: str) -> bool:
 
 def _compile_regex(rule_id: str, pattern_str: str) -> re.Pattern[str] | None:
     try:
-        return re.compile(pattern_str)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SyntaxWarning)
+            return re.compile(pattern_str)
     except re.error as exc:
         _log.warning("Rule %r: invalid regex pattern %r: %s — skipping", rule_id, pattern_str, exc)
         return None

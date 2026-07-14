@@ -45,8 +45,13 @@ class Rule:
                 continue
             if not self.pattern.search(line):
                 continue
-            if self.exclude_re and self.exclude_re.search(line):
-                continue
+            if self.exclude_re:
+                # Check current line AND surrounding context for exclude pattern
+                ctx_start = max(0, lineno - 1 - 3)
+                ctx_end = min(len(commentless_lines), lineno - 1 + 3 + 1)
+                ctx = "\n".join(commentless_lines[ctx_start:ctx_end])
+                if self.exclude_re.search(ctx):
+                    continue
             if self.context_confirm:
                 ctx_start = max(0, lineno - 1 - self.context_lines)
                 ctx_end = min(len(commentless_lines), lineno - 1 + self.context_lines + 1)
@@ -174,8 +179,8 @@ RULES: list[Rule] = [
         "Commit history will permanently expose this credential even after removal.",
         "Move secrets to environment variables: `process.env.API_KEY`. Use a secrets manager for production.",
         Severity.CRITICAL,
-        r'(?:api[_-]?key|apikey|secret|password|token|auth_token|private[_-]?key)\s*[:=]\s*["\'][A-Za-z0-9_\-\.]{8,}["\']',
-        exclude_pattern=r'process\.env|TEST|FAKE|PLACEHOLDER|your[-_]|<YOUR|_APIKEY\s*[:=]\s*["\']\w+["\']|_TOKEN\s*[:=]\s*["\']\w+["\']|_PASSWORD\s*[:=]\s*["\']\w+["\']|ERR_|Password\s*[:=]\s*["\']Password["\']|password\s*[:=]\s*["\']password["\']',
+        r'(?:api[_-]?key|apikey|secret|password|token|auth_token|private[_-]?key|stripe[_-]?key|jwt[_-]?secret|signing[_-]?key|encryption[_-]?key|master[_-]?key|access[_-]?key|db[_-]?(?:pass|pwd|password|url|uri)|database[_-]?(?:url|password|pass)|[A-Z][A-Z_]+_(?:KEY|SECRET|TOKEN|PASSWORD|PASS|PWD))\s*[:=]\s*["\'][A-Za-z0-9_\-\.]{8,}["\']',
+        exclude_pattern=r'process\.env|_TEST_KEY\s*[:=]\s*["\']|FAKE_|PLACEHOLDER|your[-_]|<YOUR|_APIKEY\s*[:=]\s*["\']\w+["\']|_TOKEN\s*[:=]\s*["\']\w+["\']|_PASSWORD\s*[:=]\s*["\']\w+["\']|ERR_|Password\s*[:=]\s*["\']Password["\']|password\s*[:=]\s*["\']password["\']',
     ),
     Rule(
         "JS-012", "CWE-798",
@@ -203,6 +208,7 @@ RULES: list[Rule] = [
         "Validate redirect target against an allowlist of permitted URLs or paths.",
         Severity.HIGH,
         r'res\.redirect\s*\([^)]*req\.\w+',
+        exclude_pattern=r'\.includes\s*\(|\.indexOf\s*\(|allowlist|whitelist|ALLOWED|SAFE_URLS|is_safe_url|allowed_hosts',
     ),
     Rule(
         "JS-015", "CWE-918",
@@ -212,6 +218,17 @@ RULES: list[Rule] = [
         "Validate URL hostname against an explicit allowlist and block private IP ranges.",
         Severity.HIGH,
         r'(?:fetch|axios\.(?:get|post)|request|got|needle)\s*\([^)]*req\.\w+',
+    ),
+    Rule(
+        "JS-015F", "CWE-918",
+        "CWE-918: SSRF — HTTP client with dynamic URL at line {line}",
+        "`fetch()`, `axios`, or `request()` receives a variable URL at L{line}: `{snippet}`. "
+        "If the variable originates from user input without validation, attackers can target internal services.",
+        "Validate URL hostname against an explicit allowlist and block private IP ranges.",
+        Severity.MEDIUM,
+        r'(?:fetch|axios\.(?:get|post|put|delete)|request|got|needle|http\.(?:get|request)|https\.(?:get|request))\s*\(\s*(\w+)\s*\)',
+        context_confirm=r'function\s+\w+\s*\([^)]*\b(\w+)\b[^)]*\)',
+        context_lines=5,
     ),
     Rule(
         "JS-016", "CWE-338",
@@ -242,6 +259,16 @@ RULES: list[Rule] = [
         context_confirm=r'__proto__\s*:\s*null|===\s*.__proto__.|!==\s*.__proto__.|\.hasOwnProperty',
         context_lines=1,
         negate_context=True,
+    ),
+    Rule(
+        "JS-018F", "CWE-1321",
+        "CWE-1321: Prototype pollution via for...in without hasOwnProperty at line {line}",
+        "`for...in` loop copies properties without `hasOwnProperty` check at L{line}: `{snippet}`. "
+        "Inherited prototype properties can be injected by an attacker.",
+        "Use `Object.keys(obj).forEach(k => ...)` or add `if (!obj.hasOwnProperty(k)) continue`.",
+        Severity.MEDIUM,
+        r'for\s*\(\s*(?:let|var|const)\s+\w+\s+in\s+\w+\s*\)',
+        exclude_pattern=r'\.hasOwnProperty\s*\(|Object\.keys|Object\.entries|Object\.getOwnPropertyNames',
     ),
     Rule(
         "JS-019", "CWE-1004",
@@ -415,10 +442,11 @@ RULES: list[Rule] = [
         "Resolve the path inside a safe base directory and reject requests that escape it: "
         "`path.resolve(BASE, file).startsWith(BASE)`.",
         Severity.HIGH,
-        # Match sendFile/download/readFile where the first arg is NOT a plain string/path literal
-        r'(?:res\.sendFile|res\.download|fs\.createReadStream|fs\.readFile)\s*\(\s*(?!["\'/`])',
-        context_confirm=r'req\.(?:query|params|body|headers)',
+        # Match sendFile/download/readFile calls — context_confirm filters for user input
+        r'(?:\w+\.sendFile|\w+\.download|fs\.createReadStream|fs\.readFile)\s*\(',
+        context_confirm=r'(?:req|res|r|request|response)\.(?:query|params|body|headers|file|path)',
         context_lines=6,
+        exclude_pattern=r'path\.basename|path\.normalize|path\.resolve',
     ),
     # ─── GraphQL Injection — CWE-943 ────────────────────────────────────────
     Rule(
@@ -522,6 +550,7 @@ RULES: list[Rule] = [
         "Use `Object.hasOwnProperty.call(source, key)` or a Map to safely iterate.",
         Severity.HIGH,
         r'for\s*\(\s*(?:var|let|const)?\s*\w+\s*in\s*(?:req\.|request\.|body|data|source|input|JSON\.parse)',
+        exclude_pattern=r'\.hasOwnProperty\s*\(|Object\.hasOwn|Object\.keys',
     ),
     # ─── CWE-601: Next.js / Express open redirect ────────────────────────
     Rule(
@@ -646,6 +675,7 @@ RULES: list[Rule] = [
         Severity.CRITICAL,
         r'(?:\.find|\.findOne|\.update|\.deleteOne|\.deleteMany)\s*\(\s*\{',
         context_confirm=r'(?:req\.|request\.)(?:body|query|params)',
+        exclude_pattern=r'where\s*:|\.findOne\s*\(\s*\{\s*where\s*:',
     ),
     # ─── CWE-943: NoSQL injection via user-named parameters (MongoDB) ──
     Rule(
@@ -801,6 +831,7 @@ RULES: list[Rule] = [
         r'(?:\.find|\.findOne|\.update|\.deleteOne|\.deleteMany)\s*\(\s*\{',
         context_confirm=r'(?:req\.|request\.)(?:body|query|params)',
         context_lines=10,
+        exclude_pattern=r'where\s*:|\.findOne\s*\(\s*\{\s*where\s*:',
     ),
     # ─── CWE-200: Sensitive data in error messages ─────────────────
     Rule(

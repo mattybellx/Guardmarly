@@ -146,39 +146,39 @@ class ContextAnalyzer:
         '__tests__', '.test.', '.spec.',
         # C# convention: *Tests.cs, *Test.cs files (e.g., BsonReaderTests.cs)
         'tests.cs', 'Tests.cs', 'test.cs', 'Test.cs',
-        # Directory-based patterns (forward + backslash for Windows)
-        '/test/', '\\test\\', '/tests/', '\\tests\\',
-        '/e2e/', '\\e2e\\',
-        '/spec/', '\\spec\\', '/cypress/', '\\cypress\\',
-        '/playwright/', '\\playwright\\',
+        # Directory-based patterns (normalized to forward slashes)
+        '/test/', '/tests/',
+        '/e2e/',
+        '/spec/', '/cypress/',
+        '/playwright/',
         # Perf / benchmark / example / tutorial directories (non-production code)
-        '/perf/', '\\perf\\', '/bench/', '\\bench\\',
-        '/benchmarks/', '\\benchmarks\\', '/examples/', '\\examples\\',
-        '/example/', '\\example\\', '/tutorial/', '\\tutorial\\',
-        '/tutorials/', '\\tutorials\\', '/demo/', '\\demo\\',
-        '/samples/', '\\samples\\', '/sample/', '\\sample\\',
-        '/docs_src/', '\\docs_src\\', '/doc_src/', '\\doc_src\\',
+        '/perf/', '/bench/',
+        '/benchmarks/', '/examples/',
+        '/example/', '/tutorial/',
+        '/tutorials/', '/demo/',
+        '/samples/', '/sample/',
+        '/docs_src/', '/doc_src/',
         # Filename patterns that indicate test/example/tutorial code
         'tutorial', 'example_', 'demo_',
         # Directory patterns with underscore prefix (e.g., _examples/, _fixtures/)
-        '/_examples/', '\\_examples\\', '/_fixtures/', '\\_fixtures\\',
+        '/_examples/', '/_fixtures/',
         # Build tooling
         '/build-tools/', '/build-scripts/', 'gulpfile.', 'gruntfile.', 'webpack.',
-        '/scripts/', '\\scripts\\',
+        '/scripts/',
     ]
 
     MOCK_PATTERNS = [
         'mock_', '_mock', 'fixtures/', '/fixtures', 'fixture', 'fake_', '_fake',
         'stub', 'stubs/', '/stubs', '.fixtures', '__fixtures__',
         # Example / demo / doc directories (non-production code)
-        '/examples/', '\\examples\\', '/example/', '\\example\\',
-        '/demo/', '\\demo\\', '/docs/', '\\docs\\',
-        '/documentation/', '\\documentation\\', '/tutorial/', '\\tutorial\\',
-        '/samples/', '\\samples\\', '/sample/', '\\sample\\',
+        '/examples/', '/example/',
+        '/demo/', '/docs/',
+        '/documentation/', '/tutorial/',
+        '/samples/', '/sample/',
         # Build tooling / benchmark / perf directories
-        '/perf/', '\\perf\\', '/bench/', '\\bench\\',
-        '/benchmarks/', '\\benchmarks\\',
-        '/build-tools/', '\\build-tools\\', '/build-scripts/', '\\build-scripts\\',
+        '/perf/', '/bench/',
+        '/benchmarks/',
+        '/build-tools/', '/build-scripts/',
     ]
 
     GENERATED_PATTERNS = [
@@ -188,13 +188,13 @@ class ContextAnalyzer:
 
     FRAMEWORK_INTERNAL_PATTERNS = [
         # Paths that indicate framework/library source code (not user endpoints)
-        '/src/flask/', '\\src\\flask\\',
-        '/src/django/', '\\src\\django\\',
-        '/packages/', '\\packages\\',
+        '/src/flask/',
+        '/src/django/',
+        '/packages/',
         # Framework lib directories (matches e.g. p_express/lib/, express/lib/, etc.)
-        'express/lib/', 'express\\lib\\',
-        'flask/src/', 'flask\\src\\',
-        'django/django/', 'django\\django\\',
+        'express/lib/',
+        'flask/src/',
+        'django/django/',
     ]
 
     # ── Library-purpose patterns ────────────────────────────────────────
@@ -212,7 +212,7 @@ class ContextAnalyzer:
         'losformatter', 'LosFormatter',
         'objectstateformatter', 'ObjectStateFormatter',
         # HTTP client libraries (they ARE supposed to make HTTP requests)
-        '/requests/', '\\requests\\',
+        '/requests/',
         'restsharp', 'RestSharp', 'got', 'Got',
         'httpclient', 'HttpClient', 'okhttp', 'OkHttp', 'retrofit', 'Retrofit',
         # Template engines / HTML tools (they ARE supposed to render HTML)
@@ -236,7 +236,7 @@ class ContextAnalyzer:
         # Code coverage / analysis tools
         'coveragepy', 'coverage.py', 'coverage',
         # Build / dev / CLI tools
-        '/tools/', '\\tools\\', '/scripts/', '\\scripts\\', '/cmd/', '\\cmd\\',
+        '/tools/', '/scripts/', '/cmd/',
     ]
 
     # CWE-rule pairs that are library-purpose by design — suppress when
@@ -1236,7 +1236,7 @@ def run_triage(
 # into single "High-Fidelity Incidents" to eliminate noise bloat.
 # Drives Noise Quotient below 1.0 findings/kLOC.
 
-_CLUSTER_WINDOW = 3  # lines
+_CLUSTER_WINDOW = 0  # lines — only merge exact same-line duplicates
 
 
 def cluster_findings(
@@ -1315,7 +1315,7 @@ def cluster_findings(
     for i in range(m):
         fi = findings_by_line[i]
         li = fi.line or 0
-        ci = (fi.cwe or "") + (fi.rule_id or "")
+        ci = (fi.cwe or "") + (fi.rule_id or "") + (fi.title or "")[:40]
         if li == 0:
             continue
         for j in range(i + 1, m):
@@ -1328,9 +1328,10 @@ def cluster_findings(
                 # Same line — same sink node — always merge
                 _union2(i, j)
             elif diff <= window:
-                # Within window — merge if related (same CWE or same rule family)
-                cj = (fj.cwe or "") + (fj.rule_id or "")
-                if ci and cj and (ci[:5] == cj[:5] or ci == cj):
+                # Within window — merge ONLY if same CWE AND same sink identity
+                cj = (fj.cwe or "") + (fj.rule_id or "") + (fj.title or "")[:40]
+                # Must have same CWE prefix (e.g., CWE-78) AND similar title (same sink)
+                if ci and cj and ci[:6] == cj[:6] and ci[:30] == cj[:30]:
                     _union2(i, j)
             elif diff > window + 5:
                 break

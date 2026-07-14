@@ -52,9 +52,10 @@ rules:
     severity: high
     pattern_type: taint_sink
     sinks:
-      - obj[req.body.key]
-      - obj[req.query.key]
-      - target[req.params.
+      - obj[req.body
+      - obj[req.query
+      - target[req.params
+      - obj[req.
     suggestion: "Block __proto__, constructor, and prototype keys; use hasOwnProperty check before property assignment"
 
   - id: registry/js/proto-pollution/lodash-set-req
@@ -190,6 +191,8 @@ rules:
       - Hoek.merge(config, req.body
       - Hoek.merge(obj, req.
       - hoek.merge(config, req.
+      - Hoek.merge(
+      - hoek.merge(
     suggestion: "Upgrade to @hapi/hoek >= 9.0.3 and sanitize keys before any deep merge"
 
   - id: registry/js/proto-pollution/immer-produce-req

@@ -990,7 +990,7 @@ def _run_structural_checkers(
 
     try:
         if filename and not minified.is_minified:
-            project = build_js_project_index(filename, code)
+            project = build_js_project_index(filename, code, fast=True)
         calls = collect_calls(code)
         property_writes = collect_property_writes(code)
         taint_traces = extract_taint_traces(code)

@@ -884,7 +884,17 @@ def _iter_related_sources(file_index: JsFileIndex) -> tuple[str, ...]:
 	return tuple(dict.fromkeys(source for source in sources if source))
 
 
-def build_js_project_index(filename: str, code: str) -> JsProjectIndex | None:
+def build_js_project_index(filename: str, code: str, *, fast: bool = False) -> JsProjectIndex | None:
+	"""Build a JS project index for cross-file analysis.
+
+	When ``fast=True`` (recommended for single-file scans), skips the
+	expensive ``os.walk()`` workspace graph refresh and builds a minimal
+	project containing only the current file and its direct imports.
+
+	The ``fast`` flag is automatically enabled when the workspace contains
+	more than 500 JS files or the filename is a basename-only string
+	(which cannot resolve to a workspace root anyway).
+	"""
 	if not filename:
 		return None
 	if detect_minified(filename, code).is_minified:
@@ -893,6 +903,28 @@ def build_js_project_index(filename: str, code: str) -> JsProjectIndex | None:
 	if not Path(current_file).is_file():
 		return None
 	workspace_root = _discover_workspace_root(current_file)
+
+	# ── Fast path: single-file scan (no os.walk) ──────────────────────
+	if not fast:
+		# Auto-detect large workspaces — if the root has >500 JS files,
+		# skip the expensive workspace refresh to avoid hangs.
+		try:
+			js_count = sum(1 for _ in _iter_workspace_js_files(Path(workspace_root)))
+		except OSError:
+			js_count = 9999
+		if js_count > 500:
+			fast = True
+
+	if fast:
+		# Minimal project: only the current file + direct imports
+		project = JsProjectIndex(files={}, workspace_root=workspace_root)
+		project.files[current_file] = _build_file_index(current_file, code)
+		for source in _iter_related_sources(project.files[current_file]):
+			if source not in project.files:
+				_index_project_file(project, source, depth=0)
+		return project
+
+	# ── Full path: workspace-aware cross-file analysis ────────────────
 	workspace_graph = _get_workspace_graph(workspace_root)
 	project = JsProjectIndex(files=dict(workspace_graph.files), workspace_root=workspace_root)
 	project.files[current_file] = _build_file_index(current_file, code)

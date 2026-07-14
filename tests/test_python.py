@@ -154,6 +154,99 @@ def safe():
         assert not _has_cwe(code, "CWE-78")
 
 
+# ── CWE-78: Command Injection — Direct Sink (standalone, no taint source) ─────
+
+class TestCommandInjectionDirectSink:
+    """Tests for _rule_06 direct-sink patterns that catch dangerous calls
+    even without a Flask/request taint source."""
+
+    def test_os_system_standalone(self):
+        code = """import os
+os.system("rm -rf /")"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_system_with_variable(self):
+        code = """import os
+def run(cmd):
+    os.system(cmd)"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_popen_standalone(self):
+        code = """import os
+os.popen("cat /etc/passwd")"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_execve(self):
+        code = """import os
+os.execve("/bin/sh", ["/bin/sh"], {})"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_execvp(self):
+        code = """import os
+os.execvp("ls", ["ls", "-la"])"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_os_execl(self):
+        code = """import os
+os.execl("/bin/ls", "ls", "-la")"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_subprocess_getoutput(self):
+        code = """import subprocess
+subprocess.getoutput("id")"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_subprocess_getstatusoutput(self):
+        code = """import subprocess
+subprocess.getstatusoutput("whoami")"""
+        assert _has_cwe(code, "CWE-78")
+
+    def test_pty_spawn(self):
+        code = """import pty
+pty.spawn("/bin/bash")"""
+        assert _has_cwe(code, "CWE-78")
+
+
+# ── CWE-95/94: Code Injection — Direct Sink ──────────────────────────────────
+
+class TestCodeInjectionDirectSink:
+    """Tests for _rule_06 eval() and exec() direct-sink patterns."""
+
+    def test_eval_standalone(self):
+        code = """eval("1+1")"""
+        assert _has_cwe(code, "CWE-95")
+
+    def test_eval_with_variable(self):
+        code = """def run(expr):
+    eval(expr)"""
+        assert _has_cwe(code, "CWE-95")
+
+    def test_exec_standalone(self):
+        code = """exec("print(42)")"""
+        assert _has_cwe(code, "CWE-94")
+
+    def test_exec_with_variable(self):
+        code = """def run(code):
+    exec(code)"""
+        assert _has_cwe(code, "CWE-94")
+
+
+# ── CWE-502: Unsafe Deserialization — Additional Libraries ────────────────────
+
+class TestDeserializationAdditional:
+    """Tests for additional deserialization libraries added to _rule_06."""
+
+    def test_dill_loads(self):
+        code = """import dill
+dill.loads(b"gASV...")"""
+        assert _has_cwe(code, "CWE-502")
+
+    def test_jsonpickle_decode(self):
+        code = """import jsonpickle
+jsonpickle.decode('{"py/object": "module.Class"}')"""
+        assert _has_cwe(code, "CWE-502")
+
+
 # ── CWE-502: Unsafe Deserialization ──────────────────────────────────────────
 
 class TestDeserialization:

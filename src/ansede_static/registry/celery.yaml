@@ -164,7 +164,7 @@ rules:
     severity: medium
     confidence: 0.55
     pattern_type: regex
-    regex: "broker_url\\s*=\\s*['\"]redis://"
+    regex: "broker_url.*=.*['\"]redis://"
     suggestion: "Use rediss:// and configure TLS options for Redis broker connections"
 
   - id: registry/celery/deserialization/dill-serializer

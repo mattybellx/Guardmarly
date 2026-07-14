@@ -1905,7 +1905,7 @@ def run_route_checks(
     filename: str = '',
     project=None,
 ) -> list[Finding]:
-    active_project = project or (build_js_project_index(filename, code) if filename else None)
+    active_project = project or (build_js_project_index(filename, code, fast=True) if filename else None)
     findings: list[Finding] = []
     for checker in (
         _check_hapi_missing_auth,
