@@ -52,6 +52,7 @@ class FunctionSummary:
     - argument positions that can taint the return value
     - whether return can be tainted directly from an intrinsic source
     - side effects (symbol names) visible outside callee scope
+    - sanitizers applied within the function body
     """
 
     file_path: str
@@ -61,6 +62,7 @@ class FunctionSummary:
     return_from_source: bool = False
     side_effect_symbols: Tuple[str, ...] = ()
     depends_on: Tuple[str, ...] = ()
+    sanitizers_applied: Tuple[str, ...] = ()
 
     def as_dict(self) -> Dict[str, Any]:
         return {
@@ -71,6 +73,7 @@ class FunctionSummary:
             "return_from_source": self.return_from_source,
             "side_effect_symbols": list(self.side_effect_symbols),
             "depends_on": list(self.depends_on),
+            "sanitizers_applied": list(self.sanitizers_applied),
         }
 
     @classmethod
@@ -83,7 +86,57 @@ class FunctionSummary:
             return_from_source=bool(data.get("return_from_source", False)),
             side_effect_symbols=tuple(sorted(str(v) for v in data.get("side_effect_symbols", ()) if isinstance(v, str))),
             depends_on=tuple(sorted(str(v) for v in data.get("depends_on", ()) if isinstance(v, str))),
+            sanitizers_applied=tuple(sorted(str(v) for v in data.get("sanitizers_applied", ()) if isinstance(v, str))),
         )
+
+
+# ── Summary Registry ─────────────────────────────────────────────────────────
+
+class SummaryRegistry:
+    """Thread-safe registry for FunctionSummary contracts.
+
+    Provides O(1) lookup by fully-qualified function name, enabling the
+    cross-file taint engine to substitute call-site traversal with a single
+    dictionary lookup rather than an O(N) recursive walk of the callee's
+    internal statements.
+
+    Usage::
+
+        registry = SummaryRegistry()
+        registry.register("mypackage.utils:process_input", summary)
+        cached = registry.lookup("mypackage.utils:process_input")
+    """
+
+    def __init__(self) -> None:
+        self._registry: dict[str, FunctionSummary] = {}
+        self._by_simple_name: dict[str, list[str]] = {}  # simple_name → [fqn, …]
+
+    def register(self, fully_qualified_name: str, summary: FunctionSummary) -> None:
+        """Store a FunctionSummary keyed by its fully-qualified name."""
+        self._registry[fully_qualified_name] = summary
+        simple = fully_qualified_name.split("::")[-1].split(".")[-1]
+        self._by_simple_name.setdefault(simple, []).append(fully_qualified_name)
+
+    def lookup(self, fully_qualified_name: str) -> FunctionSummary | None:
+        """Return the FunctionSummary for *fully_qualified_name* or None."""
+        return self._registry.get(fully_qualified_name)
+
+    def lookup_simple(self, simple_name: str) -> list[FunctionSummary]:
+        """Return all summaries whose simple (unqualified) name matches."""
+        fqns = self._by_simple_name.get(simple_name, [])
+        return [self._registry[fqn] for fqn in fqns if fqn in self._registry]
+
+    def __len__(self) -> int:
+        return len(self._registry)
+
+    def __contains__(self, fqn: str) -> bool:
+        return fqn in self._registry
+
+    def keys(self):
+        return self._registry.keys()
+
+    def items(self):
+        return self._registry.items()
 
 
 @dataclass(frozen=True)

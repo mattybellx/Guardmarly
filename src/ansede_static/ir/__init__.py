@@ -9,6 +9,10 @@ from ansede_static.ir.issues import (
     IssueTraceFrame,
     build_issue_records,
 )
+from ansede_static.ir.global_graph import (
+    FunctionSummary,
+    SummaryRegistry,
+)
 
 
 __all__ = [
@@ -16,4 +20,6 @@ __all__ = [
     "IssueRecord",
     "IssueTraceFrame",
     "build_issue_records",
+    "FunctionSummary",
+    "SummaryRegistry",
 ]

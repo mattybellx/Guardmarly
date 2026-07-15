@@ -7032,10 +7032,17 @@ def _rule_49(ctx: _Ctx) -> list[Finding]:
                 ))
 
     # ── Module-level log injection (not inside any function) ─────────────
-    # Only flag concatenation/f-string, NOT %s-parameterized logging (which is safe)
+    # Catches: f-string concat, + concat, % operator, AND parameterized logging
+    # with potentially tainted variables (e.g., logging.info("User: %s", user))
     _PCT_LOG_RE = re.compile(
         r"(?:logger|log|logging)\.(?:info|warning|error|debug|critical|warn|exception)\s*\(\s*"
         r"(?:f[\"'][^\"']*\{[^}]*\}|\"[\"']\s*\+|[^\"']+\s*\+\s*[\"']|[\"'][^\"']*[\"']\s*%\s*\()",
+        re.IGNORECASE,
+    )
+    # Parameterized logging: logging.info("fmt %s", var) — var may contain CRLF
+    _PARAM_LOG_RE = re.compile(
+        r"(?:logger|log|logging)\.(?:info|warning|error|debug|critical|warn|exception)\s*\(\s*"
+        r"[\"'][^\"']*%[sd]\s*[\"']\s*,\s*(\w+)",
         re.IGNORECASE,
     )
     for lineno, line in enumerate(ctx.lines, 1):
@@ -7055,6 +7062,25 @@ def _rule_49(ctx: _Ctx) -> list[Finding]:
                 suggestion="Use parameterized logging: logger.info('msg %s', val). Sanitize: str(val).replace(chr(10),'').replace(chr(13),'')[:200]",
                 cwe="CWE-117", agent="python-analyzer",
             ))
+        # Check for parameterized logging with a variable that could contain CRLF
+        pm = _PARAM_LOG_RE.search(stripped)
+        if pm:
+            var_name = pm.group(1)
+            # Don't flag if the variable is a literal or safe pattern
+            if var_name not in ("True", "False", "None", "self", "cls"):
+                findings.append(Finding(
+                    category="security", severity=Severity.LOW,
+                    title=f"CWE-117: Parameterized log injection at module level at line {lineno}",
+                    description=(
+                        f"Module-level parameterized log call at L{lineno} passes variable "
+                        f"`{var_name}` which may contain CRLF characters for log injection. "
+                        "Even with parameterized logging, newline characters in values can "
+                        "inject fake log entries."
+                    ),
+                    line=lineno,
+                    suggestion="Sanitize: str(val).replace(chr(10),'').replace(chr(13),'')[:200]",
+                    cwe="CWE-117", agent="python-analyzer",
+                ))
 
     return _assign_rule_ids(findings, "PY-062")
 

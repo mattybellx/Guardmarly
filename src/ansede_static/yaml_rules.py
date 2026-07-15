@@ -775,16 +775,33 @@ def apply_custom_rules(
     filename: str,
     language: str,
     rules: list[CustomRule],
+    *,
+    dse_enabled: bool = False,
 ) -> list[Finding]:
     findings: list[Finding] = []
     if not rules:
         return findings
+
+    # ── DSE Circuit Breaker ──────────────────────────────────────────
+    breaker = None
+    if dse_enabled:
+        try:
+            from ansede_static.dse import ReDoSCircuitBreaker
+            breaker = ReDoSCircuitBreaker()
+        except ImportError:
+            pass
 
     code_lines = code.splitlines()
     for rule in rules:
         if not rule.matches_language(language):
             continue
         if rule.pattern_type == "regex":
+            if breaker is not None and rule.raw_pattern:
+                result = breaker.evaluate(rule.raw_pattern, code)
+                if result.timed_out or "blacklisted" in str(getattr(result, "error", "")):
+                    _log.debug("DSE: skipped blacklisted/timed-out pattern for rule %s",
+                               str(rule.rule_id).replace("\n", "").replace("\r", "")[:80])
+                    continue
             findings.extend(_apply_regex_rule(code_lines, rule))
         elif rule.pattern_type == "ast_structural":
             findings.extend(_apply_ast_structural_rule(code_lines, rule))

@@ -1728,7 +1728,7 @@ _HAS_WEB_FRAMEWORK = re.compile(
 )
 
 _JAVA_CMD_INJ_SINK = re.compile(
-    r'Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\([^)]*\)\s*\.start\s*\(|'
+    r'Runtime\.getRuntime\(\)\.exec\s*\(|new\s+ProcessBuilder\s*\(|'
     r'\.exec\s*\(\s*\w+\s*\+|\.exec\s*\(\s*\w+\s*\)',
     re.IGNORECASE,
 )
@@ -1779,15 +1779,117 @@ def _get_java_propagated_taint(source: str) -> set[str]:
     return tainted
 
 
+def _java_sink_only_pass(
+    source: str, lines: list[str], propagated: set[str],
+    has_direct_taint: bool, has_web_fw: bool,
+) -> list:
+    """Sink-only baseline pass — flags dangerous API calls with non-literal
+    arguments even without visible web/HTTP taint sources.
+
+    This is the security-first approach: better to flag and let the triage
+    system downgrade than to miss a real vulnerability in a standalone method.
+
+    Confidence is set lower (0.55-0.62) when no taint source is visible so
+    the triage system can distinguish these from high-confidence findings.
+    """
+    findings: list = []
+    has_any_taint = has_direct_taint or has_web_fw or bool(propagated)
+    base_conf = 0.62 if has_any_taint else 0.55
+
+    def _arg_is_literal(m: re.Match, max_dist: int = 300) -> bool:
+        """Check if ALL arguments to a sink are string literals (no dynamic input)."""
+        sink_end = m.end()
+        depth = 0
+        arg_start = None
+        args: list[str] = []
+        for i in range(sink_end, min(sink_end + max_dist, len(source))):
+            c = source[i]
+            if c == '(' and depth == 0:
+                arg_start = i + 1
+                depth = 1
+            elif c == '(':
+                depth += 1
+            elif c == ')':
+                depth -= 1
+                if depth == 0:
+                    if arg_start:
+                        args.append(source[arg_start:i].strip())
+                    break
+            elif c == ',' and depth == 1:
+                if arg_start:
+                    args.append(source[arg_start:i].strip())
+                arg_start = i + 1
+        # If ANY argument is not a plain string literal, the call is dynamic
+        if not args:
+            return False
+        return all(
+            a.startswith('"') and a.endswith('"') for a in args
+        )
+
+    # ── CWE-78: Command injection sinks ──────────────────────────────
+    for m in _JAVA_CMD_INJ_SINK.finditer(source):
+        if _arg_is_literal(m):
+            continue
+        line_no = source[:m.start()].count('\n') + 1
+        ctx = '\n'.join(lines[max(0, line_no - 3):min(len(lines), line_no + 2)])
+        has_concat = '+' in m.group() or '+' in ctx or 'format' in ctx.lower()
+        findings.append(Finding(
+            category="security", severity=Severity.CRITICAL,
+            title=f"CWE-78: Command injection via {m.group()[:60]} at line {line_no}",
+            description=f"OS command execution with dynamic input at L{line_no}."
+                + (" No visible taint source — may be called from untrusted context." if not has_any_taint else ""),
+            line=line_no,
+            suggestion="Use ProcessBuilder with explicit argument arrays and validate all inputs.",
+            rule_id="JV-008F", cwe="CWE-78", agent="java-sink-only",
+            confidence=base_conf, analysis_kind="direct_sink",
+        ))
+
+    # ── CWE-22: Path traversal sinks ─────────────────────────────────
+    for m in _JAVA_PATH_SINK.finditer(source):
+        if _arg_is_literal(m):
+            continue
+        line_no = source[:m.start()].count('\n') + 1
+        ctx = '\n'.join(lines[max(0, line_no - 3):min(len(lines), line_no + 2)])
+        has_concat = '+' in m.group() or '+' in ctx
+        findings.append(Finding(
+            category="security", severity=Severity.HIGH,
+            title=f"CWE-22: Path traversal via {m.group()[:60]} at line {line_no}",
+            description=f"File operation with dynamic path at L{line_no}."
+                + (" No visible taint source — may be called from untrusted context." if not has_any_taint else ""),
+            line=line_no,
+            suggestion="Validate paths against a base directory using canonical path resolution.",
+            rule_id="JV-007F", cwe="CWE-22", agent="java-sink-only",
+            confidence=base_conf, analysis_kind="direct_sink",
+        ))
+
+    # ── CWE-117: Log injection sinks ─────────────────────────────────
+    for m in _LOG_INJECTION_JAVA_RE.finditer(source):
+        if _arg_is_literal(m):
+            continue
+        line_no = source[:m.start()].count('\n') + 1
+        ctx = '\n'.join(lines[max(0, line_no - 2):min(len(lines), line_no + 1)])
+        has_concat = '+' in m.group() or '+' in ctx
+        findings.append(Finding(
+            category="security", severity=Severity.MEDIUM,
+            title=f"CWE-117: Log injection via {m.group()[:60]} at line {line_no}",
+            description=f"Log call with dynamic input at L{line_no}."
+                + (" No visible taint source — may be called from untrusted context." if not has_any_taint else ""),
+            line=line_no,
+            suggestion="Sanitize log input: replace CR/LF characters before logging.",
+            rule_id="JV-016F", cwe="CWE-117", agent="java-sink-only",
+            confidence=base_conf, analysis_kind="direct_sink",
+        ))
+
+    return findings
+
+
 def _java_fallback_detect(source: str, findings: list) -> None:
-    """Add fallback findings for CWE-78, CWE-22, CWE-79 in Java."""
+    """Add fallback findings for CWE-78, CWE-22, CWE-79, CWE-117 in Java."""
     # Taint sources can come from explicit getParameter() calls OR
     # from web framework parameter binding (Struts2 setters, Spring @RequestParam)
     has_direct_taint = bool(_JAVA_TAINT_SOURCE.search(source))
     has_web_fw = bool(_HAS_WEB_FRAMEWORK.search(source))
-    if not has_direct_taint and not has_web_fw:
-        return
-    
+
     lines = source.splitlines()
     propagated = _get_java_propagated_taint(source)
     # In web framework classes with setters, all private fields are potentially tainted
@@ -1795,6 +1897,17 @@ def _java_fallback_detect(source: str, findings: list) -> None:
         # Extract private field names as potentially tainted
         for fm in re.finditer(r'private\s+(?:String|int|long|boolean)\s+(\w+)\s*;', source):
             propagated.add(fm.group(1))
+
+    # ── Sink-only baseline pass — runs even without web context ──────
+    # Flags dangerous API calls with non-literal arguments at lower confidence.
+    # This catches standalone utility methods that would be invisible to
+    # the taint-gated detectors. The triage system can downgrade these if needed.
+    _sink_only_findings = _java_sink_only_pass(source, lines, propagated,
+                                                has_direct_taint, has_web_fw)
+    findings.extend(_sink_only_findings)
+
+    if not has_direct_taint and not has_web_fw:
+        return
     
     def _arg_contains_taint(m: re.Match, max_dist: int = 200) -> tuple[bool, set[str]]:
         sink_end = m.end()

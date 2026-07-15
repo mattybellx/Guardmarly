@@ -114,8 +114,8 @@ tailwind.config = {
         <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
         <div class="relative z-10">
           <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">Real Repos Scanned</div>
-          <div class="text-3xl font-bold text-blue-400 font-mono">58</div>
-          <div class="text-xs text-zinc-500 mt-1">3.1M+ lines · 0 failures</div>
+          <div class="text-3xl font-bold text-blue-400 font-mono" id="stat-repos">58</div>
+          <div class="text-xs text-zinc-500 mt-1"><span id="stat-lines">3.1M+</span> lines · 0 failures</div>
         </div>
       </div>
       <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5">
@@ -212,5 +212,19 @@ tailwind.config = {
     <a href="https://pypi.org/project/ansede-static/" class="text-zinc-500 hover:text-cyan-400 transition-colors">PyPI</a>
   </footer>
 </main>
+
+<script>
+// Live stats — dynamically update counters from /stats endpoint
+fetch('/stats').then(r => r.json()).then(s => {
+  const reposEl = document.getElementById('stat-repos');
+  const linesEl = document.getElementById('stat-lines');
+  if (reposEl && s.real_repos_scanned) {
+    reposEl.textContent = s.real_repos_scanned.toLocaleString();
+  }
+  if (linesEl && s.real_lines_scanned) {
+    linesEl.textContent = s.real_lines_scanned;
+  }
+}).catch(() => {});
+</script>
 </body>
 </html>
