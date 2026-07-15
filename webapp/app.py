@@ -136,9 +136,11 @@ def _add_security_headers(response):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
     response.headers["X-RateLimit-Limit"] = str(_RATE_LIMIT_MAX_REQUESTS)
-    # Cache static pages for 1 hour
-    if request.path in ("/", "/compare", "/blog", "/leaderboard", "/autofix-studio") and request.method == "GET":
-        response.headers["Cache-Control"] = "public, max-age=3600"
+    # Cache static pages for 10 minutes, homepage only 60s (dynamic counter)
+    if request.path == "/" and request.method == "GET":
+        response.headers["Cache-Control"] = "public, max-age=60"
+    elif request.path in ("/compare", "/blog", "/leaderboard", "/autofix-studio") and request.method == "GET":
+        response.headers["Cache-Control"] = "public, max-age=600"
     if request.is_secure or BASE_URL.startswith("https://"):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
