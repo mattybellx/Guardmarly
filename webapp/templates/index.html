@@ -114,8 +114,8 @@ tailwind.config = {
         <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
         <div class="relative z-10">
           <div class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-2">Real Repos Scanned</div>
-          <div class="text-3xl font-bold text-blue-400 font-mono" id="stat-repos">58</div>
-          <div class="text-xs text-zinc-500 mt-1"><span id="stat-lines">3.1M+</span> lines · 0 failures</div>
+          <div class="text-3xl font-bold text-blue-400 font-mono" id="stat-repos">{{ real_repos_scanned }}</div>
+          <div class="text-xs text-zinc-500 mt-1"><span id="stat-lines">{{ real_lines_scanned }}</span> lines · 0 failures</div>
         </div>
       </div>
       <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 hover:bg-zinc-900/80 transition-all duration-300 p-5">

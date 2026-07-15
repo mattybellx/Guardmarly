@@ -1154,7 +1154,10 @@ _ERROR_BODY = r"""
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    stats = _load_stats()
+    return render_template("index.html",
+        real_repos_scanned=stats.get("real_repos_scanned", 58),
+        real_lines_scanned=stats.get("real_lines_scanned", "3.1M+"))
 
 
 @app.route("/autofix-studio")
