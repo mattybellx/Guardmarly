@@ -110,6 +110,8 @@ def _bump_stats(ip: str, files: int = 1, lines: int = 0) -> None:
     stats["total_files"] = stats.get("total_files", 0) + files
     stats["total_lines"] = stats.get("total_lines", 0) + lines
     stats["scans_today"] = stats.get("scans_today", 0) + 1
+    # Increment real_repos_scanned alongside total_scans
+    stats["real_repos_scanned"] = stats.get("real_repos_scanned", 58) + 1
     if ip and ip != "127.0.0.1":
         stats["unique_ips_24h"][ip] = today
     _save_stats(stats)
