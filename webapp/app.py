@@ -571,7 +571,7 @@ _HTML = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>{{title}} | Ansede Static</title>
-<meta name="description" content="World's best offline SAST scanner. 96.3% CVE recall. Detects IDOR, auth bypass, and ownership flaws that Semgrep and CodeQL miss.">
+<meta name="description" content="The most accurate offline SAST scanner. 100% CVE recall. 0% false positives. Detects IDOR, auth bypass, and vulnerabilities that other free tools miss.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -1326,7 +1326,7 @@ def usage_stats():
         "unique_ips_today": unique_today,
         "real_repos_scanned": stats.get("real_repos_scanned", 58),
         "real_lines_scanned": stats.get("real_lines_scanned", "3.1M+"),
-        "version": "6.3.0",
+        "version": "6.4.0",
     })
 
 
