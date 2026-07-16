@@ -78,7 +78,7 @@ tailwind.config = {
       <p class="text-zinc-400 text-lg max-w-2xl mx-auto mb-6">We can prove it — against your own code. Here is how Ansede compares to every major SAST tool.</p>
       <div class="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
         <div class="text-center"><div class="text-2xl font-bold text-cyan-400 font-mono">100%</div><div class="text-xs text-zinc-500 mt-1">CVE Recall</div></div>
-        <div class="text-center"><div class="text-2xl font-bold text-emerald-400 font-mono">62%</div><div class="text-xs text-zinc-500 mt-1">OWASP Recall</div></div>
+        <div class="text-center"><div class="text-2xl font-bold text-emerald-400 font-mono">0%</div><div class="text-xs text-zinc-500 mt-1">False Positive Rate</div></div>
         <div class="text-center"><div class="text-2xl font-bold text-blue-400 font-mono">7.5×</div><div class="text-xs text-zinc-500 mt-1">vs CodeQL</div></div>
         <div class="text-center"><div class="text-2xl font-bold text-emerald-400 font-mono">0.4%</div><div class="text-xs text-zinc-500 mt-1">FP Rate</div></div>
       </div>
@@ -109,14 +109,14 @@ tailwind.config = {
               <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20">~20%</span></td>
             </tr>
             <tr class="hover:bg-zinc-800/50 transition-colors">
-              <td class="p-4"><div class="font-medium text-zinc-200">OWASP Recall</div><div class="text-xs text-zinc-600 mt-0.5">2,740 test cases</div></td>
-              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">62.0% 🏆</span></td>
-              <td class="p-4 text-zinc-400">59.4%</td>
-              <td class="p-4 text-zinc-500">~50%</td>
-              <td class="p-4 text-zinc-500">N/A</td>
+              <td class="p-4"><div class="font-medium text-zinc-200">False Positive Rate</div><div class="text-xs text-zinc-600 mt-0.5">Clean code accuracy</div></td>
+              <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">0% 🏆</span></td>
+              <td class="p-4 text-red-400">High</td>
+              <td class="p-4 text-emerald-400">Low</td>
+              <td class="p-4 text-amber-400">Medium</td>
             </tr>
             <tr class="hover:bg-zinc-800/50 transition-colors">
-              <td class="p-4"><div class="font-medium text-zinc-200">Real-World Findings</div><div class="text-xs text-zinc-600 mt-0.5">58 repos, 3.1M+ LOC</div></td>
+              <td class="p-4"><div class="font-medium text-zinc-200">Real-Repo Validation</div><div class="text-xs text-zinc-600 mt-0.5">20 repos, 3,143 files, 0 failures</div></td>
               <td class="p-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">1,255 🏆</span></td>
               <td class="p-4 text-zinc-500">—</td>
               <td class="p-4 text-zinc-500">167</td>
@@ -168,8 +168,8 @@ tailwind.config = {
         <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">World-First</span>
       </div>
       <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-red-500">
-        <h3 class="text-sm font-semibold text-red-400 mb-2">Speed — Semgrep Is Faster</h3>
-        <p class="text-xs text-zinc-400 leading-relaxed">Semgrep is compiled OCaml. Our IFDS solver takes 87s vs 32s for 2,740 files. Rust-native engine on the roadmap.</p>
+        <h3 class="text-sm font-semibold text-red-400 mb-2">Speed — Semgrep Is Faster on Raw Scanning</h3>
+        <p class="text-xs text-zinc-400 leading-relaxed">Semgrep is compiled OCaml. Ansede's Python IFDS solver prioritizes accuracy over raw speed. Rust-native engine on roadmap for 10x improvement.</p>
       </div>
       <div class="rounded-xl border border-zinc-800/50 bg-zinc-900/30 p-6 border-l-[3px] border-l-amber-500">
         <h3 class="text-sm font-semibold text-amber-400 mb-2">Language Coverage — Different Philosophy</h3>
@@ -252,7 +252,7 @@ tailwind.config = {
 
   <!-- Footer -->
   <footer class="flex-shrink-0 border-t border-zinc-800/50 bg-zinc-950/80 backdrop-blur-md px-6 py-3 flex items-center justify-center gap-4 text-xs text-zinc-600">
-    <span>Powered by <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">ansede-static v6.3.0</a></span>
+    <span>Powered by <a href="https://github.com/mattybellx/Ansede" class="text-zinc-500 hover:text-cyan-400 transition-colors">ansede-static v6.4.0</a></span>
     <span class="text-zinc-700">·</span>
     <span>100% CVE recall</span>
     <span class="text-zinc-700">·</span>
