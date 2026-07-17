@@ -1833,6 +1833,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--golden-corpus", type=Path, default=None, metavar="DIR",
         help="Path to golden corpus directory for rule validation (default: .ansede/golden_corpus).",
     )
+    parser.add_argument(
+        "--demo", action="store_true",
+        help="Scan a built-in vulnerable code sample to see what Ansede findings look like.",
+    )
     return parser
 
 
@@ -2146,6 +2150,106 @@ def _run_dse_validation(golden_corpus_path: Path | None) -> None:
     print("✅ DSE validation complete.")
 
 
+_DEMO_CODE = '''"""
+Demo: Vulnerable Flask application with an IDOR bug.
+This is the built-in example for `ansede-static --demo`.
+"""
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+# Simulated database
+invoices = {
+    1: {"user": "alice", "amount": "$100", "due": "2026-08-01"},
+    2: {"user": "bob",   "amount": "$450", "due": "2026-08-15"},
+}
+
+
+@app.route("/invoice/<int:id>")
+def get_invoice(id):
+    """❌ CWE-639 IDOR: any authenticated user can view any invoice.
+
+    The route parameter `id` flows directly into the data lookup
+    without verifying that the current user owns this invoice.
+    An attacker can enumerate IDs to access other users' data.
+    """
+    return invoices.get(id, {"error": "not found"})
+
+
+@app.route("/invoice/<int:id>")
+def get_invoice_secure(id):
+    """FIXED: A real application would verify ownership first.
+
+    @login_required  # Ensure user is authenticated
+    invoice = Invoice.query.filter_by(id=id, user=current_user.id).first()
+    if not invoice:
+        abort(404)
+    return invoice.to_dict()
+    """
+    pass
+
+
+if __name__ == "__main__":
+    app.run()
+'''
+
+
+def _run_demo(*, colour: bool = True) -> None:
+    """Scan a built-in vulnerable code sample and display findings.
+
+    Guarantees every user sees a real finding within 5 seconds of
+    their first interaction with Ansede, regardless of whether
+    their own codebase has vulnerabilities.
+    """
+    from ansede_static.python_analyzer import analyze_python
+
+    if console and colour:
+        console.print()
+        console.print("[bold cyan]ansede-static --demo[/bold cyan]")
+        console.print("[dim]Scanning a built-in vulnerable sample to show what findings look like...[/dim]")
+        console.print()
+
+        result = analyze_python(_DEMO_CODE, filename="<demo>/app.py")
+
+        if result.findings:
+            console.print("[bold green]Found security issues in the demo sample:[/bold green]")
+            console.print()
+            # Use the existing text formatter for consistent display
+            from ansede_static.reporters import format_text
+            format_text(result, colour=colour, verbose=True)
+        else:
+            console.print("[bold yellow]⚠ No findings in demo sample — this shouldn't happen.[/bold yellow]")
+
+        console.print()
+        console.print("[bold]Try it on your own code:[/bold]")
+        console.print("  [cyan]ansede-static src/[/cyan]")
+        console.print()
+        console.print("[dim]Zero telemetry · Zero cloud · 100% offline[/dim]")
+        console.print()
+    else:
+        # Fallback without Rich
+        print()
+        print("ansede-static --demo")
+        print("Scanning a built-in vulnerable sample to show what findings look like...")
+        print()
+
+        result = analyze_python(_DEMO_CODE, filename="<demo>/app.py")
+
+        if result.findings:
+            print(f"Found {len(result.findings)} security issue(s) in the demo sample:")
+            print()
+            from ansede_static.reporters import format_text
+            print(format_text(result, colour=False, verbose=True))
+        else:
+            print("WARNING: No findings in demo sample — this shouldn't happen.")
+
+        print()
+        print("Try it on your own code:")
+        print("  ansede-static src/")
+        print()
+
+
 def _handle_graceful_shutdown() -> None:
     """Print a clean shutdown message and exit with code 130 (SIGINT convention)."""
     msg = "\nansede-static: scan interrupted by user (Ctrl+C)."
@@ -2355,6 +2459,11 @@ def _main_impl() -> None:
     if getattr(args, "dse_validate", False):
         _run_dse_validation(getattr(args, "golden_corpus", None))
         sys.exit(0)
+
+    # ── Demo: scan built-in vulnerable sample and exit ─────────────────
+    if getattr(args, "demo", False):
+        _run_demo(colour=args.colour)
+        sys.exit(0)  # Demo is educational — always exit clean
 
     # ── License feature gating ──────────────────────────────────────────
     gate = LicenseFeatureGate()

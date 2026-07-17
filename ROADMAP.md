@@ -1,6 +1,12 @@
 # Ansede Static — Roadmap to World's Best SAST
 
-**Updated:** 2026-07-08 | **Current version:** v6.0.0 | **Status:** 1,249 tests, 0 failures, OWASP 93.3% recall, 6 languages
+**Updated:** 2026-07-17 | **Current version:** v6.4.0 | **Status:** 1,268 tests passing, 100% CVE recall, 5 languages
+
+> **This is the single source of truth for Ansede's roadmap.** For deeper dives, see:
+> - [Production Readiness](PRODUCTION_ROADMAP.md) — deployment-readiness tracker
+> - [v3 Milestone Status](docs/v3-roadmap-status.md) — v3 feature tracking
+> - [Language Parser Plans](docs/native-language-parser-roadmap.md) — tree-sitter integration
+> - [Growth & Adoption Strategy](ANSEDE_GROWTH_STRATEGY.md) — marketing & community plan
 
 ---
 

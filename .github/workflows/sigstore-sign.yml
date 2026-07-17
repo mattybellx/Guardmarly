@@ -1,0 +1,98 @@
+# Sigstore Keyless Signing for PyPI Releases
+# Signs Python packages with Sigstore (OIDC-based, no key management)
+# Adds to the existing publish.yml workflow.
+#
+# This is a DROP-IN snippet. Add to publish.yml after the "Build distribution" step.
+#
+# Prerequisites:
+#   1. PyPI project must have Trusted Publishing configured (already set up in publish.yml)
+#   2. GitHub Actions must have id-token: write permission (already set)
+#   3. Install sigstore: pip install sigstore
+
+name: Sigstore Sign (Add to publish.yml)
+
+# ── Add this job to the existing publish.yml workflow ─────────────────
+
+# In the existing publish.yml, add this after the "Build distribution" step:
+
+#   - name: Sign packages with Sigstore
+#     run: |
+#       pip install sigstore
+#       for f in dist/*.tar.gz dist/*.whl; do
+#         python -m sigstore sign "$f" --output-signature "$f.sigstore.json"
+#       done
+#
+#   - name: Upload signatures to release
+#     if: startsWith(github.ref, 'refs/tags/')
+#     uses: softprops/action-gh-release@v2
+#     with:
+#       files: dist/*.sigstore.json
+
+# ── OR add as a separate job that releases can call ───────────────────
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  sign:
+    name: Sign with Sigstore
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install sigstore
+        run: pip install sigstore
+
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: python-packages
+          path: dist/
+
+      - name: Sign packages
+        run: |
+          for f in dist/*.tar.gz dist/*.whl; do
+            if [ -f "$f" ]; then
+              echo "Signing $f..."
+              python -m sigstore sign "$f" --output-signature "${f}.sigstore.json"
+              echo "  Created ${f}.sigstore.json"
+            fi
+          done
+
+      - name: Upload signatures as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sigstore-signatures
+          path: dist/*.sigstore.json
+          retention-days: 7
+
+      - name: Attach signatures to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.sigstore.json
+
+# ── Verification Instructions (for users) ─────────────────────────────
+#
+# Users can verify signatures with:
+#
+#   pip install sigstore
+#   python -m sigstore verify identity \
+#     --cert-identity https://github.com/mattybellx/Ansede/.github/workflows/publish.yml@refs/tags/v6.4.0 \
+#     --cert-oidc-issuer https://token.actions.githubusercontent.com \
+#     dist/ansede_static-6.4.0-py3-none-any.whl
+#
+# Or use the GitHub CLI:
+#
+#   gh attestation verify dist/ansede_static-6.4.0-py3-none-any.whl \
+#     --repo mattybellx/Ansede

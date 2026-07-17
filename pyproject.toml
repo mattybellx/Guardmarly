@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "ansede-static"
 version = "6.4.0"
-description = "Offline SAST for 5 languages — 100% precision, 1,266 tests. Detects IDOR, auth bypass, injection flaws, hardcoded secrets, prototype pollution, and 28+ CWE categories missed by Semgrep and CodeQL."
+description = "Find IDOR, missing authorization, SQL injection, and 30+ vulnerability types in Python, JavaScript, Go, Java, and C#. 100% CVE recall. Zero false positives on clean code. Fully offline. No API keys needed."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
