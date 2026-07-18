@@ -299,13 +299,14 @@ function createColoredIconPath(context, color) {
 function deactivate() { }
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function isSupportedLanguage(lang) {
-    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp'].includes(lang);
+    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp', 'ruby', 'php', 'rust'].includes(lang);
 }
 function mapLanguage(lang) {
     const map = {
         python: 'python', javascript: 'javascript', typescript: 'javascript',
         javascriptreact: 'javascript', typescriptreact: 'javascript',
-        go: 'go', java: 'java', csharp: 'csharp'
+        go: 'go', java: 'java', csharp: 'csharp',
+        ruby: 'ruby', php: 'php', rust: 'rust'
     };
     return map[lang] || 'python';
 }

@@ -332,14 +332,15 @@ export function deactivate() {}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function isSupportedLanguage(lang: string): boolean {
-    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp'].includes(lang);
+    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp', 'ruby', 'php', 'rust'].includes(lang);
 }
 
 function mapLanguage(lang: string): string {
     const map: Record<string, string> = {
         python: 'python', javascript: 'javascript', typescript: 'javascript',
         javascriptreact: 'javascript', typescriptreact: 'javascript',
-        go: 'go', java: 'java', csharp: 'csharp'
+        go: 'go', java: 'java', csharp: 'csharp',
+        ruby: 'ruby', php: 'php', rust: 'rust'
     };
     return map[lang] || 'python';
 }

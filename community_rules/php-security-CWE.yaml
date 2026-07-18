@@ -1,0 +1,45 @@
+# PHP security rules — pattern-based (AST analyzer planned for v0.2)
+rules:
+  - id: PHP-CWE-78
+    metadata:
+      title: "Command injection via exec/system/shell_exec"
+      severity: CRITICAL
+      cwe: "CWE-78"
+      description: "User input flowing into shell command execution"
+    target_layers: [php]
+    patterns:
+      - pattern: '(exec|system|shell_exec|passthru)\s*\(\s*\$'
+        message: "Command execution with variable input — use escapeshellarg()"
+
+  - id: PHP-CWE-89
+    metadata:
+      title: "SQL injection via string concatenation"
+      severity: CRITICAL
+      cwe: "CWE-89"
+      description: "SQL query built with concatenated user input"
+    target_layers: [php]
+    patterns:
+      - pattern: '(mysql_query|mysqli_query|pg_query)\s*\(\s*["\'].*\$'
+        message: "SQL query with variable — use PDO prepared statements"
+
+  - id: PHP-CWE-79
+    metadata:
+      title: "XSS via echo/print with user input"
+      severity: HIGH
+      cwe: "CWE-79"
+      description: "User input echoed without escaping"
+    target_layers: [php]
+    patterns:
+      - pattern: '(echo|print)\s+\$_(GET|POST|REQUEST|COOKIE)'
+        message: "Direct output of user input — use htmlspecialchars()"
+
+  - id: PHP-CWE-798
+    metadata:
+      title: "Hardcoded credential in PHP source"
+      severity: HIGH
+      cwe: "CWE-798"
+      description: "Password or API key hardcoded"
+    target_layers: [php]
+    patterns:
+      - pattern: '\$(password|api_key|secret|token)\s*=\s*["\'][A-Za-z0-9_\-]{8,}'
+        message: "Hardcoded credential — use environment variables"

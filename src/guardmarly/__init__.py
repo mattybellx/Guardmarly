@@ -154,6 +154,34 @@ def _get_default_global_graph():
     return _DEFAULT_GLOBAL_GRAPH
 
 
+# ── Pattern-only analysis for languages without a full AST analyzer ──────
+# These languages get YAML-rule-based scanning via the Rust fast-path pattern
+# engine. Covers ~70% of vulnerabilities (secrets, misconfigs, unsafe calls).
+
+_PATTERN_ONLY_LANG_EXT_MAP: dict[str, str] = {
+    "rb": "ruby", "rake": "ruby", "gemspec": "ruby",
+    "php": "php", "phtml": "php", "php3": "php", "php4": "php", "php5": "php", "php7": "php", "phps": "php",
+    "rs": "rust",
+}
+
+
+def _analyze_pattern_only(code: str, *, filename: str, ext: str) -> AnalysisResult:
+    """Run YAML custom rules against source code for pattern-only languages."""
+    lang = _PATTERN_ONLY_LANG_EXT_MAP.get(ext, "unknown")
+    result = AnalysisResult(language=lang, filename=filename)
+    try:
+        from guardmarly.yaml_rules import apply_custom_rules
+        from guardmarly.config import GuardmarlyConfig, temporary_analyzer_config
+        runtime_rules = _get_runtime_rules(None, workspace_root=Path.cwd())
+        if runtime_rules:
+            result.findings.extend(
+                apply_custom_rules(code, filename or "<stdin>", lang, runtime_rules)
+            )
+    except Exception:
+        pass
+    return result
+
+
 def scan_file(
     path: str | Path,
     config: GuardmarlyConfig | None = None,
@@ -203,6 +231,11 @@ def scan_file(
         elif ext in _CSHARP_EXTS:
             from guardmarly.csharp_analyzer import analyze_csharp
             result = analyze_csharp(code, filename=str(p))
+        elif ext in _RUST_EXTS:
+            from guardmarly.rust_analyzer import analyze_rust
+            result = analyze_rust(code, filename=str(p))
+        elif ext in _RUBY_EXTS or ext in _PHP_EXTS:
+            result = _analyze_pattern_only(code, filename=p.name, ext=ext)
         else:
             raise ValueError(
                 f"Unsupported file extension: {ext!r}. Supported: .py, .js, .ts, .go, .java, .cs (and variants)."

@@ -254,7 +254,7 @@ fn fast_pattern_rules(py: Python, code: &str, rules_json: &str) -> PyResult<PyOb
 
 #[pyfunction]
 fn supported_languages() -> Vec<&'static str> {
-    vec!["python", "javascript", "typescript", "java", "go", "csharp"]
+    vec!["python", "javascript", "typescript", "java", "go", "csharp", "ruby", "php", "rust"]
 }
 
 #[pyfunction]
