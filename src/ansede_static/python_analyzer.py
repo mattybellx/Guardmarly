@@ -8098,9 +8098,20 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
             ))
 
     # CWE-79: XSS via response rendering
+    # Suppress in HTTP *client* library packages where Response() constructs a
+    # client-side object, not a web framework response that renders to browsers.
+    _HTTP_CLIENT_PATH_PATTERNS = (
+        "/requests/", "/urllib3/", "/httpx/", "/aiohttp/",
+        "/http/client/", "/httplib/", "/httpcore/",
+    )
+    _is_http_client_path = any(p in filename.lower().replace("\\", "/") for p in _HTTP_CLIENT_PATH_PATTERNS)
     for m in _PY_XSS_SINK.finditer(code):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
+        matched = m.group().lower()
+        # Skip Response(...)/redirect(...) in HTTP client library packages
+        if _is_http_client_path and any(kw in matched for kw in ("response", "httpresponse", "redirect")):
+            continue
         if any(kw in context.lower() for kw in ('request', 'param', 'data', 'content', 'body', 'user_input', 'args', 'form')):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
@@ -8138,6 +8149,10 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
         matched = m.group()
         # Skip method calls like f.read(), obj.write() — not path traversal
         if m.start() > 0 and code[m.start() - 1] == '.':
+            continue
+        # Skip in HTTP client libraries where file ops are internal logic
+        if _is_http_client_path:
+            continue
             continue
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         # Skip if secure_filename / werkzeug sanitizer is used
