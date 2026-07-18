@@ -2,7 +2,7 @@
   "name": "guardmarly",
   "displayName": "Guardmarly — Offline SAST Security Scanner",
   "description": "Zero-dependency SAST for Python, JS/TS, Go, Java & C#. Built-in IDOR detection. 100% CVE recall. Trace-backed findings inline while you code.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "publisher": "guardmarly",
   "icon": "guardmarly-logo-128.png",
   "repository": {
@@ -47,6 +47,10 @@
       {
         "command": "guardmarly.scanWorkspace",
         "title": "Guardmarly: Scan workspace"
+      },
+      {
+        "command": "guardmarly.showFindings",
+        "title": "Guardmarly: Show findings"
       }
     ],
     "configuration": {
