@@ -1,22 +1,21 @@
-# Copilot Instructions for Monorepo
+# Copilot Instructions — Ansede Static
 
-- [x] Clarify Project Requirements
-- [x] Scaffold the Project
-- [x] Customize the Project
-- [x] Compile the Project
-- [x] Create and Run Task (CI/CD pipelines active, 13 jobs passing)
-- [x] Launch the Project (ansede.onrender.com live, Stripe payments active)
-- [x] Ensure Documentation is Complete
+Always read `AGENTS.md` first — it has the full repo map, commands, and architecture.
 
-## Current Status — v4.1.0
+## Rules for this workspace
 
-- 58 real-world repos scanned, 0 failures
-- 21,871+ files, 3,186,097+ lines, 130+ MB source analyzed
-- 100% CVE recall (164/164) across all 5 languages
-- 100% quality gate (37/37 cases, 63/63 checks, 15/15 shadow detectors)
-- 1,147 unit tests passing in ~16s
-- 3-tool comparison published: Ansede 100% vs Semgrep 23.2% vs CodeQL 33.6%
-- 35+ CWE types detected in production codebases
-- 49.6% finding reduction via incident clustering
+- Never import from `benchmarks`, `tools`, `scripts`, `webapp`, `campaign`, `docs`, or `site` — these were deleted July 2026.
+- `python_analyzer.py` is 8,500+ lines; prefer grep_search before reading blind.
+- `id()`-based memoization is used in `_get_taint_source` and `_get_sink_name` — sensitive to Python version.
+- Self-scan CI excludes `src/` and `ansede_rust_core/` to avoid false positives on rule catalog strings.
+- Lint errors in `cli.py` are all pre-existing (~25 type-checker warnings), not from recent changes.
+- Run `pytest tests/ -q` after any change to verify nothing broke (1,183 tests, ~12s).
+
+## Current Status
+
+- 1,183 tests passing
 - 5 languages: Python, JavaScript/TypeScript, Go, Java, C#
+- 100% CVE recall (164/164)
+- 35+ CWE types
 - Incident clustering, symbolic guards, VLQ source maps, shadow detectors all active
+- CI: 8 workflows (test+lint, quality gates, release, publish, self-scan, Docker, SBOM, Sigstore)
