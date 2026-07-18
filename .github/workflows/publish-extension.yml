@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'vscode-extension/**'
+    tags:
+      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:

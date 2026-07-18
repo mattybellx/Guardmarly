@@ -1093,9 +1093,10 @@ _PATH_LIKE_NAME_RE: re.Pattern[str] = re.compile(
 # Taint helper functions
 # ──────────────────────────────────────────────────────────────────────────────
 
-# ── v6.6: Per-file memoization caches for hot-path functions ──
-_taint_source_cache: dict[int, str | None] = {}
-_sink_name_cache: dict[int, str | None] = {}
+# ── v6.7: Per-file memoization caches for hot-path functions ──
+# Keys are (lineno, col_offset, type_name) tuples for stable cross-version caching.
+_taint_source_cache: dict[tuple[int, int, str], str | None] = {}
+_sink_name_cache: dict[tuple[int, int, str], str | None] = {}
 
 
 def _clear_per_file_caches() -> None:
@@ -1107,10 +1108,10 @@ def _clear_per_file_caches() -> None:
 def _get_taint_source(node: ast.expr) -> str | None:
     """Return a human-readable taint-source description, or None if node is not tainted.
 
-    v6.6: Uses per-file id()-based memoization. Called ~10k times per file during
-    taint analysis; caching reduces this to ~1k unique lookups.
+    v6.7: Uses (lineno, col_offset, type) as cache key instead of id() to avoid
+    Python-version-dependent id() collisions (e.g. CPython 3.12 vs 3.14).
     """
-    nid = id(node)
+    nid = (getattr(node, "lineno", 0), getattr(node, "col_offset", 0), type(node).__name__)
     if nid in _taint_source_cache:
         return _taint_source_cache[nid]
 
@@ -1325,9 +1326,9 @@ def _get_sink_name(node: ast.Call) -> str | None:
     in the full call path.  This prevents false positives like re.search()
     being flagged as LDAP injection.
 
-    v6.6: Uses per-file id()-based memoization.
+    v6.7: Uses (lineno, col_offset, type) as cache key instead of id().
     """
-    nid = id(node)
+    nid = (getattr(node, "lineno", 0), getattr(node, "col_offset", 0), type(node).__name__)
     if nid in _sink_name_cache:
         return _sink_name_cache[nid]
 
