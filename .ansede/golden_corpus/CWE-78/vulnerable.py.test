@@ -1,0 +1,14 @@
+# Golden Corpus: Command Injection (CWE-78)
+# MUST trigger the rule
+
+import subprocess
+import os
+
+def run_command(user_input):
+    subprocess.call("ls -la " + user_input, shell=True)
+
+def ping_host(host):
+    os.system("ping -c 1 " + host)
+
+def exec_cmd(cmd):
+    subprocess.run(cmd, shell=True)

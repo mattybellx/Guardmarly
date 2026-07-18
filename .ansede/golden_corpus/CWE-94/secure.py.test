@@ -1,0 +1,15 @@
+# Golden Corpus: Code Injection (CWE-94) — Python
+# MUST NOT trigger the rule
+
+import json
+
+def parse_value(raw: str) -> int | float | str | list | dict | None:
+    """Safe: JSON parsing only — no eval, exec, or compile."""
+    try:
+        return json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return raw
+
+def compute_total(items: list[dict]) -> float:
+    """Safe: pure computation, no dynamic code execution."""
+    return sum(item.get("price", 0) for item in items)

@@ -1,0 +1,14 @@
+# Golden Corpus: Code Injection (CWE-94) — Python
+# MUST trigger the rule
+
+def evaluate_expression(user_input):
+    return eval(user_input)  # Direct code injection
+
+def compile_user_code(code):
+    exec(code)  # Arbitrary code execution
+
+def dynamic_import(module_name):
+    return __import__(module_name)  # User-controlled import
+
+def run_expression(expr):
+    return eval(f"lambda x: {expr}")  # Code injection via f-string eval

@@ -1,0 +1,26 @@
+// Golden Corpus: XSS (CWE-79) — JavaScript
+// MUST trigger the rule
+
+const express = require('express');
+const app = express();
+
+app.get('/search', (req, res) => {
+    const q = req.query.q;
+    res.send(`<h1>Results for ${q}</h1>`);  // Unescaped in HTML
+});
+
+app.get('/profile', (req, res) => {
+    const name = req.query.name;
+    const html = '<div>Welcome, ' + name + '</div>';
+    res.send(html);
+});
+
+// DOM XSS
+app.get('/render', (req, res) => {
+    res.send(`
+        <script>
+            const name = '${req.query.name}';
+            document.getElementById('greeting').innerHTML = name;
+        </script>
+    `);
+});
