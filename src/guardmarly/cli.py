@@ -37,6 +37,7 @@ from guardmarly.js_engine.backends import (
 from guardmarly.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
 from guardmarly.rules import describe_rule, list_rule_contracts
 from guardmarly import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS, _KOTLIN_EXTS, _SWIFT_EXTS, _DART_EXTS, _LUA_EXTS, _ELIXIR_EXTS, _SCALA_EXTS, _CLOJURE_EXTS, _HASKELL_EXTS, _SHELL_EXTS, _DOCKERFILE_EXTS, _TERRAFORM_EXTS
+from guardmarly.__init__ import _analyze_pattern_only
 
 from guardmarly.ir.global_graph import GlobalGraph
 from guardmarly.profiler import ScanProfiler
@@ -584,6 +585,8 @@ def _analyze_file(
     elif lang == "rust":
         from guardmarly.rust_analyzer import analyze_rust
         result = analyze_rust(code, filename=str(path))
+    elif lang in ("kotlin", "swift", "dart", "lua", "elixir", "scala", "clojure", "haskell", "shell", "dockerfile", "terraform"):
+        result = _analyze_pattern_only(code, filename=str(path), ext=path.suffix.lower().lstrip('.'))
     else:
         result = AnalysisResult(file_path=str(path), language="unknown")
 
