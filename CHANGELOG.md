@@ -3,6 +3,23 @@
 All notable changes to guardmarly are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [6.5.0] — 2026-07-18
+
+### Added
+- **VS Code Extension v1.2.0** — Gutter severity decorations (red/orange/yellow dots), findings quick-pick (click status bar), scan spinner animation, auto CLI detection (pip/python -m/python3 -m), friendly install prompt when CLI missing. Slim 28KB package.
+- **Live scan counter** on guardmarly.onrender.com landing page
+- **CI pipeline reference** at `.github/CI.md` documenting all auto-deploy triggers
+
+### Changed
+- VS Code extension now auto-detects guardmarly CLI via multiple methods
+- Extension publish triggers on every push to main (vscode-extension/** changes)
+- Render.com auto-deploys via Dockerfile with persistent scan counter
+
+### Fixed
+- Release workflow: `softprops/action-gh-release` downgraded to v1 (v2 API bug)
+- Extension CI: `@types/node` types resolution, icon files tracked in git
+- Webapp Docker build: removed redundant guardmarly pip install (source copied directly)
+
 ## [6.3.0] — 2026-07-13
 
 ### Added

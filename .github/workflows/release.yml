@@ -84,7 +84,7 @@ jobs:
           find . -type f ! -name "SHA256SUMS.txt" ! -name "RELEASE_NOTES.md" -exec sha256sum {} \; > SHA256SUMS.txt
 
       - name: Generate GitHub Official Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v1
         with:
           body_path: accumulated_dist/RELEASE_NOTES.md
           files: |
