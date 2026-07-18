@@ -5,7 +5,7 @@ root = Path(__file__).resolve().parent.parent
 exts = frozenset({'.py', '.pyi', '.js', '.ts', '.jsx', '.tsx',
                    '.go', '.java', '.cs', '.rb', '.php', '.rake'})
 count = 0
-for sub in ['src', 'tests', 'benchmarks']:
+for sub in ['src', 'tests']:
     d = root / sub
     if d.is_dir():
         count += sum(1 for f in d.rglob('*') if f.is_file() and f.suffix.lower() in exts)

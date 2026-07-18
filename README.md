@@ -203,11 +203,10 @@ Flags: `--diff-only` (PR-only) · `--fail-on` (CI gate) · `--baseline` (new fin
 ```bash
 git clone https://github.com/mattybellx/Ansede.git
 cd Ansede && pip install -e ".[dev]"
-pytest tests/ -q                       # 1,268+ tests in ~16s
-python -m benchmarks.nvd_benchmark     # Verify CVE recall yourself
+pytest tests/ -q                       # 1,183+ tests in ~11s
 ```
 
-PRs welcome. Start with a [`good first issue`](https://github.com/mattybellx/Ansede/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or write a [community rule](docs/writing-rules.md). See [CONTRIBUTING.md](CONTRIBUTING.md).
+PRs welcome. Start with a [`good first issue`](https://github.com/mattybellx/Ansede/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 
 ---
 

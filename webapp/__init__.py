@@ -1,1 +1,0 @@
-# ansede-studio web application

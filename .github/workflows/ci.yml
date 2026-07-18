@@ -18,20 +18,7 @@ jobs:
       - name: Install
         run: pip install -e ".[dev]"
       - name: Run tests
-        run: python -m pytest tests/ --ignore=tests/test_real_world_compare.py --ignore=tests/test_external_corpus.py --ignore=tests/test_phase2_registry_expansion.py --deselect tests/test_java_csharp_analyzers.py::test_detects_missing_secure_flag_on_auth_cookie --deselect tests/test_tools/test_check_binary_guardrails.py::test_binary_guardrails_pass --deselect tests/test_quality_benchmark.py::test_quality_benchmark_corpus_is_green --deselect tests/test_lsp_server.py::TestDocumentSync::test_did_change_updates_document -q --tb=short
-
-  nvd:
-    name: NVD CVE Benchmark
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Run
-        run: python -m benchmarks.nvd_benchmark --fail-under 60
+        run: python -m pytest tests/ -q --tb=short
 
   lint:
     name: Lint

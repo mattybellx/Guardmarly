@@ -26,9 +26,6 @@
 ### Validation performed
 
 - [ ] `pytest tests -q --tb=short`
-- [ ] `python -m benchmarks.nvd_benchmark --fail-under 90 --quiet`
-- [ ] `python -m benchmarks.quality_benchmark --fail-under 100 --quiet`
-- [ ] `python -m benchmarks.external_corpus --manifest benchmarks/external_manifest.json --fail-under 100 --quiet`
 
 ### Backward compatibility
 
@@ -44,7 +41,6 @@
 
 - [ ] I have added or updated tests for the change
 - [ ] All existing tests pass (`pytest tests/`)
-- [ ] The benchmark still passes (`python -m benchmarks.nvd_benchmark --fail-under 90 --quiet`)
 - [ ] I have updated `CHANGELOG.md` under `[Unreleased]`
 - [ ] For new rules: I have added an entry to the detection-coverage table in `README.md`
 

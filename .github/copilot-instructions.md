@@ -3,11 +3,10 @@
 - [x] Clarify Project Requirements
 - [x] Scaffold the Project
 - [x] Customize the Project
-- [x] Install Required Extensions (IntelliJ + VS plugins built)
-- [x] Compile the Project (both IDE plugins compile, PyPI v2.3.1 published)
+- [x] Compile the Project
 - [x] Create and Run Task (CI/CD pipelines active, 13 jobs passing)
 - [x] Launch the Project (ansede.onrender.com live, Stripe payments active)
-- [x] Ensure Documentation is Complete (scorecard, benchmarks, READMEs, plugin docs)
+- [x] Ensure Documentation is Complete
 
 ## Current Status — v4.1.0
 
@@ -21,8 +20,3 @@
 - 49.6% finding reduction via incident clustering
 - 5 languages: Python, JavaScript/TypeScript, Go, Java, C#
 - Incident clustering, symbolic guards, VLQ source maps, shadow detectors all active
-- `--pr` / `--pr-output` flags for auto-generated PR documents
-- 13 CI jobs (CI, quality gates, binary builds, IDE extensions, Docker)
-- IntelliJ IDEA plugin, VS Code extension, Visual Studio 2022 extension all built
-- Offline license server: rate-limited, Stripe-integrated
-- Full roadmap: Phase 1 (100%), Phase 2 (83%), Phase 3 (100%), Phase 5 (40%), overall 52%

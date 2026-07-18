@@ -1,8 +1,0 @@
-{
-  "date": "2026-07-01",
-  "owasp": {},
-  "interproc_findings": 3,
-  "total_findings": 7,
-  "start_recall": 30.3,
-  "end_recall": 45.0
-}

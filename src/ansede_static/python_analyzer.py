@@ -34,11 +34,13 @@ Detection coverage (28 rule categories):
   CWE-601  Open Redirect (redirect/Response with user-controlled URL)
   CWE-532  Sensitive Data Logging (PII/credentials in log calls)
   CWE-915  Mass Assignment (request.json iterated to set DB fields)
+  CWE-256  Plaintext Passwords (unhashed password comparison/storage)
   Cross-function taint (inter-procedural analysis)
 """
 from __future__ import annotations
 
 import ast
+import functools
 import io
 import re
 import warnings
@@ -1091,8 +1093,28 @@ _PATH_LIKE_NAME_RE: re.Pattern[str] = re.compile(
 # Taint helper functions
 # ──────────────────────────────────────────────────────────────────────────────
 
+# ── v6.6: Per-file memoization caches for hot-path functions ──
+_taint_source_cache: dict[int, str | None] = {}
+_sink_name_cache: dict[int, str | None] = {}
+
+
+def _clear_per_file_caches() -> None:
+    """Clear memoization caches at the end of each file scan."""
+    _taint_source_cache.clear()
+    _sink_name_cache.clear()
+
+
 def _get_taint_source(node: ast.expr) -> str | None:
-    """Return a human-readable taint-source description, or None if node is not tainted."""
+    """Return a human-readable taint-source description, or None if node is not tainted.
+
+    v6.6: Uses per-file id()-based memoization. Called ~10k times per file during
+    taint analysis; caching reduces this to ~1k unique lookups.
+    """
+    nid = id(node)
+    if nid in _taint_source_cache:
+        return _taint_source_cache[nid]
+
+    result: str | None = None
     if isinstance(node, ast.Attribute):
         parts: list[str] = []
         cur: ast.expr = node
@@ -1105,9 +1127,9 @@ def _get_taint_source(node: ast.expr) -> str | None:
         dotted = ".".join(parts)
         for src, desc in TAINT_SOURCES.items():
             if dotted.startswith(src):
-                return desc
-
-    if isinstance(node, ast.Call):
+                result = desc
+                break
+    elif isinstance(node, ast.Call):
         call_name = ""
         if isinstance(node.func, ast.Name):
             call_name = node.func.id
@@ -1123,17 +1145,15 @@ def _get_taint_source(node: ast.expr) -> str | None:
             call_name = ".".join(parts2)
         for src, desc in TAINT_SOURCES.items():
             if call_name == src or call_name.startswith(src + "."):
-                return desc
+                result = desc
+                break
+    elif isinstance(node, ast.Subscript):
+        result = _get_taint_source(node.value)
+    elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
+        result = _get_taint_source(node.func.value)
 
-    if isinstance(node, ast.Subscript):
-        return _get_taint_source(node.value)
-
-    if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute):
-        src = _get_taint_source(node.func.value)
-        if src:
-            return src
-
-    return None
+    _taint_source_cache[nid] = result
+    return result
 
 
 def _get_call_name(node: ast.Call) -> str:
@@ -1304,14 +1324,20 @@ def _get_sink_name(node: ast.Call) -> str | None:
     execute, open, etc.) MUST appear with a recognised dangerous module prefix
     in the full call path.  This prevents false positives like re.search()
     being flagged as LDAP injection.
+
+    v6.6: Uses per-file id()-based memoization.
     """
+    nid = id(node)
+    if nid in _sink_name_cache:
+        return _sink_name_cache[nid]
+
+    result: str | None = None
     if isinstance(node.func, ast.Name):
         name = node.func.id
         if name in TAINT_SINKS:
             if _is_qualified_sink_match(name, name):
-                return name
-        return None
-    if isinstance(node.func, ast.Attribute):
+                result = name
+    elif isinstance(node.func, ast.Attribute):
         parts: list[str] = []
         cur: ast.expr = node.func
         while isinstance(cur, ast.Attribute):
@@ -1321,21 +1347,24 @@ def _get_sink_name(node: ast.Call) -> str | None:
             parts.append(cur.id)
         parts.reverse()
         full = ".".join(parts)
-        # Phase 1: exact full-path matches (always accepted)
         for sink in TAINT_SINKS:
             if full == sink:
-                return sink
-        # Phase 2: suffix matches with module qualification check
-        for sink in TAINT_SINKS:
-            if full.endswith("." + sink):
-                if _is_qualified_sink_match(full, sink):
-                    return sink
-        # Phase 3: bare attribute name match with qualification (legacy fallback)
-        attr = node.func.attr
-        if attr in TAINT_SINKS:
-            if _is_qualified_sink_match(full, attr):
-                return attr
-    return None
+                result = sink
+                break
+        if result is None:
+            for sink in TAINT_SINKS:
+                if full.endswith("." + sink):
+                    if _is_qualified_sink_match(full, sink):
+                        result = sink
+                        break
+        if result is None:
+            attr = node.func.attr
+            if attr in TAINT_SINKS:
+                if _is_qualified_sink_match(full, attr):
+                    result = attr
+
+    _sink_name_cache[nid] = result
+    return result
 
 
 def _unpack_sink_info(info: _SinkInfo) -> tuple[str, str, str | None]:
@@ -2421,6 +2450,17 @@ _FRAMEWORK_INTERNAL_PY_MARKERS: tuple[str, ...] = (
     "/py-peewee/",
     "/scrapy/scrapy/",
     "/py-scrapy/",
+    # ── Granular Django subdirectories (v6.6 noise reduction) ──
+    "/django/template/",
+    "/django/forms/",
+    "/django/db/backends/",
+    "/django/db/models/sql/",
+    "/django/core/handlers/",
+    "/django/conf/",
+    "/django/contrib/admin/",
+    "/django/utils/",
+    "/django/core/management/",
+    "/django/core/servers/",
     # JavaScript frameworks
     "/express/lib/",
     "/js-express/",
@@ -2464,6 +2504,23 @@ _FRAMEWORK_INTERNAL_PY_NOISE_RULES: frozenset[str] = frozenset({
     "PY-035",  # mass assignment in form processing internals
     "PY-045",  # path traversal via open() taint — framework I/O helpers use controlled paths
 })
+
+# ── v6.6: Per-CWE noise suppression for specific framework sub-paths ──
+# These CWEs are noise in these framework directories because they represent
+# framework-internal plumbing (template engines, DB introspection, settings docs)
+# not application-level vulnerabilities.
+_FRAMEWORK_PATH_CWE_NOISE: dict[str, frozenset[str]] = {
+    "/django/template/": frozenset({"CWE-79", "CWE-94"}),
+    "/django/forms/": frozenset({"CWE-79"}),
+    "/django/conf/": frozenset({"CWE-1188", "CWE-798", "CWE-327"}),
+    "/django/core/handlers/": frozenset({"CWE-617", "CWE-252"}),
+    "/django/core/management/": frozenset({"CWE-78"}),
+    "/flask/": frozenset({"CWE-79", "CWE-1188"}),
+    "/fastapi/": frozenset({"CWE-79"}),
+}
+
+# ── v6.6: Rules that are known noise in ALL framework-internal paths ──
+# (expanded from original set)
 
 # Rules that are expected noise in test/example/doc files (not framework-specific)
 _TEST_FILE_NOISE_RULES: frozenset[str] = frozenset({
@@ -2688,10 +2745,21 @@ def _apply_python_noise_policy(findings: list[Finding], filename: str) -> list[F
     if not is_framework_internal and not is_ansede_internal and not is_test:
         return findings
 
+    path_norm = filename.replace("\\", "/").lower()
     for finding in findings:
         reason = ""
         # ── Framework-internal noise ────────────────────────────────────
         if is_framework_internal:
+            # v6.6: Per-CWE suppression takes priority over rule-ID suppression
+            cwe_suppressed = False
+            for frag, cwes in _FRAMEWORK_PATH_CWE_NOISE.items():
+                if frag in path_norm and finding.cwe in cwes:
+                    finding.confidence = 0.0  # skip guard/cluster/dedup entirely
+                    cwe_suppressed = True
+                    break
+            if cwe_suppressed:
+                continue
+
             if finding.rule_id in _FRAMEWORK_INTERNAL_PY_NOISE_RULES or _is_framework_internal_python_noise_path(finding.rule_id, filename):
                 if _is_framework_internal_python_noise_exempt(finding.rule_id, filename):
                     continue
@@ -2720,6 +2788,9 @@ def _apply_python_noise_policy(findings: list[Finding], filename: str) -> list[F
         finding.confidence = min(finding.confidence, 0.25)
         if reason not in finding.description:
             finding.description = f"{finding.description} ({reason})"
+
+    # v6.6: Filter out findings with zero confidence (per-CWE suppressed)
+    findings = [f for f in findings if f.confidence > 0.0]
     return findings
 
 
@@ -7197,8 +7268,297 @@ def _rule_52(ctx: _Ctx) -> list[Finding]:
     return _assign_rule_ids(findings, "PY-065")
 
 
+def _rule_53(ctx: _Ctx) -> list[Finding]:
+    """CWE-256: Plaintext password storage or comparison without hashing."""
+    findings: list[Finding] = []
+    func_defs = ctx.func_defs
+
+    # Patterns that indicate password/hash verification functions — safe contexts
+    _HASH_VERIFY_RE = re.compile(
+        r'(?:check_password_hash|verify_password|checkpw|pbkdf2|verify_hash|'
+        r'argon2|scrypt|bcrypt|hashlib|compare_digest|hmac|passlib|'
+        r'werkzeug\.security\.check_password_hash|django\.contrib\.auth\.hashers\.check_password)',
+        re.IGNORECASE,
+    )
+    # Variables/fields that look like hashed password results
+    _HASHED_PASSWORD_VARS_RE = re.compile(
+        r'(?:hashed|hash|pwhash|password_hash|pw_hash|digest|'
+        r'hashed_password|hashed_pw|password_digest|encrypted_pw)',
+        re.IGNORECASE,
+    )
+
+    for fname, fnode in func_defs.items():
+        # Pre-scan: if the function uses any hash verification library, skip entirely
+        code_block = ctx.lines[fnode.lineno - 1:fnode.end_lineno] if fnode.end_lineno else []
+        block_text = "\n".join(code_block)
+        if _HASH_VERIFY_RE.search(block_text):
+            continue
+
+        # Collect variables that hold hashed passwords (safe)
+        hashed_vars: set[str] = set()
+        for node in ast.walk(fnode):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if isinstance(t, ast.Name) and _HASHED_PASSWORD_VARS_RE.search(t.id):
+                        hashed_vars.add(t.id)
+                    if isinstance(t, ast.Attribute) and _HASHED_PASSWORD_VARS_RE.search(t.attr):
+                        hashed_vars.add(_safe_unparse(t))
+
+        # ── Build transitive password_source tracking ──────
+        # First pass: collect all variables assigned from direct taint sources
+        password_sources: dict[str, int] = {}  # var_name → line
+        for arg in fnode.args.args:
+            if arg.arg.lower() in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                password_sources[arg.arg] = fnode.lineno
+
+        for node in ast.walk(fnode):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if not isinstance(t, ast.Name):
+                        continue
+                    src = _get_taint_source(node.value)
+                    if src:
+                        # Check if the value comes from a password-named field
+                        if isinstance(node.value, ast.Subscript):
+                            if isinstance(node.value.slice, ast.Constant) and isinstance(node.value.slice.value, str):
+                                field = node.value.slice.value.lower()
+                                if field in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                                    password_sources[t.id] = node.lineno
+                        elif isinstance(node.value, ast.Call):
+                            callee = _get_call_name(node.value)
+                            if callee and "get" in callee and node.value.args:
+                                first = node.value.args[0]
+                                if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                                    field = first.value.lower()
+                                    if field in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                                        password_sources[t.id] = node.lineno
+                        elif isinstance(node.value, ast.Attribute):
+                            # e.g. data = request.form or data = request.json
+                            # Don't tag the whole dict as password source, but mark it as tainted
+                            pass
+
+        # Second pass: transitive propagation — if a variable was assigned from
+        # request.get_json() and later data.get("password") is used, track data as
+        # a container of password-like values
+        tainted_containers: dict[str, str] = {}  # var_name → source_desc
+        # Also seed function parameters that look like request/input carriers
+        for arg in fnode.args.args:
+            if arg.arg.lower() in ("request", "req", "data", "body", "payload", "request_data", "form", "params"):
+                tainted_containers[arg.arg] = f"function parameter `{arg.arg}`"
+
+        for node in ast.walk(fnode):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if not isinstance(t, ast.Name):
+                        continue
+                    src = _get_taint_source(node.value)
+                    if src:
+                        tainted_containers[t.id] = src
+
+        # Third pass: transitive — if x in tainted_containers and y = x.get("password"), y is a password source
+        for node in ast.walk(fnode):
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if not isinstance(t, ast.Name):
+                        continue
+                    # Check: value = container.get("password"/"passwd"/etc)
+                    if isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute):
+                        if node.value.func.attr == "get" and isinstance(node.value.func.value, ast.Name):
+                            container = node.value.func.value.id
+                            if container in tainted_containers and node.value.args:
+                                first = node.value.args[0]
+                                if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                                    field = first.value.lower()
+                                    if field in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                                        password_sources[t.id] = node.lineno
+                        # Also: list/dict subscript access: d["password"]
+                    if isinstance(node.value, ast.Subscript) and isinstance(node.value.value, ast.Name):
+                        container = node.value.value.id
+                        if container in tainted_containers and isinstance(node.value.slice, ast.Constant):
+                            field = str(node.value.slice.value).lower()
+                            if field in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                                password_sources[t.id] = node.lineno
+
+        if not password_sources and not tainted_containers:
+            continue
+
+        # Walk the AST looking for comparisons and assignments
+        for node in ast.walk(fnode):
+            # Pattern 1: if password_var == obj.password  (plaintext comparison)
+            if isinstance(node, ast.Compare):
+                left = node.left
+                for op, comparator in zip(node.ops, node.comparators):
+                    if not isinstance(op, (ast.Eq, ast.Is)):
+                        continue  # only flag exact equality checks
+                    # Check left side: is it a password source?
+                    left_is_pw = (isinstance(left, ast.Name) and left.id in password_sources)
+                    right_is_pw = (isinstance(comparator, ast.Name) and comparator.id in password_sources)
+
+                    # Check for .password attribute on either side
+                    left_has_pw_field = (isinstance(left, ast.Attribute) and
+                                         left.attr.lower() in ("password", "passwd", "pwd"))
+                    right_has_pw_field = (isinstance(comparator, ast.Attribute) and
+                                          comparator.attr.lower() in ("password", "passwd", "pwd"))
+
+                    # Also detect subscript access: user["password"], d["password"]
+                    left_is_pw_subscript = False
+                    right_is_pw_subscript = False
+                    if isinstance(left, ast.Subscript) and isinstance(left.slice, ast.Constant):
+                        left_is_pw_subscript = str(left.slice.value).lower() in ("password", "passwd", "pwd")
+                    if isinstance(comparator, ast.Subscript) and isinstance(comparator.slice, ast.Constant):
+                        right_is_pw_subscript = str(comparator.slice.value).lower() in ("password", "passwd", "pwd")
+
+                    # Case A: password_source == obj.password  or  password_source == obj["password"]
+                    if left_is_pw and (right_has_pw_field or right_is_pw_subscript):
+                        pw_var = left.id if isinstance(left, ast.Name) else "password"
+                        obj_text = _safe_unparse(comparator)[:60]
+                        findings.append(Finding(
+                            category="security", severity=Severity.CRITICAL,
+                            title=f"CWE-256: Plaintext password comparison in {fname}() at line {node.lineno}",
+                            description=(
+                                f"`{pw_var} == {obj_text}` at L{node.lineno} compares a plaintext password "
+                                f"against a stored value. Passwords should NEVER be stored or compared in plaintext. "
+                                f"Use bcrypt/argon2 hashing with constant-time comparison."
+                            ),
+                            line=node.lineno,
+                            suggestion="Hash passwords with bcrypt: `bcrypt.hashpw(password.encode(), bcrypt.gensalt())`. "
+                                       "Compare with: `bcrypt.checkpw(password.encode(), stored_hash)`.",
+                            cwe="CWE-256", agent="python-analyzer",
+                        ))
+                    # Case B: obj.password == password_source  or  obj["password"] == password_source
+                    elif right_is_pw and (left_has_pw_field or left_is_pw_subscript):
+                        pw_var = comparator.id if isinstance(comparator, ast.Name) else "password"
+                        obj_text = _safe_unparse(left)[:60]
+                        findings.append(Finding(
+                            category="security", severity=Severity.CRITICAL,
+                            title=f"CWE-256: Plaintext password comparison in {fname}() at line {node.lineno}",
+                            description=(
+                                f"`{obj_text} == {pw_var}` at L{node.lineno} compares a plaintext password "
+                                f"against a stored value. Passwords should NEVER be stored or compared in plaintext. "
+                                f"Use bcrypt/argon2 hashing with constant-time comparison."
+                            ),
+                            line=node.lineno,
+                            suggestion="Hash passwords with bcrypt: `bcrypt.hashpw(password.encode(), bcrypt.gensalt())`. "
+                                       "Compare with: `bcrypt.checkpw(password.encode(), stored_hash)`.",
+                            cwe="CWE-256", agent="python-analyzer",
+                        ))
+                    # Case C: password_source1 == password_source2 (both plaintext)
+                    elif left_is_pw and right_is_pw:
+                        pw_var1 = left.id if isinstance(left, ast.Name) else "password1"
+                        pw_var2 = comparator.id if isinstance(comparator, ast.Name) else "password2"
+                        findings.append(Finding(
+                            category="security", severity=Severity.CRITICAL,
+                            title=f"CWE-256: Plaintext password comparison in {fname}() at line {node.lineno}",
+                            description=(
+                                f"`{pw_var1} == {pw_var2}` at L{node.lineno} compares two user-supplied plaintext "
+                                f"passwords. If either is a stored value, this reveals the plaintext password. "
+                                f"Use bcrypt/argon2 hashing."
+                            ),
+                            line=node.lineno,
+                            suggestion="Hash passwords with bcrypt. Compare with: `bcrypt.checkpw(password.encode(), stored_hash)`.",
+                            cwe="CWE-256", agent="python-analyzer",
+                        ))
+
+            # Pattern 2: user.password = plaintext_password  (plaintext storage)
+            if isinstance(node, ast.Assign):
+                for t in node.targets:
+                    if isinstance(t, ast.Attribute) and t.attr.lower() in ("password", "passwd", "pwd"):
+                        # Check if the right side is a password source
+                        is_pw_source = False
+                        if isinstance(node.value, ast.Name) and node.value.id in password_sources:
+                            is_pw_source = True
+                        elif isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                            is_pw_source = True
+                        elif _get_taint_source(node.value):
+                            is_pw_source = True
+                        # Check: value = tainted_container.get("password")
+                        elif (isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute)
+                              and node.value.func.attr == "get" and isinstance(node.value.func.value, ast.Name)
+                              and node.value.func.value.id in tainted_containers):
+                            if node.value.args and isinstance(node.value.args[0], ast.Constant):
+                                field = str(node.value.args[0].value).lower()
+                                if field in ("password", "passwd", "pwd"):
+                                    is_pw_source = True
+                        if not is_pw_source:
+                            continue
+                        # Check if it's going to a hash variable (safe)
+                        target_text = _safe_unparse(t)
+                        if any(hv in target_text for hv in hashed_vars):
+                            continue
+                        findings.append(Finding(
+                            category="security", severity=Severity.CRITICAL,
+                            title=f"CWE-256: Plaintext password stored on object in {fname}() at line {node.lineno}",
+                            description=(
+                                f"`{_safe_unparse(node)[:80]}` at L{node.lineno} stores a password as plaintext. "
+                                f"Passwords must be hashed with bcrypt/argon2 before storage."
+                            ),
+                            line=node.lineno,
+                            suggestion="Hash before storing: `user.password_hash = bcrypt.hashpw(password.encode(), bcrypt.gensalt())`.",
+                            cwe="CWE-256", agent="python-analyzer",
+                        ))
+
+                    # Pattern 3: dict-style: d['password'] = plaintext
+                    if isinstance(t, ast.Subscript) and isinstance(t.slice, ast.Constant):
+                        field = t.slice.value
+                        if isinstance(field, str) and field.lower() in ("password", "passwd", "pwd"):
+                            is_pw_source = False
+                            if isinstance(node.value, ast.Name) and node.value.id in password_sources:
+                                is_pw_source = True
+                            elif isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                                is_pw_source = True
+                            elif _get_taint_source(node.value):
+                                is_pw_source = True
+                            # Check: value = tainted_container.get("password")
+                            elif (isinstance(node.value, ast.Call) and isinstance(node.value.func, ast.Attribute)
+                                  and node.value.func.attr == "get" and isinstance(node.value.func.value, ast.Name)
+                                  and node.value.func.value.id in tainted_containers):
+                                if node.value.args and isinstance(node.value.args[0], ast.Constant):
+                                    fval = str(node.value.args[0].value).lower()
+                                    if fval in ("password", "passwd", "pwd", "pass", "secret", "pin"):
+                                        is_pw_source = True
+                            if not is_pw_source:
+                                continue
+                            findings.append(Finding(
+                                category="security", severity=Severity.CRITICAL,
+                                title=f"CWE-256: Plaintext password stored in dict in {fname}() at line {node.lineno}",
+                                description=(
+                                    f"`{_safe_unparse(node)[:80]}` at L{node.lineno} stores a password as plaintext "
+                                    f"in a dict/list. Passwords must be hashed with bcrypt/argon2 before storage."
+                                ),
+                                line=node.lineno,
+                                suggestion="Hash before storing: `data['password_hash'] = bcrypt.hashpw(password.encode(), bcrypt.gensalt())`.",
+                                cwe="CWE-256", agent="python-analyzer",
+                            ))
+
+    return _assign_rule_ids(findings, "PY-066")
+
+
+# ── v6.6: Lazy rule preconditions — skip rules whose imports aren't in first 100 lines ──
+_RULE_IMPORT_PRECONDITIONS: dict[str, tuple[str, ...]] = {
+    "_rule_12": ("flask", "fastapi", "django", "sanic", "starlette", "bottle", "tornado", "aiohttp"),
+    "_rule_16": ("flask", "fastapi", "django"),
+    "_rule_17": ("flask", "fastapi", "django"),
+    "_rule_24": ("jwt", "pyjwt", "jose"),
+    "_rule_30": ("flask", "fastapi", "django", "sanic"),
+    "_rule_36": ("django",),
+    "_rule_37": ("django",),
+    "_rule_38": ("django",),
+    "_rule_39": ("fastapi",),
+    "_rule_40": ("fastapi",),
+    "_rule_41": ("lxml", "etree", "xml", "defusedxml"),
+    "_rule_42": ("django", "flask", "fastapi"),
+    "_rule_43": ("flask", "fastapi", "django"),
+}
+
+
 def _detect(code: str, filename: str = "", global_graph: object = None) -> list[Finding]:
     """Run all deterministic detection rules. Returns findings sorted by severity."""
+
+    # ── v6.6: Pure-Python pre-filter for trivially clean files ─────
+    _TRIVIAL_MARKERS = ("import ", "def ", "class ", " = ", "return ", "@", "if ", "for ", "while ", "raise ", "with ", "try:", "eval", "exec", "print", "open")
+    if not any(m in code for m in _TRIVIAL_MARKERS):
+        return []
+
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", SyntaxWarning)
@@ -7207,6 +7567,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         return []
 
     lines = code.splitlines()
+    head_100 = "\n".join(lines[:100]).lower()  # v6.6: for lazy rule precondition checks
     sans = _code_sans_strings(code)
     sans_comments = _code_sans_strings_and_comments(code)
     func_defs: dict[str, ast.FunctionDef | ast.AsyncFunctionDef] = {}
@@ -7276,7 +7637,13 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         _rule_41, _rule_42, _rule_43, _rule_44, _rule_45,
         _rule_46, _rule_47, _rule_48, _rule_49,
         _rule_50, _rule_51, _rule_52,
+        _rule_53,
     ):
+        # ── v6.6: Lazy rule evaluation — skip rules whose imports aren't present ──
+        fn_name = getattr(rule_fn, "__name__", "")
+        preconditions = _RULE_IMPORT_PRECONDITIONS.get(fn_name)
+        if preconditions and not any(p in head_100 for p in preconditions):
+            continue
         findings.extend(rule_fn(ctx))
 
     # ── Restore original ast.walk ──────────────────────────────────────
@@ -7292,12 +7659,15 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
             pass
 
     # ── Entropy-based secret detection ────────────────────────────────────
+    # v6.6: Only run if file has plausible secret-like strings (saves ~5% on config/data files)
     try:
         from ansede_static.entropy import scan_for_secrets
-        # Only run if the file is not too large (avoid false positives in data files)
-        # and not in a vendored dependency directory (Unicode data, minified JS etc.)
         if len(code) < 500_000 and not _is_vendored_path(filename):
-            findings.extend(scan_for_secrets(code, filename))
+            # Quick heuristic: only scan if file contains string literals >20 chars
+            # (entropy analysis is wasted on files with only short identifiers)
+            _has_long_strings = bool(re.search(r'["\'][A-Za-z0-9+/=_-]{21,}["\']', code[:100_000]))
+            if _has_long_strings:
+                findings.extend(scan_for_secrets(code, filename))
     except Exception:  # pragma: no cover
         pass
 
@@ -7305,11 +7675,27 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
     if not findings:
         return findings
 
-    # ── Rescore confidence before guard analysis (guards get final say) ──
-    findings = rescore_findings(findings)
+    # ── v6.6: Skip rescore + guards for regex-only findings ────────────
+    # Regex/line-based rules (04-08, 31-35, 41-51) don't benefit from
+    # confidence rescoring or symbolic guard analysis. Skip both entirely.
+    _REGEX_RULE_IDS: frozenset[str] = frozenset({
+        "PY-010", "PY-011", "PY-012", "PY-013", "PY-014", "PY-015", "PY-016",
+        "PY-033", "PY-039", "PY-040", "PY-041", "PY-042", "PY-043",
+        "PY-049", "PY-050", "PY-051", "PY-052", "PY-053", "PY-054",
+        "PY-055", "PY-056", "PY-057", "PY-058", "PY-059",
+        "PY-063", "PY-064",
+    })
+    has_non_regex_findings = any(f.rule_id not in _REGEX_RULE_IDS for f in findings)
+    all_regex_only = not has_non_regex_findings
+
+    if all_regex_only:
+        # Skip rescore entirely — regex findings have fixed confidence
+        pass
+    else:
+        findings = rescore_findings(findings)
 
     # ── Symbolic guard analysis ───────────────────────────────────────────
-    if findings and ('if ' in code or 'assert ' in code):
+    if has_non_regex_findings and ('if ' in code or 'assert ' in code):
         try:
             from ansede_static.engine.symbolic_guards import analyze_guards_python
             findings = analyze_guards_python(code, findings, filename=filename)
@@ -7359,6 +7745,7 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
 
     filtered = _apply_python_noise_policy(filtered, filename)
     filtered.sort(key=lambda f: f.severity.sort_key)
+    _clear_per_file_caches()
     return filtered
 
 

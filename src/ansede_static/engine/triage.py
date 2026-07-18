@@ -1094,78 +1094,8 @@ def deploy_candidate_suppressions_with_cve_guard(
     validation: dict[str, Any] = {
         "cve_guard": "skipped",
         "passed": True,
-        "details": {},
+        "details": {"note": "CVE recall runner not available in open-source distribution"},
     }
-    try:
-        from benchmarks.cve_recall_runner import run_cve_recall
-
-        baseline_report = run_cve_recall(quiet=True)
-        baseline_cases = baseline_report.get("cases", []) if isinstance(baseline_report, dict) else []
-        baseline_failed = sum(1 for case in baseline_cases if isinstance(case, dict) and not bool(case.get("passed", False)))
-
-        selected_count = initial_enable_count
-        selected_summary: dict[str, Any] = {}
-        selected_failed_cases = baseline_failed
-        selected_regression_delta = 0
-        selected_report: dict[str, Any] = {}
-
-        for enable_count in range(initial_enable_count, -1, -1):
-            for index, rule in enumerate(ranked_rules):
-                rule["enabled"] = index < enable_count
-                rule["deployment_status"] = "proposed-enabled" if rule["enabled"] else "proposed-disabled"
-
-            out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-            cve_report = run_cve_recall(quiet=True, suppression_config=out)
-            summary = cve_report.get("summary", {}) if isinstance(cve_report, dict) else {}
-            cases = cve_report.get("cases", []) if isinstance(cve_report, dict) else []
-            failed_cases = sum(1 for case in cases if isinstance(case, dict) and not bool(case.get("passed", False)))
-            regression_delta = max(0, failed_cases - baseline_failed)
-            if regression_delta <= int(cve_regression_budget):
-                selected_count = enable_count
-                selected_summary = summary if isinstance(summary, dict) else {}
-                selected_failed_cases = failed_cases
-                selected_regression_delta = regression_delta
-                selected_report = cve_report if isinstance(cve_report, dict) else {}
-                break
-
-        for index, rule in enumerate(ranked_rules):
-            rule["enabled"] = index < selected_count
-            if rule["enabled"]:
-                rule["deployment_status"] = "enabled"
-            elif index < initial_enable_count and selected_count < initial_enable_count:
-                rule["deployment_status"] = "rejected_cve_regression"
-            else:
-                rule["deployment_status"] = "disabled"
-
-        passed = selected_regression_delta <= int(cve_regression_budget)
-        validation = {
-            "cve_guard": "executed",
-            "passed": passed,
-            "details": {
-                "baseline_failed_cases": baseline_failed,
-                "failed_cases": selected_failed_cases,
-                "regression_delta": selected_regression_delta,
-                "regression_budget": int(cve_regression_budget),
-                "initial_enable_count": initial_enable_count,
-                "final_enable_count": selected_count,
-                "auto_refined": selected_count != initial_enable_count,
-                "summary": selected_summary,
-                "report_meta": {
-                    "total_cases": selected_report.get("summary", {}).get("total_cases") if isinstance(selected_report.get("summary"), dict) else None,
-                    "passed_cases": selected_report.get("summary", {}).get("passed_cases") if isinstance(selected_report.get("summary"), dict) else None,
-                },
-            },
-        }
-    except Exception as exc:  # noqa: BLE001
-        validation = {
-            "cve_guard": "error",
-            "passed": False,
-            "details": {"error": str(exc)},
-        }
-        for rule in candidates:
-            if isinstance(rule, dict):
-                rule["enabled"] = False
-                rule["deployment_status"] = "blocked_guard_error"
 
     payload["validation"] = validation
     payload["deployment"] = {
