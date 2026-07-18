@@ -16,6 +16,7 @@
 - 🌐 **5 languages** — Python, JavaScript/TypeScript, Go, Java, C#
 - 📋 **SARIF output** — one-click export for GitHub Code Scanning
 - 🔒 **100% offline** — no cloud, no API keys, no telemetry
+- ⚡ **Auto-detects** guardmarly CLI — works with pip, pipx, or python -m
 
 ## Installation
 
