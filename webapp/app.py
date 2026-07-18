@@ -1,6 +1,11 @@
 """Guardmarly — Landing page and live scanner demo."""
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import subprocess, tempfile, os, json
+import sys, os
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from guardmarly.python_analyzer import analyze_python
+from guardmarly.js_analyzer import analyze_js
 
 app = Flask(__name__)
 
@@ -14,36 +19,25 @@ def scan():
     lang = request.json.get("language", "python")
     if not code.strip():
         return jsonify({"error": "No code provided"}), 400
-    
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
-        f.write(code)
-        tmp = f.name
-    
+
     try:
-        result = subprocess.run(
-            ["guardmarly", tmp, "--format", "json", "--fail-on", "never", "--no-triage"],
-            capture_output=True, text=True, timeout=30,
-            env={**os.environ, "PYTHONPATH": "/app/src"}
-        )
-        data = json.loads(result.stdout) if result.stdout.strip() else {"results": []}
+        if lang == "python":
+            result = analyze_python(code, filename="<demo>")
+        else:
+            result, _ = analyze_js(code, filename="<demo>")
+
         findings = []
-        for r in data.get("results", []):
-            for f in r.get("findings", []):
-                findings.append({
-                    "severity": f.get("severity", "info"),
-                    "title": f.get("title", ""),
-                    "line": f.get("line"),
-                    "cwe": f.get("cwe", ""),
-                    "suggestion": f.get("suggestion", ""),
-                })
+        for f in result.findings:
+            findings.append({
+                "severity": f.severity.value if hasattr(f.severity, 'value') else str(f.severity),
+                "title": f.title,
+                "line": f.line,
+                "cwe": f.cwe or "",
+                "suggestion": f.suggestion or "",
+            })
         return jsonify({"findings": findings, "lines": len(code.splitlines())})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    finally:
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
 
 @app.route("/guard.png")
 def logo():

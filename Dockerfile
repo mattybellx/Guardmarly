@@ -5,17 +5,15 @@ WORKDIR /app
 COPY webapp/requirements.txt ./webapp/
 RUN pip install --no-cache-dir -r webapp/requirements.txt
 
-# Copy the scanner source (used as subprocess via PYTHONPATH)
+# Copy the scanner source (used via direct Python import by app.py)
 COPY src/ ./src/
 
-# Copy webapp templates and code
+# Copy webapp templates, static, and code
 COPY webapp/ ./webapp/
 
-# Allow the CLI subprocess to find guardmarly
 ENV PYTHONPATH="/app/src:${PYTHONPATH}" \
     PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    DB_PATH=/data/licenses.db
+    PYTHONDONTWRITEBYTECODE=1
 
 RUN mkdir -p /data /tmp/scans
 VOLUME ["/data", "/tmp"]
