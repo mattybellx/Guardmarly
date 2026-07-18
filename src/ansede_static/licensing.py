@@ -665,6 +665,68 @@ def bump_scan_count() -> int:
     return 0
 
 
+# ── Lifetime (all-time) scan tracking ─────────────────────────────────────
+
+def _lifetime_count_file() -> Path:
+    return Path.home() / ".ansede" / "lifetime_scan_count.json"
+
+
+def _lifetime_hash_file() -> Path:
+    return Path.home() / ".ansede" / ".lifetime_scan_integrity"
+
+
+def _check_lifetime_scans() -> int:
+    """Return the all-time total scan count (never resets)."""
+    count_file = _lifetime_count_file()
+    hash_file = _lifetime_hash_file()
+    try:
+        if count_file.exists():
+            data = json.loads(count_file.read_text())
+            if hash_file.exists():
+                stored_hash = hash_file.read_text().strip()
+                computed = _scan_count_hash(json.dumps(data, sort_keys=True))
+                if stored_hash != computed:
+                    return 0
+            return int(data.get("total", 0))
+    except Exception:
+        pass
+    return 0
+
+
+def bump_lifetime_scan_count() -> int:
+    """Increment the all-time total scan count. Never resets."""
+    count_file = _lifetime_count_file()
+    hash_file = _lifetime_hash_file()
+    count_file.parent.mkdir(parents=True, exist_ok=True)
+    data: dict[str, int] = {"total": 0, "first_seen": 0}
+    try:
+        if count_file.exists():
+            data = json.loads(count_file.read_text())
+    except Exception:
+        pass
+
+    now_ts = int(time.time())
+    if not data.get("first_seen"):
+        data["first_seen"] = now_ts
+    data["total"] = data.get("total", 0) + 1
+    data["last_seen"] = now_ts
+
+    tmp = count_file.with_suffix(".tmp")
+    serialized = json.dumps(data, sort_keys=True)
+    tmp.write_text(serialized)
+    tmp.replace(count_file)
+    hash_file.write_text(_scan_count_hash(serialized))
+    return int(data["total"])
+
+
+def get_lifetime_scan_stats() -> dict[str, int]:
+    """Return lifetime + today scan stats for display."""
+    return {
+        "lifetime_total": _check_lifetime_scans(),
+        "today": _check_scans_today(),
+    }
+
+
 def remaining_guarded_autofix_quota() -> int | None:
     """Return remaining free-tier Guarded Autofix actions for today, or None when unlimited."""
     try:

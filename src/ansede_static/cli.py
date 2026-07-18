@@ -50,6 +50,8 @@ from ansede_static.licensing import (
     format_license_status,
     maybe_show_upgrade_prompt,
     bump_scan_count,
+    bump_lifetime_scan_count,
+    get_lifetime_scan_stats,
     bump_guarded_autofix_count,
     maybe_show_guarded_autofix_upgrade_prompt,
     remaining_guarded_autofix_quota,
@@ -1645,6 +1647,10 @@ def build_parser() -> argparse.ArgumentParser:
         version=_get_version_str(),
     )
     parser.add_argument(
+        "--show-stats", action="store_true",
+        help="Show lifetime and today scan counts, then exit.",
+    )
+    parser.add_argument(
         "--apply-fixes", action="store_true",
         help="Apply auto-fixes directly to the source files when possible (Warning: overwrites code)",
     )
@@ -2566,6 +2572,12 @@ def _main_impl() -> None:
 
     if getattr(args, "list_js_backends", False):
         print(_render_js_backend_catalog(args.format == "json"))
+        sys.exit(0)
+
+    if getattr(args, "show_stats", False):
+        stats = get_lifetime_scan_stats()
+        print(f"Scans today:     {stats['today']}")
+        print(f"Lifetime total:  {stats['lifetime_total']}")
         sys.exit(0)
 
     # ── LSP server mode ────────────────────────────────────────────────────
@@ -3840,8 +3852,9 @@ def _main_impl() -> None:
 
     # ── Exit code ───────────────────────────────────────────────────────────
 
-    # Track daily scan count (free tier) and show upgrade prompt when approaching limit
+    # Track daily scan count (free tier) and lifetime total
     bump_scan_count()
+    bump_lifetime_scan_count()
     upgrade_prompt = maybe_show_upgrade_prompt()
     if upgrade_prompt:
         if console:
