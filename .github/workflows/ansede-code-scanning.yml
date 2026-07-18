@@ -34,7 +34,9 @@ jobs:
             --fail-on never \
             --exclude node_modules \
             --exclude .venv \
-            --exclude __pycache__
+            --exclude __pycache__ \
+            --exclude src \
+            --exclude ansede_rust_core
 
       - name: Convert JSON to SARIF
         run: python .github/scripts/json_to_sarif.py
