@@ -1,4 +1,4 @@
-﻿# 🛡️ Guardmarly — Find authorization bugs before attackers do
+﻿# <img src="guard.png" width="36" style="vertical-align:middle"> Guardmarly — Find authorization bugs before attackers do
 
 <p align="center">
   <strong>The only free SAST with built-in IDOR detection. 100% CVE recall. Fully offline.</strong>
