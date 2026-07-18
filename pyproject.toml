@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "guardmarly"
-version = "6.4.0"
+version = "6.5.0"
 description = "Find IDOR, missing authorization, SQL injection, and 30+ vulnerability types in Python, JavaScript, Go, Java, and C#. 100% CVE recall. Zero false positives on clean code. Fully offline. No API keys needed."
 readme = "README.md"
 license = "MIT"
