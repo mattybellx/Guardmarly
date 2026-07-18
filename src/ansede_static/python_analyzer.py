@@ -5277,6 +5277,10 @@ def _rule_21(ctx: _Ctx) -> list[Finding]:
                     if _expr_looks_path_like(arg):
                         is_tainted = True
                         var_name = short or "path helper"
+                    elif _get_taint_source(arg):
+                        # Direct taint source like request.args.get() / request.form.get()
+                        is_tainted = True
+                        var_name = short
                 elif isinstance(arg, ast.Attribute):
                     if _expr_looks_path_like(arg):
                         is_tainted = True
