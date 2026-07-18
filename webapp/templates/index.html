@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guardmarly — Find Authorization Bugs Before Attackers Do</title>
 <meta name="description" content="Zero-dependency SAST scanner. Built-in IDOR detection. 100% CVE recall. Fully offline. 5 languages.">
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='guard.png') }}">
+<link rel="icon" type="image/png" href="/guard.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -93,7 +93,7 @@ section{padding:100px 0}
 
 /* Scan demo */
 .scan-demo{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius-xl);padding:40px;max-width:800px;margin:0 auto}
-.scan-input{width:100%;min-height:200px;background:var(--gray-900);color:#c3e88d;border:none;border-radius:var(--radius);padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;resize:vertical;margin-bottom:16px}
+.scan-input{width:100%;min-height:400px;background:var(--gray-900);color:#c3e88d;border:none;border-radius:var(--radius);padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;resize:vertical;margin-bottom:16px}
 .scan-input:focus{outline:2px solid var(--green);outline-offset:2px}
 .scan-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .scan-results{margin-top:20px;display:none}
@@ -141,7 +141,7 @@ footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 40px}
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="{{ url_for('static', filename='guard.png') }}" alt="Guardmarly">
+      <img src="/guard.png" alt="Guardmarly">
       Guardmarly
     </a>
     <div class="nav-links">
@@ -181,7 +181,7 @@ footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 40px}
 <span class="line highlight">    <span class="kw">return</span> Invoice.query.get(id)</span>
 <span class="line"><span class="cm">#   ↑ CWE-639 IDOR: any user can view any invoice</span></span>
 <span class="line"><span class="cm">#   Bandit: silent. Semgrep OSS: silent. CodeQL: silent.</span></span>
-<span class="line"><span class="cm">#   Guardmarly: 🚨 CRITICAL — route flows to DB without auth</span></span>
+<span class="line"><span class="cm">#   Guardmarly: CRITICAL - route flows to DB without auth</span></span>
       </div>
     </div>
   </div>
@@ -195,7 +195,7 @@ footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 40px}
     </div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
+        <div class="feature-icon"><img src="/guard.png" width="24" height="24" alt=""></div>
         <h3>Built-in IDOR Detection</h3>
         <p>Maps every HTTP route, checks for auth guards, and traces data flow to sinks. Catches CWE-639, CWE-862, and CWE-306 — the bugs Bandit, Semgrep OSS, and CodeQL miss.</p>
       </div>
@@ -292,7 +292,7 @@ def get_invoice(id):
     return Invoice.query.get(id)
 # ↑ CWE-639 IDOR: no auth check!</textarea>
       <div class="scan-actions">
-        <button class="btn btn-primary btn-lg" onclick="runScan()">🔍 Scan Code</button>
+        <button class="btn btn-primary btn-lg" onclick="runScan()">Scan Code</button>
         <select id="langSelect" style="padding:10px 16px;border:2px solid var(--gray-300);border-radius:var(--radius);font-size:14px;font-weight:500">
           <option value="python">Python</option>
           <option value="javascript">JavaScript</option>
@@ -333,7 +333,7 @@ def get_invoice(id):
           <li>HTML dashboards</li>
           <li>SBOM generation (CycloneDX)</li>
         </ul>
-        <a href="https://buy.stripe.com/4gwg1k0UC1eZ8xW144" class="btn btn-outline" style="width:100%;justify-content:center">Get One-Time &pound;4.99</a>
+        <a href="https://guardmarly.onrender.com/#pricing" class="btn btn-outline" style="width:100%;justify-content:center">Get One-Time &pound;4.99</a>
       </div>
       <div class="pricing-card featured">
         <div class="pricing-name">Pro</div>
@@ -346,7 +346,7 @@ def get_invoice(id):
           <li>Commercial use license</li>
           <li>Lifetime updates</li>
         </ul>
-        <a href="https://buy.stripe.com/7sIdUu7Mu7Lr0k08wx" class="btn btn-primary" style="width:100%;justify-content:center">Get Pro &pound;49/yr</a>
+        <a href="https://guardmarly.onrender.com/#pricing" class="btn btn-primary" style="width:100%;justify-content:center">Get Pro &pound;49/yr</a>
       </div>
     </div>
   </div>
@@ -355,7 +355,7 @@ def get_invoice(id):
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="{{ url_for('static', filename='guard.png') }}" alt="Guardmarly">
+      <img src="/guard.png" alt="Guardmarly">
       <p>Zero-dependency SAST scanner. Find authorization bugs before attackers do.</p>
     </div>
     <div class="footer-col">
@@ -403,7 +403,7 @@ async function runScan() {
       results.innerHTML = `<div style="color:#dc2626;padding:16px">${data.error}</div>`;
     } else if (data.findings.length === 0) {
       results.innerHTML = `<div style="text-align:center;padding:32px;color:var(--gray-400)">
-        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <div style="font-size:48px;margin-bottom:12px;color:var(--green)">&#10003;</div>
         <div style="font-size:18px;font-weight:600;color:var(--gray-700)">No issues found</div>
         <div style="font-size:14px">${data.lines} lines scanned</div>
       </div>`;
