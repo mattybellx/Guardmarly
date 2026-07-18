@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from ansede_static.js_ast_analyzer import analyze_js_ast
+from guardmarly.js_ast_analyzer import analyze_js_ast
 
 
 class TestJsAstAnalyzer:
@@ -240,8 +240,8 @@ async function sendWebhook(req) {
 
   def test_sourcemap_remap_sets_trace_frame_file_path(self, tmp_path):
     """Source-mapped trace frames must carry file_path for the original source."""
-    from ansede_static._types import Finding, TraceFrame, Severity
-    from ansede_static.js_engine.source_map_resolver import remap_findings_to_source_map
+    from guardmarly._types import Finding, TraceFrame, Severity
+    from guardmarly.js_engine.source_map_resolver import remap_findings_to_source_map
 
     map_file = tmp_path / "bundle.js.map"
     map_file.write_text(
@@ -834,7 +834,7 @@ app.get('/admin/users', async (req, res) => {
         assert any(finding.rule_id == "JS-034" for finding in result.findings)
 
     def test_inline_suppression_applies_to_ast_findings(self):
-        code = "document.write(req.query.html); // ansede: ignore[CWE-79]"
+        code = "document.write(req.query.html); // guardmarly: ignore[CWE-79]"
         result = analyze_js_ast(code)
 
         assert not any(finding.cwe == "CWE-79" for finding in result.findings)
@@ -843,9 +843,9 @@ app.get('/admin/users', async (req, res) => {
     """End-to-end: after source-map remapping, SARIF codeFlow locations must
     reference the original source file, not the bundle path."""
     import json as _json
-    from ansede_static._types import Finding, TraceFrame, Severity, AnalysisResult
-    from ansede_static.js_engine.source_map_resolver import remap_findings_to_source_map
-    from ansede_static.reporters import format_sarif
+    from guardmarly._types import Finding, TraceFrame, Severity, AnalysisResult
+    from guardmarly.js_engine.source_map_resolver import remap_findings_to_source_map
+    from guardmarly.reporters import format_sarif
 
     bundle_file = tmp_path / "bundle.js"
     map_file = tmp_path / "bundle.js.map"

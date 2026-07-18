@@ -1,0 +1,12 @@
+# Golden Corpus: Open Redirect (CWE-601) — Python
+# MUST NOT trigger the rule
+
+def build_internal_url(page: str) -> str:
+    """Safe: always returns a URL within the application's domain."""
+    allowed = {"dashboard", "profile", "settings", "home"}
+    target = page if page in allowed else "home"
+    return f"/app/{target}"
+
+def get_login_redirect() -> str:
+    """Safe: static redirect with no user-controlled target."""
+    return "/dashboard"

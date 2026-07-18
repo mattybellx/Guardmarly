@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from ansede_static.graph.go_callgraph import build_go_callgraph
-from ansede_static.graph.import_graph import resolve_go_imports
-from ansede_static.graph.unified_source_graph import UnifiedSourceGraph
+from guardmarly.graph.go_callgraph import build_go_callgraph
+from guardmarly.graph.import_graph import resolve_go_imports
+from guardmarly.graph.unified_source_graph import UnifiedSourceGraph
 
 
 def test_build_go_callgraph_resolves_same_file_calls(tmp_path):

@@ -1,7 +1,7 @@
-# ansede-static — GitHub Code Scanning Integration
+# guardmarly — GitHub Code Scanning Integration
 # Upload SARIF results to the Security > Code Scanning tab.
 # For full documentation see docs/github-code-scanning-sarif-integration.md
-name: Ansede Code Scanning
+name: Guardmarly Code Scanning
 
 on:
   push:
@@ -17,26 +17,26 @@ permissions:
 
 jobs:
   scan:
-    name: Ansede static analysis
+    name: Guardmarly static analysis
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install ansede-static
-        run: pip install ansede-static
+      - name: Install guardmarly
+        run: pip install guardmarly
 
-      - name: Run ansede scan
+      - name: Run guardmarly scan
         run: |
-          ansede scan . \
+          guardmarly scan . \
             --format json \
-            --output ansede.json \
+            --output guardmarly.json \
             --fail-on never \
             --exclude node_modules \
             --exclude .venv \
             --exclude __pycache__ \
             --exclude src \
-            --exclude ansede_rust_core
+            --exclude guardmarly_rust_core
 
       - name: Convert JSON to SARIF
         run: python .github/scripts/json_to_sarif.py
@@ -44,5 +44,5 @@ jobs:
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ansede.sarif
-          category: ansede-static
+          sarif_file: guardmarly.sarif
+          category: guardmarly

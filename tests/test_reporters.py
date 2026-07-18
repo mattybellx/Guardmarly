@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import json
 
-from ansede_static.cache import stable_hash
-from ansede_static.engine_version import ENGINE_NAME, SCHEMA_VERSION
-from ansede_static.schema import FINGERPRINT_VERSION
-from ansede_static.ir import build_issue_records
-from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
-from ansede_static.python_analyzer import analyze_python
-from ansede_static.reporters import format_json, format_sarif, format_text_multi
+from guardmarly.cache import stable_hash
+from guardmarly.engine_version import ENGINE_NAME, SCHEMA_VERSION
+from guardmarly.schema import FINGERPRINT_VERSION
+from guardmarly.ir import build_issue_records
+from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
+from guardmarly.python_analyzer import analyze_python
+from guardmarly.reporters import format_json, format_sarif, format_text_multi
 
 
 def _sample_results():

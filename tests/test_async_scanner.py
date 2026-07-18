@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ansede_static._types import AnalysisResult
-from ansede_static.engine.async_scanner import scan_files_sync
-from ansede_static.registry.sharded_loader import load_custom_rules_for_code
+from guardmarly._types import AnalysisResult
+from guardmarly.engine.async_scanner import scan_files_sync
+from guardmarly.registry.sharded_loader import load_custom_rules_for_code
 
 
 def _scan_stub(path: Path) -> AnalysisResult:

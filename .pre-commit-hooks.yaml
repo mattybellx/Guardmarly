@@ -1,11 +1,11 @@
 repos:
-  - repo: https://github.com/mattybellx/Ansede
+  - repo: https://github.com/mattybellx/Guardmarly
     rev: v2.1.6
     hooks:
-      - id: ansede-static
-        name: Ansede Static SAST
+      - id: guardmarly
+        name: Guardmarly SAST
         language: python
-        entry: ansede-static
+        entry: guardmarly
         args: [--fail-on, high]
         types: [python, javascript, typescript]
         pass_filenames: false

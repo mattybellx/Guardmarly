@@ -88,7 +88,7 @@ def main() -> int:
         [
             sys.executable,
             "-m",
-            "ansede_static.cli",
+            "guardmarly.cli",
             "--stdin",
             "--lang",
             lang,

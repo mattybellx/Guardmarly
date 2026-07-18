@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ansede_static.graph.import_graph import resolve_go_imports, resolve_js_imports, resolve_python_imports
-from ansede_static.graph.unified_source_graph import UnifiedSourceGraph
+from guardmarly.graph.import_graph import resolve_go_imports, resolve_js_imports, resolve_python_imports
+from guardmarly.graph.unified_source_graph import UnifiedSourceGraph
 
 
 def test_resolve_python_imports_handles_relative_and_package_imports(tmp_path):

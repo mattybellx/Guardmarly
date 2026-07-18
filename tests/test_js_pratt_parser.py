@@ -1,7 +1,7 @@
-from ansede_static.js_engine.backends import run_js_analysis
-from ansede_static.js_engine.pratt.ast_nodes import TemplateLiteral, VariableDeclaration
-from ansede_static.js_engine.pratt.lexer import TokenType, tokenize
-from ansede_static.js_engine.pratt.parser import PrattParser
+from guardmarly.js_engine.backends import run_js_analysis
+from guardmarly.js_engine.pratt.ast_nodes import TemplateLiteral, VariableDeclaration
+from guardmarly.js_engine.pratt.lexer import TokenType, tokenize
+from guardmarly.js_engine.pratt.parser import PrattParser
 
 
 def test_pratt_parser_consumes_template_head_without_recursing():

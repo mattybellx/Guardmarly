@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 # ── Test execution_context ────────────────────────────────────────────
-from ansede_static.execution_context import (
+from guardmarly.execution_context import (
     classify_file, ExecutionEnvironment, get_context_for_language,
     should_suppress_for_context,
 )
@@ -58,7 +58,7 @@ assert get_context_for_language("python", "utils/helpers.py") == ExecutionEnviro
 print("  get_context_for_language: OK")
 
 # ── Test DSE ──────────────────────────────────────────────────────────
-from ansede_static.dse import ReDoSCircuitBreaker, GoldenCorpusValidator, PerfRegressionGuard
+from guardmarly.dse import ReDoSCircuitBreaker, GoldenCorpusValidator, PerfRegressionGuard
 
 breaker = ReDoSCircuitBreaker(timeout_seconds=0.05)
 # Safe pattern
@@ -87,7 +87,7 @@ assert len(guard.get_budget_violations()) == 1
 print(f"  Perf guard budget violations: {len(guard.get_budget_violations())}")
 
 # ── Test SummaryRegistry ─────────────────────────────────────────────
-from ansede_static.ir.global_graph import FunctionSummary, SummaryRegistry
+from guardmarly.ir.global_graph import FunctionSummary, SummaryRegistry
 
 registry = SummaryRegistry()
 summary = FunctionSummary(

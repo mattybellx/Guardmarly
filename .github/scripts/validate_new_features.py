@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Quick validation of new features."""
-from ansede_static._types import Finding, Severity, TraceFrame
-from ansede_static.php_analyzer import analyze_php
-from ansede_static.cli import build_parser
+from guardmarly._types import Finding, Severity, TraceFrame
+from guardmarly.php_analyzer import analyze_php
+from guardmarly.cli import build_parser
 
 # Confidence labels
 f1 = Finding(category='security', severity=Severity.HIGH, title='t', description='',

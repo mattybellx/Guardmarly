@@ -4,7 +4,7 @@ tests/test_ifds
 Tests for IFDS (Interprocedural Finite Distributive Set) framework.
 """
 import pytest
-from ansede_static.v2.ifds import (
+from guardmarly.v2.ifds import (
     CFGNode,
     CallSite,
     Context,

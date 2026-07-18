@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from ansede_static.entropy import (
+from guardmarly.entropy import (
     shannon_entropy,
     find_high_entropy_strings,
     scan_for_secrets,
@@ -104,7 +104,7 @@ def test_scan_severity_high_for_keyword_context():
 secret_token = "sk-live-xK9mN2pQ-rT5vW8zA-3bCd4eF"
 '''
     findings = scan_for_secrets(code, "test.py")
-    from ansede_static._types import Severity
+    from guardmarly._types import Severity
     high_or_above = [f for f in findings if f.severity in (Severity.HIGH, Severity.CRITICAL)]
     assert len(high_or_above) >= 1
 

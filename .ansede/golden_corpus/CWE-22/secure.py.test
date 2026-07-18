@@ -1,0 +1,13 @@
+# Golden Corpus: Path Traversal (CWE-22) — Python
+# MUST NOT trigger the rule
+
+import os
+
+def sanitize_filename(user_input: str) -> str:
+    """Safe: strips all directory components, returns basename only."""
+    return os.path.basename(user_input)
+
+def validate_path(requested: str, base: str) -> bool:
+    """Safe: checks that resolved path stays within base directory."""
+    resolved = os.path.realpath(os.path.join(base, os.path.basename(requested)))
+    return resolved.startswith(os.path.realpath(base) + os.sep)

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from ansede_static._types import Severity
-from ansede_static.js_ast_analyzer import analyze_js_ast
-from ansede_static.python_analyzer import analyze_python
-from ansede_static.registry.sharded_loader import load_rules_for_code
+from guardmarly._types import Severity
+from guardmarly.js_ast_analyzer import analyze_js_ast
+from guardmarly.python_analyzer import analyze_python
+from guardmarly.registry.sharded_loader import load_rules_for_code
 
 
 def test_js_vendor_minified_open_redirect_is_downgraded(tmp_path):
@@ -233,7 +233,7 @@ def dispatch(request):
     assert "framework-internal implementation heuristic downgraded" in finding.description
 
 
-def test_python_ansede_internal_silent_except_is_downgraded():
+def test_python_guardmarly_internal_silent_except_is_downgraded():
     code = """
 def _parse_exports():
     try:
@@ -241,7 +241,7 @@ def _parse_exports():
     except Exception:
         pass
 """
-    result = analyze_python(code, filename="C:/tmp/project/src/ansede_static/js_engine/project.py")
+    result = analyze_python(code, filename="C:/tmp/project/src/guardmarly/js_engine/project.py")
     finding = next(f for f in result.findings if f.rule_id == "PY-001")
 
     assert finding.severity == Severity.LOW
@@ -249,11 +249,11 @@ def _parse_exports():
     assert "tool-internal implementation heuristic downgraded" in finding.description
 
 
-def test_python_ansede_internal_complexity_is_downgraded():
+def test_python_guardmarly_internal_complexity_is_downgraded():
     branches = "\n".join(f"    if x == {idx}:\n        return {idx}" for idx in range(30))
     code = f"def _main_impl(x):\n{branches}\n    return -1\n"
 
-    result = analyze_python(code, filename="C:/tmp/project/src/ansede_static/cli.py")
+    result = analyze_python(code, filename="C:/tmp/project/src/guardmarly/cli.py")
     finding = next(f for f in result.findings if f.rule_id == "PY-044")
 
     assert finding.severity == Severity.LOW
@@ -261,7 +261,7 @@ def test_python_ansede_internal_complexity_is_downgraded():
     assert "tool-internal implementation heuristic downgraded" in finding.description
 
 
-def test_python_ansede_internal_cli_path_open_is_downgraded():
+def test_python_guardmarly_internal_cli_path_open_is_downgraded():
     code = """
 from pathlib import Path
 
@@ -269,7 +269,7 @@ def _apply_auto_fixes(output_file):
     with open(Path(output_file), 'r', encoding='utf-8') as handle:
         return handle.read()
 """
-    result = analyze_python(code, filename="C:/tmp/project/src/ansede_static/cli.py")
+    result = analyze_python(code, filename="C:/tmp/project/src/guardmarly/cli.py")
     finding = next(f for f in result.findings if f.rule_id == "PY-045")
 
     assert finding.severity == Severity.LOW

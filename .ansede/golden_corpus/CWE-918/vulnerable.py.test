@@ -1,0 +1,25 @@
+# Golden Corpus: SSRF (CWE-918) — Python
+# MUST trigger the rule
+
+import requests
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route("/fetch")
+def fetch():
+    url = request.args.get("url")
+    return requests.get(url).text  # User-controlled URL → SSRF
+
+@app.route("/proxy")
+def proxy():
+    target = request.args.get("target", "")
+    # SSRF via requests
+    resp = requests.post(f"http://internal-api:8080/{target}")
+    return resp.json()
+
+@app.route("/webhook")
+def webhook():
+    callback = request.form.get("callback_url")
+    requests.post(callback, json={"status": "ok"})  # SSRF
+    return "ok"

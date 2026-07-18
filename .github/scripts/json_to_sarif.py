@@ -1,9 +1,9 @@
-"""CI helper: convert ansede JSON output to SARIF using the built-in formatter."""
+"""CI helper: convert guardmarly JSON output to SARIF using the built-in formatter."""
 import json
-from ansede_static._types import AnalysisResult, Finding, Severity
-from ansede_static.reporters import format_sarif
+from guardmarly._types import AnalysisResult, Finding, Severity
+from guardmarly.reporters import format_sarif
 
-with open("ansede.json") as fh:
+with open("guardmarly.json") as fh:
     data = json.load(fh)
 
 results = []
@@ -27,6 +27,6 @@ for entry in data.get("results", []):
     results.append(r)
 
 sarif = format_sarif(results)
-with open("ansede.sarif", "w") as fh:
+with open("guardmarly.sarif", "w") as fh:
     fh.write(sarif)
 print(f"Generated SARIF with {len(results)} file(s)")

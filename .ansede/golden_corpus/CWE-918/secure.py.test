@@ -1,0 +1,16 @@
+# Golden Corpus: SSRF (CWE-918) — Python
+# MUST NOT trigger the rule
+
+import hashlib
+import hmac
+
+HMAC_KEY = b"static-internal-key"
+
+def verify_webhook_signature(payload: bytes, signature: str) -> bool:
+    """Safe: cryptographic verification only, no outbound HTTP."""
+    expected = hmac.new(HMAC_KEY, payload, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(expected, signature)
+
+def process_event(payload: dict) -> dict:
+    """Safe: internal processing only, no external network calls."""
+    return {"status": "processed", "type": payload.get("type", "unknown")}

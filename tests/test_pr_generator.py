@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from ansede_static._types import AnalysisResult, Finding, Severity
-from ansede_static.engine.pr_generator import (
+from guardmarly._types import AnalysisResult, Finding, Severity
+from guardmarly.engine.pr_generator import (
     _parse_auto_fix_block,
     _make_unified_patch,
     generate_pr_body,

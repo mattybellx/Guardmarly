@@ -10,5 +10,5 @@ body:
   - type: textarea
     attributes:
       label: Environment
-      description: "ansede-static version, Python version, OS"
-      placeholder: "ansede-static 2.3.x, Python 3.11, Ubuntu 24.04"
+      description: "guardmarly version, Python version, OS"
+      placeholder: "guardmarly 2.3.x, Python 3.11, Ubuntu 24.04"

@@ -1,0 +1,1067 @@
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from functools import lru_cache
+from enum import IntEnum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
+import sqlite3
+
+from guardmarly._types import TraceFrame
+from guardmarly.cache.sqlite_store import SQLiteStore, stable_hash
+
+
+@dataclass(frozen=True)
+class NodeID:
+    """A unique identifier for a symbol or AST node across the workspace."""
+
+    file_path: str
+    symbol_name: str
+
+
+@dataclass
+class TaintNode:
+    """A node in the inter-procedural taint graph."""
+
+    id: NodeID
+    ast_type: str
+    line_start: int
+    is_source: bool = False
+    is_sink: bool = False
+    taint_source: Optional[str] = None
+    taint_trace: Tuple[TraceFrame, ...] = field(default_factory=tuple)
+
+
+@dataclass
+class Edge:
+    """A directional relationship between two nodes."""
+
+    source: NodeID
+    target: NodeID
+    edge_type: str  # IMPORTS, CALLS, RETURNS, DATA_FLOW
+    weight: int = 1
+    metadata: Dict[str, str] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class FunctionSummary:
+    """IFDS-compatible summary for a function.
+
+    The summary captures distributive flow facts:
+    - argument positions that can reach sinks
+    - argument positions that can taint the return value
+    - whether return can be tainted directly from an intrinsic source
+    - side effects (symbol names) visible outside callee scope
+    - sanitizers applied within the function body
+    """
+
+    file_path: str
+    function_name: str
+    args_to_sink: Tuple[int, ...] = ()
+    args_to_return: Tuple[int, ...] = ()
+    return_from_source: bool = False
+    side_effect_symbols: Tuple[str, ...] = ()
+    depends_on: Tuple[str, ...] = ()
+    sanitizers_applied: Tuple[str, ...] = ()
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "file_path": self.file_path,
+            "function_name": self.function_name,
+            "args_to_sink": list(self.args_to_sink),
+            "args_to_return": list(self.args_to_return),
+            "return_from_source": self.return_from_source,
+            "side_effect_symbols": list(self.side_effect_symbols),
+            "depends_on": list(self.depends_on),
+            "sanitizers_applied": list(self.sanitizers_applied),
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "FunctionSummary":
+        return cls(
+            file_path=str(data.get("file_path", "")),
+            function_name=str(data.get("function_name", "")),
+            args_to_sink=tuple(sorted(int(v) for v in data.get("args_to_sink", ()) if isinstance(v, int))),
+            args_to_return=tuple(sorted(int(v) for v in data.get("args_to_return", ()) if isinstance(v, int))),
+            return_from_source=bool(data.get("return_from_source", False)),
+            side_effect_symbols=tuple(sorted(str(v) for v in data.get("side_effect_symbols", ()) if isinstance(v, str))),
+            depends_on=tuple(sorted(str(v) for v in data.get("depends_on", ()) if isinstance(v, str))),
+            sanitizers_applied=tuple(sorted(str(v) for v in data.get("sanitizers_applied", ()) if isinstance(v, str))),
+        )
+
+
+# ── Summary Registry ─────────────────────────────────────────────────────────
+
+class SummaryRegistry:
+    """Thread-safe registry for FunctionSummary contracts.
+
+    Provides O(1) lookup by fully-qualified function name, enabling the
+    cross-file taint engine to substitute call-site traversal with a single
+    dictionary lookup rather than an O(N) recursive walk of the callee's
+    internal statements.
+
+    Usage::
+
+        registry = SummaryRegistry()
+        registry.register("mypackage.utils:process_input", summary)
+        cached = registry.lookup("mypackage.utils:process_input")
+    """
+
+    def __init__(self) -> None:
+        self._registry: dict[str, FunctionSummary] = {}
+        self._by_simple_name: dict[str, list[str]] = {}  # simple_name → [fqn, …]
+
+    def register(self, fully_qualified_name: str, summary: FunctionSummary) -> None:
+        """Store a FunctionSummary keyed by its fully-qualified name."""
+        self._registry[fully_qualified_name] = summary
+        simple = fully_qualified_name.split("::")[-1].split(".")[-1]
+        self._by_simple_name.setdefault(simple, []).append(fully_qualified_name)
+
+    def lookup(self, fully_qualified_name: str) -> FunctionSummary | None:
+        """Return the FunctionSummary for *fully_qualified_name* or None."""
+        return self._registry.get(fully_qualified_name)
+
+    def lookup_simple(self, simple_name: str) -> list[FunctionSummary]:
+        """Return all summaries whose simple (unqualified) name matches."""
+        fqns = self._by_simple_name.get(simple_name, [])
+        return [self._registry[fqn] for fqn in fqns if fqn in self._registry]
+
+    def __len__(self) -> int:
+        return len(self._registry)
+
+    def __contains__(self, fqn: str) -> bool:
+        return fqn in self._registry
+
+    def keys(self):
+        return self._registry.keys()
+
+    def items(self):
+        return self._registry.items()
+
+
+@dataclass(frozen=True)
+class IFDSTaintFact:
+    """Context-sensitive IFDS taint fact with field-sensitive access paths.
+
+    `call_string` stores the bounded call context (k-limited) and is used to
+    keep return-flow propagation sound for nested helper chains.
+
+    `access_path` tracks the sequence of field/property accesses from the
+    tainted base object — e.g., (\"user\", \"email\") means obj.user.email is
+    tainted.  Empty tuple means the base reference itself is tainted.
+    """
+
+    function_file: str
+    function_name: str
+    value_label: str
+    call_string: Tuple[str, ...] = ()
+    access_path: Tuple[str, ...] = ()
+
+    def trim(self, k: int) -> "IFDSTaintFact":
+        if k <= 0:
+            return IFDSTaintFact(
+                function_file=self.function_file,
+                function_name=self.function_name,
+                value_label=self.value_label,
+                call_string=(),
+                access_path=self.access_path,
+            )
+        if len(self.call_string) <= k:
+            return self
+        return IFDSTaintFact(
+            function_file=self.function_file,
+            function_name=self.function_name,
+            value_label=self.value_label,
+            call_string=self.call_string[-k:],
+            access_path=self.access_path,
+        )
+
+
+class IDETaintLevel(IntEnum):
+    """Finite-height taint lattice levels for IDE-style dataflow facts."""
+
+    BOTTOM = 0
+    CLEAN = 1
+    TAINTED = 2
+    TOP = 3
+
+
+@dataclass(frozen=True)
+class IDETaintFact:
+    """IDE lattice fact tracked per (file, function, value, call-string).
+
+    `access_path` provides field-sensitive precision: (\"user\", \"email\")
+    means obj.user.email is tainted rather than the whole obj reference.
+    """
+
+    level: IDETaintLevel = IDETaintLevel.BOTTOM
+    sources: Tuple[str, ...] = ()
+    sanitizers: Tuple[str, ...] = ()
+    call_string: Tuple[str, ...] = ()
+    access_path: Tuple[str, ...] = ()
+
+    def trim(self, k: int) -> "IDETaintFact":
+        if k <= 0:
+            return IDETaintFact(
+                level=self.level,
+                sources=self.sources,
+                sanitizers=self.sanitizers,
+                call_string=(),
+                access_path=self.access_path,
+            )
+        if len(self.call_string) <= k:
+            return self
+        return IDETaintFact(
+            level=self.level,
+            sources=self.sources,
+            sanitizers=self.sanitizers,
+            call_string=self.call_string[-k:],
+            access_path=self.access_path,
+        )
+
+    def join(self, other: "IDETaintFact") -> "IDETaintFact":
+        if self.level == IDETaintLevel.BOTTOM:
+            return other
+        if other.level == IDETaintLevel.BOTTOM:
+            return self
+        level = IDETaintLevel(max(int(self.level), int(other.level)))
+        sources = tuple(sorted(set(self.sources) | set(other.sources)))
+        sanitizers = tuple(sorted(set(self.sanitizers) | set(other.sanitizers)))
+        call_string = self.call_string if len(self.call_string) >= len(other.call_string) else other.call_string
+        # Join access paths: if both paths exist and differ, widen to empty (top)
+        if self.access_path and other.access_path and self.access_path != other.access_path:
+            access_path: Tuple[str, ...] = ()
+        else:
+            access_path = self.access_path or other.access_path
+        return IDETaintFact(level=level, sources=sources, sanitizers=sanitizers, call_string=call_string, access_path=access_path)
+
+    def meet(self, other: "IDETaintFact") -> "IDETaintFact":
+        if self.level == IDETaintLevel.TOP:
+            return other
+        if other.level == IDETaintLevel.TOP:
+            return self
+        level = IDETaintLevel(min(int(self.level), int(other.level)))
+        source_intersection = set(self.sources) & set(other.sources)
+        sanitizer_intersection = set(self.sanitizers) & set(other.sanitizers)
+        if not source_intersection and level > IDETaintLevel.CLEAN:
+            level = IDETaintLevel.CLEAN
+        # Meet access paths: if they match, keep them; otherwise widen
+        if self.access_path == other.access_path:
+            access_path = self.access_path
+        else:
+            access_path = ()
+        return IDETaintFact(
+            level=level,
+            sources=tuple(sorted(source_intersection)),
+            sanitizers=tuple(sorted(sanitizer_intersection)),
+            call_string=self.call_string if self.call_string == other.call_string else (),
+            access_path=access_path,
+        )
+
+
+class GlobalGraph:
+    """Workspace-global graph plus IFDS summary state.
+
+    Compatibility: keeps legacy APIs (`add_node`, `add_edge`,
+    `resolve_cross_file_taint`, `find_all_paths`) while adding formal summary
+    persistence and propagation helpers for mathematically-sound incremental
+    scanning.
+    """
+
+    _SUMMARY_BUCKET = "ifds_function_summaries_v1"
+    _DEPENDENCY_BUCKET = "ifds_function_dependencies_v1"
+    # 5thMay.md Task B1 audit note (2026-05-07): keep the default bounded
+    # call-string depth at a single shared default so Python and JS helper-flow
+    # analyses do not silently diverge. v3.0 raises the default to k=3 to keep
+    # the last three verified call-sites in context and reduce cross-route taint
+    # bleed for wrapper/helper chains.
+    DEFAULT_CALL_STRING_K = 3
+
+    def __init__(self, cache_path: str | Path | None = None):
+        self.nodes: Dict[NodeID, TaintNode] = {}
+        self.adjacency: Dict[NodeID, List[Edge]] = {}
+        self.reverse_adjacency: Dict[NodeID, List[Edge]] = {}
+
+        # (normalized file, symbol) -> [(normalized file, symbol)]
+        self.imports: Dict[Tuple[str, str], List[Tuple[str, str]]] = {}
+        # (normalized file, symbol) -> (source label, trace)
+        self.module_taint: Dict[Tuple[str, str], Tuple[str, Tuple[TraceFrame, ...]]] = {}
+
+        # (normalized file, function name) -> FunctionSummary
+        self.function_summaries: Dict[Tuple[str, str], FunctionSummary] = {}
+        # (callee file, callee function) -> set((caller file, caller function))
+        self.reverse_summary_dependencies: Dict[Tuple[str, str], Set[Tuple[str, str]]] = {}
+        # (normalized file, function, value_label, call_string) -> IDETaintFact
+        self.ide_facts: Dict[Tuple[str, str, str, Tuple[str, ...]], IDETaintFact] = {}
+        self._loaded_summary_keys: Set[Tuple[str, str]] = set()
+        self._missing_summary_keys: Set[Tuple[str, str]] = set()
+
+        self._cache_path = Path(cache_path) if cache_path else Path(".guardmarly") / "cache.db"
+
+    @staticmethod
+    @lru_cache(maxsize=32768)
+    def _normalize_path(path: str) -> str:
+        try:
+            normalized = Path(path).resolve(strict=False).as_posix()
+        except OSError:
+            normalized = path.replace("\\", "/")
+        return normalized.casefold()
+
+    @classmethod
+    def _paths_match(cls, left: str, right: str) -> bool:
+        left_norm = cls._normalize_path(left)
+        right_norm = cls._normalize_path(right)
+        if left_norm == right_norm:
+            return True
+        if left_norm.endswith("/" + right_norm) or right_norm.endswith("/" + left_norm):
+            return True
+        return Path(left_norm).name == Path(right_norm).name
+
+    def _summary_key(self, file_path: str, function_name: str) -> str:
+        normalized = self._normalize_path(file_path)
+        return stable_hash(f"{normalized}::{function_name}")
+
+    def _summary_tuple_key(self, file_path: str, function_name: str) -> Tuple[str, str]:
+        return (self._normalize_path(file_path), function_name)
+
+    def _summary_label(self, file_path: str, function_name: str) -> str:
+        normalized = self._normalize_path(file_path)
+        return f"{normalized}::{function_name}"
+
+    def _ide_fact_key(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        call_string: Tuple[str, ...],
+    ) -> Tuple[str, str, str, Tuple[str, ...]]:
+        return (self._normalize_path(file_path), function_name, value_label, call_string)
+
+    def join_ide_facts(self, left: IDETaintFact, right: IDETaintFact) -> IDETaintFact:
+        return left.join(right)
+
+    def meet_ide_facts(self, left: IDETaintFact, right: IDETaintFact) -> IDETaintFact:
+        return left.meet(right)
+
+    def set_ide_fact(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        fact: IDETaintFact,
+        join: bool = True,
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> IDETaintFact:
+        trimmed = fact.trim(call_string_k)
+        key = self._ide_fact_key(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=trimmed.call_string,
+        )
+        if join and key in self.ide_facts:
+            merged = self.ide_facts[key].join(trimmed)
+            self.ide_facts[key] = merged
+            return merged
+        self.ide_facts[key] = trimmed
+        return trimmed
+
+    def get_ide_fact(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> IDETaintFact:
+        bounded = call_string[-call_string_k:] if call_string_k > 0 else ()
+        key = self._ide_fact_key(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=bounded,
+        )
+        return self.ide_facts.get(key, IDETaintFact())
+
+    def add_node(self, node: TaintNode) -> None:
+        self.nodes[node.id] = node
+        self.adjacency.setdefault(node.id, [])
+        self.reverse_adjacency.setdefault(node.id, [])
+
+        if node.taint_source:
+            key = (self._normalize_path(node.id.file_path), node.id.symbol_name)
+            self.module_taint[key] = (node.taint_source, node.taint_trace)
+
+    def add_edge(self, edge: Edge) -> None:
+        if edge.edge_type == "IMPORTS":
+            src_key = (self._normalize_path(edge.source.file_path), edge.source.symbol_name)
+            tgt_key = (self._normalize_path(edge.target.file_path), edge.target.symbol_name)
+            self.imports.setdefault(src_key, []).append(tgt_key)
+
+        if edge.source in self.nodes and edge.target in self.nodes:
+            self.adjacency.setdefault(edge.source, []).append(edge)
+            self.reverse_adjacency.setdefault(edge.target, []).append(edge)
+
+    def record_function_summary(self, summary: FunctionSummary) -> None:
+        key = self._summary_tuple_key(summary.file_path, summary.function_name)
+        normalized_dependencies = tuple(
+            sorted(
+                dep
+                for dep in summary.depends_on
+                if isinstance(dep, str) and "::" in dep
+            )
+        )
+        normalized_summary = FunctionSummary(
+            file_path=self._normalize_path(summary.file_path),
+            function_name=summary.function_name,
+            args_to_sink=summary.args_to_sink,
+            args_to_return=summary.args_to_return,
+            return_from_source=summary.return_from_source,
+            side_effect_symbols=summary.side_effect_symbols,
+            depends_on=normalized_dependencies,
+        )
+        self.function_summaries[key] = normalized_summary
+        self._loaded_summary_keys.add(key)
+        self._missing_summary_keys.discard(key)
+        self._rebuild_reverse_dependencies_for(key, normalized_summary)
+
+    def absorb_stir(self, stir_model: object) -> None:
+        """Absorb a STIR model into this GlobalGraph's function summaries.
+
+        Called by language analyzers after detection to populate the
+        inter-procedural fact graph with STIR sources, sinks, and flows.
+        Best-effort — failures are silently ignored.
+        """
+        try:
+            from guardmarly.ir.stir import StirModel
+
+            if not isinstance(stir_model, StirModel):
+                return
+
+            # Record each source as a FunctionSummary
+            for src in stir_model.sources:
+                fname = src.name.split(".")[0]
+                summary = FunctionSummary(
+                    file_path=stir_model.file_path,
+                    function_name=f"stir_{fname}",
+                    return_from_source=True,
+                    depends_on=(),
+                )
+                self.record_function_summary(summary)
+
+            # Record each sink as a FunctionSummary
+            for sink in stir_model.sinks:
+                fname = sink.name.split(".")[0]
+                summary = FunctionSummary(
+                    file_path=stir_model.file_path,
+                    function_name=f"stir_{fname}",
+                    args_to_sink=(1,),
+                    depends_on=(),
+                )
+                self.record_function_summary(summary)
+        except (AttributeError, ValueError, TypeError):
+            pass
+
+    def record_call_dependency(
+        self,
+        *,
+        caller_file: str,
+        caller_name: str,
+        callee_file: str,
+        callee_name: str,
+    ) -> None:
+        caller_key = self._summary_tuple_key(caller_file, caller_name)
+        callee_label = self._summary_label(callee_file, callee_name)
+        existing = self.function_summaries.get(caller_key)
+        if existing is None:
+            existing = FunctionSummary(file_path=caller_key[0], function_name=caller_name)
+        deps = set(existing.depends_on)
+        if callee_label in deps:
+            return
+        deps.add(callee_label)
+        updated = FunctionSummary(
+            file_path=existing.file_path,
+            function_name=existing.function_name,
+            args_to_sink=existing.args_to_sink,
+            args_to_return=existing.args_to_return,
+            return_from_source=existing.return_from_source,
+            side_effect_symbols=existing.side_effect_symbols,
+            depends_on=tuple(sorted(deps)),
+        )
+        self.function_summaries[caller_key] = updated
+        self._rebuild_reverse_dependencies_for(caller_key, updated)
+
+    def _rebuild_reverse_dependencies_for(
+        self,
+        caller_key: Tuple[str, str],
+        summary: FunctionSummary,
+    ) -> None:
+        for callee_key, callers in list(self.reverse_summary_dependencies.items()):
+            if caller_key in callers:
+                callers.discard(caller_key)
+                if not callers:
+                    self.reverse_summary_dependencies.pop(callee_key, None)
+
+        for dependency in summary.depends_on:
+            if "::" not in dependency:
+                continue
+            dep_file, dep_fn = dependency.rsplit("::", 1)
+            dep_key = (dep_file, dep_fn)
+            self.reverse_summary_dependencies.setdefault(dep_key, set()).add(caller_key)
+
+    def get_function_summary(self, file_path: str, function_name: str) -> Optional[FunctionSummary]:
+        key = (self._normalize_path(file_path), function_name)
+        summary = self.function_summaries.get(key)
+        if summary is not None:
+            return summary
+
+        # Fuzzy fallback for relative/absolute path mismatches
+        normalized = self._normalize_path(file_path)
+        for (fp, fn), candidate in self.function_summaries.items():
+            if fn == function_name and self._paths_match(fp, normalized):
+                return candidate
+        return None
+
+    def save_summaries(self) -> None:
+        if not self.function_summaries and not self.reverse_summary_dependencies:
+            return
+        try:
+            with SQLiteStore(self._cache_path) as store:
+                for summary in self.function_summaries.values():
+                    cache_key = self._summary_key(summary.file_path, summary.function_name)
+                    store.set_json(self._SUMMARY_BUCKET, cache_key, summary.as_dict())
+                for (dep_file, dep_fn), callers in self.reverse_summary_dependencies.items():
+                    dep_key = self._summary_key(dep_file, dep_fn)
+                    payload = {
+                        "dependency": f"{dep_file}::{dep_fn}",
+                        "callers": [f"{caller_file}::{caller_fn}" for caller_file, caller_fn in sorted(callers)],
+                    }
+                    store.set_json(self._DEPENDENCY_BUCKET, dep_key, payload)
+        except sqlite3.OperationalError:
+            # Database unavailable — summaries remain in memory only
+            pass
+
+    def load_summary(self, file_path: str, function_name: str) -> Optional[FunctionSummary]:
+        key = self._summary_tuple_key(file_path, function_name)
+        if key in self.function_summaries:
+            return self.function_summaries[key]
+        if key in self._missing_summary_keys:
+            return None
+
+        cache_key = self._summary_key(file_path, function_name)
+        try:
+            with SQLiteStore(self._cache_path) as store:
+                payload = store.get_json(self._SUMMARY_BUCKET, cache_key)
+                dep_payload = store.get_json(self._DEPENDENCY_BUCKET, cache_key)
+        except sqlite3.OperationalError:
+            # Database locked or unavailable — fall back to in-memory state
+            self._missing_summary_keys.add(key)
+            return None
+        if not isinstance(payload, dict):
+            self._missing_summary_keys.add(key)
+            return None
+        summary = FunctionSummary.from_dict(payload)
+        self.record_function_summary(summary)
+        self._loaded_summary_keys.add(key)
+        if isinstance(dep_payload, dict):
+            callers = dep_payload.get("callers", ())
+            for item in callers:
+                if not isinstance(item, str) or "::" not in item:
+                    continue
+                caller_file, caller_fn = item.rsplit("::", 1)
+                self.reverse_summary_dependencies.setdefault(
+                    self._summary_tuple_key(file_path, function_name),
+                    set(),
+                ).add((caller_file, caller_fn))
+        return summary
+
+    def invalidate_changed_files(self, changed_files: Set[str]) -> Set[Tuple[str, str]]:
+        """Invalidate summaries impacted by changed files and dependent callers.
+
+        Returns the set of invalidated (file, function) summary keys.
+        """
+        if not changed_files:
+            return set()
+
+        changed_norm = {self._normalize_path(path) for path in changed_files}
+        to_invalidate: Set[Tuple[str, str]] = {
+            key for key in self.function_summaries if key[0] in changed_norm
+        }
+        queue: List[Tuple[str, str]] = list(to_invalidate)
+        visited: Set[Tuple[str, str]] = set()
+        while queue:
+            callee_key = queue.pop(0)
+            if callee_key in visited:
+                continue
+            visited.add(callee_key)
+            for caller_key in self.reverse_summary_dependencies.get(callee_key, set()):
+                if caller_key not in to_invalidate:
+                    to_invalidate.add(caller_key)
+                    queue.append(caller_key)
+
+        if not to_invalidate:
+            return set()
+
+        with SQLiteStore(self._cache_path) as store:
+            for file_path, function_name in to_invalidate:
+                key = (file_path, function_name)
+                self.function_summaries.pop(key, None)
+                self._loaded_summary_keys.discard(key)
+                self._missing_summary_keys.discard(key)
+                cache_key = self._summary_key(file_path, function_name)
+                store.delete(self._SUMMARY_BUCKET, cache_key)
+                store.delete(self._DEPENDENCY_BUCKET, cache_key)
+
+        for callee_key in list(self.reverse_summary_dependencies.keys()):
+            callers = self.reverse_summary_dependencies[callee_key]
+            updated_callers = {caller for caller in callers if caller not in to_invalidate}
+            if updated_callers:
+                self.reverse_summary_dependencies[callee_key] = updated_callers
+            else:
+                self.reverse_summary_dependencies.pop(callee_key, None)
+        return to_invalidate
+
+    def propagate_call_facts(
+        self,
+        *,
+        caller_file: str,
+        caller_name: str = "<module>",
+        callee_file: str,
+        callee_name: str,
+        tainted_arg_indexes: Set[int],
+        call_line: Optional[int] = None,
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> Tuple[bool, Tuple[TraceFrame, ...], bool, Tuple[TraceFrame, ...]]:
+        """Apply IFDS summary transfer for one callsite.
+
+        Returns:
+            (sink_reachable, sink_trace, return_tainted, return_trace)
+        """
+        summary = self.get_function_summary(callee_file, callee_name)
+        if summary is None:
+            summary = self.load_summary(callee_file, callee_name)
+        if summary is None:
+            return False, (), False, ()
+
+        self.record_call_dependency(
+            caller_file=caller_file,
+            caller_name=caller_name,
+            callee_file=callee_file,
+            callee_name=callee_name,
+        )
+
+        sink_hit = bool(set(summary.args_to_sink) & set(tainted_arg_indexes))
+        ret_hit = summary.return_from_source or bool(set(summary.args_to_return) & set(tainted_arg_indexes))
+
+        call_site_label = f"{self._normalize_path(caller_file)}::{caller_name}@{call_line or 0}->{callee_name}"
+        bounded_call_string = tuple(call_string + (call_site_label,))
+        if call_string_k >= 0:
+            bounded_call_string = bounded_call_string[-call_string_k:] if call_string_k else ()
+        context_label = " > ".join(bounded_call_string) if bounded_call_string else "<root>"
+
+        sink_trace: Tuple[TraceFrame, ...] = ()
+        return_trace: Tuple[TraceFrame, ...] = ()
+        if sink_hit:
+            sink_trace = (
+                TraceFrame(kind="call", label=f"call `{callee_name}()` [ctx: {context_label}]", line=call_line),
+                TraceFrame(kind="sink", label=f"summary sink in `{callee_name}()`", line=call_line),
+            )
+        if ret_hit:
+            label = "summary return tainted from source" if summary.return_from_source else "summary return tainted from argument"
+            return_trace = (
+                TraceFrame(kind="call", label=f"call `{callee_name}()` [ctx: {context_label}]", line=call_line),
+                TraceFrame(kind="return", label=label, line=call_line),
+            )
+
+        fact_level = IDETaintLevel.TAINTED if (sink_hit or ret_hit) else IDETaintLevel.CLEAN
+        fact_sources: Tuple[str, ...] = ()
+        if ret_hit and summary.return_from_source:
+            fact_sources = ("intrinsic-source",)
+        elif tainted_arg_indexes:
+            fact_sources = tuple(sorted(f"arg[{idx}]" for idx in tainted_arg_indexes))
+        elif fact_level == IDETaintLevel.CLEAN:
+            # Explicitly encode clean return transfer so callers can overwrite stale taint.
+            fact_sources = ("clean-return",)
+        propagated_fact = IDETaintFact(
+            level=fact_level,
+            sources=fact_sources,
+            call_string=bounded_call_string,
+        )
+        self.set_ide_fact(
+            file_path=callee_file,
+            function_name=callee_name,
+            value_label="$ret",
+            fact=propagated_fact,
+            join=True,
+            call_string_k=call_string_k,
+        )
+        return sink_hit, sink_trace, ret_hit, return_trace
+
+    def propagate_js_call_facts(
+        self,
+        *,
+        caller_file: str,
+        callee_file: str,
+        callee_name: str,
+        tainted_arg_indexes: Set[int],
+        call_line: Optional[int] = None,
+        caller_name: str = "<js-scope>",
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> Tuple[bool, Tuple[TraceFrame, ...], bool, Tuple[TraceFrame, ...]]:
+        """JS-facing wrapper around IFDS call transfer.
+
+        Keeps JavaScript helper-flow callsites on a single GlobalGraph entrypoint
+        while sharing the same bounded call-string and IDE-lattice transfer
+        semantics used by Python.
+        """
+        return self.propagate_call_facts(
+            caller_file=caller_file,
+            caller_name=caller_name,
+            callee_file=callee_file,
+            callee_name=callee_name,
+            tainted_arg_indexes=tainted_arg_indexes,
+            call_line=call_line,
+            call_string=call_string,
+            call_string_k=call_string_k,
+        )
+
+    def resolve_cross_file_taint(
+        self,
+        file_path: str,
+        symbol_name: str,
+        visited: Optional[Set[Tuple[str, str]]] = None,
+    ) -> Optional[Tuple[str, Tuple[TraceFrame, ...]]]:
+        """Resolve taint for potentially-imported symbols across modules."""
+        normalized_file = self._normalize_path(file_path)
+        state = (normalized_file, symbol_name)
+        if visited is None:
+            visited = set()
+        if state in visited:
+            return None
+        visited.add(state)
+
+        for (fp, sym), taint in self.module_taint.items():
+            if sym == symbol_name and self._paths_match(normalized_file, fp):
+                return taint
+
+        for (fp, sym), targets in self.imports.items():
+            if sym == symbol_name and self._paths_match(normalized_file, fp):
+                for target_fp, target_sym in targets:
+                    imported_taint = self.resolve_cross_file_taint(target_fp, target_sym, visited=visited)
+                    if imported_taint:
+                        return imported_taint
+        return None
+
+    # ── Demand-driven call-chain verification ─────────────────────────────
+
+    def verify_call_chain_soundness(
+        self,
+        *,
+        sink_file: str,
+        sink_function: str,
+        source_file: str,
+        source_function: str,
+        max_depth: int = 12,
+    ) -> Tuple[bool, List[str]]:
+        """Demand-driven backward verification of the taint path through callers.
+
+        Starting from the sink function, walks *up* the call dependency graph
+        (reverse edges) to verify that the source function genuinely reaches
+        the sink through a chain of verified summarized calls.  Returns
+        (is_reachable, chain_text).
+
+        Unlike the bounded k=2 forward call-string, this can traverse
+        arbitrarily deep middleware → view → service → ORM chains.
+        """
+        sink_key = self._summary_tuple_key(sink_file, sink_function)
+        source_key = self._summary_tuple_key(source_file, source_function)
+
+        # BFS upward from sink through reverse call dependencies
+        visited: Set[Tuple[str, str]] = {sink_key}
+        parent: Dict[Tuple[str, str], Optional[Tuple[str, str]]] = {sink_key: None}
+        queue: List[Tuple[str, str]] = [sink_key]
+        found = False
+
+        for _depth in range(max_depth):
+            next_queue: List[Tuple[str, str]] = []
+            for current in queue:
+                # Check all callers of the current function
+                callers = self.reverse_summary_dependencies.get(current, set())
+                for caller_key in callers:
+                    if caller_key in visited:
+                        continue
+                    visited.add(caller_key)
+                    parent[caller_key] = current
+                    if caller_key == source_key:
+                        found = True
+                        break
+                    # Also check partial matches by file or function name
+                    caller_file, caller_fn = caller_key
+                    if self._paths_match(caller_file, source_key[0]) and caller_fn == source_key[1]:
+                        found = True
+                        break
+                    next_queue.append(caller_key)
+                if found:
+                    break
+            if found or not next_queue:
+                break
+            queue = next_queue
+
+        if found:
+            # Reconstruct the chain from source → sink
+            chain: List[str] = []
+            cur: Optional[Tuple[str, str]] = source_key
+            while cur is not None:
+                chain.append(f"{cur[1]}({cur[0]})")
+                cur = parent.get(cur)
+            return True, chain
+        return False, []
+
+    def resolve_taint_with_access_path(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        access_path: Tuple[str, ...] = (),
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> Tuple[IDETaintLevel, Tuple[str, ...], Tuple[str, ...]]:
+        """Resolve taint state for a value with optional field-sensitive access path.
+
+        When `access_path` is non-empty (e.g., (\"user\", \"email\")), only facts
+        whose access path is a prefix of or equal to the query path will match.
+        An empty query access_path matches any fact (conservative read).
+        """
+        if not access_path:
+            # Conservative: match any access path
+            fact = self.get_ide_fact(
+                file_path=file_path,
+                function_name=function_name,
+                value_label=value_label,
+                call_string=call_string,
+                call_string_k=call_string_k,
+            )
+            return fact.level, fact.sources, fact.sanitizers
+
+        # Field-sensitive lookup: try exact access path first, then each prefix
+        for prefix_len in range(len(access_path), 0, -1):
+            prefix = access_path[:prefix_len]
+            # Look up facts with each call-string variant
+            for cs_variant in self._call_string_variants(call_string, call_string_k):
+                key = self._ide_fact_key(
+                    file_path=file_path,
+                    function_name=function_name,
+                    value_label=value_label,
+                    call_string=cs_variant,
+                )
+                if key in self.ide_facts:
+                    fact = self.ide_facts[key]
+                    if not fact.access_path or fact.access_path == prefix:
+                        return fact.level, fact.sources, fact.sanitizers
+            # Also try without access path restriction (conservative fallback)
+            for cs_variant in self._call_string_variants(call_string, call_string_k):
+                key = self._ide_fact_key(
+                    file_path=file_path,
+                    function_name=function_name,
+                    value_label=value_label,
+                    call_string=cs_variant,
+                )
+                if key in self.ide_facts and not self.ide_facts[key].access_path:
+                    fact = self.ide_facts[key]
+                    if fact.level >= IDETaintLevel.TAINTED:
+                        return fact.level, fact.sources, fact.sanitizers
+
+        # Fall back to conservative lookup
+        fact = self.get_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=call_string,
+            call_string_k=call_string_k,
+        )
+        return fact.level, fact.sources, fact.sanitizers
+
+    def _call_string_variants(
+        self,
+        call_string: Tuple[str, ...],
+        k: int,
+    ) -> List[Tuple[str, ...]]:
+        """Generate call-string variants for fuzzy matching."""
+        if not call_string:
+            return [()]
+        bounded = call_string[-k:] if k > 0 else call_string
+        variants = [bounded]
+        # Also try dropping the last call-site for imprecise matching
+        if len(bounded) > 1:
+            variants.append(bounded[:-1])
+        if len(bounded) > 0:
+            variants.append(())
+        return variants
+
+    def set_taint_with_access_path(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        level: IDETaintLevel,
+        sources: Tuple[str, ...] = (),
+        access_path: Tuple[str, ...] = (),
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> IDETaintFact:
+        """Record a field-sensitive taint fact for a value."""
+        fact = IDETaintFact(
+            level=level,
+            sources=sources,
+            call_string=call_string,
+            access_path=access_path,
+        )
+        return self.set_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            fact=fact,
+            join=True,
+            call_string_k=call_string_k,
+        )
+
+    # ── Cross-language bridge convergence (DIR-3.3) ────────────────────
+
+    def publish_cross_language_bridges(
+        self,
+        bridges: list[tuple[str, str, str, str]],
+    ) -> int:
+        """Publish cross-language routeu2192HTTP bridge edges into the GlobalGraph IFDS model.
+
+        Each bridge is (source_file, source_function, target_file, target_symbol).
+        Converts each bridge into IDE taint facts and ICFG edges so
+        cross-language flows participate in the unified IFDS solution.
+        """
+        count = 0
+        for src_file, src_func, tgt_file, tgt_symbol in bridges:
+            self.set_taint_with_access_path(
+                file_path=src_file,
+                function_name=src_func,
+                value_label="return",
+                level=IDETaintLevel.TAINTED,
+                sources=(f"cross-lang:{src_func}",),
+            )
+            self.set_taint_with_access_path(
+                file_path=tgt_file,
+                function_name=tgt_symbol,
+                value_label="argument",
+                level=IDETaintLevel.TAINTED,
+                sources=(f"cross-lang:{src_func}",),
+            )
+            src_key = self._summary_tuple_key(src_file, src_func)
+            tgt_key = self._summary_tuple_key(tgt_file, tgt_symbol)
+            # Add reverse dependency so verify_call_chain_soundness can walk from sink to source
+            if tgt_key not in self.reverse_summary_dependencies:
+                self.reverse_summary_dependencies[tgt_key] = set()
+            self.reverse_summary_dependencies[tgt_key].add(src_key)
+            count += 1
+        return count
+
+    def find_all_paths(self, source_id: NodeID, sink_id: NodeID, max_depth: int = 5) -> list[list[NodeID]]:
+        """Bounded DFS path discovery across the ICFG projection."""
+        paths: List[List[NodeID]] = []
+
+        def dfs(current: NodeID, path: List[NodeID], visited: Set[NodeID]) -> None:
+            if len(path) <= max_depth:
+                if current == sink_id:
+                    paths.append(list(path))
+                else:
+                    for edge in self.adjacency.get(current, []):
+                        neighbor = edge.target
+                        if neighbor not in visited:
+                            visited.add(neighbor)
+                            path.append(neighbor)
+                            dfs(neighbor, path, visited)
+                            path.pop()
+                            visited.remove(neighbor)
+
+        dfs(source_id, [source_id], {source_id})
+        return paths
+
+    def adjust_confidence_from_ide(
+        self,
+        *,
+        file_path: str,
+        function_name: str,
+        value_label: str,
+        base_confidence: float,
+        call_string: Tuple[str, ...] = (),
+        call_string_k: int = DEFAULT_CALL_STRING_K,
+    ) -> float:
+        """Use IDE lattice facts to refine a finding's confidence.
+
+        - TAINTED facts boost confidence toward 1.0
+        - CLEAN facts suppress confidence toward 0.0
+        - BOTTOM/TOP facts leave confidence unchanged
+        """
+        fact = self.get_ide_fact(
+            file_path=file_path,
+            function_name=function_name,
+            value_label=value_label,
+            call_string=call_string,
+            call_string_k=call_string_k,
+        )
+        if fact.level == IDETaintLevel.BOTTOM or fact.level == IDETaintLevel.TOP:
+            return base_confidence
+        if fact.level == IDETaintLevel.TAINTED:
+            return min(1.0, base_confidence + 0.15)
+        if fact.level == IDETaintLevel.CLEAN:
+            return max(0.0, base_confidence - 0.40)
+        return base_confidence
+
+    # ── Serialization ──────────────────────────────────────────────────────────
+
+    def to_dict(self) -> dict:
+        """Serialize the graph to a JSON-compatible dict for caching."""
+        def _ser_trace(trace: tuple) -> list:
+            return [
+                {"kind": t.kind, "label": t.label, "line": t.line, "start_column": t.start_column}
+                for t in trace
+            ]
+
+        summaries = {
+            f"{fp}|{fn}": s.as_dict()
+            for (fp, fn), s in self.function_summaries.items()
+        }
+        module_taint = {
+            f"{fp}|{sym}": {"source": src, "trace": _ser_trace(trace)}
+            for (fp, sym), (src, trace) in self.module_taint.items()
+        }
+        return {"summaries": summaries, "module_taint": module_taint}
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "GlobalGraph":
+        """Restore a GlobalGraph from a serialized dict."""
+        from guardmarly._types import TraceFrame as _TF
+
+        graph = cls()
+        for key, s in data.get("summaries", {}).items():
+            fp, fn = key.split("|", 1)
+            summary = FunctionSummary.from_dict(s)
+            graph.function_summaries[(fp, fn)] = summary
+        for key, mt in data.get("module_taint", {}).items():
+            fp, sym = key.split("|", 1)
+            trace = tuple(
+                _TF(
+                    kind=t.get("kind", ""),
+                    label=t.get("label", ""),
+                    line=t.get("line"),
+                    start_column=t.get("start_column", 1),
+                )
+                for t in mt.get("trace", [])
+            )
+            graph.module_taint[(fp, sym)] = (mt.get("source", ""), trace)
+        return graph
+

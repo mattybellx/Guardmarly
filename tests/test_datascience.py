@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from ansede_static.rulesets.datascience import analyze_datascience
+from guardmarly.rulesets.datascience import analyze_datascience
 
 
 # ── DS-001: Path traversal via pandas read_csv ───────────────────────────────

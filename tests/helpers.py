@@ -1,9 +1,9 @@
-"""Shared test fixtures and helpers for ansede-static reporter tests."""
+"""Shared test fixtures and helpers for guardmarly reporter tests."""
 from __future__ import annotations
 
 import pytest
 
-from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
+from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
 
 
 @pytest.fixture

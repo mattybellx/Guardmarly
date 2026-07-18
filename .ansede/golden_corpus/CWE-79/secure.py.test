@@ -1,0 +1,14 @@
+# Golden Corpus: Cross-Site Scripting (CWE-79) — Python
+# MUST NOT trigger the rule
+
+# Safe: uses template rendering with auto-escaping.
+# No string formatting, concatenation, or raw HTML with user data.
+
+def render_greeting(name: str) -> str:
+    """Safe: returns plain text, not HTML."""
+    return f"Hello, {len(name)} character name!"
+
+def build_json_response(data: dict) -> str:
+    """Safe: JSON response, not HTML."""
+    import json
+    return json.dumps({"status": "ok", "count": len(data)})

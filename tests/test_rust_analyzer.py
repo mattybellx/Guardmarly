@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import pytest
-from ansede_static.rust_analyzer import analyze_rust
-from ansede_static._types import Severity
+from guardmarly.rust_analyzer import analyze_rust
+from guardmarly._types import Severity
 
 
 def test_unsafe_block_flagged():
@@ -103,7 +103,7 @@ def test_lines_scanned_correct():
 
 
 def test_rust_analyze_returns_analysis_result():
-    from ansede_static._types import AnalysisResult
+    from guardmarly._types import AnalysisResult
     result = analyze_rust("fn main() {}", filename="test.rs")
     assert isinstance(result, AnalysisResult)
     assert result.file_path == "test.rs"
@@ -121,7 +121,7 @@ let hashed = password.unwrap();
 
 def test_cli_rust_detection():
     """Verify CLI detects .rs files as rust language."""
-    from ansede_static.cli import _detect_language
+    from guardmarly.cli import _detect_language
     from pathlib import Path
     assert _detect_language(Path("main.rs")) == "rust"
     assert _detect_language(Path("lib.rs")) == "rust"

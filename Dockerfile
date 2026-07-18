@@ -11,7 +11,7 @@ COPY src/ ./src/
 # Copy webapp templates and code
 COPY webapp/ ./webapp/
 
-# Allow the CLI subprocess to find ansede_static
+# Allow the CLI subprocess to find guardmarly
 ENV PYTHONPATH="/app/src:${PYTHONPATH}" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \

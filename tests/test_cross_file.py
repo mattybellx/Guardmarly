@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ansede_static.ir.global_graph import GlobalGraph
-from ansede_static.python_analyzer import analyze_python, index_python_file
+from guardmarly.ir.global_graph import GlobalGraph
+from guardmarly.python_analyzer import analyze_python, index_python_file
 
 
 def test_cross_file_imported_taint_reaches_sql_sink(tmp_path):

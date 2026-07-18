@@ -4,10 +4,10 @@ tests/test_interprocedural_taint
 Tests for interprocedural taint analysis via IFDS.
 """
 import pytest
-from ansede_static.v2.interprocedural_taint import InterproceduralTaintAnalysis
-from ansede_static.v2.call_graph import CallGraph
-from ansede_static.v2.model import SemanticModel
-from ansede_static.v2.normalizer import normalize_source
+from guardmarly.v2.interprocedural_taint import InterproceduralTaintAnalysis
+from guardmarly.v2.call_graph import CallGraph
+from guardmarly.v2.model import SemanticModel
+from guardmarly.v2.normalizer import normalize_source
 
 
 class TestInterproceduralTaintAnalysis:

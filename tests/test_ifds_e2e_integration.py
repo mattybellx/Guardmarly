@@ -4,11 +4,11 @@ tests/test_ifds_e2e_integration
 End-to-end IFDS integration: realistic vulnerabilities detected.
 """
 import pytest
-from ansede_static.v2 import (
+from guardmarly.v2 import (
     SemanticModel, Engine, REGISTRY, InterproceduralTaintAnalysis
 )
-from ansede_static.v2.call_graph import CallGraph
-from ansede_static.v2.normalizer import normalize_source
+from guardmarly.v2.call_graph import CallGraph
+from guardmarly.v2.normalizer import normalize_source
 
 
 class TestIFDSEndToEndIntegration:

@@ -35,24 +35,24 @@ jobs:
           cyclonedx-py \
             --format json \
             --schema-version 1.5 \
-            -- output ansede-static-sbom.cdx.json
+            -- output guardmarly-sbom.cdx.json
 
       - name: Upload SBOM as Release Asset
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: ansede-static-sbom.cdx.json
+          files: guardmarly-sbom.cdx.json
 
       - name: Generate SLSA Provenance
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            ansede-static-sbom.cdx.json
+            guardmarly-sbom.cdx.json
 
       - name: Upload SBOM as Workflow Artifact
         uses: actions/upload-artifact@v4
         with:
           name: sbom-${{ github.ref_name }}
-          path: ansede-static-sbom.cdx.json
+          path: guardmarly-sbom.cdx.json
           retention-days: 90

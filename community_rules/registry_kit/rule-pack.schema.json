@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Ansede Community Rule Pack",
+  "title": "Guardmarly Community Rule Pack",
   "type": "object",
   "required": ["version", "rules"],
   "properties": {

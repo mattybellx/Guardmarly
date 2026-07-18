@@ -23,12 +23,12 @@ MIN_V2_RECALL_PCT = 80.0  # v2 must find at least 80% of v1 findings
 
 
 def _run_engine(engine: str, target: str) -> dict | None:
-    """Run ansede-static with the given engine.  Returns parsed JSON or None."""
+    """Run guardmarly with the given engine.  Returns parsed JSON or None."""
     result = subprocess.run(
         [
             sys.executable,
             "-m",
-            "ansede_static.cli",
+            "guardmarly.cli",
             target,
             "--engine",
             engine,

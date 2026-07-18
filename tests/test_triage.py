@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ansede_static._types import Finding, Severity
-from ansede_static.engine.triage import CWETriageRules, cluster_findings
+from guardmarly._types import Finding, Severity
+from guardmarly.engine.triage import CWETriageRules, cluster_findings
 
 
 def _finding(cwe: str, title: str = "finding") -> Finding:

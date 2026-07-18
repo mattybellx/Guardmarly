@@ -1,12 +1,12 @@
 ---
 name: 💡 Rule Request / False Negative
-description: Request a new detection rule or report a vulnerability pattern that ansede-static misses
+description: Request a new detection rule or report a vulnerability pattern that guardmarly misses
 labels: ["enhancement", "rule-request"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve ansede-static's coverage!  
+        Thanks for helping improve guardmarly's coverage!  
         A good rule request includes a minimal code snippet that **should** trigger a finding but currently does not.
 
   - type: textarea

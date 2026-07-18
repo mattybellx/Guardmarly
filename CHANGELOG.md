@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to ansede-static are documented here.
+All notable changes to guardmarly are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ## [6.3.0] — 2026-07-13
@@ -158,7 +158,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Added
 - **Rust language analyzer** (RS-001–006): CWE-119 (unsafe blocks), CWE-798 (hardcoded credentials), CWE-78 (command injection), CWE-327 (weak crypto), CWE-532 (sensitive panics), CWE-362 (TOCTOU)
 - **LSP code actions + hover**: VS Code now offers one-click fix suggestions via the lightbulb (codeAction) and vulnerability details on hover
-- **Live playground** at `/scan`: paste code, see findings — no install required. Available at ansede.onrender.com/scan
+- **Live playground** at `/scan`: paste code, see findings — no install required. Available at guardmarly.onrender.com/scan
 - **GitLab CI + Azure DevOps + Jenkins templates** in `docs/ci-templates/`
 - **Adaptive Rules** section in README — `--suggest` documented prominently
 - **`--all-findings` flag**: escape hatch to see all findings regardless of confidence
@@ -329,7 +329,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [5.0.0] — 2026-06-27
 
 ### Added
-- **Rust Pattern Engine** — Native regex matching via PyO3 (`ansede_rust_core`), 3.6x faster on large files with graceful Python fallback
+- **Rust Pattern Engine** — Native regex matching via PyO3 (`guardmarly_rust_core`), 3.6x faster on large files with graceful Python fallback
 - **Java Tree-Sitter AST Analyzer** (`java_ast_analyzer.py`) — Replaces regex heuristics with accurate AST parsing. 9 checkers: CWE-89, CWE-78, CWE-328, CWE-918, CWE-601, CWE-79, CWE-798, CWE-22, CWE-862
 - **4 New Detectors**: CWE-942 (CORS wildcard), CWE-94 (Jinja2 SSTI), CWE-362 (TOCTOU), CWE-862 (Spring Actuator)
 - **Precision Benchmark Harness** (`benchmarks/precision_benchmark.py`) — Multi-language, multi-repo precision tracking with per-CWE heatmaps
@@ -370,10 +370,10 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - **`--pr` / `--pr-output` CLI flags** — Generate PR-ready markdown documents with unified diffs from auto-fixable findings
-- **`src/ansede_static/engine/pr_generator.py`** — PR document generator module with 20 tests
+- **`src/guardmarly/engine/pr_generator.py`** — PR document generator module with 20 tests
 - **`benchmarks/codeql_runner.py`** — Automated CodeQL security-extended benchmark runner on CVE corpus
-- **`benchmarks/three_tool_report.py`** — Automated 3-tool comparison (Ansede + Semgrep + CodeQL)
-- **`benchmarks/THREE_TOOL_COMPARISON.md`** — Published 3-tool benchmark (Ansede 100%, Semgrep 23.2%, CodeQL 33.6% on Py+JS)
+- **`benchmarks/three_tool_report.py`** — Automated 3-tool comparison (Guardmarly + Semgrep + CodeQL)
+- **`benchmarks/THREE_TOOL_COMPARISON.md`** — Published 3-tool benchmark (Guardmarly 100%, Semgrep 23.2%, CodeQL 33.6% on Py+JS)
 - **`docs/FULL_ROADMAP.md`** — Full 66-item implementation roadmap (P1 100%, P3 100%, overall 52%)
 
 ### Fixed — Accuracy Improvements
@@ -408,7 +408,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Added — Comprehensive Benchmark Refresh (2026-06-26)
 - **CVE recall updated to 90.2% (148/164)** across 5 languages (+4.8% from prior 87.2%)
 - **Quality benchmark: 100%** — 37/37 cases, 63/63 checks, 15/15 shadow detectors, gate_ready=True
-- **Head-to-head vs Semgrep OSS published**: Ansede 90.2% vs Semgrep 23.2% recall (measured on 164 CVE corpus)
+- **Head-to-head vs Semgrep OSS published**: Guardmarly 90.2% vs Semgrep 23.2% recall (measured on 164 CVE corpus)
 - **Performance benchmark**: 198.52 cases/sec, avg 186ms per iteration
 - **48-repo stress test**: 0 failures across 48 real-world repos (2 large repos timed out on minified JS)
 - **Fresh 10-repo benchmark**: 9,499 files, 1,426,143 lines, 3,561 findings, 49.6% noise reduction
@@ -416,7 +416,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **CodeQL CLI v2.25.6** downloaded and verified for future multi-tool comparisons
 
 ### Added — OpenAPI/Swagger Bridge
-- **`src/ansede_static/graph/openapi_bridge.py`** — New module that auto-discovers OpenAPI/Swagger spec files, parses 3.0/3.1/2.0 specs, extracts route definitions with operationIds/parameters, matches spec paths to backend route handlers across Python/JS/Go/Java/C# using exact and {param} wildcard matching, and generates bridge edges for cross-language taint tracking.
+- **`src/guardmarly/graph/openapi_bridge.py`** — New module that auto-discovers OpenAPI/Swagger spec files, parses 3.0/3.1/2.0 specs, extracts route definitions with operationIds/parameters, matches spec paths to backend route handlers across Python/JS/Go/Java/C# using exact and {param} wildcard matching, and generates bridge edges for cross-language taint tracking.
 - **`--openapi-report`** CLI flag — prints matched/unmatched route-to-handler bridging report.
 - **7 tests** covering path normalization, route extraction, spec discovery, JSON loading, end-to-end matching, and bridge stats.
 
@@ -429,7 +429,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Added — Container & Release Automation
 - **`docker/static-scanner.Dockerfile`** — Minimal scanner-only Docker image (python:3.13-slim + pip install).
 - **`.github/workflows/scanner-image.yml`** — Builds/publishes to GHCR on version tags.
-- **`.github/actions/ansede-scan/action.yml`** — Docker-based GitHub Action.
+- **`.github/actions/guardmarly-scan/action.yml`** — Docker-based GitHub Action.
 - **Release workflow overhaul** — `.github/workflows/release.yml` now builds 3 IDE plugins (VS Code `.vsix`, IntelliJ `.zip`, VS 2022 `.vsix`), compiles CLI binaries (Linux/macOS/Windows), runs full test suite, and generates changelog-driven release notes.
 
 ### Added — Java & C# Rule Depth
@@ -438,7 +438,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added — Performance: `--batch` Mode
 - **`--batch` CLI flag** — Scans all files with shared GlobalGraph + rules cache + parallel thread pool. Avoids per-file import overhead. Targets 5,000+ LOC/s throughput.
-- `ansede-static src/ --batch --workers 8`
+- `guardmarly src/ --batch --workers 8`
 
 ### Added — Documentation Site
 - **MkDocs site** with 7 pages: Getting Started, Configuration, CI Integration, IDE Setup, FAQ, Benchmarks, Writing Rules.
@@ -453,7 +453,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Collapsible file sections
 
 ### Added — Head-to-Head Benchmark
-- **`benchmarks/head_to_head.py`** with `--ansede-only` mode for running without Semgrep.
+- **`benchmarks/head_to_head.py`** with `--guardmarly-only` mode for running without Semgrep.
 - **Verified 99.2% recall** on 128 CVE cases with existing rule coverage.
 - **Expanded corpus: 164 cases** (68 Python, 42 JS, 15 Go, 20 Java, 19 C#) — honest gap-revealing benchmark.
 - **Semgrep benchmark scaffolding** (`benchmarks/semgrep_public_benchmark.py`).
@@ -468,11 +468,11 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **GitHub Discussion templates** (General, Show-and-Tell, Q&A)
 - **GitHub Issue templates** (Bug Report, Feature Request, Rule Request)
 - **Community rules** — Express CWE-693, Flask CWE-307 starter packs with schema validation
-- **`docs/community-rule-conversion-guide.md`** — Semgrep/CodeQL → Ansede YAML migration guide
+- **`docs/community-rule-conversion-guide.md`** — Semgrep/CodeQL → Guardmarly YAML migration guide
 
 ### Changed
 - **Documentation completely rewritten** — 7 MkDocs pages with professional structure.
-- **`--explain` now supports optional token** — `ansede-static --explain CWE-89` prints rule explanation and exits.
+- **`--explain` now supports optional token** — `guardmarly --explain CWE-89` prints rule explanation and exits.
 - **`--diff-only`** — filters findings to git diff hunks.
 - **XML/JSON/YAML spec discovery** — OpenAPI/Swagger auto-detection across standard paths.
 - **Perf benchmark**: 222 cases/second, 166ms average.
@@ -486,7 +486,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Fixed — Stability & False Positives
 - **scan_file JS hang** — Root cause identified and fixed: `build_js_project_index()` with a full Windows path triggered `os.walk()` on the entire project. Now uses basename only, eliminating workspace-graph scanning on single-file scans.
-- **SQLite timeout** — Added `timeout=30.0` to `sqlite3.connect()` and graceful `try/except` around GlobalGraph cache operations. Prevents hangs on locked/corrupted `.ansede/cache.db`.
+- **SQLite timeout** — Added `timeout=30.0` to `sqlite3.connect()` and graceful `try/except` around GlobalGraph cache operations. Prevents hangs on locked/corrupted `.guardmarly/cache.db`.
 - **External corpus path bug** — `relative_to()` ValueError in `benchmarks/external_corpus.py` fixed with `os.path.relpath()` fallback.
 - **Added skip patterns** — `tests/`, `benchmarks/`, `tmp/`, `webapp/`, `internet_code_samples/` added to CLI exclude list to prevent false positives when scanning the project repo itself.
 - **SyntaxWarnings suppressed** — 7 `invalid escape sequence` warnings (Python 3.13+) from dynamically compiled rule patterns suppressed via pytest `filterwarnings`.
@@ -524,7 +524,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added — LLM-Assisted Triage Engine
 - **`--llm` flag** — local Ollama integration (gemma3:4b) for classifying remaining NEEDS_REVIEW findings. Zero cloud dependency.
-- **Persistent Few-Shot Memory** (`~/.ansede/llm_memory.json`) — 354 curated examples across 26 CWE/agent groups. Automatically trains on high-confidence LLM verdicts.
+- **Persistent Few-Shot Memory** (`~/.guardmarly/llm_memory.json`) — 354 curated examples across 26 CWE/agent groups. Automatically trains on high-confidence LLM verdicts.
 - **`--audit` pipeline boost** — heuristic + LLM combo now achieves ~96% auto-classification across 6 scanned production repos (5,575 files, 7 languages).
 
 ### Added — Training Pipeline
@@ -547,7 +547,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ### Fixed
 - `check_ollama_available()` — updated for ollama Python library v0.6.2 API (ListResponse.models, Model.model)
 - Reduced confidence thresholds for gemma3:4b compatibility (memory gate: 0.75, triage gate: 0.70)
-- `--audit` flag now properly recognized via `python -m ansede_static.cli`
+- `--audit` flag now properly recognized via `python -m guardmarly.cli`
 
 ## [2.2.1] — 2026-05-18
 
@@ -579,13 +579,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [2.2.0] — 2026-05-16
 
 ### Added — Commercial Licensing & Standalone Builds
-- **Offline license key system** (`src/ansede_static/licensing.py`) — HMAC-signed JWT-like keys, verified entirely offline. Four tiers: Free, Pro, Team, Enterprise.
-- **`ansede license` CLI command** — `activate`, `deactivate`, and status display with upgrade path.
+- **Offline license key system** (`src/guardmarly/licensing.py`) — HMAC-signed JWT-like keys, verified entirely offline. Four tiers: Free, Pro, Team, Enterprise.
+- **`guardmarly license` CLI command** — `activate`, `deactivate`, and status display with upgrade path.
 - **Pro feature gating** — SARIF, SBOM, HTML dashboard, and CI recipes require Pro+. Free tier includes unlimited text/JSON scanning with 500 scans/day.
-- **Standalone `.exe` builds** via Nuitka (`build_exe.py`) — produces `ansede-static.exe` (~20 MB) and `ansede-static-lsp.exe` (~13 MB) with zero Python dependency.
+- **Standalone `.exe` builds** via Nuitka (`build_exe.py`) — produces `guardmarly.exe` (~20 MB) and `guardmarly-lsp.exe` (~13 MB) with zero Python dependency.
 - **License key generator** (`tools/generate_license.py`) — generate Pro/Team/Enterprise keys for distribution.
 - **GitHub Actions release pipeline** (`.github/workflows/build-release.yml`) — auto-builds Windows/macOS/Linux on tag push, publishes VS Code extension, creates GitHub Release.
-- **`.ansedeignore`** — gitignore-compatible exclusion file for scanning.
+- **`.guardmarlyignore`** — gitignore-compatible exclusion file for scanning.
 
 ### Improved
 - VS Code extension updated to v2.2.0 with license key configuration option.
@@ -651,7 +651,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added — Rule Scaling via Zero-Dependency Sharding
 - **1,080+ registry rules** across 36 YAML packs covering Python (18 frameworks: Django, Flask, FastAPI, SQLAlchemy, DRF, boto3, subprocess, requests, PyMongo, aiohttp, Celery, Redis, cryptography, xml.etree, PyYAML, Tornado, Pydantic, socket.io), JavaScript (16 frameworks: Express, React, Next.js, Sequelize, Prisma, TypeORM, Mongoose, mysql2, pg, Knex, Axios, Node.js core, GraphQL, NestJS, Angular, Vue), Java (Spring Boot), and C# (ASP.NET Core).
-- **`ansede_static.registry` package** — lazy, `lru_cache`-powered framework pack loader with `load_packs_for_source()`, `detect_frameworks()`, `count_registry_rules()`, `list_registry_pack_names()`.
+- **`guardmarly.registry` package** — lazy, `lru_cache`-powered framework pack loader with `load_packs_for_source()`, `detect_frameworks()`, `count_registry_rules()`, `list_registry_pack_names()`.
 - **`load_registry_packs()` in yaml_rules** — registry rules loaded automatically alongside user custom rules on every scan.
 
 ### Added — Incremental Symbol Graph Caching
@@ -679,7 +679,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added — v2.1 Security-as-Code Platform (2026-05-07)
-- **11 new systems** across ~2,500 lines of production code, transforming ansede-static from a high-quality scanner into a full Security-as-Code platform.
+- **11 new systems** across ~2,500 lines of production code, transforming guardmarly from a high-quality scanner into a full Security-as-Code platform.
 
 #### Detection Engine
 - **4 new CWE categories**: CWE-611 (XXE, PY-049), CWE-639 (IDOR, PY-050 + JS-043), CWE-352 (CSRF, PY-051 + JS-041), CWE-434 (File Upload, PY-052 + JS-042). Rule catalog now 100 rules (47 Python + 53 JS), 48 distinct CWEs.
@@ -692,7 +692,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **Async parallel execution engine** (`engine/async_scanner.py`) — process-pool workers for CPU-bound AST parsing + asyncio for I/O-bound disk reads. Maintains <10s/100k LOC with 10x rule expansion.
 - **Sharded rule registry loader** (`registry/sharded_loader.py`) — auto-detects frameworks in target code and lazily loads framework-specific rule packs. Core engine stays <5MB; 37 framework packs available on-demand.
 - **CI-native baseline auto-management** (`engine/ci_baseline.py`) — automatic baseline comparison, new-finding-only PR failure, and auto-promotion when findings decrease.
-- **Learning triage loop** (`engine/learning_triage.py`) — developer `# ansede: ignore` feedback stored as suppression fingerprints. Suggests global rules for repeated patterns across the monorepo.
+- **Learning triage loop** (`engine/learning_triage.py`) — developer `# guardmarly: ignore` feedback stored as suppression fingerprints. Suggests global rules for repeated patterns across the monorepo.
 
 #### Framework Semantic Models
 - **Redirect-to-self detection** — `redirect(request.path)` and `HttpResponseRedirect(request.get_full_path())` recognized as safe self-referential redirects after form validation.
@@ -732,7 +732,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **Triage engine** enhanced with broader ownership/tenant scoping patterns, Nest.js guard detection, and improved FastAPI dependency signal matching.
 
 ### Added — Public Launch Readiness (2026-04-30)
-- **`docs/BENCHMARKS.md`** — dedicated public proof page with reproducible benchmark commands and current scorecards (CVE/quality/external/web-wild), plus cross-scanner NodeGoat evidence for ansede-static vs Bandit vs Semgrep OSS.
+- **`docs/BENCHMARKS.md`** — dedicated public proof page with reproducible benchmark commands and current scorecards (CVE/quality/external/web-wild), plus cross-scanner NodeGoat evidence for guardmarly vs Bandit vs Semgrep OSS.
 
 ### Changed — Public Launch Readiness (2026-04-30)
 - **PyPI-first install guidance** across `README.md` and `action.yml` (while still supporting explicit GitHub/local install paths for debugging and development).
@@ -750,14 +750,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **`lsp_server.py` `_Debouncer.schedule`** — synchronous short-circuit when `delay == 0.0`; fixes flaky `test_did_open_*` tests on Python 3.8/3.9 where `threading.Timer(0.0, fn)` is still async.
 
 ### Added — Phase 3 Continuation: Interprocedural Taint Analysis (IFDS/IDE)
-- **IFDS framework** (`src/ansede_static/v2/ifds.py`) — production-grade interprocedural dataflow analysis via tabulation algorithm.
+- **IFDS framework** (`src/guardmarly/v2/ifds.py`) — production-grade interprocedural dataflow analysis via tabulation algorithm.
   - `DataFlowFact` — immutable information units for dataflow facts
   - `TaintFact` — taint-specific facts with category and confidence
   - `FlowFunction` protocol — composable fact transformers (Identity, Kill, Generate)
   - `CFGNode` — control flow graph node representation
   - `Context` — call-site-sensitive call stack tracking (bounded depth 3)
   - `IFDSSolver` — O(n³) tabulation solver for precise, deterministic interprocedural analysis
-- **Interprocedural taint analysis** (`src/ansede_static/v2/interprocedural_taint.py`) — context-sensitive taint tracking across function boundaries.
+- **Interprocedural taint analysis** (`src/guardmarly/v2/interprocedural_taint.py`) — context-sensitive taint tracking across function boundaries.
   - `InterproceduralTaintAnalysis` — high-level analysis API
   - Taint-specific flow functions: `TaintPropagateFlowFunction`, `TaintSanitizeFlowFunction`, `TaintSourceFlowFunction`, `ParameterTaintFlowFunction`, `ReturnTaintFlowFunction`
   - Parameter and return value taint mapping
@@ -770,42 +770,42 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - **Context-sensitive** — Distinguishes different invocations of the same function based on call site, improving accuracy.
 - **Scalable** — O(n³) complexity is polynomial and deterministic, suitable for CI/CD pipelines.
 
-## [2.0.0] — 2026-04-27 — Ansede v2: Enterprise Architecture
+## [2.0.0] — 2026-04-27 — Guardmarly v2: Enterprise Architecture
 
 ### Added — Phase 1: AST Normalization
 - **v2 engine architecture** — strict three-layer pipeline: Parse → Normalize → Evaluate.
-- **Normalized AST nodes** (`src/ansede_static/v2/nodes.py`) — immutable frozen+slots dataclasses covering Call, Assign, Import, Return, FString, Attribute, FuncDef, ClassDef.
-- **Tree-sitter integration** (`src/ansede_static/v2/normalizer.py`) — optional tree-sitter-backed JS/TS normalization with graceful regex fallback. Install via `pip install ansede-static[treesitter]`.
+- **Normalized AST nodes** (`src/guardmarly/v2/nodes.py`) — immutable frozen+slots dataclasses covering Call, Assign, Import, Return, FString, Attribute, FuncDef, ClassDef.
+- **Tree-sitter integration** (`src/guardmarly/v2/normalizer.py`) — optional tree-sitter-backed JS/TS normalization with graceful regex fallback. Install via `pip install guardmarly[treesitter]`.
 - **Language-specific normalizers** — PythonNormalizer (stdlib AST) and JsTsNormalizer (tree-sitter + fallback).
 
 ### Added — Phase 2: Rule Engine Decoupling
-- **Rule protocol** (`src/ansede_static/v2/rule_protocol.py`) — `@runtime_checkable` Rule protocol with `evaluate(node, model) -> Optional[Finding]` contract.
+- **Rule protocol** (`src/guardmarly/v2/rule_protocol.py`) — `@runtime_checkable` Rule protocol with `evaluate(node, model) -> Optional[Finding]` contract.
 - **RuleRegistry singleton** — dispatch rules by node type; extensible via `@REGISTRY.register("CALL")` decorator.
 - **13 built-in v2 rules** — PY-SEC-001 through PY-SEC-020, JS-SEC-001 through JS-SEC-009, spanning SQL injection, command injection, code injection, SSRF, XSS, hardcoded secrets, weak crypto, auth bypass, IDOR, etc.
-- **Inline suppression** — `# ansede: ignore RULE-ID` and `# ansede: ignore` comments automatically suppress findings without CLI flags.
+- **Inline suppression** — `# guardmarly: ignore RULE-ID` and `# guardmarly: ignore` comments automatically suppress findings without CLI flags.
 - **docs/writing-rules.md** — comprehensive rule-authoring guide with examples, node types, taint primitives, and checklist.
 
 ### Added — Phase 3: Dataflow & Taint Tracking
-- **TaintGraph** (`src/ansede_static/v2/taint.py`) — intraprocedural taint propagation with TaintSource/TaintSink/Sanitizer primitives.
-- **CallGraph** (`src/ansede_static/v2/call_graph.py`) — directed call graph with networkx backend (optional dep: `pip install ansede-static[graph]`) and safe adjacency-list fallback.
+- **TaintGraph** (`src/guardmarly/v2/taint.py`) — intraprocedural taint propagation with TaintSource/TaintSink/Sanitizer primitives.
+- **CallGraph** (`src/guardmarly/v2/call_graph.py`) — directed call graph with networkx backend (optional dep: `pip install guardmarly[graph]`) and safe adjacency-list fallback.
 - **Per-node callee limit** — 50 outgoing call edges per node guards against dynamic-dispatch explosion in large codebases.
 
 ### Added — Phase 4: Config, Caching & Schema
-- **JSON Schema validation** (`src/ansede_static/schemas/ansede.schema.json`) — formal v2 config schema; optional jsonschema validation (install: `pip install ansede-static[schema]`).
+- **JSON Schema validation** (`src/guardmarly/schemas/guardmarly.schema.json`) — formal v2 config schema; optional jsonschema validation (install: `pip install guardmarly[schema]`).
 - **V2 config format** — structured `sinks` and `sources` arrays with tainted_args/safe_args and category fields; backward-compatible legacy `custom_sinks` support.
 - **SQLite WAL mode** — `PRAGMA journal_mode=WAL` + `PRAGMA synchronous=NORMAL` for safe concurrent reads in incremental scans.
 - **BLAKE2b-20 hashing** — faster than SHA-256 (3× speedup) for cache fingerprinting while retaining collision resistance.
 
 ### Added — Phase 6: Enterprise Polish
-- **Baseline management** (`src/ansede_static/v2/baseline.py`) — fingerprint-based baseline generation and matching; `ansede baseline generate --output baseline.json`.
-- **Config migration** — `ansede migrate-config` converts v1 `ansede.json` to v2 format.
-- **CLI aliases** — `ansede` now works as an alias for `ansede-static`.
-- **Optional dependency groups** — `pip install ansede-static[treesitter,graph,schema,v2]` for full v2 stack.
+- **Baseline management** (`src/guardmarly/v2/baseline.py`) — fingerprint-based baseline generation and matching; `guardmarly baseline generate --output baseline.json`.
+- **Config migration** — `guardmarly migrate-config` converts v1 `guardmarly.json` to v2 format.
+- **CLI aliases** — `guardmarly` now works as an alias for `guardmarly`.
+- **Optional dependency groups** — `pip install guardmarly[treesitter,graph,schema,v2]` for full v2 stack.
 
 ### Changed
 - **pyproject.toml** — version bumped to 2.0.0; optional deps for tree-sitter, networkx, jsonschema.
-- **js_ast_analyzer.py** — DeprecationWarning added; users should migrate to `ansede_static.v2.engine`.
-- **Backward compatibility** — all v1 code remains untouched; v2 lives in `src/ansede_static/v2/` namespace.
+- **js_ast_analyzer.py** — DeprecationWarning added; users should migrate to `guardmarly.v2.engine`.
+- **Backward compatibility** — all v1 code remains untouched; v2 lives in `src/guardmarly/v2/` namespace.
 
 ### Fixed
 - Schema import conflict — `schema/` directory renamed to `schemas/` to avoid shadowing `schema.py` module.
@@ -814,9 +814,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 ## [1.2.0] — 2026-04-24
 
 ### Added
-- **Inline suppression** — `# ansede: ignore` or `# ansede: ignore[CWE-862]` on any line to suppress findings. Works in both Python (`#`) and JavaScript (`//`) comments.
+- **Inline suppression** — `# guardmarly: ignore` or `# guardmarly: ignore[CWE-862]` on any line to suppress findings. Works in both Python (`#`) and JavaScript (`//`) comments.
 - **`--baseline` flag** — pass a previous JSON report to only show *new* findings. Ideal for CI diff-scanning on PRs.
-- **`--init` flag** — write a starter `ansede.json` config to the project root.
+- **`--init` flag** — write a starter `guardmarly.json` config to the project root.
 - **`--incremental` flag** — scan only files changed in `git diff HEAD`; useful for pre-commit hooks on large monorepos.
 - **`--apply-fixes` flag** — interactively apply auto-fixes to source files.
 - **`--ai-triage` flag** — offline heuristic triage pass; suppresses findings in test/mock/fixture contexts.
@@ -841,7 +841,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - SQLite cache `evict_older_than(bucket, days)` method for bounded cache growth.
 
 ### Changed
-- **`rich` is now an optional dependency** — `pip install ansede-static` is truly zero-dependency; install `pip install "ansede-static[rich]"` for colored terminal output.
+- **`rich` is now an optional dependency** — `pip install guardmarly` is truly zero-dependency; install `pip install "guardmarly[rich]"` for colored terminal output.
 - **CWE-862 false-positive reduction** — pure GET routes with no state mutation and no resource IDs in the path are no longer flagged.
 - JSON examples and downstream integrations now use the top-level report envelope (`results`, `summary`, `schema_version`) instead of assuming a raw array.
 - README capability framing now documents current JS/Python scope, synthetic benchmark limits, and the expanded benchmark corpus.
@@ -852,7 +852,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - README "Additional CLI flags" table added with stability levels for experimental flags.
 
 ### Fixed
-- `config.py`: field name mismatch (`exclude` → `exclude_paths`) that silently discarded all path exclusions from `ansede.json`.
+- `config.py`: field name mismatch (`exclude` → `exclude_paths`) that silently discarded all path exclusions from `guardmarly.json`.
 - `config.py`: bare `except Exception: pass` replaced with `logging.warning()` so config parse errors surface instead of vanishing.
 - GitHub Action finding counts now parse the JSON envelope correctly.
 - VS Code extension scans now stream document contents over stdin instead of assuming child-process input wiring.

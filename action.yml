@@ -1,4 +1,4 @@
-name: 'ansede-static'
+name: 'guardmarly'
 description: 'Minimal-dependency SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ categories. No GPU, no API keys.'
 author: 'mattybellx'
 
@@ -22,13 +22,13 @@ inputs:
   output:
     description: 'Write output to this file (stdout if omitted). Required for SARIF upload.'
     required: false
-    default: 'ansede.sarif'
+    default: 'guardmarly.sarif'
   exclude:
     description: 'Comma-separated path patterns to exclude (e.g. "tests,migrations")'
     required: false
     default: ''
   version:
-    description: 'Optional version/ref. With install-source=pypi, install ansede-static==<version>; with install-source=github, install from that git ref.'
+    description: 'Optional version/ref. With install-source=pypi, install guardmarly==<version>; with install-source=github, install from that git ref.'
     required: false
     default: ''
   install-source:
@@ -60,7 +60,7 @@ inputs:
     required: false
     default: ''
   license-key:
-    description: 'ansede-static Pro license key for SARIF/SBOM features'
+    description: 'guardmarly Pro license key for SARIF/SBOM features'
     required: false
     default: ''
 
@@ -75,7 +75,7 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install ansede-static
+    - name: Install guardmarly
       shell: bash
       env:
         INPUT_VERSION: ${{ inputs.version }}
@@ -84,21 +84,21 @@ runs:
       run: |
         if [ "$INPUT_INSTALL_SOURCE" = "github" ]; then
           if [ -n "$INPUT_VERSION" ]; then
-            pip install --quiet "ansede-static @ git+https://github.com/mattybellx/Ansede.git@$INPUT_VERSION"
+            pip install --quiet "guardmarly @ git+https://github.com/mattybellx/Guardmarly.git@$INPUT_VERSION"
           else
-            pip install --quiet "ansede-static @ git+https://github.com/mattybellx/Ansede.git"
+            pip install --quiet "guardmarly @ git+https://github.com/mattybellx/Guardmarly.git"
           fi
         elif [ "$INPUT_INSTALL_SOURCE" = "local" ]; then
           pip install --quiet "$ACTION_PATH"
         else
           if [ -n "$INPUT_VERSION" ]; then
-            pip install --quiet "ansede-static==$INPUT_VERSION" || pip install --quiet "$ACTION_PATH"
+            pip install --quiet "guardmarly==$INPUT_VERSION" || pip install --quiet "$ACTION_PATH"
           else
-            pip install --quiet "ansede-static" || pip install --quiet "$ACTION_PATH"
+            pip install --quiet "guardmarly" || pip install --quiet "$ACTION_PATH"
           fi
         fi
 
-    - name: Run ansede-static
+    - name: Run guardmarly
       id: scan
       shell: bash
       env:
@@ -130,7 +130,7 @@ runs:
         if [ -n "$INPUT_NOISE_GATE" ]; then
           ARGS+=(--noise-gate "$INPUT_NOISE_GATE")
         fi
-        ansede-static "${ARGS[@]}"
+        guardmarly "${ARGS[@]}"
 
         # Derive findings count from the already-generated output rather than re-scanning.
         # Fall back to a fresh JSON scan only when the primary format is not json/sarif.
@@ -149,7 +149,7 @@ runs:
           if [ -n "$INPUT_NOISE_GATE" ]; then
             COUNT_ARGS+=(--noise-gate "$INPUT_NOISE_GATE")
           fi
-          ansede-static "${COUNT_ARGS[@]}" > "$COUNT_FILE" 2>/dev/null || true
+          guardmarly "${COUNT_ARGS[@]}" > "$COUNT_FILE" 2>/dev/null || true
           REMOVE_COUNT_FILE=true
         fi
 
@@ -202,7 +202,7 @@ runs:
           if [ -n "$INPUT_NOISE_GATE" ]; then
             FAIL_ARGS+=(--noise-gate "$INPUT_NOISE_GATE")
           fi
-          ansede-static "${FAIL_ARGS[@]}" 2>&1 || exit 1
+          guardmarly "${FAIL_ARGS[@]}" 2>&1 || exit 1
         fi
 
     - name: Upload SARIF to Code Scanning
@@ -210,7 +210,7 @@ runs:
       uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: ${{ inputs.output }}
-        category: ansede-static
+        category: guardmarly
 
     - name: Post PR inline comments
       if: ${{ inputs.post-pr-comments == 'true' && github.event_name == 'pull_request' && inputs.format == 'sarif' && inputs.output != '' }}
@@ -233,7 +233,7 @@ runs:
             with open(sarif_file, encoding="utf-8") as fh:
                 data = json.load(fh)
         except Exception as exc:
-            print(f"[ansede] Cannot read SARIF: {exc}")
+            print(f"[guardmarly] Cannot read SARIF: {exc}")
             raise SystemExit(0)
 
         comments = []
@@ -245,11 +245,11 @@ runs:
                     path = phys.get("artifactLocation", {}).get("uri", "")
                     line = phys.get("region", {}).get("startLine", 1)
                     rule_id = result.get("ruleId", "")
-                    body = f"**[ansede-static]** `{rule_id}` — {msg}"
+                    body = f"**[guardmarly]** `{rule_id}` — {msg}"
                     comments.append({"path": path, "line": line, "side": "RIGHT", "body": body})
 
         if not comments:
-            print("[ansede] No findings to post as PR comments.")
+            print("[guardmarly] No findings to post as PR comments.")
             raise SystemExit(0)
 
         url = f"https://api.github.com/repos/{repo}/pulls/{pr_number}/reviews"
@@ -260,7 +260,7 @@ runs:
             "Content-Type": "application/json",
         }
         payload = json.dumps({
-            "body": f"ansede-static found {len(comments)} security finding(s). See inline comments.",
+            "body": f"guardmarly found {len(comments)} security finding(s). See inline comments.",
             "event": "COMMENT",
             "comments": comments[:50],
         }).encode("utf-8")
@@ -268,8 +268,8 @@ runs:
         req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
         try:
             with urllib.request.urlopen(req) as resp:
-                print(f"[ansede] Posted {len(comments)} inline comment(s). HTTP {resp.status}")
+                print(f"[guardmarly] Posted {len(comments)} inline comment(s). HTTP {resp.status}")
         except urllib.error.HTTPError as exc:
-            print(f"[ansede] Failed to post PR comments: HTTP {exc.code} {exc.reason}")
+            print(f"[guardmarly] Failed to post PR comments: HTTP {exc.code} {exc.reason}")
             raise SystemExit(1)
         PY

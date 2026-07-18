@@ -3,7 +3,7 @@ FROM python:3.13-slim
 WORKDIR /app
 
 # Install scanner package from PyPI; pin/override via build args when needed.
-ARG ANSEDE_VERSION=ansede-static
-RUN pip install --no-cache-dir "${ANSEDE_VERSION}"
+ARG GUARDMARLY_VERSION=guardmarly
+RUN pip install --no-cache-dir "${GUARDMARLY_VERSION}"
 
-ENTRYPOINT ["ansede-static"]
+ENTRYPOINT ["guardmarly"]

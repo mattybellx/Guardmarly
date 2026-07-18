@@ -23,7 +23,7 @@ MIN_TRACE_COVERAGE_PCT = 80.0
 
 
 def main() -> int:
-    # Run ansede-static on a small file to check trace coverage
+    # Run guardmarly on a small file to check trace coverage
     sample_file = REPO_ROOT / "tests" / "test_python.py"
     if not sample_file.is_file():
         print(f"SKIP: sample file not found at {sample_file}")
@@ -33,7 +33,7 @@ def main() -> int:
         [
             sys.executable,
             "-m",
-            "ansede_static.cli",
+            "guardmarly.cli",
             str(sample_file),
             "--format",
             "json",
@@ -46,7 +46,7 @@ def main() -> int:
     )
 
     if result.returncode != 0:
-        print(f"ERROR: ansede-static scan failed (exit {result.returncode})")
+        print(f"ERROR: guardmarly scan failed (exit {result.returncode})")
         print(result.stderr[:2000])
         return 1
 

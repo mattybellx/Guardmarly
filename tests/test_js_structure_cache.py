@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ansede_static.js_engine.structure import collect_calls, collect_property_writes
+from guardmarly.js_engine.structure import collect_calls, collect_property_writes
 
 
 def test_collect_calls_returns_fresh_list_when_cache_hits():

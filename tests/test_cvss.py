@@ -1,5 +1,5 @@
 """Tests for CVSS scoring and OWASP mapping."""
-from ansede_static.engine.cvss import get_cvss, get_owasp, enrich_finding_properties
+from guardmarly.engine.cvss import get_cvss, get_owasp, enrich_finding_properties
 
 
 class TestCvss:

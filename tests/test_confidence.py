@@ -1,8 +1,8 @@
 """Tests for the confidence scoring engine (ROADMAP Section 8)."""
 from __future__ import annotations
 
-from ansede_static._types import Finding, Severity, TraceFrame
-from ansede_static.engine.confidence import score_confidence, rescore_findings
+from guardmarly._types import Finding, Severity, TraceFrame
+from guardmarly.engine.confidence import score_confidence, rescore_findings
 
 
 class TestConfidenceScoring:

@@ -1,8 +1,8 @@
 from pathlib import Path
 
-import ansede_static.js_ast_analyzer as js_ast_analyzer
-import ansede_static.js_analyzer as js_analyzer
-import ansede_static.js_engine.project as js_project
+import guardmarly.js_ast_analyzer as js_ast_analyzer
+import guardmarly.js_analyzer as js_analyzer
+import guardmarly.js_engine.project as js_project
 
 
 def test_minified_bundle_skips_project_index(monkeypatch, tmp_path: Path):

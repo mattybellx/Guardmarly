@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from ansede_static.engine.semgrep_transpiler import (
+from guardmarly.engine.semgrep_transpiler import (
     transpile_rule,
     transpile_all,
     transpile_supported_rules,
@@ -13,7 +13,7 @@ from ansede_static.engine.semgrep_transpiler import (
 def test_transpile_py004_returns_valid_semgrep_yaml():
     result = transpile_rule("PY-004")
 
-    assert "ansede-py-004" in result
+    assert "guardmarly-py-004" in result
     assert "languages: [\"python\"]" in result
     assert "cursor.execute" in result
     assert "SEVERITY" in result.upper() or "WARNING" in result or "ERROR" in result
@@ -22,7 +22,7 @@ def test_transpile_py004_returns_valid_semgrep_yaml():
 def test_transpile_js001_returns_valid_semgrep_yaml():
     result = transpile_rule("JS-001")
 
-    assert "ansede-js-001" in result
+    assert "guardmarly-js-001" in result
     assert "innerHTML" in result
     assert "javascript" in result or "typescript" in result
 
@@ -32,7 +32,7 @@ def test_transpile_rule_contains_metadata():
 
     assert "metadata" in result
     assert "cwe:" in result
-    assert "source: \"ansede-static\"" in result
+    assert "source: \"guardmarly\"" in result
     assert "rule_id: \"PY-008\"" in result
 
 
@@ -40,7 +40,7 @@ def test_transpile_unknown_rule_raises_keyerror():
     """XX-999 has no Semgrep mapping but get_rule_contract has a fallback.
     The transpiler should still produce output for known contract-only rules."""
     result = transpile_rule("XX-999")
-    assert "ansede-xx-999" in result
+    assert "guardmarly-xx-999" in result
     assert "metadata" in result
 
 
@@ -49,7 +49,7 @@ def test_transpile_all_returns_all_mapped_rules():
 
     supported = transpile_supported_rules()
     for rule_id in supported:
-        assert f"ansede-{rule_id.lower()}" in result, f"Missing rule {rule_id} in transpile_all output"
+        assert f"guardmarly-{rule_id.lower()}" in result, f"Missing rule {rule_id} in transpile_all output"
 
 
 def test_transpile_all_produces_parsable_yaml():
@@ -60,19 +60,19 @@ def test_transpile_all_produces_parsable_yaml():
     rule_starts = [line for line in result.split("\n") if line.strip().startswith("- id:")]
     assert len(rule_starts) > 0
     for rs in rule_starts:
-        assert "ansede-" in rs
+        assert "guardmarly-" in rs
 
 
 def test_transpile_all_rules_have_severity():
     result = transpile_all()
 
     for rule_id in transpile_supported_rules():
-        assert f"ansede-{rule_id.lower()}" in result
+        assert f"guardmarly-{rule_id.lower()}" in result
         # Each rule should have a severity line
-        section = result[result.index(f"ansede-{rule_id.lower()}"):]
+        section = result[result.index(f"guardmarly-{rule_id.lower()}"):]
         section = section[:section.index("\n  ") if "\n  " in section[1:] else len(section)]
         # The full result should contain this rule id followed by severity
-        assert f"ansede-{rule_id.lower()}" in result
+        assert f"guardmarly-{rule_id.lower()}" in result
 
 
 def test_transpile_supported_rules_returns_list():

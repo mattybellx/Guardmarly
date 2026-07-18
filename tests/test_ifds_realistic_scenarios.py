@@ -4,7 +4,7 @@ tests/test_ifds_realistic_scenarios
 Realistic end-to-end interprocedural taint scenarios.
 """
 import pytest
-from ansede_static.v2.ifds import (
+from guardmarly.v2.ifds import (
     CFGNode, CallSite, Context, IFDSSolver, IdentityFlowFunction,
     GenerateFlowFunction, KillFlowFunction, TaintFact, ZERO_FACT
 )
@@ -110,7 +110,7 @@ class TestRealisticCrossFunctionTaint:
         solver.add_edge_flow(src, sanitize, ctx, IdentityFlowFunction())
         
         # sanitize -> sink (kill user_input taint)
-        from ansede_static.v2.interprocedural_taint import TaintSanitizeFlowFunction
+        from guardmarly.v2.interprocedural_taint import TaintSanitizeFlowFunction
         sanitizer_ff = TaintSanitizeFlowFunction(frozenset({"user_input"}))
         solver.add_edge_flow(sanitize, sink, ctx, sanitizer_ff)
         
@@ -264,8 +264,8 @@ class TestTaintConfidenceProgression:
     
     def test_confidence_degrades_through_assignments(self):
         """Confirmed taint -> likely after one propagation."""
-        from ansede_static.v2.interprocedural_taint import TaintPropagateFlowFunction
-        from ansede_static.v2.nodes import AssignNode, SourceLocation, CallNode
+        from guardmarly.v2.interprocedural_taint import TaintPropagateFlowFunction
+        from guardmarly.v2.nodes import AssignNode, SourceLocation, CallNode
         
         # x = tainted (confirmed)
         # y = x      (propagates as likely)

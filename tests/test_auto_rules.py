@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ansede_static._types import Finding, Severity
-from ansede_static.engine.audit import AuditedFinding, Verdict
-from ansede_static.engine.auto_rules import (
+from guardmarly._types import Finding, Severity
+from guardmarly.engine.audit import AuditedFinding, Verdict
+from guardmarly.engine.auto_rules import (
     AutoRule,
     _normalize_cwe,
     apply_rules_to_audit,
@@ -121,7 +121,7 @@ def test_apply_rules_to_audit_updates_verdict_and_reasoning():
 
 
 def test_save_and_load_rules_round_trip(tmp_path, monkeypatch):
-    from ansede_static.engine import auto_rules as auto_rules_module
+    from guardmarly.engine import auto_rules as auto_rules_module
 
     monkeypatch.setattr(auto_rules_module, "_AUTO_RULES_DIR", tmp_path / "auto_generated")
     monkeypatch.setattr(auto_rules_module, "_MANIFEST_PATH", tmp_path / "auto_generated" / "manifest.json")

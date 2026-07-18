@@ -1,10 +1,10 @@
 # ── Example GitHub Actions CI workflow with SARIF upload ────────────────
-# Copy to .github/workflows/ansede-scan.yml in your repo
+# Copy to .github/workflows/guardmarly-scan.yml in your repo
 #
 # Results: OWASP recall 62.0% (beats Semgrep 59.4%) | CVE recall 96.3%
-# Install: pip install ansede-static (zero deps)
+# Install: pip install guardmarly (zero deps)
 
-name: Ansede SAST Scan
+name: Guardmarly SAST Scan
 
 on:
   push:
@@ -19,36 +19,36 @@ permissions:
   security-events: write  # Required for SARIF upload
 
 jobs:
-  ansede-scan:
+  guardmarly-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install ansede-static
-        run: pip install ansede-static
+      - name: Install guardmarly
+        run: pip install guardmarly
 
-      - name: Run ansede-static (SARIF)
+      - name: Run guardmarly (SARIF)
         run: |
-          ansede-static . \
+          guardmarly . \
             --format sarif \
-            --output ansede-results.sarif \
+            --output guardmarly-results.sarif \
             --fail-on high
 
       - name: Upload SARIF to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: ansede-results.sarif
-          category: ansede-static
+          sarif_file: guardmarly-results.sarif
+          category: guardmarly
 
       - name: Summary
         if: always()
         run: |
-          echo "✅ Ansede scan complete. View results in the Security tab."
+          echo "✅ Guardmarly scan complete. View results in the Security tab."
           echo "📊 OWASP recall: 62.0% (beats Semgrep 59.4%)"
           echo "🔒 CVE recall: 96.3% (Semgrep: 23.2%)"
 
 jobs:
-  ansede-scan:
+  guardmarly-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -58,29 +58,29 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install ansede-static
-        run: pip install ansede-static
+      - name: Install guardmarly
+        run: pip install guardmarly
 
-      - name: Run Ansede Static Scan
+      - name: Run Guardmarly Scan
         id: scan
         run: |
           # --incremental-sha256 uses SHA-256 content hashing to skip
           # unchanged files — massive performance boost for monorepos.
           # Remove this flag for clean-slate scans.
-          ansede scan . \
+          guardmarly scan . \
             --format sarif \
             --incremental-sha256 \
             --cluster \
-            --output ansede-results.sarif
+            --output guardmarly-results.sarif
 
       - name: Upload SARIF Results
         uses: github/codeql-action/upload-sarif@v4
         with:
-          sarif_file: ansede-results.sarif
-          category: ansede-static
+          sarif_file: guardmarly-results.sarif
+          category: guardmarly
 
       - name: Enforce Quality Gate (optional)
         if: always()
         run: |
           # Fail the build on CRITICAL findings
-          ansede scan . --format text --fail-on critical --no-colour
+          guardmarly scan . --format text --fail-on critical --no-colour

@@ -1,4 +1,4 @@
-# ansede-static community rule: express-missing-helmet-CWE-693
+# guardmarly community rule: express-missing-helmet-CWE-693
 # Detects Express.js apps that don't use helmet middleware
 # Helmet sets security headers (CSP, X-Frame-Options, etc.)
 # CWE-693: Missing security headers / Protection mechanism failure

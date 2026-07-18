@@ -7,10 +7,10 @@ assignees: []
 ---
 
 ### Problem statement
-What gap does this feature address? Is there a CWE or vulnerability class that ansede currently misses?
+What gap does this feature address? Is there a CWE or vulnerability class that guardmarly currently misses?
 
 ### Proposed solution
-Describe what you'd like ansede to do. If proposing a new rule, include:
+Describe what you'd like guardmarly to do. If proposing a new rule, include:
 - CWE ID
 - Example vulnerable code
 - Expected finding output

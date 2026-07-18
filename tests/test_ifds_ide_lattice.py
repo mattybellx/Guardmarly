@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from ansede_static.ir.global_graph import (
+from guardmarly.ir.global_graph import (
     FunctionSummary,
     GlobalGraph,
     IDETaintFact,

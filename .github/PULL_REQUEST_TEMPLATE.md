@@ -46,4 +46,4 @@
 
 ### Sample output
 
-<!-- Paste an example of `ansede-static` output that demonstrates the change, if applicable. -->
+<!-- Paste an example of `guardmarly` output that demonstrates the change, if applicable. -->

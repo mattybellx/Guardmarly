@@ -88,11 +88,11 @@ jobs:
 #
 #   pip install sigstore
 #   python -m sigstore verify identity \
-#     --cert-identity https://github.com/mattybellx/Ansede/.github/workflows/publish.yml@refs/tags/v6.4.0 \
+#     --cert-identity https://github.com/mattybellx/Guardmarly/.github/workflows/publish.yml@refs/tags/v6.4.0 \
 #     --cert-oidc-issuer https://token.actions.githubusercontent.com \
-#     dist/ansede_static-6.4.0-py3-none-any.whl
+#     dist/guardmarly-6.4.0-py3-none-any.whl
 #
 # Or use the GitHub CLI:
 #
-#   gh attestation verify dist/ansede_static-6.4.0-py3-none-any.whl \
-#     --repo mattybellx/Ansede
+#   gh attestation verify dist/guardmarly-6.4.0-py3-none-any.whl \
+#     --repo mattybellx/Guardmarly

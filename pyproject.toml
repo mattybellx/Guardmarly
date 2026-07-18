@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ansede-static"
+name = "guardmarly"
 version = "6.4.0"
 description = "Find IDOR, missing authorization, SQL injection, and 30+ vulnerability types in Python, JavaScript, Go, Java, and C#. 100% CVE recall. Zero false positives on clean code. Fully offline. No API keys needed."
 readme = "README.md"
@@ -45,30 +45,29 @@ test       = ["pytest>=8", "pytest-cov>=5"]
 treesitter = ["tree-sitter>=0.20", "tree-sitter-java>=0.21"]
 graph      = ["networkx>=3.0"]
 schema     = ["jsonschema>=4.0"]
-v2         = ["ansede-static[treesitter,graph,schema]"]
+v2         = ["guardmarly[treesitter,graph,schema]"]
 
 # User-friendly aliases (prefer these over the internal names above)
-fast       = ["ansede-static[treesitter]"]             # tree-sitter for better Java/JS analysis
-full       = ["ansede-static[treesitter,graph,schema]"] # everything
-enterprise = ["ansede-static[treesitter,graph,schema]"] # enterprise alias for full
+fast       = ["guardmarly[treesitter]"]             # tree-sitter for better Java/JS analysis
+full       = ["guardmarly[treesitter,graph,schema]"] # everything
+enterprise = ["guardmarly[treesitter,graph,schema]"] # enterprise alias for full
 
 [project.scripts]
-ansede-static     = "ansede_static.cli:main"
-ansede            = "ansede_static.cli:main"
-ansede-static-lsp = "ansede_static.lsp_server:run_lsp_server"
+guardmarly     = "guardmarly.cli:main"
+guardmarly-lsp = "guardmarly.lsp_server:run_lsp_server"
 
 [project.urls]
-Homepage   = "https://github.com/mattybellx/Ansede"
-Repository = "https://github.com/mattybellx/Ansede"
-Issues     = "https://github.com/mattybellx/Ansede/issues"
-Documentation = "https://github.com/mattybellx/Ansede#readme"
-Changelog = "https://github.com/mattybellx/Ansede/blob/main/CHANGELOG.md"
+Homepage   = "https://github.com/mattybellx/Guardmarly"
+Repository = "https://github.com/mattybellx/Guardmarly"
+Issues     = "https://github.com/mattybellx/Guardmarly/issues"
+Documentation = "https://github.com/mattybellx/Guardmarly#readme"
+Changelog = "https://github.com/mattybellx/Guardmarly/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/ansede_static"]
+packages = ["src/guardmarly"]
 artifacts = [
-    "src/ansede_static/schemas/ansede.schema.json",
-    "src/ansede_static/schemas/rule_schema.json",
+    "src/guardmarly/schemas/guardmarly.schema.json",
+    "src/guardmarly/schemas/rule_schema.json",
 ]
 
 [tool.hatch.build.targets.sdist]

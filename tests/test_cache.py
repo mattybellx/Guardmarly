@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import json
 
-from ansede_static.cache import SQLiteStore, stable_hash
-from ansede_static.python_analyzer import analyze_python
+from guardmarly.cache import SQLiteStore, stable_hash
+from guardmarly.python_analyzer import analyze_python
 
 
 def test_sqlite_store_round_trip(tmp_path):
@@ -59,7 +59,7 @@ def test_sqlite_store_missing_key_returns_none(tmp_path):
 
 
 def test_incremental_cache_known_clean_tracking(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     cache = IncrementalCache(tmp_path / "test_clean.db")
     test_file = tmp_path / "test.py"
     test_file.write_text("x = 1")
@@ -82,7 +82,7 @@ def test_incremental_cache_known_clean_tracking(tmp_path):
 
 
 def test_incremental_cache_clean_count_survives_reopen(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     db_path = tmp_path / "test_persist.db"
     test_file = tmp_path / "test.py"
     test_file.write_text("x = 1")
@@ -115,7 +115,7 @@ def test_stable_hash_is_deterministic():
 
 
 def test_get_cached_result_round_trip(tmp_path):
-    from ansede_static.cache.sqlite_store import SQLiteStore
+    from guardmarly.cache.sqlite_store import SQLiteStore
     from pathlib import Path
 
     store = SQLiteStore(tmp_path / "result_cache.db")
@@ -128,7 +128,7 @@ def test_get_cached_result_round_trip(tmp_path):
     assert cached is None, "Should be None on first access"
 
     # Run analysis and cache it
-    from ansede_static import scan_code
+    from guardmarly import scan_code
     result = scan_code(code, language="python", filename=str(test_file))
 
     # Store the result using the same bucket the CLI uses
@@ -204,7 +204,7 @@ def handler():
     result = analyze_python(code, filename="app.py")
     assert result.findings is not None
 
-    store = SQLiteStore(tmp_path / ".ansede" / "cache.db")
+    store = SQLiteStore(tmp_path / ".guardmarly" / "cache.db")
     keys = store.keys("function_summaries_v1")
     assert len(keys) == 1
     payload = store.get_json("function_summaries_v1", keys[0])

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ansede_static import scan_code
+from guardmarly import scan_code
 
 
 def _rule_ids(code: str, language: str, filename: str) -> set[str]:

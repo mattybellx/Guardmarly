@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ansede_static._types import AnalysisResult, Finding, Severity
-from ansede_static.cli import (
+from guardmarly._types import AnalysisResult, Finding, Severity
+from guardmarly.cli import (
     _apply_auto_fixes,
     _artifact_suffix,
     _build_cross_language_execution,
@@ -29,7 +29,7 @@ from ansede_static.cli import (
     _write_output_artifact,
     build_parser,
 )
-from ansede_static.reporters import format_json
+from guardmarly.reporters import format_json
 
 
 def test_parse_auto_fix_block_round_trip():
@@ -206,7 +206,7 @@ def test_render_export_rule_catalog_includes_cached_community_rules(tmp_path, mo
         '        pass\n',
         encoding="utf-8",
     )
-    monkeypatch.setattr("ansede_static.yaml_rules.default_community_rules_dir", lambda: rule_dir)
+    monkeypatch.setattr("guardmarly.yaml_rules.default_community_rules_dir", lambda: rule_dir)
 
     payload = json.loads(_render_export_rule_catalog("json"))
 
@@ -276,15 +276,15 @@ def test_write_output_artifact_creates_parent_directories(tmp_path):
 
 
 def test_matches_exclude_pattern_uses_real_path_segments():
-    path = Path("src/ansede_static/cli.py")
+    path = Path("src/guardmarly/cli.py")
 
     assert not _matches_exclude_pattern(path, "static")
     assert _matches_exclude_pattern(path, "src")
-    assert _matches_exclude_pattern(path, "ansede_static")
+    assert _matches_exclude_pattern(path, "guardmarly")
 
 
-def test_collect_files_does_not_exclude_ansede_static_package(tmp_path):
-    package_dir = tmp_path / "src" / "ansede_static"
+def test_collect_files_does_not_exclude_guardmarly_package(tmp_path):
+    package_dir = tmp_path / "src" / "guardmarly"
     package_dir.mkdir(parents=True)
     module = package_dir / "cli.py"
     module.write_text("print('ok')\n", encoding="utf-8")
@@ -540,14 +540,14 @@ def test_cross_language_results_from_paths_classifies_code_execution_sink():
 
 def test_parse_timeout_flag_is_accepted():
     """TASK-2.2: --timeout-per-file CLI flag should parse correctly."""
-    from ansede_static.cli import build_parser
+    from guardmarly.cli import build_parser
     args = build_parser().parse_args(["--timeout-per-file", "15.0", "src"])
     assert args.timeout_per_file == 15.0
 
 
 def test_incremental_flag_is_accepted():
     """TASK-2.6: --incremental and --incremental-sha256 CLI flags should parse correctly."""
-    from ansede_static.cli import build_parser
+    from guardmarly.cli import build_parser
     args = build_parser().parse_args(["--incremental", "src"])
     assert args.incremental is True
 
@@ -601,6 +601,6 @@ def test_filter_results_to_changed_lines_keeps_only_intersecting_findings(tmp_pa
 
 def test_profile_flag_is_accepted():
     """TASK-0.2: --profile CLI flag should parse correctly."""
-    from ansede_static.cli import build_parser
+    from guardmarly.cli import build_parser
     args = build_parser().parse_args(["--profile", "src"])
     assert args.profile is True

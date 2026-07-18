@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import builtins
 
-from ansede_static._types import AnalysisResult, Finding, Severity
-from ansede_static.engine.audit import Verdict, audit_findings
+from guardmarly._types import AnalysisResult, Finding, Severity
+from guardmarly.engine.audit import Verdict, audit_findings
 
 
 def test_audit_marks_cookie_secure_flag_findings_in_test_files_as_likely_fp():

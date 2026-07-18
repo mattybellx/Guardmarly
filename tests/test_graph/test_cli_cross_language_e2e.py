@@ -7,8 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from ansede_static.cli import _build_cross_language_execution, _cross_language_results_from_paths
-from ansede_static._types import Severity
+from guardmarly.cli import _build_cross_language_execution, _cross_language_results_from_paths
+from guardmarly._types import Severity
 
 
 def test_cli_cross_language_python_js_dom_xss(tmp_path):

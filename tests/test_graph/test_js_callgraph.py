@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from ansede_static.graph.import_graph import resolve_js_imports
-from ansede_static.graph.js_callgraph import build_js_callgraph
-from ansede_static.graph.unified_source_graph import UnifiedSourceGraph
+from guardmarly.graph.import_graph import resolve_js_imports
+from guardmarly.graph.js_callgraph import build_js_callgraph
+from guardmarly.graph.unified_source_graph import UnifiedSourceGraph
 
 
 def test_build_js_callgraph_resolves_same_file_calls(tmp_path):

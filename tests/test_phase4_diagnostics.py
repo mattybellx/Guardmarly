@@ -1,4 +1,4 @@
-"""Tests for ansede_static.engine.shadow_scan and ansede_static.engine.dump_failures.
+"""Tests for guardmarly.engine.shadow_scan and guardmarly.engine.dump_failures.
 
 Validates:
   - Shadow scan detects expected patterns in Python and JavaScript
@@ -14,15 +14,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from ansede_static._types import Finding, Severity
-from ansede_static.engine.shadow_scan import (
+from guardmarly._types import Finding, Severity
+from guardmarly.engine.shadow_scan import (
     run_shadow_scan,
     diff_scans,
     generate_shadow_report,
     shadow_report_to_dict,
     ShadowMatch,
 )
-from ansede_static.engine.dump_failures import (
+from guardmarly.engine.dump_failures import (
     attribute_false_negative,
     attribute_false_positive,
     run_failure_diagnostics,

@@ -1,0 +1,80 @@
+{
+  "name": "guardmarly",
+  "displayName": "Guardmarly — Offline SAST Security Scanner",
+  "description": "Zero-dependency SAST for Python, JS/TS, Go, Java & C#. Built-in IDOR detection. 100% CVE recall. Trace-backed findings inline while you code.",
+  "version": "1.0.0",
+  "publisher": "guardmarly",
+  "icon": "guard.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mattybellx/Guardmarly"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "sast",
+    "security",
+    "static-analysis",
+    "idor",
+    "vulnerability",
+    "cwe",
+    "owasp",
+    "offline",
+    "zero-dependency"
+  ],
+  "activationEvents": [
+    "onLanguage:python",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:go",
+    "onLanguage:java",
+    "onLanguage:csharp"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "guardmarly.scan",
+        "title": "Guardmarly: Scan file"
+      },
+      {
+        "command": "guardmarly.scanWorkspace",
+        "title": "Guardmarly: Scan workspace"
+      }
+    ],
+    "configuration": {
+      "title": "Guardmarly",
+      "properties": {
+        "guardmarly.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Guardmarly security scanning"
+        },
+        "guardmarly.failOn": {
+          "type": "string",
+          "default": "high",
+          "enum": ["critical", "high", "medium", "low", "never"],
+          "description": "Minimum severity to highlight in editor"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0",
+    "@vscode/vsce": "^3.0.0"
+  }
+}

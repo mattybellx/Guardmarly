@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from ansede_static.yaml_rules import apply_custom_rules, load_custom_rules
+from guardmarly.yaml_rules import apply_custom_rules, load_custom_rules
 
 
 def test_load_custom_rules_normalizes_languages_and_metadata(tmp_path):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ansede_static.graph.openapi_bridge import (
+from guardmarly.graph.openapi_bridge import (
     _normalize_route_path,
     _extract_openapi_routes,
     _discover_openapi_files,

@@ -1,0 +1,15 @@
+# Golden Corpus: SQL Injection (CWE-89)
+# This file MUST trigger the CWE-89 rule.
+# If the rule does NOT fire on this file, it's a FALSE NEGATIVE regression.
+
+def get_user(username):
+    query = "SELECT * FROM users WHERE name = '" + username + "'"
+    return db.execute(query)
+
+def search_products(term):
+    sql = f"SELECT * FROM products WHERE name LIKE '%{term}%'"
+    cursor.execute(sql)
+
+# Unsanitized dynamic SQL — must be detected
+def delete_record(table, record_id):
+    db.execute("DELETE FROM " + table + " WHERE id = " + str(record_id))

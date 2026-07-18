@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ansede_static.licensing import (
+from guardmarly.licensing import (
     LicenseInfo,
     bump_guarded_autofix_count,
     remaining_guarded_autofix_quota,
@@ -23,9 +23,9 @@ def test_free_guarded_autofix_quota_decrements(monkeypatch, tmp_path):
     count_file = tmp_path / "guarded_autofix_count.json"
     hash_file = tmp_path / ".guarded_autofix_integrity"
 
-    monkeypatch.setattr("ansede_static.licensing._guarded_autofix_count_file", lambda: count_file)
-    monkeypatch.setattr("ansede_static.licensing._guarded_autofix_hash_file", lambda: hash_file)
-    monkeypatch.setattr("ansede_static.licensing.load_license", lambda: _license("free"))
+    monkeypatch.setattr("guardmarly.licensing._guarded_autofix_count_file", lambda: count_file)
+    monkeypatch.setattr("guardmarly.licensing._guarded_autofix_hash_file", lambda: hash_file)
+    monkeypatch.setattr("guardmarly.licensing.load_license", lambda: _license("free"))
 
     # Developer mode: limit is 0 (unlimited) — everything succeeds
     used = bump_guarded_autofix_count(7)
@@ -33,7 +33,7 @@ def test_free_guarded_autofix_quota_decrements(monkeypatch, tmp_path):
 
 
 def test_pro_guarded_autofix_quota_is_unlimited(monkeypatch):
-    monkeypatch.setattr("ansede_static.licensing.load_license", lambda: _license("pro"))
+    monkeypatch.setattr("guardmarly.licensing.load_license", lambda: _license("pro"))
 
     assert remaining_guarded_autofix_quota() is None
     assert bump_guarded_autofix_count(5) == 5  # unlimited — always succeeds

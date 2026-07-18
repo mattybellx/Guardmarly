@@ -8,8 +8,8 @@ These verify that the shared apply_taint_aware_demotion function:
 """
 from __future__ import annotations
 
-from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
-from ansede_static.engine.confidence import apply_taint_aware_demotion, _should_demote
+from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
+from guardmarly.engine.confidence import apply_taint_aware_demotion, _should_demote
 
 
 def _result_with(findings: list[Finding]) -> list[AnalysisResult]:

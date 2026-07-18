@@ -1,7 +1,7 @@
 """
 tests.test_config
 ─────────────────
-Unit tests for the ansede.json configuration loader.
+Unit tests for the guardmarly.json configuration loader.
 """
 from __future__ import annotations
 
@@ -9,19 +9,19 @@ import json
 
 import pytest
 
-from ansede_static import scan_code
-from ansede_static.config import AnsedeConfig, CustomSinkSpec, apply_config_to_results, load_config
+from guardmarly import scan_code
+from guardmarly.config import GuardmarlyConfig, CustomSinkSpec, apply_config_to_results, load_config
 
 
 def _write_config(tmp_path, data: dict) -> None:
-    (tmp_path / "ansede.json").write_text(json.dumps(data), encoding="utf-8")
+    (tmp_path / "guardmarly.json").write_text(json.dumps(data), encoding="utf-8")
 
 
 # ── Happy-path loading ────────────────────────────────────────────────────────
 
 def test_load_config_no_file_returns_defaults(tmp_path):
     cfg = load_config(tmp_path)
-    assert cfg == AnsedeConfig()
+    assert cfg == GuardmarlyConfig()
 
 
 def test_load_config_exclude_paths_field(tmp_path):
@@ -113,21 +113,21 @@ def test_load_config_full(tmp_path):
 # ── Error handling ────────────────────────────────────────────────────────────
 
 def test_load_config_invalid_json_returns_defaults(tmp_path):
-    (tmp_path / "ansede.json").write_text("{not: valid json!!!}", encoding="utf-8")
+    (tmp_path / "guardmarly.json").write_text("{not: valid json!!!}", encoding="utf-8")
     cfg = load_config(tmp_path)
-    assert cfg == AnsedeConfig()
+    assert cfg == GuardmarlyConfig()
 
 
 def test_load_config_empty_json_object_returns_defaults(tmp_path):
     _write_config(tmp_path, {})
     cfg = load_config(tmp_path)
-    assert cfg == AnsedeConfig()
+    assert cfg == GuardmarlyConfig()
 
 
 def test_load_config_none_workspace_uses_cwd():
     """Passing None should not raise — falls back to cwd."""
     cfg = load_config(None)
-    assert isinstance(cfg, AnsedeConfig)
+    assert isinstance(cfg, GuardmarlyConfig)
 
 
 def test_load_config_custom_sinks_malformed_entry_skipped(tmp_path):
@@ -147,7 +147,7 @@ def test_load_config_custom_sinks_malformed_entry_skipped(tmp_path):
 
 
 def test_apply_config_to_results_disables_by_rule_id():
-    config = AnsedeConfig(disable_rules=["PY-020"])
+    config = GuardmarlyConfig(disable_rules=["PY-020"])
     results = [scan_code(
         """
 from flask import Flask
@@ -165,7 +165,7 @@ def admin_users():
 
 
 def test_apply_config_to_results_disables_by_cwe():
-    config = AnsedeConfig(disable_rules=["CWE-862"])
+    config = GuardmarlyConfig(disable_rules=["CWE-862"])
     results = [scan_code(
         """
 from flask import Flask
@@ -183,7 +183,7 @@ def admin_users():
 
 
 def test_scan_code_respects_custom_sink_config():
-    config = AnsedeConfig(custom_sinks={
+    config = GuardmarlyConfig(custom_sinks={
         "my_db_execute": CustomSinkSpec(cwe="CWE-89", title="Custom SQL Injection sink", severity="critical")
     })
     result = scan_code(

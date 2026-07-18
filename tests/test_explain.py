@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ansede_static.engine.explain import get_explanation
+from guardmarly.engine.explain import get_explanation
 
 
 def test_get_explanation_returns_known_cwe_markdown():

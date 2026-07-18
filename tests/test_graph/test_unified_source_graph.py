@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from ansede_static.graph.unified_source_graph import SourceEdge, SourceNode, UnifiedSourceGraph
+from guardmarly.graph.unified_source_graph import SourceEdge, SourceNode, UnifiedSourceGraph
 
 
 def _sample_graph() -> UnifiedSourceGraph:

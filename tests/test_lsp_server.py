@@ -14,14 +14,14 @@ from typing import Any
 
 import pytest
 
-from ansede_static.lsp_server import (
+from guardmarly.lsp_server import (
     LspServer,
     _Debouncer,
     _findings_to_diagnostics,
     _sev_to_lsp,
     _StdioTransport,
 )
-from ansede_static._types import Finding, Severity
+from guardmarly._types import Finding, Severity
 
 
 # ── Fake transport ────────────────────────────────────────────────────────────
@@ -112,7 +112,7 @@ class TestFindingsToDiagnostics:
         d = diags[0]
         assert d["range"]["start"]["line"] == 4  # 0-based
         assert d["severity"] == 1               # HIGH → Error
-        assert d["source"] == "ansede-static"
+        assert d["source"] == "guardmarly"
         assert "SQL Injection" in d["message"]
 
     def test_cwe_attached_as_code(self):
@@ -185,7 +185,7 @@ class TestInitialize:
             {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}},
         ])
         info = transport.sent[0]["result"].get("serverInfo", {})
-        assert info.get("name") == "ansede-static"
+        assert info.get("name") == "guardmarly"
 
     def test_initialized_notification_no_response(self):
         transport = _run_server([

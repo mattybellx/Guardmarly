@@ -31,11 +31,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: ansede-linux-amd64
+            artifact_name: guardmarly-linux-amd64
           - os: macos-latest
-            artifact_name: ansede-macos-universal
+            artifact_name: guardmarly-macos-universal
           - os: windows-latest
-            artifact_name: ansede-windows-amd64.exe
+            artifact_name: guardmarly-windows-amd64.exe
 
     steps:
       - name: Checkout Source Code
@@ -53,7 +53,7 @@ jobs:
 
       - name: Execute Binary Packaging Engine
         run: |
-          pyinstaller --onefile --name="${{ matrix.artifact_name }}" src/ansede_static/cli.py
+          pyinstaller --onefile --name="${{ matrix.artifact_name }}" src/guardmarly/cli.py
 
       - name: Upload Binary Stable Builds As Workflow Storage
         uses: actions/upload-artifact@v4

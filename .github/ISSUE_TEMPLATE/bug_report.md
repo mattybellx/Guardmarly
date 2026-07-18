@@ -12,7 +12,7 @@ A clear description of what went wrong.
 ### Reproduction
 ```bash
 # Command that triggered the issue
-ansede-static <path> --flag ...
+guardmarly <path> --flag ...
 ```
 
 ### Code sample
@@ -28,7 +28,7 @@ What happened instead (paste output if applicable).
 
 ### Environment
 - OS: [e.g. macOS 15, Windows 11, Ubuntu 24.04]
-- ansede-static version: [`ansede-static --version`]
+- guardmarly version: [`guardmarly --version`]
 - Python version: [`python --version`]
 
 ### Additional context

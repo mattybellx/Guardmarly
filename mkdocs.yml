@@ -1,8 +1,8 @@
-site_name: Ansede Static
+site_name: Guardmarly
 site_description: Production-grade offline SAST for access-control and taint vulnerabilities
-site_url: https://github.com/mattybellx/Ansede
-repo_url: https://github.com/mattybellx/Ansede
-repo_name: mattybellx/Ansede
+site_url: https://github.com/mattybellx/Guardmarly
+repo_url: https://github.com/mattybellx/Guardmarly
+repo_name: mattybellx/Guardmarly
 
 # Built-in search via MkDocs Material
 docs_dir: docs

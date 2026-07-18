@@ -35,7 +35,7 @@ body:
     attributes:
       label: Description
       description: What happened? What did you expect?
-      placeholder: "ansede-static flagged a safe pattern as CWE-89..."
+      placeholder: "guardmarly flagged a safe pattern as CWE-89..."
     validations:
       required: true
 
@@ -44,7 +44,7 @@ body:
     attributes:
       label: Reproduction command
       description: Paste the exact command used (including flags)
-      placeholder: "ansede-static src/ --format json --js-backend structural"
+      placeholder: "guardmarly src/ --format json --js-backend structural"
       render: bash
     validations:
       required: true
@@ -61,7 +61,7 @@ body:
   - type: textarea
     id: output
     attributes:
-      label: ansede-static output
+      label: guardmarly output
       description: Paste the full output (text or JSON)
       render: text
 
@@ -69,14 +69,14 @@ body:
     id: expected
     attributes:
       label: Expected behavior
-      description: What should ansede-static report instead?
+      description: What should guardmarly report instead?
 
   - type: input
     id: version
     attributes:
       label: Version
-      description: "Run `ansede-static --version`"
-      placeholder: "ansede-static 1.2.0"
+      description: "Run `guardmarly --version`"
+      placeholder: "guardmarly 1.2.0"
     validations:
       required: true
 

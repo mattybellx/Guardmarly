@@ -8,7 +8,7 @@
       "cwe": "CWE-307",
       "severity": "high",
       "language": "python",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/flask-missing-rate-limit-CWE-307.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/flask-missing-rate-limit-CWE-307.yaml",
       "tags": ["owasp:A07"]
     },
     {
@@ -17,7 +17,7 @@
       "cwe": "CWE-693",
       "severity": "medium",
       "language": "javascript",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/express-missing-helmet-CWE-693.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/express-missing-helmet-CWE-693.yaml",
       "tags": ["owasp:A05", "express", "helmet"]
     },
     {
@@ -26,7 +26,7 @@
       "cwe": "CWE-489",
       "severity": "high",
       "language": "python",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/django-debug-enabled-CWE-489.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/django-debug-enabled-CWE-489.yaml",
       "tags": ["owasp:A05", "django", "debug", "information-disclosure"]
     },
     {
@@ -35,7 +35,7 @@
       "cwe": "CWE-693",
       "severity": "medium",
       "language": "javascript",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/express-missing-csp-CWE-693.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/express-missing-csp-CWE-693.yaml",
       "tags": ["owasp:A05", "express", "csp", "xss-prevention"]
     },
     {
@@ -44,7 +44,7 @@
       "cwe": "CWE-295",
       "severity": "high",
       "language": "go",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/go-tls-insecure-skip-verify-CWE-295.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/go-tls-insecure-skip-verify-CWE-295.yaml",
       "tags": ["owasp:A02", "go", "tls", "certificate-validation"]
     },
     {
@@ -53,7 +53,7 @@
       "cwe": "CWE-352",
       "severity": "high",
       "language": "java",
-      "url": "https://raw.githubusercontent.com/mattybellx/Ansede/master/community_rules/java-spring-csrf-disabled-CWE-352.yaml",
+      "url": "https://raw.githubusercontent.com/mattybellx/Guardmarly/master/community_rules/java-spring-csrf-disabled-CWE-352.yaml",
       "tags": ["owasp:A01", "java", "spring", "csrf"]
     }
   ]

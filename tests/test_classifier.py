@@ -1,13 +1,13 @@
 """Tests for production classifier."""
 import pytest
-from ansede_static.classifier import (
+from guardmarly.classifier import (
     Classifier, Verdict, ClassifiedFinding,
     _is_parameterized_sql, _is_dynamic_sql, _is_list_subprocess,
     _is_shell_injection, _has_xss_sanitizer, _has_deser_guard,
     _has_path_sanitizer, _is_placeholder_secret, _is_env_secret,
     _has_auth_guard, _has_csrf_protection,
 )
-from ansede_static._types import Finding, Severity
+from guardmarly._types import Finding, Severity
 
 
 def make_finding(**kwargs) -> Finding:

@@ -1,0 +1,24 @@
+# Golden Corpus: Cross-Site Scripting (CWE-79) — Python
+# MUST trigger the rule
+
+from flask import Flask, request, make_response
+
+app = Flask(__name__)
+
+@app.route("/search")
+def search():
+    q = request.args.get("q", "")
+    return f"<h1>Results for {q}</h1>"  # Unescaped user input in HTML
+
+@app.route("/profile")
+def profile():
+    name = request.args.get("name", "")
+    # Direct string format into HTML
+    html = "<div>Welcome, " + name + "</div>"
+    return html
+
+@app.route("/api")
+def api():
+    callback = request.args.get("callback", "")
+    # JSONP-style XSS
+    return f"{callback}({{'data': 123}})"

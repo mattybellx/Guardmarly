@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from ansede_static.cache.incremental import (
+from guardmarly.cache.incremental import (
     IncrementalCache,
     _extract_js_imports,
     _extract_python_imports,

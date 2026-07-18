@@ -1,7 +1,7 @@
 """Tests for GlobalGraph cross-language bridge convergence (DIR-3.3)."""
 from __future__ import annotations
 
-from ansede_static.ir.global_graph import GlobalGraph, IDETaintLevel
+from guardmarly.ir.global_graph import GlobalGraph, IDETaintLevel
 
 
 def test_publish_cross_language_bridges_creates_taint_facts():

@@ -4,7 +4,7 @@
 # custom security assertions without modifying core engine logic.
 #
 # Schema version: 1.0
-# Documentation: https://github.com/mattybellx/Ansede/blob/main/docs/writing-rules.md
+# Documentation: https://github.com/mattybellx/Guardmarly/blob/main/docs/writing-rules.md
 
 rules:
   - id: ANS-CUSTOM-DECORATOR

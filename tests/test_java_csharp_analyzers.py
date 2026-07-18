@@ -3,8 +3,8 @@ from __future__ import annotations
 import os
 import pytest
 
-from ansede_static.cli import _apply_auto_fixes
-from ansede_static import scan_code, scan_file
+from guardmarly.cli import _apply_auto_fixes
+from guardmarly import scan_code, scan_file
 
 
 JAVA_MISSING_AUTH = """
@@ -418,7 +418,7 @@ def test_java_csharp_go_findings_include_safe_inline_auto_fixes(tmp_path):
     # Use actuator endpoint fixture that AST analyzer detects (GET /admin is not flagged)
     # On CI where tree-sitter isn't built, the regex fallback uses JAVA_MISSING_AUTH instead
     try:
-        from ansede_static.java_analyzer import _AST_AVAILABLE
+        from guardmarly.java_analyzer import _AST_AVAILABLE
     except ImportError:
         _AST_AVAILABLE = False
     if _AST_AVAILABLE:
@@ -444,7 +444,7 @@ def test_java_csharp_go_findings_include_safe_inline_auto_fixes(tmp_path):
 
 def test_apply_fixes_updates_java_csharp_and_go_sources(tmp_path):
     try:
-        from ansede_static.java_analyzer import _AST_AVAILABLE
+        from guardmarly.java_analyzer import _AST_AVAILABLE
     except ImportError:
         _AST_AVAILABLE = False
     java_file = tmp_path / "AdminController.java"

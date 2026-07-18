@@ -1,5 +1,5 @@
-name: 'Ansede Static Scan (Docker)'
-description: 'Run ansede-static from GHCR Docker image for low-friction CI adoption'
+name: 'Guardmarly Scan (Docker)'
+description: 'Run guardmarly from GHCR Docker image for low-friction CI adoption'
 author: 'mattybellx'
 
 branding:
@@ -24,13 +24,13 @@ inputs:
     required: false
     default: ''
   args:
-    description: 'Additional args passed to ansede-static'
+    description: 'Additional args passed to guardmarly'
     required: false
     default: ''
 
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/ansede/static-scanner:latest'
+  image: 'docker://ghcr.io/guardmarly/static-scanner:latest'
   args:
     - ${{ inputs.path }}
     - --format

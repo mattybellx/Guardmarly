@@ -10,8 +10,8 @@ from unittest.mock import patch
 
 import pytest
 
-from ansede_static._types import Finding, Severity
-from ansede_static.engine.remediation import (
+from guardmarly._types import Finding, Severity
+from guardmarly.engine.remediation import (
     _build_prompt,
     _call_ollama,
     _extract_before_after,

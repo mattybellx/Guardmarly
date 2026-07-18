@@ -16,7 +16,7 @@ if str(ROOT) not in sys.path:
 # ── Shared test fixtures for reporter and IR tests ─────────────────────
 
 import pytest
-from ansede_static._types import AnalysisResult, Finding, Severity, TraceFrame
+from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
 
 
 @pytest.fixture

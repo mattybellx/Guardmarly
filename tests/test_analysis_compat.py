@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from ansede_static.analysis.framework_detector import detect_framework_profile
-from ansede_static.analysis.interprocedural import build_project_index
+from guardmarly.analysis.framework_detector import detect_framework_profile
+from guardmarly.analysis.interprocedural import build_project_index
 
 
 def test_framework_detector_identifies_flask_and_fastapi_signals():

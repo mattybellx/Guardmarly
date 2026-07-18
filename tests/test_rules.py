@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from ansede_static import scan_code
-from ansede_static.rules import (
+from guardmarly import scan_code
+from guardmarly.rules import (
     describe_rule,
     get_rule_contract,
     list_rule_contracts,

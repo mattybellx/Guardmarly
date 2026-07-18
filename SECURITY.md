@@ -1,6 +1,6 @@
 # Security Policy
 
-Thanks for helping keep `ansede-static` safe and trustworthy.
+Thanks for helping keep `guardmarly` safe and trustworthy.
 
 ## Supported Versions
 
@@ -14,15 +14,15 @@ Thanks for helping keep `ansede-static` safe and trustworthy.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in ansede-static, **please do not open a public issue**.
+If you discover a security vulnerability in guardmarly, **please do not open a public issue**.
 
 Instead, use **GitHub private vulnerability reporting**:
 
-- https://github.com/mattybellx/Ansede/security/advisories/new
+- https://github.com/mattybellx/Guardmarly/security/advisories/new
 
 When reporting, please include:
 
-1. Version: `ansede-static --version`
+1. Version: `guardmarly --version`
 2. Steps to reproduce
 3. Impact assessment (if known)
 
@@ -39,7 +39,7 @@ When reporting, please include:
 We aim to acknowledge reports within **48 hours** and provide a fix within **7 days** for critical issues.
 
 ## Advisories
-https://github.com/mattybellx/Ansede/security/advisories
+https://github.com/mattybellx/Guardmarly/security/advisories
 
 ## Where to report
 
@@ -59,7 +59,7 @@ Include as much of the following as possible:
 
 ## Scope
 
-ansede-static is a static analysis tool — it reads source code but never executes it. Security concerns include:
+guardmarly is a static analysis tool — it reads source code but never executes it. Security concerns include:
 
 - **False negatives** — missing a real vulnerability in scanned code
 - **ReDoS** — a crafted input causing the regex engine to hang

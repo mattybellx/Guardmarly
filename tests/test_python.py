@@ -6,9 +6,9 @@ Unit tests for the Python AST security analyzer.
 from __future__ import annotations
 
 import pytest
-from ansede_static.ir.global_graph import GlobalGraph
-from ansede_static.python_analyzer import analyze_python
-from ansede_static._types import Severity
+from guardmarly.ir.global_graph import GlobalGraph
+from guardmarly.python_analyzer import analyze_python
+from guardmarly._types import Severity
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -476,24 +476,24 @@ def get_user(user_id):
         assert _has_cwe(code, "CWE-862")
 
     def test_inline_suppression(self):
-        """Inline # ansede: ignore suppresses the finding."""
+        """Inline # guardmarly: ignore suppresses the finding."""
         code = """
 from flask import Flask
 app = Flask(__name__)
 
-@app.route('/admin/panel')  # ansede: ignore[CWE-862]
+@app.route('/admin/panel')  # guardmarly: ignore[CWE-862]
 def admin_panel():
     return {}
 """
         assert not _has_cwe(code, "CWE-862")
 
     def test_inline_suppression_blanket(self):
-        """Blanket # ansede: ignore (no CWE list) suppresses all on that line."""
+        """Blanket # guardmarly: ignore (no CWE list) suppresses all on that line."""
         code = """
 from flask import Flask
 app = Flask(__name__)
 
-@app.route('/admin/secret')  # ansede: ignore
+@app.route('/admin/secret')  # guardmarly: ignore
 def admin_secret():
     return {}
 """

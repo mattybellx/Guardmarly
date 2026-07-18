@@ -6,8 +6,8 @@ Unit tests for the JavaScript security analyzer.
 from __future__ import annotations
 
 import pytest
-from ansede_static.js_analyzer import analyze_js
-from ansede_static._types import Severity
+from guardmarly.js_analyzer import analyze_js
+from guardmarly._types import Severity
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
@@ -697,15 +697,15 @@ app.use(cors({ origin: '*' }));
 
 class TestJsSuppression:
     def test_suppress_specific_cwe(self):
-        code = "document.getElementById('out').innerHTML = req.query.name; // ansede: ignore[CWE-79]"
+        code = "document.getElementById('out').innerHTML = req.query.name; // guardmarly: ignore[CWE-79]"
         assert not _has_cwe(code, "CWE-79")
 
     def test_suppress_blanket(self):
-        code = "document.getElementById('out').innerHTML = req.query.name; // ansede: ignore"
+        code = "document.getElementById('out').innerHTML = req.query.name; // guardmarly: ignore"
         assert not _has_cwe(code, "CWE-79")
 
     def test_suppress_wrong_cwe_still_flags(self):
-        code = "document.getElementById('out').innerHTML = req.query.name; // ansede: ignore[CWE-89]"
+        code = "document.getElementById('out').innerHTML = req.query.name; // guardmarly: ignore[CWE-89]"
         assert _has_cwe(code, "CWE-79")
 
 
@@ -903,12 +903,12 @@ class TestGlobalGraphDelegation:
         """When GlobalGraph already has a FunctionSummary for a callee, the
         return trace emitted by the IFDS path should not be duplicated by the
         local return_effects path."""
-        from ansede_static.ir.global_graph import GlobalGraph, FunctionSummary as GGSummary
-        from ansede_static.js_engine.project import (
+        from guardmarly.ir.global_graph import GlobalGraph, FunctionSummary as GGSummary
+        from guardmarly.js_engine.project import (
             JsProjectIndex, JsFileIndex, JsFunctionDef,
             _trace_helper_return_expression,
         )
-        from ansede_static._types import TraceFrame
+        from guardmarly._types import TraceFrame
 
         caller_file = str(tmp_path / "app.js")
 
@@ -958,12 +958,12 @@ class TestGlobalGraphDelegation:
     def test_globalgraph_no_summary_falls_back_gracefully(self, tmp_path):
         """Without a GlobalGraph summary, _trace_helper_return_expression must
         not raise even with an empty GlobalGraph."""
-        from ansede_static.ir.global_graph import GlobalGraph
-        from ansede_static.js_engine.project import (
+        from guardmarly.ir.global_graph import GlobalGraph
+        from guardmarly.js_engine.project import (
             JsProjectIndex, JsFileIndex, JsFunctionDef,
             _trace_helper_return_expression,
         )
-        from ansede_static._types import TraceFrame
+        from guardmarly._types import TraceFrame
 
         caller_file = str(tmp_path / "app2.js")
 
@@ -996,7 +996,7 @@ class TestIDELatticeOperations:
     """IDE fact lattice integration."""
 
     def test_ide_lattice_boosts_confidence_for_tainted_facts(self):
-        from ansede_static.ir.global_graph import GlobalGraph, IDETaintLevel
+        from guardmarly.ir.global_graph import GlobalGraph, IDETaintLevel
 
         gg = GlobalGraph()
         gg.set_taint_with_access_path(
@@ -1010,7 +1010,7 @@ class TestIDELatticeOperations:
         assert adjusted > 0.75, f"TAINTED IDE fact should boost confidence; got {adjusted}"
 
     def test_ide_lattice_suppresses_confidence_for_clean_facts(self):
-        from ansede_static.ir.global_graph import GlobalGraph, IDETaintLevel
+        from guardmarly.ir.global_graph import GlobalGraph, IDETaintLevel
 
         gg = GlobalGraph()
         gg.set_taint_with_access_path(
@@ -1024,8 +1024,8 @@ class TestIDELatticeOperations:
         assert adjusted < 0.9, f"CLEAN IDE fact should suppress confidence; got {adjusted}"
 
     def test_python_analyze_with_global_graph_records_ide_facts(self):
-        from ansede_static.ir.global_graph import GlobalGraph
-        from ansede_static.python_analyzer import analyze_python
+        from guardmarly.ir.global_graph import GlobalGraph
+        from guardmarly.python_analyzer import analyze_python
 
         code = """
 from flask import request

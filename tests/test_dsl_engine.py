@@ -1,5 +1,5 @@
 import unittest
-from ansede_static.dsl.engine import (
+from guardmarly.dsl.engine import (
     ASTNode, KindPattern, MetavariablePattern, TextPattern,
     PatternsOperator, PatternEitherOperator, PatternNotOperator, EvaluatorContext
 )
@@ -72,7 +72,7 @@ class TestDeclarativeDSLEngine(unittest.TestCase):
         self.assertTrue(pattern_not.match(self.node_child_1, ctx))
 
     def test_query_ast_recursive(self):
-        from ansede_static.dsl.engine import query_ast
+        from guardmarly.dsl.engine import query_ast
         pattern = TextPattern("foo")
         matches = query_ast(self.root_node, pattern)
         self.assertEqual(len(matches), 1)
@@ -80,7 +80,7 @@ class TestDeclarativeDSLEngine(unittest.TestCase):
 
 class TestDeclarativeDSLCompiler(unittest.TestCase):
     def test_compile_simple(self):
-        from ansede_static.dsl.compiler import compile_pattern
+        from guardmarly.dsl.compiler import compile_pattern
         pat = compile_pattern("foo")
         self.assertIsInstance(pat, TextPattern)
         self.assertEqual(pat.text, "foo")
@@ -90,7 +90,7 @@ class TestDeclarativeDSLCompiler(unittest.TestCase):
         self.assertEqual(pat_var.var_name, "$X_VAR")
 
     def test_compile_list(self):
-        from ansede_static.dsl.compiler import compile_pattern
+        from guardmarly.dsl.compiler import compile_pattern
         pat = compile_pattern(["foo", "$X"])
         self.assertIsInstance(pat, PatternsOperator)
         self.assertEqual(len(pat.operators), 2)
@@ -98,7 +98,7 @@ class TestDeclarativeDSLCompiler(unittest.TestCase):
         self.assertIsInstance(pat.operators[1], MetavariablePattern)
 
     def test_compile_nested_dict(self):
-        from ansede_static.dsl.compiler import compile_pattern
+        from guardmarly.dsl.compiler import compile_pattern
         schema = {
             "patterns": ["const x = 1", "$VAR"],
             "not": {
@@ -110,9 +110,9 @@ class TestDeclarativeDSLCompiler(unittest.TestCase):
         self.assertEqual(len(pat.operators), 2)  # parsed patterns + not
 
     def test_bridge_python_ast(self):
-        from ansede_static.dsl.bridge import parse_python_to_dsl
-        from ansede_static.dsl.engine import query_ast
-        from ansede_static.dsl.compiler import compile_pattern
+        from guardmarly.dsl.bridge import parse_python_to_dsl
+        from guardmarly.dsl.engine import query_ast
+        from guardmarly.dsl.compiler import compile_pattern
         
         # Parse test Python snippet:
         # app.route("/admin")

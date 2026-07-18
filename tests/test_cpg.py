@@ -7,7 +7,7 @@ import pytest
 # ── CPG graph data structures ────────────────────────────────────────────────
 
 def test_cpg_graph_imports():
-    from ansede_static.cpg import CPG, CPGNode, CPGEdge, EdgeKind
+    from guardmarly.cpg import CPG, CPGNode, CPGEdge, EdgeKind
     assert CPG
     assert EdgeKind.AST_CHILD
     assert EdgeKind.CFG_NEXT
@@ -18,7 +18,7 @@ def test_cpg_graph_imports():
 
 
 def test_cpg_add_node_and_edge():
-    from ansede_static.cpg import CPG, EdgeKind
+    from guardmarly.cpg import CPG, EdgeKind
     cpg = CPG()
     n1 = cpg.add_node("Assign", lineno=1)
     n2 = cpg.add_node("Call", lineno=2)
@@ -28,7 +28,7 @@ def test_cpg_add_node_and_edge():
 
 
 def test_cpg_def_use():
-    from ansede_static.cpg import CPG
+    from guardmarly.cpg import CPG
     cpg = CPG()
     n1 = cpg.add_node("Assign", lineno=1)
     cpg.record_def("x", n1.node_id)
@@ -38,7 +38,7 @@ def test_cpg_def_use():
 
 
 def test_cpg_stats():
-    from ansede_static.cpg import CPG, EdgeKind
+    from guardmarly.cpg import CPG, EdgeKind
     cpg = CPG()
     n1 = cpg.add_node("Module", lineno=0)
     n2 = cpg.add_node("FunctionDef", lineno=1)
@@ -51,7 +51,7 @@ def test_cpg_stats():
 # ── CPG builder ──────────────────────────────────────────────────────────────
 
 def test_build_cpg_simple_function():
-    from ansede_static.cpg import build_cpg
+    from guardmarly.cpg import build_cpg
     code = '''
 def add(a, b):
     return a + b
@@ -61,7 +61,7 @@ def add(a, b):
 
 
 def test_build_cpg_if_branch_edges():
-    from ansede_static.cpg import build_cpg, EdgeKind
+    from guardmarly.cpg import build_cpg, EdgeKind
     code = '''
 def check(x):
     if x > 0:
@@ -79,7 +79,7 @@ def check(x):
 
 
 def test_build_cpg_isinstance_guard_meta():
-    from ansede_static.cpg import build_cpg
+    from guardmarly.cpg import build_cpg
     code = '''
 def process(x):
     if isinstance(x, int):
@@ -93,7 +93,7 @@ def process(x):
 
 
 def test_build_cpg_data_dependency_edges():
-    from ansede_static.cpg import build_cpg, EdgeKind
+    from guardmarly.cpg import build_cpg, EdgeKind
     code = '''
 def compute():
     x = 1
@@ -109,7 +109,7 @@ def compute():
 
 
 def test_build_cpg_try_except():
-    from ansede_static.cpg import build_cpg, EdgeKind
+    from guardmarly.cpg import build_cpg, EdgeKind
     code = '''
 def risky():
     try:
@@ -128,7 +128,7 @@ def risky():
 
 
 def test_build_cpg_assigns_ssa_versions_to_defs_and_uses():
-    from ansede_static.cpg import build_cpg
+    from guardmarly.cpg import build_cpg
 
     code = '''
 def f(x):
@@ -154,7 +154,7 @@ def f(x):
 
 
 def test_build_cpg_emits_phi_node_for_if_else_redefinitions():
-    from ansede_static.cpg import build_cpg
+    from guardmarly.cpg import build_cpg
 
     code = '''
 def f(flag):
@@ -172,7 +172,7 @@ def f(flag):
 
 
 def test_build_cpg_syntax_error_returns_empty():
-    from ansede_static.cpg import build_cpg
+    from guardmarly.cpg import build_cpg
     cpg = build_cpg("def broken(", "bad.py")
     assert cpg.stats()["nodes"] == 0
 
@@ -180,12 +180,12 @@ def test_build_cpg_syntax_error_returns_empty():
 # ── CPG taint engine ─────────────────────────────────────────────────────────
 
 def test_cpg_taint_engine_imports():
-    from ansede_static.cpg import CPGTaintEngine
+    from guardmarly.cpg import CPGTaintEngine
     assert CPGTaintEngine
 
 
 def test_cpg_taint_engine_no_paths_on_empty():
-    from ansede_static.cpg import build_cpg, CPGTaintEngine
+    from guardmarly.cpg import build_cpg, CPGTaintEngine
     cpg = build_cpg("x = 1\n", "test.py")
     engine = CPGTaintEngine(cpg)
     paths = engine.find_taint_paths()
@@ -193,7 +193,7 @@ def test_cpg_taint_engine_no_paths_on_empty():
 
 
 def test_cpg_taint_state_merge():
-    from ansede_static.cpg.taint_engine import TaintState
+    from guardmarly.cpg.taint_engine import TaintState
     a = TaintState(tags=frozenset({"user_controlled"}))
     b = TaintState(tags=frozenset({"sql_injectable"}))
     merged = a.merge(b)
@@ -202,7 +202,7 @@ def test_cpg_taint_state_merge():
 
 
 def test_cpg_taint_state_sanitize():
-    from ansede_static.cpg.taint_engine import TaintState
+    from guardmarly.cpg.taint_engine import TaintState
     t = TaintState(tags=frozenset({"user_controlled"}))
     sanitized = t.sanitize("html_escape")
     assert "html_escape" in sanitized.sanitized_by
@@ -210,17 +210,17 @@ def test_cpg_taint_state_sanitize():
 
 
 def test_cpg_taint_clean_constant():
-    from ansede_static.cpg.taint_engine import CLEAN
+    from guardmarly.cpg.taint_engine import CLEAN
     assert not CLEAN.is_tainted()
 
 
 def test_cpg_taint_user_controlled():
-    from ansede_static.cpg.taint_engine import USER_CONTROLLED
+    from guardmarly.cpg.taint_engine import USER_CONTROLLED
     assert USER_CONTROLLED.is_tainted()
 
 
 def test_cpg_find_sql_injection_path():
-    from ansede_static.cpg import build_cpg, CPGTaintEngine
+    from guardmarly.cpg import build_cpg, CPGTaintEngine
     code = '''
 from flask import request
 import sqlite3
@@ -241,7 +241,7 @@ def search():
 # ── Incremental cache ─────────────────────────────────────────────────────────
 
 def test_incremental_cache_file_changed(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     db = tmp_path / "cache.db"
     f = tmp_path / "test.py"
     f.write_text("x = 1\n")
@@ -256,7 +256,7 @@ def test_incremental_cache_file_changed(tmp_path):
 
 
 def test_incremental_cache_detects_modification(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     db = tmp_path / "cache.db"
     f = tmp_path / "test.py"
     f.write_text("x = 1\n")
@@ -270,8 +270,8 @@ def test_incremental_cache_detects_modification(tmp_path):
 
 
 def test_incremental_cache_store_and_retrieve_findings(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
-    from ansede_static._types import Finding, Severity
+    from guardmarly.cache.incremental import IncrementalCache
+    from guardmarly._types import Finding, Severity
     db = tmp_path / "cache.db"
     f = tmp_path / "test.py"
     f.write_text("x = 1\n")
@@ -293,7 +293,7 @@ def test_incremental_cache_store_and_retrieve_findings(tmp_path):
 
 
 def test_incremental_cache_invalidate(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     db = tmp_path / "cache.db"
     f = tmp_path / "test.py"
     f.write_text("x = 1\n")
@@ -307,7 +307,7 @@ def test_incremental_cache_invalidate(tmp_path):
 
 
 def test_incremental_cache_context_manager(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
     db = tmp_path / "cache.db"
     f = tmp_path / "test.py"
     f.write_text("x = 1\n")
@@ -319,7 +319,7 @@ def test_incremental_cache_context_manager(tmp_path):
 
 
 def test_incremental_cache_marks_importers_of_changed_files(tmp_path):
-    from ansede_static.cache.incremental import IncrementalCache
+    from guardmarly.cache.incremental import IncrementalCache
 
     db = tmp_path / "cache.db"
     dep = tmp_path / "dep.py"

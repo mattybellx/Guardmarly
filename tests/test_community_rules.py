@@ -5,16 +5,16 @@ from pathlib import Path
 
 import pytest
 
-import ansede_static
-from ansede_static import AnsedeConfig, scan_code
-from ansede_static.cli import _apply_baseline, _load_baseline
-from ansede_static.registry import (
+import guardmarly
+from guardmarly import GuardmarlyConfig, scan_code
+from guardmarly.cli import _apply_baseline, _load_baseline
+from guardmarly.registry import (
     NoCommunityRulesCachedError,
     fetch_registry_rules,
     list_installed_community_rules,
     remove_installed_rule,
 )
-from ansede_static.reporters import format_json
+from guardmarly.reporters import format_json
 
 
 RULE_ID = "community/flask-missing-rate-limit-CWE-307"
@@ -52,8 +52,8 @@ def _install_rule(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> Path:
     rule_dir.mkdir()
     rule_file = rule_dir / "flask-rule.yaml"
     rule_file.write_text(RULE_YAML, encoding="utf-8")
-    monkeypatch.setattr("ansede_static.yaml_rules.default_community_rules_dir", lambda: rule_dir)
-    monkeypatch.setattr("ansede_static.registry.default_community_rules_dir", lambda: rule_dir)
+    monkeypatch.setattr("guardmarly.yaml_rules.default_community_rules_dir", lambda: rule_dir)
+    monkeypatch.setattr("guardmarly.registry.default_community_rules_dir", lambda: rule_dir)
     return rule_dir
 
 
@@ -80,8 +80,8 @@ def test_malformed_rule_skipped_with_warning(tmp_path, monkeypatch, caplog):
         'id: "community/broken-rule"\ntitle: "Broken rule"\nlanguage: "python"\npattern:\n  type: "regex"\n  regex: "danger"\n',
         encoding="utf-8",
     )
-    monkeypatch.setattr("ansede_static.yaml_rules.default_community_rules_dir", lambda: rule_dir)
-    monkeypatch.setattr("ansede_static.registry.default_community_rules_dir", lambda: rule_dir)
+    monkeypatch.setattr("guardmarly.yaml_rules.default_community_rules_dir", lambda: rule_dir)
+    monkeypatch.setattr("guardmarly.registry.default_community_rules_dir", lambda: rule_dir)
 
     with caplog.at_level("WARNING"):
         result = scan_code("print('safe')\n", language="python", filename="demo.py")
@@ -112,7 +112,7 @@ def test_community_rule_suppressible_via_disable_rules(tmp_path, monkeypatch):
         POSITIVE_SOURCE,
         language="python",
         filename="app.py",
-        config=AnsedeConfig(disable_rules=[RULE_ID]),
+        config=GuardmarlyConfig(disable_rules=[RULE_ID]),
     )
 
     assert all(f.rule_id != RULE_ID for f in result.findings)
@@ -122,7 +122,7 @@ def test_community_rule_suppressible_via_inline_comment(tmp_path, monkeypatch):
     _install_rule(monkeypatch, tmp_path)
 
     result = scan_code(
-        f'@app.route("/admin/export", methods=["POST"])  # ansede: ignore[{RULE_ID}]\ndef export_users():\n    pass\n',
+        f'@app.route("/admin/export", methods=["POST"])  # guardmarly: ignore[{RULE_ID}]\ndef export_users():\n    pass\n',
         language="python",
         filename="app.py",
     )
@@ -176,7 +176,7 @@ def test_registry_offline_requires_cached_rules(tmp_path):
 
 
 def test_scan_code_runtime_rules_cache_reuses_workspace_load(monkeypatch, tmp_path):
-    ansede_static._load_runtime_rules_cached.cache_clear()
+    guardmarly._load_runtime_rules_cached.cache_clear()
     monkeypatch.chdir(tmp_path)
 
     calls = 0
@@ -186,7 +186,7 @@ def test_scan_code_runtime_rules_cache_reuses_workspace_load(monkeypatch, tmp_pa
         calls += 1
         return []
 
-    monkeypatch.setattr(ansede_static._yaml_rules, "load_runtime_rules", fake_load_runtime_rules)
+    monkeypatch.setattr(guardmarly._yaml_rules, "load_runtime_rules", fake_load_runtime_rules)
 
     scan_code("print('one')\n", language="python", filename="first.py")
     scan_code("print('two')\n", language="python", filename="second.py")

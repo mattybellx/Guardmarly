@@ -32,4 +32,4 @@ jobs:
         run: python -m pytest tests/ -q --tb=short
 
       - name: Rule Validation
-        run: python -m ansede_static.cli --list-rules
+        run: python -m guardmarly.cli --list-rules

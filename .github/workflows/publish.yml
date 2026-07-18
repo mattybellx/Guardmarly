@@ -67,4 +67,4 @@ jobs:
         if: success() || (steps.publish_token.conclusion == 'success')
         run: |
           sleep 15
-          pip install --dry-run --no-deps "ansede-static==$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")" 2>&1 || echo "Package may still be indexing on PyPI..."
+          pip install --dry-run --no-deps "guardmarly==$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")" 2>&1 || echo "Package may still be indexing on PyPI..."

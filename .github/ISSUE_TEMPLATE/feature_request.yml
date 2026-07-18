@@ -7,7 +7,7 @@ body:
     attributes:
       label: Problem
       description: What limitation or missing feature are you running into?
-      placeholder: "I wish ansede-static could detect..."
+      placeholder: "I wish guardmarly could detect..."
     validations:
       required: true
   - type: textarea

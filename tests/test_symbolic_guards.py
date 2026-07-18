@@ -1,8 +1,8 @@
 """Tests for enhanced symbolic guard analysis (ROADMAP Section 3.2)."""
 from __future__ import annotations
 
-from ansede_static.python_analyzer import analyze_python
-from ansede_static.js_analyzer import analyze_js
+from guardmarly.python_analyzer import analyze_python
+from guardmarly.js_analyzer import analyze_js
 
 
 class TestNullGuardDetection:

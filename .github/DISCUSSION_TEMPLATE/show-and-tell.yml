@@ -3,7 +3,7 @@ labels: ["show-and-tell"]
 body:
   - type: textarea
     attributes:
-      label: What did you build with ansede-static?
+      label: What did you build with guardmarly?
       description: Share your integration, custom rules, or findings!
     validations:
       required: true
