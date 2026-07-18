@@ -60,7 +60,13 @@
         "guardmarly.failOn": {
           "type": "string",
           "default": "high",
-          "enum": ["critical", "high", "medium", "low", "never"],
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "never"
+          ],
           "description": "Minimum severity to highlight in editor"
         }
       }
@@ -73,8 +79,9 @@
     "package": "vsce package"
   },
   "devDependencies": {
+    "@types/node": "^26.1.1",
     "@types/vscode": "^1.85.0",
-    "typescript": "^5.0.0",
-    "@vscode/vsce": "^3.0.0"
+    "@vscode/vsce": "^3.0.0",
+    "typescript": "^5.0.0"
   }
 }
