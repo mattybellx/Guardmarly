@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="guard.png" width="300" alt="Guardmarly logo">
+  <img src="https://raw.githubusercontent.com/mattybellx/Guardmarly/main/showcase.png" width="800" alt="Guardmarly in action — CWE-22 path traversal detection in VS Code">
 </p>
 
 <p align="center">

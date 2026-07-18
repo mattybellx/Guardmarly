@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: guardmarly
+    env: python
+    buildCommand: pip install guardmarly && pip install -r webapp/requirements.txt
+    startCommand: cd webapp && gunicorn app:app --bind 0.0.0.0:$PORT
+    plan: free

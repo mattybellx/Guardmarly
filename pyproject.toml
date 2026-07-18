@@ -77,6 +77,7 @@ include = [
     "/README.md",
     "/CHANGELOG.md",
     "/LICENSE",
+    "/showcase.png",
 ]
 
 [tool.pytest.ini_options]

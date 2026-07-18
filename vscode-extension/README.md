@@ -1,12 +1,12 @@
 # Guardmarly for VS Code
 
 <p align="center">
-  <img src="guard.png" width="96" alt="Guardmarly">
+  <img src="https://raw.githubusercontent.com/mattybellx/Guardmarly/main/showcase.png" width="800" alt="Guardmarly catching CWE-22 path traversal in VS Code">
 </p>
 
 **Zero-dependency SAST scanner inline in your editor.** Catches IDOR, SQL injection, XSS, path traversal, and 30+ more CWE types as you code — fully offline, no API keys.
 
-![Guardmarly demo](https://img.shields.io/badge/1183_tests-passing-22c55e)
+![1183 tests passing](https://img.shields.io/badge/1183_tests-passing-22c55e)
 
 ## Features
 

@@ -1,3 +1,4 @@
 flask
 gunicorn
 rich>=13.0.0
+guardmarly>=6.4.0

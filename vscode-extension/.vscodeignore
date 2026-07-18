@@ -1,0 +1,6 @@
+src/**
+guard.png
+guardmarly-logo-256.png
+node_modules/**
+.git/**
+*.vsix

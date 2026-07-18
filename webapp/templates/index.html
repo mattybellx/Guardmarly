@@ -235,6 +235,8 @@ footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 40px}
       <div><div class="stat-value">100%</div><div class="stat-label">CVE Recall (164/164)</div></div>
       <div><div class="stat-value">35+</div><div class="stat-label">CWE Types Detected</div></div>
       <div><div class="stat-value">5</div><div class="stat-label">Languages Supported</div></div>
+      <div><div class="stat-value" id="scanCount">{{ counter.total_scans }}</div><div class="stat-label">Live Demo Scans</div></div>
+      <div><div class="stat-value" id="repoCount">{{ counter.total_repos }}</div><div class="stat-label">Repos Scanned</div></div>
     </div>
   </div>
 </section>
@@ -420,6 +422,11 @@ async function runScan() {
       `).join('');
     }
     status.textContent = data.findings ? `${data.findings.length} finding(s)` : '';
+    // Refresh counter
+    fetch('/stats').then(r => r.json()).then(s => {
+      document.getElementById('scanCount').textContent = s.total_scans;
+      document.getElementById('repoCount').textContent = s.total_repos;
+    }).catch(() => {});
   } catch(e) {
     results.innerHTML = `<div style="color:#dc2626;padding:16px">Scan failed: ${e.message}</div>`;
     status.textContent = '';
