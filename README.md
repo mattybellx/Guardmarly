@@ -9,6 +9,7 @@
 </p>
 
 <p align="center">
+  <a href="https://guardmarly.onrender.com"><img src="https://img.shields.io/badge/Try%20Online%20Scanner-guardmarly.onrender.com-22c55e?style=for-the-badge" alt="Try Online Scanner"></a>
   <a href="https://pypi.org/project/guardmarly/"><img src="https://img.shields.io/pypi/v/guardmarly?color=22c55e" alt="PyPI"></a>
   <a href="https://github.com/mattybellx/Guardmarly/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Guardmarly/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/mattybellx/Guardmarly/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
