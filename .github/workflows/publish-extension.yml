@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'vscode-extension/**'
+      - '.github/workflows/publish-extension.yml'
     tags:
       - 'v*'
   release:
