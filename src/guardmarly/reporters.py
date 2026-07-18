@@ -69,7 +69,7 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
 
         if not result.findings:
             console.print(f"[dim]  OK  No issues found ({result.lines_scanned} lines scanned)[/dim]")
-            console.print(f"[dim]     Try [bold]guardmarly --demo[/bold] to see what a finding looks like[/dim]")
+            console.print("[dim]     Try [bold]guardmarly --demo[/bold] to see what a finding looks like[/dim]")
             return ""
             
         for f in result.sorted_findings():
@@ -139,7 +139,7 @@ def format_text(result: AnalysisResult, colour: bool = True, verbose: bool = Fal
 
     if not result.findings:
         lines.append(f"  OK  No issues found ({result.lines_scanned} lines scanned)")
-        lines.append(f"     Try 'guardmarly --demo' to see what a finding looks like")
+        lines.append("     Try 'guardmarly --demo' to see what a finding looks like")
         return "\n".join(lines)
 
     for f in result.sorted_findings():
