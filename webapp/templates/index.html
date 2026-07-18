@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardmarly — Find Authorization Bugs Before Attackers Do</title>
+<meta name="description" content="Zero-dependency SAST scanner. Built-in IDOR detection. 100% CVE recall. Fully offline. 5 languages.">
+<link rel="icon" type="image/png" href="/guard.png">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#22c55e;--green-d:#16a34a;--green-l:#4ade80;--green-bg:#f0fdf4;
+  --dark:#0a0a0a;--gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;
+  --gray-300:#d1d5db;--gray-400:#9ca3af;--gray-500:#6b7280;--gray-600:#4b5563;
+  --gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+  --white:#fff;--shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 6px rgba(0,0,0,.07),0 2px 4px rgba(0,0,0,.06);--shadow-lg:0 10px 15px rgba(0,0,0,.1),0 4px 6px rgba(0,0,0,.05);
+  --shadow-xl:0 20px 25px rgba(0,0,0,.1),0 10px 10px rgba(0,0,0,.04);
+  --radius:8px;--radius-lg:16px;--radius-xl:24px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:var(--gray-900);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1200px;margin:0 auto;padding:0 24px}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;font-size:20px;color:var(--dark)}
+.nav-logo img{width:32px;height:32px}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{text-decoration:none;color:var(--gray-600);font-size:15px;font-weight:500;transition:color .15s}
+.nav-links a:hover{color:var(--dark)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--radius);font-weight:600;font-size:14px;cursor:pointer;text-decoration:none;transition:all .15s;border:none}
+.btn-primary{background:var(--green);color:var(--white)}
+.btn-primary:hover{background:var(--green-d);transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.btn-outline{background:transparent;color:var(--gray-700);border:2px solid var(--gray-300)}
+.btn-outline:hover{border-color:var(--gray-400)}
+.btn-lg{padding:14px 32px;font-size:16px;border-radius:var(--radius-lg)}
+
+/* Hero */
+.hero{padding:160px 0 80px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--green-bg) 0%,var(--white) 100%)}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 0%,rgba(34,197,94,.08) 0%,transparent 60%);pointer-events:none}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:100px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--gray-600);margin-bottom:24px;box-shadow:var(--shadow-sm)}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1.1;letter-spacing:-.02em;color:var(--dark);max-width:800px;margin:0 auto 20px}
+.hero h1 span{color:var(--green)}
+.hero p{font-size:18px;color:var(--gray-500);max-width:600px;margin:0 auto 40px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:60px}
+
+/* Code demo */
+.code-demo{max-width:720px;margin:0 auto;background:var(--gray-900);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-xl);text-align:left}
+.code-header{display:flex;align-items:center;gap:8px;padding:14px 20px;background:rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.08)}
+.code-dot{width:12px;height:12px;border-radius:50%}
+.code-dot.r{background:#ff5f56}.code-dot.y{background:#ffbd2e}.code-dot.g{background:#27c93f}
+.code-title{flex:1;text-align:center;font-size:12px;color:rgba(255,255,255,.4)}
+.code-body{padding:20px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:13px;line-height:1.8;overflow-x:auto}
+.code-body .kw{color:#c792ea}.code-body .fn{color:#82aaff}.code-body .str{color:#c3e88d}.code-body .cm{color:#546e7a}.code-body .warn{color:#ffcb6b}.code-body .err{color:#ff5370}
+.code-body .line{display:block;padding:1px 0}
+.code-body .highlight{background:rgba(255,83,112,.12);border-left:3px solid #ff5370;padding-left:12px;margin:4px 0}
+
+/* Sections */
+section{padding:100px 0}
+.section-header{text-align:center;max-width:700px;margin:0 auto 64px}
+.section-header h2{font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--dark);margin-bottom:16px;letter-spacing:-.01em}
+.section-header p{font-size:17px;color:var(--gray-500);line-height:1.7}
+
+/* Features */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.feature-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:32px;transition:all .2s}
+.feature-card:hover{border-color:var(--green);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.feature-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--green-bg);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.feature-card h3{font-size:18px;font-weight:600;margin-bottom:8px;color:var(--dark)}
+.feature-card p{font-size:14px;color:var(--gray-500);line-height:1.7}
+
+/* Stats */
+.stats{background:var(--gray-900);color:var(--white);padding:80px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:40px;text-align:center}
+.stat-value{font-size:clamp(36px,5vw,56px);font-weight:800;color:var(--green);line-height:1}
+.stat-label{font-size:15px;color:var(--gray-400);margin-top:8px}
+
+/* Languages */
+.lang-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.lang-badge{background:var(--gray-100);border:1px solid var(--gray-200);border-radius:100px;padding:10px 20px;font-size:14px;font-weight:600;color:var(--gray-700);transition:all .15s}
+.lang-badge:hover{border-color:var(--green);color:var(--green)}
+
+/* CWE section */
+.cwe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.cwe-card{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius);padding:20px;display:flex;gap:14px;align-items:flex-start}
+.cwe-badge{flex-shrink:0;background:var(--green);color:var(--white);padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;font-family:monospace}
+.cwe-card h4{font-size:15px;font-weight:600;margin-bottom:4px}
+.cwe-card p{font-size:13px;color:var(--gray-500)}
+
+/* Scan demo */
+.scan-demo{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius-xl);padding:40px;max-width:800px;margin:0 auto}
+.scan-input{width:100%;min-height:120px;background:var(--gray-900);color:#c3e88d;border:none;border-radius:var(--radius);padding:20px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;resize:vertical;margin-bottom:16px}
+.scan-input:focus{outline:2px solid var(--green);outline-offset:2px}
+.scan-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.scan-results{margin-top:20px;display:none}
+.scan-results.active{display:block}
+.result-item{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+.sev-badge{padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.sev-critical{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.sev-high{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.sev-medium{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.sev-low{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+
+/* Pricing */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;max-width:900px;margin:0 auto}
+.pricing-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:40px;text-align:center;transition:all .2s;position:relative}
+.pricing-card:hover{border-color:var(--green);box-shadow:var(--shadow-lg)}
+.pricing-card.featured{border-color:var(--green);box-shadow:var(--shadow-xl);border-width:2px}
+.pricing-card.featured::before{content:'Most Popular';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--white);padding:4px 16px;border-radius:100px;font-size:12px;font-weight:600}
+.pricing-name{font-size:20px;font-weight:700;margin-bottom:8px}
+.pricing-price{font-size:48px;font-weight:800;color:var(--dark);margin:16px 0}
+.pricing-price span{font-size:16px;font-weight:400;color:var(--gray-400)}
+.pricing-features{list-style:none;text-align:left;margin:24px 0}
+.pricing-features li{padding:8px 0;font-size:14px;color:var(--gray-600);display:flex;gap:8px;align-items:center}
+.pricing-features li::before{content:'✓';color:var(--green);font-weight:700}
+
+/* Footer */
+footer{background:var(--gray-900);color:var(--gray-400);padding:60px 0 40px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;max-width:1200px;margin:0 auto;padding:0 24px}
+.footer-brand img{width:32px;height:32px;margin-bottom:12px}
+.footer-brand p{font-size:14px;line-height:1.7;max-width:300px}
+.footer-col h4{color:var(--white);font-size:14px;font-weight:600;margin-bottom:16px}
+.footer-col a{display:block;color:var(--gray-400);text-decoration:none;font-size:14px;padding:4px 0;transition:color .15s}
+.footer-col a:hover{color:var(--white)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:24px;text-align:center;font-size:13px;max-width:1200px;margin-left:auto;margin-right:auto;padding-left:24px;padding-right:24px}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hero{padding:120px 0 60px}
+  .features-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="/guard.png" alt="Guardmarly">
+      Guardmarly
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="#pricing">Pricing</a>
+      <a href="https://github.com/mattybellx/Guardmarly">GitHub</a>
+      <a href="https://pypi.org/project/guardmarly/" class="btn btn-outline">pip install guardmarly</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <span class="dot"></span> v6.4.0 — Now on PyPI
+    </div>
+    <h1>Find <span>authorization bugs</span> before attackers do</h1>
+    <p>The only free SAST scanner with built-in IDOR detection. 100% CVE recall across 5 languages. Zero false positives on clean code. Fully offline.</p>
+    <div class="hero-actions">
+      <a href="#demo" class="btn btn-primary btn-lg">Try Live Demo</a>
+      <a href="https://github.com/mattybellx/Guardmarly" class="btn btn-outline btn-lg">View on GitHub</a>
+    </div>
+    <div class="code-demo">
+      <div class="code-header">
+        <span class="code-dot r"></span><span class="code-dot y"></span><span class="code-dot g"></span>
+        <span class="code-title">invoice_api.py</span>
+      </div>
+      <div class="code-body">
+<span class="line"><span class="kw">from</span> flask <span class="kw">import</span> Flask, request</span>
+<span class="line"><span class="kw">from</span> models <span class="kw">import</span> Invoice</span>
+<span class="line"></span>
+<span class="line">app = Flask(__name__)</span>
+<span class="line"></span>
+<span class="line"><span class="kw">@app</span>.route(<span class="str">"/invoice/&lt;id&gt;"</span>)</span>
+<span class="line"><span class="kw">def</span> <span class="fn">get_invoice</span>(id):</span>
+<span class="line highlight">    <span class="kw">return</span> Invoice.query.get(id)</span>
+<span class="line"><span class="cm">#   ↑ CWE-639 IDOR: any user can view any invoice</span></span>
+<span class="line"><span class="cm">#   Bandit: silent. Semgrep OSS: silent. CodeQL: silent.</span></span>
+<span class="line"><span class="cm">#   Guardmarly: 🚨 CRITICAL — route flows to DB without auth</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="section-header">
+      <h2>What makes Guardmarly different</h2>
+      <p>Most SAST tools pattern-match for injection flaws. Guardmarly traces data from HTTP routes through auth guards into database queries — catching the authorization bugs that caused real breaches.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Built-in IDOR Detection</h3>
+        <p>Maps every HTTP route, checks for auth guards, and traces data flow to sinks. Catches CWE-639, CWE-862, and CWE-306 — the bugs Bandit, Semgrep OSS, and CodeQL miss.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>100% CVE Recall</h3>
+        <p>164/164 CVEs detected across all 5 supported languages. Zero false negatives on known vulnerability patterns. Industry-leading precision.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Fully Offline</h3>
+        <p>Zero cloud dependencies. Zero API keys. Zero telemetry. Your code never leaves your machine. Deployable in air-gapped environments.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Sub-Second Scans</h3>
+        <p>Rust-powered native parser core with tree-sitter. Scans 10,000+ LOC per second. Falls back gracefully to pure Python when needed.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>5 Languages</h3>
+        <p>Python, JavaScript/TypeScript, Go, Java, and C#. Each with dedicated AST-based analyzers — not regex hacks.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>SARIF + GitHub Integration</h3>
+        <p>Native SARIF output for GitHub Code Scanning. One-line CI integration. PR comments with finding details and fix suggestions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div><div class="stat-value">1183</div><div class="stat-label">Unit Tests Passing</div></div>
+      <div><div class="stat-value">100%</div><div class="stat-label">CVE Recall (164/164)</div></div>
+      <div><div class="stat-value">35+</div><div class="stat-label">CWE Types Detected</div></div>
+      <div><div class="stat-value">5</div><div class="stat-label">Languages Supported</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <h2>Vulnerabilities detected</h2>
+      <p>35+ CWE types across injection, authorization, cryptography, and configuration categories.</p>
+    </div>
+    <div class="cwe-grid">
+      <div class="cwe-card"><span class="cwe-badge">CWE-639</span><div><h4>IDOR</h4><p>Insecure Direct Object Reference — route params flow to DB without ownership check</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-89</span><div><h4>SQL Injection</h4><p>Dynamic SQL construction with user-controlled input</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-78</span><div><h4>Command Injection</h4><p>Shell command construction with tainted data</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-79</span><div><h4>Cross-Site Scripting</h4><p>Unescaped user data in HTML rendering sinks</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-22</span><div><h4>Path Traversal</h4><p>User-controlled paths reaching filesystem operations</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-918</span><div><h4>SSRF</h4><p>User-controlled URLs in outbound HTTP requests</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-502</span><div><h4>Deserialization</h4><p>Untrusted data fed to pickle, yaml.load, or marshal</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-798</span><div><h4>Hardcoded Secrets</h4><p>API keys, tokens, and passwords in source code</p></div></div>
+      <div class="cwe-card"><span class="cwe-badge">CWE-862</span><div><h4>Missing Authorization</h4><p>Endpoints without authentication or access control checks</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--gray-50)">
+  <div class="container">
+    <div class="section-header">
+      <h2>Supported languages</h2>
+    </div>
+    <div class="lang-grid">
+      <span class="lang-badge">🐍 Python</span>
+      <span class="lang-badge">📜 JavaScript</span>
+      <span class="lang-badge">🔷 TypeScript</span>
+      <span class="lang-badge">☕ Java</span>
+      <span class="lang-badge">🐹 Go</span>
+      <span class="lang-badge">🔮 C#</span>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="container">
+    <div class="section-header">
+      <h2>Try it live</h2>
+      <p>Paste some code and see what Guardmarly finds. No install required.</p>
+    </div>
+    <div class="scan-demo">
+      <textarea class="scan-input" id="codeInput" placeholder="Paste Python or JavaScript code here...">from flask import Flask, request
+from models import Invoice
+
+app = Flask(__name__)
+
+@app.route("/invoice/<id>")
+def get_invoice(id):
+    return Invoice.query.get(id)
+# ↑ CWE-639 IDOR: no auth check!</textarea>
+      <div class="scan-actions">
+        <button class="btn btn-primary btn-lg" onclick="runScan()">🔍 Scan Code</button>
+        <select id="langSelect" style="padding:10px 16px;border:2px solid var(--gray-300);border-radius:var(--radius);font-size:14px;font-weight:500">
+          <option value="python">Python</option>
+          <option value="javascript">JavaScript</option>
+        </select>
+        <span id="scanStatus" style="color:var(--gray-400);font-size:14px"></span>
+      </div>
+      <div class="scan-results" id="scanResults"></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <h2>Simple pricing</h2>
+      <p>Start free. Upgrade when you need advanced features.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-name">Free</div>
+        <div class="pricing-price">$0<span>/forever</span></div>
+        <ul class="pricing-features">
+          <li>Unlimited local scans</li>
+          <li>All 5 languages</li>
+          <li>35+ CWE types</li>
+          <li>Text & JSON output</li>
+          <li>Community support</li>
+        </ul>
+        <a href="https://pypi.org/project/guardmarly/" class="btn btn-outline" style="width:100%;justify-content:center">pip install guardmarly</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-name">Pro</div>
+        <div class="pricing-price">$49<span>/year</span></div>
+        <ul class="pricing-features">
+          <li>Everything in Free</li>
+          <li>SARIF output for GitHub</li>
+          <li>HTML dashboards</li>
+          <li>SBOM generation (CycloneDX)</li>
+          <li>Guarded Autofix with rollback</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="https://guardmarly.onrender.com" class="btn btn-primary" style="width:100%;justify-content:center">Get Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="/guard.png" alt="Guardmarly">
+      <p>Zero-dependency SAST scanner. Find authorization bugs before attackers do.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#demo">Live Demo</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="https://github.com/mattybellx/Guardmarly">GitHub</a>
+      <a href="https://pypi.org/project/guardmarly/">PyPI</a>
+      <a href="https://github.com/mattybellx/Guardmarly/blob/main/CHANGELOG.md">Changelog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="https://github.com/mattybellx/Guardmarly/blob/main/LICENSE">MIT License</a>
+      <a href="https://github.com/mattybellx/Guardmarly/blob/main/SECURITY.md">Security</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 Guardmarly. Built by Matty Bell. Zero telemetry. Fully offline.
+  </div>
+</footer>
+
+<script>
+async function runScan() {
+  const code = document.getElementById('codeInput').value;
+  const lang = document.getElementById('langSelect').value;
+  const status = document.getElementById('scanStatus');
+  const results = document.getElementById('scanResults');
+  
+  status.textContent = 'Scanning...';
+  results.classList.remove('active');
+  
+  try {
+    const resp = await fetch('/scan', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code, language: lang})
+    });
+    const data = await resp.json();
+    
+    if (data.error) {
+      results.innerHTML = `<div style="color:#dc2626;padding:16px">${data.error}</div>`;
+    } else if (data.findings.length === 0) {
+      results.innerHTML = `<div style="text-align:center;padding:32px;color:var(--gray-400)">
+        <div style="font-size:48px;margin-bottom:12px">✅</div>
+        <div style="font-size:18px;font-weight:600;color:var(--gray-700)">No issues found</div>
+        <div style="font-size:14px">${data.lines} lines scanned</div>
+      </div>`;
+    } else {
+      results.innerHTML = data.findings.map(f => `
+        <div class="result-item">
+          <span class="sev-badge sev-${f.severity}">${f.severity}</span>
+          <div style="flex:1">
+            <div style="font-weight:600;font-size:14px;margin-bottom:4px">[${f.cwe}] ${f.title}</div>
+            ${f.suggestion ? `<div style="font-size:13px;color:var(--gray-500)">💡 ${f.suggestion}</div>` : ''}
+            ${f.line ? `<div style="font-size:12px;color:var(--gray-400);margin-top:4px">Line ${f.line}</div>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+    status.textContent = data.findings ? `${data.findings.length} finding(s)` : '';
+  } catch(e) {
+    results.innerHTML = `<div style="color:#dc2626;padding:16px">Scan failed: ${e.message}</div>`;
+    status.textContent = '';
+  }
+  results.classList.add('active');
+}
+</script>
+</body>
+</html>
