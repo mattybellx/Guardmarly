@@ -33,8 +33,12 @@ jobs:
         working-directory: vscode-extension
         run: npm run compile
 
+      - name: Install vsce
+        working-directory: vscode-extension
+        run: npm install -g @vscode/vsce
+
       - name: Publish to Marketplace
         working-directory: vscode-extension
-        run: npm run publish -- --pat ${{ secrets.VSCE_PAT }}
+        run: vsce publish --pat ${{ secrets.VSCE_PAT }}
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
