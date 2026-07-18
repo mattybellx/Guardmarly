@@ -36,7 +36,7 @@ from guardmarly.js_engine.backends import (
 )
 from guardmarly.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
 from guardmarly.rules import describe_rule, list_rule_contracts
-from guardmarly import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS
+from guardmarly import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS, _KOTLIN_EXTS, _SWIFT_EXTS, _DART_EXTS, _LUA_EXTS, _ELIXIR_EXTS, _SCALA_EXTS, _CLOJURE_EXTS, _HASKELL_EXTS, _SHELL_EXTS, _DOCKERFILE_EXTS, _TERRAFORM_EXTS
 
 from guardmarly.ir.global_graph import GlobalGraph
 from guardmarly.profiler import ScanProfiler
@@ -85,6 +85,28 @@ def _detect_language(path: Path) -> str | None:
         return "php"
     if ext in _RUST_EXTS:
         return "rust"
+    if ext in _KOTLIN_EXTS:
+        return "kotlin"
+    if ext in _SWIFT_EXTS:
+        return "swift"
+    if ext in _DART_EXTS:
+        return "dart"
+    if ext in _LUA_EXTS:
+        return "lua"
+    if ext in _ELIXIR_EXTS:
+        return "elixir"
+    if ext in _SCALA_EXTS:
+        return "scala"
+    if ext in _CLOJURE_EXTS:
+        return "clojure"
+    if ext in _HASKELL_EXTS:
+        return "haskell"
+    if ext in _SHELL_EXTS:
+        return "shell"
+    if ext in _DOCKERFILE_EXTS:
+        return "dockerfile"
+    if ext in _TERRAFORM_EXTS:
+        return "terraform"
     return None
 
 

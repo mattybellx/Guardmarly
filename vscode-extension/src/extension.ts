@@ -332,7 +332,7 @@ export function deactivate() {}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
 function isSupportedLanguage(lang: string): boolean {
-    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp', 'ruby', 'php', 'rust'].includes(lang);
+    return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp', 'ruby', 'php', 'rust', 'kotlin', 'swift', 'dart', 'lua', 'elixir', 'scala', 'clojure', 'haskell', 'shell', 'dockerfile', 'terraform'].includes(lang);
 }
 
 function mapLanguage(lang: string): string {
@@ -340,7 +340,10 @@ function mapLanguage(lang: string): string {
         python: 'python', javascript: 'javascript', typescript: 'javascript',
         javascriptreact: 'javascript', typescriptreact: 'javascript',
         go: 'go', java: 'java', csharp: 'csharp',
-        ruby: 'ruby', php: 'php', rust: 'rust'
+        ruby: 'ruby', php: 'php', rust: 'rust',
+        kotlin: 'kotlin', swift: 'swift', dart: 'dart', lua: 'lua',
+        elixir: 'elixir', scala: 'scala', clojure: 'clojure',
+        haskell: 'haskell', shell: 'shell', dockerfile: 'dockerfile', terraform: 'terraform'
     };
     return map[lang] || 'python';
 }

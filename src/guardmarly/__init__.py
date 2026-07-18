@@ -52,6 +52,28 @@ _CSHARP_EXTS = frozenset({".cs"})
 _RUBY_EXTS = frozenset({".rb", ".rake", ".gemspec"})
 _PHP_EXTS = frozenset({".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps"})
 _RUST_EXTS = frozenset({".rs"})
+_KOTLIN_EXTS = frozenset({".kt", ".kts"})
+_SWIFT_EXTS = frozenset({".swift"})
+_DART_EXTS = frozenset({".dart"})
+_LUA_EXTS = frozenset({".lua"})
+_ELIXIR_EXTS = frozenset({".ex", ".exs"})
+_SCALA_EXTS = frozenset({".scala"})
+_CLOJURE_EXTS = frozenset({".clj", ".cljs", ".edn"})
+_HASKELL_EXTS = frozenset({".hs", ".lhs"})
+_SHELL_EXTS = frozenset({".sh", ".bash"})
+_DOCKERFILE_EXTS = frozenset({".dockerfile"})
+_TERRAFORM_EXTS = frozenset({".tf", ".tfvars"})
+_KOTLIN_EXTS = frozenset({".kt", ".kts"})
+_SWIFT_EXTS = frozenset({".swift"})
+_DART_EXTS = frozenset({".dart"})
+_LUA_EXTS = frozenset({".lua"})
+_ELIXIR_EXTS = frozenset({".ex", ".exs"})
+_SCALA_EXTS = frozenset({".scala"})
+_CLOJURE_EXTS = frozenset({".clj", ".cljs", ".edn"})
+_HASKELL_EXTS = frozenset({".hs", ".lhs"})
+_SHELL_EXTS = frozenset({".sh", ".bash"})
+_DOCKERFILE_EXTS = frozenset({".dockerfile"})
+_TERRAFORM_EXTS = frozenset({".tf", ".tfvars"})
 
 
 def _rule_mtime(path: Path) -> int:
@@ -162,6 +184,17 @@ _PATTERN_ONLY_LANG_EXT_MAP: dict[str, str] = {
     "rb": "ruby", "rake": "ruby", "gemspec": "ruby",
     "php": "php", "phtml": "php", "php3": "php", "php4": "php", "php5": "php", "php7": "php", "phps": "php",
     "rs": "rust",
+    "kt": "kotlin", "kts": "kotlin",
+    "swift": "swift",
+    "dart": "dart",
+    "lua": "lua",
+    "ex": "elixir", "exs": "elixir",
+    "scala": "scala",
+    "clj": "clojure", "cljs": "clojure", "edn": "clojure",
+    "hs": "haskell", "lhs": "haskell",
+    "sh": "shell", "bash": "shell",
+    "dockerfile": "dockerfile",
+    "tf": "terraform", "tfvars": "terraform",
 }
 
 
@@ -234,7 +267,7 @@ def scan_file(
         elif ext in _RUST_EXTS:
             from guardmarly.rust_analyzer import analyze_rust
             result = analyze_rust(code, filename=str(p))
-        elif ext in _RUBY_EXTS or ext in _PHP_EXTS:
+        elif ext in _RUBY_EXTS or ext in _PHP_EXTS or ext in _KOTLIN_EXTS or ext in _SWIFT_EXTS or ext in _DART_EXTS or ext in _LUA_EXTS or ext in _ELIXIR_EXTS or ext in _SCALA_EXTS or ext in _CLOJURE_EXTS or ext in _HASKELL_EXTS or ext in _SHELL_EXTS or ext in _DOCKERFILE_EXTS or ext in _TERRAFORM_EXTS:
             result = _analyze_pattern_only(code, filename=p.name, ext=ext)
         else:
             raise ValueError(
