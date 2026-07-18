@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="guard.png" width="120" alt="Guardmarly logo">
+  <img src="guard.png" width="300" alt="Guardmarly logo">
 </p>
 
 <p align="center">
