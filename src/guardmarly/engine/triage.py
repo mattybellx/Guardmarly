@@ -1,4 +1,4 @@
-﻿"""guardmarly.engine.triage
+"""guardmarly.engine.triage
 ──────────────────────────────────────────────────────────────────────────────
 Production-grade intelligent triage engine.
 
