@@ -8,7 +8,7 @@ Command-line interface for guardmarly.
     guardmarly --stdin --lang python < app.py
     guardmarly src/ --fail-on high
 
-Zero external dependencies — pure stdlib only.
+CLI entry point for local and CI scanning.
 """
 from __future__ import annotations
 

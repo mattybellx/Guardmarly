@@ -1,5 +1,5 @@
 name: 'guardmarly'
-description: 'Minimal-dependency SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ categories. No GPU, no API keys.'
+description: 'Run the Guardmarly scanner in GitHub Actions and optionally upload SARIF results to GitHub Code Scanning.'
 author: 'mattybellx'
 
 branding:
@@ -44,7 +44,7 @@ inputs:
     required: false
     default: 'true'
   min-confidence:
-    description: 'Only report findings with confidence >= threshold (0.0-1.0). Default 0.65 reduces noise ~60% while keeping all HIGH/CRITICAL.'
+    description: 'Only report findings with confidence >= threshold (0.0-1.0). Use with your own validation policy.'
     required: false
     default: '0.65'
   all-findings:

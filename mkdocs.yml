@@ -1,5 +1,5 @@
 site_name: Guardmarly
-site_description: Production-grade offline SAST for access-control and taint vulnerabilities
+site_description: Static analysis for authorization-sensitive and related code-security issues
 site_url: https://github.com/mattybellx/Guardmarly
 repo_url: https://github.com/mattybellx/Guardmarly
 repo_name: mattybellx/Guardmarly

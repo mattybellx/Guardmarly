@@ -1,26 +1,27 @@
 # Guardmarly for VS Code
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/mattybellx/Guardmarly/main/showcase.png" width="800" alt="Guardmarly catching CWE-22 path traversal in VS Code">
-</p>
+Guardmarly for VS Code is a local editor integration for the Guardmarly CLI. It surfaces authorization-sensitive findings and other supported code-security results inline while you work.
 
-**Zero-dependency SAST scanner inline in your editor.** Catches IDOR, SQL injection, XSS, path traversal, and 30+ more CWE types as you code — fully offline, no API keys.
+## What it does
 
-![1183 tests passing](https://img.shields.io/badge/1183_tests-passing-22c55e)
+- highlights Guardmarly findings as VS Code diagnostics
+- focuses attention on authorization / IDOR-style risks alongside other supported rules
+- can scan the current file or workspace from the command palette
+- relies on a local `guardmarly` CLI installation rather than a hosted scanning service
 
-## Features
+## Supported editor surfaces
 
-- 🔍 **Real-time scanning** — findings appear inline as you type
-- 🛡️ **IDOR detection** — catches authorization bugs other tools miss
-- 📊 **Trace-backed findings** — see the full taint path from source to sink
-- 🌐 **5 languages** — Python, JavaScript/TypeScript, Go, Java, C#
-- 📋 **SARIF output** — one-click export for GitHub Code Scanning
-- 🔒 **100% offline** — no cloud, no API keys, no telemetry
-- ⚡ **Auto-detects** guardmarly CLI — works with pip, pipx, or python -m
+The current extension activates for Python, JavaScript, TypeScript, React JSX/TSX, Go, Java, C#, Ruby, PHP, and Rust files. Detection depth still depends on the underlying CLI analyzer support.
 
 ## Installation
 
-Install from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=guardmarly.guardmarly) or:
+1. Install the CLI locally:
+
+```bash
+pip install guardmarly
+```
+
+2. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=guardmarly.guardmarly) or:
 
 ```bash
 code --install-extension guardmarly.guardmarly
@@ -28,10 +29,15 @@ code --install-extension guardmarly.guardmarly
 
 ## Usage
 
-1. Open any Python, JavaScript, Go, Java, or C# file
-2. Guardmarly scans automatically on open and on save
-3. Findings appear as inline diagnostics with severity badges
-4. Run `Guardmarly: Scan workspace` from the command palette for a full scan
+1. Open a supported file in VS Code.
+2. Let the extension invoke the local Guardmarly CLI.
+3. Review findings in the editor or run `Guardmarly: Scan workspace` from the command palette.
+
+## Limits
+
+- The extension is only a presentation layer over the CLI; it does not guarantee complete authorization correctness.
+- Findings still need review in the context of framework behavior and application business rules.
+- Hosted or demo deployments are separate surfaces from this local editor workflow.
 
 ## Settings
 
@@ -47,6 +53,6 @@ code --install-extension guardmarly.guardmarly
 | `Guardmarly: Scan file` | Scan the active file |
 | `Guardmarly: Scan workspace` | Scan all files in the workspace |
 
----
+## License
 
-**100% CVE recall · Zero false positives on clean code · MIT Licensed**
+The repository currently ships a custom / non-standard license text at `/home/runner/work/Guardmarly/Guardmarly/LICENSE`. See the repository README and remediation playbook for the current status.

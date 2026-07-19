@@ -3,7 +3,7 @@
 ## Goal
 
 40 languages with full taint-tracking, route-mapping, IDOR-detection AST analyzers.
-Zero regression. Faster than today. No false positives on clean code. 100% CWE recall.
+Goal: expand language support while preserving existing validation and using reproducible benchmark methods instead of absolute performance claims.
 
 ---
 
@@ -169,21 +169,21 @@ python -m guardmarly.cli tests/ --format json  # Real scan of test suite
 
 ### Automated corpus collection
 ```bash
-# Scan random GitHub repos for real-world training data
-python -m guardmarly.cli ~/repos/ --format json --output corpus_scan.json
+# Prefer permissioned or openly licensed benchmark corpora for training and evaluation.
+# Keep raw outputs and review labels together so future benchmark claims are reproducible.
+python -m guardmarly.cli <corpus_dir> --format json --output corpus_scan.json
 
 # Extract findings for training:
-# - True positives: known vulnerable patterns → improve detection
-# - False positives: flagged clean code → improve triage
-# - Missed findings: known vulns not caught → improve sink catalog
+# - True positives: known vulnerable patterns -> improve detection
+# - False positives: flagged clean code -> improve triage
+# - Missed findings: known vulns not caught -> improve sink catalog
 ```
 
 ### Weekly benchmark routine
 ```bash
-# Run against a fixed set of 50 diverse repos
-# Track: detection count, FP count, scan time
-# Goal: detection ↑, FP ↓, time ↓ every week
-python scripts/benchmark_repos.py --repos repos.txt --output results/$(date +%Y-%m-%d).json
+# Run against a fixed, permissioned benchmark set with pinned tool versions.
+# Track: detection count, review status, and scan time with a reproducible runner.
+make reproduce
 ```
 
 ### Continuous improvement loop
@@ -229,11 +229,11 @@ pytest tests/ -q --tb=short  # Must be 100%
 # 2. Speed must not degrade
 python scripts/perf_check.py  # Must be <= 120% of baseline
 
-# 3. CVE recall benchmark must hold
-python scripts/cve_recall.py  # Must be 100% (164/164)
+# 3. Benchmark regression checks should run from the separate reproducible benchmark surface
+make reproduce
 
-# 4. Zero false positives on known-clean corpus
-python scripts/fp_check.py  # Must be 0
+# 4. Clean-corpus review should be measured with explicit adjudication rather than assumed from a single metric
+python -m guardmarly.cli <clean-corpus> --format json
 
 # 5. New language test coverage
 pytest tests/test_<lang>.py --cov=src/guardmarly/<lang>_analyzer --cov-report=term

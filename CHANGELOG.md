@@ -3,6 +3,8 @@
 All notable changes to guardmarly are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+> Historical release entries are preserved for auditability. Time-bound benchmark, precision, and positioning language in older notes should not be treated as the current public evidence policy; see `CLAIMS_AND_EVIDENCE.md`.
+
 ## [6.5.0] — 2026-07-18
 
 ### Added
