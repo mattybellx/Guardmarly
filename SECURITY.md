@@ -6,11 +6,9 @@ Thanks for helping keep `guardmarly` safe and trustworthy.
 
 | Version | Supported |
 |---|---|
-| 5.5.x (latest) | ✅ Active |
-| 5.1.x | ✅ Security fixes |
-| 5.0.x | ✅ Security fixes |
-| 4.x | ❌ No longer supported |
-| < 4.0 | ❌ No longer supported |
+| 6.x (latest) | ✅ Active |
+| 5.x | ✅ Security fixes |
+| < 5.0 | ❌ No longer supported |
 
 ## Reporting a Vulnerability
 

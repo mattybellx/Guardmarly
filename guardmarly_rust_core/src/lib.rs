@@ -29,6 +29,11 @@ fn parse_with_language(code: &str, lang: &str) -> Result<Vec<ParsedNode>, String
             "java" | "jv" => tree_sitter_java::LANGUAGE.into(),
             "go" | "golang" => tree_sitter_go::LANGUAGE.into(),
             "csharp" | "c#" | "cs" => tree_sitter_c_sharp::LANGUAGE.into(),
+            "php" => tree_sitter_php::LANGUAGE_PHP.into(),
+            "ruby" | "rb" => tree_sitter_ruby::LANGUAGE.into(),
+            "rust" | "rs" => tree_sitter_rust::LANGUAGE.into(),
+            "c" => tree_sitter_c::LANGUAGE.into(),
+            "cpp" | "c++" | "cxx" => tree_sitter_cpp::LANGUAGE.into(),
             _ => return Err(format!("Unsupported language: {}", lang)),
         };
         parser.set_language(&language).map_err(|e| format!("set_language: {}", e))?;

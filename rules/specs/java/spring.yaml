@@ -1,0 +1,153 @@
+# Guardmarly Spec — Spring Boot / Spring MVC / Spring Security
+spec_version: 1
+language: java
+framework: spring
+description: "Spring Framework security patterns for IDOR and injection detection"
+
+sources:
+  - id: spring_request_param
+    pattern: "@RequestParam"
+    kind: http_param
+  - id: spring_path_variable
+    pattern: "@PathVariable"
+    kind: route_param
+  - id: spring_request_body
+    pattern: "@RequestBody"
+    kind: http_body
+  - id: spring_request_header
+    pattern: "@RequestHeader"
+    kind: http_header
+  - id: spring_cookie_value
+    pattern: "@CookieValue"
+    kind: http_cookie
+  - id: spring_model_attribute
+    pattern: "@ModelAttribute"
+    kind: http_model
+  - id: spring_session_attribute
+    pattern: "@SessionAttribute"
+    kind: http_session
+  - id: spring_request_part
+    pattern: "@RequestPart"
+    kind: file_upload
+  - id: servlet_request_param
+    pattern: "request.getParameter($X)|request.getParameterValues($X)"
+    kind: http_param
+  - id: servlet_request_header
+    pattern: "request.getHeader($X)|request.getHeaders($X)"
+    kind: http_header
+
+sinks:
+  # SQL / JDBC
+  - id: jdbc_template_query
+    pattern: "jdbcTemplate.query($X)|jdbcTemplate.queryForObject($X)|jdbcTemplate.queryForList($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: jdbc_template_update
+    pattern: "jdbcTemplate.update($X)|jdbcTemplate.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: jpa_native_query
+    pattern: "entityManager.createNativeQuery($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: jpa_query
+    pattern: "entityManager.createQuery($X)"
+    cwe: CWE-89
+    severity: high
+  # SSRF
+  - id: rest_template_ssrf
+    pattern: "restTemplate.getForObject($X)|restTemplate.exchange($X)|restTemplate.getForEntity($X)"
+    cwe: CWE-918
+    severity: high
+  - id: web_client_ssrf
+    pattern: "webClient.get()|webClient.post()"
+    cwe: CWE-918
+    severity: high
+  # SSTI
+  - id: thymeleaf_template
+    pattern: "templateEngine.process($X)"
+    cwe: CWE-94
+    severity: high
+  # Deserialization
+  - id: jackson_deserialize
+    pattern: "ObjectMapper.readValue($X)"
+    cwe: CWE-502
+    severity: high
+  # XXE
+  - id: xxe_parser
+    pattern: "DocumentBuilderFactory.newInstance()|SAXParserFactory.newInstance()|XMLInputFactory.newInstance()"
+    cwe: CWE-611
+    severity: high
+
+sanitizers:
+  - id: jpa_parameterized
+    pattern: "entityManager.createQuery($SQL, $CLASS)|query.setParameter($X, $Y)"
+  - id: jdbc_prepared_statement
+    pattern: "connection.prepareStatement($SQL)|PreparedStatement"
+  - id: spring_escape_html
+    pattern: "HtmlUtils.htmlEscape($X)"
+  - id: spring_escape_js
+    pattern: "JavaScriptUtils.javaScriptEscape($X)"
+  - id: spring_validated
+    pattern: "@Validated|@Valid"
+
+propagators:
+  - id: java_string_concat
+    pattern: "$X + $Y"
+  - id: java_string_format
+    pattern: "String.format($X, $Y)"
+  - id: java_string_builder
+    pattern: "StringBuilder|StringBuffer"
+  - id: java_variable_assign
+    pattern: "$TYPE $VAR = $X"
+  - id: java_return
+    pattern: "return $X"
+
+route_extractors:
+  - id: spring_get_mapping
+    pattern: "@GetMapping($ROUTE)|@RequestMapping(value = $ROUTE, method = RequestMethod.GET)"
+    captures: [route]
+    framework: spring
+  - id: spring_post_mapping
+    pattern: "@PostMapping($ROUTE)"
+    captures: [route]
+    framework: spring
+  - id: spring_request_mapping
+    pattern: "@RequestMapping($ROUTE)"
+    captures: [route]
+    framework: spring
+
+auth_checks:
+  - id: spring_pre_authorize
+    pattern: "@PreAuthorize($EXPR)"
+  - id: spring_post_authorize
+    pattern: "@PostAuthorize($EXPR)"
+  - id: spring_secured
+    pattern: "@Secured($ROLES)"
+  - id: spring_roles_allowed
+    pattern: "@RolesAllowed($ROLES)"
+  - id: spring_permit_all
+    pattern: "@PermitAll"
+    effect: "exempt"
+  - id: spring_deny_all
+    pattern: "@DenyAll"
+  - id: spring_security_config
+    pattern: "@EnableWebSecurity|@EnableMethodSecurity|@EnableGlobalMethodSecurity"
+  - id: spring_has_role
+    pattern: ".hasRole($X)|.hasAuthority($X)|.hasPermission($X)"
+
+ownership_checks:
+  - id: spring_find_by_user_id
+    pattern: "findByUserId($X)|findByUserIdAnd|findByOwnerId($X)"
+  - id: spring_principal_id
+    pattern: "getCurrentUserId()|AuthenticationPrincipal|SecurityContextHolder.getContext().getAuthentication()"
+  - id: spring_owner_query
+    pattern: ".findByUserId(authentication.getName())|.where(userId.eq(currentUserId))"
+
+middleware:
+  - id: spring_security_filter_chain
+    pattern: "SecurityFilterChain|filterChain"
+  - id: spring_authentication_manager
+    pattern: "AuthenticationManager|authenticationManager"
+  - id: spring_csrf
+    pattern: "_csrf|CsrfToken"

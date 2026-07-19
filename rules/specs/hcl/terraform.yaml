@@ -1,0 +1,82 @@
+# Guardmarly Spec — Terraform / HCL Security
+spec_version: 1
+language: hcl
+framework: terraform
+description: "Terraform/HCL infrastructure-as-code security patterns"
+
+sources:
+  - id: terraform_variable
+    pattern: "variable \"$X\"|var.$X"
+    kind: user_input
+  - id: terraform_data_source
+    pattern: "data \"$TYPE\" \"$NAME\""
+    kind: external_data
+
+sinks:
+  # Open security groups
+  - id: terraform_sg_open
+    pattern: "cidr_blocks = [\"0.0.0.0/0\"]|cidr_blocks = [\"::/0\"]"
+    cwe: CWE-668
+    severity: high
+    note: "Security group open to the world (0.0.0.0/0)"
+  # Public S3 bucket
+  - id: terraform_s3_public
+    pattern: "acl = \"public-read\"|acl = \"public-read-write\"|acl = \"authenticated-read\""
+    cwe: CWE-284
+    severity: high
+  # Unencrypted resources
+  - id: terraform_unencrypted_s3
+    pattern: "aws_s3_bucket\" \"$NAME\"|resource \"aws_s3_bucket\""
+    cwe: CWE-311
+    severity: medium
+    note: "S3 bucket without server-side encryption"
+  - id: terraform_unencrypted_rds
+    pattern: "storage_encrypted = false|storage_encrypted = 0"
+    cwe: CWE-311
+    severity: high
+  - id: terraform_unencrypted_ebs
+    pattern: "encrypted = false|encrypted = 0"
+    cwe: CWE-311
+    severity: medium
+  # Hardcoded secrets
+  - id: terraform_hardcoded_secret
+    pattern: "password = \"$X\"|secret = \"$X\"|access_key = \"$X\"|private_key = \"$X\""
+    cwe: CWE-798
+    severity: critical
+  # Public databases
+  - id: terraform_public_rds
+    pattern: "publicly_accessible = true|publicly_accessible = 1"
+    cwe: CWE-200
+    severity: high
+  # IAM wildcard
+  - id: terraform_iam_wildcard
+    pattern: "Action = \"*\"|Resource = \"*\"|Effect = \"Allow\""
+    cwe: CWE-269
+    severity: high
+  # Insecure TLS
+  - id: terraform_insecure_tls
+    pattern: "ssl_policy = \"ELBSecurityPolicy-2016-08\"|minimum_tls_version = \"TLS_1_0\""
+    cwe: CWE-327
+    severity: medium
+  # Public ECR/Container
+  - id: terraform_public_ecr
+    pattern: "image_tag_mutability = \"MUTABLE\"|scan_on_push = false"
+    cwe: CWE-1104
+    severity: low
+  # KMS key rotation off
+  - id: terraform_kms_no_rotation
+    pattern: "enable_key_rotation = false|rotation_enabled = false"
+    cwe: CWE-320
+    severity: medium
+
+sanitizers:
+  - id: terraform_encrypted
+    pattern: "encrypted = true|storage_encrypted = true|enable_key_rotation = true"
+  - id: terraform_restricted_sg
+    pattern: "cidr_blocks = [\"10.|cidr_blocks = [\"172.|cidr_blocks = [\"192.168."
+  - id: terraform_variable_secret
+    pattern: "sensitive = true|variable \"$X\" { sensitive = true"
+  - id: terraform_remote_state
+    pattern: "terraform_remote_state|data \"terraform_remote_state\""
+  - id: terraform_tls_modern
+    pattern: "minimum_tls_version = \"TLS_1_2\"|minimum_tls_version = \"TLS_1_3\""

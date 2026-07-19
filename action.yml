@@ -1,5 +1,5 @@
 name: 'guardmarly'
-description: 'Minimal-dependency SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ categories. No GPU, no API keys.'
+description: 'SAST scanner — detects IDOR, auth bypass, SQLi, path traversal, and 20+ vulnerability categories. Runs locally, no API keys.'
 author: 'mattybellx'
 
 branding:

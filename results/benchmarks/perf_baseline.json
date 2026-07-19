@@ -1,0 +1,8 @@
+{
+  "version": "baseline",
+  "timestamp": "2026-07-19T15:13:39Z",
+  "loc": 3726,
+  "time_s": 3.03,
+  "throughput_loc_per_s": 1231.3,
+  "note": "Baseline measured on samples/ directory"
+}

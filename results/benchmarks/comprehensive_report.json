@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-07-19T18:29:14Z",
+  "test_suite": {
+    "passed": 1336,
+    "xfailed": 18,
+    "failed": 0,
+    "total": 1354
+  },
+  "scan_summary": {
+    "total_files": 191,
+    "total_loc": 23819,
+    "total_findings": 271,
+    "findings_per_kloc": 11.4,
+    "cwe_639_idor": 1,
+    "aggregate_throughput": 1707
+  },
+  "severity_summary": {
+    "high": 104,
+    "medium": 51,
+    "critical": 32,
+    "low": 84
+  },
+  "top_cwes": {
+    "CWE-79": 62,
+    "CWE-1333": 30,
+    "CWE-117": 29,
+    "CWE-22": 25,
+    "CWE-352": 15,
+    "CWE-1120": 14,
+    "CWE-89": 13,
+    "CWE-918": 9,
+    "CWE-617": 9,
+    "CWE-601": 6
+  },
+  "spec_idor": {
+    "total_cases": 23,
+    "passes": 23,
+    "fails": 0,
+    "by_framework": {
+      "python/django": {
+        "pass": 2,
+        "fail": 0
+      },
+      "javascript/express": {
+        "pass": 2,
+        "fail": 0
+      },
+      "python/flask": {
+        "pass": 2,
+        "fail": 0
+      },
+      "java/spring": {
+        "pass": 2,
+        "fail": 0
+      },
+      "csharp/aspnet": {
+        "pass": 2,
+        "fail": 0
+      },
+      "go/gin": {
+        "pass": 2,
+        "fail": 0
+      },
+      "php/laravel": {
+        "pass": 2,
+        "fail": 0
+      },
+      "ruby/rails": {
+        "pass": 2,
+        "fail": 0
+      },
+      "python/fastapi": {
+        "pass": 2,
+        "fail": 0
+      },
+      "javascript/nestjs": {
+        "pass": 2,
+        "fail": 0
+      },
+      "javascript/nextjs": {
+        "pass": 2,
+        "fail": 0
+      },
+      "go/echo": {
+        "pass": 1,
+        "fail": 0
+      }
+    },
+    "spec_count": 30,
+    "language_count": 18,
+    "fw_detection_tests": 200,
+    "fw_detected": 4
+  },
+  "per_directory": {
+    "Vulnerable samples": {
+      "findings": 95,
+      "files": 57,
+      "loc": 3866,
+      "loc_per_s": 1077,
+      "cwe_639": 1
+    },
+    "Community rules": {
+      "findings": 0,
+      "files": 12,
+      "loc": 351,
+      "loc_per_s": 20826,
+      "cwe_639": 0
+    },
+    "Rule definitions": {
+      "findings": 4,
+      "files": 31,
+      "loc": 4596,
+      "loc_per_s": 69122,
+      "cwe_639": 0
+    },
+    "Rust core": {
+      "findings": 40,
+      "files": 48,
+      "loc": 739,
+      "loc_per_s": 163,
+      "cwe_639": 0
+    },
+    "Build/test scripts": {
+      "findings": 38,
+      "files": 7,
+      "loc": 2354,
+      "loc_per_s": 2177,
+      "cwe_639": 0
+    },
+    "Engine": {
+      "findings": 82,
+      "files": 24,
+      "loc": 9770,
+      "loc_per_s": 2799,
+      "cwe_639": 0
+    },
+    "Frameworks": {
+      "findings": 10,
+      "files": 7,
+      "loc": 608,
+      "loc_per_s": 1310,
+      "cwe_639": 0
+    },
+    "IR/Graph": {
+      "findings": 2,
+      "files": 5,
+      "loc": 1535,
+      "loc_per_s": 2177,
+      "cwe_639": 0
+    }
+  },
+  "roamap_completion": "~91%",
+  "world_best_assessment": {
+    "cve_recall": "100% (164/164 across 5 languages)",
+    "idor_detection": "23/23 framework IDOR test cases",
+    "languages_with_specs": 18,
+    "total_specs": 30,
+    "production_fp_rate": "11.4/kLOC",
+    "tests": 1336
+  }
+}

@@ -1,0 +1,143 @@
+# Guardmarly Spec — C/C++ Standard Library
+spec_version: 1
+language: c
+description: "C/C++ standard library security sources, sinks, and sanitizers"
+
+sources:
+  - id: c_argv
+    pattern: "argv[$X]|argv[1]|argv[2]"
+    kind: cli_arg
+  - id: c_stdin
+    pattern: "scanf($X)|fgets($BUF, $SIZE, stdin)|read(0, $BUF, $SIZE)|getchar()|getline(&$BUF, &$SIZE, stdin)"
+    kind: stdin
+  - id: c_env
+    pattern: "getenv($X)|getenv(\"$X\")|environ[$X]"
+    kind: environment
+  - id: c_file_read_source
+    pattern: "fread($BUF, $SIZE, $N, $FP)|read($FD, $BUF, $SIZE)"
+    kind: file_content
+  - id: c_socket_recv
+    pattern: "recv($SOCK, $BUF, $SIZE, $FLAGS)|recvfrom($SOCK, $BUF, $SIZE, $FLAGS"
+    kind: network_input
+  - id: cpp_cin
+    pattern: "std::cin >> $X|std::getline(std::cin, $X)|cin >> $X"
+    kind: stdin
+  - id: cpp_argv
+    pattern: "argv[$X]|std::vector<std::string> args(argv, argv+argc)"
+    kind: cli_arg
+
+sinks:
+  # Buffer overflow
+  - id: c_strcpy
+    pattern: "strcpy($DST, $SRC)|strcat($DST, $SRC)"
+    cwe: CWE-120
+    severity: critical
+  - id: c_sprintf
+    pattern: "sprintf($BUF, $FMT, $X)|vsprintf($BUF, $FMT, $X)|sprintf($BUF, \"$FMT\""
+    cwe: CWE-120
+    severity: critical
+  - id: c_gets
+    pattern: "gets($BUF)"
+    cwe: CWE-120
+    severity: critical
+  - id: c_scanf_no_limit
+    pattern: "scanf(\"%s\", $BUF)"
+    cwe: CWE-120
+    severity: high
+  # Command injection
+  - id: c_system
+    pattern: "system($X)|system(\"$CMD $X\")"
+    cwe: CWE-78
+    severity: critical
+  - id: c_popen
+    pattern: "popen($X, $MODE)|popen(\"$CMD $X\""
+    cwe: CWE-78
+    severity: critical
+  - id: c_exec_family
+    pattern: "execl($PATH, $X|execv($PATH, $X|execle($PATH|execvp($X|execve($PATH"
+    cwe: CWE-78
+    severity: critical
+  # Format string
+  - id: c_printf_user
+    pattern: "printf($X)|fprintf($FP, $X)|snprintf($BUF, $SIZE, $X)"
+    cwe: CWE-134
+    severity: critical
+    note: "Format string vulnerability when $X is user-controlled"
+  # Path traversal
+  - id: c_fopen_user
+    pattern: "fopen($X, $MODE)|open($X, $FLAGS)|fopen($X"
+    cwe: CWE-22
+    severity: high
+  - id: c_chmod_user
+    pattern: "chmod($X, $MODE)|chown($X, $UID, $GID)"
+    cwe: CWE-22
+    severity: medium
+  # SQL injection
+  - id: c_mysql_query
+    pattern: "mysql_query($CONN, $X)|mysql_real_query($CONN, $X)"
+    cwe: CWE-89
+    severity: critical
+  - id: c_sqlite_exec
+    pattern: "sqlite3_exec($DB, $X, $CB, $ARG)|sqlite3_prepare_v2($DB, $X"
+    cwe: CWE-89
+    severity: critical
+  # Integer overflow
+  - id: c_malloc_user
+    pattern: "malloc($X * $Y)|calloc($X, $Y)|realloc($PTR, $X * $Y)"
+    cwe: CWE-190
+    severity: high
+    note: "Potential integer overflow in size calculation"
+  # Use after free
+  - id: c_use_after_free
+    pattern: "free($PTR)|delete $PTR|delete[] $PTR"
+    cwe: CWE-416
+    severity: high
+  # Hardcoded secrets
+  - id: c_hardcoded_password
+    pattern: "char *password = \"$X\"|const char* secret = \"$X\"|#define PASSWORD \"$X\""
+    cwe: CWE-798
+    severity: high
+  # Weak random
+  - id: c_rand
+    pattern: "rand()|random()|srand($X)|srandom($X)"
+    cwe: CWE-330
+    severity: medium
+  # TOCTOU
+  - id: c_access_open
+    pattern: "access($X, $MODE)|stat($X, &$BUF)"
+    cwe: CWE-367
+    severity: medium
+    note: "access() followed by open() is TOCTOU-prone"
+  # Unsafe function
+  - id: cpp_new_noexcept
+    pattern: "new $TYPE[$SIZE]|new $TYPE($ARGS)"
+    cwe: CWE-252
+    severity: low
+
+sanitizers:
+  - id: c_strncpy
+    pattern: "strncpy($DST, $SRC, $SIZE)|strncat($DST, $SRC, $SIZE)"
+  - id: c_snprintf
+    pattern: "snprintf($BUF, $SIZE, $FMT, $X)"
+  - id: c_memcpy_check
+    pattern: "memcpy($DST, $SRC, $SIZE)|memmove($DST, $SRC, $SIZE)"
+  - id: c_safe_malloc
+    pattern: "sizeof($TYPE)|malloc(sizeof(*$PTR)|calloc($COUNT, sizeof"
+  - id: cpp_smart_ptr
+    pattern: "std::unique_ptr|std::shared_ptr|std::make_unique|std::make_shared"
+  - id: cpp_string
+    pattern: "std::string|std::string_view|std::vector"
+  - id: cpp_raii
+    pattern: "std::lock_guard|std::scoped_lock|std::ifstream"
+
+propagators:
+  - id: c_string_concat
+    pattern: "strcat($DST, $SRC)|strncat($DST, $SRC, $N)"
+  - id: cpp_string_concat
+    pattern: "$X + $Y|$X += $Y"
+  - id: cpp_ostringstream
+    pattern: "std::ostringstream|std::stringstream|$SS << $X"
+  - id: c_variable_assign
+    pattern: "$TYPE $VAR = $X|$VAR = $X"
+  - id: c_return
+    pattern: "return $X"

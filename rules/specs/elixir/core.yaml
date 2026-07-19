@@ -1,0 +1,183 @@
+# Guardmarly Spec — Elixir Standard Library + Phoenix
+spec_version: 1
+language: elixir
+description: "Elixir standard library and Phoenix security sources, sinks, and sanitizers"
+
+sources:
+  # Phoenix
+  - id: elixir_conn_params
+    pattern: "conn.params[$X]|conn.params[\"$X\"]|conn.query_params[$X]"
+    kind: http_param
+  - id: elixir_conn_body
+    pattern: "conn.body_params[$X]|conn.body_params[\"$X\"]|Plug.Conn.read_body"
+    kind: http_body
+  - id: elixir_conn_headers
+    pattern: "conn.req_headers[$X]|get_req_header(conn, $X)"
+    kind: http_header
+  - id: elixir_conn_cookies
+    pattern: "conn.cookies[$X]|conn.req_cookies[$X]|fetch_cookies(conn)"
+    kind: http_cookie
+  - id: elixir_conn_session
+    pattern: "get_session(conn, $X)|put_session(conn, $X)"
+    kind: http_session
+  - id: elixir_path_params
+    pattern: "conn.path_params[$X]|conn.path_params[\"$X\"]"
+    kind: route_param
+  - id: elixir_conn_assigns
+    pattern: "conn.assigns[$X]|conn.assigns.$X"
+    kind: user_input
+  # Environment
+  - id: elixir_env
+    pattern: "System.get_env($X)|System.get_env(\"$X\")|Application.get_env($APP, $X)"
+    kind: environment
+  - id: elixir_argv
+    pattern: "System.argv()|System.argv()"
+    kind: cli_arg
+
+sinks:
+  # SQL injection (Ecto)
+  - id: elixir_ecto_raw
+    pattern: "Ecto.Adapters.SQL.query($REPO, $SQL)|Repo.query($SQL)"
+    cwe: CWE-89
+    severity: critical
+  - id: elixir_ecto_fragment
+    pattern: "Ecto.Query.fragment($X)|fragment($X)"
+    cwe: CWE-89
+    severity: high
+  - id: elixir_ecto_interpolation
+    pattern: "from $X in $TABLE, where: $X.$COL == ^$VAL"
+    cwe: CWE-89
+    severity: low
+    note: "Ecto pin operator ^ is safe; flag only raw fragment usage"
+  # Command injection
+  - id: elixir_system_cmd
+    pattern: "System.cmd($X, $ARGS)|System.cmd(\"$CMD\", [$X])"
+    cwe: CWE-78
+    severity: critical
+  - id: elixir_port_open
+    pattern: "Port.open({:spawn, $X})|Port.open({:spawn_executable, $X})"
+    cwe: CWE-78
+    severity: critical
+  - id: elixir_os_cmd
+    pattern: ":os.cmd($X)|:os.cmd('$X')"
+    cwe: CWE-78
+    severity: critical
+  # Code injection
+  - id: elixir_code_eval
+    pattern: "Code.eval_string($X)|Code.eval_quoted($X)|Code.string_to_quoted($X)"
+    cwe: CWE-94
+    severity: critical
+  # SSRF
+  - id: elixir_http_client
+    pattern: "HTTPoison.get($X)|HTTPoison.post($X)|HTTPoison.request($METHOD, $X)"
+    cwe: CWE-918
+    severity: high
+  - id: elixir_tesla
+    pattern: "Tesla.get($CLIENT, $X)|Tesla.post($CLIENT, $X)"
+    cwe: CWE-918
+    severity: high
+  - id: elixir_finch
+    pattern: "Finch.request($REQ, $X)|Finch.build(:get, $X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: elixir_file_read
+    pattern: "File.read($X)|File.read!($X)|File.stream!($X)"
+    cwe: CWE-22
+    severity: high
+  - id: elixir_file_write
+    pattern: "File.write($X, $Y)|File.write!($X, $Y)|File.open($X, [:write])"
+    cwe: CWE-22
+    severity: high
+  # Deserialization
+  - id: elixir_binary_term
+    pattern: ":erlang.binary_to_term($X)|:erlang.binary_to_term($X, [:safe])"
+    cwe: CWE-502
+    severity: critical
+  # XSS
+  - id: elixir_raw_html
+    pattern: "raw($X)|Phoenix.HTML.raw($X)|{:safe, $X}"
+    cwe: CWE-79
+    severity: medium
+  - id: elixir_redirect
+    pattern: "redirect(conn, to: $X)|redirect(conn, external: $X)"
+    cwe: CWE-601
+    severity: medium
+  # Atom exhaustion
+  - id: elixir_string_to_atom
+    pattern: "String.to_atom($X)|String.to_existing_atom($X)"
+    cwe: CWE-400
+    severity: medium
+    note: "String.to_atom on user input can exhaust the atom table"
+  # Hardcoded secrets
+  - id: elixir_hardcoded_secret
+    pattern: "@password \"$X\"|@secret_key \"$X\"|config :$APP, password: \"$X\""
+    cwe: CWE-798
+    severity: high
+  # Weak crypto
+  - id: elixir_md5
+    pattern: ":crypto.hash(:md5, $X)|:erlang.md5($X)"
+    cwe: CWE-327
+    severity: medium
+  - id: elixir_sha1
+    pattern: ":crypto.hash(:sha, $X)|:erlang.sha($X)"
+    cwe: CWE-327
+    severity: medium
+
+sanitizers:
+  - id: elixir_ecto_query
+    pattern: "from($X in $TABLE, where: $X.$COL == ^$VAL)|Ecto.Query.from|Repo.get($MODEL, $ID)"
+  - id: elixir_ecto_changeset
+    pattern: "Ecto.Changeset.cast($X, $PARAMS, $FIELDS)|Ecto.Changeset.validate_required"
+  - id: elixir_plug_csrf
+    pattern: "plug :protect_from_forgery|Plug.CSRFProtection"
+  - id: elixir_secure_compare
+    pattern: "Plug.Crypto.secure_compare($X, $Y)"
+  - id: elixir_string_to_existing_atom
+    pattern: "String.to_existing_atom($X)"
+  - id: elixir_html_escape
+    pattern: "Phoenix.HTML.html_escape($X)|html_escape($X)|Phoenix.HTML.safe_to_string"
+  - id: elixir_binary_term_safe
+    pattern: ":erlang.binary_to_term($X, [:safe])"
+
+propagators:
+  - id: elixir_string_interpolation
+    pattern: "\"#{}$X\"|\"#{$X}\""
+  - id: elixir_string_concat
+    pattern: "$X <> $Y"
+  - id: elixir_pipe
+    pattern: "$X |> $FUNC"
+  - id: elixir_variable_assign
+    pattern: "$VAR = $X"
+  - id: elixir_return
+    pattern: "{:ok, $X}|{:error, $X}"
+
+route_extractors:
+  - id: elixir_phoenix_get
+    pattern: "get \"/$ROUTE\", $CONTROLLER, :$ACTION|get($ROUTE, $CONTROLLER, :$ACTION)"
+    captures: [route, controller, action]
+    framework: phoenix
+  - id: elixir_phoenix_resources
+    pattern: "resources \"/$ROUTE\", $CONTROLLER"
+    captures: [route, controller]
+    framework: phoenix
+
+auth_checks:
+  - id: elixir_phoenix_auth_plug
+    pattern: "plug :authenticate_user|plug :require_authenticated_user|plug :authorize"
+  - id: elixir_guardian
+    pattern: "Guardian.Plug.EnsureAuthenticated|Guardian.Plug.LoadResource|Guardian.Plug.VerifyHeader"
+  - id: elixir_pow
+    pattern: "Pow.Plug.RequireAuthenticated|Pow.Plug.RequireAdmin|:require_authenticated"
+
+ownership_checks:
+  - id: elixir_owner_query
+    pattern: "where([$X], $X.user_id == ^user_id)|where($X.user_id == ^current_user.id)"
+  - id: elixir_owner_preload
+    pattern: "Repo.get_by($MODEL, id: ^id, user_id: ^user_id)"
+
+middleware:
+  - id: elixir_endpoint
+    pattern: "plug Plug.Session|plug Plug.Static|plug :accepts"
+  - id: elixir_router
+    pattern: "pipeline :api do|pipeline :browser do|plug :put_secure_browser_headers"

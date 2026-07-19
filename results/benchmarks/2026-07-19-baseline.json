@@ -1,0 +1,21 @@
+{
+  "version": "baseline-2026-07-19",
+  "timestamp": "2026-07-19",
+  "scans": [
+    {
+      "label": "samples (vulnerable)",
+      "error": "json parse failed",
+      "stdout_preview": "Applying smart triage filters...\n"
+    },
+    {
+      "label": "tests",
+      "error": "json parse failed",
+      "stdout_preview": "Applying smart triage filters...\n"
+    }
+  ],
+  "totals": {
+    "findings": 0,
+    "loc": 0,
+    "idor_findings": 0
+  }
+}

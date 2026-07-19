@@ -1,0 +1,121 @@
+# Guardmarly Spec — Echo Framework (Go)
+spec_version: 1
+language: go
+framework: echo
+description: "Echo web framework security patterns for IDOR and injection detection"
+
+sources:
+  - id: echo_query_param
+    pattern: "c.QueryParam($X)|c.QueryParams()[$X]"
+    kind: http_param
+  - id: echo_path_param
+    pattern: "c.Param($X)|c.ParamNames()"
+    kind: route_param
+  - id: echo_form_value
+    pattern: "c.FormValue($X)"
+    kind: http_form
+  - id: echo_bind
+    pattern: "c.Bind($MODEL)|c.Bind(&$MODEL)"
+    kind: http_body
+  - id: echo_request_body
+    pattern: "c.Request().Body|ioutil.ReadAll(c.Request().Body)"
+    kind: http_body
+  - id: echo_request_header
+    pattern: "c.Request().Header.Get($X)"
+    kind: http_header
+  - id: echo_cookie
+    pattern: "c.Cookie($X)|c.Cookies()"
+    kind: http_cookie
+  - id: echo_file_upload
+    pattern: "c.FormFile($X)|c.MultipartForm()"
+    kind: file_upload
+
+sinks:
+  - id: echo_string_response
+    pattern: "c.String($CODE, $X)"
+    cwe: CWE-79
+    severity: medium
+  - id: echo_json_response
+    pattern: "c.JSON($CODE, $X)|c.JSONPretty($CODE, $X)"
+    cwe: CWE-201
+    severity: low
+  - id: echo_html_response
+    pattern: "c.HTML($CODE, $TEMPLATE, $X)|c.Render($CODE, $TEMPLATE)"
+    cwe: CWE-79
+    severity: medium
+  - id: echo_redirect
+    pattern: "c.Redirect($CODE, $X)"
+    cwe: CWE-601
+    severity: medium
+  - id: echo_file_serve
+    pattern: "c.File($X)|c.Attachment($X)|c.Inline($X)"
+    cwe: CWE-22
+    severity: high
+  - id: echo_sql_query
+    pattern: "db.Query($X)|db.Exec($X)|db.Raw($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: echo_ssrf
+    pattern: "http.Get($X)|http.Post($X)|http.NewRequest($METHOD, $X)"
+    cwe: CWE-918
+    severity: high
+  - id: echo_command_exec
+    pattern: "exec.Command($X)"
+    cwe: CWE-78
+    severity: critical
+
+sanitizers:
+  - id: echo_bind_validate
+    pattern: "c.Bind($X); c.Validate($X)|c.Validate($X)"
+  - id: echo_sql_params
+    pattern: "db.Query($SQL, $ARGS...)|db.Exec($SQL, $ARGS...)"
+  - id: echo_html_template
+    pattern: "html/template"
+  - id: echo_escape
+    pattern: "html.EscapeString($X)"
+  - id: echo_path_clean
+    pattern: "filepath.Clean($X)"
+
+propagators:
+  - id: echo_middleware_chain
+    pattern: "e.Use($MIDDLEWARE)|g.Use($MIDDLEWARE)"
+
+route_extractors:
+  - id: echo_get
+    pattern: "e.GET($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: echo
+  - id: echo_post
+    pattern: "e.POST($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: echo
+  - id: echo_group
+    pattern: "e.Group($PREFIX)"
+    captures: [prefix]
+    framework: echo
+
+auth_checks:
+  - id: echo_jwt_middleware
+    pattern: "echojwt.JWT($SECRET)|echojwt.WithJWTConfig|middleware.JWT($SECRET)"
+  - id: echo_basic_auth
+    pattern: "middleware.BasicAuth($FN)|echojwt.BasicAuth"
+  - id: echo_key_auth
+    pattern: "middleware.KeyAuth($FN)"
+  - id: echo_auth_middleware_ref
+    pattern: "AuthMiddleware|TokenMiddleware|e.Use(auth"
+  - id: echo_get_user
+    pattern: "c.Get(\"user\")"
+
+ownership_checks:
+  - id: echo_owner_query
+    pattern: ".Where(\"user_id = ?\", userId)|.Where(\"owner_id = ?\", currentUser.ID)"
+
+middleware:
+  - id: echo_cors_mw
+    pattern: "middleware.CORS()|middleware.CORSWithConfig"
+  - id: echo_rate_limit_mw
+    pattern: "middleware.RateLimiter|middleware.RateLimiterWithConfig"
+  - id: echo_csrf_mw
+    pattern: "middleware.CSRF|middleware.CSRFWithConfig"
+  - id: echo_secure_mw
+    pattern: "middleware.Secure()|middleware.SecureWithConfig"

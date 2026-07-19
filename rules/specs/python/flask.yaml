@@ -1,0 +1,140 @@
+# Guardmarly Spec — Flask Framework
+spec_version: 1
+language: python
+framework: flask
+description: "Flask web framework security patterns for IDOR and injection detection"
+
+sources:
+  - id: flask_request_args
+    pattern: "request.args.get($X)|request.args[$X]"
+    kind: http_param
+  - id: flask_request_form
+    pattern: "request.form.get($X)|request.form[$X]"
+    kind: http_form
+  - id: flask_request_json
+    pattern: "request.json.get($X)|request.get_json()|request.json[$X]"
+    kind: http_body
+  - id: flask_request_headers
+    pattern: "request.headers.get($X)|request.headers[$X]"
+    kind: http_header
+  - id: flask_request_cookies
+    pattern: "request.cookies.get($X)|request.cookies[$X]"
+    kind: http_cookie
+  - id: flask_request_files
+    pattern: "request.files[$X]|request.files.get($X)"
+    kind: file_upload
+  - id: flask_request_url
+    pattern: "request.url|request.path|request.referrer"
+    kind: http_url
+  - id: flask_request_data
+    pattern: "request.data|request.get_data()"
+    kind: http_body
+
+sinks:
+  # Flask-specific response sinks
+  - id: flask_render_template
+    pattern: "render_template($X)|render_template_string($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: flask_redirect
+    pattern: "redirect($X)|url_for($X)"
+    cwe: CWE-601
+    severity: medium
+  - id: flask_make_response
+    pattern: "make_response($X)|Response($X)"
+    cwe: CWE-79
+    severity: low
+  - id: flask_send_file
+    pattern: "send_file($X)|send_from_directory($DIR, $X)"
+    cwe: CWE-22
+    severity: high
+  # SQLAlchemy sinks
+  - id: flask_sqlalchemy_text
+    pattern: "db.session.execute(text($X))|session.execute(text($X))"
+    cwe: CWE-89
+    severity: critical
+  - id: flask_sqlalchemy_raw
+    pattern: "db.engine.execute($X)|connection.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  # Flask-specific SSRF
+  - id: flask_requests_ssrf
+    pattern: "requests.get($X)|requests.post($X)"
+    cwe: CWE-918
+    severity: high
+
+sanitizers:
+  - id: flask_secure_filename
+    pattern: "secure_filename($X)|werkzeug.utils.secure_filename($X)"
+  - id: flask_escape
+    pattern: "escape($X)|Markup.escape($X)"
+  - id: flask_sqlalchemy_filter
+    pattern: "Model.query.filter($X)|Model.query.filter_by($X)"
+  - id: flask_sqlalchemy_param
+    pattern: "db.session.execute(text($SQL), $PARAMS)"
+  - id: flask_wtf_validate
+    pattern: "$FORM.validate_on_submit()|$FORM.validate()"
+  - id: flask_login_required_decorator
+    pattern: "@login_required"
+
+propagators:
+  - id: flask_string_concat
+    pattern: "$X + $Y"
+  - id: flask_fstring
+    pattern: "f\"{$X}\""
+  - id: flask_format
+    pattern: "\"{}\".format($X)|'{}'.format($X)"
+  - id: flask_percent_format
+    pattern: "\"%s\" % $X"
+  - id: flask_variable_assign
+    pattern: "$VAR = $X"
+
+route_extractors:
+  - id: flask_route_decorator
+    pattern: "@app.route($ROUTE)|@bp.route($ROUTE)|@blueprint.route($ROUTE)"
+    captures: [route]
+    framework: flask
+  - id: flask_add_url_rule
+    pattern: "app.add_url_rule($ROUTE, $ENDPOINT, $VIEW)"
+    captures: [route, endpoint, view]
+    framework: flask
+  - id: flask_register_blueprint
+    pattern: "app.register_blueprint($BP)"
+    captures: [blueprint]
+    framework: flask
+
+auth_checks:
+  - id: flask_login_required
+    pattern: "@login_required|flask_login.login_required"
+  - id: flask_jwt_required
+    pattern: "@jwt_required()|@jwt_required|flask_jwt_extended.jwt_required"
+  - id: flask_jwt_optional
+    pattern: "@jwt_optional"
+    effect: "exempt"
+  - id: flask_admin_required
+    pattern: "@admin_required|@roles_required('admin')"
+  - id: flask_http_auth
+    pattern: "@auth.login_required|@htpasswd.required"
+  - id: flask_csrf_protect
+    pattern: "@csrf.protect|@csrf_exempt"
+  - id: flask_csrf_exempt
+    pattern: "@csrf.exempt"
+    effect: "exempt"
+
+ownership_checks:
+  - id: flask_owner_filter
+    pattern: "Model.query.filter_by(owner=current_user|.filter_by(user_id=current_user.id)"
+  - id: flask_owner_get
+    pattern: "Model.query.get($ID); if .owner != current_user|.filter_by(id=$ID, user_id=current_user)"
+  - id: flask_current_user_id
+    pattern: "current_user.id|current_user.get_id()|flask_login.current_user"
+
+middleware:
+  - id: flask_login_manager
+    pattern: "LoginManager()|login_manager.init_app($APP)"
+  - id: flask_cors
+    pattern: "CORS($APP)|flask_cors.CORS"
+  - id: flask_talisman
+    pattern: "Talisman($APP)|flask_talisman.Talisman"
+  - id: flask_limiter
+    pattern: "Limiter($APP)|flask_limiter.Limiter"

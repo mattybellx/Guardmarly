@@ -1,0 +1,208 @@
+# Guardmarly Spec — PHP Standard Library
+spec_version: 1
+language: php
+description: "PHP standard library security sources, sinks, and sanitizers"
+
+sources:
+  # HTTP request
+  - id: php_get
+    pattern: "$_GET[$X]|$_GET['$X']"
+    kind: http_param
+  - id: php_post
+    pattern: "$_POST[$X]|$_POST['$X']"
+    kind: http_form
+  - id: php_request
+    pattern: "$_REQUEST[$X]|$_REQUEST['$X']"
+    kind: http_param
+  - id: php_server
+    pattern: "$_SERVER[$X]|$_SERVER['$X']"
+    kind: http_header
+  - id: php_cookie
+    pattern: "$_COOKIE[$X]|$_COOKIE['$X']"
+    kind: http_cookie
+  - id: php_files
+    pattern: "$_FILES[$X]|$_FILES['$X']"
+    kind: file_upload
+  - id: php_php_input
+    pattern: "php://input|file_get_contents('php://input')"
+    kind: http_body
+  - id: php_filter_input
+    pattern: "filter_input(INPUT_GET|filter_input(INPUT_POST|filter_input(INPUT_SERVER"
+    kind: http_param
+    note: "filter_input is a sanitization wrapper; taint depends on flags"
+  # Environment / CLI
+  - id: php_env
+    pattern: "$_ENV[$X]|getenv($X)|$_SERVER['$X']"
+    kind: environment
+  - id: php_argv
+    pattern: "$argv[$X]|$_SERVER['argv']"
+    kind: cli_arg
+
+sinks:
+  # Command injection
+  - id: php_exec
+    pattern: "exec($X)|shell_exec($X)|system($X)|passthru($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: php_popen
+    pattern: "popen($X)|proc_open($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: php_pcntl_exec
+    pattern: "pcntl_exec($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: php_backtick
+    pattern: "`$X`"
+    cwe: CWE-78
+    severity: high
+  # Code injection
+  - id: php_eval
+    pattern: "eval($X)"
+    cwe: CWE-95
+    severity: critical
+  - id: php_assert
+    pattern: "assert($X)"
+    cwe: CWE-95
+    severity: high
+  - id: php_create_function
+    pattern: "create_function($X, $Y)"
+    cwe: CWE-95
+    severity: critical
+  - id: php_preg_replace_e
+    pattern: "preg_replace($PATTERN, $X, $SUBJ)|preg_replace('/e'"
+    cwe: CWE-95
+    severity: high
+  - id: php_include_var
+    pattern: "include($X)|include_once($X)|require($X)|require_once($X)"
+    cwe: CWE-98
+    severity: critical
+  # SQL injection
+  - id: php_mysql_query
+    pattern: "mysql_query($X)|mysqli_query($CONN, $X)"
+    cwe: CWE-89
+    severity: critical
+  - id: php_mysqli_query_method
+    pattern: "$mysqli->query($X)|$db->query($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: php_pdo_exec
+    pattern: "$pdo->exec($X)|->exec($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: php_pdo_query
+    pattern: "$pdo->query($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: php_db_raw
+    pattern: "DB::raw($X)|DB::select($X)|DB::statement($X)|DB::unprepared($X)"
+    cwe: CWE-89
+    severity: critical
+  # Path traversal
+  - id: php_file_get_contents
+    pattern: "file_get_contents($X)"
+    cwe: CWE-22
+    severity: high
+  - id: php_file_put_contents
+    pattern: "file_put_contents($X)"
+    cwe: CWE-22
+    severity: high
+  - id: php_fopen
+    pattern: "fopen($X)|fread($X)|fwrite($X)"
+    cwe: CWE-22
+    severity: high
+  - id: php_readfile
+    pattern: "readfile($X)"
+    cwe: CWE-22
+    severity: medium
+  - id: php_unlink
+    pattern: "unlink($X)|rmdir($X)"
+    cwe: CWE-22
+    severity: medium
+  # SSRF
+  - id: php_curl_exec
+    pattern: "curl_exec($CH)|curl_setopt($CH, CURLOPT_URL, $X)"
+    cwe: CWE-918
+    severity: high
+  - id: php_file_get_contents_url
+    pattern: "file_get_contents($URL)|file_get_contents('http"
+    cwe: CWE-918
+    severity: high
+  - id: php_fopen_url
+    pattern: "fopen($URL, 'r')|fopen('http"
+    cwe: CWE-918
+    severity: medium
+  # Deserialization
+  - id: php_unserialize
+    pattern: "unserialize($X)"
+    cwe: CWE-502
+    severity: critical
+  # XSS
+  - id: php_echo
+    pattern: "echo $X|print $X|echo $_GET|echo $_POST"
+    cwe: CWE-79
+    severity: medium
+  - id: php_print_r
+    pattern: "print_r($X)|var_dump($X)|var_export($X)"
+    cwe: CWE-79
+    severity: low
+  # XXE
+  - id: php_simplexml_load
+    pattern: "simplexml_load_string($X)|simplexml_load_file($X)|new SimpleXMLElement($X)"
+    cwe: CWE-611
+    severity: high
+  - id: php_domdocument_load
+    pattern: "DOMDocument->loadXML($X)|DOMDocument->load($X)"
+    cwe: CWE-611
+    severity: high
+  # LDAP
+  - id: php_ldap_search
+    pattern: "ldap_search($X)|ldap_list($X)"
+    cwe: CWE-90
+    severity: high
+  # Header injection
+  - id: php_header
+    pattern: "header($X)|header('Location: $X"
+    cwe: CWE-113
+    severity: medium
+  # Hardcoded secrets
+  - id: php_hardcoded_password
+    pattern: "$password = '$X'|$db_password = '$X'|define('DB_PASSWORD'"
+    cwe: CWE-798
+    severity: high
+
+sanitizers:
+  - id: php_prepared_statement
+    pattern: "$stmt->prepare($SQL)|$pdo->prepare($SQL)|mysqli_prepare($CONN, $SQL)"
+  - id: php_bind_param
+    pattern: "$stmt->bind_param($TYPES, $X)|$stmt->bindValue($X, $Y)"
+  - id: php_escapeshellarg
+    pattern: "escapeshellarg($X)|escapeshellcmd($X)"
+  - id: php_htmlspecialchars
+    pattern: "htmlspecialchars($X)|htmlentities($X)"
+  - id: php_strip_tags
+    pattern: "strip_tags($X)"
+  - id: php_filter_var
+    pattern: "filter_var($X, FILTER_SANITIZE|filter_var($X, FILTER_VALIDATE"
+  - id: php_real_escape
+    pattern: "mysqli_real_escape_string($CONN, $X)|$mysqli->real_escape_string($X)"
+  - id: php_hash_password
+    pattern: "password_hash($X|password_verify($X"
+  - id: php_basename
+    pattern: "basename($X)|dirname($X)"
+  - id: php_intval
+    pattern: "intval($X)|(int)$X|floatval($X)"
+
+propagators:
+  - id: php_string_concat
+    pattern: "$X . $Y|$X .= $Y"
+  - id: php_double_quote
+    pattern: "\"$X\"|\"$VAR\""
+  - id: php_sprintf
+    pattern: "sprintf($FMT, $X)|printf($FMT, $X)"
+  - id: php_variable_assign
+    pattern: "$VAR = $X"
+  - id: php_return
+    pattern: "return $X"
+  - id: php_implode
+    pattern: "implode($GLUE, $X)|join($GLUE, $X)"

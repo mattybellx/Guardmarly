@@ -1,0 +1,146 @@
+# Guardmarly Spec — Go Gin Framework
+spec_version: 1
+language: go
+framework: gin
+description: "Gin web framework security patterns for IDOR and injection detection"
+
+sources:
+  - id: gin_query_param
+    pattern: "c.Query($X)|c.DefaultQuery($X)"
+    kind: http_param
+  - id: gin_route_param
+    pattern: "c.Param($X)"
+    kind: route_param
+  - id: gin_post_form
+    pattern: "c.PostForm($X)|c.DefaultPostForm($X)"
+    kind: http_form
+  - id: gin_request_body
+    pattern: "c.Request.Body"
+    kind: http_body
+  - id: gin_request_headers
+    pattern: "c.Request.Header|c.Request.Header.Get($X)"
+    kind: http_header
+  - id: gin_request_url
+    pattern: "c.Request.URL"
+    kind: http_url
+  - id: gin_form_file
+    pattern: "c.FormFile($X)"
+    kind: file_upload
+  - id: gin_cookie
+    pattern: "c.Cookie($X)"
+    kind: http_cookie
+
+sinks:
+  - id: gin_string_response
+    pattern: "c.String($CODE, $X)"
+    cwe: CWE-79
+    severity: medium
+  - id: gin_json_response
+    pattern: "c.JSON($CODE, $X)"
+    cwe: CWE-201
+    severity: low
+  - id: gin_html_response
+    pattern: "c.HTML($CODE, $X)"
+    cwe: CWE-79
+    severity: medium
+  - id: gin_redirect
+    pattern: "c.Redirect($CODE, $X)"
+    cwe: CWE-601
+    severity: medium
+  - id: gin_file_serve
+    pattern: "c.File($X)|c.FileAttachment($X)"
+    cwe: CWE-22
+    severity: high
+  - id: gin_sql_query
+    pattern: "db.Query($X)|db.Exec($X)|db.Raw($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: gin_sql_open
+    pattern: "sql.Open($DRIVER, $X)"
+    cwe: CWE-89
+    severity: low
+    note: "Connection strings are a config concern, not injection"
+  - id: gin_ssrf_http
+    pattern: "http.Get($X)|http.Post($X)"
+    cwe: CWE-918
+    severity: high
+  - id: gin_file_ops
+    pattern: "os.Open($X)|os.ReadFile($X)|os.WriteFile($X)"
+    cwe: CWE-22
+    severity: high
+  - id: gin_command_exec
+    pattern: "exec.Command($X)|exec.CommandContext($CTX, $X)"
+    cwe: CWE-78
+    severity: critical
+  - id: gin_template_unsafe
+    pattern: "text/template|template.New($X).Parse($Y)"
+    cwe: CWE-94
+    severity: high
+  - id: gin_deserialize
+    pattern: "json.Unmarshal($X)|xml.Unmarshal($X)"
+    cwe: CWE-502
+    severity: medium
+
+sanitizers:
+  - id: gin_template_safe
+    pattern: "html/template"
+  - id: gin_param_query
+    pattern: "db.Query($SQL, $ARGS...)|db.Exec($SQL, $ARGS...)"
+  - id: gin_bind_validate
+    pattern: "c.ShouldBind($X)|c.Bind($X)|c.ShouldBindJSON($X)"
+  - id: gin_html_escape
+    pattern: "html.EscapeString($X)|template.HTMLEscape($X)"
+  - id: gin_path_clean
+    pattern: "filepath.Clean($X)|path.Clean($X)"
+
+propagators:
+  - id: go_string_concat
+    pattern: "$X + $Y"
+  - id: go_fmt_sprintf
+    pattern: "fmt.Sprintf($FMT, $X)"
+  - id: go_variable_assign
+    pattern: "$VAR := $X"
+  - id: go_return
+    pattern: "return $X"
+  - id: go_append
+    pattern: "append($SLICE, $X)"
+
+route_extractors:
+  - id: gin_router_get
+    pattern: "router.GET($ROUTE, $HANDLER)|r.GET($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: gin
+  - id: gin_router_post
+    pattern: "router.POST($ROUTE, $HANDLER)|r.POST($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: gin
+  - id: gin_router_group
+    pattern: "router.Group($PREFIX)|r.Group($PREFIX)"
+    captures: [prefix]
+    framework: gin
+
+auth_checks:
+  - id: gin_basic_auth
+    pattern: "gin.BasicAuth($OPTIONS)|middleware.BasicAuth($OPTIONS)"
+  - id: gin_jwt
+    pattern: "JWT|jwt.New|jwt.MapClaims"
+  - id: gin_auth_middleware_ref
+    pattern: "AuthMiddleware|AuthRequired|TokenAuthMiddleware"
+  - id: gin_get_user
+    pattern: "c.MustGet(\"user\")|c.Get(\"user\")"
+  - id: gin_auth_header
+    pattern: "c.Request.Header.Get(\"Authorization\")|c.GetHeader(\"Authorization\")"
+
+ownership_checks:
+  - id: gin_owner_query
+    pattern: ".Where(\"user_id = ?\", userId)|.Where(\"owner_id = ?\", userId)"
+  - id: gin_owner_param_check
+    pattern: "userId := c.Param(\"id\"); .Where(\"user_id = ?\", userId)"
+
+middleware:
+  - id: gin_auth_middleware_use
+    pattern: "r.Use(auth|router.Use(auth|r.Use(Auth"
+  - id: gin_cors_middleware
+    pattern: "r.Use(cors|router.Use(cors"
+  - id: gin_rate_limit_middleware
+    pattern: "r.Use(rate|RateLimiter"

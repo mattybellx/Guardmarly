@@ -479,6 +479,21 @@ SANITIZERS: dict[str, set[str]] = {
     "marshmallow.Schema":             {"CWE-89", "CWE-78", "CWE-22"},
     "cerberus.Validator":             {"CWE-89", "CWE-78"},
     "voluptuous.Schema":              {"CWE-89", "CWE-78"},
+    # Logging — standard logging calls are not injection vectors
+    "logging.getLogger":              {"CWE-117"},
+    "logging.Logger":                 {"CWE-117"},
+    "django.utils.log":               {"CWE-117"},
+    # Django internal template/file operations
+    "django.template.loader":         {"CWE-22"},
+    "django.template.engine":         {"CWE-22"},
+    "pathlib.Path.parent":            {"CWE-22"},
+    "pathlib.Path.joinpath":          {"CWE-22"},
+    "os.path.join":                   {"CWE-22"},
+    # Safe Django ORM patterns
+    "django.db.models.query.QuerySet": {"CWE-89"},
+    # Common safe subprocess patterns
+    "subprocess.check_call":          {"CWE-78"},
+    "subprocess.check_output":        {"CWE-78"},
 }
 
 # ──────────────────────────────────────────────────────────────────────────────

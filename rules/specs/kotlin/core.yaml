@@ -1,0 +1,131 @@
+# Guardmarly Spec — Kotlin Standard Library + Android
+spec_version: 1
+language: kotlin
+description: "Kotlin standard library and Android security sources, sinks, and sanitizers"
+
+sources:
+  - id: kotlin_intent_data
+    pattern: "intent.data|intent.getStringExtra($X)|intent.extras|intent.getParcelableExtra"
+    kind: http_param
+  - id: kotlin_intent_action
+    pattern: "intent.action|intent.getAction()"
+    kind: user_input
+  - id: kotlin_edit_text
+    pattern: "editText.text|editText.getText()|binding.$X.text"
+    kind: user_input
+  - id: kotlin_webview_url
+    pattern: "webView.url|webView.loadUrl($X)|webView.originalUrl"
+    kind: http_url
+  # Ktor / HTTP
+  - id: kotlin_ktor_params
+    pattern: "call.parameters[$X]|call.request.queryParameters[$X]|call.receiveParameters()"
+    kind: http_param
+  - id: kotlin_ktor_body
+    pattern: "call.receive<T>()|call.receiveText()|call.receiveStream()"
+    kind: http_body
+  - id: kotlin_ktor_headers
+    pattern: "call.request.headers[$X]|call.request.header($X)"
+    kind: http_header
+  # Environment
+  - id: kotlin_env
+    pattern: "System.getenv($X)|System.getProperty($X)"
+    kind: environment
+
+sinks:
+  # SQL injection
+  - id: kotlin_execute_query
+    pattern: "executeQuery($X)|execute($X)|prepareStatement($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: kotlin_raw_query
+    pattern: "createQuery($X)|createNativeQuery($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: kotlin_room_raw
+    pattern: "@RawQuery|@Query($X)|SimpleSQLiteQuery($X)"
+    cwe: CWE-89
+    severity: high
+  # Command injection
+  - id: kotlin_runtime_exec
+    pattern: "Runtime.getRuntime().exec($X)|ProcessBuilder($X)"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: kotlin_url_open
+    pattern: "URL($X).openConnection()|URL($X).readText()"
+    cwe: CWE-918
+    severity: high
+  - id: kotlin_http_client
+    pattern: "HttpClient.get($X)|HttpClient.request($X)|ktor.client.get($X)"
+    cwe: CWE-918
+    severity: high
+  - id: kotlin_okhttp
+    pattern: "OkHttpClient.newCall($X)|Request.Builder().url($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: kotlin_file_read
+    pattern: "File($X).readText()|File($X).readBytes()|File($X).inputStream()"
+    cwe: CWE-22
+    severity: high
+  - id: kotlin_file_write
+    pattern: "File($X).writeText($Y)|File($X).writeBytes($Y)|File($X).outputStream()"
+    cwe: CWE-22
+    severity: high
+  # Weak crypto
+  - id: kotlin_md5
+    pattern: "MessageDigest.getInstance(\"MD5\")|MessageDigest.getInstance(\"md5\")"
+    cwe: CWE-327
+    severity: medium
+  - id: kotlin_sha1
+    pattern: "MessageDigest.getInstance(\"SHA-1\")|MessageDigest.getInstance(\"SHA1\")"
+    cwe: CWE-327
+    severity: medium
+  # Hardcoded secrets
+  - id: kotlin_hardcoded_secret
+    pattern: "val password = \"$X\"|val apiKey = \"$X\"|val secret = \"$X\"|const val TOKEN ="
+    cwe: CWE-798
+    severity: high
+  # WebView vulnerabilities
+  - id: kotlin_webview_js
+    pattern: "webView.settings.javaScriptEnabled = true|setJavaScriptEnabled(true)"
+    cwe: CWE-79
+    severity: medium
+  - id: kotlin_webview_ssl
+    pattern: "onReceivedSslError(handler.proceed())|handler.proceed()"
+    cwe: CWE-295
+    severity: high
+  # Deserialization
+  - id: kotlin_deserialize
+    pattern: "ObjectInputStream($X)|Gson().fromJson($X)|kotlinx.serialization.decodeFromString"
+    cwe: CWE-502
+    severity: high
+  # Intent redirection
+  - id: kotlin_intent_redirect
+    pattern: "startActivity(Intent($X))|startActivity(intent.setData($X))"
+    cwe: CWE-940
+    severity: medium
+
+sanitizers:
+  - id: kotlin_prepared_statement
+    pattern: "PreparedStatement|prepareStatement($SQL)|connection.prepareStatement"
+  - id: kotlin_input_validation
+    pattern: "$X?.let { it.takeIf|$X?.filter {|$X?.isNotBlank()|require($X"
+  - id: kotlin_https_only
+    pattern: "https://|SSLContext|HttpsURLConnection"
+  - id: kotlin_safe_intent
+    pattern: "Intent($CTX, $CLASS::class.java)|Intent(requireContext()"
+  - id: kotlin_encrypted_shared_prefs
+    pattern: "EncryptedSharedPreferences|MasterKeys.getOrCreate"
+
+propagators:
+  - id: kotlin_string_template
+    pattern: "\"\${}$X\"|\"$X\""
+  - id: kotlin_string_concat
+    pattern: "$X + $Y"
+  - id: kotlin_variable_assign
+    pattern: "val $VAR = $X|var $VAR = $X"
+  - id: kotlin_return
+    pattern: "return $X"
+  - id: kotlin_let_chain
+    pattern: "$X?.let {|$X?.apply {|$X?.also {"

@@ -1,0 +1,161 @@
+# Guardmarly Spec — ASP.NET Core / MVC / Web API
+spec_version: 1
+language: csharp
+framework: aspnet
+description: "ASP.NET Core security patterns for IDOR and injection detection"
+
+sources:
+  - id: aspnet_from_body
+    pattern: "[FromBody]"
+    kind: http_body
+  - id: aspnet_from_form
+    pattern: "[FromForm]"
+    kind: http_form
+  - id: aspnet_from_query
+    pattern: "[FromQuery]"
+    kind: http_param
+  - id: aspnet_from_route
+    pattern: "[FromRoute]"
+    kind: route_param
+  - id: aspnet_from_header
+    pattern: "[FromHeader]"
+    kind: http_header
+  - id: aspnet_request_query
+    pattern: "HttpContext.Request.Query|Request.QueryString"
+    kind: http_param
+  - id: aspnet_request_form
+    pattern: "HttpContext.Request.Form|Request.Form"
+    kind: http_form
+  - id: aspnet_request_headers
+    pattern: "HttpContext.Request.Headers|Request.Headers"
+    kind: http_header
+  - id: aspnet_request_cookies
+    pattern: "HttpContext.Request.Cookies|Request.Cookies["
+    kind: http_cookie
+  - id: aspnet_file_upload
+    pattern: "IFormFile|HttpPostedFile"
+    kind: file_upload
+
+sinks:
+  # SQL / EF Core
+  - id: ef_from_sql_raw
+    pattern: ".FromSqlRaw($X)|.FromSql($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: ef_execute_sql_raw
+    pattern: ".ExecuteSqlRaw($X)|.ExecuteSqlInterpolated($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: ado_sql_command
+    pattern: "SqlCommand($X)|SqlDataAdapter($X)"
+    cwe: CWE-89
+    severity: high
+  # SSRF
+  - id: http_client_ssrf
+    pattern: "HttpClient.GetAsync($X)|HttpClient.PostAsync($X)|HttpClient.SendAsync($X)"
+    cwe: CWE-918
+    severity: high
+  - id: web_request_ssrf
+    pattern: "WebRequest.Create($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: file_read_all
+    pattern: "System.IO.File.ReadAllText($X)|System.IO.File.ReadAllBytes($X)|System.IO.File.OpenRead($X)"
+    cwe: CWE-22
+    severity: high
+  - id: file_write_all
+    pattern: "System.IO.File.WriteAllText($X)|System.IO.File.Copy($X)"
+    cwe: CWE-22
+    severity: high
+  # Deserialization
+  - id: json_deserialize
+    pattern: "JsonConvert.DeserializeObject($X)|JsonSerializer.Deserialize($X)"
+    cwe: CWE-502
+    severity: high
+  - id: binary_deserialize
+    pattern: "BinaryFormatter.Deserialize($X)|JavaScriptSerializer.Deserialize($X)"
+    cwe: CWE-502
+    severity: critical
+  - id: xml_deserialize
+    pattern: "XmlSerializer.Deserialize($X)|DataContractSerializer"
+    cwe: CWE-502
+    severity: high
+  # XXE
+  - id: xml_load
+    pattern: "XmlDocument.Load($X)|XmlReader.Create($X)|XDocument.Load($X)"
+    cwe: CWE-611
+    severity: high
+  # LDAP
+  - id: ldap_injection
+    pattern: "DirectoryEntry($X)|DirectorySearcher($X)|LdapConnection($X)"
+    cwe: CWE-90
+    severity: high
+
+sanitizers:
+  - id: ef_parameterized
+    pattern: ".FromSqlInterpolated($X)"
+  - id: ado_parameters
+    pattern: "SqlParameter|SqlCommand.Parameters.Add"
+  - id: path_combine
+    pattern: "Path.Combine($BASE, $X)"
+    note: "Safe only when $BASE is not user-controlled"
+  - id: html_encode
+    pattern: "HtmlEncoder.Default.Encode($X)|HttpUtility.HtmlEncode($X)"
+  - id: antiforgery_validate
+    pattern: "[ValidateAntiForgeryToken]|[AutoValidateAntiforgeryToken]"
+
+propagators:
+  - id: csharp_string_concat
+    pattern: "$X + $Y"
+  - id: csharp_interpolation
+    pattern: "$\"{$X}\""
+  - id: csharp_string_format
+    pattern: "string.Format($X, $Y)"
+  - id: csharp_variable_assign
+    pattern: "var $VAR = $X"
+  - id: csharp_return
+    pattern: "return $X"
+
+route_extractors:
+  - id: aspnet_http_get
+    pattern: "[HttpGet($ROUTE)]"
+    captures: [route]
+    framework: aspnet
+  - id: aspnet_http_post
+    pattern: "[HttpPost($ROUTE)]"
+    captures: [route]
+    framework: aspnet
+  - id: aspnet_route
+    pattern: "[Route($ROUTE)]"
+    captures: [route]
+    framework: aspnet
+
+auth_checks:
+  - id: aspnet_authorize
+    pattern: "[Authorize]|[Authorize(Roles|[Authorize(Policy"
+  - id: aspnet_allow_anonymous
+    pattern: "[AllowAnonymous]"
+    effect: "exempt"
+  - id: aspnet_is_authenticated
+    pattern: "User.Identity.IsAuthenticated|HttpContext.User.Identity.IsAuthenticated"
+  - id: aspnet_is_in_role
+    pattern: "User.IsInRole($X)"
+  - id: aspnet_require_authorization
+    pattern: ".RequireAuthorization()"
+
+ownership_checks:
+  - id: aspnet_owner_where
+    pattern: ".Where(u => u.UserId ==|.FirstOrDefault(u => u.UserId =="
+  - id: aspnet_get_user_id
+    pattern: "User.FindFirstValue(ClaimTypes.NameIdentifier)|_userManager.GetUserId(User)"
+  - id: aspnet_owner_scoped
+    pattern: ".Where(o => o.OwnerId == currentUserId)|.Where(o => o.UserId =="
+
+middleware:
+  - id: aspnet_auth_middleware
+    pattern: "app.UseAuthentication()|app.UseAuthorization()"
+  - id: aspnet_cors
+    pattern: "app.UseCors("
+  - id: aspnet_antiforgery
+    pattern: "app.UseAntiforgery("

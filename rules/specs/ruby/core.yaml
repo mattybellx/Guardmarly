@@ -1,0 +1,208 @@
+# Guardmarly Spec — Ruby Standard Library
+spec_version: 1
+language: ruby
+description: "Ruby standard library and common gem security sources, sinks, and sanitizers"
+
+sources:
+  # HTTP / Rack / Rails request
+  - id: ruby_params
+    pattern: "params[$X]|params[:$X]|params.fetch($X)"
+    kind: http_param
+  - id: ruby_request_env
+    pattern: "request.env[$X]|request.env['$X']|env[$X]"
+    kind: http_header
+  - id: ruby_request_cookies
+    pattern: "cookies[$X]|cookies[:$X]|cookies.signed[$X]"
+    kind: http_cookie
+  - id: ruby_request_body
+    pattern: "request.body|request.raw_post|request.raw_body|request.POST"
+    kind: http_body
+  - id: ruby_file_upload
+    pattern: "params[$X].tempfile|params[$X].read|params[$X].original_filename"
+    kind: file_upload
+  # Environment / CLI
+  - id: ruby_env
+    pattern: "ENV[$X]|ENV['$X']|ENV.fetch($X)"
+    kind: environment
+  - id: ruby_argv
+    pattern: "ARGV[$X]|ARGV.first|ARGV.last"
+    kind: cli_arg
+  - id: ruby_stdin
+    pattern: "STDIN.read|STDIN.gets|ARGF.read|$stdin.read"
+    kind: stdin
+  # File reads (for chaining)
+  - id: ruby_file_read_source
+    pattern: "File.read($X)|IO.read($X)|File.readlines($X)"
+    kind: file_content
+
+sinks:
+  # Command injection
+  - id: ruby_system
+    pattern: "system($X)|system(\"$X\")"
+    cwe: CWE-78
+    severity: critical
+  - id: ruby_exec
+    pattern: "exec($X)|exec(\"$X\")"
+    cwe: CWE-78
+    severity: critical
+  - id: ruby_backtick
+    pattern: "`$X`|%x($X)|%x{$X}"
+    cwe: CWE-78
+    severity: high
+  - id: ruby_spawn
+    pattern: "spawn($X)|Process.spawn($X)"
+    cwe: CWE-78
+    severity: high
+  - id: ruby_open3
+    pattern: "Open3.capture2($X)|Open3.capture3($X)|Open3.popen3($X)|IO.popen($X)"
+    cwe: CWE-78
+    severity: high
+  # Code injection
+  - id: ruby_eval
+    pattern: "eval($X)|eval(\"$X\")"
+    cwe: CWE-95
+    severity: critical
+  - id: ruby_class_eval
+    pattern: "class_eval($X)|module_eval($X)|instance_eval($X)"
+    cwe: CWE-95
+    severity: critical
+  - id: ruby_send_method
+    pattern: "send($X)|public_send($X)|__send__($X)"
+    cwe: CWE-915
+    severity: medium
+    note: "Dynamic method dispatch; flag when method name is user-controlled"
+  # SQL injection
+  - id: ruby_where_string
+    pattern: ".where(\"$CONDITION\")|.where(\"$COL = '#{$X}'\")"
+    cwe: CWE-89
+    severity: critical
+  - id: ruby_find_by_sql
+    pattern: ".find_by_sql($X)|find_by_sql(\"$X\")"
+    cwe: CWE-89
+    severity: critical
+  - id: ruby_execute_raw
+    pattern: "ActiveRecord::Base.connection.execute($X)|connection.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: ruby_select_all
+    pattern: "connection.select_all($X)|connection.select_rows($X)"
+    cwe: CWE-89
+    severity: high
+  # SSRF
+  - id: ruby_net_http
+    pattern: "Net::HTTP.get($X)|Net::HTTP.get_response($X)|Net::HTTP.start($X)"
+    cwe: CWE-918
+    severity: high
+  - id: ruby_open_uri
+    pattern: "open($X)|URI.open($X)|Kernel.open($X)"
+    cwe: CWE-918
+    severity: high
+  - id: ruby_httparty
+    pattern: "HTTParty.get($X)|HTTParty.post($X)"
+    cwe: CWE-918
+    severity: high
+  - id: ruby_faraday
+    pattern: "Faraday.get($X)|Faraday.new(url: $X)"
+    cwe: CWE-918
+    severity: high
+  - id: ruby_rest_client
+    pattern: "RestClient.get($X)|RestClient.post($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: ruby_file_read
+    pattern: "File.read($X)|File.open($X)|IO.read($X)|File.readlines($X)"
+    cwe: CWE-22
+    severity: high
+  - id: ruby_file_write
+    pattern: "File.write($X)|File.open($X, 'w')|IO.write($X)"
+    cwe: CWE-22
+    severity: high
+  - id: ruby_send_file
+    pattern: "send_file($X)|send_data($X)"
+    cwe: CWE-22
+    severity: medium
+  - id: ruby_render_file
+    pattern: "render file: $X|render $X, layout:"
+    cwe: CWE-22
+    severity: medium
+  - id: ruby_file_join_user
+    pattern: "File.join($BASE, params[$X])|Rails.root.join(params[$X])"
+    cwe: CWE-22
+    severity: medium
+  # Deserialization
+  - id: ruby_yaml_load
+    pattern: "YAML.load($X)|YAML.load_file($X)"
+    cwe: CWE-502
+    severity: high
+  - id: ruby_marshal_load
+    pattern: "Marshal.load($X)|Marshal.restore($X)"
+    cwe: CWE-502
+    severity: critical
+  - id: ruby_psych_load
+    pattern: "Psych.load($X)|Psych.safe_load($X)"
+    cwe: CWE-502
+    severity: medium
+  # XSS / Response
+  - id: ruby_raw_html
+    pattern: "raw($X)|.html_safe|raw($X).html_safe|sanitize($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: ruby_render_inline
+    pattern: "render inline: $X|render html: $X"
+    cwe: CWE-79
+    severity: medium
+  - id: ruby_redirect
+    pattern: "redirect_to $X|redirect_to($X)"
+    cwe: CWE-601
+    severity: medium
+  # XXE
+  - id: ruby_nokogiri_parse
+    pattern: "Nokogiri::XML($X)|Nokogiri::XML.parse($X)"
+    cwe: CWE-611
+    severity: high
+  - id: ruby_rexml_parse
+    pattern: "REXML::Document.new($X)|Document.new($X)"
+    cwe: CWE-611
+    severity: high
+  # Hardcoded secrets
+  - id: ruby_hardcoded_secret
+    pattern: "PASSWORD = '$X'|SECRET_KEY = '$X'|API_KEY = '$X'"
+    cwe: CWE-798
+    severity: high
+
+sanitizers:
+  - id: ruby_where_hash
+    pattern: ".where($COL => $VAL)|.where($COL: $VAL)"
+  - id: ruby_find
+    pattern: ".find($ID)|.find_by($COL => $VAL)|.find_by!($COL => $VAL)"
+  - id: ruby_shellwords_escape
+    pattern: "Shellwords.escape($X)|Shellwords.shellescape($X)"
+  - id: ruby_escape_html
+    pattern: "h($X)|html_escape($X)|ERB::Util.html_escape($X)|CGI.escapeHTML($X)"
+  - id: ruby_escape_js
+    pattern: "j($X)|escape_javascript($X)"
+  - id: ruby_sanitize
+    pattern: "sanitize($X)|strip_tags($X)|ActionView::Helpers::SanitizeHelper"
+  - id: ruby_permit_params
+    pattern: "params.require($MODEL).permit($FIELDS)"
+  - id: ruby_yaml_safe_load
+    pattern: "YAML.safe_load($X)|Psych.safe_load($X)"
+  - id: ruby_path_expand
+    pattern: "File.expand_path($X)|Pathname.new($X).cleanpath"
+  - id: ruby_csrf
+    pattern: "protect_from_forgery|form_authenticity_token|authenticity_token"
+
+propagators:
+  - id: ruby_string_concat
+    pattern: "$X + $Y|$X << $Y"
+  - id: ruby_interpolation
+    pattern: "\"#{$X}\"|\"#{}$X\""
+  - id: ruby_format
+    pattern: "sprintf($FMT, $X)|format($FMT, $X)|$STR % $X"
+  - id: ruby_variable_assign
+    pattern: "$VAR = $X|$VAR ||= $X"
+  - id: ruby_return
+    pattern: "return $X"
+  - id: ruby_array_join
+    pattern: "$ARR.join($SEP)|$ARR.join"

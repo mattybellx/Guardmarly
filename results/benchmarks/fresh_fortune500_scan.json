@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-07-19T15:45:54Z",
+  "repos": [
+    {
+      "label": "Django (fresh)",
+      "findings": 394,
+      "files": 100,
+      "loc": 38141,
+      "fpk": 10.3,
+      "time": 32.0
+    },
+    {
+      "label": "Flask (fresh)",
+      "findings": 312,
+      "files": 83,
+      "loc": 18337,
+      "fpk": 17.0,
+      "time": 18.6
+    },
+    {
+      "label": "Express (fresh)",
+      "findings": 565,
+      "files": 100,
+      "loc": 19487,
+      "fpk": 29.0,
+      "time": 7.3
+    },
+    {
+      "label": "Gin (fresh)",
+      "findings": 15,
+      "files": 99,
+      "loc": 24099,
+      "fpk": 0.6,
+      "time": 1.5
+    },
+    {
+      "label": "Samples",
+      "findings": 76,
+      "files": 47,
+      "loc": 2996,
+      "fpk": 25.4,
+      "time": 1.2
+    }
+  ],
+  "fresh_fpk": 12.851774864086986,
+  "tests": 1330,
+  "idor": "23/23"
+}

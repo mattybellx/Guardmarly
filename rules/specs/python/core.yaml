@@ -1,0 +1,234 @@
+# Guardmarly Spec — Python Standard Library
+# Core sources, sinks, sanitizers, and propagators for Python.
+# Used by the shared taint engine for language-level vulnerability detection.
+spec_version: 1
+language: python
+description: "Python standard library security sources, sinks, and sanitizers"
+
+# ── Sources: where user-controlled data enters the application ────────────
+sources:
+  # HTTP request parameters
+  - id: flask_request_args
+    pattern: "request.args.get($X)|request.args[$X]"
+    kind: http_param
+  - id: flask_request_form
+    pattern: "request.form.get($X)|request.form[$X]"
+    kind: http_param
+  - id: flask_request_json
+    pattern: "request.json.get($X)|request.get_json()"
+    kind: http_param
+  - id: flask_request_headers
+    pattern: "request.headers.get($X)|request.headers[$X]"
+    kind: http_header
+  - id: flask_request_cookies
+    pattern: "request.cookies.get($X)"
+    kind: http_cookie
+  - id: flask_request_files
+    pattern: "request.files[$X]"
+    kind: file_upload
+
+  # Django HTTP request
+  - id: django_request_get
+    pattern: "request.GET.get($X)|request.GET[$X]"
+    kind: http_param
+  - id: django_request_post
+    pattern: "request.POST.get($X)|request.POST[$X]"
+    kind: http_param
+  - id: django_request_body
+    pattern: "request.body|request.data"
+    kind: http_body
+  - id: django_request_meta
+    pattern: "request.META.get($X)|request.META[$X]"
+    kind: http_header
+
+  # FastAPI / Starlette
+  - id: fastapi_query_param
+    pattern: "def $FUNC(q: str|def $FUNC(query: str"
+    kind: http_param
+  - id: fastapi_path_param
+    pattern: "def $FUNC($X: Path"
+    kind: route_param
+  - id: fastapi_request
+    pattern: "Request.query_params|Request.path_params"
+    kind: http_param
+
+  # Standard input / environment
+  - id: stdin_read
+    pattern: "sys.stdin.read()|sys.stdin.readline()"
+    kind: stdin
+  - id: environ_get
+    pattern: "os.environ.get($X)|os.environ[$X]|os.getenv($X)"
+    kind: environment
+  - id: argv_input
+    pattern: "sys.argv[$X]"
+    kind: cli_arg
+
+  # File reads (as taint sources for path traversal chaining)
+  - id: file_read_source
+    pattern: "open($X).read()|Path($X).read_text()"
+    kind: file_content
+
+# ── Sinks: where tainted data causes harm ─────────────────────────────────
+sinks:
+  # Command injection
+  - id: os_system
+    pattern: "os.system($X)|os.popen($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: subprocess_shell
+    pattern: "subprocess.call($X, shell=True)|subprocess.Popen($X, shell=True)"
+    cwe: CWE-78
+    severity: critical
+  - id: subprocess_no_shell
+    pattern: "subprocess.run($X)|subprocess.call($X)|subprocess.check_output($X)"
+    cwe: CWE-78
+    severity: high
+    note: "Only when first argument is user-controlled (arg injection)"
+
+  # SQL injection
+  - id: raw_sql_execute
+    pattern: "cursor.execute($X)|connection.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: raw_sql_string
+    pattern: "\"SELECT * WHERE\" % $X|\"INSERT INTO\" % $X|f\"SELECT\" + $X"
+    cwe: CWE-89
+    severity: high
+  - id: sqlalchemy_raw
+    pattern: "session.execute(text($X))|connection.execute(text($X))"
+    cwe: CWE-89
+    severity: high
+  - id: django_raw_query
+    pattern: "Model.objects.raw($X)|*.raw($X)"
+    cwe: CWE-89
+    severity: high
+
+  # Path traversal
+  - id: open_with_path
+    pattern: "open($X)|open($X, 'w')|open($X, 'a')"
+    cwe: CWE-22
+    severity: high
+  - id: pathlib_write
+    pattern: "Path($X).write_text|Path($X).write_bytes"
+    cwe: CWE-22
+    severity: high
+  - id: shutil_ops
+    pattern: "shutil.copy($X)|shutil.move($X)|os.remove($X)"
+    cwe: CWE-22
+    severity: medium
+
+  # Deserialization
+  - id: pickle_loads
+    pattern: "pickle.loads($X)|pickle.load($X)"
+    cwe: CWE-502
+    severity: critical
+  - id: yaml_load
+    pattern: "yaml.load($X)|yaml.load($X, Loader=yaml.Loader)"
+    cwe: CWE-502
+    severity: high
+  - id: marshal_loads
+    pattern: "marshal.loads($X)"
+    cwe: CWE-502
+    severity: high
+
+  # SSRF
+  - id: requests_get_ssrf
+    pattern: "requests.get($X)|requests.post($X)|requests.put($X)|requests.delete($X)"
+    cwe: CWE-918
+    severity: high
+  - id: urllib_ssrf
+    pattern: "urllib.request.urlopen($X)|urllib.request.Request($X)"
+    cwe: CWE-918
+    severity: high
+  - id: httpx_ssrf
+    pattern: "httpx.get($X)|httpx.post($X)|httpx.Client()"
+    cwe: CWE-918
+    severity: high
+
+  # XSS / template injection
+  - id: jinja2_render
+    pattern: "render_template($X)|render_template_string($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: mark_safe
+    pattern: "mark_safe($X)|django.utils.safestring.mark_safe($X)"
+    cwe: CWE-79
+    severity: medium
+
+  # XXE
+  - id: xml_parse
+    pattern: "etree.parse($X)|etree.fromstring($X)|xml.etree.ElementTree.parse($X)"
+    cwe: CWE-611
+    severity: high
+
+  # Code injection
+  - id: eval_exec
+    pattern: "eval($X)|exec($X)|compile($X)"
+    cwe: CWE-94
+    severity: critical
+
+# ── Sanitizers: patterns that neutralize taint ────────────────────────────
+sanitizers:
+  # SQL safe patterns
+  - id: parameterized_query
+    pattern: "cursor.execute($SQL, $PARAMS)|session.execute(text($SQL), $PARAMS)"
+  - id: django_orm_filter
+    pattern: "*.objects.filter(**$KWARGS)|*.objects.get(**$KWARGS)"
+  - id: sqlalchemy_orm
+    pattern: "session.query($X).filter($Y)|*.objects.select()"
+
+  # Command safe patterns
+  - id: subprocess_array
+    pattern: "subprocess.run([$X])|subprocess.Popen([$X])"
+    note: "Argument arrays are safe when not using shell=True"
+
+  # File path sanitizers
+  - id: secure_filename
+    pattern: "werkzeug.utils.secure_filename($X)|secure_filename($X)"
+  - id: os_path_join
+    pattern: "os.path.join($BASE, $X)"
+    note: "Safe only when $BASE is not user-controlled"
+  - id: pathlib_resolve
+    pattern: "Path($X).resolve()"
+
+  # YAML safe loaders
+  - id: yaml_safe_load
+    pattern: "yaml.safe_load($X)|yaml.load($X, Loader=yaml.SafeLoader)|yaml.load($X, Loader=yaml.CSafeLoader)"
+
+  # HTML/XML escape
+  - id: html_escape
+    pattern: "html.escape($X)|escape($X)|markupsafe.escape($X)"
+  - id: jinja2_autoescape
+    pattern: "{% autoescape %}|autoescape=True"
+
+# ── Propagators: operations that move taint without neutralizing it ───────
+propagators:
+  # String operations
+  - id: string_concat
+    pattern: "$X + $Y"
+  - id: fstring_interp
+    pattern: "f\"{}$X\""
+  - id: percent_format
+    pattern: "\"%s\" % $X"
+  - id: str_format
+    pattern: "\"{}\".format($X)"
+  - id: str_join
+    pattern: "\"\".join($X)"
+
+  # Variable assignment
+  - id: simple_assignment
+    pattern: "$VAR = $X"
+
+  # Function returns
+  - id: return_value
+    pattern: "return $X"
+
+  # Dict/list access
+  - id: dict_get
+    pattern: "$DICT.get($X)|$DICT[$X]"
+  - id: list_index
+    pattern: "$LIST[$X]"
+
+  # JSON parsing
+  - id: json_loads
+    pattern: "json.loads($X)"

@@ -1,0 +1,142 @@
+# Guardmarly Spec — Next.js Framework (React/TypeScript)
+spec_version: 1
+language: javascript
+framework: nextjs
+description: "Next.js App Router + Pages Router security patterns for IDOR and injection detection"
+
+sources:
+  # App Router (Server Components / Route Handlers)
+  - id: nextjs_search_params
+    pattern: "searchParams|searchParams[$X]|searchParams.get($X)"
+    kind: http_param
+  - id: nextjs_params
+    pattern: "params|params[$X]|params.id|params.slug"
+    kind: route_param
+  - id: nextjs_request_body
+    pattern: "request.json()|await request.json()|request.text()|request.formData()"
+    kind: http_body
+  - id: nextjs_headers
+    pattern: "headers()|headers().get($X)|next/headers"
+    kind: http_header
+  - id: nextjs_cookies
+    pattern: "cookies()|cookies().get($X)|next/headers.cookies"
+    kind: http_cookie
+  # Pages Router
+  - id: nextjs_req_query
+    pattern: "req.query|req.query[$X]|req.url"
+    kind: http_param
+  - id: nextjs_req_body
+    pattern: "req.body|req.body[$X]"
+    kind: http_body
+  - id: nextjs_req_cookies
+    pattern: "req.cookies|req.cookies[$X]"
+    kind: http_cookie
+  # getServerSideProps / getStaticProps
+  - id: nextjs_context_params
+    pattern: "context.params|context.query|context.req|context.res"
+    kind: http_param
+
+sinks:
+  # SQL injection (Prisma / Drizzle / raw)
+  - id: nextjs_prisma_raw
+    pattern: "prisma.$queryRaw($X)|prisma.$executeRaw($X)|prisma.$queryRawUnsafe($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: nextjs_drizzle_sql
+    pattern: "sql\`$X\`|db.execute(sql\`$X\`)"
+    cwe: CWE-89
+    severity: critical
+  # SSRF
+  - id: nextjs_fetch_ssrf
+    pattern: "fetch($X)|await fetch($X)"
+    cwe: CWE-918
+    severity: high
+  - id: nextjs_axios_ssrf
+    pattern: "axios.get($X)|axios.post($X)"
+    cwe: CWE-918
+    severity: high
+  # Server Actions
+  - id: nextjs_server_action_mutation
+    pattern: "'use server';|async function $ACTION($DATA: FormData"
+    cwe: CWE-352
+    severity: medium
+    note: "Server Actions without CSRF protection"
+  # Redirect
+  - id: nextjs_redirect
+    pattern: "redirect($X)|permanentRedirect($X)|NextResponse.redirect($X)"
+    cwe: CWE-601
+    severity: medium
+  # File operations
+  - id: nextjs_fs_read
+    pattern: "fs.readFile($X)|fs.readFileSync($X)"
+    cwe: CWE-22
+    severity: high
+  # Dynamic code
+  - id: nextjs_dynamic_import
+    pattern: "next/dynamic|dynamic(() => import($X)"
+    cwe: CWE-94
+    severity: low
+    note: "Dynamic imports are usually safe; flag only when path is user-controlled"
+
+sanitizers:
+  - id: nextjs_auth_middleware
+    pattern: "middleware.ts|NextRequest|NextResponse|matcher:"
+  - id: nextjs_next_auth
+    pattern: "getServerSession($X)|getSession($X)|useSession()|next-auth"
+  - id: nextjs_clerk_auth
+    pattern: "auth()|currentUser()|useUser()|@clerk/nextjs"
+  - id: nextjs_csrf
+    pattern: "csrfToken|next-csrf|csrf"
+  - id: nextjs_prisma_params
+    pattern: "prisma.$queryRaw\`$SQL\`|prisma.user.findUnique($X)"
+  - id: nextjs_zod_validation
+    pattern: "z.object($X)|.parse($X)|.safeParse($X)|z.string()|z.number()"
+  - id: nextjs_headers_security
+    pattern: "Content-Security-Policy|X-Frame-Options|Strict-Transport-Security"
+
+propagators:
+  - id: nextjs_serialize
+    pattern: "JSON.stringify($X)|JSON.parse($X)"
+  - id: nextjs_form_data_get
+    pattern: "formData.get($X)|formData.getAll($X)"
+
+route_extractors:
+  - id: nextjs_app_route
+    pattern: "export async function GET(|export async function POST(|export async function PUT(|export async function DELETE("
+    captures: [method]
+    framework: nextjs
+  - id: nextjs_page_component
+    pattern: "export default function $PAGE(|export default async function $PAGE("
+    captures: [page]
+    framework: nextjs
+  - id: nextjs_route_handler
+    pattern: "export const $METHOD = async (|export const $METHOD = ("
+    captures: [method]
+    framework: nextjs
+
+auth_checks:
+  - id: nextjs_get_server_session
+    pattern: "getServerSession(authOptions)|getServerSession($X)"
+  - id: nextjs_require_auth
+    pattern: "if (!session) { redirect('/login')|if (!user) { notFound()|requireAuth($X)"
+  - id: nextjs_public_route
+    pattern: "export const runtime = 'edge'|export const dynamic = 'force-static'"
+    effect: "exempt"
+  - id: nextjs_auth_guard
+    pattern: "authGuard($X)|withAuth($X)|authenticatedProcedure"
+
+ownership_checks:
+  - id: nextjs_owner_where
+    pattern: ".findUnique({ where: { id: $ID, userId: session.user.id } })"
+  - id: nextjs_owner_verify
+    pattern: "if (item.userId !== session.user.id)|if (resource.ownerId !== user.id)"
+  - id: nextjs_session_user_id
+    pattern: "session.user.id|session.user?.id|user.id"
+
+middleware:
+  - id: nextjs_middleware_ts
+    pattern: "middleware.ts|export function middleware|NextResponse.next()"
+  - id: nextjs_cors_middleware
+    pattern: "Access-Control-Allow-Origin|Access-Control-Allow-Methods"
+  - id: nextjs_rate_limit
+    pattern: "rateLimit($X)|upstash/ratelimit|@upstash/ratelimit"

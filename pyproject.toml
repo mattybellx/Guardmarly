@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "guardmarly"
-version = "6.5.0"
-description = "Find IDOR, missing authorization, SQL injection, and 30+ vulnerability types in Python, JavaScript, Go, Java, and C#. 100% CVE recall. Zero false positives on clean code. Fully offline. No API keys needed."
+version = "6.6.0"
+description = "Static analysis for authorization gaps (IDOR/CWE-639), missing authorization, SQL injection, and 30+ vulnerability types across Python, JavaScript, Go, Java, C#, and 35+ other languages."
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 requires-python = ">=3.9"
 authors = [
     { name = "Matty Bell" }
@@ -22,9 +22,8 @@ keywords = [
     "offline", "air-gapped", "cli", "devsecops", "sarif",
 ]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",

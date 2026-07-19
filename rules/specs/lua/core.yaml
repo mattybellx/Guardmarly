@@ -1,0 +1,160 @@
+# Guardmarly Spec — Lua Standard Library
+spec_version: 1
+language: lua
+description: "Lua standard library security sources, sinks, and sanitizers"
+
+sources:
+  - id: lua_io_read
+    pattern: "io.read()|io.read($FMT)|file:read($FMT)"
+    kind: stdin
+  - id: lua_arg
+    pattern: "arg[$X]|arg[1]|arg[2]"
+    kind: cli_arg
+  - id: lua_env
+    pattern: "os.getenv($X)|os.getenv(\"$X\")"
+    kind: environment
+  - id: lua_ngx_var
+    pattern: "ngx.var.$X|ngx.var.arg_$X|ngx.req.get_uri_args()[$X]"
+    kind: http_param
+  - id: lua_ngx_body
+    pattern: "ngx.req.get_body_data()|ngx.req.get_body_file()|ngx.req.read_body()"
+    kind: http_body
+  - id: lua_ngx_headers
+    pattern: "ngx.req.get_headers()[$X]|ngx.var.http_$X"
+    kind: http_header
+  - id: lua_ngx_cookies
+    pattern: "ngx.var.cookie_$X|ngx.req.get_headers()[\"Cookie\"]"
+    kind: http_cookie
+  - id: lua_cgi_query
+    pattern: "cgi[$X]|cgi.$X"
+    kind: http_param
+
+sinks:
+  # Command injection
+  - id: lua_os_execute
+    pattern: "os.execute($X)|os.execute(\"$CMD $X\")"
+    cwe: CWE-78
+    severity: critical
+  - id: lua_io_popen
+    pattern: "io.popen($X)|io.popen(\"$CMD $X\")"
+    cwe: CWE-78
+    severity: critical
+  # Code injection
+  - id: lua_loadstring
+    pattern: "loadstring($X)|load($X)|loadfile($X)"
+    cwe: CWE-94
+    severity: critical
+  - id: lua_dostring
+    pattern: "dostring($X)|dofile($X)"
+    cwe: CWE-94
+    severity: critical
+  # Path traversal
+  - id: lua_io_open
+    pattern: "io.open($X, $MODE)|file:open($X)|io.open($X)"
+    cwe: CWE-22
+    severity: high
+  - id: lua_os_remove
+    pattern: "os.remove($X)|os.rename($X, $Y)"
+    cwe: CWE-22
+    severity: medium
+  # SSRF (nginx)
+  - id: lua_ngx_http
+    pattern: "ngx.location.capture($X)|ngx.location.capture_multi|resty.http"
+    cwe: CWE-918
+    severity: high
+  - id: lua_socket_http
+    pattern: "socket.http.request($X)|http.request($X)"
+    cwe: CWE-918
+    severity: high
+  # SQL injection (nginx/openresty)
+  - id: lua_ngx_mysql
+    pattern: "mysql:query($X)|ngx.say($RESULT)"
+    cwe: CWE-89
+    severity: critical
+  - id: lua_pg_query
+    pattern: "pg:query($X)|pg:exec($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: lua_redis_raw
+    pattern: "redis:eval($SCRIPT)|redis:execute($CMD, $ARGS)"
+    cwe: CWE-89
+    severity: medium
+  # XSS (nginx)
+  - id: lua_ngx_say
+    pattern: "ngx.say($X)|ngx.print($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: lua_ngx_redirect
+    pattern: "ngx.redirect($X)|ngx.exec($X)"
+    cwe: CWE-601
+    severity: medium
+  # Hardcoded secrets
+  - id: lua_hardcoded_secret
+    pattern: "local password = \"$X\"|local secret = \"$X\"|local api_key = \"$X\""
+    cwe: CWE-798
+    severity: high
+  # Module injection
+  - id: lua_require_user
+    pattern: "require($X)"
+    cwe: CWE-427
+    severity: medium
+    note: "require() with user-controlled path is unsafe"
+  # Weak random
+  - id: lua_math_random
+    pattern: "math.random()|math.randomseed($X)"
+    cwe: CWE-330
+    severity: low
+
+sanitizers:
+  - id: lua_assert_type
+    pattern: "assert(type($X) == \"string\")|assert($X ~= nil)"
+  - id: lua_tonumber
+    pattern: "tonumber($X)"
+  - id: lua_pattern_match
+    pattern: "string.match($X, \"^[%w]|string.gsub($X, \"[^%w]\""
+  - id: lua_https_only
+    pattern: "https://|ngx.req.is_internal()"
+  - id: lua_pcall
+    pattern: "pcall($FUNC, $X)|xpcall($FUNC, $ERR, $X)"
+  - id: lua_secure_compare
+    pattern: "ngx.encode_base64|ngx.md5|ngx.hmac_sha1"
+  - id: lua_escape
+    pattern: "ngx.escape_uri($X)|ngx.escape_html($X)|ngx.quote_sql_str($X)"
+
+propagators:
+  - id: lua_concat
+    pattern: "$X .. $Y"
+  - id: lua_format
+    pattern: "string.format($FMT, $X)"
+  - id: lua_variable_assign
+    pattern: "local $VAR = $X|$VAR = $X"
+  - id: lua_return
+    pattern: "return $X"
+  - id: lua_table_concat
+    pattern: "table.concat($TBL, $SEP)"
+
+route_extractors:
+  - id: lua_nginx_location
+    pattern: "location /$ROUTE {|content_by_lua_block|content_by_lua_file"
+    captures: [route]
+    framework: nginx
+  - id: lua_openresty_route
+    pattern: "ngx.req.get_method()|if ngx.var.request_uri|local $METHOD = ngx.req.get_method()"
+    captures: []
+    framework: openresty
+
+auth_checks:
+  - id: lua_nginx_auth
+    pattern: "ngx.req.get_headers()[\"Authorization\"]|access_by_lua_block|auth_request"
+  - id: lua_jwt
+    pattern: "jwt:verify($TOKEN)|jwt:sign($DATA)|resty.jwt"
+  - id: lua_session
+    pattern: "ngx.var.cookie_session|lua-resty-session"
+
+ownership_checks:
+  - id: lua_owner_check
+    pattern: "if user_id ~= resource.user_id|if user ~= record.owner"
+
+middleware:
+  - id: lua_nginx_access
+    pattern: "access_by_lua_block|access_by_lua_file"

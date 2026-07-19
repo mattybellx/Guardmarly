@@ -4,11 +4,11 @@
 
 ## What is Guardmarly?
 
-Guardmarly is a **zero-dependency SAST (Static Application Security Testing) scanner** that finds security vulnerabilities in source code. It supports **Python, JavaScript/TypeScript, Go, Java, C#** with 35+ CWE types.
+Guardmarly is a **SAST (Static Application Security Testing) scanner** that finds security vulnerabilities in source code, with a focus on authorization gaps (IDOR/CWE-639). It supports **Python, JavaScript/TypeScript, Go, Java, C#** plus 35+ pattern-aware languages with 35+ CWE types.
 
 - **PyPI**: `guardmarly` (v6.4.0)
 - **GitHub**: `mattybellx/Guardmarly`
-- **License**: MIT
+- **License**: See LICENSE file (custom terms)
 - **Unique strength**: Built-in IDOR/missing-authorization detection that Bandit, Semgrep OSS, and CodeQL miss.
 
 ## Repo structure (post-cleanup, July 2026)
@@ -37,7 +37,7 @@ guardmarly-focus/
 ├── guardmarly_rust_core/           # Rust native parser core (tree-sitter based)
 │   ├── src/                    # Rust source
 │   └── python/                 # Python bindings
-├── tests/                      # 1,183 unit tests (pytest)
+├── tests/                      # 1,300+ unit tests (pytest)
 ├── rules/                      # YAML rule definitions
 ├── community_rules/            # Community-contributed rules
 ├── samples/                    # Test fixtures & vulnerable code samples
@@ -59,7 +59,7 @@ guardmarly-focus/
 ├── CHANGELOG.md                # Full version history
 ├── README.md                   # Public-facing readme
 ├── SECURITY.md                 # Security policy
-├── LICENSE                     # MIT
+├── LICENSE                     # Custom license
 ├── Dockerfile                  # Container build
 ├── action.yml                  # GitHub Action entry point
 └── ci-workflow.example.yml     # Example CI config for users
@@ -118,7 +118,7 @@ Everything not needed for the scanner CLI was deleted:
 ## Common gotchas
 
 - **Don't add imports from `benchmarks` or `tools`** — those directories don't exist anymore.
-- **Test count**: 1,183 tests. If you see fewer, check for skipped platform-specific tests.
+- **Test count**: 1,300+ tests. Run `pytest tests/ -q` for current count. If you see fewer, check for skipped platform-specific tests.
 - **Pre-existing lint errors**: ~25 type-checker warnings in `cli.py` — all pre-existing, not from recent changes.
 - **`id()`-based memoization**: `_get_taint_source` and `_get_sink_name` use `id(node)` as cache keys. This is sensitive to Python version memory allocator differences.
 - **python_analyzer.py line references**: The CI `guardmarly-code-scanning.yml` used to flag the analyzer's own pattern strings as vulnerabilities. Now fixed by excluding `src/`.

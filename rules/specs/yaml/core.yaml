@@ -1,0 +1,97 @@
+# Guardmarly Spec — YAML Configuration Security
+spec_version: 1
+language: yaml
+framework: ""
+description: "YAML configuration file security patterns (CI/CD, K8s, Compose)"
+
+sources:
+  - id: yaml_user_input
+    pattern: "${{ $X }}|${{ inputs.$X }}|${{ github.event.$X }}"
+    kind: user_input
+  - id: yaml_secret_ref
+    pattern: "${{ secrets.$X }}|fromJSON($X)"
+    kind: secret
+
+sinks:
+  # GitHub Actions injection
+  - id: yaml_github_actions_injection
+    pattern: "run: ${{ github.event|run: ${{ inputs"
+    cwe: CWE-78
+    severity: high
+    note: "GitHub Actions expression injection in run: step"
+  # Script injection in CI
+  - id: yaml_script_injection
+    pattern: "run: echo ${{|run: ${{ github.event.issue.title"
+    cwe: CWE-74
+    severity: high
+  # K8s privileged container
+  - id: yaml_k8s_privileged
+    pattern: "privileged: true|securityContext:\n  privileged: true"
+    cwe: CWE-250
+    severity: high
+  # K8s host network
+  - id: yaml_k8s_host_network
+    pattern: "hostNetwork: true|hostPID: true|hostIPC: true"
+    cwe: CWE-668
+    severity: medium
+  # K8s runAsRoot
+  - id: yaml_k8s_run_as_root
+    pattern: "runAsUser: 0|runAsGroup: 0|runAsNonRoot: false"
+    cwe: CWE-250
+    severity: medium
+  # K8s allowPrivilegeEscalation
+  - id: yaml_k8s_privilege_escalation
+    pattern: "allowPrivilegeEscalation: true"
+    cwe: CWE-269
+    severity: high
+  # Docker Compose privileged
+  - id: yaml_compose_privileged
+    pattern: "privileged: true"
+    cwe: CWE-250
+    severity: medium
+  # Hardcoded secrets
+  - id: yaml_hardcoded_secret
+    pattern: "password: $X|api_key: $X|token: $X|secret: $X|PRIVATE_KEY: $X"
+    cwe: CWE-798
+    severity: critical
+  # K8s secret as env
+  - id: yaml_k8s_env_secret
+    pattern: "valueFrom:\n    secretKeyRef:"
+    cwe: CWE-200
+    severity: low
+    note: "Secrets mounted as env vars are visible in /proc"
+  # Insecure capabilities
+  - id: yaml_k8s_capabilities
+    pattern: "add:\n    - ALL|add:\n    - SYS_ADMIN|add:\n    - NET_ADMIN"
+    cwe: CWE-250
+    severity: high
+  # Read-only root filesystem missing
+  - id: yaml_k8s_readonly_rootfs
+    pattern: "readOnlyRootFilesystem: false"
+    cwe: CWE-1068
+    severity: low
+  # K8s service account token auto-mount
+  - id: yaml_k8s_automount_token
+    pattern: "automountServiceAccountToken: true"
+    cwe: CWE-200
+    severity: low
+  # Actions checkout with persist-credentials
+  - id: yaml_actions_persist_creds
+    pattern: "actions/checkout@$VERSION"
+    cwe: CWE-522
+    severity: medium
+    note: "actions/checkout persists credentials by default"
+
+sanitizers:
+  - id: yaml_actions_env_expression
+    pattern: "${{ env.$X }}|${{ vars.$X }}"
+  - id: yaml_k8s_security_context
+    pattern: "securityContext:\n  runAsNonRoot: true|securityContext:\n  readOnlyRootFilesystem: true"
+  - id: yaml_k8s_network_policy
+    pattern: "NetworkPolicy|networkPolicy|egress:|ingress:"
+  - id: yaml_k8s_resource_limits
+    pattern: "resources:\n    limits:|resources:\n    requests:"
+  - id: yaml_secrets_manager
+    pattern: "${{ secrets.$X }}|secretKeyRef:\n      name: $NAME"
+  - id: yaml_actions_pinned
+    pattern: "$ACTION@$SHA|$ACTION@$TAG # pin@$SHA"

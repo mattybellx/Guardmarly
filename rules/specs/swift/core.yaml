@@ -1,0 +1,122 @@
+# Guardmarly Spec — Swift Standard Library + iOS
+spec_version: 1
+language: swift
+description: "Swift standard library and iOS/macOS security sources, sinks, and sanitizers"
+
+sources:
+  - id: swift_url_session
+    pattern: "URLSession.shared.dataTask(with: $X)|URLSession.shared.downloadTask(with:"
+    kind: http_param
+  - id: swift_url_request
+    pattern: "URLRequest(url: $X)|URLRequest(string: $X)"
+    kind: http_url
+  - id: swift_ui_text_field
+    pattern: "@State var $X: String|textField.text|$X.text"
+    kind: user_input
+  - id: swift_user_defaults
+    pattern: "UserDefaults.standard.string(forKey: $X)|UserDefaults.standard.object(forKey:"
+    kind: user_input
+  - id: swift_command_line
+    pattern: "CommandLine.arguments[$X]|CommandLine.argc"
+    kind: cli_arg
+  - id: swift_env
+    pattern: "ProcessInfo.processInfo.environment[$X]|ProcessInfo.processInfo.environment"
+    kind: environment
+  - id: swift_file_upload
+    pattern: "NSData(contentsOf: $X)|Data(contentsOf: $X)"
+    kind: file_upload
+  # Vapor
+  - id: swift_vapor_request
+    pattern: "req.query[$X]|req.parameters.get($X)|req.content.decode($TYPE)"
+    kind: http_param
+  - id: swift_vapor_body
+    pattern: "req.body.string|req.body.data"
+    kind: http_body
+
+sinks:
+  # SQL injection
+  - id: swift_sql_execute
+    pattern: "execute($X)|executeQuery($X)|prepare($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: swift_flt_raw
+    pattern: "Fluent.Raw($X)|.raw($X)"
+    cwe: CWE-89
+    severity: high
+  # Command injection
+  - id: swift_process
+    pattern: "Process($X)|Process.launchedProcess|Process.run($X)"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: swift_url_session_ssrf
+    pattern: "URLSession.shared.dataTask(with: $URL)|URLSession.shared.downloadTask(with: $URL)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: swift_file_read
+    pattern: "FileManager.default.contents(atPath: $X)|String(contentsOfFile: $X)|Data(contentsOf: $X)"
+    cwe: CWE-22
+    severity: high
+  - id: swift_file_write
+    pattern: "FileManager.default.createFile(atPath: $X|$X.write(to: $URL)"
+    cwe: CWE-22
+    severity: high
+  # Weak crypto
+  - id: swift_md5
+    pattern: "Insecure.MD5|CryptoKit.Insecure.MD5|CC_MD5"
+    cwe: CWE-327
+    severity: medium
+  - id: swift_sha1
+    pattern: "Insecure.SHA1|CryptoKit.Insecure.SHA1|CC_SHA1"
+    cwe: CWE-327
+    severity: medium
+  # Hardcoded secrets
+  - id: swift_hardcoded_secret
+    pattern: "let password = \"$X\"|let apiKey = \"$X\"|static let secret = \"$X\""
+    cwe: CWE-798
+    severity: high
+  # WebView / WKWebView
+  - id: swift_webview_unsafe
+    pattern: "WKUserScript(source: $X|evaluateJavaScript($X"
+    cwe: CWE-79
+    severity: medium
+  # Keychain misuse
+  - id: swift_keychain_plain
+    pattern: "kSecAttrAccessibleAlways|kSecAttrAccessibleAlwaysThisDeviceOnly"
+    cwe: CWE-312
+    severity: medium
+  # Deserialization
+  - id: swift_nscoding
+    pattern: "NSKeyedUnarchiver.unarchiveObject(with: $X)|NSKeyedUnarchiver.unarchivedObject"
+    cwe: CWE-502
+    severity: high
+  # URL scheme hijacking
+  - id: swift_url_scheme
+    pattern: "UIApplication.shared.open($URL)|open($URL, options:"
+    cwe: CWE-939
+    severity: medium
+
+sanitizers:
+  - id: swift_parameterized
+    pattern: "PreparedStatement|prepare($SQL)|statement.bind($X, $VAL)"
+  - id: swift_input_validation
+    pattern: "guard let $X =|guard $X.isEmpty|$X?.isEmpty|$X?.count"
+  - id: swift_https_only
+    pattern: "App Transport Security|NSAllowsArbitraryLoads|https://"
+  - id: swift_keychain_secure
+    pattern: "kSecAttrAccessibleWhenUnlockedThisDeviceOnly|SecAccessControlCreateWithFlags"
+  - id: swift_nssecurecoding
+    pattern: "NSSecureCoding|NSSecureUnarchiveFromDataTransformer"
+
+propagators:
+  - id: swift_string_interpolation
+    pattern: "\"\\($X)\""
+  - id: swift_string_concat
+    pattern: "$X + $Y"
+  - id: swift_variable_assign
+    pattern: "let $VAR = $X|var $VAR = $X"
+  - id: swift_return
+    pattern: "return $X"
+  - id: swift_guard_let
+    pattern: "guard let $X = $Y|if let $X = $Y"

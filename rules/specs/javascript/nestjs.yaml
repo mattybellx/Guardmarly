@@ -1,0 +1,140 @@
+# Guardmarly Spec — NestJS Framework (TypeScript/Node.js)
+spec_version: 1
+language: javascript
+framework: nestjs
+description: "NestJS security patterns for IDOR and injection detection"
+
+sources:
+  - id: nestjs_req_query
+    pattern: "@Query()|@Query($X)|@Query($KEY, $PIPE)"
+    kind: http_param
+  - id: nestjs_req_param
+    pattern: "@Param()|@Param($X)|@Param($KEY, $PIPE)"
+    kind: route_param
+  - id: nestjs_req_body
+    pattern: "@Body()|@Body($X)|@Body($KEY, $PIPE)"
+    kind: http_body
+  - id: nestjs_req_headers
+    pattern: "@Headers()|@Headers($X)"
+    kind: http_header
+  - id: nestjs_req_request
+    pattern: "@Req()|@Request()|request: Request"
+    kind: http_param
+  - id: nestjs_req_cookies
+    pattern: "@Cookies()|@Cookies($X)"
+    kind: http_cookie
+  - id: nestjs_req_session
+    pattern: "@Session()|request.session"
+    kind: http_session
+  - id: nestjs_file_upload
+    pattern: "@UploadedFile()|@UploadedFiles()|FileInterceptor|FilesInterceptor"
+    kind: file_upload
+
+sinks:
+  # SQL injection (TypeORM / Prisma)
+  - id: nestjs_typeorm_query
+    pattern: "entityManager.query($X)|getConnection().query($X)|.query($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: nestjs_typeorm_create_query
+    pattern: "getRepository($ENTITY).createQueryBuilder|.createQueryBuilder($ALIAS)"
+    cwe: CWE-89
+    severity: medium
+  - id: nestjs_prisma_raw
+    pattern: "prisma.$queryRaw($X)|prisma.$executeRaw($X)|prisma.$queryRawUnsafe($X)"
+    cwe: CWE-89
+    severity: critical
+  # SSRF
+  - id: nestjs_http_service
+    pattern: "httpService.get($X)|httpService.post($X)|this.httpService.get($X)"
+    cwe: CWE-918
+    severity: high
+  - id: nestjs_axios
+    pattern: "axios.get($X)|axios.post($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: nestjs_stream_file
+    pattern: "new StreamableFile(createReadStream($X))|createReadStream($X)"
+    cwe: CWE-22
+    severity: high
+  # XSS / response
+  - id: nestjs_res_send
+    pattern: "res.send($X)|response.send($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: nestjs_redirect
+    pattern: "res.redirect($X)|@Redirect($X)"
+    cwe: CWE-601
+    severity: medium
+  # Deserialization
+  - id: nestjs_class_transformer
+    pattern: "plainToClass($CLASS, $X)|plainToInstance($CLASS, $X)"
+    cwe: CWE-502
+    severity: medium
+  # Command injection
+  - id: nestjs_exec
+    pattern: "exec($X)|execSync($X)|spawn($X)"
+    cwe: CWE-78
+    severity: critical
+
+sanitizers:
+  - id: nestjs_validation_pipe
+    pattern: "ValidationPipe|@UsePipes(new ValidationPipe|app.useGlobalPipes(new ValidationPipe"
+  - id: nestjs_class_validator
+    pattern: "@IsString()|@IsInt()|@IsEmail()|@IsNotEmpty()|@Matches($X)"
+  - id: nestjs_typeorm_params
+    pattern: ".setParameter($X, $Y)|.setParameters($X)"
+  - id: nestjs_prisma_params
+    pattern: "prisma.$queryRaw\`$SQL\`|$queryRaw\`$SQL\`"
+  - id: nestjs_serialize
+    pattern: "@Exclude()|@Expose()|classToPlain($X)"
+  - id: nestjs_helmet
+    pattern: "app.use(helmet())|HelmetMiddleware"
+
+propagators:
+  - id: nestjs_pipe_transform
+    pattern: "ParseIntPipe|ParseBoolPipe|ParseUUIDPipe|DefaultValuePipe"
+  - id: nestjs_interceptor
+    pattern: "@UseInterceptors($X)|app.useGlobalInterceptors"
+
+route_extractors:
+  - id: nestjs_controller
+    pattern: "@Controller($ROUTE)"
+    captures: [route]
+    framework: nestjs
+  - id: nestjs_get
+    pattern: "@Get($ROUTE)|@Get()"
+    captures: [route]
+    framework: nestjs
+  - id: nestjs_post
+    pattern: "@Post($ROUTE)|@Post()"
+    captures: [route]
+    framework: nestjs
+
+auth_checks:
+  - id: nestjs_guards
+    pattern: "@UseGuards(AuthGuard)|@UseGuards(JwtAuthGuard)|@UseGuards(RolesGuard)"
+  - id: nestjs_jwt_auth
+    pattern: "AuthGuard('jwt')|JwtAuthGuard|PassportStrategy|@nestjs/passport"
+  - id: nestjs_roles
+    pattern: "@Roles($ROLE)|@SetMetadata('roles'|RolesGuard"
+  - id: nestjs_public
+    pattern: "@Public()|@SkipAuth()|IS_PUBLIC_KEY"
+    effect: "exempt"
+  - id: nestjs_rbac
+    pattern: "require('nest-access-control')|AccessControl|@UseRoles($X)"
+
+ownership_checks:
+  - id: nestjs_owner_where
+    pattern: ".find({ where: { userId: req.user.id } })|.findOne({ userId: currentUser.id })"
+  - id: nestjs_owner_param_check
+    pattern: "if (item.userId !== req.user.id)|if (entity.ownerId !== user.id)"
+
+middleware:
+  - id: nestjs_auth_middleware
+    pattern: "app.use(AuthMiddleware)|configure(consumer: MiddlewareConsumer)"
+  - id: nestjs_cors
+    pattern: "app.enableCors()|CorsMiddleware"
+  - id: nestjs_rate_limit
+    pattern: "ThrottlerModule|ThrottlerGuard|@SkipThrottle()"

@@ -1,0 +1,180 @@
+# Guardmarly Spec — Go Standard Library
+spec_version: 1
+language: go
+description: "Go standard library security sources, sinks, and sanitizers"
+
+sources:
+  # net/http
+  - id: go_request_query
+    pattern: "r.URL.Query().Get($X)|r.URL.Query()[$X]|r.FormValue($X)"
+    kind: http_param
+  - id: go_request_form
+    pattern: "r.PostFormValue($X)|r.Form[$X]|r.PostForm[$X]"
+    kind: http_form
+  - id: go_request_body
+    pattern: "r.Body|io.ReadAll(r.Body)"
+    kind: http_body
+  - id: go_request_header
+    pattern: "r.Header.Get($X)|r.Header[$X]"
+    kind: http_header
+  - id: go_request_cookie
+    pattern: "r.Cookie($X)"
+    kind: http_cookie
+  - id: go_request_url
+    pattern: "r.URL.Path|r.URL.String()|r.URL.Host|r.Referer()"
+    kind: http_url
+  - id: go_request_multipart
+    pattern: "r.MultipartForm|r.FormFile($X)|r.ParseMultipartForm($X)"
+    kind: file_upload
+  # Gin
+  - id: gin_query_param
+    pattern: "c.Query($X)|c.DefaultQuery($X)|c.GetQuery($X)"
+    kind: http_param
+  - id: gin_route_param
+    pattern: "c.Param($X)"
+    kind: route_param
+  - id: gin_post_form
+    pattern: "c.PostForm($X)|c.DefaultPostForm($X)"
+    kind: http_form
+  - id: gin_request_body
+    pattern: "c.Request.Body|c.ShouldBindJSON($X)"
+    kind: http_body
+  # Environment / CLI
+  - id: go_os_environ
+    pattern: "os.Getenv($X)|os.Environ()|os.LookupEnv($X)"
+    kind: environment
+  - id: go_os_args
+    pattern: "os.Args[$X]|flag.Args()"
+    kind: cli_arg
+  - id: go_stdin
+    pattern: "os.Stdin|bufio.NewReader(os.Stdin)"
+    kind: stdin
+  # File reads (for chaining)
+  - id: go_file_read_source
+    pattern: "os.ReadFile($X)|ioutil.ReadFile($X)"
+    kind: file_content
+
+sinks:
+  # SQL injection
+  - id: go_sql_query
+    pattern: "db.Query($X)|db.QueryContext($CTX, $X)|db.QueryRow($X)|db.QueryRowContext($CTX, $X)"
+    cwe: CWE-89
+    severity: critical
+  - id: go_sql_exec
+    pattern: "db.Exec($X)|db.ExecContext($CTX, $X)"
+    cwe: CWE-89
+    severity: critical
+  - id: go_sql_raw
+    pattern: "db.Raw($X)|gorm.DB.Raw($X)|.Raw($X).Scan"
+    cwe: CWE-89
+    severity: critical
+  - id: go_sql_fmt
+    pattern: "fmt.Sprintf(\"SELECT|fmt.Sprintf(\"INSERT|fmt.Sprintf(\"UPDATE|fmt.Sprintf(\"DELETE"
+    cwe: CWE-89
+    severity: high
+    note: "Dynamic SQL construction via fmt.Sprintf"
+  # Command injection
+  - id: go_exec_command
+    pattern: "exec.Command($X)|exec.CommandContext($CTX, $X)"
+    cwe: CWE-78
+    severity: critical
+  - id: go_os_start_process
+    pattern: "os.StartProcess($X, $ARGS)"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: go_http_get
+    pattern: "http.Get($X)|http.Head($X)|http.Post($X)"
+    cwe: CWE-918
+    severity: high
+  - id: go_http_new_request
+    pattern: "http.NewRequest($METHOD, $X)|http.NewRequestWithContext($CTX, $METHOD, $X)"
+    cwe: CWE-918
+    severity: high
+  - id: go_http_client_do
+    pattern: "client.Do($REQ)|http.DefaultClient.Do($REQ)"
+    cwe: CWE-918
+    severity: medium
+    note: "Only when the request URL is user-controlled"
+  # Path traversal
+  - id: go_file_open
+    pattern: "os.Open($X)|os.OpenFile($X)"
+    cwe: CWE-22
+    severity: high
+  - id: go_file_read
+    pattern: "os.ReadFile($X)|ioutil.ReadFile($X)"
+    cwe: CWE-22
+    severity: high
+  - id: go_file_write
+    pattern: "os.WriteFile($X)|ioutil.WriteFile($X)"
+    cwe: CWE-22
+    severity: high
+  # Template injection
+  - id: go_template_parse
+    pattern: "template.New($X).Parse($Y)|template.Must(template.New($X).Parse($Y))"
+    cwe: CWE-94
+    severity: high
+  - id: go_text_template
+    pattern: "text/template|template.New($X).Parse($TEXT)"
+    cwe: CWE-94
+    severity: high
+    note: "text/template does not auto-escape HTML"
+  # Deserialization
+  - id: go_json_unmarshal
+    pattern: "json.Unmarshal($X)|json.NewDecoder($X).Decode"
+    cwe: CWE-502
+    severity: medium
+  - id: go_xml_unmarshal
+    pattern: "xml.Unmarshal($X)|xml.NewDecoder($X).Decode"
+    cwe: CWE-502
+    severity: medium
+  - id: go_gob_decode
+    pattern: "gob.NewDecoder($X).Decode"
+    cwe: CWE-502
+    severity: high
+  # XSS / response
+  - id: go_response_write
+    pattern: "w.Write($X)|fmt.Fprintf(w, $X)|io.WriteString(w, $X)"
+    cwe: CWE-79
+    severity: medium
+  - id: go_redirect
+    pattern: "http.Redirect(w, r, $X)|http.RedirectHandler($X)"
+    cwe: CWE-601
+    severity: medium
+
+sanitizers:
+  - id: go_sql_placeholders
+    pattern: "db.Query($SQL, $ARGS...)|db.QueryContext($CTX, $SQL, $ARGS...)"
+  - id: go_sql_exec_placeholders
+    pattern: "db.Exec($SQL, $ARGS...)|db.ExecContext($CTX, $SQL, $ARGS...)"
+  - id: go_html_template
+    pattern: "html/template|template.HTML($X)"
+  - id: go_html_escape
+    pattern: "html.EscapeString($X)|template.HTMLEscapeString($X)"
+  - id: go_url_escape
+    pattern: "url.QueryEscape($X)|url.PathEscape($X)"
+  - id: go_path_clean
+    pattern: "filepath.Clean($X)|path.Clean($X)|filepath.Base($X)"
+  - id: go_path_join
+    pattern: "filepath.Join($BASE, $X)"
+  - id: go_exec_args
+    pattern: "exec.Command($CMD, $ARG1, $ARG2)"
+    note: "Safe when $CMD is hardcoded; args are passed as separate parameters"
+  - id: go_input_validation
+    pattern: "validator.Validate($X)|govalidator|ozzo-validation"
+
+propagators:
+  - id: go_string_concat
+    pattern: "$X + $Y"
+  - id: go_fmt_sprintf
+    pattern: "fmt.Sprintf($FMT, $X)"
+  - id: go_variable_assign
+    pattern: "$VAR := $X|var $VAR = $X"
+  - id: go_return
+    pattern: "return $X"
+  - id: go_append
+    pattern: "append($SLICE, $X)"
+  - id: go_bytes_to_string
+    pattern: "string($BYTES)"
+  - id: go_string_to_bytes
+    pattern: "[]byte($STR)"

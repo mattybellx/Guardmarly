@@ -4,18 +4,16 @@
   <img src="https://raw.githubusercontent.com/mattybellx/Guardmarly/main/showcase.png" width="800" alt="Guardmarly catching CWE-22 path traversal in VS Code">
 </p>
 
-**Zero-dependency SAST scanner inline in your editor.** Catches IDOR, SQL injection, XSS, path traversal, and 30+ more CWE types as you code — fully offline, no API keys.
-
-![1183 tests passing](https://img.shields.io/badge/1183_tests-passing-22c55e)
+**SAST scanner inline in your editor.** Detects IDOR, missing authorization, SQL injection, XSS, path traversal, and 30+ more CWE types — runs locally on your machine.
 
 ## Features
 
 - 🔍 **Real-time scanning** — findings appear inline as you type
 - 🛡️ **IDOR detection** — catches authorization bugs other tools miss
 - 📊 **Trace-backed findings** — see the full taint path from source to sink
-- 🌐 **5 languages** — Python, JavaScript/TypeScript, Go, Java, C#
+- 🌐 **5+ languages** — Python, JavaScript/TypeScript, Go, Java, C#, and 35+ more
 - 📋 **SARIF output** — one-click export for GitHub Code Scanning
-- 🔒 **100% offline** — no cloud, no API keys, no telemetry
+- 🔒 **Runs locally** — scans files on your machine, no cloud required
 - ⚡ **Auto-detects** guardmarly CLI — works with pip, pipx, or python -m
 
 ## Installation
@@ -49,4 +47,4 @@ code --install-extension guardmarly.guardmarly
 
 ---
 
-**100% CVE recall · Zero false positives on clean code · MIT Licensed**
+See [CLAIMS_AND_EVIDENCE.md](../CLAIMS_AND_EVIDENCE.md) for benchmark methodology and measured results.

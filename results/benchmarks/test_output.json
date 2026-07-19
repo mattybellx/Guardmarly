@@ -1,0 +1,46 @@
+guardmarly: config warning: jsonschema is not installed; guardmarly.json schema
+validation is skipped. Install with: pip install guardmarly
+guardmarly: scanning [1/1] sample_vuln.py
+Applying smart triage filters...
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\matth\OneDrive\Desktop\ansede-static-focus\src\guardmarly\cli.py", line 3972, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\matth\OneDrive\Desktop\ansede-static-focus\src\guardmarly\cli.py", line 2135, in main
+    _main_impl()
+    ~~~~~~~~~~^^
+  File "C:\Users\matth\OneDrive\Desktop\ansede-static-focus\src\guardmarly\cli.py", line 3397, in _main_impl
+    results = run_triage(results, code_map, suppression_config_path=suppression_config_path)
+  File "C:\Users\matth\OneDrive\Desktop\ansede-static-focus\src\guardmarly\engine\triage.py", line 1149, in run_triage
+    console.print(f"[dim]\U0001f916 Triage Engine rejected False Positive: {f.title} in {r.file_path}\n   \u2794 Reason: {triage_res.reason}[/dim]")
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\console.py", line 1704, in print
+    with self:
+         ^^^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\console.py", line 864, in __exit__
+    self._exit_buffer()
+    ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\console.py", line 820, in _exit_buffer
+    self._check_buffer()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\console.py", line 2055, in _check_buffer
+    self._write_buffer()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\console.py", line 2091, in _write_buffer
+    legacy_windows_render(buffer, LegacyWindowsTerm(self.file))
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\_windows_renderer.py", line 17, in legacy_windows_render
+    term.write_styled(text, style)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\_win32_console.py", line 441, in write_styled
+    self.write_text(text)
+    ~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\matth\AppData\Roaming\Python\Python314\site-packages\rich\_win32_console.py", line 402, in write_text
+    self.write(text)
+    ~~~~~~~~~~^^^^^^
+  File "C:\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f916' in position 0: character maps to <undefined>

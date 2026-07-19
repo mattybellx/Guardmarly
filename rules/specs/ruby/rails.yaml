@@ -1,0 +1,189 @@
+# Guardmarly Spec — Ruby on Rails
+spec_version: 1
+language: ruby
+framework: rails
+description: "Ruby on Rails security patterns for IDOR and injection detection"
+
+sources:
+  - id: rails_params
+    pattern: "params[$X]|params[:$X]|params.fetch($X)|params.dig($X)"
+    kind: http_param
+  - id: rails_params_permit
+    pattern: "params.permit($X)|params.require($X).permit($Y)"
+    kind: http_param
+  - id: rails_request_headers
+    pattern: "request.headers[$X]|request.env[$X]|request.user_agent"
+    kind: http_header
+  - id: rails_request_cookies
+    pattern: "cookies[$X]|cookies.signed[$X]|cookies.encrypted[$X]"
+    kind: http_cookie
+  - id: rails_request_body
+    pattern: "request.body|request.raw_post|request.raw_body"
+    kind: http_body
+  - id: rails_file_upload
+    pattern: "params[$X].tempfile|params[$X].original_filename|params[$X].read"
+    kind: file_upload
+  - id: rails_url_params
+    pattern: "request.query_parameters|request.path_parameters|request.fullpath"
+    kind: http_url
+  - id: rails_env
+    pattern: "ENV[$X]|ENV.fetch($X)"
+    kind: environment
+
+sinks:
+  # SQL injection (ActiveRecord)
+  - id: rails_where_string
+    pattern: ".where(\"$CONDITION\"|.where(\"$COL = '#{$X}'\")"
+    cwe: CWE-89
+    severity: critical
+  - id: rails_find_by_sql
+    pattern: ".find_by_sql($X)|ActiveRecord::Base.connection.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: rails_select_all
+    pattern: "ActiveRecord::Base.connection.select_all($X)|connection.select_all($X)"
+    cwe: CWE-89
+    severity: high
+  - id: rails_execute_raw
+    pattern: "ActiveRecord::Base.connection.execute($X)|connection.execute($X)|connection.raw_connection.exec($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: rails_sanitize_sql_bypass
+    pattern: "ActiveRecord::Base.sanitize_sql($X)|sanitize_sql_array($X)"
+    cwe: CWE-89
+    severity: medium
+    note: "sanitize_sql is intended for sanitization but has known bypasses"
+  # Command injection
+  - id: rails_system_call
+    pattern: "system($X)|`$X`|exec($X)|spawn($X)|Open3.capture2($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: rails_backtick
+    pattern: "%x($X)|%x{$X}"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: rails_net_http
+    pattern: "Net::HTTP.get($X)|Net::HTTP.get_response($X)|Net::HTTP.start($X)"
+    cwe: CWE-918
+    severity: high
+  - id: rails_open_uri
+    pattern: "open($X)|URI.open($X)|Kernel.open($X)"
+    cwe: CWE-918
+    severity: high
+  - id: rails_httparty
+    pattern: "HTTParty.get($X)|HTTParty.post($X)"
+    cwe: CWE-918
+    severity: high
+  - id: rails_faraday
+    pattern: "Faraday.get($X)|Faraday.new(url: $X)|conn.get($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: rails_file_read
+    pattern: "File.read($X)|File.open($X)|IO.read($X)|File.readlines($X)"
+    cwe: CWE-22
+    severity: high
+  - id: rails_file_write
+    pattern: "File.write($X)|File.open($X, 'w')"
+    cwe: CWE-22
+    severity: high
+  - id: rails_send_file
+    pattern: "send_file($X)|send_data($X)"
+    cwe: CWE-22
+    severity: medium
+  - id: rails_render_file
+    pattern: "render file: $X|render $X, layout:"
+    cwe: CWE-22
+    severity: medium
+  # Deserialization
+  - id: rails_yaml_load
+    pattern: "YAML.load($X)|YAML.safe_load($X)"
+    cwe: CWE-502
+    severity: high
+  - id: rails_marshal_load
+    pattern: "Marshal.load($X)|Marshal.restore($X)"
+    cwe: CWE-502
+    severity: critical
+  # XSS
+  - id: rails_raw_html
+    pattern: "raw($X)|html_safe|.html_safe|sanitize($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: rails_redirect
+    pattern: "redirect_to $X|redirect_to($X)"
+    cwe: CWE-601
+    severity: medium
+
+sanitizers:
+  - id: rails_where_hash
+    pattern: ".where($COL => $VAL)|.where($COL: $VAL)"
+  - id: rails_find
+    pattern: ".find($ID)|.find_by($COL => $VAL)|.find_by!($COL => $VAL)"
+  - id: rails_input_sanitize
+    pattern: "sanitize($X)|strip_tags($X)|ActionView::Helpers::SanitizeHelper"
+  - id: rails_escape_html
+    pattern: "h($X)|html_escape($X)|ERB::Util.html_escape($X)"
+  - id: rails_escape_js
+    pattern: "j($X)|escape_javascript($X)"
+  - id: rails_csrf_protect
+    pattern: "protect_from_forgery|form_authenticity_token|authenticity_token"
+  - id: rails_strong_params
+    pattern: "params.require($MODEL).permit($FIELDS)"
+
+propagators:
+  - id: ruby_string_concat
+    pattern: "$X + $Y|$X << $Y"
+  - id: ruby_interpolation
+    pattern: "\"#{}$X\"|\"#{$VAR}\""
+  - id: ruby_format
+    pattern: "sprintf($FMT, $X)|format($FMT, $X)|$STR % $X"
+  - id: ruby_variable_assign
+    pattern: "$VAR = $X"
+  - id: ruby_return
+    pattern: "return $X"
+
+route_extractors:
+  - id: rails_get_route
+    pattern: "get $ROUTE, to: $ACTION|get $ROUTE => $ACTION"
+    captures: [route, action]
+    framework: rails
+  - id: rails_post_route
+    pattern: "post $ROUTE, to: $ACTION"
+    captures: [route, action]
+    framework: rails
+  - id: rails_resources
+    pattern: "resources :$NAME|resource :$NAME"
+    captures: [name]
+    framework: rails
+
+auth_checks:
+  - id: rails_before_action_auth
+    pattern: "before_action :authenticate_user!|before_action :require_login|before_action :authorize"
+  - id: rails_devise_auth
+    pattern: "before_action :authenticate_user!|authenticate_user!|devise :database_authenticatable"
+  - id: rails_cancancan
+    pattern: "load_and_authorize_resource|authorize! :$ACTION|can? :$ACTION"
+  - id: rails_pundit
+    pattern: "authorize $MODEL|policy($MODEL)|policy_scope($MODEL)"
+  - id: rails_skip_auth
+    pattern: "skip_before_action :authenticate_user!|skip_authorization"
+    effect: "exempt"
+  - id: rails_http_basic
+    pattern: "authenticate_or_request_with_http_basic|http_basic_authenticate_with"
+
+ownership_checks:
+  - id: rails_owner_scope
+    pattern: ".where(user_id: current_user.id)|.where(owner: current_user)"
+  - id: rails_owner_policy
+    pattern: "record.user_id == user.id|record.user == user"
+  - id: rails_current_user_scope
+    pattern: "current_user.posts|current_user.orders|user.$ASSOCIATION.where"
+
+middleware:
+  - id: rails_devise_config
+    pattern: "devise_for :$MODEL|config/initializers/devise.rb"
+  - id: rails_rack_cors
+    pattern: "Rack::Cors|config.middleware.insert_before"
+  - id: rails_rack_attack
+    pattern: "Rack::Attack|rack-attack"

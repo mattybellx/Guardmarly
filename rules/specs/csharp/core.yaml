@@ -1,0 +1,181 @@
+# Guardmarly Spec — C# Standard Library + ASP.NET
+spec_version: 1
+language: csharp
+description: "C# / .NET standard library security sources, sinks, and sanitizers"
+
+sources:
+  # ASP.NET Core model binding
+  - id: cs_from_body
+    pattern: "[FromBody]"
+    kind: http_body
+  - id: cs_from_form
+    pattern: "[FromForm]"
+    kind: http_form
+  - id: cs_from_query
+    pattern: "[FromQuery]"
+    kind: http_param
+  - id: cs_from_route
+    pattern: "[FromRoute]"
+    kind: route_param
+  - id: cs_from_header
+    pattern: "[FromHeader]"
+    kind: http_header
+  # HttpContext request
+  - id: cs_request_query
+    pattern: "HttpContext.Request.Query|Request.Query|Request.QueryString"
+    kind: http_param
+  - id: cs_request_form
+    pattern: "HttpContext.Request.Form|Request.Form"
+    kind: http_form
+  - id: cs_request_headers
+    pattern: "HttpContext.Request.Headers|Request.Headers"
+    kind: http_header
+  - id: cs_request_cookies
+    pattern: "HttpContext.Request.Cookies|Request.Cookies"
+    kind: http_cookie
+  - id: cs_request_route_values
+    pattern: "HttpContext.Request.RouteValues|RouteData.Values"
+    kind: route_param
+  - id: cs_file_upload
+    pattern: "IFormFile|HttpPostedFile|HttpPostedFileBase"
+    kind: file_upload
+  # Environment / CLI
+  - id: cs_environment
+    pattern: "Environment.GetEnvironmentVariable($X)|Environment.GetCommandLineArgs()"
+    kind: environment
+  - id: cs_console_read
+    pattern: "Console.ReadLine()|Console.Read()"
+    kind: stdin
+  # File reads (for chaining)
+  - id: cs_file_read_source
+    pattern: "File.ReadAllText($X)|File.ReadAllLines($X)|File.OpenRead($X)"
+    kind: file_content
+
+sinks:
+  # SQL injection
+  - id: cs_from_sql_raw
+    pattern: ".FromSqlRaw($X)|.FromSql($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: cs_execute_sql_raw
+    pattern: ".ExecuteSqlRaw($X)|.ExecuteSqlInterpolated($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: cs_ado_sql_command
+    pattern: "new SqlCommand($X)|SqlCommand($X, $CONN)"
+    cwe: CWE-89
+    severity: critical
+  - id: cs_ado_data_adapter
+    pattern: "new SqlDataAdapter($X, $CONN)"
+    cwe: CWE-89
+    severity: high
+  # Command injection
+  - id: cs_process_start
+    pattern: "Process.Start($X)|new Process() { StartInfo = new ProcessStartInfo($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: cs_process_start_info
+    pattern: "new ProcessStartInfo($X)|ProcessStartInfo.FileName = $X"
+    cwe: CWE-78
+    severity: high
+  # SSRF
+  - id: cs_http_client_ssrf
+    pattern: "HttpClient.GetAsync($X)|HttpClient.PostAsync($X)|HttpClient.SendAsync($X)|HttpClient.GetStringAsync($X)"
+    cwe: CWE-918
+    severity: high
+  - id: cs_web_request_ssrf
+    pattern: "WebRequest.Create($X)|WebClient.DownloadString($X)|WebClient.DownloadFile($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: cs_file_read
+    pattern: "File.ReadAllText($X)|File.ReadAllBytes($X)|File.OpenRead($X)|File.OpenText($X)"
+    cwe: CWE-22
+    severity: high
+  - id: cs_file_write
+    pattern: "File.WriteAllText($X)|File.WriteAllBytes($X)|File.Copy($X)|File.Move($X)"
+    cwe: CWE-22
+    severity: high
+  - id: cs_file_delete
+    pattern: "File.Delete($X)|Directory.Delete($X)"
+    cwe: CWE-22
+    severity: medium
+  # Deserialization
+  - id: cs_binary_deserialize
+    pattern: "BinaryFormatter.Deserialize($X)|BinaryFormatter().Deserialize($X)"
+    cwe: CWE-502
+    severity: critical
+  - id: cs_json_deserialize
+    pattern: "JsonConvert.DeserializeObject($X)|JsonSerializer.Deserialize($X)"
+    cwe: CWE-502
+    severity: high
+  - id: cs_xml_deserialize
+    pattern: "new XmlSerializer($TYPE).Deserialize($X)|XmlSerializer.Deserialize($X)"
+    cwe: CWE-502
+    severity: high
+  - id: cs_los_formatter
+    pattern: "LosFormatter.Deserialize($X)|ObjectStateFormatter.Deserialize($X)"
+    cwe: CWE-502
+    severity: critical
+  # XXE
+  - id: cs_xml_load
+    pattern: "XmlDocument.Load($X)|XmlDocument.LoadXml($X)"
+    cwe: CWE-611
+    severity: high
+  - id: cs_xml_reader
+    pattern: "XmlReader.Create($X)|new XmlReaderSettings()"
+    cwe: CWE-611
+    severity: high
+  - id: cs_xdocument_load
+    pattern: "XDocument.Load($X)|XDocument.Parse($X)"
+    cwe: CWE-611
+    severity: high
+  # XSS / response
+  - id: cs_response_write
+    pattern: "Response.Write($X)|Response.WriteAsync($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: cs_redirect
+    pattern: "Redirect($X)|RedirectPermanent($X)|LocalRedirect($X)"
+    cwe: CWE-601
+    severity: medium
+  # LDAP
+  - id: cs_ldap_entry
+    pattern: "new DirectoryEntry($X)|new DirectorySearcher($X)|new LdapConnection($X)"
+    cwe: CWE-90
+    severity: high
+
+sanitizers:
+  - id: cs_ef_interpolated
+    pattern: ".FromSqlInterpolated($X)|.ExecuteSqlInterpolated($X)"
+  - id: cs_sql_parameters
+    pattern: "new SqlParameter($X, $Y)|cmd.Parameters.AddWithValue($X, $Y)"
+  - id: cs_html_encode
+    pattern: "HtmlEncoder.Default.Encode($X)|HttpUtility.HtmlEncode($X)|WebUtility.HtmlEncode($X)"
+  - id: cs_url_encode
+    pattern: "UrlEncoder.Default.Encode($X)|HttpUtility.UrlEncode($X)|WebUtility.UrlEncode($X)"
+  - id: cs_js_encode
+    pattern: "JavaScriptEncoder.Default.Encode($X)|HttpUtility.JavaScriptStringEncode($X)"
+  - id: cs_path_combine
+    pattern: "Path.Combine($BASE, $X)|Path.GetFullPath($X)"
+  - id: cs_antiforgery
+    pattern: "[ValidateAntiForgeryToken]|[AutoValidateAntiforgeryToken]"
+  - id: cs_model_validation
+    pattern: "ModelState.IsValid|ModelState.IsValid()"
+  - id: cs_process_args
+    pattern: "ProcessStartInfo.Arguments =|Process.Start($CMD, $ARGS)"
+    note: "Safe when $CMD is a hardcoded executable"
+
+propagators:
+  - id: cs_string_concat
+    pattern: "$X + $Y"
+  - id: cs_interpolation
+    pattern: "$\"{$X}\""
+  - id: cs_string_format
+    pattern: "string.Format($X, $Y)|$\"{$X:$FMT}\""
+  - id: cs_variable_assign
+    pattern: "var $VAR = $X|$TYPE $VAR = $X"
+  - id: cs_return
+    pattern: "return $X"
+  - id: cs_string_builder
+    pattern: "new StringBuilder($X)|sb.Append($X)"

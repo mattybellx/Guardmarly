@@ -585,6 +585,42 @@ def _analyze_file(
     elif lang == "rust":
         from guardmarly.rust_analyzer import analyze_rust
         result = analyze_rust(code, filename=str(path))
+    elif lang == "kotlin":
+        from guardmarly.kotlin_analyzer import analyze_kotlin
+        result = analyze_kotlin(code, filename=str(path))
+    elif lang == "swift":
+        from guardmarly.swift_analyzer import analyze_swift
+        result = analyze_swift(code, filename=str(path))
+    elif lang == "scala":
+        from guardmarly.scala_analyzer import analyze_scala
+        result = analyze_scala(code, filename=str(path))
+    elif lang == "dart":
+        from guardmarly.dart_analyzer import analyze_dart
+        result = analyze_dart(code, filename=str(path))
+    elif lang == "elixir":
+        from guardmarly.elixir_analyzer import analyze_elixir
+        result = analyze_elixir(code, filename=str(path))
+    elif lang == "lua":
+        from guardmarly.lua_analyzer import analyze_lua
+        result = analyze_lua(code, filename=str(path))
+    elif lang == "clojure":
+        from guardmarly.clojure_analyzer import analyze_clojure
+        result = analyze_clojure(code, filename=str(path))
+    elif lang == "haskell":
+        from guardmarly.haskell_analyzer import analyze_haskell
+        result = analyze_haskell(code, filename=str(path))
+    elif lang == "shell":
+        from guardmarly.shell_analyzer import analyze_shell
+        result = analyze_shell(code, filename=str(path))
+    elif lang == "dockerfile":
+        from guardmarly.dockerfile_analyzer import analyze_dockerfile
+        result = analyze_dockerfile(code, filename=str(path))
+    elif lang == "terraform":
+        from guardmarly.terraform_analyzer import analyze_terraform
+        result = analyze_terraform(code, filename=str(path))
+    elif lang == "yaml":
+        from guardmarly.yaml_analyzer import analyze_yaml
+        result = analyze_yaml(code, filename=str(path))
     elif lang in ("kotlin", "swift", "dart", "lua", "elixir", "scala", "clojure", "haskell", "shell", "dockerfile", "terraform"):
         result = _analyze_pattern_only(code, filename=str(path), ext=path.suffix.lower().lstrip('.'))
     else:
@@ -1555,7 +1591,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Initialize a new guardmarly.json configuration file in the current directory.",
     )
     parser.add_argument(
-        "--lang", choices=["python", "javascript", "go", "java", "csharp", "ruby", "php", "rust"],
+        "--lang", choices=["python", "javascript", "go", "java", "csharp", "ruby", "php", "rust", "kotlin", "swift", "scala", "dart", "elixir", "lua", "clojure", "haskell", "shell", "dockerfile", "terraform", "yaml"],
         help="Force language detection (useful with --stdin).",
     )
     parser.add_argument(
@@ -3196,6 +3232,42 @@ def _main_impl() -> None:
     # Uses shared policy from engine/confidence.py so webapp gets same behavior.
     from guardmarly.engine.confidence import apply_taint_aware_demotion
     apply_taint_aware_demotion(results)
+
+    # ── Spec-augmented IDOR validation ──────────────────────────────────
+    # Cross-reference CWE-639 findings against YAML security specs.
+    # If spec confirms no auth + no ownership → boost confidence.
+    # If spec shows mitigation → add note but keep finding.
+    _spec_idor_validated = 0
+    _spec_idor_boosted = 0
+    try:
+        from guardmarly.engine.spec_idor import check_idor, _detect_framework
+        for r in results:
+            if not r.findings or not r.language:
+                continue
+            # Only process files that have CWE-639 findings
+            idor_findings = [f for f in r.findings if (f.cwe or "").upper() == "CWE-639"]
+            if not idor_findings:
+                continue
+            try:
+                code = Path(r.file_path).read_text(encoding="utf-8", errors="replace")
+            except OSError:
+                continue
+            fw = _detect_framework(code, r.language)
+            idor_check = check_idor(code, r.language, fw)
+            for f in idor_findings:
+                _spec_idor_validated += 1
+                if idor_check.is_vulnerable and idor_check.confidence > 0.80:
+                    f.confidence = min(1.0, f.confidence + 0.10)
+                    _spec_idor_boosted += 1
+                elif idor_check.has_auth_check and idor_check.has_ownership_check:
+                    # Spec shows mitigation — add explanation
+                    if not f.explanation:
+                        f.explanation = (
+                            "Note: spec analysis detected both auth and ownership patterns "
+                            "in this file. Review manually to confirm the finding is valid."
+                        )
+    except Exception:
+        pass  # Spec IDOR validation is best-effort, never block on it
 
     # ── Confidence filter ───────────────────────────────────────────────
     _all_findings: bool = getattr(args, "all_findings", False)

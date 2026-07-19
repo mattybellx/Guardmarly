@@ -3,6 +3,13 @@
 All notable changes to guardmarly are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+> **Historical note**: Earlier versions of this changelog and documentation used
+> absolute claims (e.g., "100% CVE recall", "world-first", "zero false positives").
+> These reflect the understanding at the time of writing and are retained for
+> transparency. Current claims are scoped to specific corpora and documented in
+> [CLAIMS_AND_EVIDENCE.md](CLAIMS_AND_EVIDENCE.md). See also
+> [DEEPSEEK_V4_REMEDIATION_PLAYBOOK.md](DEEPSEEK_V4_REMEDIATION_PLAYBOOK.md).
+
 ## [6.5.0] — 2026-07-18
 
 ### Added

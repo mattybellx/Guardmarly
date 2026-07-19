@@ -1,0 +1,211 @@
+# Guardmarly Spec — JavaScript/TypeScript Standard Library
+spec_version: 1
+language: javascript
+description: "JavaScript/TypeScript standard library and Node.js security sources, sinks, and sanitizers"
+
+sources:
+  # Express / HTTP request
+  - id: js_req_query
+    pattern: "req.query|req.query[$X]|request.query"
+    kind: http_param
+  - id: js_req_params
+    pattern: "req.params|req.params[$X]|request.params"
+    kind: route_param
+  - id: js_req_body
+    pattern: "req.body|req.body[$X]|request.body"
+    kind: http_body
+  - id: js_req_headers
+    pattern: "req.headers|req.headers[$X]|request.headers|req.get($X)"
+    kind: http_header
+  - id: js_req_cookies
+    pattern: "req.cookies|req.cookies[$X]|request.cookies"
+    kind: http_cookie
+  - id: js_req_url
+    pattern: "req.url|req.originalUrl|req.path|req.hostname"
+    kind: http_url
+  - id: js_req_ip
+    pattern: "req.ip|req.connection.remoteAddress|req.socket.remoteAddress"
+    kind: client_ip
+  # Browser sources
+  - id: js_location_search
+    pattern: "location.search|location.href|location.hash|window.location"
+    kind: http_url
+  - id: js_document_cookie
+    pattern: "document.cookie"
+    kind: http_cookie
+  - id: js_url_search_params
+    pattern: "new URLSearchParams($X)|url.searchParams.get($X)|URLSearchParams"
+    kind: http_param
+  # Environment / CLI
+  - id: js_process_env
+    pattern: "process.env[$X]|process.env.$X"
+    kind: environment
+  - id: js_process_argv
+    pattern: "process.argv[$X]"
+    kind: cli_arg
+  - id: js_stdin
+    pattern: "process.stdin|process.stdin.read()"
+    kind: stdin
+  # Lambda / serverless
+  - id: js_lambda_event
+    pattern: "event.queryStringParameters|event.pathParameters|event.body|event.headers"
+    kind: http_param
+  # File reads (for chaining)
+  - id: js_file_read_source
+    pattern: "fs.readFileSync($X)|fs.readFile($X)"
+    kind: file_content
+
+sinks:
+  # Command injection
+  - id: js_child_exec
+    pattern: "child_process.exec($X)|exec($X, $CALLBACK)"
+    cwe: CWE-78
+    severity: critical
+  - id: js_child_spawn
+    pattern: "child_process.spawn($X)|spawn($X, $ARGS)|child_process.execFile($X)|execFile($X)"
+    cwe: CWE-78
+    severity: high
+  - id: js_child_exec_sync
+    pattern: "execSync($X)|spawnSync($X)|execFileSync($X)"
+    cwe: CWE-78
+    severity: critical
+  # Code injection
+  - id: js_eval
+    pattern: "eval($X)"
+    cwe: CWE-94
+    severity: critical
+  - id: js_function_constructor
+    pattern: "new Function($X)|Function($X)"
+    cwe: CWE-94
+    severity: critical
+  - id: js_settimeout_string
+    pattern: "setTimeout($X)|setInterval($X)|setImmediate($X)"
+    cwe: CWE-94
+    severity: high
+    note: "Only when first argument is a string (not a function reference)"
+  - id: js_vm_escape
+    pattern: "vm.runInNewContext($X)|vm.runInThisContext($X)|vm.compileFunction($X)|vm.Script($X)"
+    cwe: CWE-94
+    severity: high
+  # Path traversal
+  - id: js_fs_read
+    pattern: "fs.readFile($X)|fs.readFileSync($X)|fs.createReadStream($X)"
+    cwe: CWE-22
+    severity: high
+  - id: js_fs_write
+    pattern: "fs.writeFile($X)|fs.writeFileSync($X)|fs.createWriteStream($X)"
+    cwe: CWE-22
+    severity: high
+  - id: js_fs_unlink
+    pattern: "fs.unlink($X)|fs.rmdir($X)|fs.rm($X)"
+    cwe: CWE-22
+    severity: medium
+  # SQL injection
+  - id: js_sql_query
+    pattern: "connection.query($X)|pool.query($X)|db.query($X)|db.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: js_sql_raw
+    pattern: "sequelize.query($X)|knex.raw($X)|db.raw($X)"
+    cwe: CWE-89
+    severity: critical
+  # SSRF
+  - id: js_axios_ssrf
+    pattern: "axios.get($X)|axios.post($X)|axios.put($X)|axios.delete($X)|axios.request($X)"
+    cwe: CWE-918
+    severity: high
+  - id: js_fetch_ssrf
+    pattern: "fetch($X)|node-fetch($X)"
+    cwe: CWE-918
+    severity: high
+  - id: js_http_ssrf
+    pattern: "http.get($X)|http.request($X)|https.get($X)"
+    cwe: CWE-918
+    severity: high
+  - id: js_superagent_ssrf
+    pattern: "superagent.get($X)|superagent.post($X)|request($X)"
+    cwe: CWE-918
+    severity: high
+  # XSS / response
+  - id: js_res_send
+    pattern: "res.send($X)|res.write($X)|res.end($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: js_res_redirect
+    pattern: "res.redirect($X)|res.location($X)"
+    cwe: CWE-601
+    severity: medium
+  - id: js_inner_html
+    pattern: ".innerHTML = $X|.outerHTML = $X|document.write($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: js_dangerously_set
+    pattern: "dangerouslySetInnerHTML|__html:"
+    cwe: CWE-79
+    severity: medium
+  # Deserialization
+  - id: js_json_parse
+    pattern: "JSON.parse($X)"
+    cwe: CWE-502
+    severity: low
+  - id: js_serialize_js
+    pattern: "serialize.unserialize($X)|node-serialize.unserialize($X)"
+    cwe: CWE-502
+    severity: critical
+  # NoSQL injection
+  - id: js_mongo_find
+    pattern: "collection.find($X)|Model.find($X)|Model.findOne($X)"
+    cwe: CWE-943
+    severity: high
+    note: "Only when $X is built from user input without sanitization"
+  # LDAP
+  - id: js_ldap_search
+    pattern: "ldap.search($X)|ldapjs.search($X)"
+    cwe: CWE-90
+    severity: high
+  # Open redirect (browser)
+  - id: js_location_redirect
+    pattern: "location.href = $X|location.replace($X)|location.assign($X)|window.open($X)"
+    cwe: CWE-601
+    severity: medium
+
+sanitizers:
+  - id: js_parameterized_query
+    pattern: "connection.query($SQL, $PARAMS)|db.query($SQL, $PARAMS)|pool.query($SQL, $PARAMS)"
+  - id: js_prepared_statement
+    pattern: "connection.execute($SQL, $PARAMS)|.execute($SQL, $PARAMS)"
+  - id: js_escape_html
+    pattern: "escapeHtml($X)|_.escape($X)|he.encode($X)"
+  - id: js_escape_js
+    pattern: "encodeURI($X)|encodeURIComponent($X)"
+  - id: js_helmet
+    pattern: "helmet()|require('helmet')"
+  - id: js_csrf_token
+    pattern: "csrfToken|csurf($X)"
+  - id: js_input_validation
+    pattern: "express-validator|validator.escape($X)|validator.isAlphanumeric($X)"
+  - id: js_path_join
+    pattern: "path.join($BASE, $X)|path.resolve($BASE, $X)"
+  - id: js_path_normalize
+    pattern: "path.normalize($X)"
+  - id: js_safe_json
+    pattern: "JSON.stringify($X)"
+  - id: js_spawn_args
+    pattern: "spawn($CMD, [$ARGS])|execFile($CMD, [$ARGS])"
+    note: "Argument arrays are safe when $CMD is hardcoded"
+
+propagators:
+  - id: js_string_concat
+    pattern: "$X + $Y"
+  - id: js_template_literal
+    pattern: "`${$X}`"
+  - id: js_variable_assign
+    pattern: "const $VAR = $X|let $VAR = $X|var $VAR = $X"
+  - id: js_return
+    pattern: "return $X"
+  - id: js_spread
+    pattern: "...$X"
+  - id: js_arrow_return
+    pattern: "($PARAM) => $X"
+  - id: js_array_method
+    pattern: ".map($X)|.filter($X)|.reduce($X)"

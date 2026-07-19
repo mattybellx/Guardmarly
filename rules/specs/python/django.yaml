@@ -1,0 +1,121 @@
+# Guardmarly Spec — Django + Django REST Framework
+# Framework-specific sources, sinks, sanitizers, auth checks, and route patterns.
+spec_version: 1
+language: python
+framework: django
+description: "Django / DRF security patterns for IDOR and injection detection"
+
+# ── Framework-specific sources ────────────────────────────────────────────
+sources:
+  - id: django_request_params
+    pattern: "request.GET|request.POST|request.data|request.query_params"
+    kind: http_param
+  - id: django_path_param
+    kind: route_param  # bound from route_extractor below
+  - id: django_request_body
+    pattern: "request.body|request.FILES"
+    kind: http_body
+  - id: django_upload
+    pattern: "request.FILES[$X]|request.FILES.get($X)"
+    kind: file_upload
+
+# ── Framework-specific sinks ──────────────────────────────────────────────
+sinks:
+  - id: django_raw_sql
+    pattern: "*.raw($X)|connection.cursor().execute($X)|cursor.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: django_extra_sql
+    pattern: "*.extra($X)|RawSQL($X, $PARAMS)"
+    cwe: CWE-89
+    severity: high
+  - id: django_file_response
+    pattern: "FileResponse($X)|HttpResponse(open($X))"
+    cwe: CWE-22
+    severity: high
+  - id: django_send_file
+    pattern: "send_file($X)"
+    cwe: CWE-22
+    severity: medium
+  - id: django_template_render
+    pattern: "render(request, $TEMPLATE, $CONTEXT)"
+    cwe: CWE-79
+    severity: medium
+  - id: drf_response_data
+    pattern: "Response($X)|JsonResponse($X)"
+    cwe: CWE-201
+    severity: low
+    note: "Check if $X contains sensitive fields from models"
+
+# ── Sanitizers ────────────────────────────────────────────────────────────
+sanitizers:
+  - id: django_orm_filter
+    pattern: "*.objects.filter(**$KWARGS)|*.objects.get(**$KWARGS)|*.objects.exclude(**$KWARGS)"
+  - id: django_orm_create
+    pattern: "*.objects.create(**$KWARGS)|*.objects.get_or_create(**$KWARGS)"
+  - id: django_form_validation
+    pattern: "$FORM.is_valid()|$FORM.cleaned_data"
+  - id: drf_serializer_validation
+    pattern: "$SERIALIZER.is_valid()|$SERIALIZER.validated_data"
+  - id: django_queryset_methods
+    pattern: "*.objects.all()|*.objects.select_related($X)|*.objects.prefetch_related($X)"
+
+# ── Propagators ───────────────────────────────────────────────────────────
+propagators:
+  - id: django_orm_chain
+    pattern: "*.objects.filter($X).first()|*.objects.filter($X).last()|*.objects.filter($X).count()"
+
+# ── Route extraction ──────────────────────────────────────────────────────
+route_extractors:
+  - id: django_url_path
+    pattern: "path($ROUTE, $VIEW)|re_path($ROUTE, $VIEW)"
+    captures: [route, view]
+    framework: django
+  - id: django_url_include
+    pattern: "include($MODULE.urls)"
+    captures: [module]
+  - id: drf_router
+    pattern: "$ROUTER.register($PREFIX, $VIEWSET)"
+    captures: [prefix, viewset]
+    framework: drf
+
+# ── Auth checks — presence of these means the handler IS protected ────────
+auth_checks:
+  - id: drf_authenticated
+    pattern: "permission_classes = [*IsAuthenticated*]|permission_classes = [IsAuthenticated]"
+  - id: drf_admin
+    pattern: "permission_classes = [*IsAdminUser*]"
+  - id: drf_allow_any
+    pattern: "permission_classes = [*AllowAny*]"
+    effect: "exempt"  # This REMOVES auth protection
+  - id: django_login_required
+    pattern: "@login_required|LoginRequiredMixin"
+  - id: django_permission_required
+    pattern: "@permission_required($PERM)|PermissionRequiredMixin"
+  - id: django_staff_required
+    pattern: "@staff_member_required|@user_passes_test"
+  - id: django_csrf_protect
+    pattern: "@csrf_protect|{% csrf_token %}"
+  - id: django_csrf_exempt
+    pattern: "@csrf_exempt"
+    effect: "exempt"  # Removes CSRF protection
+
+# ── Ownership checks — scoping queries to the current user ───────────────
+ownership_checks:
+  - id: request_user_filter
+    pattern: "*.objects.filter(..., owner=request.user)|filter(..., user=request.user)"
+  - id: request_user_create
+    pattern: "*.objects.create(..., owner=request.user)|create(..., user=request.user)"
+  - id: drf_get_queryset_owner
+    pattern: "def get_queryset(self):\n    return *.objects.filter(owner=self.request.user)"
+  - id: drf_perform_create_owner
+    pattern: "def perform_create(self, serializer):\n    serializer.save(owner=self.request.user)"
+
+# ── Middleware (checked for auth coverage across the app) ─────────────────
+middleware:
+  - id: django_auth_middleware
+    pattern: "django.contrib.auth.middleware.AuthenticationMiddleware"
+  - id: drf_auth_classes
+    pattern: "DEFAULT_AUTHENTICATION_CLASSES"
+  - id: django_session_middleware
+    pattern: "django.contrib.sessions.middleware.SessionMiddleware"

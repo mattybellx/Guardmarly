@@ -1,7 +1,7 @@
-﻿# <img src="guard.png" width="36" style="vertical-align:middle"> Guardmarly — Find authorization bugs before attackers do
+﻿# <img src="guard.png" width="36" style="vertical-align:middle"> Guardmarly — Static analysis for authorization gaps and risky code paths
 
 <p align="center">
-  <strong>The only free SAST with built-in IDOR detection. 100% CVE recall. Fully offline.</strong>
+  <strong>Focused on missing object-level authorization checks (IDOR / broken access control) and related security findings across supported languages.</strong>
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
   <a href="https://guardmarly.onrender.com"><img src="https://img.shields.io/badge/Try%20Online%20Scanner-guardmarly.onrender.com-22c55e?style=for-the-badge" alt="Try Online Scanner"></a>
   <a href="https://pypi.org/project/guardmarly/"><img src="https://img.shields.io/pypi/v/guardmarly?color=22c55e" alt="PyPI"></a>
   <a href="https://github.com/mattybellx/Guardmarly/actions/workflows/ci.yml"><img src="https://github.com/mattybellx/Guardmarly/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/mattybellx/Guardmarly/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
+  <a href="https://github.com/mattybellx/Guardmarly/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-custom%20terms-blue" alt="License"></a>
 </p>
 
 ```bash
@@ -51,8 +51,11 @@ guardmarly --list-rules                  # full rule catalog
 
 ## Supported languages & CWEs
 
-**5 languages:** Python, JavaScript/TypeScript, Go, Java, C#  
+**5 full-AST languages:** Python, JavaScript/TypeScript, Go, Java, C#  
+**35+ pattern-aware languages:** PHP, Ruby, Kotlin, Swift, Dart, Rust, Scala, Elixir, C/C++, Lua, and 25+ more  
 **35+ CWE types:** IDOR (CWE-639), Missing Auth (CWE-862/306), SQLi (CWE-89), Command Injection (CWE-78), XSS (CWE-79), Path Traversal (CWE-22), SSRF (CWE-918), Deserialization (CWE-502), Hardcoded Secrets (CWE-798), Open Redirect (CWE-601), CSRF (CWE-352), XXE (CWE-611), and 25+ more.
+
+> **Evidence**: See [CLAIMS_AND_EVIDENCE.md](CLAIMS_AND_EVIDENCE.md) for benchmark methodology, corpus details, and measured results. Detection rates vary by language and CWE category.
 
 ## Contributing
 
@@ -64,4 +67,4 @@ pytest tests/ -q                       # 1,183+ tests in ~12s
 
 ## License
 
-MIT © Matty Bell
+See [LICENSE](LICENSE) for terms. Guardmarly is source-available software.

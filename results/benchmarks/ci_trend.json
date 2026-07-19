@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "2026-07-19T15:32:01Z",
+    "total_files": 53,
+    "total_loc": 3726,
+    "total_findings": 95,
+    "findings_per_kloc": 25.5,
+    "throughput": 1146,
+    "severity": {
+      "critical": 14,
+      "high": 57,
+      "low": 14,
+      "medium": 10
+    },
+    "top_cwes": {
+      "CWE-79": 30,
+      "CWE-352": 15,
+      "CWE-1333": 5,
+      "CWE-918": 4,
+      "CWE-798": 4,
+      "CWE-943": 4
+    },
+    "tests_passed": 1330,
+    "idor_cases_pass": "23/23"
+  },
+  {
+    "timestamp": "2026-07-19T18:26:40Z",
+    "total_files": 53,
+    "total_loc": 3726,
+    "total_findings": 95,
+    "findings_per_kloc": 25.5,
+    "throughput": 962,
+    "severity": {
+      "critical": 14,
+      "high": 57,
+      "low": 14,
+      "medium": 10
+    },
+    "top_cwes": {
+      "CWE-79": 30,
+      "CWE-352": 15,
+      "CWE-1333": 5,
+      "CWE-918": 4,
+      "CWE-798": 4,
+      "CWE-943": 4
+    },
+    "tests_passed": 1336,
+    "idor_cases_pass": "23/23"
+  }
+]

@@ -1,0 +1,131 @@
+# Guardmarly Spec — FastAPI / Starlette
+spec_version: 1
+language: python
+framework: fastapi
+description: "FastAPI / Starlette security patterns for IDOR and injection detection"
+
+sources:
+  - id: fastapi_query_param
+    pattern: "def $FUNC(q: str|def $FUNC(query: str|def $FUNC($X: str = Query"
+    kind: http_param
+  - id: fastapi_path_param
+    pattern: "def $FUNC($X: Path|def $FUNC(id: int|def $FUNC($X: int = Path"
+    kind: route_param
+  - id: fastapi_request_body
+    pattern: "def $FUNC(body: $MODEL|request: Request"
+    kind: http_body
+  - id: fastapi_header_param
+    pattern: "def $FUNC($X: str = Header|def $FUNC(authorization: str = Header"
+    kind: http_header
+  - id: fastapi_cookie_param
+    pattern: "def $FUNC($X: str = Cookie"
+    kind: http_cookie
+  - id: fastapi_request_object
+    pattern: "request.query_params|request.path_params|request.headers|request.cookies"
+    kind: http_param
+  - id: fastapi_form_data
+    pattern: "def $FUNC($X: str = Form|form: Form|request.form()"
+    kind: http_form
+  - id: fastapi_file_upload
+    pattern: "def $FUNC(file: UploadFile|UploadFile|File($X)"
+    kind: file_upload
+
+sinks:
+  - id: fastapi_sqlalchemy_text
+    pattern: "db.execute(text($X))|session.execute(text($X))|async_session.execute(text($X))"
+    cwe: CWE-89
+    severity: critical
+  - id: fastapi_raw_sql
+    pattern: "db.execute($X)|connection.execute($X)|cursor.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: fastapi_httpx_ssrf
+    pattern: "httpx.get($X)|httpx.post($X)|httpx.AsyncClient()|async with httpx.AsyncClient"
+    cwe: CWE-918
+    severity: high
+  - id: fastapi_aiohttp_ssrf
+    pattern: "aiohttp.ClientSession().get($X)|aiohttp.request($X)"
+    cwe: CWE-918
+    severity: high
+  - id: fastapi_file_response
+    pattern: "FileResponse($X)|StreamingResponse(open($X))"
+    cwe: CWE-22
+    severity: high
+  - id: fastapi_json_response
+    pattern: "JSONResponse($X)|ORJSONResponse($X)"
+    cwe: CWE-201
+    severity: low
+  - id: fastapi_redirect
+    pattern: "RedirectResponse($X)|RedirectResponse(url=$X)"
+    cwe: CWE-601
+    severity: medium
+  - id: fastapi_jinja_render
+    pattern: "templates.TemplateResponse($X)|Jinja2Templates.TemplateResponse"
+    cwe: CWE-79
+    severity: medium
+  - id: fastapi_command_exec
+    pattern: "asyncio.create_subprocess_exec($X)|asyncio.create_subprocess_shell($X)"
+    cwe: CWE-78
+    severity: critical
+
+sanitizers:
+  - id: fastapi_depends_auth
+    pattern: "Depends(get_current_user)|Depends(get_current_active_user)|Depends(oauth2_scheme)"
+  - id: fastapi_depends_admin
+    pattern: "Depends(get_current_admin)|Depends(check_admin)"
+  - id: fastapi_parameterized_query
+    pattern: "db.execute(text($SQL), $PARAMS)|session.execute(text($SQL), $PARAMS)"
+  - id: fastapi_pydantic_validation
+    pattern: "$MODEL.model_validate($X)|$MODEL.parse_obj($X)"
+  - id: fastapi_form_validation
+    pattern: "$FORM.model_dump()|$FORM.dict()"
+
+propagators:
+  - id: fastapi_depends_chain
+    pattern: "Depends($X)|$DEP = Depends($FUNC)"
+  - id: fastapi_background_task
+    pattern: "BackgroundTasks().add_task($FUNC, $X)|background_tasks.add_task"
+
+route_extractors:
+  - id: fastapi_get_route
+    pattern: "@app.get($ROUTE)|@router.get($ROUTE)"
+    captures: [route]
+    framework: fastapi
+  - id: fastapi_post_route
+    pattern: "@app.post($ROUTE)|@router.post($ROUTE)"
+    captures: [route]
+    framework: fastapi
+  - id: fastapi_api_route
+    pattern: "@app.api_route($ROUTE)|@router.api_route($ROUTE)"
+    captures: [route]
+    framework: fastapi
+
+auth_checks:
+  - id: fastapi_oauth2
+    pattern: "OAuth2PasswordBearer|oauth2_scheme|OAuth2PasswordRequestForm"
+  - id: fastapi_get_current_user
+    pattern: "def get_current_user($TOKEN|async def get_current_user($TOKEN"
+  - id: fastapi_security_depends
+    pattern: "Security(get_current_user)|Security(get_current_active_user)"
+  - id: fastapi_http_bearer
+    pattern: "HTTPBearer()|HTTPAuthorizationCredentials|HTTPBasic"
+  - id: fastapi_api_key
+    pattern: "APIKeyHeader|APIKeyQuery|APIKeyCookie"
+
+ownership_checks:
+  - id: fastapi_owner_filter
+    pattern: ".filter(Model.owner_id == current_user.id|.where(Model.user_id == current_user.id"
+  - id: fastapi_owner_verify
+    pattern: "if item.owner_id != current_user.id:|if item.user_id != current_user.id:"
+  - id: fastapi_current_user_id
+    pattern: "current_user.id|current_user.get('id')|get_current_user().id"
+
+middleware:
+  - id: fastapi_auth_middleware
+    pattern: "app.add_middleware(AuthenticationMiddleware)|app.add_middleware(SessionMiddleware)"
+  - id: fastapi_cors
+    pattern: "app.add_middleware(CORSMiddleware)|CORSMiddleware"
+  - id: fastapi_trusted_host
+    pattern: "app.add_middleware(TrustedHostMiddleware)"
+  - id: fastapi_https_redirect
+    pattern: "app.add_middleware(HTTPSRedirectMiddleware)"

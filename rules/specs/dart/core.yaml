@@ -1,0 +1,114 @@
+# Guardmarly Spec — Dart Standard Library + Flutter
+spec_version: 1
+language: dart
+description: "Dart standard library and Flutter security sources, sinks, and sanitizers"
+
+sources:
+  - id: dart_text_field
+    pattern: "TextEditingController|controller.text|onChanged($X)"
+    kind: user_input
+  - id: dart_http_request
+    pattern: "http.get($X)|http.post($X)|HttpClient.getUrl($X)"
+    kind: http_param
+  - id: dart_uri_query
+    pattern: "Uri.parse($X).queryParameters|uri.queryParameters[$X]"
+    kind: http_param
+  - id: dart_route_params
+    pattern: "ModalRoute.of(context).settings.arguments|Navigator.of(context)"
+    kind: route_param
+  - id: dart_platform_channel
+    pattern: "MethodChannel($X).invokeMethod|BasicMessageChannel|EventChannel"
+    kind: user_input
+  - id: dart_env
+    pattern: "Platform.environment[$X]|Platform.environment"
+    kind: environment
+  - id: dart_stdin
+    pattern: "stdin.readLineSync()|stdin.readByteSync()"
+    kind: stdin
+
+sinks:
+  # SQL injection
+  - id: dart_sql_query
+    pattern: "database.execute($X)|db.execute($X)|.query($X)|database.rawQuery($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: dart_sqflite_raw
+    pattern: "db.rawQuery($X)|db.rawInsert($X)|db.rawUpdate($X)|db.rawDelete($X)"
+    cwe: CWE-89
+    severity: critical
+  # Command injection
+  - id: dart_process_run
+    pattern: "Process.run($X)|Process.start($X)"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: dart_http_client
+    pattern: "HttpClient.getUrl($X)|HttpClient.postUrl($X)|http.get($X)"
+    cwe: CWE-918
+    severity: high
+  - id: dart_dio
+    pattern: "Dio().get($X)|Dio().post($X)|dio.get($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: dart_file_read
+    pattern: "File($X).readAsString()|File($X).readAsBytes()|File($X).openRead()"
+    cwe: CWE-22
+    severity: high
+  - id: dart_file_write
+    pattern: "File($X).writeAsString($Y)|File($X).writeAsBytes($Y)"
+    cwe: CWE-22
+    severity: high
+  - id: dart_directory_list
+    pattern: "Directory($X).list()|Directory($X).listSync()"
+    cwe: CWE-22
+    severity: medium
+  # Hardcoded secrets
+  - id: dart_hardcoded_secret
+    pattern: "final password = '$X'|final apiKey = '$X'|static const token = '$X'"
+    cwe: CWE-798
+    severity: high
+  # Deserialization
+  - id: dart_json_decode
+    pattern: "jsonDecode($X)|json.decode($X)"
+    cwe: CWE-502
+    severity: low
+  # XSS / HTML
+  - id: dart_inner_html
+    pattern: "Element.html($X)|setInnerHtml($X)|document.body.innerHtml ="
+    cwe: CWE-79
+    severity: medium
+  # Platform channel injection
+  - id: dart_platform_injection
+    pattern: "MethodChannel($CHANNEL).invokeMethod($METHOD, $ARGS)"
+    cwe: CWE-74
+    severity: medium
+  # eval / code injection
+  - id: dart_eval
+    pattern: "Isolate.spawnUri($X)|spawnUri($X)"
+    cwe: CWE-94
+    severity: high
+
+sanitizers:
+  - id: dart_prepared_statement
+    pattern: "database.execute($SQL, $ARGS)|db.rawQuery($SQL, $ARGS)"
+  - id: dart_input_validation
+    pattern: "$X?.isEmpty|$X?.isNotEmpty|RegExp($PATTERN).hasMatch($X)"
+  - id: dart_https_only
+    pattern: "Uri.https($HOST, $PATH)"
+  - id: dart_secure_storage
+    pattern: "FlutterSecureStorage|secureStorage.read($X)"
+  - id: dart_path_join
+    pattern: "path.join($BASE, $X)|path.normalize($X)"
+
+propagators:
+  - id: dart_string_interpolation
+    pattern: "'\${}$X'|\"\${}$X\""
+  - id: dart_string_concat
+    pattern: "$X + $Y"
+  - id: dart_variable_assign
+    pattern: "final $VAR = $X|var $VAR = $X"
+  - id: dart_return
+    pattern: "return $X"
+  - id: dart_cascade
+    pattern: "..$X = $Y"

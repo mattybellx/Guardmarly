@@ -1,0 +1,197 @@
+# Guardmarly Spec — Java Standard Library + Servlet + JDBC
+spec_version: 1
+language: java
+description: "Java standard library, Servlet API, and JDBC security sources, sinks, and sanitizers"
+
+sources:
+  # Servlet API
+  - id: servlet_get_parameter
+    pattern: "request.getParameter($X)|request.getParameterValues($X)|request.getParameterMap()"
+    kind: http_param
+  - id: servlet_get_header
+    pattern: "request.getHeader($X)|request.getHeaders($X)"
+    kind: http_header
+  - id: servlet_get_query_string
+    pattern: "request.getQueryString()"
+    kind: http_param
+  - id: servlet_get_cookies
+    pattern: "request.getCookies()|request.getCookie($X)"
+    kind: http_cookie
+  - id: servlet_get_input_stream
+    pattern: "request.getInputStream()|request.getReader()"
+    kind: http_body
+  - id: servlet_get_session
+    pattern: "request.getSession()|request.getSession(true)"
+    kind: http_session
+  # Spring annotations (also in spring.yaml)
+  - id: spring_request_param
+    pattern: "@RequestParam"
+    kind: http_param
+  - id: spring_path_variable
+    pattern: "@PathVariable"
+    kind: route_param
+  - id: spring_request_body
+    pattern: "@RequestBody"
+    kind: http_body
+  - id: spring_request_header
+    pattern: "@RequestHeader"
+    kind: http_header
+  # Environment / CLI
+  - id: java_system_property
+    pattern: "System.getProperty($X)|System.getenv($X)"
+    kind: environment
+  - id: java_main_args
+    pattern: "public static void main(String[] args)"
+    kind: cli_arg
+  # File reads (for chaining)
+  - id: java_file_read_source
+    pattern: "Files.readAllLines($X)|Files.readString($X)|FileInputStream($X)"
+    kind: file_content
+
+sinks:
+  # SQL injection
+  - id: java_statement_execute
+    pattern: "Statement.executeQuery($X)|Statement.execute($X)|Statement.executeUpdate($X)|createStatement().execute"
+    cwe: CWE-89
+    severity: critical
+  - id: java_prepare_statement_concat
+    pattern: "prepareStatement($X +|prepareStatement(\"SELECT\" + $X|prepareCall($X +"
+    cwe: CWE-89
+    severity: critical
+  - id: java_jdbc_template_query
+    pattern: "jdbcTemplate.query($X)|jdbcTemplate.queryForObject($X)|jdbcTemplate.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: java_jdbc_template_update
+    pattern: "jdbcTemplate.update($X)|jdbcTemplate.batchUpdate($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: java_jpa_native_query
+    pattern: "entityManager.createNativeQuery($X)|entityManager.createQuery($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: java_hibernate_sql
+    pattern: "session.createSQLQuery($X)|session.createQuery($X)"
+    cwe: CWE-89
+    severity: critical
+  # Command injection
+  - id: java_runtime_exec
+    pattern: "Runtime.getRuntime().exec($X)|runtime.exec($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: java_process_builder
+    pattern: "new ProcessBuilder($X)|ProcessBuilder($X).start()"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: java_url_open
+    pattern: "new URL($X).openConnection()|new URL($X).openStream()"
+    cwe: CWE-918
+    severity: high
+  - id: java_http_client_ssrf
+    pattern: "HttpClient.newHttpClient().send($X)|HttpURLConnection"
+    cwe: CWE-918
+    severity: high
+  - id: java_rest_template_ssrf
+    pattern: "restTemplate.getForObject($X)|restTemplate.exchange($X)|restTemplate.getForEntity($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: java_file_read
+    pattern: "new FileInputStream($X)|Files.newInputStream($X)|Files.readAllBytes($X)"
+    cwe: CWE-22
+    severity: high
+  - id: java_file_write
+    pattern: "new FileOutputStream($X)|Files.newOutputStream($X)|Files.write($X)"
+    cwe: CWE-22
+    severity: high
+  - id: java_file_delete
+    pattern: "Files.delete($X)|file.delete()"
+    cwe: CWE-22
+    severity: medium
+  # Deserialization
+  - id: java_object_input
+    pattern: "new ObjectInputStream($X)|ObjectInputStream.readObject()"
+    cwe: CWE-502
+    severity: critical
+  - id: java_xml_decoder
+    pattern: "new XMLDecoder($X)|XMLDecoder.readObject()"
+    cwe: CWE-502
+    severity: critical
+  - id: java_jackson_deserialize
+    pattern: "ObjectMapper.readValue($X)"
+    cwe: CWE-502
+    severity: high
+  # XXE
+  - id: java_xxe_parser
+    pattern: "DocumentBuilderFactory.newInstance()|SAXParserFactory.newInstance()|XMLInputFactory.newFactory()"
+    cwe: CWE-611
+    severity: high
+  - id: java_xxe_transformer
+    pattern: "TransformerFactory.newInstance()|SchemaFactory.newInstance()"
+    cwe: CWE-611
+    severity: medium
+  # XSS / response
+  - id: java_response_writer
+    pattern: "response.getWriter().write($X)|response.getWriter().print($X)|response.getOutputStream()"
+    cwe: CWE-79
+    severity: medium
+  - id: java_send_redirect
+    pattern: "response.sendRedirect($X)"
+    cwe: CWE-601
+    severity: medium
+  # LDAP
+  - id: java_ldap_search
+    pattern: "DirContext.search($X)|InitialDirContext.search($X)|LdapContext.search($X)"
+    cwe: CWE-90
+    severity: high
+  # Expression language injection
+  - id: java_el_injection
+    pattern: "ExpressionFactory.newInstance()|ValueExpression.getValue()|MethodExpression.invoke()"
+    cwe: CWE-917
+    severity: high
+  # XPath injection
+  - id: java_xpath_injection
+    pattern: "XPath.compile($X)|XPath.evaluate($X, $DOC)|XPathExpression.evaluate($X)"
+    cwe: CWE-643
+    severity: medium
+
+sanitizers:
+  - id: java_prepared_statement
+    pattern: "PreparedStatement|prepareStatement($SQL)"
+    note: "Safe when SQL string is literal, not concatenated"
+  - id: java_callable_statement
+    pattern: "CallableStatement|prepareCall($SQL)"
+  - id: java_jpa_parameterized
+    pattern: "query.setParameter($X, $Y)|.setParameter($NAME, $VALUE)"
+  - id: java_input_validation
+    pattern: "@Valid|@Validated|Validator.validate($X)"
+  - id: java_escape_html
+    pattern: "StringEscapeUtils.escapeHtml($X)|HtmlUtils.htmlEscape($X)"
+  - id: java_escape_xml
+    pattern: "StringEscapeUtils.escapeXml($X)|ESAPI.encoder()"
+  - id: java_escape_java
+    pattern: "StringEscapeUtils.escapeJava($X)"
+  - id: java_path_normalize
+    pattern: "Paths.get($X).normalize()|FilenameUtils.normalize($X)"
+  - id: java_url_encode
+    pattern: "URLEncoder.encode($X)|URLEncoder.encode($X, $ENC)"
+  - id: java_spawn_args
+    pattern: "new ProcessBuilder($CMD, $ARG1)"
+    note: "Safe when $CMD is a hardcoded command"
+
+propagators:
+  - id: java_string_concat
+    pattern: "$X + $Y"
+  - id: java_string_format
+    pattern: "String.format($FMT, $X)"
+  - id: java_string_builder
+    pattern: "new StringBuilder($X)|sb.append($X)|StringBuilder($X)"
+  - id: java_variable_assign
+    pattern: "$TYPE $VAR = $X"
+  - id: java_return
+    pattern: "return $X"
+  - id: java_method_call
+    pattern: "$OBJ.method($X)"
+  - id: java_string_valueof
+    pattern: "String.valueOf($X)"

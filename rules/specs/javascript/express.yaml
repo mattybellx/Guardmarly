@@ -1,0 +1,160 @@
+# Guardmarly Spec — Express.js Framework
+spec_version: 1
+language: javascript
+framework: express
+description: "Express.js security patterns for IDOR and injection detection"
+
+sources:
+  - id: express_req_query
+    pattern: "req.query|req.query[$X]"
+    kind: http_param
+  - id: express_req_params
+    pattern: "req.params|req.params[$X]"
+    kind: route_param
+  - id: express_req_body
+    pattern: "req.body|req.body[$X]"
+    kind: http_body
+  - id: express_req_headers
+    pattern: "req.headers|req.headers[$X]"
+    kind: http_header
+  - id: express_req_cookies
+    pattern: "req.cookies|req.cookies[$X]"
+    kind: http_cookie
+  - id: express_req_url
+    pattern: "req.url|req.originalUrl"
+    kind: http_url
+  - id: express_req_file
+    pattern: "req.file|req.files"
+    kind: file_upload
+  - id: express_req_ip
+    pattern: "req.ip"
+    kind: client_ip
+
+sinks:
+  - id: express_res_send
+    pattern: "res.send($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: express_res_json
+    pattern: "res.json($X)"
+    cwe: CWE-201
+    severity: low
+  - id: express_res_render
+    pattern: "res.render($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: express_res_redirect
+    pattern: "res.redirect($X)"
+    cwe: CWE-601
+    severity: medium
+  - id: express_eval
+    pattern: "eval($X)"
+    cwe: CWE-94
+    severity: critical
+  - id: express_child_exec
+    pattern: "child_process.exec($X)|child_process.spawn($X)|exec($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: express_ssrf_axios
+    pattern: "axios.get($X)|axios.post($X)|axios.put($X)|axios.delete($X)"
+    cwe: CWE-918
+    severity: high
+  - id: express_ssrf_fetch
+    pattern: "fetch($X)|node-fetch($X)"
+    cwe: CWE-918
+    severity: high
+  - id: express_fs_read
+    pattern: "fs.readFile($X)|fs.readFileSync($X)"
+    cwe: CWE-22
+    severity: high
+  - id: express_fs_write
+    pattern: "fs.writeFile($X)|fs.writeFileSync($X)"
+    cwe: CWE-22
+    severity: high
+  - id: express_dynamic_function
+    pattern: "new Function($X)"
+    cwe: CWE-94
+    severity: critical
+  - id: express_vm_escape
+    pattern: "vm.runInNewContext($X)|vm.runInThisContext($X)"
+    cwe: CWE-94
+    severity: high
+  - id: express_sql_mysql
+    pattern: "connection.query($X)|pool.query($X)|db.query($X)|db.execute($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: express_json_parse
+    pattern: "JSON.parse($X)"
+    cwe: CWE-502
+    severity: low
+    note: "JSON.parse is safe by default; flag only when combined with eval"
+
+sanitizers:
+  - id: express_helmet
+    pattern: "require('helmet')|helmet()|app.use(helmet"
+  - id: express_cors
+    pattern: "cors($OPTIONS)"
+  - id: express_rate_limit
+    pattern: "rateLimit($OPTIONS)|express-rate-limit"
+  - id: express_csrf
+    pattern: "csrfProtection|csurf($OPTIONS)|csrf($OPTIONS)"
+  - id: express_input_validation
+    pattern: "express-validator|validator.escape($X)|sanitize($X)"
+  - id: express_parameterized_query
+    pattern: "connection.query($SQL, [$PARAMS])|db.query($SQL, [$PARAMS])"
+  - id: express_escape_html
+    pattern: "escapeHtml($X)|_.escape($X)"
+
+propagators:
+  - id: js_string_concat
+    pattern: "$X + $Y"
+  - id: js_template_literal
+    pattern: "`${$X}`"
+  - id: js_variable_assign
+    pattern: "const $VAR = $X|let $VAR = $X|var $VAR = $X"
+  - id: js_return
+    pattern: "return $X"
+  - id: js_spread
+    pattern: "...$X"
+
+route_extractors:
+  - id: express_route_get
+    pattern: "app.get($ROUTE, $HANDLER)|router.get($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: express
+  - id: express_route_post
+    pattern: "app.post($ROUTE, $HANDLER)|router.post($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: express
+  - id: express_route_use
+    pattern: "app.use($ROUTE, $HANDLER)|router.use($ROUTE, $HANDLER)"
+    captures: [route, handler]
+    framework: express
+
+auth_checks:
+  - id: passport_authenticate
+    pattern: "passport.authenticate($STRATEGY)"
+  - id: express_is_authenticated
+    pattern: "req.isAuthenticated()|.isAuthenticated()"
+  - id: express_jwt
+    pattern: "express-jwt|expressJwt($OPTIONS)|jwt($OPTIONS)"
+  - id: express_session
+    pattern: "express-session|req.session"
+  - id: express_req_user
+    pattern: "req.user"
+
+ownership_checks:
+  - id: express_owner_filter
+    pattern: ".find({ user: req.user|.findOne({ userId: req.user|.filter(u => u.userId ==="
+  - id: express_owner_where
+    pattern: ".where('userId', req.user|.where('ownerId', req.user"
+  - id: express_owner_param_compare
+    pattern: "req.user.id === req.params.userId|req.user.id == req.params"
+
+middleware:
+  - id: express_auth_middleware
+    pattern: "app.use(auth)|app.use(isAuthenticated)|app.use(verifyToken)"
+  - id: express_helmet_middleware
+    pattern: "app.use(helmet())"
+  - id: express_session_middleware
+    pattern: "app.use(session("

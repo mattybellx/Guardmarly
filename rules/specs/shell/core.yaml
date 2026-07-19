@@ -1,0 +1,93 @@
+# Guardmarly Spec — Shell / Bash Security
+spec_version: 1
+language: shell
+framework: ""
+description: "Shell/Bash script security patterns"
+
+sources:
+  - id: shell_positional
+    pattern: "$1|$2|$3|$@|$*"
+    kind: cli_arg
+  - id: shell_read
+    pattern: "read $VAR|read -r $VAR|read -p $X $VAR"
+    kind: stdin
+  - id: shell_env_var
+    pattern: "$VAR|${VAR}"
+    kind: environment
+
+sinks:
+  # Command injection
+  - id: shell_eval
+    pattern: "eval $X|eval \"$X\"|eval '$X'"
+    cwe: CWE-78
+    severity: critical
+  - id: shell_backtick
+    pattern: "`$X`"
+    cwe: CWE-78
+    severity: high
+  - id: shell_xargs_exec
+    pattern: "xargs -I{} $CMD|xargs $CMD"
+    cwe: CWE-78
+    severity: medium
+  # Unsafe variable usage in commands
+  - id: shell_unquoted_var
+    pattern: "$VAR $COMMAND|cat $FILE|rm $FILE|mv $FILE"
+    cwe: CWE-78
+    severity: medium
+    note: "Unquoted variables can expand to multiple arguments"
+  # Path traversal in redirects
+  - id: shell_redirect
+    pattern: "> $X|>> $X|< $X"
+    cwe: CWE-22
+    severity: medium
+  # Hardcoded secrets
+  - id: shell_hardcoded_secret
+    pattern: "PASSWORD=$X|TOKEN=$X|API_KEY=$X|SECRET=$X|export PASSWORD=$X"
+    cwe: CWE-798
+    severity: high
+  # curl piping to shell
+  - id: shell_curl_pipe_bash
+    pattern: "curl $URL | bash|curl $URL | sh|wget $URL -O - | bash"
+    cwe: CWE-494
+    severity: critical
+  # Unsafe temp file
+  - id: shell_temp_file
+    pattern: "> /tmp/$X|TMPDIR=/tmp|mktemp|mktemp -d"
+    cwe: CWE-377
+    severity: medium
+    note: "Predictable temp file names are race-condition prone"
+  # chmod 777
+  - id: shell_world_writable
+    pattern: "chmod 777 $X|chmod -R 777 $X|chmod a+rwx"
+    cwe: CWE-732
+    severity: medium
+  # sudo without restrictions
+  - id: shell_sudo_unrestricted
+    pattern: "sudo $CMD|sudo -u $USER $CMD"
+    cwe: CWE-269
+    severity: low
+  # set -e missing
+  - id: shell_no_error_exit
+    pattern: "#!/bin/bash|#!/bin/sh"  # heuristic: scripts without set -euo pipefail
+    cwe: CWE-252
+    severity: low
+
+sanitizers:
+  - id: shell_quoted_var
+    pattern: "\"$VAR\"|\"${VAR}\""
+  - id: shell_set_e
+    pattern: "set -e|set -eu|set -euo pipefail|set -o errexit"
+  - id: shell_set_u
+    pattern: "set -u|set -o nounset"
+  - id: shell_mktemp
+    pattern: "mktemp|mktemp -d|mktemp -t"
+  - id: shell_readonly
+    pattern: "readonly $VAR|declare -r $VAR"
+
+propagators:
+  - id: shell_export
+    pattern: "export $VAR=$X|export $VAR"
+  - id: shell_subshell
+    pattern: "$($CMD)|$(($EXPR))"
+  - id: shell_command_sub
+    pattern: "`$CMD`"

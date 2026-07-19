@@ -1,0 +1,160 @@
+# Guardmarly Spec — Scala Standard Library + Play/Akka
+spec_version: 1
+language: scala
+description: "Scala standard library and Play/Akka HTTP security sources, sinks, and sanitizers"
+
+sources:
+  - id: scala_play_request
+    pattern: "request.body.asText|request.body.asJson|request.body.asXml|request.getQueryString"
+    kind: http_body
+  - id: scala_play_query
+    pattern: "request.queryString|request.getQueryString($X)|request.queryString.get($X)"
+    kind: http_param
+  - id: scala_play_headers
+    pattern: "request.headers.get($X)|request.headers($X)"
+    kind: http_header
+  - id: scala_play_cookies
+    pattern: "request.cookies.get($X)|request.cookies($X)"
+    kind: http_cookie
+  - id: scala_play_session
+    pattern: "request.session.get($X)|request.session($X)"
+    kind: http_session
+  - id: scala_akka_http
+    pattern: "parameter($X)|parameters($X)|formFields($X)|entity(as[$TYPE])"
+    kind: http_param
+  - id: scala_path_param
+    pattern: "path($SEGMENT / $X)|pathPrefix($SEGMENT / $X)"
+    kind: route_param
+  - id: scala_env
+    pattern: "sys.env.get($X)|sys.env($X)|System.getenv($X)"
+    kind: environment
+  - id: scala_stdin
+    pattern: "scala.io.StdIn.readLine()|Console.readLine()|StdIn.readInt()"
+    kind: stdin
+
+sinks:
+  # SQL injection
+  - id: scala_slick_sql
+    pattern: "sql\"$X\".as[$TYPE]|sqlu\"$X\"|sql\"\"\"$X\"\"\""
+    cwe: CWE-89
+    severity: critical
+  - id: scala_jdbc_execute
+    pattern: "statement.execute($X)|statement.executeQuery($X)|connection.prepareStatement($X)"
+    cwe: CWE-89
+    severity: critical
+  - id: scala_anorm_sql
+    pattern: "SQL($X).execute()|SQL($X).as($PARSER.*)"
+    cwe: CWE-89
+    severity: critical
+  # Command injection
+  - id: scala_process_exec
+    pattern: "$X.!|$X.!!|Process($X)|sys.process.Process($X)"
+    cwe: CWE-78
+    severity: critical
+  - id: scala_runtime_exec
+    pattern: "Runtime.getRuntime.exec($X)"
+    cwe: CWE-78
+    severity: critical
+  # SSRF
+  - id: scala_ws_client
+    pattern: "WS.client.url($X).get()|ws.url($X).post($Y)"
+    cwe: CWE-918
+    severity: high
+  - id: scala_akka_http_ssrf
+    pattern: "Http().singleRequest(HttpRequest(uri = $X))|Http().singleRequest($X)"
+    cwe: CWE-918
+    severity: high
+  # Path traversal
+  - id: scala_file_read
+    pattern: "Source.fromFile($X)|scala.io.Source.fromFile($X)|Files.readAllLines($X)"
+    cwe: CWE-22
+    severity: high
+  - id: scala_file_write
+    pattern: "Files.write($X)|new FileWriter($X)|new PrintWriter($X)"
+    cwe: CWE-22
+    severity: high
+  # Deserialization
+  - id: scala_object_input
+    pattern: "new ObjectInputStream($X)|ObjectInputStream($X).readObject"
+    cwe: CWE-502
+    severity: critical
+  - id: scala_java_serialization
+    pattern: "readObject($X)|writeObject($X)"
+    cwe: CWE-502
+    severity: high
+  # XXE
+  - id: scala_xml_load
+    pattern: "XML.load($X)|XML.loadString($X)|scala.xml.XML.load($X)"
+    cwe: CWE-611
+    severity: high
+  # XSS
+  - id: scala_play_html
+    pattern: "Html($X)|@Html($X)"
+    cwe: CWE-79
+    severity: medium
+  - id: scala_twirl_raw
+    pattern: "@Html($X)"
+    cwe: CWE-79
+    severity: medium
+  # Hardcoded secrets
+  - id: scala_hardcoded_secret
+    pattern: "val password = \"$X\"|val apiKey = \"$X\"|val secret = \"$X\""
+    cwe: CWE-798
+    severity: high
+  # Weak crypto
+  - id: scala_md5
+    pattern: "MessageDigest.getInstance(\"MD5\")|DigestUtils.md5($X)"
+    cwe: CWE-327
+    severity: medium
+  - id: scala_weak_random
+    pattern: "scala.util.Random|new Random()|Random.nextInt"
+    cwe: CWE-330
+    severity: low
+
+sanitizers:
+  - id: scala_prepared_statement
+    pattern: "PreparedStatement|prepareStatement($SQL)"
+  - id: scala_slick_lifted
+    pattern: "TableQuery[$TABLE].filter($X => $X.$COL === $VAL)|TableQuery[$TABLE].map"
+  - id: scala_input_validation
+    pattern: "$X.filter($X.matches($REGEX))|require($X.nonEmpty)|$X.forall"
+  - id: scala_secure_random
+    pattern: "java.security.SecureRandom|SecureRandom()"
+  - id: scala_https_only
+    pattern: "https://|SSLContext|WS.url(\"https"
+  - id: scala_csrf
+    pattern: "CSRFAddToken|CSRFCheck|play.filters.csrf"
+
+propagators:
+  - id: scala_string_interpolation
+    pattern: "s\"$X\"|f\"$X\"|raw\"$X\""
+  - id: scala_string_concat
+    pattern: "$X + $Y|$X ++ $Y"
+  - id: scala_variable_assign
+    pattern: "val $VAR = $X|var $VAR = $X"
+  - id: scala_return
+    pattern: "return $X"
+  - id: scala_map_flatmap
+    pattern: "$X.map($Y =>|$X.flatMap($Y =>|$X.foreach($Y =>"
+
+route_extractors:
+  - id: scala_play_get
+    pattern: "Action {|Action.async {"
+    captures: [action]
+    framework: play
+  - id: scala_akka_get
+    pattern: "get {|post {|put {|delete {|path($X) {"
+    captures: [path]
+    framework: akka-http
+
+auth_checks:
+  - id: scala_play_auth
+    pattern: "AuthenticatedAction|AuthenticatedBuilder|UserAction|authorized("
+  - id: scala_silhouette
+    pattern: "SecuredAction|UnsecuredAction|UserAwareAction|Silhouette"
+  - id: scala_akka_auth
+    pattern: "authenticateOAuth2|authenticateBasic|authenticateBasicAsync|authorize("
+
+ownership_checks:
+  - id: scala_owner_filter
+    pattern: ".filter(_.userId === $USER)|.filter(_.ownerId === $USER)|.filter($X => $X.userId == $USER)"
