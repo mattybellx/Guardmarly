@@ -1,7 +1,7 @@
 {
   "name": "guardmarly",
-  "displayName": "Guardmarly — Offline SAST Security Scanner",
-  "description": "Zero-dependency SAST for Python, JS/TS, Go, Java & C#. Built-in IDOR detection. 100% CVE recall. Trace-backed findings inline while you code.",
+  "displayName": "Guardmarly — Local SAST Scanner",
+  "description": "VS Code integration for the Guardmarly CLI, with inline findings for authorization, injection, and related code-security issues.",
   "version": "1.4.0",
   "publisher": "guardmarly",
   "icon": "guardmarly-logo-128.png",
@@ -24,8 +24,7 @@
     "vulnerability",
     "cwe",
     "owasp",
-    "offline",
-    "zero-dependency"
+    "authorization"
   ],
   "activationEvents": [
     "onLanguage:python",

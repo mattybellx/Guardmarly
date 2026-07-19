@@ -1,8 +1,7 @@
 """
 guardmarly
 ─────────────
-Zero-dependency SAST security scanner for Python, JavaScript/TypeScript,
-Go, Java, and C#.
+Static application security scanner with authorization-focused and other supported analyzers.
 
 Quick start:
     from guardmarly import scan_file, scan_code

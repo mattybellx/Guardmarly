@@ -5,7 +5,7 @@
 ### Push to `main`
 | Trigger | What runs |
 |---|---|
-| `ci.yml` | Tests + lint (1,183 tests) |
+| `ci.yml` | Tests + lint |
 | `publish-extension.yml` | Publishes VS Code extension (if `vscode-extension/**` changed) |
 | Render.com | Auto-deploys `guardmarly.onrender.com` |
 

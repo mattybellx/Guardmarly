@@ -32,8 +32,8 @@ The CI will try Trusted Publishing first, then fall back to `PYPI_API_TOKEN`.
 
 1. Go to [Render Dashboard](https://dashboard.render.com)
 2. **New → Web Service** → Connect `mattybellx/Guardmarly`
-3. Render auto-detects `render.yaml` — no manual config needed
-4. **Auto-deploy** is on by default — every push to `main` triggers a deploy
+3. This repository currently contains a `Dockerfile` but no `render.yaml`; confirm the service configuration manually in Render.
+4. If Render is enabled for the repo, confirm auto-deploy behavior in the Render dashboard rather than assuming it from source control alone.
 
 ## What Happens On...
 

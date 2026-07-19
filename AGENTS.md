@@ -4,12 +4,12 @@
 
 ## What is Guardmarly?
 
-Guardmarly is a **zero-dependency SAST (Static Application Security Testing) scanner** that finds security vulnerabilities in source code. It supports **Python, JavaScript/TypeScript, Go, Java, C#** with 35+ CWE types.
+Guardmarly is a static application security scanner with a strong emphasis on authorization / IDOR-style findings alongside broader code-security checks. The current CLI dispatches full analyzers for Python, JavaScript/TypeScript, Go, Java, C#, and Rust, plus pattern-based coverage for additional file types.
 
-- **PyPI**: `guardmarly` (v6.4.0)
+- **PyPI**: `guardmarly` (v6.5.0 in `pyproject.toml`)
 - **GitHub**: `mattybellx/Guardmarly`
-- **License**: MIT
-- **Unique strength**: Built-in IDOR/missing-authorization detection that Bandit, Semgrep OSS, and CodeQL miss.
+- **License**: custom / non-standard text in `LICENSE`
+- **Primary positioning**: authorization gaps, IDOR patterns, and related risky code paths
 
 ## Repo structure (post-cleanup, July 2026)
 
@@ -37,7 +37,7 @@ guardmarly-focus/
 ├── guardmarly_rust_core/           # Rust native parser core (tree-sitter based)
 │   ├── src/                    # Rust source
 │   └── python/                 # Python bindings
-├── tests/                      # 1,183 unit tests (pytest)
+├── tests/                      # Python test suite (run `pytest tests/ -q`)
 ├── rules/                      # YAML rule definitions
 ├── community_rules/            # Community-contributed rules
 ├── samples/                    # Test fixtures & vulnerable code samples
@@ -59,9 +59,12 @@ guardmarly-focus/
 ├── CHANGELOG.md                # Full version history
 ├── README.md                   # Public-facing readme
 ├── SECURITY.md                 # Security policy
-├── LICENSE                     # MIT
+├── LICENSE                     # Custom/non-standard license text
 ├── Dockerfile                  # Container build
 ├── action.yml                  # GitHub Action entry point
+├── mkdocs.yml                  # MkDocs config (docs_dir currently absent)
+├── vscode-extension/           # VS Code extension source + package metadata
+├── webapp/                     # Hosted/demo surface present in current tree
 └── ci-workflow.example.yml     # Example CI config for users
 ```
 
@@ -71,7 +74,7 @@ guardmarly-focus/
 # Install dev deps
 pip install -e ".[dev]"
 
-# Run ALL tests (~12s on warm cache)
+# Run the repository Python test suite
 pytest tests/ -q
 
 # Run a specific test file
@@ -107,18 +110,12 @@ python -m guardmarly.cli --list-rules
 
 ## What was removed (July 2026 cleanup)
 
-Everything not needed for the scanner CLI was deleted:
-
-- `benchmarks/`, `tools/`, `scripts/`, `docs/`, `site/`, `webapp/`
-- `intellij-plugin/`, `vscode-extension/`, `visualstudio-extension/`
-- `campaign/`, `drafts/`, `reports/`, `assets/`, `tmp/`, `owasp-benchmark-java/`
-- `render.yaml` (deployed the now-deleted webapp)
-- All root-level JSON reports and MD roadmaps
+Do not assume older cleanup notes are still accurate. As of 2026-07-19, the repository still contains `webapp/`, `vscode-extension/`, `mkdocs.yml`, and several `.github/` documentation files. Verify the current tree before acting on any claim that a directory was removed.
 
 ## Common gotchas
 
 - **Don't add imports from `benchmarks` or `tools`** — those directories don't exist anymore.
-- **Test count**: 1,183 tests. If you see fewer, check for skipped platform-specific tests.
+- **Test baseline drifts over time**: use `pytest tests/ -q` and record the observed result instead of relying on a hard-coded count.
 - **Pre-existing lint errors**: ~25 type-checker warnings in `cli.py` — all pre-existing, not from recent changes.
 - **`id()`-based memoization**: `_get_taint_source` and `_get_sink_name` use `id(node)` as cache keys. This is sensitive to Python version memory allocator differences.
 - **python_analyzer.py line references**: The CI `guardmarly-code-scanning.yml` used to flag the analyzer's own pattern strings as vulnerabilities. Now fixed by excluding `src/`.
