@@ -40,6 +40,29 @@ jobs:
 
       - name: Publish to Marketplace
         working-directory: vscode-extension
-        run: vsce publish --pat ${{ secrets.VSCE_PAT }}
+        # The Marketplace gallery API (/_apis/gallery) intermittently times out
+        # (see run history: many failures with "Request timeout: /_apis/gallery").
+        # Retry with backoff so a single run self-heals instead of requiring
+        # manual re-runs. If the version already exists, vsce fails fast and we
+        # stop immediately.
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "== Publish attempt $i of 5 =="
+            OUTPUT=$(vsce publish --pat "$VSCE_PAT" 2>&1)
+            RC=$?
+            echo "$OUTPUT"
+            if [ $RC -eq 0 ]; then
+              echo "Publish succeeded (attempt $i)"
+              exit 0
+            fi
+            if echo "$OUTPUT" | grep -qi "already exists\|extension already"; then
+              echo "Version already exists on the Marketplace; nothing to do."
+              exit 0
+            fi
+            echo "Attempt $i failed; retrying in 20s..."
+            sleep 20
+          done
+          echo "All publish attempts failed"
+          exit 1
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
