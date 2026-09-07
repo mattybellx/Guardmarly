@@ -29,6 +29,10 @@ jobs:
         with:
           python-version: '3.11'
       - name: Install
-        run: pip install ruff
+        # Pin ruff: 0.16+ promotes many new rules to defaults (I001, RUF022,
+        # UP006/035, PYI034/036, S110/BLE001, SIM1xx, ...) which flag the whole
+        # legacy src/ tree. Keep lint deterministic; bump deliberately together
+        # with a codebase-wide cleanup.
+        run: pip install ruff==0.15.19
       - name: Run ruff
         run: ruff check src/ --ignore E501,E701,E702,E741,F821,F401,F811,F841,E402 --fix
