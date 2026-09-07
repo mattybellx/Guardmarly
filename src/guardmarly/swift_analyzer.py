@@ -3,7 +3,8 @@ guardmarly.swift_analyzer — Security analyzer for Swift.
 Covers: SQLi, CMDi, PathTrav, HardcodedSecrets, WeakCrypto.
 """
 from __future__ import annotations
-import logging, re
+import logging
+import re
 from typing import List, FrozenSet
 from guardmarly._types import AnalysisResult, Finding, Severity
 from guardmarly.swift_parser import parse_swift

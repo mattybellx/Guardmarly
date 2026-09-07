@@ -2,7 +2,8 @@
 guardmarly.rust_parser — Rust parser via tree-sitter-rust core.
 """
 from __future__ import annotations
-import logging, re as _re
+import logging
+import re as _re
 from dataclasses import dataclass, field
 from typing import Any
 
