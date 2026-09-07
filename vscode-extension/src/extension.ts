@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 
 let outputChannel: vscode.OutputChannel;
 
@@ -34,7 +34,8 @@ export function activate(context: vscode.ExtensionContext) {
     function resolveGuardmarly(): [string, boolean, string] {
         for (const candidate of ['guardmarly', 'python -m guardmarly.cli', 'python3 -m guardmarly.cli']) {
             try {
-                const ver = execSync(`${candidate} --version`, {
+                const { file, args } = splitCommand(candidate);
+                const ver = execFileSync(file, [...args, '--version'], {
                     encoding: 'utf-8',
                     timeout: 10000,
                     windowsHide: true
@@ -84,8 +85,8 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push({ dispose: () => clearInterval(spinInterval) });
 
         try {
-            const cli = `${guardmarlyCmd} --stdin --lang ${mapLanguage(document.languageId)} --format json --fail-on never`;
-            const result = execSync(cli, {
+            const { file, args } = splitCommand(guardmarlyCmd);
+            const result = execFileSync(file, [...args, '--stdin', '--lang', mapLanguage(document.languageId), '--format', 'json', '--fail-on', 'never'], {
                 input: document.getText(),
                 encoding: 'utf-8',
                 timeout: 30000,
@@ -270,8 +271,10 @@ export function activate(context: vscode.ExtensionContext) {
             }, 200);
 
             try {
-                const result = execSync(
-                    `${guardmarlyCmd} "${workspaceFolders[0].uri.fsPath}" --format text --fail-on never`,
+                const { file, args } = splitCommand(guardmarlyCmd);
+                const result = execFileSync(
+                    file,
+                    [...args, workspaceFolders[0].uri.fsPath, '--format', 'text', '--fail-on', 'never'],
                     { encoding: 'utf-8', timeout: 120000, windowsHide: true }
                 );
                 scanning = false;
@@ -331,6 +334,14 @@ function createColoredIconPath(context: vscode.ExtensionContext, color: string):
 export function deactivate() {}
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
+// Resolve a CLI command string (e.g. "python -m guardmarly.cli") into an
+// executable + args so it can be run via execFileSync with an argument array.
+// Never run user/path-controlled values through a shell (prevents CWE-78).
+function splitCommand(command: string): { file: string; args: string[] } {
+    const parts = command.split(/\s+/).filter((p) => p.length > 0);
+    return { file: parts[0], args: parts.slice(1) };
+}
+
 function isSupportedLanguage(lang: string): boolean {
     return ['python', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'go', 'java', 'csharp', 'ruby', 'php', 'rust', 'kotlin', 'swift', 'dart', 'lua', 'elixir', 'scala', 'clojure', 'haskell', 'shell', 'dockerfile', 'terraform'].includes(lang);
 }
