@@ -48,18 +48,22 @@ jobs:
         run: |
           for i in 1 2 3 4 5; do
             echo "== Publish attempt $i of 5 =="
+            # GitHub Actions bash runs with `set -e`: capture the exit code
+            # without letting a failed vsce kill the retry loop.
+            set +e
             OUTPUT=$(vsce publish --pat "$VSCE_PAT" 2>&1)
             RC=$?
+            set -e
             echo "$OUTPUT"
             if [ $RC -eq 0 ]; then
               echo "Publish succeeded (attempt $i)"
               exit 0
             fi
-            if echo "$OUTPUT" | grep -qi "already exists\|extension already"; then
+            if echo "$OUTPUT" | grep -qi "already exists"; then
               echo "Version already exists on the Marketplace; nothing to do."
               exit 0
             fi
-            echo "Attempt $i failed; retrying in 20s..."
+            echo "Attempt $i failed (exit $RC); retrying in 20s..."
             sleep 20
           done
           echo "All publish attempts failed"
