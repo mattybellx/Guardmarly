@@ -322,3 +322,59 @@ Independent: **TPR 75.5%, FPR 45.6%, Youden +0.299 — mid-table.** Three rules
 (securecookie, weakrand, crypto) are genuinely strong and prove the design works;
 the rest are either non-discriminative or partial. This is a measurable,
 actionable position — and it was only visible after splitting TPR from FPR.
+
+---
+
+## 10. Second attempt at the fix — and the real blocker
+
+A proper version of the gating was implemented and measured: extract the sink's
+**balanced argument text** (respecting nesting and string literals) and ask
+whether that expression references a tracked tainted variable — rather than the
+crude 500-character window that failed in §9.
+
+**Result: byte-identical metrics.** TPR 65.6%, FPR 36.1%, Youden +0.295,
+pathtraver 9.8%/16.3%, cmdi 82.5%/84.0%. Identical to the window version.
+
+That identity is the finding. Two very different implementations of the same
+question produced the same answer, which means **the question is not what is
+broken — the taint set being consulted is.**
+
+### The actual blocker: `_collect_tainted_names` propagates on name mention
+
+```python
+# pass 2, propagation
+if re.search(r"\b" + re.escape(t) + r"\b", rhs):
+    tainted.add(new_name)
+```
+
+A variable is marked tainted when a tainted name appears **anywhere** in the
+right-hand side. So:
+
+```java
+String bar = new Test().doSomething(request, param);   // helper returns a SAFE constant
+```
+
+marks `bar` as tainted. OWASP Benchmark's safe cases neutralise input precisely by
+passing it through such helpers, so **every safe case also looks tainted** — the
+taint set cannot separate the two populations, and gating on it removes true and
+false positives about equally.
+
+### What a correct fix requires
+
+Pass-2 propagation must distinguish *transmission* from *consumption*:
+
+* transmit (result is tainted): `bar = param`, `bar = "x" + param`,
+  `bar = param.trim()` — a direct reference, concatenation, or known pass-through
+  such as `String.valueOf` / `.toString()` / `.trim()` / `.substring()`;
+* consume (result is **not** tainted): `bar = anyOtherCall(request, param)`,
+  because the callee may sanitise, return a constant, or ignore the argument.
+
+Until that distinction exists, no downstream rule can be made discriminative by
+gating on taint. Changing it is high-blast-radius — the propagator feeds several
+rules — so it needs its own before/after measurement across all eleven categories,
+not a hurried edit.
+
+**Status: two implementations falsified by measurement, both reverted. Current
+tree is the measured-best state (TPR 75.5% / FPR 45.6% / Youden +0.299, 1403 tests
+passing). The fix is specified above and is the highest-value change in the
+project.**
