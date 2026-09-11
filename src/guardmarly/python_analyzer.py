@@ -43,6 +43,7 @@ import ast
 import functools
 import io
 import re
+import threading
 import warnings
 import tokenize as _tokenize
 from dataclasses import dataclass, field
@@ -1093,16 +1094,86 @@ _PATH_LIKE_NAME_RE: re.Pattern[str] = re.compile(
 # Taint helper functions
 # ──────────────────────────────────────────────────────────────────────────────
 
-# ── v6.7: Per-file memoization caches for hot-path functions ──
-# Keys are (lineno, col_offset, type_name) tuples for stable cross-version caching.
-_taint_source_cache: dict[tuple[int, int, str], str | None] = {}
-_sink_name_cache: dict[tuple[int, int, str], str | None] = {}
+# ── Per-file memoization caches for hot-path functions ──
+# Keys are (lineno, col_offset, type_name) tuples for stable cross-version
+# caching.  That key is only unique *within a single file*, so the mapping must
+# be private to the thread: the CLI analyses files in a thread pool, and two
+# workers sharing one dict at the same (line, column, node type) read each
+# other's entries.  Observed symptom: a trivial `hashlib.sha256` helper was
+# reported with the SSRF finding that belonged to a neighbouring file at the
+# same coordinates, and rule ids for a single weakness varied between identical
+# runs (PY-005 vs PY-012, PY-008 vs PY-022, PY-004 vs PY-004F).
+class _ThreadLocalDict:
+    """A ``dict`` whose contents are private to the calling thread."""
+
+    __slots__ = ("_local",)
+
+    def __init__(self) -> None:
+        self._local = threading.local()
+
+    @property
+    def _data(self) -> dict[Any, Any]:
+        data = getattr(self._local, "data", None)
+        if data is None:
+            data = {}
+            self._local.data = data
+        return data
+
+    def __contains__(self, key: object) -> bool:
+        return key in self._data
+
+    def __getitem__(self, key: Any) -> Any:
+        return self._data[key]
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        self._data[key] = value
+
+    def get(self, key: Any, default: Any = None) -> Any:
+        return self._data.get(key, default)
+
+    def clear(self) -> None:
+        self._data.clear()
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+
+_taint_source_cache: _ThreadLocalDict = _ThreadLocalDict()
+_sink_name_cache: _ThreadLocalDict = _ThreadLocalDict()
 
 
 def _clear_per_file_caches() -> None:
     """Clear memoization caches at the end of each file scan."""
     _taint_source_cache.clear()
     _sink_name_cache.clear()
+
+
+_WALK_LOCAL = threading.local()
+_ORIGINAL_AST_WALK = ast.walk
+
+
+def _thread_scoped_walk(node):
+    """``ast.walk`` that consults the *current thread's* cache when active.
+
+    A pass-through unless the calling thread has activated a cache, so
+    semantics are unchanged for every other caller in the process.
+    """
+    cache = getattr(_WALK_LOCAL, "cache", None)
+    if cache is None:
+        return _ORIGINAL_AST_WALK(node)
+    nid = id(node)
+    cached = cache.get(nid)
+    if cached is None:
+        cached = list(_ORIGINAL_AST_WALK(node))
+        cache[nid] = cached
+    return iter(cached)
+
+
+def _install_thread_scoped_walk() -> None:
+    """Install the dispatcher once.  Idempotent and safe to race on: both
+    threads assign the same function object."""
+    if ast.walk is not _thread_scoped_walk:
+        ast.walk = _thread_scoped_walk
 
 
 def _get_taint_source(node: ast.expr) -> str | None:
@@ -1531,7 +1602,8 @@ def _expr_param_dependencies(
     node_id = id(node)
     if node_id in visited:
         return set()
-    visited = set(visited)
+    # Shared, add-only visited set -- see `_expr_has_direct_source`. Copying the
+    # set here made each of the 347k calls allocate a fresh set.
     visited.add(node_id)
 
     if isinstance(node, ast.Name):
@@ -1573,7 +1645,9 @@ def _expr_has_direct_source(
     node_id = id(node)
     if node_id in visited:
         return None
-    visited = set(visited)
+    # Shared, add-only visited set: the result for a node depends only on that
+    # node, so an already-explored node can be skipped rather than re-explored.
+    # `set(visited)` copied the set on every one of 376k recursive calls here.
     visited.add(node_id)
 
     if isinstance(node, ast.Name) and node.id in source_vars:
@@ -1853,7 +1927,12 @@ def _find_tainted_expr_info(
     node_id = id(node)
     if node_id in visited:
         return None
-    visited = set(visited)
+    # Shared, add-only visited set. The exploration result for a node depends
+    # only on that node (``tainted``/``call_string`` are fixed for the whole
+    # top-level query), so an already-explored node can be skipped rather than
+    # re-explored. The previous ``visited = set(visited)`` copied the set on
+    # every one of 2.8M recursive calls -- quadratic allocation churn for no
+    # semantic gain. Each top-level call still gets a fresh set (visited=None).
     visited.add(node_id)
 
     if isinstance(node, ast.Name) and node.id in tainted:
@@ -2630,8 +2709,28 @@ _GUARDMARLY_INTERNAL_PY_RULE_DOWNGRADE_PATHS: dict[str, tuple[str, ...]] = {
 }
 
 
+def _scoped_path(filename: str) -> str:
+    """Path used for directory-name heuristics, scoped to the scan root.
+
+    These markers describe a *project's own* layout (``tests/``, ``examples/``,
+    ``/src/flask/`` ...).  Matching them against the host path made results
+    depend on how the path was passed: an absolute path under a directory named
+    ``benchmarks`` looked like test code, so route and auth rules (PY-020,
+    JS-041) were suppressed, while the identical relative path kept them.
+
+    ``ContextAnalyzer._match_path`` already owns this scoping; this is the
+    single accessor so the two implementations cannot drift apart again.
+    """
+    try:
+        from guardmarly.engine.triage import ContextAnalyzer
+
+        return ContextAnalyzer._match_path(filename)
+    except Exception:  # noqa: BLE001 - path scoping must never break a scan
+        return filename.replace("\\", "/").lower()
+
+
 def _is_framework_internal_python_path(filename: str) -> bool:
-    path_norm = filename.replace("\\", "/").lower()
+    path_norm = _scoped_path(filename)
     return any(marker in path_norm for marker in _FRAMEWORK_INTERNAL_PY_MARKERS)
 
 
@@ -2709,22 +2808,22 @@ def _detect_framework_root(file_path: str) -> bool:
 
 def _is_test_file(filename: str) -> bool:
     """Return True if the file path indicates test/example/fixture code."""
-    path_norm = filename.replace("\\", "/").lower()
+    path_norm = _scoped_path(filename)
     return any(pattern in path_norm for pattern in _TEST_FILE_PATH_PATTERNS)
 
 
 def _is_guardmarly_internal_python_path(filename: str) -> bool:
-    path_norm = filename.replace("\\", "/").lower()
+    path_norm = _scoped_path(filename)
     return any(marker in path_norm for marker in _GUARDMARLY_INTERNAL_PY_MARKERS)
 
 
 def _is_framework_internal_python_noise_exempt(rule_id: str, filename: str) -> bool:
-    path_norm = filename.replace("\\", "/").lower()
+    path_norm = _scoped_path(filename)
     return any(fragment in path_norm for fragment in _FRAMEWORK_INTERNAL_PY_RULE_EXEMPT_PATHS.get(rule_id, ()))
 
 
 def _is_framework_internal_python_noise_path(rule_id: str, filename: str) -> bool:
-    path_norm = filename.replace("\\", "/").lower()
+    path_norm = _scoped_path(filename)
     return any(fragment in path_norm for fragment in _FRAMEWORK_INTERNAL_PY_RULE_DOWNGRADE_PATHS.get(rule_id, ()))
 
 
@@ -3378,6 +3477,67 @@ def _rule_05(ctx: _Ctx) -> list[Finding]:
     return _assign_rule_ids(findings, "PY-011")
 
 
+def _code_exec_effective_severity(desc: str, raw_line: str, default: Severity) -> Severity:
+    """Severity for an exec()/eval()/shell match, accounting for safe idioms.
+
+    Code injection requires *attacker-controlled code*. Two shapes are the
+    documented, deliberate idiom rather than a vulnerability:
+
+    * an explicit globals/locals namespace is passed, so the executed text
+      cannot reach the caller's scope (``eval(expr, globals, locals)``);
+    * the executed text (or shell command) is a literal in the source.
+
+    Both stay reported -- just below CRITICAL -- because the pattern is still
+    worth a human look. Dynamic calls with no namespace keep full severity, so
+    ``exec(user_input)`` and ``eval(value)`` are unaffected.
+
+    On the CPython standard library this accounted for ~30 of 46 HIGH findings,
+    every one of them deliberate (bdb, doctest, pdb, zipimport, logging.config).
+    """
+    shell_prefixes = ("os.system", "os.popen", "os.execl", "os.execve", "subprocess.", "pty.spawn")
+    if desc not in ("exec() code execution", "eval() code injection") and not desc.startswith(shell_prefixes):
+        return default
+    stmt = raw_line.strip()
+    if not stmt:
+        return default
+    try:
+        tree: ast.AST | None = ast.parse(stmt)
+    except SyntaxError:
+        tree = None
+    if tree is not None:
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call):
+                if node.args and isinstance(node.args[0], ast.Constant):
+                    return Severity.MEDIUM  # literal code / command
+                if len(node.args) >= 2 or node.keywords:
+                    return Severity.MEDIUM  # explicit namespace
+                return default
+        return default
+    # Multi-line statement or fragment: count top-level commas in the call.
+    open_idx = raw_line.find("(")
+    if open_idx == -1:
+        return default
+    depth = 0
+    commas = 0
+    first_arg = ""
+    for ch in raw_line[open_idx + 1:]:
+        if ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            if depth == 0:
+                break
+            depth -= 1
+        elif ch == "," and depth == 0:
+            commas += 1
+        elif depth == 0:
+            first_arg += ch
+    if commas >= 1:
+        return Severity.MEDIUM
+    if first_arg.strip().startswith(("'", '"', 'f"', "f'")):
+        return Severity.MEDIUM
+    return default
+
+
 def _rule_06(ctx: _Ctx) -> list[Finding]:
     findings: list[Finding] = []
     sans = ctx.sans
@@ -3416,8 +3576,10 @@ def _rule_06(ctx: _Ctx) -> list[Finding]:
                     if "__builtins__" in ctx_window:
                         continue
                 title = f"{cwe}: Unsafe {desc} at line {lineno}"
+                raw_line = ctx.lines[lineno - 1] if 0 < lineno <= len(ctx.lines) else ""
                 findings.append(Finding(
-                    category="security", severity=sev,
+                    category="security",
+                    severity=_code_exec_effective_severity(desc, raw_line, sev),
                     title=title,
                     description=(
                         f"Unsafe {desc} at L{lineno}: `{line_text.strip()[:80]}`. "
@@ -4708,6 +4870,33 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
                             if _is_tainted_expr(node.value, {v: None for v in tainted_paths}):
                                 tainted_paths.add(t.id)
 
+        # Function parameters are unknown input boundaries, so a path-shaped
+        # parameter passed to `os.path.join` stays suspicious -- that is the
+        # "framework-style join" case the rule was written for. Internal state
+        # (`self._path`, `cls._cache`) is *not* an input boundary, and flagging
+        # it produced 19 HIGH false positives on the standard library
+        # (`os.path.join(self._path, 'tmp')` in mailbox.py and friends).
+        param_names: set[str] = set()
+        for _a in list(fnode.args.posonlyargs) + list(fnode.args.args) + list(fnode.args.kwonlyargs):
+            param_names.add(_a.arg)
+        if fnode.args.vararg:
+            param_names.add(fnode.args.vararg.arg)
+        if fnode.args.kwarg:
+            param_names.add(fnode.args.kwarg.arg)
+
+        def _arg_is_parameter(node: ast.AST) -> bool:
+            """True when the expression is rooted at a bare function parameter.
+
+            `self`/`cls` are excluded: `self._path` is internal state, not an
+            input boundary. Counting them flagged 10 of the 19 PY-023 hits on
+            the standard library (`os.path.join(self._path, 'tmp')` in
+            mailbox.py), where nothing attacker-controlled is involved.
+            """
+            for _sub in ast.walk(node):
+                if isinstance(_sub, ast.Name) and _sub.id in param_names and _sub.id not in ("self", "cls"):
+                    return True
+            return False
+
         for node in ast.walk(fnode):
             if not isinstance(node, ast.Call):
                 continue
@@ -4753,8 +4942,13 @@ def _rule_15(ctx: _Ctx) -> list[Finding]:
                 if info and "CWE-22" not in info[3]:
                     var_name = var_name or info[0] or "tainted path input"
                     is_risky = True
+                # Path traversal needs an attacker-controlled component: either
+                # tracked taint, or a path-shaped value that crosses an unknown
+                # input boundary (a function parameter).
                 if var_name and var_name not in sanitized_paths:
-                    is_risky = is_risky or var_name in tainted_paths or _expr_looks_path_like(arg)
+                    is_risky = is_risky or var_name in tainted_paths
+                    if not is_risky and _arg_is_parameter(arg):
+                        is_risky = _expr_looks_path_like(arg)
                 if is_risky:
                     findings.append(Finding(
                         category="security", severity=Severity.HIGH,
@@ -5332,6 +5526,23 @@ def _rule_22(ctx: _Ctx) -> list[Finding]:
         r'(?:request\.path|request\.get_full_path\s*\(|request\.build_absolute_uri\s*\()',
         re.IGNORECASE,
     )
+    # Request accessors reached through a *globally imported* request proxy
+    # (Flask's `from flask import request`) rather than a view parameter
+    # (Django's `def view(request)`).  Without this, `redirect(request.args.get("next"))`
+    # in a Flask app was never treated as attacker-controllable.
+    _REQUEST_SOURCE_RE = re.compile(
+        r'(?:^|[^\w.])(?:self\.)?(?:request|req)\.'
+        r'(?:args|form|GET|POST|query|values|json|data|params|headers|cookies)\b',
+        re.IGNORECASE,
+    )
+
+    def _is_request_derived(node: ast.AST) -> bool:
+        """True when the expression reads from a request object."""
+        try:
+            expr = ast.unparse(node)
+        except Exception:  # noqa: BLE001 - unparse is best-effort
+            return False
+        return bool(_REQUEST_SOURCE_RE.search(expr))
     for fname, fnode in func_defs.items():
         tainted_vars: set[str] = set()
         validated_vars: set[str] = set()
@@ -5382,17 +5593,21 @@ def _rule_22(ctx: _Ctx) -> list[Finding]:
                     continue
                 if cn and any(sf in cn for sf in _safe_redirect_fns):
                     continue  # redirect(url_for(...)) is safe
-                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars})
+                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars}) or _is_request_derived(url_arg)
                 var_name = "expression"
             elif isinstance(url_arg, (ast.JoinedStr, ast.BinOp)):
                 expr = ast.unparse(url_arg) if hasattr(ast, "unparse") else ""
                 if "get_absolute_url" in expr or ("object_domain" in expr and "absurl" in expr):
                     continue
-                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars})
+                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars}) or _is_request_derived(url_arg)
                 var_name = "interpolated URL"
             elif isinstance(url_arg, ast.Subscript):
-                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars})
+                is_tainted = _is_tainted_expr(url_arg, {v: None for v in tainted_vars}) or _is_request_derived(url_arg)
                 var_name = "subscript"
+            elif isinstance(url_arg, ast.Attribute):
+                if _is_request_derived(url_arg):
+                    is_tainted = True
+                    var_name = _get_call_name(url_arg) or "attribute"
             if not is_tainted:
                 continue
             # ── Framework semantic: redirect-to-self is safe ──────────
@@ -6874,6 +7089,17 @@ def _rule_46(ctx: _Ctx) -> list[Finding]:
     )
     _LDAP_SEARCH_RE = re.compile(r'\b(?:conn|ldap_conn|c|connection)\s*\.\s*search_s?\b', re.IGNORECASE)
 
+    # Loop invariants — hoisted out of the per-line loop.  These scan the whole
+    # file text, so evaluating them per line made this rule O(lines x size):
+    # on the Python standard library it cost 0.43s per file and 31% of total
+    # scan time, which is why throughput trailed Semgrep by ~4x.
+    _filename_lower = (ctx.filename or "").lower()
+    is_setup_script = (
+        "setup.py" in _filename_lower
+        or "from setuptools import" in code_text
+        or "import setuptools" in code_text
+    )
+
     for lineno, line in enumerate(lines, 1):
         stripped = line.strip()
         if stripped.startswith("#"):
@@ -6899,11 +7125,6 @@ def _rule_46(ctx: _Ctx) -> list[Finding]:
                 rule_id="PY-056", cwe="CWE-377", agent="python-analyzer",
             ))
 
-        is_setup_script = (
-            "setup.py" in (ctx.filename or "").lower()
-            or "from setuptools import" in code_text
-            or "import setuptools" in code_text
-        )
         if is_setup_script and _SETUP_SHELL_RE.search(stripped):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
@@ -7617,18 +7838,17 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
     )
     findings: list[Finding] = []
     # ── AST walk cache: pre-compute node lists per function ────
+    # The cache is stored per *thread*.  It used to be a single dict behind a
+    # process-wide `ast.walk` monkey-patch, which the CLI's thread pool made
+    # unsafe: two workers shared one closure over an `id()`-keyed cache holding
+    # different trees, so a worker could read another worker's node list (and
+    # `id()` reuse across freed trees could return the wrong nodes outright).
+    # That produced non-deterministic findings in default, parallel scans.
     _walk_cache: dict[int, list] = {}
-    _orig_walk = ast.walk
-    def _cached_walk(node):
-        nid = id(node)
-        if nid in _walk_cache:
-            return iter(_walk_cache[nid])
-        result = list(_orig_walk(node))
-        _walk_cache[nid] = result
-        return iter(result)
-    ast.walk = _cached_walk
+    _install_thread_scoped_walk()
+    _WALK_LOCAL.cache = _walk_cache
     for fnode in func_defs.values():
-        _walk_cache[id(fnode)] = list(_orig_walk(fnode))
+        _walk_cache[id(fnode)] = list(_ORIGINAL_AST_WALK(fnode))
 
     for rule_fn in (
         _rule_01, _rule_02, _rule_03, _rule_04, _rule_05,
@@ -7651,8 +7871,8 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
             continue
         findings.extend(rule_fn(ctx))
 
-    # ── Restore original ast.walk ──────────────────────────────────────
-    ast.walk = _orig_walk
+    # ── Release this thread's walk cache ───────────────────────────────
+    _WALK_LOCAL.cache = None
 
     # ── Data science ruleset ───────────────────────────────────────────────
     _HAS_DS_IMPORTS = bool(re.search(r'import\s+(?:pandas|numpy|sklearn|tensorflow|torch|keras|matplotlib|scipy|seaborn|plotly)', code))
@@ -7717,7 +7937,18 @@ def _detect(code: str, filename: str = "", global_graph: object = None) -> list[
         f for f in findings
         if f.rule_id != "PY-037" or (f.cwe, f.line or 0) not in ast_covered
     ]
-    # Second: title/line dedup
+    # Second: title/line dedup.
+    # The input order must be explicit: several rules can emit an equivalent
+    # finding for the same line, and whichever is seen first survives.  In a
+    # parallel scan that order depended on rule evaluation timing, so the
+    # reported rule id varied between identical runs.  Sorting on stable keys
+    # makes the survivor deterministic regardless of how the scan was scheduled.
+    findings.sort(key=lambda f: (
+        f.line or 0,
+        f.severity.sort_key,
+        f.rule_id or "",
+        (f.title or "").lower(),
+    ))
     seen: set[tuple[str, int | None]] = set()
     deduped: list[Finding] = []
     for f in findings:
@@ -7917,16 +8148,29 @@ _PY_CMD_INJ_SINK = re.compile(
     re.IGNORECASE,
 )
 
+# Sinks that render into a browser.  Bare `.write(` is deliberately excluded:
+# `os.write(fd, ...)`, `log.write(...)` and `StringIO.write(...)` are not HTML
+# rendering, and matching them produced 183 HIGH CWE-79 findings on the Python
+# standard library.  Plain string formatting (`return "%s" % x`) is likewise not
+# an XSS sink.  `redirect` is removed as well — it is CWE-601, not CWE-79.
 _PY_XSS_SINK = re.compile(
-    r'(?:render_template_string|render|render_to_response|HttpResponse|JsonResponse|make_response|redirect|Response|'
-    r'HTTPResponse|streaminghttpresponse|FileResponse|send_file)\s*\(|'
-    r'\.write\s*\(|\.writelines\s*\(|'
-    r'return\s+["\'][^"\']*["\']\s*\+|return\s+\w+\s*\+\s*["\']|return\s+["\'][^"\']*["\']\s*%\s*\(',
+    r'(?:render_template_string|render_template|render_to_response|HttpResponse|JsonResponse|'
+    r'make_response|HTTPResponse|StreamingHttpResponse|FileResponse|send_file|'
+    r'Markup|mark_safe)\s*\(|'
+    r'(?:self\.wfile|wfile|response|resp|reply|html|page|body)\.write\s*\(',
     re.IGNORECASE,
 )
 
+# Sinks are anchored with a negative lookbehind: without it, `IncompleteRead(`
+# matched the `read(` alternative and `profile(` matched `file(`, producing
+# HIGH path-traversal findings on method names throughout the standard library.
+#
+# Bare `read`/`write`/`readlines`/`writelines` are deliberately absent: those
+# operate on an already-open stream and take no path, so `write(FRAME + pack(...))`
+# in `pickle.py` was reported as path traversal.  Path traversal requires a
+# path: `open(...)`, a download helper, or one of the `os.*` path operations.
 _PY_PATH_TRAV_SINK = re.compile(
-    r'(?:open|file|read|write|readlines|writelines|send_file|send_from_directory|'
+    r'(?<![A-Za-z_])(?:open|file|send_file|send_from_directory|'
     r'os\.(?:remove|unlink|rmdir|mkdir|chmod|chown|rename|symlink|link|stat|access|'
     r'listdir|walk|scandir|makedirs|removedirs))\s*\(',
     re.IGNORECASE,
@@ -8039,6 +8283,120 @@ def _get_py_propagated_taint(code: str) -> set[str]:
     return tainted
 
 
+def _mask_py_comments(code: str) -> str:
+    """Blank out Python comment text, preserving length and newlines.
+
+    Fallback rules match sinks with regexes.  Prose inside a comment is not
+    code: ``# ... until read() would block`` was matching the ``read(`` file
+    sink and producing a HIGH path-traversal finding on a comment line.  String
+    literals are tracked so that a ``#`` inside one is not mistaken for a
+    comment; their contents are deliberately left intact because some rules
+    legitimately inspect literal text.
+    """
+    return _mask_py_literals(code, blank_strings=False)
+
+
+def _mask_py_literals(code: str, *, blank_strings: bool = True) -> str:
+    """Blank comments, and optionally string bodies, preserving offsets.
+
+    ``blank_strings=True`` is used for *argument analysis*: a file mode such as
+    ``'rb+'`` is not a string concatenation, and ``b''.join(...)`` is not a
+    shell pipeline.  Sink *discovery* uses ``blank_strings=False`` because a few
+    rules deliberately inspect literal text (``compile(src, "<string>", "exec")``).
+    """
+    out = list(code)
+    i = 0
+    n = len(code)
+    while i < n:
+        ch = code[i]
+        if ch == "#":
+            while i < n and code[i] != "\n":
+                out[i] = " "
+                i += 1
+            continue
+        if ch in ("'", '"'):
+            delim = ch * 3 if code[i:i + 3] == ch * 3 else ch
+            body_start = i + len(delim)
+            j = body_start
+            while j < n:
+                if code[j] == "\\":
+                    j += 2
+                    continue
+                if code[j:j + len(delim)] == delim:
+                    break
+                if len(delim) == 1 and code[j] == "\n":
+                    break  # unterminated single-quoted literal
+                j += 1
+            if blank_strings:
+                for k in range(body_start, min(j, n)):
+                    if out[k] != "\n":
+                        out[k] = " "
+            i = j + len(delim) if j < n and code[j:j + len(delim)] == delim else j + 1
+            continue
+        i += 1
+    return "".join(out)
+
+
+def _py_sink_argument(code: str, match: re.Match, max_dist: int = 600) -> str:
+    """Return the balanced-paren argument text of a sink call."""
+    open_idx = code.find("(", match.start())
+    if open_idx == -1:
+        return ""
+    depth = 0
+    limit = min(len(code), open_idx + max_dist)
+    for i in range(open_idx, limit):
+        char = code[i]
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 0:
+                return code[open_idx + 1:i]
+    return code[open_idx + 1:limit]
+
+
+# A sink argument is "dynamic" only if it is built at the call site: string
+# concatenation, %-formatting, .format(), an f-string, or a string join.
+# `os.path.join(...)` is deliberately *not* dynamic — it is the safe way to
+# build a path, and matching it flagged `open(os.path.join(base, name))`
+# throughout the standard library.
+_PY_DYNAMIC_ARG = re.compile(
+    r'\+\s*\w|\w\s*\+|\.format\s*\(|f["\']|%\s*\(|["\']\s*\.join\s*\(',
+)
+
+
+def _py_arg_is_dynamic(arg_text: str) -> bool:
+    """True when the sink's own argument is constructed dynamically.
+
+    Evaluating this on the argument instead of a five-line window is the whole
+    difference between evidence and coincidence: ``'+' in context`` is true for
+    almost any real function body.
+
+    String bodies are masked internally, so the test cannot be fooled by a
+    literal that merely *looks* like an operator (``'rb+'``).  Masking is
+    idempotent, so callers may pass already-masked text.
+    """
+    return bool(_PY_DYNAMIC_ARG.search(_mask_py_literals(arg_text)))
+
+
+def _py_first_arg(arg_text: str) -> str:
+    """Return the first top-level argument of a call's argument text.
+
+    Only the resource-selecting argument matters for path and lookup sinks:
+    ``open(path, 'r+' + mode)`` builds its *mode* dynamically, which is not a
+    path traversal.
+    """
+    depth = 0
+    for i, char in enumerate(arg_text):
+        if char in "([{":
+            depth += 1
+        elif char in ")]}":
+            depth -= 1
+        elif char == "," and depth == 0:
+            return arg_text[:i]
+    return arg_text
+
+
 def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
     """Catch CWE-78, CWE-79, CWE-89, CWE-22 patterns that the main analyzer may miss."""
     findings: list[Finding] = []
@@ -8056,38 +8414,29 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
 
     lines = code.splitlines()
     propagated = _get_py_propagated_taint(code)
+    # Sinks are matched against comment-masked source so that prose cannot be
+    # mistaken for code.  Offsets are preserved, so indices stay comparable.
+    masked = _mask_py_comments(code)
+    # Argument analysis additionally blanks string bodies so that literal text
+    # cannot masquerade as dynamic construction (`'rb+'`, `b''.join(...)`).
+    masked_args = _mask_py_literals(code)
 
-    def _arg_contains_taint(m: re.Match, max_dist: int = 200) -> tuple[bool, set[str]]:
+    def _path_arg_is_dynamic(m: re.Match) -> bool:
+        """Is the resource-selecting argument built dynamically at the call site?"""
+        return _py_arg_is_dynamic(_py_first_arg(_py_sink_argument(masked_args, m)))
+
+    def _arg_contains_taint(m: re.Match, max_dist: int = 600) -> tuple[bool, set[str]]:
         """Check if arguments to a sink contain propagated taint variables."""
-        matched = m.group()
-        paren_idx = matched.find('(')
-        if paren_idx == -1:
-            return False, set()
-        sink_start = m.start() + paren_idx
-        arg_text = ""
-        depth = 0
-        arg_start = None
-        for i in range(sink_start, min(sink_start + max_dist, len(code))):
-            c = code[i]
-            if c == '(' and depth == 0:
-                arg_start = i + 1
-                depth = 1
-            elif c == '(':
-                depth += 1
-            elif c == ')':
-                depth -= 1
-                if depth == 0:
-                    arg_text = code[arg_start:i] if arg_start else ""
-                    break
+        arg_text = _py_sink_argument(masked_args, m, max_dist)
         arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg_text)) if arg_text else set()
         return bool(arg_vars & propagated) if propagated else False, arg_vars & propagated
 
     # CWE-78: Command injection
-    for m in _PY_CMD_INJ_SINK.finditer(code):
+    for m in _PY_CMD_INJ_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
-        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context:
+        if has_prop or _py_arg_is_dynamic(_py_sink_argument(masked_args, m)):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
                 title=f"CWE-78: Command injection via {m.group()[:60]} at line {line_no}",
@@ -8106,14 +8455,20 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
         "/http/client/", "/httplib/", "/httpcore/",
     )
     _is_http_client_path = any(p in filename.lower().replace("\\", "/") for p in _HTTP_CLIENT_PATH_PATTERNS)
-    for m in _PY_XSS_SINK.finditer(code):
+    for m in _PY_XSS_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         matched = m.group().lower()
         # Skip Response(...)/redirect(...) in HTTP client library packages
         if _is_http_client_path and any(kw in matched for kw in ("response", "httpresponse", "redirect")):
             continue
-        if any(kw in context.lower() for kw in ('request', 'param', 'data', 'content', 'body', 'user_input', 'args', 'form')):
+        arg = _py_sink_argument(masked_args, m)
+        has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        # XSS requires user data reaching an HTML-rendering sink.  Accept a
+        # traced tainted variable, or a request accessor passed straight in.
+        if not (has_prop or re.search(r'\brequest\.|\.GET\b|\.POST\b', arg)):
+            continue
+        if has_prop or _py_arg_is_dynamic(arg) or re.search(r'\brequest\.', arg):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
                 title=f"CWE-79: XSS via {m.group()[:60]} at line {line_no}",
@@ -8124,7 +8479,7 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
             ))
 
     # CWE-89: SQL injection
-    for m in _PY_SQLI_SINK.finditer(code):
+    for m in _PY_SQLI_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         # Skip safe parameterized queries: .execute(text(...), {'key': var}) or .execute(sql, params)
@@ -8133,7 +8488,7 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
         if re.search(r'\.execute\s*\([^)]+,\s*\w+\s*=\s*\w+', context):
             continue
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
-        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or '%' in context:
+        if has_prop or _py_arg_is_dynamic(_py_sink_argument(masked_args, m)) or re.search(r'%\s*[\(\w]', _py_sink_argument(masked_args, m)):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
                 title=f"CWE-89: SQL injection via {m.group()[:60]} at line {line_no}",
@@ -8145,7 +8500,7 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
             ))
 
     # CWE-22: Path traversal
-    for m in _PY_PATH_TRAV_SINK.finditer(code):
+    for m in _PY_PATH_TRAV_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         matched = m.group()
         # Skip method calls like f.read(), obj.write() — not path traversal
@@ -8154,13 +8509,12 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
         # Skip in HTTP client libraries where file ops are internal logic
         if _is_http_client_path:
             continue
-            continue
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         # Skip if secure_filename / werkzeug sanitizer is used
         if 'secure_filename' in context or 'werkzeug' in context or 'basename' in context:
             continue
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
-        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or 'join' in context.lower():
+        if has_prop or _path_arg_is_dynamic(m):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
                 title=f"CWE-22: Path traversal via {m.group()[:60]} at line {line_no}",
@@ -8172,14 +8526,14 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
             ))
 
     # CWE-95: eval() code injection — catch dynamic eval calls
-    for m in _PY_EVAL_INJ_SINK.finditer(code):
+    for m in _PY_EVAL_INJ_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
         # Skip if restricted globals are used (safe eval pattern)
         if '__builtins__' in context:
             continue
-        if has_prop or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context:
+        if has_prop or _py_arg_is_dynamic(_py_sink_argument(masked_args, m)):
             findings.append(Finding(
                 category="security", severity=Severity.CRITICAL,
                 title=f"CWE-95: Code injection via eval() at line {line_no}",
@@ -8193,21 +8547,15 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
     # CWE-918: SSRF — catch requests/httpx/urllib with dynamic URL
     # Only apply function-parameter heuristic when there's NO visible web-framework
     # taint source (request.args etc.), to avoid FP on reassigned-to-constant cases.
-    for m in _PY_SSRF_SINK.finditer(code):
+    for m in _PY_SSRF_SINK.finditer(masked):
         line_no = code[:m.start()].count('\n') + 1
         context = '\n'.join(lines[max(0,line_no-3):min(len(lines),line_no+2)])
         has_prop, taint_vars = _arg_contains_taint(m) if propagated else (False, set())
+        arg = _py_sink_argument(masked_args, m)
         # Function-param SSRF: only when no visible request.* source exists
         arg_is_param = False
         if not has_prop and not has_taint_source:
-            # Extract arg vars from the full sink call (not just the match)
-            arg_text = ""
-            paren_idx = m.group().find('(')
-            if paren_idx != -1:
-                sink_start = m.start() + paren_idx
-                max_dist = min(200, len(code) - sink_start)
-                arg_text = code[sink_start:sink_start + max_dist]
-            arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg_text)) if arg_text else set()
+            arg_vars = set(re.findall(r'\b([A-Za-z_]\w*)\b', arg)) if arg else set()
             for var in arg_vars:
                 if re.search(rf'def\s+\w+\s*\([^)]*\b{re.escape(var)}\b[^)]*\)', code):
                     arg_is_param = True
@@ -8219,7 +8567,7 @@ def _python_fallback_detect(code: str, filename: str) -> list[Finding]:
                 if re.search(rf'\b{re.escape(var)}\s*=\s*["\']https?://', context):
                     has_prop = False
                     break
-        if has_prop or arg_is_param or '+' in context or 'format(' in context or 'f"' in context or 'f\'' in context or '%' in context:
+        if has_prop or arg_is_param or _py_arg_is_dynamic(arg):
             findings.append(Finding(
                 category="security", severity=Severity.HIGH,
                 title=f"CWE-918: SSRF via {m.group()[:50]} at line {line_no}",

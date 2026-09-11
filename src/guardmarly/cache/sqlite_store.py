@@ -39,16 +39,31 @@ class SQLiteStore:
         if self._connection is None:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             self._connection = sqlite3.connect(str(self.path), timeout=30.0)
-            self._connection.row_factory = sqlite3.Row
-            # Phase 4: WAL mode for concurrent-safe reads during parallel scans
-            self._connection.execute("PRAGMA journal_mode=WAL")
-            self._connection.execute("PRAGMA synchronous=NORMAL")
-            self._initialise()
+            conn = self._connection
+            conn.row_factory = sqlite3.Row
+            # `journal_mode=WAL` rewrites the database header, and the schema DDL
+            # ends in a commit. Both are *database*-level facts, so they only need
+            # doing when the database is not already set up. Re-running them for
+            # every connection made a single cache read cost ~37ms, which the
+            # profiler showed as 144s cumulative across 814 open/close cycles.
+            conn.execute("PRAGMA synchronous=NORMAL")  # per-connection, no I/O
+            table_ready = conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='cache_entries'"
+            ).fetchone() is not None
+            if not table_ready:
+                conn.execute("PRAGMA journal_mode=WAL")
+                self._initialise()
+            elif str(conn.execute("PRAGMA journal_mode").fetchone()[0]).lower() != "wal":
+                # Cheap read-only check; only rewrite the header if it is not WAL.
+                conn.execute("PRAGMA journal_mode=WAL")
         return self._connection
 
     def close(self) -> None:
         """Close the database connection if one is open."""
         if self._connection is not None:
+            # Flush any deferred cache writes (see set_json) before closing, so
+            # a whole scan costs one commit instead of one per entry.
+            self._connection.commit()
             self._connection.close()
             self._connection = None
 
@@ -73,7 +88,15 @@ class SQLiteStore:
         return self._connection
 
     def set_json(self, bucket: str, key: str, value: Any) -> None:
-        """Store a JSON-serialisable value under ``bucket``/``key``."""
+        """Store a JSON-serialisable value under ``bucket``/``key``.
+
+        The write is deliberately *not* committed here. This cache is an
+        optimisation, not a source of truth, and uncommitted rows are already
+        visible to subsequent reads on this connection -- so one commit on
+        close() is enough. Profiling a 189 kLOC stdlib scan showed 608k
+        individual commits costing 7.6s of pure commit time plus WAL/fsync
+        pressure; the entries are small and bounded, so deferring is safe.
+        """
         payload = json.dumps(value, sort_keys=True)
         conn = self.connect()
         conn.execute(
@@ -85,7 +108,6 @@ class SQLiteStore:
             """,
             (bucket, key, payload),
         )
-        conn.commit()
 
     def get_json(self, bucket: str, key: str) -> Any | None:
         """Load a stored JSON value, returning ``None`` when absent."""
@@ -105,7 +127,6 @@ class SQLiteStore:
             "DELETE FROM cache_entries WHERE bucket = ? AND cache_key = ?",
             (bucket, key),
         )
-        conn.commit()
 
     def keys(self, bucket: str) -> list[str]:
         """Return all keys stored in a bucket."""

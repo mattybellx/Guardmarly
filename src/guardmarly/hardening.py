@@ -20,7 +20,10 @@ import logging
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from guardmarly._types import Finding
 
 _log = logging.getLogger(__name__)
 
@@ -444,7 +447,7 @@ class FileMetadata:
 # PART 5: Integration Points
 # ════════════════════════════════════════════════════════════════════════════
 
-def should_suppress_in_test_context(finding: 'Finding', metadata: FileMetadata) -> bool:  # noqa: F821
+def should_suppress_in_test_context(finding: Finding, metadata: FileMetadata) -> bool:
     """Determine if a finding should be suppressed due to test/mock context."""
     # CWE-798 (hardcoded secrets) in test files should be downgraded/suppressed
     if metadata.is_test_file or metadata.is_mock_file:
@@ -455,12 +458,12 @@ def should_suppress_in_test_context(finding: 'Finding', metadata: FileMetadata) 
 
 
 __all__ = [
+    "FileMetadata",
     "MinifiedAnalysis",
-    "detect_minified",
-    "TemplateEngineDetector",
-    "TemplateInjectionFinding",
     "StreamingASTConfig",
     "StreamingASTParser",
-    "FileMetadata",
+    "TemplateEngineDetector",
+    "TemplateInjectionFinding",
+    "detect_minified",
     "should_suppress_in_test_context",
 ]

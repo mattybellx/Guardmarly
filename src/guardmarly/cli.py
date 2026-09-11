@@ -8,65 +8,121 @@ Command-line interface for guardmarly.
     guardmarly --stdin --lang python < app.py
     guardmarly src/ --fail-on high
 
-Zero external dependencies — pure stdlib only.
+The analysis core is pure standard library — ``rich`` is the only third-party
+dependency and is used solely for progress/spinner rendering (the scanner and
+all output formats work without it).
 """
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
 import gc
-import re
 import json
 import logging
+import os
+import re
 import sys
 import textwrap
-import time
 import threading
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
+from guardmarly import (
+    _CLOJURE_EXTS,
+    _CSHARP_EXTS,
+    _DART_EXTS,
+    _DOCKERFILE_EXTS,
+    _ELIXIR_EXTS,
+    _GO_EXTS,
+    _HASKELL_EXTS,
+    _JAVA_EXTS,
+    _JS_EXTS,
+    _KOTLIN_EXTS,
+    _LUA_EXTS,
+    _PHP_EXTS,
+    _PYTHON_EXTS,
+    _RUBY_EXTS,
+    _RUST_EXTS,
+    _SCALA_EXTS,
+    _SHELL_EXTS,
+    _SWIFT_EXTS,
+    _TERRAFORM_EXTS,
+)
+from guardmarly import _stdio as _stdio_helpers
+from guardmarly.__init__ import _analyze_pattern_only
 from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
-from guardmarly.config import apply_config_to_results, load_config, temporary_analyzer_config
-from guardmarly.python_analyzer import analyze_python
+from guardmarly.config import (
+    apply_config_to_results,
+    load_config,
+    temporary_analyzer_config,
+)
+from guardmarly.engine.triage import run_triage
+from guardmarly.ir.global_graph import GlobalGraph
 from guardmarly.js_engine.backends import (
     backend_choices,
     backend_execution_record,
     list_js_backends,
     run_js_analysis,
 )
-from guardmarly.reporters import format_text_multi, format_json, format_sarif, format_ciso_report, format_html
-from guardmarly.rules import describe_rule, list_rule_contracts
-from guardmarly import _PYTHON_EXTS, _JS_EXTS, _GO_EXTS, _JAVA_EXTS, _CSHARP_EXTS, _RUBY_EXTS, _PHP_EXTS, _RUST_EXTS, _KOTLIN_EXTS, _SWIFT_EXTS, _DART_EXTS, _LUA_EXTS, _ELIXIR_EXTS, _SCALA_EXTS, _CLOJURE_EXTS, _HASKELL_EXTS, _SHELL_EXTS, _DOCKERFILE_EXTS, _TERRAFORM_EXTS
-from guardmarly.__init__ import _analyze_pattern_only
-
-from guardmarly.ir.global_graph import GlobalGraph
-from guardmarly.profiler import ScanProfiler
-from guardmarly.engine.triage import run_triage
 from guardmarly.licensing import (
     LicenseFeatureGate,
     LicenseRequiredError,
-    load_license,
-    save_license_key,
     _license_file_path,
-    format_license_status,
-    maybe_show_upgrade_prompt,
-    bump_scan_count,
-    bump_lifetime_scan_count,
-    get_lifetime_scan_stats,
     bump_guarded_autofix_count,
+    bump_lifetime_scan_count,
+    bump_scan_count,
+    format_license_status,
+    get_lifetime_scan_stats,
+    load_license,
     maybe_show_guarded_autofix_upgrade_prompt,
+    maybe_show_upgrade_prompt,
     remaining_guarded_autofix_quota,
+    save_license_key,
 )
+from guardmarly.profiler import ScanProfiler
+from guardmarly.python_analyzer import analyze_python
+from guardmarly.reporters import (
+    format_ciso_report,
+    format_html,
+    format_json,
+    format_sarif,
+    format_text_multi,
+)
+from guardmarly.rules import describe_rule, list_rule_contracts
+from guardmarly.suppressions import apply_inline_suppressions
 
 try:
     from rich.console import Console
-    from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn, TimeElapsedColumn
     from rich.panel import Panel
-    console = Console()
+    from rich.progress import (
+        BarColumn,
+        Progress,
+        SpinnerColumn,
+        TextColumn,
+        TimeElapsedColumn,
+    )
+    console = Console(file=_stdio_helpers.never_fail_stream(sys.stdout))
 except ImportError:
     console = None
     Progress = None
     SpinnerColumn = BarColumn = TextColumn = TimeElapsedColumn = None
+
+
+def _reconfigure_streams(**kwargs: Any) -> None:
+    """Deprecated shim — see :mod:`guardmarly._stdio`."""
+    _stdio_helpers._reconfigure_streams((sys.stdout, sys.stderr, sys.__stdout__, sys.__stderr__), **kwargs)
+
+
+def _enable_windows_utf8_console() -> bool:
+    """Deprecated shim — see :mod:`guardmarly._stdio`."""
+    return _stdio_helpers._enable_windows_utf8_console()
+
+
+def _harden_stdio_encoding() -> None:
+    """Deprecated shim — see :mod:`guardmarly._stdio`."""
+    _stdio_helpers.harden_stdio_encoding()
+
 
 def _detect_language(path: Path) -> str | None:
     ext = path.suffix.lower()
@@ -262,7 +318,10 @@ def _collect_files(paths: list[Path], exclude_patterns: list[str]) -> list[Path]
 
 def _build_cross_language_execution(root_dir: Path, *, return_details: bool = False) -> dict[str, Any] | tuple[dict[str, Any], list[dict[str, object]]]:
     """Build execution metadata for experimental cross-language graph mode (DIR-3.3: GlobalGraph converged)."""
-    from guardmarly.graph.cross_language_taint import build_repository_graph_with_global_graph, find_cross_language_taint
+    from guardmarly.graph.cross_language_taint import (
+        build_repository_graph_with_global_graph,
+        find_cross_language_taint,
+    )
 
     graph, global_graph, bridge_count = build_repository_graph_with_global_graph(root_dir)
     stats = graph.statistics()
@@ -878,34 +937,83 @@ def _should_fail(results: list[AnalysisResult], fail_on: str) -> bool:
     return False
 
 
-def _finding_fingerprint(file_path: str, f: "Finding") -> str:
+def _baseline_path_token(file_path: str, workspace_root: Path | None = None) -> str:
+    """Normalise a finding path so baselines are portable across path spellings.
+
+    A baseline records fingerprints containing the file path, so scanning `.`
+    and then an absolute path (or running from a different working directory)
+    used to report every accepted finding as new. Paths are therefore reduced to
+    a POSIX path relative to the workspace root; files outside the root keep
+    their absolute form.
+    """
+    if not file_path or file_path.startswith("<"):
+        return file_path.replace("\\", "/")
+
+    root = (workspace_root or Path.cwd())
+    try:
+        root = root.resolve()
+    except OSError:  # pragma: no cover - unresolvable root
+        pass
+
+    candidate = Path(file_path)
+    try:
+        # Relative paths (both stored baseline entries and findings from a scan
+        # rooted at the project) are anchored to the workspace root, never to
+        # whatever the current working directory happens to be.
+        resolved = candidate if candidate.is_absolute() else (root / candidate)
+        resolved = resolved.resolve()
+        return resolved.relative_to(root).as_posix()
+    except (OSError, ValueError):
+        try:
+            return Path(file_path).resolve().as_posix()
+        except OSError:  # pragma: no cover - unresolvable path
+            return file_path.replace("\\", "/")
+
+
+def _finding_fingerprint(file_path: str, f: Finding, workspace_root: Path | None = None) -> str:
     """Generate a stable fingerprint for a finding (for baseline diffing)."""
+    token = _baseline_path_token(file_path, workspace_root)
     if f.rule_id:
-        return f"rule:{f.rule_id}|{file_path}|{f.line}"
+        return f"rule:{f.rule_id}|{token}|{f.line}"
     cwe = f.cwe or ""
     title = f.title[:60].lower()
-    return f"legacy:{cwe}|{title}|{file_path}|{f.line}"
+    return f"legacy:{cwe}|{title}|{token}|{f.line}"
 
 
-def _finding_fingerprints(file_path: str, f: "Finding") -> set[str]:
+def _finding_fingerprints(file_path: str, f: Finding, workspace_root: Path | None = None) -> set[str]:
     """Generate both stable and legacy fingerprints for backwards-compatible baselines."""
+    token = _baseline_path_token(file_path, workspace_root)
     fingerprints: set[str] = set()
     if f.rule_id:
-        fingerprints.add(f"rule:{f.rule_id}|{file_path}|{f.line}")
+        fingerprints.add(f"rule:{f.rule_id}|{token}|{f.line}")
     cwe = f.cwe or ""
     title = f.title[:60].lower()
-    fingerprints.add(f"legacy:{cwe}|{title}|{file_path}|{f.line}")
+    fingerprints.add(f"legacy:{cwe}|{title}|{token}|{f.line}")
     return fingerprints
 
 
-def _load_baseline(path: Path) -> set[str]:
-    """Load a baseline JSON file and return a set of fingerprints."""
-    data = json.loads(path.read_text(encoding="utf-8"))
+def _load_baseline(path: Path, workspace_root: Path | None = None) -> set[str]:
+    """Load a baseline JSON file and return a set of fingerprints.
+
+    A missing or unreadable baseline yields an empty set: callers either treat
+    that as "nothing accepted yet" (--baseline-update creating the file) or
+    have already reported the missing file themselves.
+
+    Paths are normalised exactly as when writing (see `_baseline_path_token`),
+    so a baseline generated with `guardmarly .` also matches a later scan that
+    passes absolute paths.
+    """
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        logging.getLogger(__name__).debug("Could not read baseline %s: %s", path, exc)
+        return set()
     fingerprints: set[str] = set()
     results_list = data.get("results", data) if isinstance(data, dict) else data
     if isinstance(results_list, list):
         for entry in results_list:
             fp = entry.get("file_path", entry.get("file", ""))
+            fp = _baseline_path_token(str(fp), workspace_root)
             for finding in entry.get("findings", []):
                 rule_id = finding.get("rule_id", "")
                 cwe = finding.get("cwe", "")
@@ -954,8 +1062,7 @@ def _collect_changed_line_map(workspace_root: Path) -> dict[str, set[int]]:
             if raw == "/dev/null":
                 current_file = None
                 continue
-            if raw.startswith("b/"):
-                raw = raw[2:]
+            raw = raw.removeprefix("b/")
             current_file = (workspace_root / raw).resolve()
             changed.setdefault(str(current_file), set())
             continue
@@ -1346,7 +1453,10 @@ def _postprocess_guarded_rescan_results(
 
     # ── Execution Context Inference (Section 5 of blueprint) ──────────
     try:
-        from guardmarly.execution_context import classify_file, should_suppress_for_context
+        from guardmarly.execution_context import (
+            classify_file,
+            should_suppress_for_context,
+        )
         for ar in processed:
             if not ar.file_path or ar.file_path == "<stdin>":
                 continue
@@ -1387,22 +1497,39 @@ def _handle_baseline_command(args: list[str]) -> None:
 
             Examples:
               guardmarly baseline generate --output baseline.json
-              guardmarly scan src/ --baseline-file baseline.json
+              guardmarly src/ --baseline baseline.json
+              guardmarly src/ --baseline baseline.json --baseline-update
         """))
         return
 
     cmd = args[0]
     if cmd == "generate":
-        # Scan current directory and generate a baseline
+        # Scan a path (default: the current directory) and write a baseline that
+        # a later scan can diff against. Reuses the normal scan path so the
+        # baseline always matches what a real run reports.
         parser = argparse.ArgumentParser(prog="guardmarly baseline generate")
         parser.add_argument("--output", "-o", type=Path, default=Path("baseline.json"), metavar="FILE")
+        parser.add_argument("paths", nargs="*", type=Path, default=[Path(".")], metavar="PATH")
         parsed = parser.parse_args(args[1:])
-        print("Scanning current directory to generate baseline...")
-        # Use the main parser to scan
-        main_parser = build_parser()
-        _scan_args = main_parser.parse_args(["."])  # Scan current dir with defaults
-        # (This is simplified; in production we'd re-invoke the scan logic)
-        print(f"✅ Baseline generated at {parsed.output}")
+
+        targets = [str(p) for p in parsed.paths] or ["."]
+        print(f"Scanning {' '.join(targets)} to generate baseline...")
+
+        saved_argv = sys.argv
+        sys.argv = [
+            "guardmarly", *targets,
+            "--baseline", str(parsed.output),
+            "--baseline-update",
+            "--fail-on", "never",
+        ]
+        try:
+            _main_impl()
+        finally:
+            sys.argv = saved_argv
+
+        if not parsed.output.is_file():
+            print(f"guardmarly: baseline was not written to {parsed.output}", file=sys.stderr)
+            sys.exit(1)
     elif cmd == "load":
         print("Development mode: loading baseline file...")
     else:
@@ -1522,12 +1649,16 @@ def _handle_migrate_config_command(args: list[str]) -> None:
     print(f"✅ Configuration migrated to {output_path}")
 
 
-def _apply_baseline(results: list[AnalysisResult], baseline: set[str]) -> list[AnalysisResult]:
+def _apply_baseline(
+    results: list[AnalysisResult],
+    baseline: set[str],
+    workspace_root: Path | None = None,
+) -> list[AnalysisResult]:
     """Remove findings already present in the baseline."""
     for r in results:
         r.findings = [
             f for f in r.findings
-            if _finding_fingerprints(r.file_path, f).isdisjoint(baseline)
+            if _finding_fingerprints(r.file_path, f, workspace_root).isdisjoint(baseline)
         ]
     return results
 
@@ -1535,9 +1666,19 @@ def _apply_baseline(results: list[AnalysisResult], baseline: set[str]) -> list[A
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="guardmarly",
-        description="Zero-dependency SAST scanner for Python, JavaScript, Go, Java, and C#",
+        description="Offline SAST scanner — authorization gaps (IDOR/CWE-639), "
+        "injection-class bugs and 35+ CWE types across Python, JavaScript/TypeScript, "
+        "Go, Java, C#, PHP and Ruby (plus 30+ pattern-aware languages).",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
+            Commands (run `guardmarly <command> --help` for details):
+              baseline generate|load   Create/load a baseline so CI fails only on new findings
+              migrate-config           Upgrade a v1 guardmarly.json to the current schema
+              registry                 Inspect or validate the rule-registry packs
+              audit-suppressions       Review `# guardmarly: ignore[...]` comments
+              license                  Activate or inspect a Pro license key
+              feedback                 Send a rule-precision report
+
             Examples:
               guardmarly app.py
               guardmarly src/ tests/
@@ -1546,11 +1687,14 @@ def build_parser() -> argparse.ArgumentParser:
               guardmarly --stdin --lang python < app.py
               guardmarly src/ --fail-on high
               guardmarly src/ --exclude .venv --exclude __pycache__
+              guardmarly src/ --baseline baseline.json      # only new findings
 
             Exit codes:
-              0   No findings at or above --fail-on severity (default: high)
-              1   One or more findings at or above --fail-on severity
-              2   Usage error or no files found
+              0    No findings at or above --fail-on severity (default: high)
+              1    One or more findings at or above --fail-on severity
+              2    Usage error, no files found, or --fail-on-degraded tripped
+              5    A Pro-only feature was requested without a license
+              130  Interrupted (Ctrl+C)
 
             SARIF output is free. Upgrade to Pro for SBOM & HTML dashboards:
               guardmarly license activate YOUR_KEY
@@ -1603,8 +1747,9 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
-        "--format", "-f", choices=["text", "json", "sarif", "ciso", "html"], default="text",
-        help="Output format (default: text). Use 'ciso' for executive summary, 'html' for browser dashboard.",
+        "--format", "-f", choices=["text", "json", "sarif", "ciso", "html"], default=None,
+        help="Output format (default: text, or guardmarly.json output_format). "
+             "Use 'ciso' for executive summary, 'html' for browser dashboard.",
     )
     parser.add_argument(
         "--cluster", action="store_true", default=True,
@@ -1651,9 +1796,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Write output artifacts into DIR using default filenames like findings.json or rules.json.",
     )
     parser.add_argument(
-        "--fail-on", default="high", metavar="SEVERITY",
+        "--fail-on", default=None, metavar="SEVERITY",
         choices=["critical", "high", "medium", "low", "info", "never"],
-        help="Exit with code 1 if any finding is at or above this severity (default: high).",
+        help="Exit with code 1 if any finding is at or above this severity "
+             "(default: high, or guardmarly.json fail_on).",
     )
     parser.add_argument(
         "--fail-on-degraded", action="store_true",
@@ -1951,6 +2097,108 @@ def _handle_feedback(args: argparse.Namespace) -> None:
     print(f"Feedback recorded: {feedback_file}")
 
 
+def _set_context_scan_root(paths: Any) -> None:
+    """Scope triage path heuristics to the scanned tree.
+
+    Without this, a project that merely *lives under* a directory named like a
+    test/example directory (``benchmarks``, ``samples``, ``build``, ``perf``,
+    ``scripts`` ...) has its findings silently discarded, because the ancestor
+    names are matched as if they were part of the project's own layout.
+    """
+    global _CONTEXT_SCAN_ROOT
+    try:
+        from guardmarly.engine.triage import ContextAnalyzer
+
+        candidates: list[str] = []
+        for raw in list(paths or []):
+            try:
+                resolved = Path(str(raw)).resolve()
+            except (OSError, ValueError):
+                continue
+            candidates.append(str(resolved.parent if resolved.is_file() else resolved))
+        if not candidates:
+            root: str | None = None
+        elif len(candidates) == 1:
+            root = candidates[0]
+        else:
+            root = os.path.commonpath(candidates)
+        ContextAnalyzer.set_scan_root(root)
+        _CONTEXT_SCAN_ROOT = ContextAnalyzer._scan_root
+    except Exception:  # noqa: BLE001 - scoping must never break a scan
+        pass
+
+
+# Root used to scope path heuristics; re-applied inside process workers.
+_CONTEXT_SCAN_ROOT: str | None = None
+
+
+def _process_pool_init(scan_root: str | None, max_file_kb: int | None) -> None:
+    r"""Seed a worker process with the parent's path and config context.
+
+    Each worker starts fresh.  The scan root scopes every path heuristic, so
+    without re-applying it a worker falls back to matching *host* paths -- which
+    is exactly how a project under a ``C:\build\`` style ancestry once reported
+    zero findings.
+    """
+    global _MAX_FILE_KB_OVERRIDE
+    if max_file_kb:
+        _MAX_FILE_KB_OVERRIDE = max_file_kb
+    try:
+        from guardmarly.engine.triage import ContextAnalyzer
+
+        ContextAnalyzer.set_scan_root(scan_root)
+    except Exception:  # noqa: BLE001 - scoping must never break a scan
+        pass
+
+
+_WORKER_GRAPH: Any = None
+
+
+def _worker_graph() -> Any:
+    """Return one ``GlobalGraph`` per worker *process*, on a private database.
+
+    Two measured problems with the obvious implementation:
+
+    * building the graph per *file* re-opened the store and re-ran the schema
+      migration for every file, so it is built once per worker instead;
+    * every worker defaulted to the shared ``.guardmarly/cache.db``, and
+      ``GlobalGraph.get_function_summary`` opens a connection to that file on
+      *every* call. With N workers that serialises on SQLite's write lock --
+      measured at only 2.16x speedup from 8 workers on a 12-CPU machine. A
+      per-process database file removes the contention completely.
+
+    A worker only ever sees its own chunk, so sharing the cache file bought
+    nothing. Each worker starts from a deleted file rather than whatever the
+    previous run left behind for that pid, so a scan is reproducible.
+    """
+    global _WORKER_GRAPH
+    if _WORKER_GRAPH is None:
+        import os as _os
+        import tempfile as _tempfile
+
+        from guardmarly.ir.global_graph import GlobalGraph
+
+        private = Path(_tempfile.gettempdir()) / f"guardmarly-graph-{_os.getpid()}.db"
+        for suffix in ("", "-wal", "-shm"):
+            Path(f"{private}{suffix}").unlink(missing_ok=True)
+        _WORKER_GRAPH = GlobalGraph(cache_path=private)
+    return _WORKER_GRAPH
+
+
+def _process_scan_chunk(path_strs: list[str]) -> list[tuple[str, Any]]:
+    """Analyse one deterministic chunk of files in a single worker.
+
+    Keeping the chunk as one task (rather than one task per file) means the
+    worker's graph is built once and reused, and the partitioning is fixed, so
+    a scan is reproducible for a given file order and worker count.
+    """
+    graph = _worker_graph()
+    results: list[tuple[str, Any]] = []
+    for path_str in path_strs:
+        results.append((path_str, _analyze_file(Path(path_str), global_graph=graph, engine="auto")))
+    return results
+
+
 def _analyze_file_with_timeout(
     path: Path,
     *,
@@ -2125,12 +2373,63 @@ def _analyze_file_streaming_fallback(
     return result
 
 
+def _can_prompt_interactively() -> bool:
+    """True only for a fully interactive terminal.
+
+    Both ends must be a TTY and the process must not be running under CI, so a
+    scan can never block waiting for an answer that nobody can type (wrappers,
+    IDE task runners, Docker without ``-i``, piped output).
+    """
+    if os.environ.get("CI"):
+        return False
+    try:
+        return bool(sys.stdin.isatty() and sys.stdout.isatty())
+    except (AttributeError, ValueError, OSError):
+        return False
+
+
+def _apply_config_defaults(
+    args: argparse.Namespace,
+    config: Any,
+    *,
+    format_from_cli: bool,
+    fail_on_from_cli: bool,
+    workers_from_cli: bool,
+    baseline_from_cli: bool,
+) -> None:
+    """Fill unset CLI flags from ``guardmarly.json``.
+
+    Precedence is flag > config file > built-in default, so a project can pin
+    its policy (`fail_on`, `output_format`, `log_level`, `max_workers`,
+    `baseline_file`) in one place without changing how explicit flags behave.
+    """
+    if not format_from_cli and getattr(config, "output_format", ""):
+        args.format = config.output_format
+
+    if not fail_on_from_cli and getattr(config, "fail_on", ""):
+        args.fail_on = config.fail_on
+
+    if not workers_from_cli and getattr(config, "max_workers", 0):
+        args.workers = config.max_workers
+        args.parallel = True
+
+    if not baseline_from_cli and getattr(config, "baseline_file", ""):
+        args.baseline = Path(config.baseline_file)
+
+    log_level = getattr(config, "log_level", "")
+    if log_level:
+        logging.getLogger("guardmarly").setLevel(
+            getattr(logging, log_level, logging.WARNING)
+        )
+
+
 def main() -> None:
     """Entry point for guardmarly CLI.
 
     Handles all subcommands, scan orchestration, and output formatting.
     Gracefully handles KeyboardInterrupt for a clean user experience.
     """
+    _harden_stdio_encoding()
     try:
         _main_impl()
     except KeyboardInterrupt:
@@ -2148,7 +2447,11 @@ def _run_dse_validation(golden_corpus_path: Path | None) -> None:
       1. ReDoS circuit breaker on all community regex patterns
       2. Golden corpus validation (if corpus directory exists)
     """
-    from guardmarly.dse import ReDoSCircuitBreaker, GoldenCorpusValidator, run_dse_pipeline
+    from guardmarly.dse import (
+        GoldenCorpusValidator,
+        ReDoSCircuitBreaker,
+        run_dse_pipeline,
+    )
     from guardmarly.yaml_rules import load_community_rules
 
     corpus_root = golden_corpus_path or Path(".guardmarly/golden_corpus")
@@ -2511,6 +2814,16 @@ def _main_impl() -> None:
 
     args = parser.parse_args()
 
+    # Command-line flags win over guardmarly.json, which wins over built-ins.
+    # Track what the user actually passed before filling in the built-ins so the
+    # config defaults can be applied later without overriding an explicit flag.
+    _format_from_cli = args.format is not None
+    _fail_on_from_cli = args.fail_on is not None
+    _workers_from_cli = getattr(args, "workers", None) is not None
+    _baseline_from_cli = getattr(args, "baseline", None) is not None
+    args.format = args.format or "text"
+    args.fail_on = args.fail_on or "high"
+
     if getattr(args, "guarded_fix", False) and getattr(args, "apply_fixes", False):
         parser.error("--guarded-fix and --apply-fixes are mutually exclusive")
 
@@ -2732,13 +3045,23 @@ def _main_impl() -> None:
     config = load_config(workspace_root)
     if config.warnings:
         _print_config_warnings(config.warnings)
+    _apply_config_defaults(
+        args,
+        config,
+        format_from_cli=_format_from_cli,
+        fail_on_from_cli=_fail_on_from_cli,
+        workers_from_cli=_workers_from_cli,
+        baseline_from_cli=_baseline_from_cli,
+    )
 
     runtime_rules = []
     _yaml_rules = None
     _registry_loader = None
     try:
         from guardmarly import yaml_rules as _yaml_rules
-        from guardmarly.registry.sharded_loader import load_custom_rules_for_code as _load_registry_packs_for_source
+        from guardmarly.registry.sharded_loader import (
+            load_custom_rules_for_code as _load_registry_packs_for_source,
+        )
 
         runtime_rules = _yaml_rules.load_runtime_rules(config=config, workspace_root=workspace_root)
         _registry_loader = _load_registry_packs_for_source
@@ -2860,6 +3183,12 @@ def _main_impl() -> None:
                              "site-packages", "dist", "build", ".tox",
                              "public", "vendor", "static", "assets", "bower_components"] + args.exclude + config.exclude_paths + _guardmarlyignore_patterns
             files = _collect_files(args.paths, exclude_extra)
+            # Scope test/generated path heuristics to the scanned tree so that
+            # ancestors on the host filesystem (e.g. C:\build\app) cannot cause
+            # findings to be silently discarded.  Regression: absolute-path
+            # scans of a tree under any 'benchmarks|tests|samples|build|...'
+            # directory reported zero findings.
+            _set_context_scan_root(args.paths)
             if getattr(args, "entropy", False):
                 entropy_files = _collect_entropy_files(args.paths, exclude_extra)
             if not files and not entropy_files:
@@ -3008,6 +3337,7 @@ def _main_impl() -> None:
                 # ── Speedup optimization: Parallel execution to bypass the GIL on multi-core systems ──
                 import concurrent.futures
                 import os
+
                 from guardmarly.python_analyzer import index_python_file
 
                 def _index_worker(fpath: Path) -> tuple[str, str] | None:
@@ -3051,21 +3381,59 @@ def _main_impl() -> None:
             if scan_targets:
                 if use_parallel:
                     import os as _os
+
                     from guardmarly.engine.async_scanner import scan_files_sync
 
                     n_workers = worker_count or _os.cpu_count() or 4
-                    print(
-                        f"guardmarly: parallel scan with {n_workers} workers over {len(scan_targets)} files",
-                        file=sys.stderr,
-                    )
-                    parallel_results = scan_files_sync(
-                        scan_targets,
-                        scan_fn=_scan_one,
-                        max_workers=n_workers,
-                    )
-                    for target in scan_targets:
-                        if target in parallel_results:
-                            results.append(parallel_results[target])
+                    # `--workers N` promises worker *processes*; the threaded
+                    # path cannot parallelise CPU-bound analysis (the GIL made
+                    # the advertised workers a no-op), so honour the promise.
+                    if worker_count:
+                        print(
+                            f"guardmarly: parallel scan with {n_workers} processes "
+                            f"over {len(scan_targets)} files",
+                            file=sys.stderr,
+                        )
+                        print(
+                            "guardmarly: note: process workers split the file list "
+                            "into fixed chunks, so cross-file analysis resolves "
+                            "within each worker's chunk. Results are reproducible "
+                            "for a given file order and worker count, but findings "
+                            "that span two chunks can differ from a default scan. "
+                            "Omit --workers for exact whole-tree results.",
+                            file=sys.stderr,
+                        )
+                        from concurrent.futures import ProcessPoolExecutor
+
+                        # Deterministic round-robin partitioning: worker k always
+                        # receives files k, k+n, k+2n, ...  That is both
+                        # reproducible and balanced, whereas `chunksize=` hands
+                        # whichever chunk finished to whichever worker is free.
+                        _files = [str(t) for t in scan_targets]
+                        _chunks = [c for c in (_files[i::n_workers] for i in range(n_workers)) if c]
+                        with ProcessPoolExecutor(
+                            max_workers=n_workers,
+                            initializer=_process_pool_init,
+                            initargs=(_CONTEXT_SCAN_ROOT,
+                                      getattr(args, "max_file_kb", None)),
+                        ) as executor:
+                            for _chunk in executor.map(_process_scan_chunk, _chunks):
+                                for _path_str, _result in _chunk:
+                                    if _result is not None:
+                                        results.append(_result)
+                    else:
+                        print(
+                            f"guardmarly: parallel scan with {n_workers} workers over {len(scan_targets)} files",
+                            file=sys.stderr,
+                        )
+                        parallel_results = scan_files_sync(
+                            scan_targets,
+                            scan_fn=_scan_one,
+                            max_workers=n_workers,
+                        )
+                        for target in scan_targets:
+                            if target in parallel_results:
+                                results.append(parallel_results[target])
                 elif Progress and args.format == "text":
                     with Progress(
                         SpinnerColumn(), # type: ignore
@@ -3157,6 +3525,28 @@ def _main_impl() -> None:
 
     results = apply_config_to_results(results, config)
 
+    # ── Inline suppressions: `# guardmarly: ignore[RULE-ID]` ────────────────
+    # Applied before triage/clustering/baseline so suppressed findings cannot
+    # reappear as "new" findings in a baseline diff.
+    def _read_suppression_source(path: str) -> str | None:
+        if path == "<stdin>":
+            return stdin_source
+        try:
+            return Path(path).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            return None
+
+    results, _suppressed_count = apply_inline_suppressions(results, _read_suppression_source)
+    if _suppressed_count:
+        _supp_msg = (
+            f"guardmarly: {_suppressed_count} finding(s) suppressed by inline "
+            "'guardmarly: ignore' comments (review with --audit-suppressions)"
+        )
+        if args.format == "text" and not args.output and console:
+            console.print(f"[dim]{_supp_msg}[/dim]")
+        else:
+            print(_supp_msg, file=sys.stderr)
+
     # ── Context-aware triage: downgrade confidence for test/mock/generated files ─
     # Only drop findings that are definitively false positives in test contexts.
     # Serious CWEs (SQLi, RCE, path traversal, hardcoded creds, missing auth)
@@ -3224,6 +3614,18 @@ def _main_impl() -> None:
                     )
                 _new_findings.append(_f)
             _r.findings = _new_findings
+        if _filtered:
+            # Never drop findings silently: a low-noise report that hides real
+            # issues is indistinguishable from a clean codebase.
+            _drop_msg = (
+                f"guardmarly: context triage removed {_filtered} finding(s) in "
+                f"test/generated/mock paths and demoted {_downgraded} "
+                f"(scan --no-triage to see everything)"
+            )
+            if args.format == "text" and not args.output and console:
+                console.print(f"[dim]{_drop_msg}[/dim]")
+            else:
+                print(_drop_msg, file=sys.stderr)
     except Exception:
         pass
 
@@ -3240,7 +3642,7 @@ def _main_impl() -> None:
     _spec_idor_validated = 0
     _spec_idor_boosted = 0
     try:
-        from guardmarly.engine.spec_idor import check_idor, _detect_framework
+        from guardmarly.engine.spec_idor import _detect_framework, check_idor
         for r in results:
             if not r.findings or not r.language:
                 continue
@@ -3292,7 +3694,7 @@ def _main_impl() -> None:
         _is_test, _ = ContextAnalyzer.is_test_context(r.file_path, "")
         _is_mock, _ = ContextAnalyzer.is_mock_context(r.file_path, "")
         # Skip benchmark directories — these are labeled test cases, not actual tests
-        _path_lower = r.file_path.lower().replace("\\", "/")
+        _path_lower = ContextAnalyzer._match_path(r.file_path)
         _is_benchmark = any(b in _path_lower for b in ("/owasp/", "/benchmark/", "/juliet/", "/testcode/"))
         if not (_is_test or _is_mock) or _is_benchmark:
             continue
@@ -3359,17 +3761,23 @@ def _main_impl() -> None:
     baseline_fps: set[str] = set()
     if args.baseline:
         if not args.baseline.is_file():
-            if console:
-                console.print(f"[bold red]guardmarly: baseline file not found: {args.baseline}[/bold red]")
-            else:
-                print(f"guardmarly: baseline file not found: {args.baseline}", file=sys.stderr)
-            sys.exit(2)
+            # Creating a baseline is the point of `--baseline-update`; only a
+            # plain --baseline against a missing file is an error.
+            if not getattr(args, "baseline_update", False):
+                if console:
+                    console.print(f"[bold red]guardmarly: baseline file not found: {args.baseline}[/bold red]")
+                else:
+                    print(f"guardmarly: baseline file not found: {args.baseline}", file=sys.stderr)
+                sys.exit(2)
         _pre_baseline = list(results) if getattr(args, "baseline_update", False) else None
-        baseline_fps = _load_baseline(args.baseline)
-        results = _apply_baseline(results, baseline_fps)
+        baseline_fps = (
+            _load_baseline(args.baseline, workspace_root) if args.baseline.is_file() else set()
+        )
+        results = _apply_baseline(results, baseline_fps, workspace_root)
         if getattr(args, "baseline_update", False) and _pre_baseline is not None:
             try:
                 new_bl_text = format_json(_pre_baseline, execution={})
+                args.baseline.parent.mkdir(parents=True, exist_ok=True)
                 args.baseline.write_text(new_bl_text, encoding="utf-8")
                 _bl_msg = f"guardmarly: baseline updated \u2192 {args.baseline}"
                 if console:
@@ -3378,6 +3786,7 @@ def _main_impl() -> None:
                     print(_bl_msg, file=sys.stderr)
             except OSError as exc:
                 print(f"guardmarly: could not write baseline: {exc}", file=sys.stderr)
+                sys.exit(2)
     elif getattr(args, "baseline_update", False):
         print("guardmarly: --baseline-update requires --baseline FILE", file=sys.stderr)
         sys.exit(2)
@@ -3446,7 +3855,10 @@ def _main_impl() -> None:
     diagnostics_enabled = getattr(args, "diagnostics", False) or args.diagnostics_output is not None
     diagnostics_payload: dict[str, Any] | None = None
     if diagnostics_enabled and results:
-        from guardmarly.engine.shadow_scan import generate_shadow_report, shadow_report_to_dict
+        from guardmarly.engine.shadow_scan import (
+            generate_shadow_report,
+            shadow_report_to_dict,
+        )
 
         all_diagnostics: list[dict[str, Any]] = []
         for r in results:
@@ -3560,12 +3972,20 @@ def _main_impl() -> None:
     # ── Audit pipeline (--audit flag) ───────────────────────────────────────
     if getattr(args, "audit", False):
         try:
-            from guardmarly.engine.audit import audit_findings, suggest_improvements, print_suggestions
+            from guardmarly.engine.audit import (
+                audit_findings,
+                print_suggestions,
+                suggest_improvements,
+            )
             audit_report = audit_findings(results, verbose=args.verbose)
 
             if getattr(args, "auto_rule", False):
                 try:
-                    from guardmarly.engine.auto_rules import generate_rules, load_memory, save_rules
+                    from guardmarly.engine.auto_rules import (
+                        generate_rules,
+                        load_memory,
+                        save_rules,
+                    )
 
                     memory = load_memory()
                     generated_rules = generate_rules(memory)
@@ -3585,7 +4005,10 @@ def _main_impl() -> None:
             if getattr(args, "apply_auto_rules", False):
                 try:
                     from guardmarly.engine.audit import AuditReport
-                    from guardmarly.engine.auto_rules import apply_rules_to_audit, load_rules
+                    from guardmarly.engine.auto_rules import (
+                        apply_rules_to_audit,
+                        load_rules,
+                    )
 
                     loaded_rules = load_rules()
                     updated_findings = apply_rules_to_audit(audit_report.findings, loaded_rules)
@@ -3607,7 +4030,10 @@ def _main_impl() -> None:
             # ── LLM triage mode (--llm) ──
             if getattr(args, "llm", False):
                 try:
-                    from guardmarly.engine.llm_triage import triage_report, check_ollama_available
+                    from guardmarly.engine.llm_triage import (
+                        check_ollama_available,
+                        triage_report,
+                    )
                     model = getattr(args, "llm_model", "qwen2.5-coder:14b")
                     min_conf = getattr(args, "llm_confidence", 0.85)
                     msg = f"guardmarly: checking Ollama ({model})..."
@@ -3712,7 +4138,7 @@ def _main_impl() -> None:
     _semgrep_stats: dict[str, Any] | None = None
     if getattr(args, "with_semgrep", False):
         try:
-            from guardmarly.engine.semgrep_ import run_semgrep_on_path, is_available
+            from guardmarly.engine.semgrep_ import is_available, run_semgrep_on_path
             if is_available():
                 _before = sum(len(r.findings) for r in results)
                 _all_semgrep: list[Any] = []
@@ -3895,19 +4321,34 @@ def _main_impl() -> None:
             print(f"guardmarly: PR document generation failed: {exc}", file=sys.stderr)
     # ── Interactive Auto-Fix Prompter ─────────────────────────────────────────
     fixable_count = sum(1 for r in results for f in r.findings if f.auto_fix)
-    
-    # Prompt the user if they didn't explicitly request fixes initially
-    if not getattr(args, "apply_fixes", False) and not getattr(args, "guarded_fix", False) and fixable_count > 0 and args.format == "text" and not args.output and console:
-        # Check standard input file descriptor directly if isatty is wonky in some test shells
-        try:
-            import os
-            if os.isatty(sys.stdin.fileno()):
+
+    # Prompt the user if they didn't explicitly request fixes initially.
+    # Only a *fully* interactive terminal may be prompted: a process whose stdin
+    # is a TTY but whose output is captured (IDE task runners, make, Docker
+    # without -i, wrappers that don't forward input) would otherwise block
+    # forever waiting for an answer nobody can type. Non-interactive runs get a
+    # hint instead, and CI never sees the prompt at all.
+    if (
+        not getattr(args, "apply_fixes", False)
+        and not getattr(args, "guarded_fix", False)
+        and fixable_count > 0
+        and args.format == "text"
+        and not args.output
+        and console
+    ):
+        if _can_prompt_interactively():
+            try:
                 console.print(f"\n[bold yellow]💡 Found {fixable_count} auto-fixable issue(s).[/bold yellow]")
                 ans = input("Would you like to automatically apply these fixes now? [y/N] ")
                 if ans.lower().strip() in ("y", "yes"):
-                    setattr(args, "apply_fixes", True)
-        except Exception:
-            pass
+                    args.apply_fixes = True
+            except (EOFError, KeyboardInterrupt, OSError):
+                pass
+        else:
+            console.print(
+                f"[dim]💡 {fixable_count} auto-fixable issue(s) — "
+                "re-run with --apply-fixes to apply them.[/dim]"
+            )
 
     if getattr(args, "apply_fixes", False):
         if console:

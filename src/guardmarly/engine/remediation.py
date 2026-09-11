@@ -405,6 +405,11 @@ class MultiLineRefactorer:
 
     def refactor(self, cwe: str, context: str, line_offset: int) -> Optional[str]:
         """Attempt multi-line refactoring for a given CWE."""
+        lines = context.splitlines()
+        # Every branch below may legitimately decline to produce a suggestion
+        # (unrecognised pattern, offset out of range, already-safe code), so the
+        # accumulator starts empty rather than being bound inside each branch.
+        result: Optional[RefactorResult] = None
         if cwe == "CWE-89":
             result = MultiLineRefactorer.refactor_sql_injection(context, line_offset)
         elif cwe == "CWE-78":
@@ -417,8 +422,8 @@ class MultiLineRefactorer:
             # IDOR/ownership: suggest adding owner filter
             if 0 <= line_offset < len(lines):
                 vuln_line = lines[line_offset]
-                _lookup = re.compile(r'(?:\.(?:get|filter|filter_by|findById|findByPk|findOne)\s*\()', re.I)
-                if _lookup.search(vuln_line) and not re.search(r'(?:owner|user_id|created_by|tenant)', vuln_line, re.I):
+                _lookup = re.compile(r'(?:\.(?:get|filter|filter_by|findById|findByPk|findOne)\s*\()', re.IGNORECASE)
+                if _lookup.search(vuln_line) and not re.search(r'(?:owner|user_id|created_by|tenant)', vuln_line, re.IGNORECASE):
                     before = vuln_line.strip()
                     after = re.sub(r'(\bfilter\s*\(|\bfilter_by\s*\(|\bget\s*\()', r'\1owner=request.user, ', before, count=1)
                     result = RefactorResult(before=before, after=after,

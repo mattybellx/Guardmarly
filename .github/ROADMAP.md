@@ -1,7 +1,8 @@
 # GUARDMARLY — MASTER INSTRUCTION FILE FOR AI CODING AGENTS
 
-You are working on https://github.com/mattybellx/Guardmarly, a free, offline,
-MIT-licensed SAST scanner. Read this entire file before writing any code.
+You are working on https://github.com/mattybellx/Guardmarly, an offline,
+source-available SAST scanner (licensing terms: see LICENSE — not OSI MIT).
+Read this entire file before writing any code.
 Follow it exactly. If this file and the repository disagree, STOP and report
 the discrepancy — do not guess.
 
@@ -56,17 +57,21 @@ stop and flag it.
 
 ---
 
-## 3. CURRENT STATE [UPDATED 2026-07-19]
+## 3. CURRENT STATE [UPDATED 2026-09-10]
 
-Confirmed against the repo on 2026-07-19:
+Confirmed against the repo on 2026-09-10 (see `IMPROVEMENTS.md` for the defect
+record and the prioritised backlog):
 
 - **Full-AST analyzers**: Python, JavaScript/TypeScript, Go, Java, C#, PHP, Ruby
 - **Pattern-aware analyzers** (~30+ additional): Kotlin, Swift, Dart, Lua, Elixir,
   Scala, Clojure, Haskell, Shell, Dockerfile, Terraform, YAML, C/C++, R, Julia,
   Zig, Nix, Solidity, Erlang, Groovy, OCaml, Perl, Objective-C, Crystal, Nim,
   F#, Vala, ReasonML, VBA, PL/SQL, ABAP, COBOL
-- **Test count**: 1,336 passing, 18 xfailed (as of 2026-07-19, end of session)
-- **Coverage**: 90% (spec_loader), 89% (spec_idor), 89% total engine modules
+- **Test count**: 1,310 passing, 1 skipped, 1 xpassed (4 OS/Python combinations in CI)
+- **Lint**: `ruff check` is the contract (config in `pyproject.toml`); it passes
+  with zero findings. The wider rule families are not yet enabled — do not add a
+  family to `select` until the tree passes it
+- **Docs**: `docs/` is the MkDocs source; `mkdocs build --strict` must pass
 - **Rust core**: `guardmarly_rust_core/` (tree-sitter + fast pattern engine)
 - **IR / engine**: `src/guardmarly/ir/` (GlobalGraph, interprocedural fixpoint),
   `src/guardmarly/engine/` (confidence, audit, clustering, symbolic guards,

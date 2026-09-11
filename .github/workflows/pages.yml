@@ -1,8 +1,20 @@
-name: Deploy GitHub Pages
+# Build the MkDocs site (mkdocs.yml) and publish it to GitHub Pages.
+#
+# Required repository setting: Settings → Pages → Build and deployment →
+# Source: "GitHub Actions".
+#
+# Previously this workflow uploaded the repository root as a static artifact,
+# which published source files instead of a rendered site (and no index.html).
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
     branches: [main, master]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,22 +27,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install docs toolchain
+        run: pip install -r requirements-docs.txt
+
+      - name: Build site (strict)
+        # --strict fails on broken nav entries, missing pages and unresolved
+        # links, so the published site cannot silently rot.
+        run: mkdocs build --strict
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -1,8 +1,10 @@
 """
 guardmarly
 ─────────────
-Zero-dependency SAST security scanner for Python, JavaScript/TypeScript,
-Go, Java, and C#.
+Offline SAST security scanner for Python, JavaScript/TypeScript, Go, Java and
+C# (full-AST), plus PHP, Ruby and 30+ pattern-aware languages. The analysis
+core uses only the standard library; ``rich`` is an optional convenience for
+progress rendering.
 
 Quick start:
     from guardmarly import scan_file, scan_code
@@ -13,32 +15,37 @@ Quick start:
 """
 from __future__ import annotations
 
-from guardmarly._types import AnalysisResult, Finding, Severity
-from guardmarly.config import GuardmarlyConfig, apply_config_to_results, temporary_analyzer_config
-from guardmarly.engine_version import SCHEMA_VERSION, get_engine_version
-from guardmarly.python_analyzer import analyze_python, analyze_file as _py_file
-from guardmarly.js_engine.backends import list_js_backends, run_js_analysis
-from guardmarly import yaml_rules as _yaml_rules
-
+import concurrent.futures
+import logging
 from functools import lru_cache
 from pathlib import Path
 from types import SimpleNamespace
-import concurrent.futures
-import logging
+
+from guardmarly import yaml_rules as _yaml_rules
+from guardmarly._types import AnalysisResult, Finding, Severity
+from guardmarly.config import (
+    GuardmarlyConfig,
+    apply_config_to_results,
+    temporary_analyzer_config,
+)
+from guardmarly.engine_version import SCHEMA_VERSION, get_engine_version
+from guardmarly.js_engine.backends import list_js_backends, run_js_analysis
+from guardmarly.python_analyzer import analyze_file as _py_file
+from guardmarly.python_analyzer import analyze_python
 
 _log = logging.getLogger(__name__)
 
 
 __all__ = [
+    "SCHEMA_VERSION",
+    "AnalysisResult",
+    "Finding",
+    "GuardmarlyConfig",
+    "Severity",
+    "list_js_backends",
+    "scan_code",
     "scan_file",
     "scan_files",
-    "scan_code",
-    "AnalysisResult",
-    "GuardmarlyConfig",
-    "Finding",
-    "Severity",
-    "SCHEMA_VERSION",
-    "list_js_backends",
 ]
 
 __version__ = get_engine_version()
@@ -52,17 +59,6 @@ _CSHARP_EXTS = frozenset({".cs"})
 _RUBY_EXTS = frozenset({".rb", ".rake", ".gemspec"})
 _PHP_EXTS = frozenset({".php", ".phtml", ".php3", ".php4", ".php5", ".php7", ".phps"})
 _RUST_EXTS = frozenset({".rs"})
-_KOTLIN_EXTS = frozenset({".kt", ".kts"})
-_SWIFT_EXTS = frozenset({".swift"})
-_DART_EXTS = frozenset({".dart"})
-_LUA_EXTS = frozenset({".lua"})
-_ELIXIR_EXTS = frozenset({".ex", ".exs"})
-_SCALA_EXTS = frozenset({".scala"})
-_CLOJURE_EXTS = frozenset({".clj", ".cljs", ".edn"})
-_HASKELL_EXTS = frozenset({".hs", ".lhs"})
-_SHELL_EXTS = frozenset({".sh", ".bash"})
-_DOCKERFILE_EXTS = frozenset({".dockerfile"})
-_TERRAFORM_EXTS = frozenset({".tf", ".tfvars"})
 _KOTLIN_EXTS = frozenset({".kt", ".kts"})
 _SWIFT_EXTS = frozenset({".swift"})
 _DART_EXTS = frozenset({".dart"})
@@ -150,7 +146,9 @@ def _apply_runtime_and_registry_rules(
     applicable_rules = list(runtime_rules)
     if include_registry_rules:
         try:
-            from guardmarly.registry.sharded_loader import load_custom_rules_for_code  # noqa: PLC0415
+            from guardmarly.registry.sharded_loader import (
+                load_custom_rules_for_code,
+            )
 
             if language in {"python", "javascript", "java", "csharp"}:
                 applicable_rules.extend(load_custom_rules_for_code(code, language))
@@ -169,7 +167,7 @@ def _get_default_global_graph():
     global _DEFAULT_GLOBAL_GRAPH
     if _DEFAULT_GLOBAL_GRAPH is None:
         try:
-            from guardmarly.ir.global_graph import GlobalGraph  # noqa: PLC0415
+            from guardmarly.ir.global_graph import GlobalGraph
             _DEFAULT_GLOBAL_GRAPH = GlobalGraph()
         except (ImportError, AttributeError, ValueError):
             _DEFAULT_GLOBAL_GRAPH = None
@@ -203,8 +201,8 @@ def _analyze_pattern_only(code: str, *, filename: str, ext: str) -> AnalysisResu
     lang = _PATTERN_ONLY_LANG_EXT_MAP.get(ext, "unknown")
     result = AnalysisResult(language=lang, filename=filename)
     try:
-        from guardmarly.yaml_rules import apply_custom_rules
         from guardmarly.config import GuardmarlyConfig, temporary_analyzer_config
+        from guardmarly.yaml_rules import apply_custom_rules
         runtime_rules = _get_runtime_rules(None, workspace_root=Path.cwd())
         if runtime_rules:
             result.findings.extend(
@@ -304,6 +302,7 @@ def scan_files(
     Raises ValueError if any file extension is unsupported.
     """
     resolved = [Path(p) for p in paths]
+    _scope_context_heuristics(resolved)
     runtime_rules = _get_runtime_rules(config, workspace_root=Path.cwd())
     shared_graph = _get_default_global_graph()
 
@@ -360,6 +359,38 @@ def scan_files(
 
     apply_config_to_results(list(results.values()), config)
     return results
+
+
+def _scope_context_heuristics(resolved: list[Path]) -> None:
+    """Scope triage path heuristics to the common root of ``resolved`` paths.
+
+    Directory names like ``build``, ``samples`` or ``benchmarks`` describe a
+    project's own layout.  Matching them against host ancestors produces silent
+    false negatives (a project at ``C:\\build\\app`` reporting clean), so the
+    heuristic path base is pinned to the scanned tree instead.
+    """
+    try:
+        from pathlib import Path as _Path
+
+        from guardmarly.engine.triage import ContextAnalyzer
+
+        dirs: list[str] = []
+        for raw in resolved:
+            try:
+                rp = _Path(str(raw)).resolve()
+            except (OSError, ValueError):
+                continue
+            dirs.append(str(rp.parent if rp.is_file() else rp))
+        if not dirs:
+            return
+        if len(dirs) == 1:
+            ContextAnalyzer.set_scan_root(dirs[0])
+        else:
+            import os as _os
+
+            ContextAnalyzer.set_scan_root(_os.path.commonpath(dirs))
+    except Exception:  # noqa: BLE001 - scoping must never break a scan
+        pass
 
 
 def scan_code(

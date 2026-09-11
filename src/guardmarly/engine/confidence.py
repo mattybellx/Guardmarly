@@ -290,6 +290,10 @@ _HEURISTIC_KINDS: frozenset[str] = frozenset({
     "decorator_heuristic",
 })
 
+# Confidence at/above which a finding is treated as a deliberate, specific
+# signature match and is therefore never demoted for lack of a taint trace.
+_CONFIDENT_MATCH_THRESHOLD: float = 0.9
+
 # Analysis kinds that represent real AST/dataflow analysis — never demote
 _STRUCTURAL_KINDS: frozenset[str] = frozenset({
     "ast", "ast_taint_flow", "interproc_ifds", "var_taint_flow", "taint_flow",
@@ -318,6 +322,17 @@ def _should_demote(finding: Finding) -> str | None:
 
     # Hardcoded secrets are real without taint
     if cwe == "CWE-798":
+        return None
+
+    # A confident signature match is deliberate, specific evidence — the
+    # absence of a taint trace just means the taint engine has no coverage for
+    # this construct (or this language), which carries no information about the
+    # code.  Demoting these to 0.35 previously combined with the CLI's default
+    # 0.65 confidence floor to *delete* them outright: a CWE-502
+    # BinaryFormatter/ObjectInputStream detection at confidence 0.95 vanished
+    # from the default report.  Demotion now targets genuinely uncertain
+    # findings only.
+    if finding.confidence >= _CONFIDENT_MATCH_THRESHOLD:
         return None
 
     # Injection / auth CWEs: require evidence

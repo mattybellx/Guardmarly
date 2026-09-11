@@ -1,6 +1,6 @@
 # guardmarly — GitHub Code Scanning Integration
 # Upload SARIF results to the Security > Code Scanning tab.
-# For full documentation see docs/github-code-scanning-sarif-integration.md
+# For full documentation see docs/ci-integration.md
 name: Guardmarly Code Scanning
 
 on:
@@ -27,19 +27,19 @@ jobs:
         run: pip install guardmarly
 
       - name: Run guardmarly scan
+        # Native SARIF output — no post-processing step. The report is written to
+        # guardmarly.sarif, deliberately *not* guardmarly.json, which is the
+        # scanner's configuration filename (and is gitignored in this repo).
         run: |
-          guardmarly scan . \
-            --format json \
-            --output guardmarly.json \
+          guardmarly . \
+            --format sarif \
+            --output guardmarly.sarif \
             --fail-on never \
             --exclude node_modules \
             --exclude .venv \
             --exclude __pycache__ \
             --exclude src \
             --exclude guardmarly_rust_core
-
-      - name: Convert JSON to SARIF
-        run: python .github/scripts/json_to_sarif.py
 
       - name: Upload SARIF to GitHub
         uses: github/codeql-action/upload-sarif@v4

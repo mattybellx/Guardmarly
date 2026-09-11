@@ -24,7 +24,7 @@ print('  as_dict has confidence_label')
 # PHP analyzer with superglobal in SQL call
 code = '<?php\n$result = mysqli_query($conn, "SELECT * FROM users WHERE id = " . $_GET["id"]);\n'
 result = analyze_php(code)
-assert len(result.findings) > 0, f'PHP analyzer produced no findings'
+assert len(result.findings) > 0, 'PHP analyzer produced no findings'
 for f in result.findings:
     print(f'  PHP: {f.rule_id} {f.cwe} line={f.line} conf={f.confidence} label={f.confidence_label}')
 

@@ -17,7 +17,9 @@ Usage:
 
 from __future__ import annotations
 
-import json, sys, time
+import json
+import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -262,7 +264,7 @@ def main():
     # Fortune 500 corpus reference
     print(f"\nFortune 500 equivalent corpus: {len(FORTUNE_500_CORPUS)} repos")
     print(f"Total stars: 2M+ across {len(set(c['lang'] for c in FORTUNE_500_CORPUS))} languages")
-    print(f"To fetch: python scripts/fetch_corpora.py")
+    print("To fetch: python scripts/fetch_corpora.py")
     print()
 
     run_ci_cycle(scan_only=args.scan_only)

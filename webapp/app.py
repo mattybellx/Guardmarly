@@ -1,6 +1,8 @@
 """Guardmarly — Landing page and live scanner demo."""
 from flask import Flask, render_template, request, jsonify, send_from_directory
-import sys, os, json
+import sys
+import os
+import json
 from datetime import datetime
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

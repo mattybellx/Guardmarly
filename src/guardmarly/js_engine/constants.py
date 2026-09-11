@@ -159,3 +159,27 @@ def callee_matches(callee: str, targets: frozenset[str]) -> bool:
         return True
     short = callee.split(".")[-1]
     return short in targets
+
+
+# Receivers that serve URLs — a call on one of these is outbound HTTP.
+_HTTP_CLIENT_RECEIVERS: frozenset[str] = frozenset({
+    "axios", "got", "needle", "superagent", "http", "https", "request",
+    "requestpromise", "fetch", "ky", "undici", "nodefetch", "node_fetch",
+    "urllib", "requests",
+})
+
+
+def is_http_client_callee(callee: str) -> bool:
+    """True when a callee really is an outbound HTTP request.
+
+    ``callee_matches`` falls back to the last dot-segment, so ``svc.fetch(x)``
+    and ``invoiceService.request(x)`` used to be reported as SSRF. A bare call
+    (the global ``fetch``) or a known HTTP-client receiver is required; anything
+    else is a method that merely shares a name.
+    """
+    if "." not in callee:
+        return True
+    if callee in SSRF_CALLEES:
+        return True
+    receiver_leaf = callee.rsplit(".", 1)[0].rsplit(".", 1)[-1]
+    return receiver_leaf.lower() in _HTTP_CLIENT_RECEIVERS

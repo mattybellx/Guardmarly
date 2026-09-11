@@ -13,12 +13,13 @@ Phase 4 additions (spec §4.1-4.2):
 """
 from __future__ import annotations
 
-from contextlib import contextmanager
 import json
 import logging
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Optional
 
 from guardmarly._types import AnalysisResult, Finding, Severity
 
@@ -52,6 +53,17 @@ def _load_schema() -> Optional[dict]:
         return None
 
 
+def _looks_like_scan_report(data: dict) -> bool:
+    """True when *data* is a scan *result* rather than a configuration file.
+
+    A report dropped at ``guardmarly.json`` is a common mistake (and the reason
+    the message below exists): the CLI writes ``--output`` to the same default
+    name the loader reads back.
+    """
+    report_keys = {"results", "findings", "total_findings", "summary", "tool"}
+    return len(report_keys.intersection(data)) >= 2
+
+
 def validate_config_json(data: dict, warnings: list[str]) -> None:
     """
     Validate *data* against the Guardmarly JSON Schema.
@@ -61,6 +73,15 @@ def validate_config_json(data: dict, warnings: list[str]) -> None:
     Validation errors are appended to *warnings* so callers can surface them
     without aborting the scan.
     """
+    if _looks_like_scan_report(data):
+        warnings.append(
+            "guardmarly.json looks like a scan *report*, not a configuration file — "
+            "it is being ignored. Scanner output must be written elsewhere "
+            "(e.g. --output guardmarly-results.json); the configuration file is read "
+            "from ./guardmarly.json."
+        )
+        return
+
     if not _HAS_JSONSCHEMA:
         warnings.append(
             "jsonschema is not installed; guardmarly.json schema validation is skipped. "
@@ -89,6 +110,9 @@ def validate_config_json(data: dict, warnings: list[str]) -> None:
 
 
 _VALID_SEVERITIES = frozenset({"critical", "high", "medium", "low", "info"})
+_VALID_OUTPUT_FORMATS = frozenset({"text", "json", "sarif", "html", "ciso"})
+_VALID_FAIL_ON = frozenset({"critical", "high", "medium", "low", "info", "never"})
+_VALID_LOG_LEVELS = frozenset({"DEBUG", "INFO", "WARNING", "ERROR"})
 
 
 @dataclass(frozen=True)
@@ -144,6 +168,13 @@ class GuardmarlyConfig:
     # Rule severity overrides — map CWE or rule_id to new severity
     # e.g. {"CWE-862": "critical", "PY-020": "low"}
     rule_overrides: dict[str, str] = field(default_factory=dict)
+    # Project-level CLI defaults. Applied only when the matching command-line
+    # flag was not supplied, so the CLI always wins. "" means "not configured".
+    output_format: str = ""
+    fail_on: str = ""
+    log_level: str = ""
+    max_workers: int = 0
+    baseline_file: str = ""
     warnings: list[str] = field(default_factory=list, compare=False)
 
 
@@ -265,7 +296,7 @@ def temporary_analyzer_config(config: GuardmarlyConfig | None) -> Iterator[None]
         return
 
     try:
-        from guardmarly.python_analyzer import TAINT_SINKS, TAINT_SOURCES, SANITIZERS
+        from guardmarly.python_analyzer import SANITIZERS, TAINT_SINKS, TAINT_SOURCES
     except ImportError:
         yield
         return
@@ -424,6 +455,33 @@ def load_config(workspace_root: Path | None = None) -> GuardmarlyConfig:
                 if token and sev_str in _VALID_SEVERITIES:
                     rule_overrides[_normalized_rule_token(token)] = sev_str
 
+        # Project-level CLI defaults (validated here so a typo is reported once
+        # rather than silently changing nothing).
+        output_format = str(data.get("output_format", "") or "").strip().lower()
+        if output_format and output_format not in _VALID_OUTPUT_FORMATS:
+            warnings.append(
+                f"guardmarly.json output_format {output_format!r} is not one of "
+                f"{sorted(_VALID_OUTPUT_FORMATS)} — ignoring."
+            )
+            output_format = ""
+        fail_on = str(data.get("fail_on", "") or "").strip().lower()
+        if fail_on and fail_on not in _VALID_FAIL_ON:
+            warnings.append(
+                f"guardmarly.json fail_on {fail_on!r} is not one of "
+                f"{sorted(_VALID_FAIL_ON)} — ignoring."
+            )
+            fail_on = ""
+        log_level = str(data.get("log_level", "") or "").strip().upper()
+        if log_level and log_level not in _VALID_LOG_LEVELS:
+            warnings.append(
+                f"guardmarly.json log_level {log_level!r} is not one of "
+                f"{sorted(_VALID_LOG_LEVELS)} — ignoring."
+            )
+            log_level = ""
+        raw_workers = data.get("max_workers", 0)
+        max_workers = raw_workers if isinstance(raw_workers, int) and raw_workers > 0 else 0
+        baseline_file = str(data.get("baseline_file", "") or "").strip()
+
         return GuardmarlyConfig(
             exclude_paths=data.get("exclude_paths", []),
             disable_rules=disable_rules,
@@ -435,6 +493,11 @@ def load_config(workspace_root: Path | None = None) -> GuardmarlyConfig:
             extra_sanitizer_files=extra_sanitizer_files,
             custom_sanitizers=custom_sanitizers,
             rule_overrides=rule_overrides,
+            output_format=output_format,
+            fail_on=fail_on,
+            log_level=log_level,
+            max_workers=max_workers,
+            baseline_file=baseline_file,
             warnings=warnings,
         )
     except json.JSONDecodeError as exc:

@@ -1,7 +1,14 @@
 from __future__ import annotations
 
+import io
 import json
+import os
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
+
+import pytest
 
 from guardmarly._types import AnalysisResult, Finding, Severity
 from guardmarly.cli import (
@@ -13,6 +20,7 @@ from guardmarly.cli import (
     _collect_files,
     _collect_entropy_files,
     _default_output_filename,
+    _harden_stdio_encoding,
     _is_safe_inline_auto_fix,
     _load_baseline,
     _matches_exclude_pattern,
@@ -115,7 +123,7 @@ def test_load_baseline_supports_versioned_report(tmp_path):
     fingerprints = _load_baseline(baseline)
 
     assert report["fingerprint_version"]
-    assert f"rule:PY-020|sample.py|4" in fingerprints
+    assert "rule:PY-020|sample.py|4" in fingerprints
     assert any(fp.startswith("legacy:CWE-862") for fp in fingerprints)
 
 
@@ -604,3 +612,250 @@ def test_profile_flag_is_accepted():
     from guardmarly.cli import build_parser
     args = build_parser().parse_args(["--profile", "src"])
     assert args.profile is True
+
+
+# ── Non-UTF-8 console safety (Windows cp1252 regression) ─────────────────
+#
+# Windows consoles default to a legacy code page that cannot encode the emoji
+# used in progress/triage messages. Rich's legacy-Windows renderer writes
+# straight through the stream, so the first such write raised
+# UnicodeEncodeError and aborted the scan *before* any report was written.
+
+def test_harden_stdio_encoding_survives_unencodable_output(monkeypatch):
+    raw = io.BytesIO()
+    stream = io.TextIOWrapper(raw, encoding="cp1252", errors="strict", newline="")
+    monkeypatch.setattr(sys, "stdout", stream)
+    monkeypatch.setattr(sys, "__stdout__", stream)
+
+    _harden_stdio_encoding()
+
+    # Previously raised UnicodeEncodeError: '\U0001f916' is not in cp1252.
+    stream.write("\U0001f916 triage engine\n")
+    stream.flush()
+    assert raw.getvalue().decode("cp1252").endswith("triage engine\n")
+
+
+def test_cli_writes_report_under_non_utf8_console(tmp_path):
+    """End-to-end guard: a legacy console encoding must never abort a scan."""
+    target = tmp_path / "vuln.py"
+    target.write_text(
+        'import subprocess\n'
+        '\n'
+        '\n'
+        'def run(cmd):\n'
+        '    subprocess.call("echo " + cmd, shell=True)\n'
+        '    password = "hunter2"  # CWE-798\n',
+        encoding="utf-8",
+    )
+    report = tmp_path / "report.json"
+    env = dict(os.environ, PYTHONIOENCODING="cp1252")
+
+    try:
+        proc = subprocess.run(
+            [
+                sys.executable, "-m", "guardmarly.cli", str(target),
+                "--format", "json", "--output", str(report),
+                "--fail-on", "never", "--no-colour",
+            ],
+            capture_output=True,
+            timeout=180,
+            cwd=str(tmp_path),
+            env=env,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        pytest.skip("CLI subprocess unavailable")
+    combined = (proc.stdout + proc.stderr).decode("utf-8", errors="replace")
+    assert "UnicodeEncodeError" not in combined, combined[-2000:]
+    assert report.exists(), combined[-2000:]
+
+
+# ── Non-interactive runs must never block on the auto-fix prompt ─────────
+#
+# Regression: the prompt was gated on `stdin.isatty()` alone, so any wrapper
+# that leaves stdin attached without forwarding input (IDE task runners, make,
+# Docker without -i, CI shells with a TTY) blocked forever on a text-mode scan
+# that found auto-fixable issues.
+
+_FIXABLE_SOURCE = (
+    'import os\n'
+    'import subprocess\n'
+    '\n'
+    '\n'
+    'def delete_files(user_input):\n'
+    '    os.system("rm -rf " + user_input)\n'
+    '\n'
+    '\n'
+    'def run_command(cmd):\n'
+    '    subprocess.call(cmd, shell=True)\n'
+    '\n'
+    'password = "hunter2"\n'
+)
+
+
+def test_can_prompt_interactively_requires_both_ends(monkeypatch):
+    from guardmarly.cli import _can_prompt_interactively
+
+    monkeypatch.delenv("CI", raising=False)
+    monkeypatch.setattr(sys, "stdin", type("S", (), {"isatty": lambda self: True})())
+    monkeypatch.setattr(sys, "stdout", type("S", (), {"isatty": lambda self: False})())
+    assert _can_prompt_interactively() is False
+
+    monkeypatch.setattr(sys, "stdout", type("S", (), {"isatty": lambda self: True})())
+    assert _can_prompt_interactively() is True
+
+    monkeypatch.setenv("CI", "true")
+    assert _can_prompt_interactively() is False
+
+
+def test_text_scan_does_not_block_when_stdin_is_unavailable(tmp_path):
+    """A text scan with fixable findings must exit, not wait for input."""
+    # Not pytest's tmp_path: its path contains "test_...", which triage
+    # classifies as a test file and suppresses the finding under test.
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_scan_"))
+    target = work / "fixable.py"
+    target.write_text(_FIXABLE_SOURCE, encoding="utf-8")
+
+    try:
+        proc = subprocess.run(
+            # --no-triage keeps the auto-fixable finding in the result set.
+            [sys.executable, "-m", "guardmarly.cli", str(target), "--no-colour", "--no-triage"],
+            capture_output=True,
+            timeout=60,
+            cwd=str(work),
+            stdin=subprocess.DEVNULL,
+            env={k: v for k, v in os.environ.items() if k != "CI"},
+        )
+    except subprocess.TimeoutExpired:
+        pytest.fail("CLI blocked waiting for input in a non-interactive run")
+    except (FileNotFoundError, OSError):
+        pytest.skip("CLI subprocess unavailable")
+
+    combined = (proc.stdout + proc.stderr).decode("utf-8", errors="replace")
+    assert proc.returncode in (0, 1), combined[-2000:]
+    assert "re-run with --apply-fixes" in combined, combined[-2000:]
+
+
+def test_text_scan_under_ci_env_does_not_prompt(tmp_path):
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_scan_"))
+    target = work / "fixable.py"
+    target.write_text(_FIXABLE_SOURCE, encoding="utf-8")
+
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-m", "guardmarly.cli", str(target), "--no-colour", "--no-triage"],
+            capture_output=True,
+            timeout=60,
+            cwd=str(work),
+            stdin=subprocess.DEVNULL,
+            env=dict(os.environ, CI="true"),
+        )
+    except subprocess.TimeoutExpired:
+        pytest.fail("CLI blocked waiting for input under CI=true")
+    except (FileNotFoundError, OSError):
+        pytest.skip("CLI subprocess unavailable")
+
+    combined = (proc.stdout + proc.stderr).decode("utf-8", errors="replace")
+    assert "Would you like to automatically apply" not in combined, combined[-2000:]
+
+
+# ── Machine-readable stdout must stay parseable ──────────────────────────
+#
+# Regression: triage progress was printed with a stdout-bound Rich console, so
+# `guardmarly src/ --format json > report.json` produced a file that no JSON
+# parser would accept ("Applying smart triage filters..." ahead of the payload).
+
+def _run_cli(args, cwd):
+    try:
+        return subprocess.run(
+            [sys.executable, "-m", "guardmarly.cli", *args],
+            capture_output=True,
+            timeout=120,
+            cwd=str(cwd),
+            stdin=subprocess.DEVNULL,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        pytest.skip("CLI subprocess unavailable")
+
+
+def test_json_on_stdout_is_parseable():
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_json_"))
+    (work / "app.py").write_text(_FIXABLE_SOURCE, encoding="utf-8")
+
+    proc = _run_cli(["app.py", "--format", "json", "--fail-on", "never"], work)
+    text = proc.stdout.decode("utf-8", errors="replace")
+
+    payload = json.loads(text)  # raises if progress leaked into stdout
+    assert payload["tool"] == "guardmarly"
+    assert isinstance(payload["results"], list)
+    assert b"Applying smart triage filters" in proc.stderr
+
+
+def test_sarif_on_stdout_is_parseable():
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_sarif_"))
+    (work / "app.py").write_text(_FIXABLE_SOURCE, encoding="utf-8")
+
+    proc = _run_cli(["app.py", "--format", "sarif", "--fail-on", "never"], work)
+    payload = json.loads(proc.stdout.decode("utf-8", errors="replace"))
+
+    assert payload["version"] == "2.1.0"
+    assert payload["runs"]
+
+
+# ── Baseline round-trip ──────────────────────────────────────────────────
+#
+# Regression: `guardmarly baseline generate` printed "Baseline generated at …"
+# without scanning or writing anything, and the write path itself crashed on a
+# missing file — so PR gating against a fresh baseline was impossible.
+
+def test_baseline_generate_writes_a_usable_baseline():
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_baseline_"))
+    (work / "app.py").write_text(_FIXABLE_SOURCE, encoding="utf-8")
+    baseline = work / "baseline.json"
+
+    gen = _run_cli(["baseline", "generate", "--output", str(baseline)], work)
+    assert baseline.is_file(), (gen.stdout + gen.stderr).decode("utf-8", errors="replace")[-2000:]
+
+    payload = json.loads(baseline.read_text(encoding="utf-8"))
+    assert payload["results"], "baseline should record the findings it accepted"
+
+    rescan = _run_cli(
+        [".", "--baseline", str(baseline), "--fail-on", "high", "--no-colour"], work
+    )
+    assert rescan.returncode == 0, (
+        "a scan against the baseline it just generated must report no new findings"
+    )
+
+
+def test_missing_baseline_without_update_still_errors():
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_nobaseline_"))
+    (work / "app.py").write_text(_FIXABLE_SOURCE, encoding="utf-8")
+
+    proc = _run_cli([".", "--baseline", "nope.json", "--fail-on", "never"], work)
+    assert proc.returncode == 2
+    assert b"baseline file not found" in (proc.stdout + proc.stderr)
+
+
+def test_baseline_matches_across_path_spellings():
+    """A baseline generated from '.' must also match an absolute-path scan.
+
+    Regression: fingerprints embedded the raw path, so mixing spellings (or
+    running from a different working directory) reported every accepted finding
+    as new and failed the gate.
+    """
+    work = Path(tempfile.mkdtemp(prefix="guardmarly_blpaths_"))
+    (work / "app.py").write_text(_FIXABLE_SOURCE, encoding="utf-8")
+    baseline = work / "baseline.json"
+
+    gen = _run_cli(["baseline", "generate", "--output", str(baseline)], work)
+    assert baseline.is_file(), gen.stderr.decode("utf-8", errors="replace")[-1500:]
+
+    absolute = str(work / "app.py")
+    same_dir = _run_cli([absolute, "--baseline", str(baseline), "--fail-on", "high"], work)
+    assert same_dir.returncode == 0, same_dir.stdout.decode("utf-8", errors="replace")[-1500:]
+
+    other_dir = _run_cli(
+        [absolute, "--baseline", str(baseline), "--fail-on", "high"], work.parent
+    )
+    assert other_dir.returncode == 0, (
+        other_dir.stdout.decode("utf-8", errors="replace")[-1500:]
+    )

@@ -16,6 +16,7 @@ from guardmarly._types import AnalysisResult, Finding, Severity, TraceFrame
 from guardmarly.hardening import TemplateEngineDetector
 from guardmarly.template_transpiler import template_taint_nodes
 from guardmarly.js_engine.common import dedup_findings, filter_inline_suppressions
+from guardmarly.js_engine.idor_lookup import detect_idor_lookups
 from guardmarly.js_engine.context_checks import run_context_checks
 from guardmarly.js_engine.pattern_rules import run_pattern_rules
 from guardmarly.js_engine.project import build_js_project_index, propagate_helper_return_traces
@@ -457,6 +458,22 @@ def _fallback_nosql_detect(code: str, filename: str) -> list[Finding]:
 
 
 def _fallback_idor_detect(code: str, filename: str) -> list[Finding]:
+    """Catch CWE-639 IDOR in either form the engine supports.
+
+    Combines the DAO-shaped route-parameter rule with the lookup detector in
+    ``js_engine/idor_lookup.py``, which covers query/body identifiers and
+    object-literal arguments. A site is reported once.
+    """
+    findings = list(_fallback_idor_dao_calls(code, filename))
+    reported_lines = {f.line for f in findings}
+    for extra in detect_idor_lookups(code, filename):
+        if extra.line not in reported_lines:
+            findings.append(extra)
+            reported_lines.add(extra.line)
+    return findings[:6]
+
+
+def _fallback_idor_dao_calls(code: str, filename: str) -> list[Finding]:
     """Catch CWE-639 IDOR: route param → DAO query without session ownership check.
     
     Targeted heuristic: only fires when req.params/query is destructured AND

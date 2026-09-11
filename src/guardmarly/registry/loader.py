@@ -180,8 +180,8 @@ def _build_custom_rule_from_entry(
 
     Returns None if the entry is invalid or incomplete.
     """
-    from guardmarly.yaml_rules import CustomRule
     from guardmarly._types import Severity
+    from guardmarly.yaml_rules import CustomRule
 
     if not isinstance(entry, dict):
         return None
@@ -323,17 +323,27 @@ def _load_single_pack(pack_path_str: str) -> tuple[Any, ...]:
     return tuple(loaded)
 
 
+def _normalise_language(language: str) -> str:
+    """Canonical language key used by the registry pack map."""
+    normalised = str(language or "").strip().lower()
+    if normalised in ("js", "javascript", "jsx", "ts", "typescript", "tsx"):
+        return "javascript"
+    if normalised in ("py", "python"):
+        return "python"
+    if normalised in ("cs", "c#", "csharp"):
+        return "csharp"
+    if normalised in ("golang", "go"):
+        return "go"
+    return normalised
+
+
 def load_packs_for_language(language: str) -> list[Any]:
     """Load all registry packs for a given language.
 
     This is the language-level lazy loading — only packs for the requested
     language are loaded into memory.
     """
-    normalised = language.strip().lower()
-    if normalised in ("js", "javascript", "jsx", "ts", "typescript", "tsx"):
-        normalised = "javascript"
-    elif normalised in ("py", "python"):
-        normalised = "python"
+    normalised = _normalise_language(language)
 
     rules: list[Any] = []
     for stem, lang in _PACK_LANGUAGE.items():
@@ -357,6 +367,7 @@ def load_packs_for_source(source: str, language: str) -> list[Any]:
         # No framework detected — only load generic/non-framework packs.
         # Framework-specific rules (Django, Flask, Express, etc.) produce
         # false positives on CLI tools, libraries, and non-web code.
+        normalised = _normalise_language(language)
         rules: list[Any] = []
         for stem, lang in _PACK_LANGUAGE.items():
             if lang != normalised:

@@ -1,33 +1,57 @@
 site_name: Guardmarly
-site_description: Production-grade offline SAST for access-control and taint vulnerabilities
-site_url: https://github.com/mattybellx/Guardmarly
+site_description: Offline SAST for authorization gaps, IDOR and taint vulnerabilities
+site_url: https://mattybellx.github.io/Guardmarly/
 repo_url: https://github.com/mattybellx/Guardmarly
 repo_name: mattybellx/Guardmarly
+edit_uri: edit/main/docs/
 
-# Built-in search via MkDocs Material
 docs_dir: docs
-
-plugins:
-  - search
+# Guard against a nav entry pointing at a page that was deleted or renamed:
+# `mkdocs build --strict` (used in CI) fails the build instead of shipping 404s.
+strict: true
 
 theme:
   name: material
   features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
     - search.highlight
     - search.share
     - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
 
 nav:
   - Home: index.md
-  - Getting Started: getting-started.md
+  - Getting started: getting-started.md
   - Configuration: configuration.md
-  - CI Integration: ci-integration.md
-  - IDE Setup: ide-setup.md
-  - Rule Database: rule-database.md
+  - CI integration: ci-integration.md
+  - Writing rules: writing-rules.md
+  - Architecture: architecture.md
+  - Benchmarks: benchmarks.md
   - FAQ / Troubleshooting: faq.md
-  - Architecture:
-      - Interprocedural Taint Analysis: interprocedural-taint-analysis.md
-      - IDE Plugin Architecture: ide-plugin-architecture.md
-  - Benchmarks: BENCHMARKS.md
-  - Writing Rules: writing-rules.md
-  - Roadmap: ROADMAP.md
+  - Claims and evidence: https://github.com/mattybellx/Guardmarly/blob/main/CLAIMS_AND_EVIDENCE.md
+  - Changelog: https://github.com/mattybellx/Guardmarly/blob/main/CHANGELOG.md

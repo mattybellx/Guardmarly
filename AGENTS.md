@@ -11,12 +11,19 @@ Guardmarly is a **SAST (Static Application Security Testing) scanner** that find
 - **License**: See LICENSE file (custom terms)
 - **Unique strength**: Built-in IDOR/missing-authorization detection that Bandit, Semgrep OSS, and CodeQL miss.
 
-## Repo structure (post-cleanup, July 2026)
+## Repo structure (verified 2026-09-10)
+
+> The July 2026 "strip to core scanner essentials" pass removed the docs site
+> content, marketing material and IDE-plugin directories. `docs/`, `scripts/`,
+> `webapp/` and `vscode-extension/` were **kept** — do not assume they are gone.
 
 ```text
 guardmarly-focus/
 ├── src/guardmarly/          # Main scanner source (Python)
 │   ├── cli.py                  # CLI entry point, argument parsing
+│   ├── _version.py             # Single source of truth for the version
+│   ├── _stdio.py               # Console-encoding hardening for entry points
+│   ├── suppressions.py         # `# guardmarly: ignore[...]` enforcement
 │   ├── python_analyzer.py      # Python AST security analyzer (~8500 lines)
 │   ├── java_analyzer.py        # Java analyzer
 │   ├── js_analyzer.py          # JS/TS analyzer
@@ -37,11 +44,16 @@ guardmarly-focus/
 ├── guardmarly_rust_core/           # Rust native parser core (tree-sitter based)
 │   ├── src/                    # Rust source
 │   └── python/                 # Python bindings
-├── tests/                      # 1,300+ unit tests (pytest)
-├── rules/                      # YAML rule definitions
+├── tests/                      # 1,310+ unit tests (pytest)
+├── rules/                      # YAML rule definitions + rules/specs/ framework specs
 ├── community_rules/            # Community-contributed rules
 ├── samples/                    # Test fixtures & vulnerable code samples
+├── docs/                       # MkDocs source (site built by .github/workflows/pages.yml)
+├── scripts/                    # Benchmark + corpus harness (fetch_corpora, benchmark, perf_check)
+├── webapp/                     # guardmarly.onrender.com landing page + demo scanner
+├── vscode-extension/           # VS Code extension (Marketplace, v1.6.x)
 ├── docker/                     # Docker build config
+├── IMPROVEMENTS.md             # Defect history + prioritised backlog
 ├── .github/                    # CI workflows
 │   ├── workflows/
 │   │   ├── ci.yml              # Main CI: test + lint
@@ -73,6 +85,12 @@ pip install -e ".[dev]"
 
 # Run ALL tests (~12s on warm cache)
 pytest tests/ -q
+
+# Lint (configuration lives in pyproject.toml [tool.ruff])
+ruff check
+
+# Docs site (strict: fails on broken nav/links)
+pip install -r requirements-docs.txt && mkdocs build --strict
 
 # Run a specific test file
 pytest tests/test_python.py -q
@@ -118,10 +136,15 @@ Everything not needed for the scanner CLI was deleted:
 ## Common gotchas
 
 - **Don't add imports from `benchmarks` or `tools`** — those directories don't exist anymore.
-- **Test count**: 1,300+ tests. Run `pytest tests/ -q` for current count. If you see fewer, check for skipped platform-specific tests.
-- **Pre-existing lint errors**: ~25 type-checker warnings in `cli.py` — all pre-existing, not from recent changes.
+- **Test count**: 1,310+ tests. Run `pytest tests/ -q` for the current count. If you see fewer, check for skipped platform-specific tests.
+- **Version**: bump `src/guardmarly/_version.py` only — `pyproject.toml` reads it
+  dynamically and `tests/test_version.py` fails on drift.
+- **Console encoding**: anything a user-facing entry point prints must survive a
+  non-UTF-8 console (`test_cli.py::test_cli_writes_report_under_non_utf8_console`).
+- **`guardmarly.json` is the config filename**, not a report filename — writing
+  scan output there makes the next run warn and ignore it.
 - **`id()`-based memoization**: `_get_taint_source` and `_get_sink_name` use `id(node)` as cache keys. This is sensitive to Python version memory allocator differences.
-- **python_analyzer.py line references**: The CI `guardmarly-code-scanning.yml` used to flag the analyzer's own pattern strings as vulnerabilities. Now fixed by excluding `src/`.
+- **python_analyzer.py line references**: The CI `guardmarly-code-scanning.yml` excludes `src/` and `guardmarly_rust_core/` because the rule catalogue's own pattern strings would match themselves.
 
 ## CI pipeline health
 

@@ -5,11 +5,13 @@
 ### Push to `main`
 | Trigger | What runs |
 |---|---|
-| `ci.yml` | Tests + lint (1,183 tests) |
+| `ci.yml` | Tests (Linux py3.9/3.12/3.13, Windows py3.13, macOS py3.12) + ruff lint + wheel build |
+| `guardmarly-code-scanning.yml` | Self-scan → SARIF → GitHub code scanning |
 | `publish-extension.yml` | Publishes VS Code extension (if `vscode-extension/**` changed) |
+| `pages.yml` | `mkdocs build --strict` → GitHub Pages (if `docs/**` changed) |
 | Render.com | Auto-deploys `guardmarly.onrender.com` |
 
-### Tag a version (`git tag v6.5.0 && git push --tags`)
+### Tag a version (`git tag v6.6.0 && git push --tags`)
 | Trigger | What runs |
 |---|---|
 | `release.yml` | Compiles PyInstaller binaries (Linux, macOS, Windows) + GitHub Release |
@@ -21,20 +23,25 @@
 
 ## Version bumps checklist
 
-When releasing a new version, update these files:
+`src/guardmarly/_version.py` is the single source of truth — `pyproject.toml`
+reads it via `[tool.hatch.version]` and reports read it at runtime. Update these
+files when releasing:
 
 | File | Value | Example |
 |---|---|---|
-| `pyproject.toml` | `version = "X.Y.Z"` | `6.5.0` |
-| `vscode-extension/package.json` | `"version": "X.Y.Z"` | `1.1.0` |
-| `webapp/templates/index.html` | Hero badge version | `v6.5.0` |
+| `src/guardmarly/_version.py` | `__version__ = "X.Y.Z"` | `6.6.0` |
+| `vscode-extension/package.json` | `"version": "X.Y.Z"` | `1.6.0` |
+| `webapp/templates/index.html` | Hero badge version | `v6.6.0` |
 | `CHANGELOG.md` | Release entry | See existing format |
+
+`tests/test_version.py` fails if the version file and the packaging metadata
+ever disagree, so a missed bump is caught by CI rather than by a user.
 
 Then:
 ```bash
 git add -A
-git commit -m "release: v6.5.0"
-git tag v6.5.0
+git commit -m "release: v6.6.0"
+git tag v6.6.0
 git push --tags
 git push
 ```

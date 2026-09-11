@@ -198,3 +198,119 @@ def run_query():
     )
 
     assert any(f.rule_id == "PY-004" and f.cwe == "CWE-89" for f in result.findings)
+
+
+# ── Schema / loader agreement ─────────────────────────────────────────────
+#
+# Regression: `custom_sanitizers` and `rule_overrides` are honoured by the
+# loader but were missing from the bundled JSON Schema (which sets
+# additionalProperties: false), so a valid config printed a schema error on
+# every single run. `$schema` had the same problem.
+
+def test_every_documented_key_validates_without_warning(tmp_path):
+    _write_config(tmp_path, {
+        "$schema": "https://example.invalid/guardmarly.schema.json",
+        "exclude_paths": ["legacy"],
+        "disable_rules": ["PY-004"],
+        "custom_sources": ["my_input"],
+        "custom_sinks": {"my_sink": {"cwe": "CWE-89", "title": "SQLi", "severity": "high"}},
+        "sinks": [{
+            "rule_id": "CUSTOM-001", "cwe": "CWE-89", "title": "SQLi",
+            "function": "my_query", "severity": "high",
+        }],
+        "sources": [{"function": "my_input", "category": "user_input"}],
+        "custom_rules_file": "rules.yaml",
+        "extra_sanitizer_files": ["sanitizers.json"],
+        "custom_sanitizers": {"sanitize_path": ["CWE-22"]},
+        "rule_overrides": {"CWE-89": "medium"},
+        "output_format": "json",
+        "fail_on": "medium",
+        "log_level": "INFO",
+        "max_workers": 2,
+        "baseline_file": "baseline.json",
+    })
+
+    cfg = load_config(tmp_path)
+
+    assert cfg.warnings == [], cfg.warnings
+    assert cfg.custom_sanitizers == {"sanitize_path": ["CWE-22"]}
+    assert cfg.rule_overrides == {"CWE-89": "medium"}
+
+
+def test_unknown_keys_still_reported(tmp_path):
+    """The schema must stay strict about genuinely unknown keys."""
+    _write_config(tmp_path, {"exclude_pahts": ["typo"]})
+    cfg = load_config(tmp_path)
+    assert any("schema error" in w for w in cfg.warnings)
+
+
+def test_report_shaped_json_is_rejected_with_actionable_message(tmp_path):
+    """A scan report dropped at guardmarly.json must not be read as config."""
+    _write_config(tmp_path, {
+        "tool": "guardmarly",
+        "version": "2.2.0",
+        "total_findings": 7,
+        "results": [{"file": "a.py"}],
+    })
+    cfg = load_config(tmp_path)
+    assert len(cfg.warnings) == 1
+    assert "looks like a scan *report*" in cfg.warnings[0]
+    assert cfg.exclude_paths == []
+
+
+def test_invalid_enum_values_warn_and_are_ignored(tmp_path):
+    _write_config(tmp_path, {
+        "output_format": "xml",
+        "fail_on": "sometimes",
+        "log_level": "LOUD",
+    })
+    cfg = load_config(tmp_path)
+    assert cfg.output_format == ""
+    assert cfg.fail_on == ""
+    assert cfg.log_level == ""
+    # The schema validator and the loader both report the bad value (the loader
+    # check also covers installs without the optional jsonschema dependency).
+    for value in ("xml", "sometimes", "LOUD"):
+        assert any(value in w for w in cfg.warnings), value
+
+
+# ── Project-level CLI defaults ────────────────────────────────────────────
+
+def test_config_defaults_apply_when_flag_absent():
+    from argparse import Namespace
+
+    from guardmarly.cli import _apply_config_defaults
+
+    args = Namespace(format="text", fail_on="high", workers=None, baseline=None, parallel=False)
+    cfg = GuardmarlyConfig(
+        output_format="json", fail_on="medium", max_workers=3, baseline_file="base.json",
+    )
+
+    _apply_config_defaults(
+        args, cfg,
+        format_from_cli=False, fail_on_from_cli=False,
+        workers_from_cli=False, baseline_from_cli=False,
+    )
+
+    assert args.format == "json"
+    assert args.fail_on == "medium"
+    assert args.workers == 3 and args.parallel is True
+    assert str(args.baseline) == "base.json"
+
+
+def test_explicit_flags_beat_config_defaults():
+    from argparse import Namespace
+
+    from guardmarly.cli import _apply_config_defaults
+
+    args = Namespace(format="sarif", fail_on="never", workers=None, baseline=None, parallel=False)
+    cfg = GuardmarlyConfig(output_format="json", fail_on="medium", max_workers=3)
+
+    _apply_config_defaults(
+        args, cfg,
+        format_from_cli=True, fail_on_from_cli=True,
+        workers_from_cli=False, baseline_from_cli=False,
+    )
+
+    assert args.format == "sarif"
+    assert args.fail_on == "never"

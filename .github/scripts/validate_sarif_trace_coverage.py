@@ -58,7 +58,7 @@ def main() -> int:
         return 1
 
     if "results" not in scan_data:
-        print(f"ERROR: unexpected JSON structure (no 'results' key)")
+        print("ERROR: unexpected JSON structure (no 'results' key)")
         print(json.dumps(scan_data)[:1000])
         return 1
 

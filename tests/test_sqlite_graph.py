@@ -1,5 +1,7 @@
 """Test the SQLite relational graph store end-to-end."""
-import sys, json, os
+import sys
+import json
+import os
 from pathlib import Path
 
 import pytest
@@ -42,7 +44,7 @@ print(f"Store stats: {stats}")
 nodes = store.conn.execute(
     "SELECT id, name, node_type, kind FROM nodes WHERE node_type IN ('call', 'function')"
 ).fetchall()
-print(f"\nNodes in store:")
+print("\nNodes in store:")
 for n in nodes:
     print(f"  [{n['node_type']:8s}] {n['name'][:40]:40s} kind={n['kind']}")
 

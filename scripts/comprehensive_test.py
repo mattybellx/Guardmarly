@@ -9,7 +9,10 @@ Usage: python scripts/comprehensive_test.py
 """
 from __future__ import annotations
 
-import json, os, sys, time
+import json
+import os
+import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -214,7 +217,7 @@ def main():
     if idor_results['fails'] > 0:
         print(f"  FAIL: {idor_results['fails']} IDOR test cases FAILED")
     else:
-        print(f"  PASS: All IDOR test cases pass")
+        print("  PASS: All IDOR test cases pass")
     print(f"  Framework detection: {idor_results['fw_detected']}/{idor_results['fw_detection_tests']} detected")
     print()
 
@@ -291,8 +294,8 @@ def main():
     print(f"  Throughput:         {agg_tput:,.0f} LOC/s")
     print(f"  CWE-639 IDOR:       {total_idor} findings, {idor_results['passes']}/{idor_results['total_cases']} test cases pass")
     print(f"  YAML specs:         {idor_results['spec_count']} specs, {idor_results['language_count']} languages")
-    print(f"  CVE recall:         100% (164/164)")
-    print(f"  ROADMAP:            ~91% complete")
+    print("  CVE recall:         100% (164/164)")
+    print("  ROADMAP:            ~91% complete")
     print()
     print(f"  Report: {out_path}")
 

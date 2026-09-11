@@ -217,7 +217,10 @@ RULES: list[Rule] = [
         "An attacker can target internal services.",
         "Validate URL hostname against an explicit allowlist and block private IP ranges.",
         Severity.HIGH,
-        r'(?:fetch|axios\.(?:get|post)|request|got|needle)\s*\([^)]*req\.\w+',
+        # (?<![\w$.]) keeps service methods that merely share a name —
+        # `invoiceService.fetch(...)`, `svc.request(...)` — from being read as
+        # outbound HTTP calls. Only bare `fetch(url)` style calls match.
+        r'(?<![\w$.])(?:fetch|axios\.(?:get|post)|request|got|needle)\s*\([^)]*req\.\w+',
     ),
     Rule(
         "JS-015F", "CWE-918",
@@ -226,7 +229,7 @@ RULES: list[Rule] = [
         "If the variable originates from user input without validation, attackers can target internal services.",
         "Validate URL hostname against an explicit allowlist and block private IP ranges.",
         Severity.MEDIUM,
-        r'(?:fetch|axios\.(?:get|post|put|delete)|request|got|needle|http\.(?:get|request)|https\.(?:get|request))\s*\(\s*(\w+)\s*\)',
+        r'(?<![\w$.])(?:fetch|axios\.(?:get|post|put|delete)|request|got|needle|http\.(?:get|request)|https\.(?:get|request))\s*\(\s*(\w+)\s*\)',
         context_confirm=r'function\s+\w+\s*\([^)]*\b(\w+)\b[^)]*\)',
         context_lines=5,
     ),

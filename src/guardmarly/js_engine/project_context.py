@@ -155,8 +155,21 @@ class ProjectContext:
 
 
 def _normalized_path(fp: str) -> str:
-    """Normalize a file path to forward-slash form for pattern matching."""
-    return fp.replace("\\", "/").lower()
+    """Normalize a file path for pattern matching, scoped to the scan root.
+
+    Path markers describe a *project's own* layout.  Matching them against the
+    host path made results depend on how the path was passed: an absolute path
+    under a directory named ``benchmarks`` looked like test code, which set
+    ``Runtime.TEST`` and skipped browser rules such as ``JS-041`` -- while the
+    identical relative path kept them.  ``ContextAnalyzer._match_path`` owns the
+    scoping, so this delegates to it rather than re-implementing it.
+    """
+    try:
+        from guardmarly.engine.triage import ContextAnalyzer
+
+        return ContextAnalyzer._match_path(fp)
+    except Exception:  # noqa: BLE001 - path scoping must never break a scan
+        return fp.replace("\\", "/").lower()
 
 
 def _detect_from_path(file_path: str) -> tuple[bool, bool, bool]:

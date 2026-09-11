@@ -13,7 +13,7 @@ registry so metadata stays aligned with the detectors that actually ship.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import lru_cache
 import re
 from typing import Any
@@ -777,7 +777,7 @@ _KNOWN_RULE_IDS: tuple[str, ...] = (
     "JS-032", "JS-033", "JS-034", "JS-035", "JS-036", "JS-037", "JS-038", "JS-039", "JS-040",
     "JS-043", "JS-044", "JS-045", "JS-046", "JS-047", "JS-048", "JS-049",
     "JS-050", "JS-051", "JS-052", "JS-053", "JS-054", "JS-055", "JS-056", "JS-057", "JS-058", "JS-059", "JS-060", "JS-061",
-    "JS-062", "JS-063",
+    "JS-062", "JS-063", "JS-064",
     "GO-22", "GO-78", "GO-79", "GO-89", "GO-327", "GO-330", "GO-400", "GO-470", "GO-502", "GO-532",
     "GO-601", "GO-798", "GO-823", "GO-862", "GO-918",
     "PY-001", "PY-002", "PY-003", "PY-004", "PY-005", "PY-006", "PY-007", "PY-008", "PY-009", "PY-010",
@@ -785,7 +785,7 @@ _KNOWN_RULE_IDS: tuple[str, ...] = (
     "PY-021", "PY-022", "PY-023", "PY-024", "PY-025", "PY-026", "PY-027", "PY-028", "PY-029", "PY-030",
     "PY-031", "PY-032", "PY-033", "PY-034", "PY-035", "PY-036", "PY-037", "PY-038",
     "PY-039", "PY-040", "PY-041", "PY-042", "PY-043", "PY-044", "PY-045", "PY-046",
-    "PY-047", "PY-048", "PY-060", "PY-061", "PY-062",
+    "PY-047", "PY-048", "PY-050", "PY-051", "PY-060", "PY-061", "PY-062",
     "JV-001", "JV-002", "JV-003", "JV-004", "JV-005", "JV-006", "JV-007",
     "JV-016",
     "CS-001", "CS-002", "CS-003", "CS-004", "CS-005", "CS-006", "CS-007",
@@ -1361,11 +1361,34 @@ _PY_RULE_CONTRACTS: dict[str, RuleContract] = {
         remediation="Load signing keys from environment variables or a secrets manager, and rotate exposed secrets.",
         tags=("python", "jwt", "secrets"),
     ),
+    "PY-050": _apply_cwe_base(
+        "PY-050",
+        cwe="CWE-326",
+        title="Python weak cryptographic key length",
+        category="security",
+        default_severity="medium",
+        languages=("python",),
+        precision="medium",
+        summary="Flags RSA/DSA key generation with an inadequate modulus size.",
+        remediation="Use at least 2048-bit RSA / 256-bit ECC key material, and prefer a managed key store.",
+        tags=("python", "crypto", "key-length"),
+    ),
+    "PY-051": _apply_cwe_base(
+        "PY-051",
+        cwe="CWE-1333",
+        title="Python inefficient regular expression (ReDoS)",
+        category="security",
+        default_severity="medium",
+        languages=("python",),
+        precision="medium",
+        summary="Flags regex patterns with nested quantifiers that can backtrack catastrophically on hostile input.",
+        remediation="Rewrite the pattern without nested quantifiers, anchor it, or use a linear-time matcher.",
+        tags=("python", "regex", "dos"),
+    ),
     "PY-060": _apply_cwe_base(
         "PY-060",
         cwe="CWE-453",
-        title="Python mutable default argument",
-        category="bug",
+        title="Python mutable default argument",        category="bug",
         default_severity="medium",
         languages=("python",),
         precision="high",
@@ -1557,6 +1580,25 @@ _JS_HEURISTIC_RULE_CONTRACTS: dict[str, RuleContract] = {
         summary="Flags GraphQL server configs that enable introspection/playground/debug in runtime code paths likely used in production.",
         remediation="Disable introspection/playground in production and expose schema metadata only in trusted development environments.",
         tags=("javascript", "graphql", "introspection", "information-disclosure"),
+    ),
+    "JS-064": _apply_cwe_base(
+        "JS-064",
+        cwe="CWE-639",
+        title="IDOR via request-controlled identifier in a resource lookup",
+        category="security",
+        default_severity="high",
+        languages=("javascript", "typescript"),
+        precision="medium",
+        summary=(
+            "Flags resource lookups whose key comes straight from the request "
+            "(`req.query.id`, `req.body['id']`, `req.params.id`) with no ownership or "
+            "tenancy constraint in scope — the classic Insecure Direct Object Reference."
+        ),
+        remediation=(
+            "Scope the lookup to the caller (`findOne({ where: { id, owner: req.user.id } })`) "
+            "or load the record and assert ownership before acting on it."
+        ),
+        tags=("javascript", "idor", "access-control", "authorization"),
     ),
     "JS-032": _apply_cwe_base(
         "JS-032",
@@ -2410,6 +2452,29 @@ def describe_rule(token: str) -> RuleContract | None:
         return _enrich_compliance(base) if base else None
     if normalized in _KNOWN_RULE_IDS:
         return get_rule_contract(normalized)
+    # Regex fallback detectors report "<RULE>F" (PY-005F, PY-023F, …). They are
+    # the same rule evaluated by the coarse engine, so describe the base
+    # contract when one exists — and fall back to a placeholder so that *every*
+    # ID the scanner reports can be looked up.
+    if normalized.endswith("F") and normalized[:-1] in _KNOWN_RULE_IDS:
+        base_contract = get_rule_contract(normalized[:-1])
+        return replace(
+            base_contract,
+            rule_id=normalized,
+            summary=(
+                f"{base_contract.summary} (reported by the regex fallback engine, "
+                "which detects the pattern without full AST/taint evidence.)"
+            ),
+        )
+    if len(normalized) > 2 and normalized.endswith("F") and re.fullmatch(r"[A-Z]{2}-\d+F", normalized):
+        placeholder = _placeholder_contract(normalized)
+        return replace(
+            placeholder,
+            summary=(
+                f"{placeholder.summary} Reported by the regex fallback engine for this "
+                "language; the corresponding AST rule has no curated contract yet."
+            ),
+        )
     return None
 
 

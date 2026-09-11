@@ -7,7 +7,9 @@ This is a virgin scan — none of these repos have been scanned by Guardmarly be
 """
 from __future__ import annotations
 
-import json, sys, time
+import json
+import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -182,7 +184,7 @@ def main():
     fpk = total_findings / (total_loc / 1000) if total_loc > 0 else 0
     print(f"  Overall FP/kLOC: {fpk:.1f}")
 
-    print(f"\n  Per-language breakdown:")
+    print("\n  Per-language breakdown:")
     for lang in sorted(lang_agg.keys()):
         d = lang_agg[lang]
         if d["files"] == 0:
@@ -197,7 +199,7 @@ def main():
     fresh_findings = sum(r.get("total_findings", 0) for r in fresh_results)
     fresh_fpk = fresh_findings / (fresh_loc / 1000) if fresh_loc > 0 else 0
 
-    print(f"\n  FRESH REPOS ONLY (virgin scan):")
+    print("\n  FRESH REPOS ONLY (virgin scan):")
     print(f"    Files: {fresh_files:,}  |  LOC: {fresh_loc:,}  |  Findings: {fresh_findings:,}")
     print(f"    FP/kLOC: {fresh_fpk:.1f}")
 
@@ -262,7 +264,7 @@ def main():
     print(f"  Tests passing: {passed}")
     print(f"  IDOR accuracy: {idor_pass}/{idor_total}")
     print(f"  Throughput: {total_loc/total_time:,.0f} LOC/s" if total_time > 0 else "")
-    print(f"  CVE recall (from prior): 100% (164/164)")
+    print("  CVE recall (from prior): 100% (164/164)")
 
     if fresh_fpk < 5 and idor_pass == idor_total and passed > 1300:
         print("\n  VERDICT: Production-grade. Low noise on Fortune 500 code.")

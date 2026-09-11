@@ -16,10 +16,12 @@ Public surface:
 """
 from __future__ import annotations
 
-from typing import NamedTuple, Optional
+from typing import TYPE_CHECKING, NamedTuple, Optional
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from guardmarly.v2.model import SemanticModel
 
 from guardmarly.v2.nodes import ASTNode
-
 
 # ── Taint primitives ───────────────────────────────────────────────────────────
 
@@ -155,7 +157,7 @@ class TaintGraph:
         self.sinks: list[TaintSink] = []
         self.sanitizers: list[Sanitizer] = []
 
-    def analyze(self, model: "SemanticModel") -> list[tuple[TaintSource, TaintSink]]:
+    def analyze(self, model: SemanticModel) -> list[tuple[TaintSource, TaintSink]]:
         """
         Run taint analysis over *model* and return confirmed source→sink pairs.
         """
@@ -180,7 +182,7 @@ class TaintGraph:
         return results
 
     def _process_node_sources(self, node: ASTNode) -> None:
-        from guardmarly.v2.nodes import AssignNode, CallNode, AttributeAccessNode
+        from guardmarly.v2.nodes import AssignNode, AttributeAccessNode, CallNode
 
         # Direct taint source call: user_var = request.get_json()
         if isinstance(node, AssignNode) and node.value is not None:

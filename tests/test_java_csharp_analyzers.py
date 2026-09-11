@@ -700,3 +700,50 @@ def test_does_not_flag_sha256():
                         filename="ModernHasher.java")
     assert "JV-012" not in _rule_ids(result), \
         f"SHA-256 should NOT trigger CWE-328, got {_rule_ids(result)}"
+
+
+# ── JV-029: stack trace written to the HTTP response (CWE-200) ───────────
+#
+# Regression: this rule's dedup guard referenced an `existing_keys` set that
+# was never bound in `analyze_java`, so the pattern pass raised NameError and
+# the finding was silently dropped.
+
+JAVA_STACKTRACE_TO_RESPONSE = """
+import javax.servlet.http.HttpServletResponse;
+
+public class ErrorHandler {
+    public void handle(HttpServletResponse response) {
+        try {
+            authenticate();
+        } catch (Exception e) {
+            e.printStackTrace(response.getWriter());
+        }
+    }
+}
+"""
+
+JAVA_STACKTRACE_TO_LOG = """
+public class ErrorHandler {
+    public void handle() {
+        try {
+            authenticate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+"""
+
+
+def test_stacktrace_written_to_http_response_is_flagged():
+    result = scan_code(JAVA_STACKTRACE_TO_RESPONSE, language="java",
+                       filename="ErrorHandler.java")
+    assert "JV-029" in _rule_ids(result), \
+        f"Expected JV-029 for response.getWriter(), got {_rule_ids(result)}"
+
+
+def test_plain_stacktrace_to_log_is_not_flagged():
+    result = scan_code(JAVA_STACKTRACE_TO_LOG, language="java",
+                       filename="ErrorHandler.java")
+    assert "JV-029" not in _rule_ids(result), \
+        f"JV-029 is for HTTP responses only, got {_rule_ids(result)}"

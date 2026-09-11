@@ -1,0 +1,6 @@
+# Documentation site build dependencies (mkdocs.yml)
+#
+# Build locally:  pip install -r requirements-docs.txt
+#                 mkdocs serve          # http://127.0.0.1:8000
+#                 mkdocs build --strict  # same check CI runs
+mkdocs-material>=9.5,<10

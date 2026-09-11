@@ -12,20 +12,72 @@ Architecture:
 
 from __future__ import annotations
 
-from typing import Callable, Dict, List, Optional, Set, Tuple
+from typing import Callable, Dict, List, Optional, Set, Tuple, Union
 
 from .ast_nodes import (
-    ArrayExpr, ArrowFunctionExpr, AssignmentExpr, BinaryExpr, BlockStatement,
-    CallExpr, ClassBody, ClassDeclaration, ClassMember, ConditionalExpr,
-    ExpressionStatement, FunctionDeclaration, FunctionExpr, Identifier,
-    IdentifierPattern, IfStatement, ImportDeclaration, ImportSpecifier,
-    Literal, LogicalExpr, MemberExpr, NewExpr, ObjectExpr, Program, Property,
-    ReturnStatement, Statement, TemplateLiteral, TemplateElement, ThisExpr,
-    ThrowStatement, TryStatement, CatchClause, UnaryExpr, VariableDeclaration,
-    VariableDeclarator, WhileStatement, ForStatement,
+    ArrayExpr,
+    ArrowFunctionExpr,
+    AssignmentExpr,
+    BinaryExpr,
+    BlockStatement,
+    CallExpr,
+    CatchClause,
+    ClassBody,
+    ClassDeclaration,
+    ClassMember,
+    ConditionalExpr,
+    ExpressionStatement,
+    ForStatement,
+    FunctionDeclaration,
+    FunctionExpr,
+    Identifier,
+    IdentifierPattern,
+    IfStatement,
+    ImportDeclaration,
+    ImportSpecifier,
+    Literal,
+    LogicalExpr,
+    MemberExpr,
+    NewExpr,
+    ObjectExpr,
+    Program,
+    Property,
+    ReturnStatement,
+    Statement,
+    SuperExpr,
+    TemplateElement,
+    TemplateLiteral,
+    ThisExpr,
+    ThrowStatement,
+    TryStatement,
+    UnaryExpr,
+    VariableDeclaration,
+    VariableDeclarator,
+    WhileStatement,
 )
-from .lexer import Lexer, TokenType, Token
+from .lexer import Lexer, Token, TokenType
 
+# Expression node returned by the Pratt core. The node classes in ast_nodes.py
+# share no common base, so the union is spelled out rather than inherited.
+Expr = Union[
+    ArrayExpr,
+    ArrowFunctionExpr,
+    AssignmentExpr,
+    BinaryExpr,
+    CallExpr,
+    ConditionalExpr,
+    FunctionExpr,
+    Identifier,
+    Literal,
+    LogicalExpr,
+    MemberExpr,
+    NewExpr,
+    ObjectExpr,
+    SuperExpr,
+    TemplateLiteral,
+    ThisExpr,
+    UnaryExpr,
+]
 
 # ── Binding power (precedence) table ──────────────────────────────────────
 
@@ -111,13 +163,13 @@ class PrattParser:
                 body.append(stmt)
         return Program(body=tuple(body), loc=(1, 1))
 
-    def parse_expression(self) -> "Expr":
+    def parse_expression(self) -> Expr:
         """Parse a single expression (for REPL / testing)."""
         return self._parse_expr(0)
 
     # ── Expression parsing (Pratt core) ───────────────────────────────────
 
-    def _parse_expr(self, min_bp: int) -> "Expr":
+    def _parse_expr(self, min_bp: int) -> Expr:
         """Pratt expression parser entry point."""
         tok = self.lexer.peek()
 
@@ -140,7 +192,7 @@ class PrattParser:
             left = self._parse_infix(left, tok, next_min)
         return left
 
-    def _parse_prefix(self, tok: Token) -> Optional["Expr"]:
+    def _parse_prefix(self, tok: Token) -> Optional[Expr]:
         """NUD: parse a prefix expression based on the current token."""
         # Literals
         if tok.type == TokenType.NUMBER:
@@ -210,7 +262,7 @@ class PrattParser:
         self.lexer.advance()
         return None
 
-    def _parse_infix(self, left: "Expr", tok: Token, min_bp: int) -> "Expr":
+    def _parse_infix(self, left: Expr, tok: Token, min_bp: int) -> Expr:
         """LED: parse an infix/postfix operator continuing from `left`."""
         ttype = tok.type
 
@@ -296,17 +348,17 @@ class PrattParser:
             value = 0
         return Literal(value, raw, (tok.line, tok.col))
 
-    def _parse_identifier_expr(self, tok: Token) -> "Expr":
+    def _parse_identifier_expr(self, tok: Token) -> Expr:
         """Parse an identifier — may be the start of an arrow function."""
         # Check if this is an async arrow: async (params) => ...
         if tok.value == "async" and self.lexer.peek().type == TokenType.LPAREN:
             return self._parse_arrow_function(async_=True)
         return Identifier(tok.value, (tok.line, tok.col))
 
-    def _parse_template(self, tok: Token) -> "Expr":
+    def _parse_template(self, tok: Token) -> Expr:
         """Parse a template literal with optional expressions."""
-        quasis: List["TemplateElement"] = []
-        expressions: List["Expr"] = []
+        quasis: List[TemplateElement] = []
+        expressions: List[Expr] = []
         line, col = tok.line, tok.col
 
         self.lexer.advance()  # eat current TEMPLATE_HEAD token
@@ -344,7 +396,7 @@ class PrattParser:
 
         return TemplateLiteral(quasis=tuple(quasis), expressions=tuple(expressions), loc=(line, col))
 
-    def _parse_paren_expr(self) -> "Expr":
+    def _parse_paren_expr(self) -> Expr:
         """Parse ( expr ) or arrow function params."""
         self.lexer.advance()  # eat (
         line, col = self.lexer.peek().line, self.lexer.peek().col
@@ -372,7 +424,7 @@ class PrattParser:
         self.lexer.expect(TokenType.RPAREN)
         return expr
 
-    def _parse_arrow_params_after_first(self, first: "Expr") -> List["IdentifierPattern"]:
+    def _parse_arrow_params_after_first(self, first: Expr) -> List[IdentifierPattern]:
         """Parse remaining comma-separated arrow params."""
         first_name = first.name if isinstance(first, Identifier) else "param"
         params = [IdentifierPattern(first_name, (first.loc[0], first.loc[1]))]
@@ -386,9 +438,9 @@ class PrattParser:
         return params
 
     def _parse_arrow_function_body(
-        self, params: Tuple["IdentifierPattern", ...], async_: bool,
+        self, params: Tuple[IdentifierPattern, ...], async_: bool,
         paren_line: int, paren_col: int,
-    ) -> "ArrowFunctionExpr":
+    ) -> ArrowFunctionExpr:
         """Parse => body of an arrow function."""
         self.lexer.advance()  # eat =>
         if self._check(TokenType.LBRACE):
@@ -397,7 +449,7 @@ class PrattParser:
         body_expr = self._parse_expr(0)
         return ArrowFunctionExpr(params=params, body=body_expr, async_=async_, loc=(paren_line, paren_col))
 
-    def _parse_arrow_function(self, async_: bool = False) -> "ArrowFunctionExpr":
+    def _parse_arrow_function(self, async_: bool = False) -> ArrowFunctionExpr:
         """Parse async? (params) => body."""
         # The '(' has already been consumed or will be
         params = self._parse_formal_params()
@@ -409,9 +461,9 @@ class PrattParser:
             body = self._parse_expr(0)
         return ArrowFunctionExpr(params=params, body=body, async_=async_, loc=(line, col))
 
-    def _parse_array_literal(self) -> "ArrayExpr":
+    def _parse_array_literal(self) -> ArrayExpr:
         self.lexer.advance()  # eat [
-        elements: List[Optional["Expr"]] = []
+        elements: List[Optional[Expr]] = []
         line, col = self.lexer.peek().line, self.lexer.peek().col
         while not self._check(TokenType.RBRACKET) and not self._check(TokenType.EOF):
             if self._check(TokenType.COMMA):
@@ -424,7 +476,7 @@ class PrattParser:
         self.lexer.expect(TokenType.RBRACKET)
         return ArrayExpr(elements=tuple(elements), loc=(line, col))
 
-    def _parse_object_literal(self) -> "ObjectExpr":
+    def _parse_object_literal(self) -> ObjectExpr:
         self.lexer.advance()  # eat {
         properties: List[Property] = []
         line, col = self.lexer.peek().line, self.lexer.peek().col
@@ -456,7 +508,7 @@ class PrattParser:
         self.lexer.expect(TokenType.RBRACE)
         return ObjectExpr(properties=tuple(properties), loc=(line, col))
 
-    def _parse_object_key(self) -> "Expr":
+    def _parse_object_key(self) -> Expr:
         tok = self.lexer.peek()
         if tok.type == TokenType.IDENTIFIER:
             return Identifier(self.lexer.advance().value, (tok.line, tok.col))
@@ -473,9 +525,9 @@ class PrattParser:
             return expr
         return self._parse_expr(0)
 
-    def _parse_call_expr(self, callee: "Expr") -> "CallExpr":
+    def _parse_call_expr(self, callee: Expr) -> CallExpr:
         self.lexer.advance()  # eat (
-        args: List["Expr"] = []
+        args: List[Expr] = []
         line, col = self.lexer.peek().line, self.lexer.peek().col
         while not self._check(TokenType.RPAREN) and not self._check(TokenType.EOF):
             args.append(self._parse_expr(0))
@@ -484,7 +536,7 @@ class PrattParser:
         self.lexer.expect(TokenType.RPAREN)
         return CallExpr(callee=callee, arguments=tuple(args), loc=(line, col))
 
-    def _parse_new_expr(self) -> "Expr":
+    def _parse_new_expr(self) -> Expr:
         self.lexer.advance()  # eat new
         tok = self.lexer.peek()
         callee = self._parse_prefix(tok)
@@ -496,7 +548,7 @@ class PrattParser:
             return Literal(None, "undefined", (tok.line, tok.col))
         return NewExpr(callee=callee, arguments=(), loc=(tok.line, tok.col))
 
-    def _parse_super_expr(self, tok: Token) -> "Expr":
+    def _parse_super_expr(self, tok: Token) -> Expr:
         if self._check(TokenType.DOT) or self._check(TokenType.LBRACKET):
             return self._parse_expr(0)  # super.prop or super[prop]
         if self._check(TokenType.LPAREN):
@@ -580,7 +632,7 @@ class PrattParser:
     def _parse_for_statement(self) -> Statement:
         self.lexer.advance()  # eat for
         self.lexer.expect(TokenType.LPAREN)
-        init: Optional["Expr | VariableDeclaration"] = None
+        init: Optional[Expr | VariableDeclaration] = None
         if not self._check(TokenType.SEMI):
             if self._check(TokenType.VAR) or self._check(TokenType.LET) or self._check(TokenType.CONST):
                 kind = self.lexer.advance().value
@@ -682,7 +734,7 @@ class PrattParser:
 
     def _parse_function(
         self, declaration: bool = False, at_method: bool = False,
-    ) -> "FunctionExpr | FunctionDeclaration":
+    ) -> FunctionExpr | FunctionDeclaration:
         # Check for async
         async_ = False
         if self._check(TokenType.ASYNC):
@@ -719,7 +771,7 @@ class PrattParser:
             loc=(0, 0),
         )
 
-    def _parse_formal_params(self) -> Tuple["IdentifierPattern", ...]:
+    def _parse_formal_params(self) -> Tuple[IdentifierPattern, ...]:
         self.lexer.expect(TokenType.LPAREN)
         params: List[IdentifierPattern] = []
         while not self._check(TokenType.RPAREN) and not self._check(TokenType.EOF):

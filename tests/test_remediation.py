@@ -205,3 +205,34 @@ class TestGenerateRemediation:
     def test_cwe_templates_cover_common_cwes(self):
         for cwe in ("CWE-89", "CWE-78", "CWE-502", "CWE-22", "CWE-798", "CWE-338"):
             assert cwe in _CWE_TEMPLATES
+
+
+# ── MultiLineRefactorer: IDOR/ownership branch ───────────────────────────
+#
+# Regression: the CWE-639/CWE-285 branch read `lines`, which was never bound in
+# `refactor()`, so any IDOR finding that reached the multi-line refactorer died
+# with NameError instead of returning a suggestion.
+
+class TestIDORRefactor:
+    def _refactor(self, context: str, line_offset: int):
+        from guardmarly.engine.remediation import MultiLineRefactorer
+
+        return MultiLineRefactorer().refactor("CWE-639", context, line_offset)
+
+    def test_ownership_filter_suggestion_is_produced(self):
+        context = "invoice = Invoice.query.filter(id=invoice_id).first()\n"
+        result = self._refactor(context, 0)
+
+        assert result is not None
+        assert result.startswith("BEFORE:")
+        assert "owner=request.user" in result
+
+    def test_query_already_scoped_is_left_alone(self):
+        context = "invoice = Invoice.query.filter(id=invoice_id, owner=request.user).first()\n"
+        assert self._refactor(context, 0) is None
+
+    def test_out_of_range_offset_does_not_raise(self):
+        assert self._refactor("x = 1\n", 99) is None
+
+    def test_non_lookup_line_does_not_raise(self):
+        assert self._refactor("logger.info('listing invoices')\n", 0) is None

@@ -143,6 +143,26 @@ def _score_finding(finding: Finding) -> tuple[int, int, float, float, int]:
     )
 
 
+def _best_representative(candidates: list[Finding]) -> Finding:
+    """Select a cluster representative with a *total* order.
+
+    ``max(candidates, key=_score_finding)`` breaks ties by input order, and that
+    input order comes from set iteration — so which rule id survived a merge
+    varied between otherwise identical runs.  Adding stable tie-breakers (line,
+    rule id, CWE, title) makes the choice independent of iteration order.
+    """
+    def sort_key(f: Finding) -> tuple:
+        return (
+            tuple(-value for value in _score_finding(f)),  # higher score first
+            f.line or 0,
+            f.rule_id or "",
+            f.cwe or "",
+            f.title or "",
+        )
+
+    return min(candidates, key=sort_key)
+
+
 def _merge_title(representative: Finding, sibling_count: int, sibling_rules: set[str]) -> str:
     if sibling_count < 1:
         return representative.title
@@ -229,7 +249,7 @@ def cluster_findings(findings: list[Finding]) -> list[Finding]:
 
             # Build merged incident
             all_findings = [rep] + [representative_map[k] for k in overlap_keys]
-            best = max(all_findings, key=_score_finding)
+            best = _best_representative(all_findings)
 
             # Collect all rule IDs and CWEs
             sibling_rules: set[str] = {f.rule_id for f in all_findings if f.rule_id}
@@ -270,6 +290,13 @@ def cluster_findings(findings: list[Finding]) -> list[Finding]:
             used_keys.add(key)
             used_keys.update(overlap_keys)
 
-    # Final sort: by line, then severity
-    merged.sort(key=lambda f: (f.line or 0, f.severity.sort_key, f.title.lower()))
+    # Final sort: by line, then severity.  The trailing keys make the order a
+    # total order, so output cannot depend on dict/set iteration.
+    merged.sort(key=lambda f: (
+        f.line or 0,
+        f.severity.sort_key,
+        f.title.lower(),
+        f.rule_id or "",
+        f.cwe or "",
+    ))
     return merged

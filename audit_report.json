@@ -1,0 +1,45 @@
+{
+  "total": 3,
+  "by_verdict": {
+    "TP": 2,
+    "LIKELY_FP": 1
+  },
+  "findings": [
+    {
+      "verdict": "TP",
+      "cwe": "CWE-78",
+      "severity": "CRITICAL",
+      "file": "C:\\Users\\matth\\AppData\\Local\\Temp\\gm_matrix_g4gd1zym\\vuln.py",
+      "line": 7,
+      "title": "CWE-78: Command injection via subprocess.call( at line 7",
+      "reasoning": "subprocess call with formatted string \u2014 real command injection",
+      "runtime_hint": "",
+      "agent": "py-fallback",
+      "analysis_kind": "direct_sink"
+    },
+    {
+      "verdict": "LIKELY_FP",
+      "cwe": "CWE-78",
+      "severity": "CRITICAL",
+      "file": "C:\\Users\\matth\\AppData\\Local\\Temp\\gm_matrix_g4gd1zym\\vuln.py",
+      "line": 8,
+      "title": "CWE-78: Unsafe os.system() command injection at line 8  [+1 related]",
+      "reasoning": "Incident-cluster finding \u2014 grouped findings may need review",
+      "runtime_hint": "",
+      "agent": "python-analyzer",
+      "analysis_kind": "incident-cluster"
+    },
+    {
+      "verdict": "TP",
+      "cwe": "CWE-502",
+      "severity": "CRITICAL",
+      "file": "C:\\Users\\matth\\AppData\\Local\\Temp\\gm_matrix_g4gd1zym\\vuln.py",
+      "line": 12,
+      "title": "CWE-502: Unsafe pickle deserialization at line 12",
+      "reasoning": "Insecure deserialization \u2014 real vulnerability",
+      "runtime_hint": "",
+      "agent": "python-analyzer",
+      "analysis_kind": "direct_sink"
+    }
+  ]
+}

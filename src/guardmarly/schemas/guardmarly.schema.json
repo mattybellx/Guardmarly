@@ -6,6 +6,10 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Optional editor hint pointing at this schema; ignored by the scanner."
+    },
     "sinks": {
       "type": "array",
       "description": "Custom taint sink definitions. Extends the built-in sink catalogue.",
@@ -99,6 +103,26 @@
       "description": "Structured log verbosity for the engine. DEBUG emits per-file parse, finding, and suppression events.",
       "enum": ["DEBUG", "INFO", "WARNING", "ERROR"],
       "default": "WARNING"
+    },
+    "custom_sanitizers": {
+      "type": "object",
+      "description": "Per-project functions that neutralise taint. Maps a function name to the CWE list it sanitises, e.g. {\"sanitize_path\": [\"CWE-22\"]}.",
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "string",
+          "pattern": "^CWE-[0-9]+$"
+        }
+      }
+    },
+    "rule_overrides": {
+      "type": "object",
+      "description": "Downgrade or raise a rule/CWE severity for this project. Maps a rule ID (PY-004) or CWE (CWE-89) to a severity.",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["critical", "high", "medium", "low", "info"]
+      }
     }
   },
   "definitions": {

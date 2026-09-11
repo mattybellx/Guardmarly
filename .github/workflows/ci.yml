@@ -6,19 +6,63 @@ on:
   pull_request:
     branches: [master, main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
-    name: Test (py3.11)
+    name: Test (${{ matrix.os }} / py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # One failing platform must not hide the others.
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.9', '3.12', '3.13']
+        include:
+          # Windows matters: console encoding, path handling and the Rich
+          # legacy-console renderer all behave differently there. The v6.6.0
+          # emoji/UnicodeEncodeError crash was Windows-only.
+          - os: windows-latest
+            python-version: '3.13'
+          - os: macos-latest
+            python-version: '3.12'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Run tests
+        run: python -m pytest tests/ -q --tb=short
+
+  metrics:
+    name: Reproducible metrics
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
       - name: Install
         run: pip install -e ".[dev]"
-      - name: Run tests
-        run: python -m pytest tests/ -q --tb=short
+      - name: Reproduce competitive metrics
+        # Exit code is the gate: the script fails when recall or clean-code
+        # precision drops below the floor declared in reproduce_metrics.py, so
+        # a regression cannot be merged by simply not reading the report. The
+        # third-party scanners used by the three-way comparison are optional --
+        # when absent those sections are reported as skipped, not failed.
+        run: python benchmarks/reproduce_metrics.py
+      - name: Upload the evidence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence
+          path: |
+            benchmarks/results/EVIDENCE.md
+            benchmarks/results/manifest.json
 
   lint:
     name: Lint
@@ -27,12 +71,31 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - name: Install
-        # Pin ruff: 0.16+ promotes many new rules to defaults (I001, RUF022,
-        # UP006/035, PYI034/036, S110/BLE001, SIM1xx, ...) which flag the whole
-        # legacy src/ tree. Keep lint deterministic; bump deliberately together
-        # with a codebase-wide cleanup.
-        run: pip install ruff==0.15.19
+          python-version: '3.12'
+      - name: Install ruff
+        # The rule selection lives in pyproject.toml ([tool.ruff]), so lint is
+        # reproducible across ruff versions and needs no version pin here.
+        run: pip install ruff
       - name: Run ruff
-        run: ruff check src/ --ignore E501,E701,E702,E741,F821,F401,F811,F841,E402 --fix
+        # Never `--fix` in CI: it mutates the checkout and can hide violations.
+        run: ruff check src tests .github/scripts scripts webapp
+
+  package:
+    name: Package build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build backend
+        run: pip install build
+      - name: Build wheel + sdist
+        # Guards the packaging metadata (dynamic version, package data) that
+        # publish.yml and release.yml depend on.
+        run: python -m build --outdir dist/
+      - name: Verify the installed wheel reports a real version
+        run: |
+          python -m pip install --force-reinstall dist/*.whl
+          python -c "import guardmarly; print('installed version:', guardmarly.__version__); assert guardmarly.__version__ != '0.0.0+unknown'"
+          python -m guardmarly.cli --version

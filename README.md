@@ -43,11 +43,15 @@ Guardmarly maps every HTTP route, checks for auth guards, traces data flow to si
 ```bash
 pip install guardmarly
 guardmarly src/                          # text output
+guardmarly --demo                        # scan a built-in vulnerable sample
 guardmarly src/ --format json -o r.json  # JSON report
 guardmarly src/ --format sarif           # SARIF for GitHub
 guardmarly --show-stats                  # lifetime + today counts
 guardmarly --list-rules                  # full rule catalog
 ```
+
+Documentation: [getting started](docs/getting-started.md), [configuration](docs/configuration.md),
+[CI integration](docs/ci-integration.md), [architecture](docs/architecture.md).
 
 ## Supported languages & CWEs
 
@@ -62,8 +66,13 @@ guardmarly --list-rules                  # full rule catalog
 ```bash
 git clone https://github.com/mattybellx/Guardmarly.git
 cd Guardmarly && pip install -e ".[dev]"
-pytest tests/ -q                       # 1,183+ tests in ~12s
+pytest tests/ -q                       # 1,300+ tests in ~12s
+ruff check                             # lint (config lives in pyproject.toml)
+mkdocs build --strict                  # docs site, if you changed docs/
 ```
+
+See [AGENTS.md](AGENTS.md) for the repository map and [IMPROVEMENTS.md](IMPROVEMENTS.md)
+for the current defect/backlog record.
 
 ## License
 

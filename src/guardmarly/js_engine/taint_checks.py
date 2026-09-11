@@ -9,6 +9,7 @@ from guardmarly.js_engine.constants import (
     PATH_CALLEE_PARTS,
     SSRF_CALLEES,
     callee_matches,
+    is_http_client_callee,
 )
 from guardmarly.js_engine.project_context import ProjectContext, is_fs_callee
 from guardmarly.js_engine.project import (
@@ -204,6 +205,8 @@ def _check_taint_ssrf(
     findings: list[Finding] = []
     for call in collect_calls(code):
         if not callee_matches(call.callee, SSRF_CALLEES):
+            continue
+        if not is_http_client_callee(call.callee):
             continue
         if not call.arguments:
             continue

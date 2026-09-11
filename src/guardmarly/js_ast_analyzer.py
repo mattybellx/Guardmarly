@@ -28,6 +28,7 @@ from guardmarly.js_engine.constants import (
     SSRF_CALLEES,
     PATH_CALLEE_PARTS,
     callee_matches,
+    is_http_client_callee,
 )
 from guardmarly.js_engine.source_map_resolver import (
     load_sourcemap_path,
@@ -35,6 +36,7 @@ from guardmarly.js_engine.source_map_resolver import (
 )
 from guardmarly.js_engine.sourcemap_rescanner import rescore_via_source_map
 
+from guardmarly.js_engine.idor_lookup import detect_idor_lookups
 from guardmarly.js_engine.project import build_js_project_index, propagate_helper_return_traces
 from guardmarly.js_engine.project_context import (
     ProjectContext,
@@ -759,6 +761,11 @@ def _check_open_redirect(
 
 
 
+def _ssrf_callee_is_http_client(callee: str) -> bool:
+    """Deprecated shim — the canonical guard lives in js_engine.constants."""
+    return is_http_client_callee(callee)
+
+
 def _check_ssrf(
     calls: list[JsCall],
     taint_traces: dict[str, tuple[TraceFrame, ...]],
@@ -772,6 +779,8 @@ def _check_ssrf(
     findings: list[Finding] = []
     for call in calls:
         if not _callee_matches(call, SSRF_CALLEES) or not call.arguments:
+            continue
+        if not _ssrf_callee_is_http_client(call.callee):
             continue
         expr = call.arguments[0]
         trace = _flow_trace(expr, taint_traces, line=call.line, allow_generic_dynamic=False)
@@ -890,6 +899,22 @@ def _check_file_upload_js(code: str, calls: list[JsCall]) -> list[Finding]:
 
 
 def _check_idor_js(code: str) -> list[Finding]:
+    """CWE-639: request-controlled resource lookups without ownership scope.
+
+    Combines the dedicated lookup detector (any request bag, object-literal
+    arguments, model receivers) with the older route-parameter rule below, so a
+    site is reported once whichever form it takes.
+    """
+    findings: list[Finding] = list(detect_idor_lookups(code))
+    reported_lines = {f.line for f in findings}
+    for legacy in _check_idor_route_params_js(code):
+        if legacy.line not in reported_lines:
+            findings.append(legacy)
+            reported_lines.add(legacy.line)
+    return findings
+
+
+def _check_idor_route_params_js(code: str) -> list[Finding]:
     """CWE-639: Auth middleware + direct object access without ownership filter."""
     findings: list[Finding] = []
     _AUTH_MIDDLEWARE_RE = re.compile(

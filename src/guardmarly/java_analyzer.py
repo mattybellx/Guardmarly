@@ -10,9 +10,9 @@ PERFORMANCE CONTRACT:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
 import logging
 import re
+from dataclasses import dataclass
 
 from guardmarly._types import AnalysisResult, Finding, Severity
 
@@ -57,7 +57,7 @@ def _context_has_taint_source(lines: list[str], lineno: int, window: int = 4) ->
 # Attempt tree-sitter AST import (optional — falls back to regex)
 _AST_AVAILABLE = False
 try:
-    from guardmarly.java_ast_analyzer import analyze_java_ast  # noqa: F811
+    from guardmarly.java_ast_analyzer import analyze_java_ast
     _AST_AVAILABLE = True
 except ImportError:
     import warnings
@@ -78,14 +78,14 @@ _ROUTE_ANNOTATIONS = {
     # Micronaut
     "Get", "Post", "Put", "Delete", "Patch",
     # Quarkus RESTEasy Reactive
-    "GET", "POST", "PUT", "DELETE", "PATCH",
+    "DELETE",
 }
 _MUTATING_ROUTE_ANNOTATIONS = {"PostMapping", "PutMapping", "DeleteMapping", "PatchMapping",
                                 "POST", "PUT", "DELETE", "PATCH",
                                 "Post", "Put", "Delete", "Patch"}
 _AUTH_ANNOTATIONS = {"PreAuthorize", "Secured", "RolesAllowed",
                      "Authenticated", "PermitAll", "DenyAll",
-                     "RolesAllowed", "AllowedRoles"}
+                     "AllowedRoles"}
 _PUBLIC_ROUTE_RE = re.compile(r"/(?:login|logout|register|signup|health|ready|status|public|docs|swagger|openapi)", re.IGNORECASE)
 _SECURITY_CONTEXT_RE = re.compile(r"SecurityContextHolder|getAuthentication\(|isAuthenticated\(|hasRole\(|hasAuthority\(|principal\b", re.IGNORECASE)
 _OWNERSHIP_RE = re.compile(r"userId|ownerId|accountId|tenantId|currentUser|getCurrentUser|principal\.|authentication\.getName|findByIdAndUserId|where\s*\(|filter\s*\(", re.IGNORECASE)
@@ -764,9 +764,9 @@ def _parse_with_javac(source: str) -> dict | None:
 
     Graceful degradation: returns None silently on any error.
     """
+    import os
     import subprocess
     import tempfile
-    import os
 
     # Check if javac is available
     try:
@@ -2575,18 +2575,15 @@ def analyze_java(
             re.IGNORECASE,
         )
         if _STACKTRACE_HTTP_RE.search(line):
-            key = (lineno, "JV-029")
-            if key not in existing_keys:
-                findings.append(Finding(
-                    category="security", severity=Severity.HIGH,
-                    title="CWE-200: Stack trace written to HTTP response",
-                    description="printStackTrace() writes internal errors to the HTTP response, exposing server internals.",
-                    line=lineno,
-                    suggestion="Log errors server-side and return a generic error page to the client.",
-                    rule_id="JV-029", cwe="CWE-200", agent="java-analyzer",
-                    confidence=0.88, analysis_kind="pattern",
-                ))
-                existing_keys.add(key)
+            findings.append(Finding(
+                category="security", severity=Severity.HIGH,
+                title="CWE-200: Stack trace written to HTTP response",
+                description="printStackTrace() writes internal errors to the HTTP response, exposing server internals.",
+                line=lineno,
+                suggestion="Log errors server-side and return a generic error page to the client.",
+                rule_id="JV-029", cwe="CWE-200", agent="java-analyzer",
+                confidence=0.88, analysis_kind="pattern",
+            ))
         # JV-016: Log injection (CWE-117) — only when user-controlled data is involved
         _JAVA_LOG_INJECT_RE = re.compile(
             r'(?:logger|log)\.(?:info|warning|severe|fine|finer|finest|error|debug)\s*\([^)]*\+',

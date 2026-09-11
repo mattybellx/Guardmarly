@@ -1,0 +1,134 @@
+{
+  "note": "Ground truth for the Guardmarly benchmark corpus. 'positives' map a corpus-relative path to the CWE set a human auditor would report. 'negatives' are safe code: any security finding against them is a false positive.",
+  "positives": {
+    "python/sqli_concat.py": [
+      "CWE-89"
+    ],
+    "python/sqli_fstring.py": [
+      "CWE-89"
+    ],
+    "python/cmdi_os_system.py": [
+      "CWE-78"
+    ],
+    "python/cmdi_subprocess_shell.py": [
+      "CWE-78"
+    ],
+    "python/pathtraversal.py": [
+      "CWE-22"
+    ],
+    "python/ssrf.py": [
+      "CWE-918"
+    ],
+    "python/deserialization_pickle.py": [
+      "CWE-502"
+    ],
+    "python/deserialization_yaml.py": [
+      "CWE-502"
+    ],
+    "python/weak_hash_md5.py": [
+      "CWE-327"
+    ],
+    "python/hardcoded_secret.py": [
+      "CWE-798"
+    ],
+    "python/xss_render.py": [
+      "CWE-79"
+    ],
+    "python/idor_django.py": [
+      "CWE-639"
+    ],
+    "python/open_redirect.py": [
+      "CWE-601"
+    ],
+    "python/xxe.py": [
+      "CWE-611"
+    ],
+    "javascript/sqli_concat.js": [
+      "CWE-89"
+    ],
+    "javascript/sqli_template.js": [
+      "CWE-89"
+    ],
+    "javascript/cmdi_exec.js": [
+      "CWE-78"
+    ],
+    "javascript/pathtraversal.js": [
+      "CWE-22"
+    ],
+    "javascript/ssrf_axios.js": [
+      "CWE-918"
+    ],
+    "javascript/xss_innerhtml.js": [
+      "CWE-79"
+    ],
+    "javascript/idor_express.js": [
+      "CWE-639"
+    ],
+    "javascript/eval_user_input.js": [
+      "CWE-95"
+    ],
+    "javascript/prototype_pollution.js": [
+      "CWE-1321"
+    ],
+    "javascript/insecure_tls.js": [
+      "CWE-295"
+    ],
+    "java/SqlInjection.java": [
+      "CWE-89"
+    ],
+    "java/CommandInjection.java": [
+      "CWE-78"
+    ],
+    "java/PathTraversal.java": [
+      "CWE-22"
+    ],
+    "java/UnsafeDeserialization.java": [
+      "CWE-502"
+    ],
+    "java/WeakCrypto.java": [
+      "CWE-327"
+    ],
+    "java/OpenRedirect.java": [
+      "CWE-601"
+    ],
+    "go/sqli_concat.go": [
+      "CWE-89"
+    ],
+    "go/cmdi_exec.go": [
+      "CWE-78"
+    ],
+    "go/pathtraversal_readfile.go": [
+      "CWE-22"
+    ],
+    "csharp/SqlInjection.cs": [
+      "CWE-89"
+    ],
+    "csharp/CommandInjection.cs": [
+      "CWE-78"
+    ],
+    "csharp/InsecureDeserialization.cs": [
+      "CWE-502"
+    ]
+  },
+  "negatives": [
+    "csharp/clean/ParameterizedQuery.cs",
+    "go/clean/parameterized_query.go",
+    "java/clean/ConstantRedirect.java",
+    "java/clean/ParameterizedQuery.java",
+    "java/clean/StrongCrypto.java",
+    "javascript/clean/execfile_arguments.js",
+    "javascript/clean/owner_scoped_express.js",
+    "javascript/clean/parameterized_query.js",
+    "javascript/clean/static_fetch.js",
+    "javascript/clean/textcontent.js",
+    "javascript/clean/tls_verified.js",
+    "python/clean/constant_url.py",
+    "python/clean/os_path_basename.py",
+    "python/clean/owner_scoped_django.py",
+    "python/clean/parameterized_query.py",
+    "python/clean/safe_yaml.py",
+    "python/clean/secrets_from_env.py",
+    "python/clean/strong_hash.py",
+    "python/clean/subprocess_list_form.py"
+  ]
+}

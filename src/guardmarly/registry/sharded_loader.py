@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import re
+from pathlib import Path
 from typing import Any
 
 _log = logging.getLogger(__name__)
@@ -93,6 +94,13 @@ def load_custom_rules_for_code(code: str, language: str) -> list[Any]:
         return []
 
 
+def _registry_dir() -> Path:
+    """Directory holding the registry packs (single source: registry.loader)."""
+    from guardmarly.registry.loader import _REGISTRY_DIR
+
+    return _REGISTRY_DIR
+
+
 def load_pack(pack_name: str) -> list[dict]:
     """Load a rule pack, caching the result."""
     if pack_name in _loaded_packs:
@@ -121,7 +129,7 @@ def load_pack(pack_name: str) -> list[dict]:
     except Exception:
         pass
 
-    pack_path = _REGISTRY_DIR / f"{pack_name}.json"
+    pack_path = _registry_dir() / f"{pack_name}.json"
     if not pack_path.exists():
         _loaded_packs[pack_name] = []
         return []

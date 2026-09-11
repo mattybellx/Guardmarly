@@ -4,18 +4,18 @@ Always read `AGENTS.md` first — it has the full repo map, commands, and archit
 
 ## Rules for this workspace
 
-- Never import from `benchmarks`, `tools`, `scripts`, `webapp`, `campaign`, `docs`, or `site` — these were deleted July 2026.
+- Never import from `benchmarks`, `tools`, `campaign`, or `site` — these were deleted July 2026. (`scripts/`, `docs/`, `webapp/` and `vscode-extension/` still exist.)
 - `python_analyzer.py` is 8,500+ lines; prefer grep_search before reading blind.
 - `id()`-based memoization is used in `_get_taint_source` and `_get_sink_name` — sensitive to Python version.
 - Self-scan CI excludes `src/` and `guardmarly_rust_core/` to avoid false positives on rule catalog strings.
-- Lint errors in `cli.py` are all pre-existing (~25 type-checker warnings), not from recent changes.
-- Run `pytest tests/ -q` after any change to verify nothing broke (1,183 tests, ~12s).
+- Bump `src/guardmarly/_version.py` for releases; `pyproject.toml` is dynamic and `tests/test_version.py` guards drift.
+- Run `pytest tests/ -q` after any change (1,310+ tests, ~12s), plus `ruff check` and `mkdocs build --strict` for docs changes.
 
 ## Current Status
 
-- 1,183 tests passing
-- 5 languages: Python, JavaScript/TypeScript, Go, Java, C#
-- 100% CVE recall (164/164)
+- 1,310+ tests passing
+- 7 full-AST languages: Python, JavaScript/TypeScript, Go, Java, C#, PHP, Ruby (+30 pattern-aware)
 - 35+ CWE types
 - Incident clustering, symbolic guards, VLQ source maps, shadow detectors all active
-- CI: 8 workflows (test+lint, quality gates, release, publish, self-scan, Docker, SBOM, Sigstore)
+- CI: test matrix (Linux 3.9/3.12/3.13, Windows 3.13, macOS 3.12) + lint + wheel build; release, publish, self-scan, Docker, SBOM, Sigstore
+- Open defect/backlog record: `IMPROVEMENTS.md`

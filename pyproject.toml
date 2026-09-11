@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "guardmarly"
-version = "6.6.0"
+dynamic = ["version"]
 description = "Static analysis for authorization gaps (IDOR/CWE-639), missing authorization, SQL injection, and 30+ vulnerability types across Python, JavaScript, Go, Java, C#, and 35+ other languages."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -61,6 +61,49 @@ Repository = "https://github.com/mattybellx/Guardmarly"
 Issues     = "https://github.com/mattybellx/Guardmarly/issues"
 Documentation = "https://github.com/mattybellx/Guardmarly#readme"
 Changelog = "https://github.com/mattybellx/Guardmarly/blob/main/CHANGELOG.md"
+
+[tool.hatch.version]
+# Single source of truth — see src/guardmarly/_version.py
+path = "src/guardmarly/_version.py"
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+src = ["src", "tests"]
+exclude = [
+    ".venv",
+    "dist",
+    "build",
+    "guardmarly_rust_core",
+    "audit_100",
+    "audit_targets",
+    "samples",
+    # Deliberately-vulnerable benchmark fixtures (labelled ground truth).
+    # These are scanner *inputs*, not product code — see benchmarks/README.md.
+    "benchmarks/corpus",
+    # Generated measurement artefacts, including a copied stdlib sample.
+    "benchmarks/results",
+]
+
+[tool.ruff.lint]
+# Explicit selection keeps lint reproducible across ruff versions: newer ruff
+# releases promote rule families to the *default* set, which would otherwise
+# turn a green build red without a code change.
+#
+# The tree is not yet clean under the wider families (UP/SIM/BLE/I/S) — the
+# ignores below are pre-existing debt, measured and tracked in IMPROVEMENTS.md.
+# Do not add a rule family here until `ruff check src tests` passes with it.
+select = ["E4", "E7", "E9", "F"]
+ignore = [
+    "E701",  # multiple statements on one line (colon) — legacy analyser style
+    "E702",  # multiple statements on one line (semicolon)
+    "E712",  # comparison to True/False — explicit in a few assertions
+    "E741",  # ambiguous variable name (l / I / O)
+    "E402",  # import not at top of file — optional-dependency guards
+    "F401",  # unused import — re-export surface in package __init__
+    "F811",  # redefinition while unused
+    "F841",  # unused local variable
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/guardmarly"]

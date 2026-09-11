@@ -18,8 +18,10 @@ from __future__ import annotations
 
 import hashlib
 import json as _json
+import sys
 from typing import Any
 
+from guardmarly._stdio import never_fail_stream
 from guardmarly._types import AnalysisResult, Finding
 from guardmarly.engine_version import get_engine_version
 from guardmarly.rules import get_rule_contract, _unique_tags
@@ -33,7 +35,7 @@ try:
     from rich.style import Style
     from rich.syntax import Syntax
     from rich.markdown import Markdown
-    console = Console()
+    console = Console(file=never_fail_stream(sys.stdout))
 except ImportError:
     console = None
 

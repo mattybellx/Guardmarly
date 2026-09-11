@@ -160,3 +160,33 @@ def test_rule_precision_values_are_valid():
         assert contract.precision in valid, (
             f"{contract.rule_id} has invalid precision: {contract.precision!r}"
         )
+
+
+# ── Fallback rule IDs must be describable ────────────────────────────────
+#
+# Regression: the Python analyzer's regex fallback reports IDs like PY-005F,
+# which were absent from the curated catalogue — so `guardmarly --describe-rule`
+# failed for the IDs users actually see on pattern-only findings.
+
+FALLBACK_RULE_IDS = (
+    "PY-004F", "PY-005F", "PY-006F", "PY-009F", "PY-023F",
+    "PY-024F", "PY-030F", "PY-050F", "PY-051F",
+)
+
+
+def test_fallback_rule_ids_resolve_to_the_base_contract():
+    for rule_id in FALLBACK_RULE_IDS:
+        contract = describe_rule(rule_id)
+
+        assert contract is not None, f"{rule_id} is emitted but not describable"
+        assert contract.rule_id == rule_id
+        assert contract.cwe.startswith("CWE-")
+        assert "regex fallback" in contract.summary
+
+
+def test_fallback_rule_keeps_the_base_cwe():
+    assert describe_rule("PY-005F").cwe == describe_rule("PY-005").cwe
+
+
+def test_unknown_tokens_still_return_none():
+    assert describe_rule("PY-999Z") is None

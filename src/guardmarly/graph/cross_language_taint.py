@@ -2,16 +2,27 @@
 
 from __future__ import annotations
 
+import re
 from collections import deque
 from pathlib import Path
-import re
+from typing import Any
 from urllib.parse import urlparse
 
 from guardmarly.graph.go_callgraph import build_go_callgraph
-from guardmarly.graph.import_graph import _load_tsconfig_aliases, _resolve_js_module, resolve_go_imports, resolve_js_imports, resolve_python_imports
+from guardmarly.graph.import_graph import (
+    _load_tsconfig_aliases,
+    _resolve_js_module,
+    resolve_go_imports,
+    resolve_js_imports,
+    resolve_python_imports,
+)
 from guardmarly.graph.js_callgraph import build_js_callgraph
 from guardmarly.graph.python_callgraph import build_python_callgraph
-from guardmarly.graph.unified_source_graph import SourceEdge, SourceNode, UnifiedSourceGraph
+from guardmarly.graph.unified_source_graph import (
+    SourceEdge,
+    SourceNode,
+    UnifiedSourceGraph,
+)
 
 _PY_ROUTE_RE = re.compile(
     r"@(?:[A-Za-z_][\w]*\.)?(?P<method>get|post|put|delete|patch|route)\(\s*(['\"])(?P<path>[^'\"]+)\2[^\n]*\)\s*\n\s*(?:async\s+def|def)\s+(?P<handler>[A-Za-z_][\w]*)\s*\(",

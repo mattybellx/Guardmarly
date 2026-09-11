@@ -1,5 +1,8 @@
 """Quick benchmark scan across samples/, src/, and tests/."""
-import subprocess, json, sys, os
+import subprocess
+import json
+import sys
+import os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
