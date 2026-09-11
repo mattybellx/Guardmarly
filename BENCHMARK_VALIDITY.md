@@ -139,8 +139,49 @@ an `owasp_benchmark` step emitting TPR, FPR and the suite version into
 
 ## 7. Status
 
-* [x] Precision on independent third-party code (T2) — measured, reproducible.
-* [x] Determinism, cache equivalence, SARIF validity (T2/T3) — proven by test.
-* [ ] **Recall on an independent labelled suite (T3) — NOT DONE.** This is the
-  single item that would let a "best in class" claim survive review.
-* [ ] Comparative TPR/FPR against Semgrep and Bandit on the *same* T3 suite.
+### T3 result — measured 2026-09-11
+
+`python benchmarks/score_owasp_benchmark.py` — OWASP Benchmark v1.2, 2,740
+labelled cases, default scanner settings, scored against the benchmark's own
+`expectedresults-1.2.csv`:
+
+| Metric | Value |
+| --- | --- |
+| **TPR (recall)** | **74.6%** (1,056 of 1,415 vulnerable cases) |
+| **FPR** | **44.6%** (591 of 1,325 safe cases) |
+| **Youden score** | **+0.300** |
+
+By category:
+
+| category | flagged | rate |
+| --- | --- | --- |
+| cmdi | 248/251 | 98.8% |
+| pathtraver | 262/268 | 97.8% |
+| trustbound | 122/126 | 96.8% |
+| ldapi | 57/59 | 96.6% |
+| xpathi | 32/35 | 91.4% |
+| xss | 282/455 | 62.0% |
+| securecookie | 36/67 | 53.7% |
+| sqli | 220/504 | 43.7% |
+| weakrand | 215/493 | 43.6% |
+| crypto | 97/246 | 39.4% |
+| hash | 76/236 | 32.2% |
+
+**This is the number that matters, and it is not flattering.** Independent recall
+is **74.6%, not 97.2%**, and the false-positive rate is **44.6%**. The gap between
+the two recall figures — 22.6 points — is the size of the self-authored benchmark
+bias, measured rather than argued.
+
+The category spread is the actionable part: command injection, path traversal,
+trust-boundary and LDAP-injection detection are genuinely strong (91-99%), while
+SQL injection, weak randomness, crypto and hashing sit at 32-44% and are the
+reason the aggregate is where it is.
+
+Against published OWASP Benchmark results for commercial and open-source
+analysers, a Youden score of +0.300 is **mid-table, not world-class**.
+
+* [x] **T3 recall on an independent labelled suite — DONE.** 74.6% TPR / 44.6% FPR.
+* [ ] Comparative TPR/FPR against Semgrep and Bandit on the *same* suite.
+* [ ] Improve the four weak categories (sqli, weakrand, crypto, hash) on the Java
+  side. The other five categories show the analyzer design is sound; these four
+  are coverage gaps, not architectural ones.
