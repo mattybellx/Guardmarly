@@ -488,9 +488,19 @@ class SafePatternDetector:
     """Detect safe patterns that indicate a finding is not exploitable."""
 
     # SQL Injection patterns
+    # NOTE: deliberately *not* re.DOTALL. With DOTALL the `[^"\']+` run could
+    # cross line and statement boundaries, so `statement.executeQuery();` on one
+    # line plus any comma further down the method -- for example
+    # `DatabaseHelper.printResults(rs, sql, response)` -- satisfied this pattern.
+    # Almost every JDBC method therefore looked like a parameterized call, and
+    # genuine SQL injection was suppressed as "safe" before it was reported.
+    # Measured on OWASP Benchmark: a textbook injection
+    # (`request.getHeader(...)` -> `"{call " + param + "}"` -> `prepareCall(sql)`)
+    # produced five JV-004 CWE-89 findings from the analyzer and zero from the
+    # CLI, while its parameterized twin was reported.
     PARAMETERIZED_QUERY_RE = re.compile(
-        r'(?:execute|query|run)\s*\(\s*["\']?[^"\']+["\']?\s*,\s*(?:\(.*?\)|\\*[^)]+\\*)',
-        re.IGNORECASE | re.DOTALL
+        r'(?:execute|query|run)\s*\(\s*["\']?[^"\'\n]+["\']?\s*,\s*(?:\(.*?\)|\\*[^)\n]+\\*)',
+        re.IGNORECASE
     )
     PLACEHOLDER_RE = re.compile(r'(\?|%s|:id|:param|\$1|\$2)')
     ORM_SAFE_RE = re.compile(
@@ -625,10 +635,19 @@ class SafePatternDetector:
         if SafePatternDetector.PARAMETERIZED_QUERY_RE.search(snippet):
             return True, "Parameterized query detected (execute with placeholders)"
 
-        # Check for placeholder markers
+        # A placeholder only demonstrates parameterization when it is part of the
+        # SQL *text*. The previous test was
+        #   `any(marker in snippet for marker in ['execute', 'query', '(', ','])`
+        # which is true of almost any snippet -- every function call contains '('
+        # and most contain ',' -- so a single '?' anywhere (a ternary, a nullable
+        # type declaration, a comment) was enough to declare a real injection
+        # "safe". Measured consequence: on OWASP Benchmark a textbook SQL
+        # injection (`request.getHeader(...)` -> `"{call " + param + "}"` ->
+        # `prepareCall(sql)`) was rejected as a false positive by triage and never
+        # reported, while its parameterized twin was reported. Requiring the
+        # placeholder to sit inside a quoted string tests the actual claim.
         if SafePatternDetector.PLACEHOLDER_RE.search(snippet):
-            # Ensure placeholder is used with execute call
-            if any(marker in snippet for marker in ['execute', 'query', '(', ',']):
+            if re.search(r'["\'][^"\']*(?:\?|%s|:\w+|\$\d+)[^"\']*["\']', snippet):
                 return True, "Placeholder tokens detected (?, %s, :param)"
 
         # Check for ORM safety
