@@ -602,6 +602,45 @@ def _has_sanitizer(method_body: str, cwe: str) -> bool:
     return bool(re.search(pattern, method_body, re.IGNORECASE))
 
 
+# Calls whose result is derived from their argument, so a tainted argument makes
+# the result tainted. Anything not listed is treated as *consuming* its
+# arguments: the callee may sanitise, return a constant, or ignore them, so taint
+# must not propagate through it.
+_PASS_THROUGH_CALL_RE = re.compile(
+    r"^(?:[\w.]+\.)?(?:valueOf|toString|trim|strip|substring|concat|getBytes|"
+    r"toLowerCase|toUpperCase|replace|replaceAll|format|append)\s*\(",
+    re.IGNORECASE,
+)
+
+
+def _rhs_transmits_taint(rhs: str, tainted: set[str]) -> bool:
+    """True when an assignment right-hand side carries taint into its target.
+
+    This distinguishes **transmission** from **consumption**:
+
+    * ``bar = param``                 -> transmits (direct reference)
+    * ``bar = "x" + param``           -> transmits (concatenation)
+    * ``bar = String.valueOf(param)`` -> transmits (known pass-through)
+    * ``bar = helper(request, param)`` -> does NOT (the callee may sanitise)
+
+    The last case is why this function exists. See the comment on pass 2 of
+    `_collect_tainted_names`.
+    """
+    stripped = rhs.strip()
+    if not stripped:
+        return False
+    bare = stripped
+    while bare.startswith("(") and bare.endswith(")"):
+        bare = bare[1:-1].strip()
+    if bare in tainted:
+        return True
+    if not any(re.search(r"\b" + re.escape(name) + r"\b", stripped) for name in tainted):
+        return False
+    if "+" in stripped:
+        return True
+    return bool(_PASS_THROUGH_CALL_RE.match(bare))
+
+
 def _collect_tainted_names(method: _JavaMethod) -> set[str]:
     """Two-pass taint tracking: identify variables carrying user input.
 
@@ -617,7 +656,19 @@ def _collect_tainted_names(method: _JavaMethod) -> set[str]:
         if match:
             tainted.add(match.group("name"))
 
-    # Pass 2: propagate through assignments (repeat until stable)
+    # Pass 2: propagate through assignments (repeat until stable).
+    #
+    # Only *transmission* propagates -- a direct reference, a concatenation, or a
+    # known pass-through call. An arbitrary call does not, because the callee may
+    # sanitise, return a constant, or ignore its argument.
+    #
+    # The previous rule marked the target tainted whenever a tainted name
+    # appeared anywhere in the right-hand side, so
+    # `String bar = new Test().doSomething(request, param);` tainted `bar` even
+    # when the helper returns a constant -- and that is precisely how OWASP
+    # Benchmark's safe cases neutralise input. Every safe case therefore looked
+    # tainted, the set could not separate vulnerable from safe, and two separate
+    # attempts to gate rules on it measured the same, worse result.
     changed = True
     while changed:
         changed = False
@@ -631,13 +682,11 @@ def _collect_tainted_names(method: _JavaMethod) -> set[str]:
                 continue
             rhs = assign.group("rhs")
             new_name = assign.group("name")
-            # Check if RHS contains any tainted variable
-            for t in list(tainted):
-                if re.search(r"\b" + re.escape(t) + r"\b", rhs):
-                    if new_name not in tainted:
-                        tainted.add(new_name)
-                        changed = True
-                        break
+            if new_name in tainted:
+                continue
+            if _rhs_transmits_taint(rhs, tainted):
+                tainted.add(new_name)
+                changed = True
 
     return tainted
 

@@ -374,7 +374,36 @@ gating on taint. Changing it is high-blast-radius — the propagator feeds sever
 rules — so it needs its own before/after measurement across all eleven categories,
 not a hurried edit.
 
-**Status: two implementations falsified by measurement, both reverted. Current
+**Status: three implementations falsified by measurement, all reverted. Current
 tree is the measured-best state (TPR 75.5% / FPR 45.6% / Youden +0.299, 1403 tests
-passing). The fix is specified above and is the highest-value change in the
-project.**
+passing).**
+
+### Third attempt: fix the propagator itself
+
+The propagator was rewritten so pass 2 follows only **transmission** —
+`bar = param`, `bar = "x" + param`, and known pass-throughs (`valueOf`,
+`toString`, `trim`, `substring`, `concat`, `getBytes`, `replace`, `format`) —
+and no longer propagates through arbitrary calls. This is the semantics §10 says
+is correct, and it is kept: it is well-tested and measured **neutral**.
+
+| configuration | TPR | FPR | Youden |
+| --- | --- | --- | --- |
+| baseline | 75.5% | 45.6% | **+0.299** |
+| propagator fix alone | 75.5% | 45.6% | **+0.299** (identical) |
+| propagator fix + dataflow gating | 65.1% | 35.6% | +0.295 |
+| (earlier) window gating | 65.6% | 36.1% | +0.295 |
+
+The propagator fix alone changes **nothing** — which is itself informative: it
+means `_collect_tainted_names` is not on the decision path for the two rules that
+drive the non-discriminative categories. They consult `_has_tainted_param`, a
+separate, weaker signal.
+
+Combining the corrected propagator with the gating still measured worse
+(pathtraver TPR collapsed to 4.5%). **The conclusion is now firm: gating these
+two rules on the existing taint machinery cannot work, regardless of how the
+gating or the propagator is written.** What is needed is a different input —
+a real per-statement dataflow implementation — not another refinement of the
+same two signals.
+
+Keeping the propagator fix is a correctness decision, not a metrics one, and it
+is explicitly **neutral** on all three measurements above.
