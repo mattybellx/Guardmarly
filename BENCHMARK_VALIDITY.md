@@ -185,3 +185,63 @@ analysers, a Youden score of +0.300 is **mid-table, not world-class**.
 * [ ] Improve the four weak categories (sqli, weakrand, crypto, hash) on the Java
   side. The other five categories show the analyzer design is sound; these four
   are coverage gaps, not architectural ones.
+
+---
+
+## 8. Root-cause diagnosis of the weak categories
+
+Measured by comparing a vulnerable case against its safe twin in each weak
+category (`BenchmarkTest00008` vs `00052` for sqli, `00003` vs `00009` for hash,
+`00005` vs `00054` for crypto, `00023` vs `00010` for weakrand).
+
+**Three of the four categories are already correct.** The vulnerable case is
+flagged and the safe twin is not:
+
+| category | vulnerable case | safe twin | verdict |
+| --- | --- | --- | --- |
+| hash | `JV-053` CWE-328 fires | not flagged | ✅ correct |
+| crypto | `JV-022` CWE-327 fires (`Cipher.getInstance("DES/…")`) | not flagged | ✅ correct |
+| weakrand | `JV-025` CWE-330 fires (`new java.util.Random()`) | not flagged | ✅ correct |
+
+So their low aggregate scores are **not** missing rules. The likely cause is
+partial coverage of the many shapes a category takes across 236–493 cases, which
+needs per-case analysis rather than a rule rewrite.
+
+**SQL injection is genuinely broken, and it is the largest category (504 cases).**
+
+| case | label | observed |
+| --- | --- | --- |
+| `BenchmarkTest00008` | **vulnerable** | **no CWE-89 reported at all** |
+| `BenchmarkTest00052` | **safe** | **`JV-004` CWE-89 false positive** (L53) |
+
+The detection is inverted on this pair. Reading `src/guardmarly/java_analyzer.py`:
+
+* `JV-004` (line ~884) fires on `_SQLI_RE.search(method.body)` — a *single*
+  textual match anywhere in the method body, reported at the first matching line.
+  It does not check that the matched text is the SQL actually passed to a sink,
+  so any concatenation in the method (including dead code or an unrelated string)
+  produces a CWE-89. That is the safest explanation for the false positive on the
+  parameterized-safe twin.
+* It also requires no taint source by design ("pattern-based, no taint source
+  required"), so it cannot distinguish `prepareCall("{call … ?}")` +
+  `setString(1, …)` (safe) from `prepareCall(dynamicSql)` (vulnerable).
+* `JV-004var` handles the two-step shape but is gated on `_has_tainted_param` and
+  on the variable appearing in `_VAR_SQL_SINK_RE`; the vulnerable case builds and
+  executes across `prepareCall` / `executeQuery()`, which evidently does not match.
+
+**Fix direction (not yet implemented):** make `JV-004` sink-anchored — match the
+argument actually passed to `prepareStatement` / `prepareCall` / `executeQuery` /
+`createStatement`, then decide: literal containing `?` placeholders bound later by
+`setXxx()` ⇒ safe; concatenation or `String.format` reaching that argument ⇒
+vulnerable. That is a real correctness fix in ordinary Java, not benchmark tuning.
+
+**Separate finding — XSS false positives.** `JV-006` (CWE-79) fires on nearly
+every Java file examined, including cases in unrelated categories. It does not
+affect the other categories' scores (the scorer only counts a flag when the
+reported CWE matches the case's own category), but it inflates FPR inside the
+`xss` category and would be very noisy on real code.
+
+**Why this is recorded rather than fixed:** a change to `JV-004` alters the
+largest category in a public benchmark and needs a full 2,740-case re-score plus
+the regression suite before it can be trusted. Landing it half-verified would be
+worse than the current, measured, honest number.
