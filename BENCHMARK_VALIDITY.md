@@ -245,3 +245,80 @@ reported CWE matches the case's own category), but it inflates FPR inside the
 largest category in a public benchmark and needs a full 2,740-case re-score plus
 the regression suite before it can be trusted. Landing it half-verified would be
 worse than the current, measured, honest number.
+
+---
+
+## 9. Per-category TPR/FPR — the map that inverts the picture
+
+The scorer previously reported only *flagged/total* per category, which is
+uninformative: a rule that flags every case scores ~100% and looks excellent.
+It now reports TPR and FPR separately. That single change exposed a structural
+problem the aggregate number had hidden.
+
+Measured 2026-09-11, OWASP Benchmark v1.2, default settings, 1,415 vulnerable /
+1,325 safe:
+
+| category | TPR | FPR | Youden | reading |
+| --- | --- | --- | --- | --- |
+| securecookie | 100.0% | **0.0%** | **+1.000** | excellent |
+| weakrand | 98.6% | **0.0%** | **+0.986** | excellent |
+| crypto | 74.6% | **0.0%** | **+0.746** | very good |
+| xpathi | 93.3% | 90.0% | +0.033 | no information |
+| trustbound | 96.4% | 97.7% | −0.013 | no information |
+| pathtraver | 98.5% | 97.0% | +0.015 | no information |
+| cmdi | 100.0% | 97.6% | +0.024 | no information |
+| ldapi | 100.0% | 93.8% | +0.062 | barely informative |
+| xss | 63.8% | 59.8% | +0.040 | barely informative |
+| sqli | 52.2% | 44.4% | +0.078 | barely informative |
+| hash | 33.3% | 30.8% | +0.025 | barely informative |
+
+**A rule whose TPR and FPR are both ~100% detects nothing** — it paints the whole
+category red. Five categories that looked like strengths (cmdi 98.8%, pathtraver
+97.8%, trustbound 96.8%, ldapi 96.6%, xpathi 91.4% on the old metric) contribute
+approximately **zero** Youden between them. The categories the earlier analysis
+called weak — weakrand, crypto — are the ones whose rules genuinely discriminate.
+
+### Root cause
+
+`JV-007ext` and `JV-008ext` gate on **method-level co-occurrence**, not dataflow:
+
+```python
+if _FILE_SINK_RE.search(method.body) and _has_tainted_param(method):   # JV-007ext
+if _CMD_INJECTION_RE.search(method.body) and _has_tainted_param(method):  # JV-008ext
+```
+
+"There is a file/command sink in this method and the method accepts a request"
+is not evidence of injection — in a servlet nearly every method satisfies both.
+The codebase already contains real taint tracking (`_collect_tainted_names`, which
+follows request sources through assignment propagation); these two rules simply
+do not use it. `_CMD_INJECTION_RE` also lists `\.start\s*\(\s*\)` as a
+command-injection indicator on its own, which matches any `.start()` call.
+
+### Attempted fix, measured, reverted
+
+Gating both rules on "a tainted variable appears in a 500-character window after
+the sink match":
+
+| | before | after |
+| --- | --- | --- |
+| TPR | 75.5% | **65.6%** |
+| FPR | 45.6% | **36.1%** |
+| Youden | **+0.299** | +0.295 |
+| pathtraver | 98.5% / 97.0% | **9.8% / 16.3%** |
+
+**Reverted.** The diagnosis was right but the implementation was not: a character
+window is not dataflow. It removed false positives and true positives roughly
+together, and left pathtraver *less* discriminative than before (Youden −0.065
+versus +0.015).
+
+**The real fix** is sink-argument dataflow: resolve the expression actually passed
+to the sink and ask whether it is derived from a tracked request source. That is
+a proper taint implementation, not a regex window, and it is the single highest
+value change available — five categories are currently carrying no information.
+
+### Current standing, honestly
+
+Independent: **TPR 75.5%, FPR 45.6%, Youden +0.299 — mid-table.** Three rules
+(securecookie, weakrand, crypto) are genuinely strong and prove the design works;
+the rest are either non-discriminative or partial. This is a measurable,
+actionable position — and it was only visible after splitting TPR from FPR.

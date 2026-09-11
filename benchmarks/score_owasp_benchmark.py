@@ -122,12 +122,22 @@ def score(cases: dict[str, dict[str, object]], flagged: dict[str, set[int]]) -> 
 
     by_category: dict[str, dict[str, int]] = {}
     for name, case in cases.items():
-        row = by_category.setdefault(str(case["category"]), {"total": 0, "flagged": 0, "vulnerable": 0})
+        row = by_category.setdefault(
+            str(case["category"]),
+            {"total": 0, "flagged": 0, "vulnerable": 0, "safe": 0, "tp": 0, "fp": 0},
+        )
         row["total"] += 1
+        flagged_here = hit(name, case)
+        if flagged_here:
+            row["flagged"] += 1
         if case["vulnerable"]:
             row["vulnerable"] += 1
-        if hit(name, case):
-            row["flagged"] += 1
+            if flagged_here:
+                row["tp"] += 1
+        else:
+            row["safe"] += 1
+            if flagged_here:
+                row["fp"] += 1
 
     return {
         "cases": len(cases),
@@ -168,10 +178,19 @@ def main() -> int:
     print(f"  FPR              : {result['fpr'] * 100:.1f}%  ({result['false_positives']} flagged)")
     print(f"  Youden score     : {result['score']:+.3f}")
     print()
-    print("  by category:")
-    for category, row in sorted(result["by_category"].items()):
-        rate = row["flagged"] / row["total"] * 100 if row["total"] else 0.0
-        print(f"    {category:<12} {row['flagged']:>4}/{row['total']:<4} {rate:5.1f}%  (vulnerable {row['vulnerable']})")
+    print("  by category (sorted by false positives -- that is where Youden is being lost):")
+    ranked = sorted(
+        result["by_category"].items(),
+        key=lambda kv: (-kv[1]["fp"], -kv[1]["tp"]),
+    )
+    print(f"    {'category':<14} {'TPR':>7} {'FPR':>7}  {'tp/pos':>11} {'fp/safe':>10}")
+    for category, row in ranked:
+        tpr = row["tp"] / row["vulnerable"] * 100 if row["vulnerable"] else 0.0
+        fpr = row["fp"] / row["safe"] * 100 if row["safe"] else 0.0
+        print(
+            f"    {category:<14} {tpr:6.1f}% {fpr:6.1f}%  "
+            f"{row['tp']:>5}/{row['vulnerable']:<5} {row['fp']:>5}/{row['safe']:<5}"
+        )
     return 0
 
 
